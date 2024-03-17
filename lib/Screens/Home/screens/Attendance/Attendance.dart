@@ -26,8 +26,14 @@ class _AttendanceState extends State<Attendance> {
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
+        Container(
+          height: size.height*0.126,
+          width: size.width,
+          color: const Color.fromRGBO(103,135,214, 1),
+          child: Image.asset("assets/Navigation/changePassword/starpattern.png"),
+        ),
         Scaffold(
-          backgroundColor: const Color.fromRGBO(103,135,214, 1),
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Colors.transparent,
@@ -55,11 +61,7 @@ class _AttendanceState extends State<Attendance> {
               child: SizedBox(
                 height: size.height*0.9,
                 width: size.width,
-                child: Column(
-                  children: [
-                    tabs[index],
-                  ],
-                ),
+                child: SingleChildScrollView(child: tabs[index]),
               ),
             ),
           ],

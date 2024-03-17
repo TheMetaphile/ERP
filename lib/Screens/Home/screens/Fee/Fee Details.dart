@@ -20,7 +20,7 @@ class FeeDetails extends StatelessWidget {
           SizedBox(
             width: size.width,
             height: size.height*0.12,
-            child: Image.asset("assets/changePassword/starpattern.png"),
+            child: Image.asset("assets/Navigation/changePassword/starpattern.png"),
           ),
           Scaffold(
             backgroundColor: Colors.transparent,

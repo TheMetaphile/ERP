@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:metaphile_erp/Screens/Home/screens/Fee/Pay.dart';
 
 class FeeDetailCard extends StatelessWidget {
   const FeeDetailCard({super.key, required this.paymentMode,required this.receiptNo,required this.month,required this.paymentDate,required this.amount,required this.payed});
@@ -49,6 +50,11 @@ class FeeDetailCard extends StatelessWidget {
           !payed
               ?
           InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return PayOnline();
+              },));
+            },
             child: Container(
               height: size.height*0.05,
               decoration: const BoxDecoration(

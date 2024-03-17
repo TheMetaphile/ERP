@@ -1,5 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:metaphile_erp/Screens/Events/screens/Events_and_programs.dart';
 import 'package:metaphile_erp/Screens/Home/screens/Home.dart';
 import 'package:molten_navigationbar_flutter/molten_navigationbar_flutter.dart';
 
@@ -12,11 +15,22 @@ class NavigationBar extends StatefulWidget {
 
 class _NavigationBarState extends State<NavigationBar> {
   int selectedIndex =0;
-
-
+  List<String> tabName = [
+    "Home",
+    "Home Work",
+    "Time Table",
+    "Class Work",
+    "Events & Programs"
+  ];
+  List<Widget> tabScreens = [
+    Home(),
+    Home(),
+    Home(),
+    Home(),
+    EventsAndPrograms()
+  ];
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
     List<MoltenTab> tabs=[
       MoltenTab(
@@ -59,8 +73,17 @@ class _NavigationBarState extends State<NavigationBar> {
     ];
     return Scaffold(
       backgroundColor: Colors.white,
-      extendBody: true,
-      body: const Home(),
+      extendBody: false,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: AutoSizeText(tabName[selectedIndex],style: GoogleFonts.openSans(color: Colors.white),),
+        actions: [
+          IconButton(onPressed: (){}, icon: const Icon(Icons.send_outlined,color: Colors.white,)),
+          IconButton(onPressed: (){}, icon: const Icon(Icons.notifications_active_outlined,color: Colors.white,))
+        ],
+        backgroundColor: const Color.fromRGBO(108, 137, 204, 1),
+      ),
+      body:  tabScreens[selectedIndex],
       bottomNavigationBar: MoltenBottomNavigationBar(
         barColor: const Color.fromRGBO(108, 137, 204, 1),
           tabs: tabs,

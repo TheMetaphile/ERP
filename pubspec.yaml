@@ -37,6 +37,7 @@ dependencies:
   molten_navigationbar_flutter: ^1.0.1
   http: ^1.2.1
   table_calendar: ^3.0.8
+  staggered_grid_view_flutter: ^0.0.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -73,7 +74,12 @@ flutter:
     - assets/onBoarding/NewPassword/
     - assets/Navigation/NavigationBar/
     - assets/Navigation/Home/
-    - assets/changePassword/
+    - assets/Navigation/changePassword/
+    - assets/Navigation/Attendance/
+    - assets/Navigation/Event/
+    - assets/Gallery/Harsh/
+    - assets/Gallery/Tushar/
+    - assets/Gallery/Bhuv/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

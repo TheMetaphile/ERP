@@ -22,7 +22,7 @@ class ChangePassword extends StatelessWidget {
         SizedBox(
           width: size.width,
           height: size.height*0.12,
-          child: Image.asset("assets/changePassword/starpattern.png"),
+          child: Image.asset("assets/Navigation/changePassword/starpattern.png"),
         ),
         Scaffold(
           backgroundColor: Colors.transparent,
@@ -95,14 +95,14 @@ class ChangePassword extends StatelessWidget {
           alignment: Alignment.bottomLeft,
           child: SizedBox(
             height: size.height*0.25,
-            child: Image.asset("assets/changePassword/semiCircle.png"),
+            child: Image.asset("assets/Navigation/changePassword/semiCircle.png"),
           ),
         ),
         Positioned(
           bottom: size.height*0.18,
           height: size.height*0.25,
           right: 0,
-          child: Image.asset("assets/changePassword/image1.png"),
+          child: Image.asset("assets/Navigation/changePassword/image1.png"),
         ),
       ]
     );

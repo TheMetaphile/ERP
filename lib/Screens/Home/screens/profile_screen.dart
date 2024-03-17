@@ -5,7 +5,16 @@ import 'package:metaphile_erp/Screens/Home/utils/profile_text_field.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
-  final TextEditingController adharController = TextEditingController();
+  final TextEditingController adharController = TextEditingController(text: "1234 5678 9123 456");
+  final TextEditingController academicYearController = TextEditingController(text: "2024-2025");
+  final TextEditingController admissionClassController = TextEditingController(text: "VI");
+  final TextEditingController oldAdmissionNoController = TextEditingController(text: "T00221");
+  final TextEditingController admissionDateController = TextEditingController(text: "01 Feb 2023");
+  final TextEditingController DOBController = TextEditingController(text: "27 Dec 2000");
+  final TextEditingController parentsMailController = TextEditingController(text: "example@gmail.com");
+  final TextEditingController mothersNameController = TextEditingController(text: "abc");
+  final TextEditingController fathersNameController = TextEditingController(text: "zyx");
+  final TextEditingController permanentAddressController = TextEditingController(text: "Ganga nagar");
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -20,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
           SizedBox(
             width: size.width,
             height: size.height*0.12,
-            child: Image.asset("assets/changePassword/starpattern.png"),
+            child: Image.asset("assets/Navigation/changePassword/starpattern.png"),
           ),
           Scaffold(
             backgroundColor: Colors.transparent,
@@ -110,7 +119,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                               SizedBox(
                                 width: size.width*0.43,
-                                child: CustomTextField(controller: adharController, hintText: "Academic Year",lock: false,),
+                                child: CustomTextField(controller: academicYearController, hintText: "Academic Year",lock: false,),
                               )
                             ],
                           ),
@@ -122,11 +131,11 @@ class ProfileScreen extends StatelessWidget {
                             children: [
                               SizedBox(
                                 width: size.width*0.37,
-                                child: CustomTextField(controller: adharController, hintText: "Adhar Number",lock: true,),
+                                child: CustomTextField(controller: admissionClassController, hintText: "Admission Class",lock: true,),
                               ),
                               SizedBox(
                                 width: size.width*0.43,
-                                child: CustomTextField(controller: adharController, hintText: "Academic Year",lock: false,),
+                                child: CustomTextField(controller: oldAdmissionNoController, hintText: "Old admission No",lock: false,),
                               )
                             ],
                           ),
@@ -138,11 +147,11 @@ class ProfileScreen extends StatelessWidget {
                             children: [
                               SizedBox(
                                 width: size.width*0.37,
-                                child: CustomTextField(controller: adharController, hintText: "Adhar Number",lock: true,),
+                                child: CustomTextField(controller: admissionDateController, hintText: "Date of Admission",lock: true,),
                               ),
                               SizedBox(
                                 width: size.width*0.43,
-                                child: CustomTextField(controller: adharController, hintText: "Academic Year",lock: false,),
+                                child: CustomTextField(controller: DOBController, hintText: "Date of Birth",lock: false,),
                               )
                             ],
                           ),
@@ -151,28 +160,28 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           SizedBox(
                             width: size.width,
-                            child: CustomTextField(controller: adharController, hintText: "Adhar Number",lock: true,),
+                            child: CustomTextField(controller: parentsMailController, hintText: "Parent Mail ID",lock: true,),
                           ),
                           SizedBox(
                             height: size.height*0.02,
                           ),
                           SizedBox(
                             width: size.width,
-                            child: CustomTextField(controller: adharController, hintText: "Adhar Number",lock: true,),
+                            child: CustomTextField(controller: mothersNameController, hintText: "Mother's Name",lock: true,),
                           ),
                           SizedBox(
                             height: size.height*0.02,
                           ),
                           SizedBox(
                             width: size.width,
-                            child: CustomTextField(controller: adharController, hintText: "Adhar Number",lock: true,),
+                            child: CustomTextField(controller: fathersNameController, hintText: "Father's Name",lock: true,),
                           ),
                           SizedBox(
                             height: size.height*0.02,
                           ),
                           SizedBox(
                             width: size.width,
-                            child: CustomTextField(controller: adharController, hintText: "Adhar Number",lock: true,),
+                            child: CustomTextField(controller: permanentAddressController, hintText: "Permanent Address",lock: true,),
                           ),
                           SizedBox(
                             height: size.height*0.02,
