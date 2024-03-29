@@ -1,65 +1,55 @@
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class STT {
-  final SpeechToText _speechToText = SpeechToText();
-  late String _lastWords;
-  late String _sentence;
+   SpeechToText speech = SpeechToText();
+  String textString = "Press The Button";
+  double confidence = 1.0;
+  bool isListen = false;
 
-  final Function(bool) onListeningStateChange;
+  // Future<String?> listen() async {
+  //   speech = SpeechToText();
+  //     bool avail = await speech.initialize();
+  //     if (avail) {
+  //
+  //       speech.listen(onResult: (value) {
+  //
+  //           textString = value.recognizedWords;
+  //           if (value.hasConfidenceRating && value.confidence > 0) {
+  //             confidence = value.confidence;
+  //           }
+  //           print("slkudtg bikyg $textString");
+  //       });
+  //     }
+  //     return textString;
+  //
+  // }
+  void listen() async {
+    if (!isListen) {
+      bool avail = await speech.initialize();
+      if (avail) {
 
-  STT({required this.onListeningStateChange});
+        isListen = true;
+        print("please wait inside if");
+        speech.listen(
+            onResult: (value) {
+              print("inside result");
+            textString = value.recognizedWords;
+            if (value.hasConfidenceRating && value.confidence > 0) {
+              confidence = value.confidence;
 
-  Future<bool> initSpeech() async {
-    return await _speechToText.initialize(
-      onStatus: (status) async {
-      if(status == "done"){
-        bool test = _speechToText.hasRecognized;
-        print("sentance $_sentence $test");
-        String test1 = await stopListening();
-        print("TEst $test1");
+              print("please wait inside second if");
+            }
+            print("ksadgh jkshg $textString");
+        });
       }
-    },
-      finalTimeout: Duration(seconds: 20),
-    );
-  }
+    } else {
 
-  Future<void> startListening() async {
-    await _speechToText.listen(
-        onResult: (result) {
-          print("from reuslt");
-          print(result.recognizedWords);
-          print(result.alternates);
-          print(result.confidence);
-          print(result.finalResult);
-        },
+      print("please wait inside else");
+      isListen = false;
 
-
-        listenOptions:  SpeechListenOptions(
-          cancelOnError: false,
-          partialResults: true,
-          onDevice: false,
-        )
-    );
-  }
-
-  bool isListening() {
-    return _speechToText.isListening;
-  }
-
-  Future<String> stopListening() async {
-    await _speechToText.stop();
-    return _sentence; // Return the recognized sentence when stopped
-  }
-
-  void onSpeechResult(SpeechRecognitionResult result) {
-    print(result.recognizedWords.isNotEmpty);
-
-      _lastWords = result.recognizedWords;
-      _sentence += ' $_lastWords';
-      print('Last word: $_lastWords');
-      print('Sentence: $_sentence');
-    // Notify the listening state change
-    onListeningStateChange(_speechToText.isListening);
+      speech.stop();
+    }
   }
 }

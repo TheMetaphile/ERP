@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  avatar_glow:
+    dependency: "direct main"
+    description:
+      name: avatar_glow
+      sha256: "848d9a85065e398241d8ffae0dcc50902980c24490aef21fd4c6b6342d4c26b4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -136,6 +144,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.2.1"
+  highlight_text:
+    dependency: "direct main"
+    description:
+      name: highlight_text
+      sha256: "74806039a02e65e5aef9bb27c2df42b8694700c389ec75b733eb2ac53a84c606"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.7.0"
   http:
     dependency: "direct main"
     description:

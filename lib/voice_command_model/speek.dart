@@ -5,9 +5,9 @@ import 'package:flutter_tts/flutter_tts.dart';
 class Speak{
 
     final FlutterTts flutterTts = FlutterTts();
-    Future<bool> speak() async{
+    Future<bool> speak(String text) async{
         bool result=false;
-      await flutterTts.speak("Hello Bhuvneshwar Tyagi").whenComplete((){
+      await flutterTts.speak(text).whenComplete((){
           result = true;
       });
       return result;
