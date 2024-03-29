@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class AttendanceBody extends StatefulWidget {
@@ -38,27 +39,40 @@ class _AttendanceBodyState extends State<AttendanceBody> {
               ),
               calendarBuilders: CalendarBuilders(
                 defaultBuilder: (context, day, focusedDay) {
-                  for (DateTime d in [DateTime(2024,3,18),DateTime(2024,3,18),DateTime(2024,3,18)]) {
-                    if (day.day == d.day &&
-                        day.month == d.month &&
-                        day.year == d.year) {
-                      return Container(
-                        decoration: const BoxDecoration(
-                          color: Color.fromRGBO(103,135,214, 1),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(80),
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '${day.day}',
-                            style: const TextStyle(color: Colors.white),
+                    if (day.day% 2 == 0 ) {
+                      return Center(
+                        child: CircleAvatar(
+                          backgroundColor: Colors.red.shade100,
+                          child: Center(
+                              child: AutoSizeText(
+                                "${day.day}",
+                                style: GoogleFonts.openSans(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500
+                                ),
+                              ),
                           ),
                         ),
                       );
                     }
-                  }
-                  return null;
+                    else{
+                      return Center(
+                        child: CircleAvatar(
+                          backgroundColor: Colors.green.shade100,
+                          child: Center(
+                            child: AutoSizeText(
+                              "${day.day}",
+                              style: GoogleFonts.openSans(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
                 },
               ),
             ),
@@ -77,11 +91,10 @@ class _AttendanceBodyState extends State<AttendanceBody> {
             ),
             child: Row(
               children: [
-
                 Container(
                   width: size.width*0.03,
                   height: size.height*0.065,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(8),
                       bottomLeft: Radius.circular(8)
@@ -115,7 +128,6 @@ class _AttendanceBodyState extends State<AttendanceBody> {
             ),
             child: Row(
               children: [
-
                 Container(
                   width: size.width*0.03,
                   height: size.height*0.065,

@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:metaphile_erp/Screens/Home/screens/Attendance/Attendance.dart';
 import 'package:metaphile_erp/Screens/Home/screens/Datesheet/DateSheet.dart';
 import 'package:metaphile_erp/Screens/Home/screens/Fee/Fee%20Details.dart';
+import 'package:metaphile_erp/Screens/Home/screens/askDoubt.dart';
 import 'package:metaphile_erp/Screens/Home/screens/change_password.dart';
+import 'package:metaphile_erp/Screens/Home/screens/leave_application.dart';
 import 'package:metaphile_erp/Screens/Home/screens/profile_screen.dart';
 import 'package:metaphile_erp/Screens/Home/screens/schoolGallery.dart';
 
@@ -270,15 +272,25 @@ class _HomeState extends State<Home> {
                   secondaryText: "Play Quiz",
                 ),
               ),
-              SizedBox(
-                width: size.width*0.4,
-                child: CustomCard(
-                  circularAvatar: SizedBox(
-                      width: size.width*0.13,
-                      height: size.width*0.13,
-                      child: Image.asset("assets/Navigation/Home/AskDoubt.png",fit: BoxFit.scaleDown,)),
-                  mainText: "",
-                  secondaryText: "Ask Doubt",
+              InkWell(
+                onTap: (){
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                      return AskDoubt();
+                      },
+                    ),
+                  );
+                },
+                child: SizedBox(
+                  width: size.width*0.4,
+                  child: CustomCard(
+                    circularAvatar: SizedBox(
+                        width: size.width*0.13,
+                        height: size.width*0.13,
+                        child: Image.asset("assets/Navigation/Home/AskDoubt.png",fit: BoxFit.scaleDown,)),
+                    mainText: "",
+                    secondaryText: "Ask Doubt",
+                  ),
                 ),
               ),
             ],
@@ -286,17 +298,26 @@ class _HomeState extends State<Home> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SizedBox(
-                width: size.width*0.4,
-                child: CustomCard(
-                  circularAvatar: SizedBox(
-                      width: size.width*0.13,
-                      height: size.width*0.13,
-                      child: Image.asset("assets/Navigation/Home/Leave.png",fit: BoxFit.scaleDown,)),
-                  mainText: "",
-                  secondaryText: "Leave Application",
+
+              InkWell(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return LeaveApplication();
+                  },));
+                },
+                child: SizedBox(
+                  width: size.width*0.4,
+                  child: CustomCard(
+                    circularAvatar: SizedBox(
+                        width: size.width*0.13,
+                        height: size.width*0.13,
+                        child: Image.asset("assets/Navigation/Home/Leave.png",fit: BoxFit.scaleDown,)),
+                    mainText: "",
+                    secondaryText: "Leave Application",
+                  ),
                 ),
               ),
+
               InkWell(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -315,6 +336,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
+
             ],
           ),
           Row(

@@ -35,12 +35,12 @@ class SchoolGallery extends StatelessWidget {
       InkWell(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return OpenImage(imagePath: "assets/Gallery/Harsh/3.jpg");
+            return const OpenImage(imagePath: "assets/Gallery/Harsh/3.jpg");
           },));
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(image: AssetImage("assets/Gallery/Harsh/3.jpg"),fit: BoxFit.cover)
           ),
 
@@ -50,14 +50,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Tushar/1.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Tushar/1.jpg");
               },
             ),
           );
           },
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(0),
+            borderRadius: BorderRadius.circular(10),
             image: const DecorationImage(image: AssetImage("assets/Gallery/Tushar/1.jpg"),fit: BoxFit.cover)
         ),
 
@@ -67,14 +67,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Harsh/1.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Harsh/1.jpg");
               },
             ),
           );
           },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(image: AssetImage("assets/Gallery/Harsh/1.jpg"),fit: BoxFit.cover)
           ),
 
@@ -85,14 +85,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Bhuv/2.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Bhuv/2.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(image: AssetImage("assets/Gallery/Bhuv/2.jpg"),fit: BoxFit.cover)
           ),
 
@@ -102,14 +102,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Tushar/2.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Tushar/2.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(image: AssetImage("assets/Gallery/Tushar/2.jpg"),fit: BoxFit.cover)
           ),
 
@@ -119,14 +119,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Harsh/2.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Harsh/2.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(image: AssetImage("assets/Gallery/Harsh/2.jpg"),fit: BoxFit.cover)
           ),
 
@@ -138,14 +138,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Bhuv/3.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Bhuv/3.jpg");
               },
             ),
           );
           },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(image: AssetImage("assets/Gallery/Bhuv/3.jpg"),fit: BoxFit.cover)
           ),
 
@@ -155,14 +155,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Tushar/3.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Tushar/3.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(image: AssetImage("assets/Gallery/Tushar/3.jpg"),fit: BoxFit.cover)
           ),
 
@@ -172,14 +172,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Bhuv/1.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Bhuv/1.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(image: AssetImage("assets/Gallery/Bhuv/1.jpg"),fit: BoxFit.cover)
           ),
 
@@ -190,14 +190,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Tushar/4.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Tushar/4.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(image: AssetImage("assets/Gallery/Tushar/4.jpg"),fit: BoxFit.cover)
           ),
 
@@ -207,14 +207,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Bhuv/5.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Bhuv/5.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(image: AssetImage("assets/Gallery/Bhuv/5.jpg"),fit: BoxFit.cover)
           ),
 
@@ -224,14 +224,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Bhuv/6.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Bhuv/6.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(image: AssetImage("assets/Gallery/Bhuv/6.jpg"),fit: BoxFit.cover)
           ),
 
@@ -242,14 +242,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Bhuv/7.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Bhuv/7.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(
                   image: AssetImage("assets/Gallery/Bhuv/7.jpg"),fit: BoxFit.cover)
           ),
@@ -260,14 +260,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Bhuv/8.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Bhuv/8.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(
                   image: AssetImage("assets/Gallery/Bhuv/8.jpg"),fit: BoxFit.cover)
           ),
@@ -278,14 +278,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Bhuv/9.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Bhuv/9.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(
                   image: AssetImage("assets/Gallery/Bhuv/9.jpg"),fit: BoxFit.cover)
           ),
@@ -296,14 +296,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Bhuv/10.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Bhuv/10.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(
                   image: AssetImage("assets/Gallery/Bhuv/10.jpg"),fit: BoxFit.cover)
           ),
@@ -314,14 +314,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Bhuv/11.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Bhuv/11.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(
                   image: AssetImage("assets/Gallery/Bhuv/11.jpg"),fit: BoxFit.cover)
           ),
@@ -332,14 +332,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Bhuv/12.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Bhuv/12.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(
                   image: AssetImage("assets/Gallery/Bhuv/12.jpg"),fit: BoxFit.cover)
           ),
@@ -350,14 +350,14 @@ class SchoolGallery extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(builder: (context) {
-              return OpenImage(imagePath: "assets/Gallery/Bhuv/13.jpg");
+              return const OpenImage(imagePath: "assets/Gallery/Bhuv/13.jpg");
             },
             ),
           );
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
+              borderRadius: BorderRadius.circular(10),
               image: const DecorationImage(
                   image: AssetImage("assets/Gallery/Bhuv/13.jpg"),fit: BoxFit.cover)
           ),

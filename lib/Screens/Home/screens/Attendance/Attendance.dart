@@ -43,29 +43,28 @@ class _AttendanceState extends State<Attendance> {
             }, icon: const Icon(Icons.arrow_back_ios_new_outlined,color: Colors.white,)),
             title: _tabs(size),
           ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Card(
+                  color: Colors.white,
+                  margin: const EdgeInsets.all(0),
+                  shape: const OutlineInputBorder(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(30),
+                          topLeft: Radius.circular(30)
+                      )
+                  ),
+                  child: SizedBox(
+                    height: size.height*0.9,
+                    width: size.width,
+                    child: SingleChildScrollView(child: tabs[index]),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        Column(
-          children: [
-            SizedBox(
-              height: size.height*0.1,
-            ),
-            Card(
-              color: Colors.white,
-              margin: const EdgeInsets.all(0),
-              shape: const OutlineInputBorder(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30),
-                  topLeft: Radius.circular(30)
-                )
-              ),
-              child: SizedBox(
-                height: size.height*0.9,
-                width: size.width,
-                child: SingleChildScrollView(child: tabs[index]),
-              ),
-            ),
-          ],
-        )
       ]
     );
   }

@@ -69,15 +69,15 @@ class PayOnline extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 15.0,vertical: size.height*0.03),
                     child: Column(
                       children: [
-                        PayOnlineTextField(controller: date, hintText: "Date", icon: true),
+                        PayOnlineTextField(controller: date, hintText: "Date", icon: true, enabled: false,),
                         SizedBox(
                           height: size.height*0.03,
                         ),
-                        PayOnlineTextField(controller: period, hintText: "Period", icon: true),
+                        PayOnlineTextField(controller: period, hintText: "Period", icon: true, enabled: false,),
                         SizedBox(
                           height: size.height*0.03,
                         ),
-                        PayOnlineTextField(controller: totalFee, hintText: "Date", icon: false),
+                        PayOnlineTextField(controller: totalFee, hintText: "Date", icon: false, enabled: false,),
                         SizedBox(
                           height: size.height*0.52,
                         ),
