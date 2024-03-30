@@ -1,9 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:avatar_glow/avatar_glow.dart';
 import 'package:highlight_text/highlight_text.dart';
+import 'package:metaphile_erp/voice_command_model/recoginize_intent.dart';
+import 'package:metaphile_erp/voice_command_model/speek.dart';
 import 'package:metaphile_erp/voice_command_model/wakeup.dart';
 import 'package:porcupine_flutter/porcupine_manager.dart';
 import 'package:speech_to_text/speech_to_text.dart' as speechToText;
+import 'package:translator/translator.dart';
+
+import 'Screens/Home/screens/schoolGallery.dart';
+import 'Screens/onBoarding/Screens/Forget.dart';
+import 'Screens/onBoarding/Screens/intro.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +22,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
+      routes: {
+        '/resetPassword': (context) => ForgetPassword(),
+        "/resultScreen" : (context) => const SchoolGallery()
+      },
+      home: Material(child: Scaffold(body: MyHomePage())),
     );
   }
 }
@@ -27,7 +38,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late speechToText.SpeechToText speech;
-  String textString = "Press The Button";
+  late BuildContext cnxt;
+  String textString = "";
   bool isListen = false;
   double confidence = 1.0;
   final Map<String, HighlightedWord> highlightWords = {
@@ -40,28 +52,108 @@ class _MyHomePageState extends State<MyHomePage> {
   };
 
   void listen() async {
-    print("inside void");
+    print("listen called successfully");
     if (!isListen) {
-      bool avail = await speech.initialize();
+      bool avail = await speech.initialize(
+        onError: (errorNotification) {
+
+          Startlistening();
+          print("erp error : ${errorNotification.errorMsg}");
+
+        },
+      );
+
       if (avail) {
         setState(() {
           isListen = true;
         });
-        speech.listen(onResult: (value) {
-          setState(() {
-            textString = value.recognizedWords;
-            if (value.hasConfidenceRating && value.confidence > 0) {
-              confidence = value.confidence;
-            }
-          });
+        speechToText.SpeechListenOptions(
+          listenMode: speechToText.ListenMode.dictation
+        );
+        await speech.listen(
+          onResult: (value) async {
+              setState(() {
+                textString = value.recognizedWords;
+                if (value.hasConfidenceRating && value.confidence > 0) {
+                  confidence = value.confidence;
+                }
+              });
+              if(value.finalResult){
+                try{
+                  var check = await GoogleTranslator().translate(textString,from: "hi",to: "en");
+                  textString = check.text;
+                  print("converted text: $textString");
+                  final Map<String,dynamic> navigationFromIntent = CustomIntent().determineIntent(textString);
+                  print("\n\n\n\n\n $textString \n output: $navigationFromIntent \n\n\n\n\n");
+                  if(navigationFromIntent.isNotEmpty){
+                    if(navigationFromIntent["route"] == "goback"){
+                      Navigator.pop(context);
+                      Navigator.of(context).pop();
+
+                    }else{
+                      Navigator.pushNamed(context, navigationFromIntent["route"],arguments: navigationFromIntent["attributes"]);
+                    }
+                  }else{
+
+                  }
+
+                  textString="";
+                  listen();
+                }catch (e){
+                  Speak().speak("write now i am unable to convert your speech in english.");
+                  final Map<String,dynamic> navigationFromIntent = CustomIntent().determineIntent(textString);
+                  print("\n\n\n\n\n $textString \n output: $navigationFromIntent \n\n\n\n\n");
+                  if(navigationFromIntent.isNotEmpty){
+                    if(navigationFromIntent["route"] == "goback"){
+                      Navigator.pop(context);
+                      Navigator.of(context).pop();
+
+                    }else{
+                      Navigator.pushNamed(context, navigationFromIntent["route"],arguments: navigationFromIntent["attributes"]);
+                    }
+                  }else{
+
+                  }
+
+                  textString="";
+                  listen();
+                }
+
+              }
+            },
+          pauseFor: const Duration(seconds: 6),
+        ).whenComplete(() {
+          showBottomSheet(context: context, builder: (context) {
+            return BottomSheet(
+              onClosing: () {
+
+              },
+              builder: (context) {
+                return Container(
+                  padding: const EdgeInsets.all(20),
+                  child: TextHighlight(
+                    text: textString,
+                    words: highlightWords,
+                    textStyle: const TextStyle(
+                        fontSize: 25.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                );
+              },
+            );
+          },);
         });
       }
-    } else {
+    }
+    else {
       setState(() {
         isListen = false;
+        speech.stop();
+        Startlistening();
       });
-      speech.stop();
     }
+
   }
 
   @override
@@ -69,42 +161,15 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     speech = speechToText.SpeechToText();
     Startlistening();
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Speech To Text"),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 10.0,
-          ),
-          Text(
-            "Confidence: ${(confidence * 100.0).toStringAsFixed(1)}%",
-            style: const TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.red),
-          ),
-          Container(
-            padding: const EdgeInsets.all(20),
-            child: TextHighlight(
-              text: textString,
-              words: highlightWords,
-              textStyle: const TextStyle(
-                  fontSize: 25.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
-      ),
-    );
+    cnxt = context;
+    return Scaffold(body: const Intro());
   }
+
+
   Startlistening() async {
     PorcupineManager? manager = await Wakeup(listen).createPorcupineManager();
     try{

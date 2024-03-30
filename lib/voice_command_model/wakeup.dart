@@ -9,8 +9,12 @@ class Wakeup{
   Wakeup(this.listingCallBack);
   Future<void> _wakeWordCallback(int keywordIndex) async {
 
-    await Speak().speak("Hello, what can i do for you").whenComplete(() async {
-      listingCallBack();
+    await Speak().speak("Hello, what can i do for you").then((check) async {
+      if(check){
+        print("check speek");
+        _porcupineManager.stop();
+        listingCallBack();
+      }
       //STT().listen();
       // Set flag when speech recognition starts
       // No need for a while loop here
