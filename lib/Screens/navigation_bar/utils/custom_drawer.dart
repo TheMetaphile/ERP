@@ -162,7 +162,7 @@ class _CustomDrawerState extends State<CustomDrawer>  with SingleTickerProviderS
                               child: Column(
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
                                       const CircleAvatar(
                                         backgroundColor: Colors.blue,
@@ -178,14 +178,14 @@ class _CustomDrawerState extends State<CustomDrawer>  with SingleTickerProviderS
                                           AutoSizeText("Parent-Teacher Meetings",
                                             style: GoogleFonts.openSans(
                                               fontWeight: FontWeight.w600,
-                                              fontSize: size.width*0.043,
+                                              fontSize: size.width*0.038,
                                               color: Colors.black
                                             ),
                                           ),
-                                          AutoSizeText("tomorrow from 9 am to 5pm",
+                                          AutoSizeText("Tomorrow from 9 am to 5pm",
                                             style: GoogleFonts.openSans(
                                               fontWeight: FontWeight.w600,
-                                              fontSize: size.width*0.035,
+                                              fontSize: size.width*0.03,
                                               color: Colors.grey.shade800
                                             ),
                                           ),
@@ -207,8 +207,8 @@ class _CustomDrawerState extends State<CustomDrawer>  with SingleTickerProviderS
                                     children: [
                                       InkWell(
                                         child: Container(
-                                          width: size.width*0.3,
-                                          height: size.height*0.05,
+                                          width: size.width*0.27,
+                                          height: size.height*0.04,
                                           decoration: BoxDecoration(
                                             color: const Color.fromRGBO(64, 111, 224, 1),
                                             borderRadius: BorderRadius.circular(10)
@@ -217,7 +217,7 @@ class _CustomDrawerState extends State<CustomDrawer>  with SingleTickerProviderS
                                             child: AutoSizeText("Accepts",
                                               style: GoogleFonts.openSans(
                                                   fontWeight: FontWeight.w600,
-                                                  fontSize: size.width*0.043,
+                                                  fontSize: size.width*0.04,
                                                   color: Colors.white
                                               ),
                                             ),
@@ -229,8 +229,8 @@ class _CustomDrawerState extends State<CustomDrawer>  with SingleTickerProviderS
                                       ),
                                       InkWell(
                                         child: Container(
-                                          width: size.width*0.3,
-                                          height: size.height*0.05,
+                                          width: size.width*0.27,
+                                          height: size.height*0.04,
                                           decoration: BoxDecoration(
                                             border: Border.all(
                                               color: Colors.grey
@@ -238,7 +238,7 @@ class _CustomDrawerState extends State<CustomDrawer>  with SingleTickerProviderS
                                             borderRadius: BorderRadius.circular(10)
                                           ),
                                           child: Center(
-                                            child: AutoSizeText("Accepts",
+                                            child: AutoSizeText("Reject",
                                               style: GoogleFonts.openSans(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: size.width*0.043,
@@ -259,7 +259,7 @@ class _CustomDrawerState extends State<CustomDrawer>  with SingleTickerProviderS
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(
@@ -277,7 +277,7 @@ class _CustomDrawerState extends State<CustomDrawer>  with SingleTickerProviderS
                                     child: AutoSizeText("Tomorrow's field trip to the museum has been postponed to next week. Please check your emails for further updates.",
                                       style: GoogleFonts.openSans(
                                         fontWeight: FontWeight.w600,
-                                        fontSize: size.width*0.035,
+                                        fontSize: size.width*0.03,
                                         color: Colors.grey.shade800
                                       ),
                                     ),
@@ -320,7 +320,7 @@ class _CustomDrawerState extends State<CustomDrawer>  with SingleTickerProviderS
                                             AutoSizeText("Attention all staff and students!",
                                               style: GoogleFonts.openSans(
                                                   fontWeight: FontWeight.w600,
-                                                  fontSize: size.width*0.04,
+                                                  fontSize: size.width*0.038,
                                                   color: Colors.black
                                               ),
                                             ),
@@ -330,7 +330,7 @@ class _CustomDrawerState extends State<CustomDrawer>  with SingleTickerProviderS
                                             AutoSizeText("The school's annual talent sho originally scheduled for this friday has been rescheduled to next month.",
                                               style: GoogleFonts.openSans(
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: size.width*0.035,
+                                                  fontSize: size.width*0.03,
                                                   color: Colors.grey.shade800
                                               ),
                                             ),
@@ -367,7 +367,7 @@ class _CustomDrawerState extends State<CustomDrawer>  with SingleTickerProviderS
                                             child: AutoSizeText("Important Notice for all",
                                               style: GoogleFonts.openSans(
                                                   fontWeight: FontWeight.w600,
-                                                  fontSize: size.width*0.043,
+                                                  fontSize: size.width*0.04,
                                                   color: Colors.white
                                               ),
                                             ),

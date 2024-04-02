@@ -10,7 +10,8 @@ class Wakeup{
   Future<void> _wakeWordCallback(int keywordIndex) async {
 
     await Speak().speak("Hello, what can i do for you").then((check) async {
-      if(check){
+      print("speak result $check");
+      if(check==1){
         print("check speek");
         _porcupineManager.stop();
         listingCallBack();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:metaphile_erp/Screens/Events/screens/Events_and_programs.dart';
 import 'package:metaphile_erp/Screens/Home/screens/Home.dart';
+import 'package:metaphile_erp/Screens/navigation_bar/Screens/result.dart';
 import 'package:metaphile_erp/Screens/navigation_bar/utils/custom_drawer.dart';
 import 'package:molten_navigationbar_flutter/molten_navigationbar_flutter.dart';
 
@@ -92,9 +93,37 @@ class _NavigationBarState extends State<NavigationBar> {
           ),
         ],
         backgroundColor: const Color.fromRGBO(108, 137, 204, 1),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu, color: Colors.white,),
+            onPressed: () {
+              Scaffold.of(context).openDrawer(); // Open the drawer
+            },
+          ),
+        ),
       ),
       endDrawer: const CustomDrawer(),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            SizedBox(
+              height: size.height*0.1,
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const Result(),));
+              },
+              title: AutoSizeText("Result",
+                 style: GoogleFonts.openSans(
+                   fontWeight: FontWeight.w600,
+                   fontSize: 20
+                 ),
+               ),
+
+            )
+          ],
+        ),
+      ),
       body:  tabScreens[selectedIndex],
       bottomNavigationBar: MoltenBottomNavigationBar(
         barColor: const Color.fromRGBO(108, 137, 204, 1),

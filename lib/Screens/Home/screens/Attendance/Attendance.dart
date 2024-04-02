@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'Attendance_body.dart';
 
@@ -10,7 +11,8 @@ class Attendance extends StatefulWidget {
   State<Attendance> createState() => _AttendanceState();
 }
 
-class _AttendanceState extends State<Attendance> {
+class _AttendanceState extends State<Attendance> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
   String currTab = "Attendance";
   double sliderPos = 0;
   double sliderWidth=110;
@@ -19,8 +21,18 @@ class _AttendanceState extends State<Attendance> {
     const AttendanceBody(),
     const AttendanceBody(),
     const AttendanceBody(),
-
   ];
+  @override
+  void initState() {
+    _tabController = TabController(length: 3, vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -58,113 +70,69 @@ class _AttendanceState extends State<Attendance> {
                   child: SizedBox(
                     height: size.height*0.9,
                     width: size.width,
-                    child: SingleChildScrollView(child: tabs[index]),
-                  ),
-                ),
-              ],
+                    child: TabBarView(
+                        controller: _tabController,
+                        children: tabs,
             ),
           ),
         ),
-      ]
+      ],
+    ),
+    ),
+    ),
+    ]
     );
   }
 
 
   Widget _tabs(Size size){
-    return Container(
-      height: size.height*0.04,
+    return SizedBox(
       width: size.width*0.8,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
-        border: Border.all(color: Colors.white,width: 2),
-        color:  const Color.fromRGBO(103,135,214, 1),
-      ),
-      child: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: size.width*0.03,
+      height: size.height*0.04,
+      child: TabBar(
+        controller: _tabController,
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          color: Colors.white,
+        ),
+        labelColor: const Color.fromRGBO(103,135,214, 1),
+        unselectedLabelColor: Colors.white,
+        indicatorSize: TabBarIndicatorSize.tab,
+        isScrollable: false,
+        tabs: [
+          Tab(
+            child: AutoSizeText(
+              'Attendance',
+              style: GoogleFonts.openSans(
+                  fontSize: 15,
+                  fontWeight:FontWeight.bold
               ),
-              InkWell(
-                onTap: (){
-                  setState(() {
-                    sliderPos = 0;
-                    index=0;
-                    currTab = "Attendance";
-                    sliderWidth=size.width*0.26;
-                  });
-                },
-                child: SizedBox(
-                  width: size.width*0.22,
-                    height: size.height*0.05,
-                  child: const Center(child: AutoSizeText("Attendance",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w600,color: Colors.white),textAlign: TextAlign.center,))
-                ),
-              ),
-              SizedBox(
-                width: size.width*0.02,
-              ),
-              InkWell(
-                onTap: (){
-                  setState(() {
-                    index=1;
-                    sliderPos=size.width*0.26;
-                    sliderWidth=size.width*0.18;
-                    currTab="Holiday";
-                  });
-                },
-                child: SizedBox(
-                  width: size.width*0.18,
-                    height: size.height*0.05,
-                  child: const Center(child: AutoSizeText("Holiday",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w600,color: Colors.white),textAlign: TextAlign.center,))
-
-                ),
-              ),
-              SizedBox(
-                width: size.width*0.01,
-              ),
-              InkWell(
-                onTap: (){
-                  setState(() {
-                    index=2;
-                    sliderPos=size.width*0.45;
-                    sliderWidth=size.width*0.34;
-                    currTab="Bus attendance";
-                  });
-                },
-                child: SizedBox(
-                  width: size.width*0.3,
-                    height: size.height*0.05,
-                  child: const Center(child: AutoSizeText("Bus Attendance",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w600,color: Colors.white),textAlign: TextAlign.center,))
-                ),
-              ),
-            ],
+              maxLines: 1,
+            ),
           ),
-          _slider(size)
+          Tab(
+            child: AutoSizeText(
+              'Holiday',
+              style: GoogleFonts.openSans(
+                  fontSize: 15,
+                  fontWeight:FontWeight.bold
+              ),
+              maxLines: 1,
+            ),
+          ),
+          Tab(
+            child: AutoSizeText(
+              'Bus Attendance',
+              style: GoogleFonts.openSans(
+                  fontSize: 15,
+                  fontWeight:FontWeight.bold,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
         ],
       ),
-    );
-  }
-  Widget _slider(Size size){
-    return AnimatedPositioned(
-        duration: const Duration(milliseconds: 400),
-        left: sliderPos,
-        top: 0,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 400),
-          height: size.height*0.04,
-          width: sliderWidth,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            border: Border.all(color: Colors.white,width: 2),
-            color: Colors.white
-          ),
-          child: Center(
-              child: AutoSizeText(currTab,style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w600,color: Color.fromRGBO(103,135,214, 1),),textAlign: TextAlign.center,)),
-        ),
     );
   }
 }

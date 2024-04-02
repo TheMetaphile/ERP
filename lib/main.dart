@@ -1,18 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:highlight_text/highlight_text.dart';
+import 'package:metaphile_erp/Screens/permissions.dart';
+import 'package:metaphile_erp/voice_command_model/convert.dart';
 import 'package:metaphile_erp/voice_command_model/recoginize_intent.dart';
 import 'package:metaphile_erp/voice_command_model/speek.dart';
 import 'package:metaphile_erp/voice_command_model/wakeup.dart';
 import 'package:porcupine_flutter/porcupine_manager.dart';
 import 'package:speech_to_text/speech_to_text.dart' as speechToText;
-import 'package:translator/translator.dart';
-
 import 'Screens/Home/screens/schoolGallery.dart';
 import 'Screens/onBoarding/Screens/Forget.dart';
 import 'Screens/onBoarding/Screens/intro.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -80,11 +80,12 @@ class _MyHomePageState extends State<MyHomePage> {
               });
               if(value.finalResult){
                 try{
-                  var check = await GoogleTranslator().translate(textString,from: "hi",to: "en");
-                  textString = check.text;
-                  print("converted text: $textString");
+                  print(": $textString");
+                  textString  = await translateText(textString);
+
+
                   final Map<String,dynamic> navigationFromIntent = CustomIntent().determineIntent(textString);
-                  print("\n\n\n\n\n $textString \n output: $navigationFromIntent \n\n\n\n\n");
+                  print("converted text \n\n\n\n\n $textString \n output: $navigationFromIntent \n\n\n\n\n");
                   if(navigationFromIntent.isNotEmpty){
                     if(navigationFromIntent["route"] == "goback"){
                       Navigator.pop(context);
@@ -93,8 +94,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     }else{
                       Navigator.pushNamed(context, navigationFromIntent["route"],arguments: navigationFromIntent["attributes"]);
                     }
-                  }else{
-
                   }
 
                   textString="";
@@ -160,6 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     speech = speechToText.SpeechToText();
+     Permissions().checkAudioPermission();
     Startlistening();
   }
 

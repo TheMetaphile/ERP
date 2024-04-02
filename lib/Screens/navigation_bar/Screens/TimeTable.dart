@@ -45,35 +45,36 @@ class _TimetableState extends State<Timetable> with TickerProviderStateMixin{
                         height:size.height*0.078,
                         width: size.width*0.95,
                         child: TabBar(
-                          isScrollable: true,
-                          tabAlignment: TabAlignment.center,
-                          indicator: ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)
-                            )
-                          ),
-                          labelPadding: EdgeInsets.zero,
                           controller: _tabController,
+                          tabAlignment: TabAlignment.start,
+                          indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25),
+                            color: const Color.fromRGBO(103,135,214, 1),
+                          ),
+                          labelColor: Colors.white,
+                          unselectedLabelColor: const Color.fromRGBO(103,135,214, 1),
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          isScrollable: true,
                           tabs: [
-                            _buildTab('Mon', '18-03-2024', context,size,1, _tabController),
-                            _buildTab('Tue', '19-03-2024', context,size,2, _tabController),
-                            _buildTab('Wed', '20-03-2024', context,size,3, _tabController),
-                            _buildTab('Thur', '21-03-2024', context,size,4, _tabController),
-                            _buildTab('Fri', '22-03-2024', context,size,5, _tabController),
-                            _buildTab('Sat', '23-03-2024', context,size,6, _tabController),
+                            _buildTab('Mon', '18 Apr', context,size,1, _tabController),
+                            _buildTab('Tue', '19 Apr', context,size,2, _tabController),
+                            _buildTab('Wed', '20 Apr', context,size,3, _tabController),
+                            _buildTab('Thur', '21 Apr', context,size,4, _tabController),
+                            _buildTab('Fri', '22 Apr', context,size,5, _tabController),
+                            _buildTab('Sat', '23 Apr', context,size,6, _tabController),
                           ],
-                        )
+                        ),
                     ),
                     Expanded(
                       child: TabBarView(
                         controller: _tabController,
                         children: [
-                          buildDayView('Mon', '17-03-2024', context),
-                          buildDayView('Tue', '18-03-2024', context),
-                          buildDayView('Wed', '19-03-2024', context),
-                          buildDayView('Thur', '20-03-2024', context),
-                          buildDayView('Fri', '21-03-2024', context),
-                          buildDayView('Sat', '22-03-2024', context),
+                          buildDayView('Mon', '17 Apr', context),
+                          buildDayView('Tue', '18 Apr', context),
+                          buildDayView('Wed', '19 Apr', context),
+                          buildDayView('Thur', '20 Apr', context),
+                          buildDayView('Fri', '21 Apr', context),
+                          buildDayView('Sat', '22 Apr', context),
                         ],
                       ),
                     )
@@ -87,32 +88,22 @@ class _TimetableState extends State<Timetable> with TickerProviderStateMixin{
   }
 }
 
-bool _isSelected(int index, TabController tabController) {
-  return tabController.index == index;
-}
 
 Widget _buildTab(String day, String date,BuildContext context,Size size,int index, TabController tabController) {
   return Tab(
-    height: size.height*0.056,
-    child: Container(
-      decoration: BoxDecoration(
-        color:_isSelected(index-1, tabController)? const Color.fromRGBO(103,135,214, 1) : Colors.white,
-        borderRadius: (index==1 || index==6)?((index==1)?const BorderRadius.only(topLeft: Radius.circular(30), bottomLeft: Radius.circular(30)):const BorderRadius.only(topRight:Radius.circular(30), bottomRight: Radius.circular(30))):BorderRadius.circular(0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AutoSizeText(day,
-              style:GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w600,color:_isSelected(index-1, tabController)? Colors.white: Colors.black)
-            ),
-            AutoSizeText(date,
-                style:GoogleFonts.openSans(fontSize:size.width*0.03,fontWeight:FontWeight.w500,color:_isSelected(index-1, tabController)? Colors.white.withOpacity(0.9): Colors.grey.shade800)
-            ),
-          ],
+    height: size.height*0.045,
+    iconMargin: const EdgeInsets.all(8),
+
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AutoSizeText(day,
+          style:GoogleFonts.openSans(fontSize: 15,fontWeight:FontWeight.w600,)
         ),
-      ),
+        AutoSizeText(date,
+            style:GoogleFonts.openSans(fontSize:12,fontWeight:FontWeight.w500,)
+        ),
+      ],
     ),
   );
 }

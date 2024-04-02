@@ -198,7 +198,7 @@ class _HomeState extends State<Home> {
                   },));
                 },
                 child: SizedBox(
-                  width: size.width*0.4,
+                  width: size.width*0.45,
                   child: CustomCard(
                     circularAvatar: Card(
                       elevation: 10,
@@ -230,7 +230,7 @@ class _HomeState extends State<Home> {
                   },));
                 },
                 child: SizedBox(
-                  width: size.width*0.4,
+                  width: size.width*0.45,
                   child: CustomCard(
                     circularAvatar: Card(
                       elevation: 10,
@@ -262,7 +262,7 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(
-                width: size.width*0.4,
+                width: size.width*0.45,
                 child: CustomCard(
                   circularAvatar: SizedBox(
                       width: size.width*0.13,
@@ -282,7 +282,7 @@ class _HomeState extends State<Home> {
                   );
                 },
                 child: SizedBox(
-                  width: size.width*0.4,
+                  width: size.width*0.45,
                   child: CustomCard(
                     circularAvatar: SizedBox(
                         width: size.width*0.13,
@@ -306,7 +306,7 @@ class _HomeState extends State<Home> {
                   },));
                 },
                 child: SizedBox(
-                  width: size.width*0.4,
+                  width: size.width*0.45,
                   child: CustomCard(
                     circularAvatar: SizedBox(
                         width: size.width*0.13,
@@ -321,11 +321,11 @@ class _HomeState extends State<Home> {
               InkWell(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return DateSheet();
+                    return const DateSheet();
                   },));
                 },
                 child: SizedBox(
-                  width: size.width*0.4,
+                  width: size.width*0.45,
                   child: CustomCard(
                     circularAvatar: SizedBox(
                         width: size.width*0.13,
@@ -345,11 +345,11 @@ class _HomeState extends State<Home> {
               InkWell(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return SchoolGallery();
+                    return const SchoolGallery();
                   },));
                 },
                 child: SizedBox(
-                  width: size.width*0.4,
+                  width: size.width*0.45,
                   child: CustomCard(
                     circularAvatar: SizedBox(
                         width: size.width*0.13,
@@ -369,7 +369,7 @@ class _HomeState extends State<Home> {
                 },
 
                 child: SizedBox(
-                  width: size.width*0.4,
+                  width: size.width*0.45,
                   child: CustomCard(
                     circularAvatar: SizedBox(
                         width: size.width*0.13,

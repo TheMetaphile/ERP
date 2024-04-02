@@ -23,7 +23,7 @@ class Events extends StatelessWidget {
             AutoSizeText(eventHeading,
               style: GoogleFonts.openSans(
                 color: Colors.black,
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: FontWeight.w600
               ),
             ),

@@ -5,12 +5,17 @@ import 'package:flutter_tts/flutter_tts.dart';
 class Speak{
 
     final FlutterTts flutterTts = FlutterTts();
-    Future<bool> speak(String text) async{
-        bool result=false;
+
+
+    Future<dynamic> speak(String text) async{
+
+        print(await flutterTts.getVoices);
+        await flutterTts.setVoice({"name": "hi-in-x-hia-local", "locale": "hi-IN"});
+        await flutterTts.setSpeechRate(0.55);
+        await flutterTts.setPitch(1);
       await flutterTts.speak(text).whenComplete((){
-          result = true;
       });
-      return result;
+      return await flutterTts.awaitSpeakCompletion(true);
     }
 
     Future stop() async{
@@ -24,9 +29,9 @@ class Speak{
 
     await flutterTts.setSpeechRate(1.0);
 
-    await flutterTts.setVolume(1.0);
 
-    await flutterTts.setPitch(1.0);
+
+
 
     await flutterTts.isLanguageAvailable("en-US");
 
@@ -37,7 +42,7 @@ class Speak{
 // iOS, macOS, and Android only
     await flutterTts.synthesizeToFile("Hello World", Platform.isAndroid ? "tts.wav" : "tts.caf");
 
-    await flutterTts.setVoice({"name": "Karen", "locale": "en-AU"});
+
 
 // iOS only
     await flutterTts.setSharedInstance(true);
