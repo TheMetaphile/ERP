@@ -78,7 +78,7 @@ class ChangePassword extends StatelessWidget {
                         SizedBox(
                           height: size.height*0.03,
                         ),
-                        CustomTextField(controller: confirmPasswordController,hintText: "Retype Password",),
+                        CustomTextField(controller: confirmPasswordController,hintText: "Confirm Password",),
                         SizedBox(
                           height: size.height*0.03,
                         ),

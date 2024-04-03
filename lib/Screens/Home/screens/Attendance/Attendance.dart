@@ -95,6 +95,7 @@ class _AttendanceState extends State<Attendance> with SingleTickerProviderStateM
           borderRadius: BorderRadius.circular(25),
           color: Colors.white,
         ),
+        dividerColor: Colors.transparent,
         labelColor: const Color.fromRGBO(103,135,214, 1),
         unselectedLabelColor: Colors.white,
         indicatorSize: TabBarIndicatorSize.tab,

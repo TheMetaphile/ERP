@@ -146,7 +146,9 @@ Widget buildSubjectInfo(String name,TimeOfDay fixedTime, int period,String subj,
   int minute=fixedTime.minute;
   int hour=fixedTime.hour;
   Size size=MediaQuery.of(context).size;
-  return (name!='')?Card(
+  return (name!='')
+      ?
+  Card(
     elevation:5,
     shadowColor: Colors.black,
     shape: RoundedRectangleBorder(
@@ -201,24 +203,30 @@ Widget buildSubjectInfo(String name,TimeOfDay fixedTime, int period,String subj,
         ],
       ),
     ),
-  ):Card(
+  )
+      :
+  Card(
     elevation:5,
     shadowColor: Colors.black,
+    color: const Color.fromRGBO(103,135,214, 1),
     shape: RoundedRectangleBorder(
         side: const BorderSide(width: 1),
         borderRadius: BorderRadius.circular(size.width*0.03)
     ),
     child: SizedBox(
-    height:size.height*0.09,
-    child: ListTile(
-    onTap:(){},
-    title: AutoSizeText(subj,
-    style:GoogleFonts.openSans(fontSize:18,fontWeight:FontWeight.bold)
+      height:size.height*0.09,
+      child: ListTile(
+        onTap:(){},
+        title: AutoSizeText(subj,
+            style:GoogleFonts.openSans(fontSize:18,fontWeight:FontWeight.w700,color: Colors.white)
+        ),
+        subtitle: AutoSizeText('$hour:$minute-${((minute+duration)>=60)?(hour+1):hour}:${(minute+duration>=60)?(((minute+duration)==60)?'00':((minute+duration)%60)):(minute+duration)}${(hour>=12)?'pm':'am'}',
+            style:GoogleFonts.openSans(fontSize:18,fontWeight:FontWeight.w600,color:Colors.white.withOpacity(0.5))
+        ),
+        trailing: CircleAvatar(
+          radius: size.height*0.035,
+            backgroundImage: const AssetImage("assets/lunch.jpg")),
+      ),
     ),
-    subtitle: AutoSizeText('$hour:$minute-${((minute+duration)>=60)?(hour+1):hour}:${(minute+duration>=60)?(((minute+duration)==60)?'00':((minute+duration)%60)):(minute+duration)}${(hour>=12)?'pm':'am'}',
-    style:GoogleFonts.openSans(fontSize:18,fontWeight:FontWeight.bold,color:Colors.black.withOpacity(0.5))
-    ),
-    ),
-    ),
-    );
+  );
 }

@@ -106,7 +106,7 @@ class _ResultState extends State<Result> {
                             height: 2,
                             endIndent: 0,
                             indent: 0,
-                            thickness: 3,
+                            thickness: 2,
 
                           ),
                           Center(
@@ -124,7 +124,7 @@ class _ResultState extends State<Result> {
                             height: 2,
                             endIndent: 0,
                             indent: 0,
-                            thickness: 3,
+                            thickness: 2,
 
                           ),
                           SizedBox(
@@ -442,7 +442,7 @@ class _ResultState extends State<Result> {
                             height: 2,
                             endIndent: 0,
                             indent: 0,
-                            thickness: 3,
+                            thickness: 2,
 
                           ),
                           Center(
@@ -460,7 +460,7 @@ class _ResultState extends State<Result> {
                             height: 2,
                             endIndent: 0,
                             indent: 0,
-                            thickness: 3,
+                            thickness: 2,
 
                           ),
 
@@ -554,7 +554,7 @@ class _ResultState extends State<Result> {
                             height: 2,
                             endIndent: 0,
                             indent: 0,
-                            thickness: 3,
+                            thickness: 2,
 
                           ),
                           Center(
@@ -572,9 +572,1529 @@ class _ResultState extends State<Result> {
                             height: 2,
                             endIndent: 0,
                             indent: 0,
-                            thickness: 3,
+                            thickness: 2,
 
                           ),
+
+                          SizedBox(
+                            height: size.height*0.01,
+                          ),
+                          AutoSizeText(
+                            "Term I",
+                            style: GoogleFonts.openSans(
+                                color: Colors.black,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height*0.01,
+                          ),
+                          Card(
+                            elevation: 5,
+                            color: Colors.white,
+                            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15),borderSide: BorderSide(color: Colors.white)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: size.width*0.3,
+                                      height: size.height*0.05,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(15))
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                        child: AutoSizeText(
+                                          "Subject",
+                                          style: GoogleFonts.openSans(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: Colors.white,
+                                      width: size.width*0.3,
+                                      height: size.height*0.05,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                        child: AutoSizeText(
+                                          "Hindi",
+                                          style: GoogleFonts.openSans(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: Colors.white,
+                                      width: size.width*0.3,
+                                      height: size.height*0.05,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                        child: AutoSizeText(
+                                          "English",
+                                          style: GoogleFonts.openSans(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: Colors.white,
+                                      width: size.width*0.3,
+                                      height: size.height*0.05,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                        child: AutoSizeText(
+                                          "Maths",
+                                          style: GoogleFonts.openSans(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: Colors.white,
+                                      width: size.width*0.3,
+                                      height: size.height*0.05,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                        child: AutoSizeText(
+                                          "Science",
+                                          style: GoogleFonts.openSans(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: Colors.white,
+                                      width: size.width*0.3,
+                                      height: size.height*0.05,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                        child: AutoSizeText(
+                                          "Social Science",
+                                          style: GoogleFonts.openSans(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: Colors.white,
+                                      width: size.width*0.3,
+                                      height: size.height*0.05,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                        child: AutoSizeText(
+                                          "Drawing",
+                                          style: GoogleFonts.openSans(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: size.width*0.3,
+                                      height: size.height*0.05,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15))
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                        child: AutoSizeText(
+                                          "Computer",
+                                          style: GoogleFonts.openSans(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: size.width*0.3,
+                                      height: size.height*0.05,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15))
+                                      ),
+                                    ),
+                                  ]
+                                ),
+                                Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "Total Marks",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.white,
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "GPA",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.red,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w700
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius: BorderRadius.only(topRight: Radius.circular(15))
+                                          ),
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "Obtained Marks",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "82 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "79 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "75 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "91 - A",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "75 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "79 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius: BorderRadius.only(bottomRight: Radius.circular(15))
+                                          ),
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "95 - A",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(bottomRight: Radius.circular(15))
+                                          ),
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "8.24",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.red,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: size.height*0.01,
+                          ),
+                          AutoSizeText(
+                            "Term II",
+                            style: GoogleFonts.openSans(
+                                color: Colors.black,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height*0.01,
+                          ),
+                          Card(
+                            elevation: 5,
+                            color: Colors.white,
+                            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15),borderSide: BorderSide(color: Colors.white)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(15))
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Subject",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Hindi",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "English",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Maths",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Science",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Social Science",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Drawing",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15))
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Computer",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15))
+                                        ),
+                                      ),
+                                    ]
+                                ),
+                                Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "Total Marks",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.white,
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "GPA",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.red,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w700
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius: BorderRadius.only(topRight: Radius.circular(15))
+                                          ),
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "Obtained Marks",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "82 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "79 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "75 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "91 - A",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "75 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "79 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius: BorderRadius.only(bottomRight: Radius.circular(15))
+                                          ),
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "95 - A",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(bottomRight: Radius.circular(15))
+                                          ),
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "8.24",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.red,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: size.height*0.01,
+                          ),
+                          AutoSizeText(
+                            "Final",
+                            style: GoogleFonts.openSans(
+                                color: Colors.black,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height*0.01,
+                          ),
+                          Card(
+                            elevation: 5,
+                            color: Colors.white,
+                            shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15),borderSide: BorderSide(color: Colors.white)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(15))
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Subject",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Hindi",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "English",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Maths",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Science",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Social Science",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Drawing",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15))
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 12.0,left: 12),
+                                          child: AutoSizeText(
+                                            "Computer",
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: size.width*0.3,
+                                        height: size.height*0.05,
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15))
+                                        ),
+                                      ),
+                                    ]
+                                ),
+                                Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "Total Marks",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: const Color.fromRGBO(180, 230, 238, 1),
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "100",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.white,
+                                          width: size.width*0.28,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "GPA",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.red,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w700
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius: BorderRadius.only(topRight: Radius.circular(15))
+                                          ),
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "Obtained Marks",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "82 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "79 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "75 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "91 - A",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "75 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+
+                                        Container(
+                                          color: Colors.green,
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "79 - B",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius: BorderRadius.only(bottomRight: Radius.circular(15))
+                                          ),
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "95 - A",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: size.width*0.32,
+                                          height: size.height*0.05,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(bottomRight: Radius.circular(15))
+                                          ),
+                                          child: Center(
+                                            child: AutoSizeText(
+                                              "8.24",
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.red,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600
+                                              ),
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: size.height*0.01,
+                          ),
+                          Card(
+                            elevation: 5,
+                            color: Colors.green.shade50,
+
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: AutoSizeText(
+                                "Thanks for a fantastic year at school this year! it’s been awesome to see everyone grow and develop so much and our community has come together so wonderfully with all of our exciting new projects and activities. Hope you all have a fantastic summer - and looking forward to seeing everyone back in the fall.",
+                                style: GoogleFonts.openSans(
+                                    color: Colors.green,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: size.height*0.01,
+                          ),
+                          AutoSizeText(
+                            "- Bhuvneshwar Tyagi",
+                            style: GoogleFonts.openSans(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height*0.01,
+                          ),
+                          AutoSizeText(
+                            "   Principle",
+                            style: GoogleFonts.openSans(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500
+                            ),
+                          ),
+
                         ],
                       ),
                     ),

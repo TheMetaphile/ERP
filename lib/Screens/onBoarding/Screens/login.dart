@@ -7,7 +7,6 @@ import 'package:metaphile_erp/Screens/onBoarding/api/api_link.dart';
 import 'package:metaphile_erp/Screens/onBoarding/utils/text_field.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:metaphile_erp/Screens/navigation_bar/Screens/navigtion_bar.dart' as bar;
-import 'dart:convert';
 
 
 class Login extends StatelessWidget {

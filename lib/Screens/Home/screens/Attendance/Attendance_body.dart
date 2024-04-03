@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -39,7 +38,7 @@ class _AttendanceBodyState extends State<AttendanceBody> {
               ),
               calendarBuilders: CalendarBuilders(
                 defaultBuilder: (context, day, focusedDay) {
-                    if (day.day% 2 == 0 ) {
+                    if (day.day% 3 == 0 ) {
                       return Center(
                         child: CircleAvatar(
                           backgroundColor: Colors.red.shade100,
@@ -58,15 +57,19 @@ class _AttendanceBodyState extends State<AttendanceBody> {
                     }
                     else{
                       return Center(
-                        child: CircleAvatar(
-                          backgroundColor: Colors.green.shade100,
-                          child: Center(
-                            child: AutoSizeText(
-                              "${day.day}",
-                              style: GoogleFonts.openSans(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500
+                        child: Card(
+                          elevation: 5,
+                          shape: const CircleBorder(eccentricity: 1),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.green.shade100,
+                            child: Center(
+                              child: AutoSizeText(
+                                "${day.day}",
+                                style: GoogleFonts.openSans(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500
+                                ),
                               ),
                             ),
                           ),
@@ -107,7 +110,7 @@ class _AttendanceBodyState extends State<AttendanceBody> {
                       title: const AutoSizeText("Absent"),
                       trailing: CircleAvatar(
                         backgroundColor: Colors.red.shade100,
-                        child: const Text("02"),
+                        child: const Text("09"),
                       ),
                     ),
                 )
@@ -141,10 +144,10 @@ class _AttendanceBodyState extends State<AttendanceBody> {
                 ),
                 Expanded(
                   child: ListTile(
-                    title: const AutoSizeText("Absent"),
+                    title: const AutoSizeText("Present"),
                     trailing: CircleAvatar(
                       backgroundColor: Colors.green.shade100,
-                      child: const Text("02"),
+                      child: const Text("20"),
                     ),
 
                   ),

@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:metaphile_erp/Screens/Home/utils/Discriptions.dart';
 
 import '../utils/payOnlineTextField.dart';
 
@@ -91,11 +92,9 @@ class LeaveApplication extends StatelessWidget {
                           SizedBox(
                             height: size.height*0.02,
                           ),
-                          PayOnlineTextField(
-                            enabled: true,
+                          DescriptionTextField(
                             controller: description,
                             hintText: "Description",
-                            icon: false,
                           ),
                           SizedBox(
                             height: size.height*0.02,

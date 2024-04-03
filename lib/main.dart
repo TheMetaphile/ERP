@@ -10,6 +10,7 @@ import 'package:speech_to_text/speech_to_text.dart' as speechToText;
 import 'Screens/Home/screens/schoolGallery.dart';
 import 'Screens/onBoarding/Screens/Forget.dart';
 import 'Screens/onBoarding/Screens/intro.dart';
+import 'Screens/onBoarding/Screens/login.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -166,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     cnxt = context;
-    return Scaffold(body: const Intro());
+    return Scaffold(body: Login());
   }
 
 

@@ -115,7 +115,7 @@ class ProfileScreen extends StatelessWidget {
                             children: [
                               SizedBox(
                                 width: size.width*0.37,
-                                child: CustomTextField(controller: adharController, hintText: "Adhar Number",lock: true,),
+                                child: CustomTextField(controller: adharController, hintText: "Aadhaar Number",lock: true,),
                               ),
                               SizedBox(
                                 width: size.width*0.43,
