@@ -1,0 +1,8 @@
+.assignmentRow{
+  display: flex;
+  overflow: auto;
+  padding-bottom: 15px;
+ }
+.assignmentRow::-webkit-scrollbar {
+  display: none;
+}

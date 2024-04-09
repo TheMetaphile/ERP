@@ -1,0 +1,26 @@
+.pay {
+    margin-top: -30px;
+    outline: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: none;
+  }
+  th{
+    text-decoration: underline;
+  }
+  
+  th, td {
+    border: 1px  #ddd;
+    padding: 8px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 400;
+  }
+  
+  .transition {
+    font-size: 15px;
+    text-align: center;
+  }
+  

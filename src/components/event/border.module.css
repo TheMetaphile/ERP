@@ -1,0 +1,71 @@
+.bord {
+          margin-top: 85px;
+          text-align: left;
+           margin-left: -440px;
+           height: 88.3%;
+           width: 61vw;
+           overflow: auto;
+        }
+        .bord::-webkit-scrollbar {
+          display: none;
+        }
+.bord h1{
+        padding-left: 14px;
+        font-size: 20px;
+    }
+.first-container{
+    width: 90%;
+    height: 35%;
+    margin-top: 10px;
+    margin-left: 14px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+     border-radius: 15px;
+     padding: 25px 25px  25px 25px;
+     overflow: auto;
+    
+     
+    }
+    .first-container::-webkit-scrollbar {
+      display: none;
+    }
+    .first-row{
+      display: flex;
+      
+    } 
+    .second-container::-webkit-scrollbar {
+      display: none;
+    }
+
+  .first-heading{
+       padding: 4px;
+       width: 32%;
+       height:12%;
+       background-color: rgba(174, 238, 237, 1);
+      align-items: center;
+       margin-left: 37%;
+       text-align: center;
+       border-radius: 10px;
+       box-shadow: 0 5px 7px rgba(3, 3, 3, 0.1);
+ }
+ .second-container{
+  width: 93%;
+  height: 90%;
+  margin-top: 10px;
+  margin-left: 14px;
+  margin-bottom: 15px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+   border-radius: 15px;
+   padding: 10px 10px  10px 10px;
+  display: flex;
+
+  overflow: auto;
+   
+  }
+  .third-row {
+     display: grid;
+     display: table-column;
+}
+
+  

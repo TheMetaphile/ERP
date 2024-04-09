@@ -1,0 +1,30 @@
+.information{
+    width: 400%;
+    height: 100%;
+    border-radius: 5px;
+    background-color: hsl(0, 0%, 100%);
+    border-radius: 20px;
+    margin-top: 120%;
+    box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+    margin-left: -750px;
+   
+}
+.information h6 {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+ margin-left: 20px;
+     font-size: 18px;
+    font-weight: 400;
+    
+    
+    margin: 20px;
+}
+
+.information .datatype {
+    /* Add margin from the left */
+    margin-left: 300px;
+    display: inline;
+    color: grey;
+}
+

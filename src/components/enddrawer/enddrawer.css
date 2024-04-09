@@ -1,0 +1,42 @@
+.dialyNotices{
+       width: 88%;
+       height: 40%;
+       border-radius: 5px;
+       background-color: #f0f8ff;
+       border-radius: 20px;
+       padding: 13px 13px 13px 13px;
+       margin-top: -15px;
+       margin-bottom: 25px;
+       text-align: left;
+       overflow: auto;
+}
+.dialyNotices::-webkit-scrollbar {
+       display: none;
+     }
+.enddrawer {
+       margin-top: 40% ;
+       overflow: auto;
+       height: 86%;
+       width: 98%;
+       margin-left: 0;
+}
+.enddrawer span{
+       color: blue;
+       font-weight: 400;
+       font-size: 12px;
+}
+.enddrawer span:hover{
+       text-decoration: underline;
+       color: blue;
+}
+.enddrawer h6{
+       display: flex;
+       justify-content: space-between;
+       font-size: 14px;
+       margin-top: 10px;
+}
+.enddrawer::-webkit-scrollbar {
+       display: none;
+     }
+
+

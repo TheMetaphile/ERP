@@ -1,0 +1,22 @@
+.feeStatus{
+    width: 180px;
+    height: auto;
+    padding: 15px 15px 15px 15px;
+    box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+    border-radius: 15px;
+    margin-left: 15px;
+    
+    align-items: center;
+    text-align: center;
+}
+
+.feeStatus h1{
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.feeStatus p{
+    font-size: 18px;
+    font-weight: 500;
+    color: grey;
+}

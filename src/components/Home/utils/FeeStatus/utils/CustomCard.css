@@ -1,0 +1,24 @@
+.feeCard{
+    width: 200px;
+    height: auto;
+    box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+    border-radius: 15px;
+    background-color: white;
+    padding: 15px;
+    justify-content: center;
+    text-align: center;
+}
+
+.feeCard img{
+    width: 60px;
+    height: 60px;
+}
+
+.feeCard h2{
+    font-weight: 500;
+}
+
+.feeCard h3{
+    font-weight: 400;
+    color: grey;
+}

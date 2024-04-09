@@ -1,0 +1,11 @@
+.home{
+  margin-top: 85px;
+  text-align: left;
+   margin-left: -440px;
+   height: 88.3%;
+   width: 61vw;
+   overflow: auto;
+}
+.home::-webkit-scrollbar {
+    display: none;
+  }

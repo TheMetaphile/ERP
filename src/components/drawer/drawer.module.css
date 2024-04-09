@@ -1,0 +1,81 @@
+.drawer{
+  width: 75%;
+  height: 134vh;
+  border-radius: 10px;
+  border-color: #000000;
+  justify-content: center;
+  background-color: #ffffff;
+  margin-bottom: 20px;
+  padding-top: 25px;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
+   box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+}
+
+.section{
+  margin-top: 10%;
+  margin-left: 1px;
+  width: 90%;
+  padding-top: 4px;
+  padding-bottom: 7px;
+  justify-content: left;
+  border-color: #56CCF2;
+  background-color: rgba(60, 203, 201, 0.3);
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+}
+.section h2{
+font-size: 20px;
+}
+
+.img-section-border{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.img-section-border img{
+  width: 30%;
+}
+.img-section-border span{
+    color: #000000;
+    text-align: center;
+    margin-left: 15px;
+}
+.img-section-border h4{
+    padding: 5% 15% 2% 10%;
+    text-align: right;
+    overflow-x: hidden;
+
+}
+.img-section-border h5{
+  padding: 5% 15% 2% 10%;
+  text-align: right;
+  overflow-x: hidden;
+}
+
+.button{
+  background-color: rgba(174, 238, 237, 1);
+  border-color: transparent;
+  border-radius: 15px;
+  margin-left: 25px;
+  width: 140px;
+  padding: 3px 3px 3px 30px;
+  margin-top: 100px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+}
+
+.button span{
+  color: black;
+}
+
+.button img{
+margin-left: 8px;
+width: 20px;
+margin-right: 4px;
+}
