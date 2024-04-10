@@ -37,6 +37,7 @@ const menuItems = [
     image: "src/assets/Dashboard_result.png",
     alt: "Result image",
     text: "Result",
+    route: '/result'
   },
   {
     image: "src/assets/Dashboard_gallery.png",

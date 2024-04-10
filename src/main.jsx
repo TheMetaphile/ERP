@@ -10,6 +10,7 @@ import Border from "./components/event/border.jsx";
 import Profile from "./components/profile/profile.jsx";
 import Quiz from "./components/quiz/quiz.jsx";
 import Receipt from "./components/receipt/receipt.jsx";
+import Result from "./components/Result/CustomResult.jsx";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "/receipt",
         element: <Receipt />,
+      },
+      {
+        path: "/result",
+        element: <Result />,
       },
     ],
   },
