@@ -1,0 +1,9 @@
+.card {
+  width: 12px;
+  height: 12px;
+  border-radius: 10px;
+  display: flex;
+}
+.card h6{
+  font-size: 13px;
+}

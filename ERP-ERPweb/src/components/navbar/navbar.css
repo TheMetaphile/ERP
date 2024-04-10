@@ -1,0 +1,57 @@
+
+.nav-bar{
+  display: flex;
+     margin-top: 5px;
+     margin-left: -37px;
+     width: 255%;
+     height: 5vh;
+     padding: 25px;
+     border: 8px;
+     border-radius: 15px;
+     background: rgba(174, 238, 237, 1);
+     align-items: center;
+     box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+     float: left;
+   }
+   
+   .nav-bar nav {
+    flex-grow: 1; /* This will make the <nav> element take the remaining space */
+  }
+  nav ul{
+    float: right;
+  }
+   nav ul li{
+     display: inline;
+     float: left;
+     text-align: right;
+   }
+
+   .link{
+     color: black;
+     font-size: 15px;
+     font-weight: 500;
+     background-color: transparent;
+     text-transform: uppercase;
+     text-decoration: none;
+     margin-left: 30px;
+     margin-right: 20px;
+     width: auto;
+     padding: 7px 7px 7px 7px ;
+     border-color: transparent;
+     border-radius: 10px;
+     margin-bottom: 15px;
+     align-items: center;
+     }
+   .link:hover{
+     background: #1b9bff;
+     transition:.5s;
+   }
+
+.nav-bar span{
+    color: #000;
+    margin-left: 10px;
+    font-weight: 400;
+}
+.nav-bar img{
+  width: 40px;
+}

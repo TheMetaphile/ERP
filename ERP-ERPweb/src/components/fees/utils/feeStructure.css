@@ -1,0 +1,10 @@
+.feeStructure {
+    width: auto;
+    height: auto;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 20px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+}

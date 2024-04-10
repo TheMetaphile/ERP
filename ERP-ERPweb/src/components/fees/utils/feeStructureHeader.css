@@ -1,0 +1,7 @@
+.header{
+    width: auto;
+display: flex;
+border-radius: 15px 15px 0px 0px;
+justify-content: space-evenly;
+background-color: aquamarine;
+}

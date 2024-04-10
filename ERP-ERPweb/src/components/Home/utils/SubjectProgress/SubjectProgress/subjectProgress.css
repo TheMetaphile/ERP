@@ -1,0 +1,27 @@
+.SubjectProgressRow{
+    display: flex;
+    flex: 1;
+    height: min-content;
+    align-items: center;
+    box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+    border-radius: 15px;
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.SubjectProgressRow h3{
+    width: 100px;
+    margin: 0;
+    padding-right: 30px;
+    font-size: 18px;
+    color: blue;
+    font-weight: 500;
+}
+
+.SubjectProgressRow p{
+    width: 100px;
+    margin: 0;
+    padding-right: 30px;
+    color: grey;
+}

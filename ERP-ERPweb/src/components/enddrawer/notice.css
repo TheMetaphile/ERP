@@ -1,0 +1,17 @@
+.notice{
+    margin-top: -20px;
+    margin-bottom: 30px;
+
+}
+
+.notice p{
+    margin-top: -18px;
+    margin-left: 0px;
+    color: grey;
+    text-align: left;
+    font-size: 14px;
+}
+
+.notice h4{
+    font-weight: 400;
+}

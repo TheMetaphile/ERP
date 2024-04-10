@@ -1,0 +1,11 @@
+.feeStructureField{
+    width: auto;
+display: flex;
+
+justify-content: space-evenly;
+}
+.feeStructureField h5{
+    color: grey;
+    font-weight: 400;
+    font-size: 15px;
+}
