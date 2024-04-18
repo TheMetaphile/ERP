@@ -45,7 +45,7 @@ dependencies:
   highlight_text: ^1.7.0
   avatar_glow: ^3.0.1
   translator: ^0.1.7
-
+  flutter_svg: ^2.0.2
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -88,6 +88,10 @@ flutter:
     - assets/Gallery/Harsh/
     - assets/Gallery/Tushar/
     - assets/Gallery/Bhuv/
+    - assets/logo/
+    - assets/images/
+    - assets/Pictures/
+    - assets/alphabets/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

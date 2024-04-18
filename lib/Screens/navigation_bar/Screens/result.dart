@@ -74,7 +74,7 @@ class _ResultState extends State<Result> {
                                       "Metaphile Public School",
                                     style: GoogleFonts.openSans(
                                       color: const Color.fromRGBO(103,135,214, 1),
-                                      fontSize: 22,
+                                      fontSize: size.width*0.05,
                                       fontWeight: FontWeight.w500
                                     ),
                                   ),
@@ -188,12 +188,16 @@ class _ResultState extends State<Result> {
                               SizedBox(
                                 width: size.width*0.28,
                               ),
-                              AutoSizeText(
-                                "51",
-                                style: GoogleFonts.openSans(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 17,
-                                  color: Colors.grey.shade700
+                              SizedBox(
+                                width: size.width*0.38,
+                                child: AutoSizeText(
+                                  "51",
+                                  style: GoogleFonts.openSans(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17,
+                                    color: Colors.grey.shade700
+                                  ),
+                                    maxLines: 1,
                                 ),
                               )
                             ],
@@ -226,12 +230,16 @@ class _ResultState extends State<Result> {
                               SizedBox(
                                 width: size.width*0.42,
                               ),
-                              AutoSizeText(
-                                "2nd",
-                                style: GoogleFonts.openSans(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 17,
-                                    color: Colors.grey.shade700
+                              SizedBox(
+                                width: size.width*0.38,
+                                child: AutoSizeText(
+                                  "2nd",
+                                  style: GoogleFonts.openSans(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17,
+                                      color: Colors.grey.shade700
+                                  ),
+                                  maxLines: 1,
                                 ),
                               )
                             ],
@@ -264,13 +272,18 @@ class _ResultState extends State<Result> {
                               SizedBox(
                                 width: size.width*0.27,
                               ),
-                              AutoSizeText(
-                                "27 Aug 2000",
-                                style: GoogleFonts.openSans(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 17,
-                                    color: Colors.grey.shade700
+                              SizedBox(
+                                width: size.width*0.38,
+                                child: AutoSizeText(
+                                  "27 Aug 2000",
+                                  style: GoogleFonts.openSans(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17,
+                                      color: Colors.grey.shade700
+                                  ),
+                                  maxLines: 1,
                                 ),
+
                               )
                             ],
                           ),
@@ -303,13 +316,18 @@ class _ResultState extends State<Result> {
                               SizedBox(
                                 width: size.width*0.28,
                               ),
-                              AutoSizeText(
-                                "B+",
-                                style: GoogleFonts.openSans(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 17,
-                                    color: Colors.grey.shade700
+                              SizedBox(
+                                width: size.width*0.38,
+                                child: AutoSizeText(
+                                  "B+",
+                                  style: GoogleFonts.openSans(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17,
+                                      color: Colors.grey.shade700
+                                  ),
+                                  maxLines: 1,
                                 ),
+
                               )
                             ],
                           ),
@@ -342,12 +360,16 @@ class _ResultState extends State<Result> {
                               SizedBox(
                                 width: size.width*0.2,
                               ),
-                              AutoSizeText(
-                                "+91 897902XXXX",
-                                style: GoogleFonts.openSans(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 17,
-                                    color: Colors.grey.shade700
+                              SizedBox(
+                                width: size.width*0.38,
+                                child: AutoSizeText(
+                                  "+91 897902XXXX",
+                                  style: GoogleFonts.openSans(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17,
+                                      color: Colors.grey.shade700
+                                  ),
+                                  maxLines: 1,
                                 ),
                               )
                             ],
@@ -381,12 +403,16 @@ class _ResultState extends State<Result> {
                               SizedBox(
                                 width: size.width*0.24,
                               ),
-                              AutoSizeText(
-                                "Mr. Kapil Tegwal",
-                                style: GoogleFonts.openSans(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 17,
-                                    color: Colors.grey.shade700
+                              SizedBox(
+                                width: size.width*0.38,
+                                child: AutoSizeText(
+                                  "Mr. Kapil Tegwal",
+                                  style: GoogleFonts.openSans(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17,
+                                      color: Colors.grey.shade700
+                                  ),
+                                  maxLines: 1,
                                 ),
                               )
                             ],
@@ -420,12 +446,16 @@ class _ResultState extends State<Result> {
                               SizedBox(
                                 width: size.width*0.23,
                               ),
-                              AutoSizeText(
-                                "Mrs. Mukul Morya",
-                                style: GoogleFonts.openSans(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 17,
-                                    color: Colors.grey.shade700
+                              SizedBox(
+                                width: size.width*0.38,
+                                child: AutoSizeText(
+                                  "Mrs. Mukul Morya",
+                                  style: GoogleFonts.openSans(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17,
+                                      color: Colors.grey.shade700
+                                  ),
+                                  maxLines: 1,
                                 ),
                               )
                             ],
@@ -892,7 +922,7 @@ class _ResultState extends State<Result> {
                                             child: AutoSizeText(
                                               "GPA",
                                               style: GoogleFonts.openSans(
-                                                  color: Colors.red,
+                                                  color: Colors.green,
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w700
                                               ),
@@ -912,15 +942,21 @@ class _ResultState extends State<Result> {
                                               color: Colors.green,
                                               borderRadius: BorderRadius.only(topRight: Radius.circular(15))
                                           ),
-                                          child: Center(
-                                            child: AutoSizeText(
-                                              "Obtained Marks",
-                                              style: GoogleFonts.openSans(
-                                                  color: Colors.black,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500
+                                          child: SizedBox(
+                                            width: size.width*0.38,
+
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(top: 10.0),
+                                              child: AutoSizeText(
+                                                "Obtained Marks",
+                                                style: GoogleFonts.openSans(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w500
+                                                ),
+                                                maxLines: 1,
+                                                textAlign: TextAlign.center,
                                               ),
-                                              maxLines: 1,
                                             ),
                                           ),
                                         ),
@@ -1052,7 +1088,7 @@ class _ResultState extends State<Result> {
                                             child: AutoSizeText(
                                               "8.24",
                                               style: GoogleFonts.openSans(
-                                                  color: Colors.red,
+                                                  color: Colors.green,
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w600
                                               ),
@@ -1384,7 +1420,7 @@ class _ResultState extends State<Result> {
                                             child: AutoSizeText(
                                               "GPA",
                                               style: GoogleFonts.openSans(
-                                                  color: Colors.red,
+                                                  color: Colors.green,
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w700
                                               ),
@@ -1404,15 +1440,21 @@ class _ResultState extends State<Result> {
                                               color: Colors.green,
                                               borderRadius: BorderRadius.only(topRight: Radius.circular(15))
                                           ),
-                                          child: Center(
-                                            child: AutoSizeText(
-                                              "Obtained Marks",
-                                              style: GoogleFonts.openSans(
-                                                  color: Colors.black,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500
+                                          child: SizedBox(
+                                            width: size.width*0.38,
+
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(top: 10.0),
+                                              child: AutoSizeText(
+                                                "Obtained Marks",
+                                                style: GoogleFonts.openSans(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w500
+                                                ),
+                                                maxLines: 1,
+                                                textAlign: TextAlign.center,
                                               ),
-                                              maxLines: 1,
                                             ),
                                           ),
                                         ),
@@ -1544,7 +1586,7 @@ class _ResultState extends State<Result> {
                                             child: AutoSizeText(
                                               "8.24",
                                               style: GoogleFonts.openSans(
-                                                  color: Colors.red,
+                                                  color: Colors.green,
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w600
                                               ),
@@ -1876,7 +1918,7 @@ class _ResultState extends State<Result> {
                                             child: AutoSizeText(
                                               "GPA",
                                               style: GoogleFonts.openSans(
-                                                  color: Colors.red,
+                                                  color: Colors.green,
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w700
                                               ),
@@ -1896,15 +1938,21 @@ class _ResultState extends State<Result> {
                                               color: Colors.green,
                                               borderRadius: BorderRadius.only(topRight: Radius.circular(15))
                                           ),
-                                          child: Center(
-                                            child: AutoSizeText(
-                                              "Obtained Marks",
-                                              style: GoogleFonts.openSans(
-                                                  color: Colors.black,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500
+                                          child: SizedBox(
+                                            width: size.width*0.38,
+
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(top: 10.0),
+                                              child: AutoSizeText(
+                                                "Obtained Marks",
+                                                style: GoogleFonts.openSans(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w500
+                                                ),
+                                                maxLines: 1,
+                                                textAlign: TextAlign.center,
                                               ),
-                                              maxLines: 1,
                                             ),
                                           ),
                                         ),
@@ -2036,7 +2084,7 @@ class _ResultState extends State<Result> {
                                             child: AutoSizeText(
                                               "8.24",
                                               style: GoogleFonts.openSans(
-                                                  color: Colors.red,
+                                                  color: Colors.green,
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w600
                                               ),

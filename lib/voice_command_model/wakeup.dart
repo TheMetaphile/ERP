@@ -9,7 +9,7 @@ class Wakeup{
   Wakeup(this.listingCallBack);
   Future<void> _wakeWordCallback(int keywordIndex) async {
 
-    await Speak().speak("Hello, what can i do for you").then((check) async {
+    await Speak().speak("Hey Mukul, what can i do for you").then((check) async {
       print("speak result $check");
       if(check==1){
         print("check speek");
@@ -22,7 +22,8 @@ class Wakeup{
     });
   }
   String keywordAsset = "assets/Hey-erp_en_android_v3_0_0.ppn";
-  String accessKey = "tJpzZPs3dZ2+1c42pUjNX8eUzhCkrPxevf0mgfu2SAaW2uFsXPPzEg=="; // Get this from https://console.picovoice.ai/
+  //String accessKey = "tJpzZPs3dZ2+1c42pUjNX8eUzhCkrPxevf0mgfu2SAaW2uFsXPPzEg=="; //mine // Get this from https://console.picovoice.ai/
+  String accessKey = "e7/qwhQKAYzYy2hSyt/DLQdG6TeG+vm2pbVjZu6kGYtARK6mCQhRiw=="; //mine // Get this from https://console.picovoice.ai/
   Future<PorcupineManager?> createPorcupineManager() async {
     try{
       _porcupineManager = await PorcupineManager.fromKeywordPaths(

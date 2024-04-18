@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:highlight_text/highlight_text.dart';
+import 'package:metaphile_erp/Screens/Home/screens/Attendance/Attendance.dart';
+import 'package:metaphile_erp/Screens/navigation_bar/Screens/result.dart';
 import 'package:metaphile_erp/Screens/permissions.dart';
-import 'package:metaphile_erp/voice_command_model/convert.dart';
 import 'package:metaphile_erp/voice_command_model/recoginize_intent.dart';
 import 'package:metaphile_erp/voice_command_model/speek.dart';
 import 'package:metaphile_erp/voice_command_model/wakeup.dart';
@@ -9,8 +10,8 @@ import 'package:porcupine_flutter/porcupine_manager.dart';
 import 'package:speech_to_text/speech_to_text.dart' as speechToText;
 import 'Screens/Home/screens/schoolGallery.dart';
 import 'Screens/onBoarding/Screens/Forget.dart';
-import 'Screens/onBoarding/Screens/intro.dart';
 import 'Screens/onBoarding/Screens/login.dart';
+import 'package:metaphile_erp/Screens/navigation_bar/Screens/navigtion_bar.dart' as nav;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +26,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/resetPassword': (context) => ForgetPassword(),
-        "/resultScreen" : (context) => const SchoolGallery()
+        "/resultScreen" : (context) => const Result(),
+        "/gallery":  (context) => const SchoolGallery(),
+        '/dashboard': (context)=> const nav.NavigationBar(),
+        '/attendance': (context) => const Attendance()
       },
       home: Material(child: Scaffold(body: MyHomePage())),
     );
@@ -46,10 +50,10 @@ class _MyHomePageState extends State<MyHomePage> {
   final Map<String, HighlightedWord> highlightWords = {
     "flutter": HighlightedWord(
         textStyle:
-        TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+        const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
     "developer": HighlightedWord(
         textStyle:
-        TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+        const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
   };
 
   void listen() async {
@@ -80,44 +84,33 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               });
               if(value.finalResult){
-                try{
-                  print(": $textString");
-                  textString  = await translateText(textString);
+
+                  try{
+                    print(": $textString");
+                    // textString  = await translateText(textString);
 
 
-                  final Map<String,dynamic> navigationFromIntent = CustomIntent().determineIntent(textString);
-                  print("converted text \n\n\n\n\n $textString \n output: $navigationFromIntent \n\n\n\n\n");
-                  if(navigationFromIntent.isNotEmpty){
-                    if(navigationFromIntent["route"] == "goback"){
-                      Navigator.pop(context);
-                      Navigator.of(context).pop();
+                    final Map<String,dynamic> navigationFromIntent = CustomIntent().determineIntent(textString);
+                    print("converted text \n\n\n\n\n $textString \n output: $navigationFromIntent \n\n\n\n\n");
+                    if(navigationFromIntent.isNotEmpty){
+                      if(navigationFromIntent["route"] == "goback"){
+                        Navigator.pop(context);
+                        Navigator.of(context).pop();
 
-                    }else{
-                      Navigator.pushNamed(context, navigationFromIntent["route"],arguments: navigationFromIntent["attributes"]);
+                      }else{
+                        Navigator.pushNamed(context, navigationFromIntent["route"],arguments: navigationFromIntent["attributes"]);
+                      }
                     }
-                  }
 
-                  textString="";
-                  listen();
-                }catch (e){
-                  Speak().speak("write now i am unable to convert your speech in english.");
-                  final Map<String,dynamic> navigationFromIntent = CustomIntent().determineIntent(textString);
-                  print("\n\n\n\n\n $textString \n output: $navigationFromIntent \n\n\n\n\n");
-                  if(navigationFromIntent.isNotEmpty){
-                    if(navigationFromIntent["route"] == "goback"){
-                      Navigator.pop(context);
-                      Navigator.of(context).pop();
-
-                    }else{
-                      Navigator.pushNamed(context, navigationFromIntent["route"],arguments: navigationFromIntent["attributes"]);
-                    }
-                  }else{
+                    textString="";
+                    listen();
+                  }catch(e){
+                    textString="";
+                    listen();
+                    Speak().speak("Something went wrong please try again!");
 
                   }
 
-                  textString="";
-                  listen();
-                }
 
               }
             },

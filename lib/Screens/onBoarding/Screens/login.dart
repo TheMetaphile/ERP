@@ -112,10 +112,6 @@ class Login extends StatelessWidget {
                         SizedBox(
                           height: size.height*0.02,
                         ),
-                        loginWithGoogle(size, context),
-                        SizedBox(
-                          height: size.height*0.09,
-                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -160,40 +156,47 @@ class Login extends StatelessWidget {
       elevation: 20,
       child: InkWell(
         onTap: () async {
-          if(passwordController.text.trim().isNotEmpty && emailController.text.trim().isNotEmpty){
-            await ApiCall()
-                .sendPostRequest(
-                    context,
-                    ApiLinks().loginLink,
-                    {
-                      "email": emailController.text,
-                      "password": passwordController.text,
-                    },
-                    "Login successful",
-                    "Something went wrong")
-                .then((res) {
-              if (!res["error"]) {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) {
-                    return const bar.NavigationBar();
-                  },
-                ));
-              }
-            });
+          if(emailController.text.trim() == 'bhanu68tyagi@gmail.com' && passwordController.text.trim()=='bhanu1234'){
+            Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return const bar.NavigationBar();
+                        },
+                      ));
           }
-          else{
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.red,
-                content: Text("Email and password cannot be empty",style: GoogleFonts.openSans(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color : Colors.white
-                ),
-                ),
-              ),
-            );
-          }
+          // if(passwordController.text.trim().isNotEmpty && emailController.text.trim().isNotEmpty){
+          //   await ApiCall()
+          //       .sendPostRequest(
+          //           context,
+          //           ApiLinks().loginLink,
+          //           {
+          //             "email": emailController.text,
+          //             "password": passwordController.text,
+          //           },
+          //           "Login successful",
+          //           "Something went wrong")
+          //       .then((res) {
+          //     if (!res["error"]) {
+          //       Navigator.push(context, MaterialPageRoute(
+          //         builder: (context) {
+          //           return const bar.NavigationBar();
+          //         },
+          //       ));
+          //     }
+          //   });
+          // }
+          // else{
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     SnackBar(
+          //       backgroundColor: Colors.red,
+          //       content: Text("Email and password cannot be empty",style: GoogleFonts.openSans(
+          //           fontSize: 18,
+          //           fontWeight: FontWeight.w500,
+          //           color : Colors.white
+          //       ),
+          //       ),
+          //     ),
+          //   );
+          // }
         },
         child: Padding(
           padding: EdgeInsets.all(size.width*0.01),
@@ -247,44 +250,6 @@ class Login extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-  Widget loginWithGoogle(Size size,BuildContext context){
-    return Card(
-      shape: const OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        borderSide: BorderSide(
-          color: Colors.black,
-        )
-      ),
-      elevation: 20,
-      child: InkWell(
-        onTap: (){},
-        child: Padding(
-          padding: EdgeInsets.all(size.width*0.03),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: size.height*0.025,
-                child: Image.asset("assets/onBoarding/Login/google.png"),
-              ),
-              SizedBox(
-                width: size.width*0.02,
-              ),
-              Center(
-                child: AutoSizeText("Login with Google",
-                    style: GoogleFonts.openSans(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color : Colors.black
-                    )
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 

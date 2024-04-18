@@ -41,7 +41,16 @@ class CustomIntent{
   ],
     "goBack": [
       "go back"
-    ]
+    ],
+  "gallery": [
+  "gallery", "photo gallery", "pictures", "images", "photo album",
+
+  "parent gallery", "parent photo gallery", "parent pictures", "parent images", "parent photo album",
+
+  "teacher gallery", "teacher photo gallery", "teacher pictures", "teacher images", "teacher photo album",
+
+  "student gallery", "student photo gallery", "student pictures", "student images", "student photo album"
+  ],
   };
   Map<String,dynamic> word_to_num = {
   "one": "1",
@@ -114,27 +123,25 @@ class CustomIntent{
     for (var intent in intent_keywords.keys) {
       for (var keyword in intent_keywords[intent]!) {
         if (userInput.contains(keyword)) {
-          if (intent == "changePassword") {
-            print("intent: $intent keyword:$keyword");
-            return PasswordIntent().passwordIntent(userInput);
-          } else if (intent == "resultIntent") {
-            return ResultIntent().resultIntent(userInput);
-          } else if (intent == "attendanceIntent") {
-            return {};
-          } else if (intent == "dashboardIntent") {
-            return {};
-          } else {
-            if(intent == "goBack"){
-             return {
-               "route": "goback"
-             };
-            }
-            return {};
+          switch (intent){
+            case "changePassword":
+              return PasswordIntent().passwordIntent(userInput);
+            case "resultIntent":
+              return ResultIntent().resultIntent(userInput);
+            case "attendanceIntent":
+              return {"route": "/attendance","attributes":{}};
+            case "dashboardIntent":
+              return {"route": "/dashboard","attributes":{}};
+            case "goBack":
+              return {"route": "/goback","attributes":{}};
+            case "gallery":
+              return {"route":"/gallery","attributes":{}};
+            default:
+              return {};
           }
         }
       }
     }
-    // If no matching intent found
     return {};
   }
 }
