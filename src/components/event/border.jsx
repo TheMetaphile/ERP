@@ -22,7 +22,7 @@ export default function Border() {
 
       <h1 className="pl-1 mt-3 text-lg">All Events</h1>
 
-      <div className="w-full bg-white shadow-lg rounded-lg  overflow-auto grid grid-cols-2  whitespace-nowrap">
+      <div className="w-full bg-white shadow-lg rounded-lg  overflow-auto  grid grid-cols-2 whitespace-nowrap">
         
         <Allevents color="bg-green-400" img={first} text="School is going for vacation at March." date="10 March 2024" />
     <Allevents color="bg-green-400" img={first} text="School is going for vacation at March." date="10 March 2024" />

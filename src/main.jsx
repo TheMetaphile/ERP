@@ -11,6 +11,9 @@ import Profile from "./components/profile/profile.jsx";
 import Quiz from "./components/quiz/quiz.jsx";
 import Receipt from "./components/receipt/receipt.jsx";
 import Result from "./components/Result/CustomResult.jsx";
+import  DateSheet  from "./components/DateSheet/datesheet.jsx";
+import Palyquiz from "./components/playquiz/firstquizs.jsx";
+import Attendance from "./components/Attendance/Attendance.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +21,7 @@ const router = createBrowserRouter([
     element: <Dashboard />,
     children: [
       {
-        path: "",
+        path: "Home",
         element: <Home />,
       },
       {
@@ -42,16 +45,28 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: "/quiz",
-        element: <Quiz />,
+        path: "/playquiz",
+        element: <Palyquiz/>,
       },
       {
         path: "/receipt",
-        element: <Receipt />,
+        element: <Receipt/>,
+      },
+      {
+        path: "/quiz",
+        element: <Quiz/>,
       },
       {
         path: "/result",
         element: <Result />,
+      },
+      {
+        path: "/Attendance",
+        element: <Attendance />,
+      },
+      {
+        path: "/datesheet",
+        element: <DateSheet />,
       },
     ],
   },

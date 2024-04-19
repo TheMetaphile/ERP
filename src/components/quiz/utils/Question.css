@@ -1,5 +1,6 @@
 .question{
     width: fit-content;
+    margin-top: 30px;
 }
 .content {
     display: flex;
@@ -19,29 +20,39 @@
    padding-left: 10px;
    text-align: center;
    padding-right: 10px;
+   word-wrap: break-word;
 }
-.question  {
-    width: 20px;
-    height: 20px;
-   display: inline;
-    border-radius: 10px;
-    box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
-    
+.options  {
+    margin-top: 30px;
     padding-left: 20px;
-
+    
 }
-.question h5{
+
+
+.options h5{
     background-color: rgb(246, 225, 199);
     box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
     width: 50%;
+    margin-bottom: 20px;
     padding-left: 20px;
     border-radius: 10px;
+    transition: all  5s ease-in;
+    justify-content:space-between;
 }
- .question .green{
-    background-color: rgb(155, 229, 155);
-    width: 50%;
-    border-radius: 10px;
-}
-.question .red{
-    background-color:rgb(207, 118, 118) ;
-}
+
+ .options .first{
+    background-color: rgb(216, 223, 229);
+    box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+ }
+ .options .second{
+    background-color: rgb(49, 122, 49);
+    box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+ }
+ .options .third{
+    background-color: rgb(247, 88, 67);
+    box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+ }
+ .options .fourth{
+    background-color: rgb(196, 200, 203);
+    box-shadow: 0 10px 14px rgba(3, 3, 3, 0.1);
+ }

@@ -1,8 +1,0 @@
-.progressRow{
-  display: flex;
-  overflow: auto; 
-  padding-bottom: 15px;
- }
-.progressRow::-webkit-scrollbar {
-  display: none;
-}

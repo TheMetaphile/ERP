@@ -11,6 +11,16 @@ const menuItems = [
     route: '/fee-due'
   },
   {
+    image: "src/assets/presentation 1.png",
+    alt: "presentation image",
+    text: "Class Work",
+  },
+  {
+    image: "src/assets/freelance 1.png",
+    alt: "freelance image",
+    text: "Home Work",
+  },
+  {
     image: "src/assets/Dashboard_events.png",
     alt: "Events image",
     text: "Events",
@@ -55,15 +65,37 @@ const menuItems = [
     text: "Ask Doubt",
   },
   {
+    image: "src/assets/notification 1.png",
+    alt: "notification image",
+    text: "Notification ",
+  },
+  {
+    image: "src/assets/Picture1.png",
+    alt: "medical image",
+    text: "Medical Records",
+  },
+  {
     image: "src/assets/datesheet.png",
     alt: "Date sheet image",
     text: "Date Sheet",
+    route: "/datesheet"
+  },
+  {
+    image: "src/assets/lifestyle 1.png",
+    alt: "lifestyle image",
+    text: "Activities",
+  },
+  {
+    image: "src/assets/live 1.png",
+    alt: "live image",
+    text: "Broadcast channels",
   },
   {
     image: "src/assets/change_password.png",
     alt: "Change password image",
     text: "Change Password",
   },
+  
 ];
 
 export default menuItems;
