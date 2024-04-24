@@ -15,7 +15,7 @@ class StudentNoteBookRecord extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Card(
       child: SizedBox(
-        height: size.height*0.06,
+        height: size.height*0.081,
         child: Row(
 
           children: [

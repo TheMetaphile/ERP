@@ -62,7 +62,6 @@ class _teacherLeaveHistoryState extends State<teacherLeaveHistory> {
                 Card(
                   elevation: 5,
                   shape: RoundedRectangleBorder(side: BorderSide(color: Colors.grey,width: 1),borderRadius: BorderRadius.circular(12)),
-
                   child:  Container(
                     width: size.width*1,
                     height: size.height*0.11,
@@ -107,7 +106,7 @@ class _teacherLeaveHistoryState extends State<teacherLeaveHistory> {
                 ),
                 SizedBox(height: size.height*0.02,),
                 Container(
-                  height: size.height*0.65,
+                  height: size.height*0.734,
                   child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: 10,

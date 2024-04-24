@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:untitled/teacher-module/studentLeaveApplicationView.dart';
 
 
@@ -85,8 +86,23 @@ class _studentLeaveApplicationsState extends State<studentLeaveApplications> {
                          ],
                        ),
                        children: [
-                         Text("Abhishek from class 11th A want a Leave Request to you.sdadad adsad adad ada ada dad adads ada dad ada dwd adad wda da da daw da dw dad adwd a..",style: TextStyle(fontSize: size.height*0.02),),
-                       ],
+                            Card(
+                              elevation: 5,
+                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(color: Colors.grey,width: 1)),
+                              child:   Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Reason",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.grey,fontWeight:FontWeight.w700),),
+                                    SizedBox(height: size.height*0.01,),
+                                    Text("Dear Sir/Madam , Abhishek from class 11th A want a Leave Request to you.sdadad adsad adad ada ada dad adads ada dad ada dwd adad wda da da daw da dw dad adwd a..",style: TextStyle(fontSize: size.height*0.02),),
+                                  ],
+                                ),
+                              ),
+
+                            )
+                              ],
                  
                  
                      ),

@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:untitled/utils/studentFeesTile.dart';
 import 'package:untitled/utils/studentReportTile.dart';
 import 'package:untitled/utils/uploadReportTile.dart';
+import 'package:untitled/utils/viewAttendanceTile.dart';
 import '../utils/studentAttendanceTile.dart';
 import '../utils/studentNoteBookRecordTile.dart';
 
@@ -70,7 +71,7 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
         title: Text(widget.screen,style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: size.width*0.06),),
       ),
       body: SingleChildScrollView(
-
+        scrollDirection: Axis.vertical,
         child: Column(
           children: [
             SizedBox(
@@ -108,10 +109,8 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Card(
-
-              margin: EdgeInsets.all(0),
               child: Container(
-                width: size.width*0.35,
+                width: size.width*0.4,
                 height: size.height*0.05,
                 child: DropdownButton<String>(
                   isExpanded: true,
@@ -138,10 +137,8 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
             ),
             SizedBox(width: size.width*0.02,),
             Card(
-
-              margin: EdgeInsets.all(0),
               child: Container(
-                width: size.width*0.35,
+                width: size.width*0.4,
                 height: size.height*0.05,
                 child: DropdownButton<String>(
                   isExpanded: true,
@@ -167,12 +164,39 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
               ),
             ),
             SizedBox(width: size.width*0.02,),
+            widget.screen == "Report Card" ?   Card(
+
+              child: Container(
+                width: size.width*0.35,
+                height: size.height*0.05,
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  borderRadius: BorderRadius.circular(12),
+                  hint: Text("Subject",),
+                  padding: EdgeInsets.all(8),
+                  icon: Icon(Icons.keyboard_arrow_down_sharp),
+                  alignment: Alignment.center,
+                  underline: Container(),
+                  value: _selectedSubject,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedSubject = newValue!;
+                    });
+                  },
+                  items: classSubjects.map((String option) {
+                    return DropdownMenuItem<String>(
+                      value: option,
+                      child: Text(option),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ):SizedBox(),
            widget.screen == "Note Book Record" ?   Card(
 
-             margin: EdgeInsets.all(0),
              child: Container(
                width: size.width*0.35,
-               height: size.height*0.07,
+               height: size.height*0.05,
                child: DropdownButton<String>(
                  isExpanded: true,
                  borderRadius: BorderRadius.circular(12),
@@ -197,11 +221,9 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
              ),
            ):SizedBox(),
             widget.screen == "Student Attendance" ?   Card(
-
-              margin: EdgeInsets.all(0),
               child: Container(
                 width: size.width*0.35,
-                height: size.height*0.07,
+                height: size.height*0.05,
                 child: DropdownButton<String>(
                   isExpanded: true,
                   borderRadius: BorderRadius.circular(12),
@@ -230,16 +252,17 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
       ),
     );
   }
-  Widget showAttributes(Size size){
+  Widget showAttributes(Size size,String page){
     return  Card(
       color: Color(0xFF5A77BC),
       margin: EdgeInsets.all(0),
-      child: SizedBox(
+      child: Container(
         height: size.height*0.06,
         width: size.width*1,
+        padding: EdgeInsets.symmetric(horizontal: 15),
         child: widget.screen == "Student Attendance" ? Row(
           children: [
-            SizedBox(width: size.width*0.15,),
+            SizedBox(width: size.width*0.11,),
             AutoSizeText("Student",textAlign: TextAlign.start,
               style: GoogleFonts.openSans(
                   fontSize: size.width*0.05,
@@ -247,8 +270,14 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
                   color: Colors.white
               ),
             ),
-            SizedBox(width: size.width*0.4,),
-            AutoSizeText("Status",textAlign: TextAlign.start,
+           Expanded(child: SizedBox()),
+            page=="View" ? AutoSizeText("Percentage",textAlign: TextAlign.start,
+              style: GoogleFonts.openSans(
+                  fontSize: size.width*0.05,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white
+              ),
+            ): AutoSizeText("Status",textAlign: TextAlign.start,
               style: GoogleFonts.openSans(
                   fontSize: size.width*0.05,
                   fontWeight: FontWeight.w400,
@@ -258,7 +287,7 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
           ],):
         widget.screen == "Student Fees Status" ?  Row(
           children: [
-            SizedBox(width: size.width*0.19,),
+            SizedBox(width: size.width*0.11,),
             AutoSizeText("Student",textAlign: TextAlign.start,
               style: GoogleFonts.openSans(
                   fontSize: size.width*0.05,
@@ -266,7 +295,7 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
                   color: Colors.white
               ),
             ),
-            SizedBox(width: size.width*0.21,),
+            Expanded(child: SizedBox()),
             AutoSizeText("Status",textAlign: TextAlign.start,
               style: GoogleFonts.openSans(
                   fontSize: size.width*0.05,
@@ -274,7 +303,7 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
                   color: Colors.white
               ),
             ),
-            SizedBox(width: size.width*0.05,),
+            SizedBox(width: size.width*0.02,),
             AutoSizeText("Amount",
               style: GoogleFonts.openSans(
                   fontSize: size.width*0.05,
@@ -285,7 +314,7 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
           ],):
         widget.screen == "Report Card" ?  Row(
           children: [
-            SizedBox(width: size.width*0.15,),
+            SizedBox(width: size.width*0.13,),
             AutoSizeText("Student",textAlign: TextAlign.start,
               style: GoogleFonts.openSans(
                   fontSize: size.width*0.05,
@@ -293,27 +322,39 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
                   color: Colors.white
               ),
             ),
-            SizedBox(width: size.width*0.15,),
-            AutoSizeText("Total Marks",
+            Expanded(child: SizedBox()),
+           page == "View"? AutoSizeText("Total",
               style: GoogleFonts.openSans(
                   color: Colors.white,
                   fontSize: size.width*0.05,
                   fontWeight: FontWeight.w400
               ),
-            ),
+            ): AutoSizeText("Obtained",
+             style: GoogleFonts.openSans(
+                 color: Colors.white,
+                 fontSize: size.width*0.05,
+                 fontWeight: FontWeight.w400
+             ),
+           ),
             SizedBox(width: size.width*0.05,),
-            AutoSizeText("GPA",
+            page == "View"? AutoSizeText("GPA",
               style: GoogleFonts.openSans(
                   fontSize: size.width*0.05,
                   fontWeight: FontWeight.w400,
                   color: Colors.white
               ),
-            ),
+            ): AutoSizeText("Total",
+              style: GoogleFonts.openSans(
+                  fontSize: size.width*0.05,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white
+              ),
+            )
           ],):
         widget.screen == "Note Book Record" ? Row(
           children: [
 
-            SizedBox(width: size.width*0.15,),
+            SizedBox(width: size.width*0.11,),
             AutoSizeText("Student",textAlign: TextAlign.start,
               style: GoogleFonts.openSans(
                   fontSize: size.width*0.05,
@@ -321,7 +362,7 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
                   color: Colors.white
               ),
             ),
-            SizedBox(width: size.width*0.2,),
+            Expanded(child: SizedBox()),
             AutoSizeText("Check",
               style: GoogleFonts.openSans(
                   color: Colors.white,
@@ -329,7 +370,7 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
                   fontWeight: FontWeight.w400
               ),
             ),
-            SizedBox(width: size.width*0.06,),
+            SizedBox(width: size.width*0.04,),
             AutoSizeText("Uncheck",
               style: GoogleFonts.openSans(
                   fontSize: size.width*0.05,
@@ -345,20 +386,88 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
     Widget child;
     switch (widget.screen) {
       case "Student Fees Status":
-      child = StudentFeesTile(
-      sNo: 1,
-      studentName: "Ankit Sharma",
-      status: "Paid",
-      amount: 15000,
+      child =Column(
+        children: [
+          dropDownButton(size),
+          SizedBox(height: size.height*0.02,),
+          showAttributes(size,""),
+          SizedBox(height: size.height*0.02,),
+          ListView.builder(
+            itemCount: 12,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return StudentFeesTile(sNo: index+1, studentName: "Ankit Sharma", status: "Paid", amount: 1500);
+            },),
+        ],
       );
       break;
 
       case "Student Attendance":
-     child= StudentAttendanceTile(
-      studentName: 'Ankit Sharma',
-      sNo: 1,
-      profilePic: '',
-      );
+     child=  Column(
+       children: [
+
+         TabBar(
+           controller: tabBarController,
+           dividerColor: Colors.transparent,
+           tabs: [
+             Text(
+               "View",
+               style: GoogleFonts.openSans(
+                 fontSize: size.width * 0.055,
+                 color: Colors.black,
+               ),
+             ),
+             Text(
+               "Upload",
+               style: GoogleFonts.openSans(
+                 fontSize: size.width * 0.055,
+                 color: Colors.black,
+               ),
+             ),
+           ],
+         ),
+         SizedBox(height: size.height*0.02,),
+         dropDownButton(size),
+         SizedBox(height: size.height*0.01,),
+         SizedBox(
+           height: size.height*0.081*15.5,
+           child: TabBarView(
+               controller: tabBarController,
+               children: [
+                 Column(
+                   children: [
+                     showAttributes(size,"View"),
+                     SizedBox(height: size.height*0.02,),
+                     ListView.builder(
+                       itemCount: 12,
+                       shrinkWrap: true,
+                       physics: NeverScrollableScrollPhysics(),
+                       itemBuilder: (context, index) {
+                         return ViewAttendanceReportTile(percentage: 50+index, studentName: "Ankit Sharma", sRollNo: index+1);
+                       },),
+                   ],
+                 ),
+                  Column(
+                  children: [
+                    showAttributes(size,"Upload"),
+                    SizedBox(height: size.height*0.02,),
+                    ListView.builder(
+                    itemCount: 12,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                    return StudentAttendanceTile(studentName: "Ankit Sharma", sNo: index+1, profilePic: "");
+                    },
+                    ),
+                  ],
+                  )
+
+               ]
+           ),
+         )
+       ],
+     );
       break;
 
       case "Report Card":
@@ -387,15 +496,16 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
           ),
          SizedBox(height: size.height*0.02,),
          dropDownButton(size),
-         SizedBox(height: size.height*0.02,),
+         SizedBox(height: size.height*0.01,),
          SizedBox(
-           height: size.height*0.09*16,
+           height: size.height*0.091*16,
            child: TabBarView(
                controller: tabBarController,
                children: [
                      Column(
                        children: [
-                         showAttributes(size),
+                         showAttributes(size,"View"),
+                         SizedBox(height: size.height*0.02,),
                          ListView.builder(
                            itemCount: 15,
                            shrinkWrap: true,
@@ -407,15 +517,17 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
                      ),
                  Column(
                    children: [
-                     showAttributes(size),
+                     showAttributes(size,"Upload"),
+                     SizedBox(height: size.height*0.02,),
                      ListView.builder(
                        itemCount: 15,
                        shrinkWrap: true,
                        physics: NeverScrollableScrollPhysics(),
                        itemBuilder: (context, index) {
-                         final TextEditingController totalMarks=TextEditingController();
+                         // final TextEditingController totalMarks=TextEditingController();
                          final TextEditingController obtainedMarks=TextEditingController();
-                         return UploadReportTile(studentName: "Ankit Sharma", totalMarks: totalMarks, obtainedMarks: obtainedMarks, sRollNo: index+1,);
+                         final int totalMarks=100;
+                         return UploadReportTile(studentName: "Ankit Sharma", totalMarks: 100, obtainedMarks: obtainedMarks, sRollNo: index+1,);
                        },),
                    ],
                  ),
@@ -428,16 +540,71 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
       break;
 
       case "Note Book Record":
-     child= StudentNoteBookRecord(
-      sNo: 1,
-      studentName: 'Ankit Sharma',
-      check: true,
-      );
+     child=Column(
+       children: [
+
+         TabBar(
+           controller: tabBarController,
+           dividerColor: Colors.transparent,
+           tabs: [
+             Text(
+               "View",
+               style: GoogleFonts.openSans(
+                 fontSize: size.width * 0.055,
+                 color: Colors.black,
+               ),
+             ),
+             Text(
+               "Upload",
+               style: GoogleFonts.openSans(
+                 fontSize: size.width * 0.055,
+                 color: Colors.black,
+               ),
+             ),
+           ],
+         ),
+         dropDownButton(size),
+         SizedBox(height: size.height*0.01,),
+         showAttributes(size,""),
+         SizedBox(height: size.height*0.02,),
+         SizedBox(
+           height: size.height*0.09*12.3,
+           child: TabBarView(
+               controller: tabBarController,
+               children: [
+                 Column(
+                   children: [
+                     ListView.builder(
+                       itemCount: 12,
+                       shrinkWrap: true,
+                       physics: NeverScrollableScrollPhysics(),
+                       itemBuilder: (context, index) {
+                         return StudentNoteBookRecord(sNo: index+1, studentName: "Ankit Sharma", check: index%4==0);
+                       },),
+                   ],
+                 ),
+                  Column(
+                  children: [
+                  ListView.builder(
+                  itemCount: 12,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                  return StudentNoteBookRecord(sNo: index+1, studentName: "Ankit Sharma", check: index%4==0);
+                  },),
+                  ],
+                  ),
+
+               ]
+           ),
+         )
+       ],
+     );
       break;
 
       default:
-      child=SizedBox(); // Return an empty SizedBox for default case
-      };
+      child=const SizedBox(); // Return an empty SizedBox for default case
+      }
     return child;
 
   }

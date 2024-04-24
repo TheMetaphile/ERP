@@ -16,6 +16,7 @@ class StudentAttendanceTile extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Card(
       child: Container(
+        height: size.height*0.08,
         child: Row(
           children: [
             SizedBox(width: size.width*0.02,),

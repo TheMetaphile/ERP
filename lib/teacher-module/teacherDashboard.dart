@@ -154,7 +154,7 @@ class _teacherDashboardState extends State<teacherDashboard> {
                         leading:Icon(Icons.home,size:  size.height*0.04,color: Colors.black,),
                         title: Text("Home",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w400),),
                         onTap: (){
-                          Navigator.push(context,MaterialPageRoute(builder: (context) => teacherDashboard(),));
+                          Navigator.pop(context);
 
                         },
                       ),

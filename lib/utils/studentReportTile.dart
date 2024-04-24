@@ -18,7 +18,7 @@ class StudentReportTile extends StatelessWidget {
     return Card(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 2),
-        height: size.height*0.065,
+        height: size.height*0.081,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

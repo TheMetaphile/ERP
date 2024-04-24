@@ -1,23 +1,20 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class UploadReportTile extends StatelessWidget {
-  const UploadReportTile({super.key, required this.studentName, required this.sRollNo, required this.totalMarks, required this.obtainedMarks});
+class ViewAttendanceReportTile extends StatelessWidget {
+  const ViewAttendanceReportTile({super.key, required this.percentage, required this.studentName, required this.sRollNo});
   final String studentName;
+  final int percentage;
   final int sRollNo;
-  final int totalMarks;
-  final TextEditingController obtainedMarks;
-
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Card(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         height: size.height*0.081,
         child: Row(
           children: [
@@ -42,20 +39,8 @@ class UploadReportTile extends StatelessWidget {
                 ),
               ],
             ),
-           Expanded(child: SizedBox()),
-            Row(
-              children: [
-                SizedBox(
-                  width: size.width*0.15,
-                  child: TextField(
-                    controller: obtainedMarks,
-                    maxLength: 3,
-
-                  ),
-                ),
-                Text(" /${100} ",style: TextStyle(fontSize: size.height*0.03),),
-              ],
-            )
+            Expanded(child: SizedBox()),
+            Text(percentage.toString()+"%",style: GoogleFonts.openSans(fontSize:size.width*0.035,fontWeight:FontWeight.w400,color:Colors.black),)
 
 
           ],
