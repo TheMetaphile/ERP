@@ -3,7 +3,7 @@ import TransactionField from "./TransactionField.jsx";
 
 export default function TransactionRow() {
     return (
-        <div className="ml-4 mr-4 mb-4">
+        <div className="w-full mb-4">
             <TransactionHistoryHeader />
             <TransactionField sn='01' transactionID="873592" type='Online' amount='Rs. 3499' academicYear='2023-24' />
             <TransactionField sn='02' transactionID="892654" type='Online' amount='Rs. 3499' academicYear='2023-24' />

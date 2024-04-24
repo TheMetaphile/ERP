@@ -4,7 +4,7 @@ import FeeStructureFooter from './feeStructureFooter';
 
 export default function FeeStructure() {
     return (
-        <div className="w-auto h-auto ml-4 mr-4 mb-4 bg-white rounded-lg shadow-md">
+        <div className="w-full h-screen mb-4 bg-white rounded-lg shadow-md ">
             <Header />
             <FeeStructureField sn='01' particular='Tuition Fee' amount='Rs. 5,000' />
             <FeeStructureField sn='02' particular='Book Bank' amount='Rs. 2,000' />
