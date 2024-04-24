@@ -5,7 +5,7 @@ import menuItems from "../../helpers/menuItems.js";
 
 export default function Drawer() {
   return (
-    <div className="w-60 max-h-fit rounded-lg text-center items-center border bg-white py-6 px-4 shadow-md overflow-auto no-scrollbar">
+    <div className="w-60 h-screen rounded-lg text-center items-center border bg-white py-6 px-4 shadow-md overflow-auto no-scrollbar">
       <div className="flex items-center">
         <img src={schoolImage} alt="school_image" className="w-1/3" />
         <span className="text-black ml-4">Methaphile Public School</span>

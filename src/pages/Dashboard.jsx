@@ -6,11 +6,11 @@ import { Outlet } from "react-router-dom";
 // Dashboard.jsx
 export default function Dashboard() {
   return (
-    <div className="flex overflow-auto no-scrollbar">
+    <div className="flex h-screen overflow-auto no-scrollbar">
       <div>
         <Drawer />
       </div>
-      <div className="flex flex-col w-full">
+      <div className="flex h-screen flex-col w-full overflow-y-auto">
         <Navbar />
         <div className="flex flex-row w-full">
           <Outlet />

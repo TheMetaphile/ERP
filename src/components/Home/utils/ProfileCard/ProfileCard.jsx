@@ -3,7 +3,7 @@ import NotificationIcon from './../../../../assets/notificationIcon.png'
 
 export default function ProfileCard(props) {
   return (
-    <div className="flex w-full mx-1 mb-1 shadow-md rounded-lg bg-white p-2 h-fit">
+    <div className="flex w-full mb-1 shadow-md rounded-lg bg-white p-2 h-fit">
       <img src={ProfileIcon} alt="ProfileIcon" className="w-20 h-20" />
       <div className='ml-3'>
         <h3 className="mb-1">Hi, {props.name}</h3>
