@@ -1,6 +1,6 @@
 export default function Assignments(props) {
     return (
-        <div className={`${props.bg} p-4 shadow-lg rounded-lg ml-4 flex flex-col items-center`}>
+        <div className={`${props.bg} p-4 shadow-lg rounded-lg mr-2 flex flex-col items-center whitespace-nowrap`}>
             <div className='text-xl font-semibold mb-2'>{props.subject}</div>
             <p className="text-sm mb-1">Topic: <span className="font-medium">{props.topic}</span></p>
             <p className="text-sm mb-1">Assigned On: <span className="font-medium">{props.assignedOn}</span></p>
