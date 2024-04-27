@@ -73,7 +73,7 @@ function Quiz() {
             >
 
               
-              <h1 className='text-base text-black pl-2 pr-2'>Previous</h1>
+              <h1 className='text-base text-black pl-2 pr-2'>Next</h1>
               <div className='bg-blue-500 p-2 rounded-full'>
               <FaArrowRight className='text-black' />
               </div>
