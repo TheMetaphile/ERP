@@ -57,7 +57,7 @@ const router = createBrowserRouter([
         element: <Receipt/>,
       },
       {
-        path: "/quiz",
+        path: "/quiz/:subject",
         element: <Quiz/>,
       },
       {

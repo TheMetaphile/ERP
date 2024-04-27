@@ -7,7 +7,7 @@ export default function Border() {
     <div className="flex flex-col w-full h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 no-scrollbar">
       <h1 className="text-lg">Events</h1>
 
-      <div className="flex flex-col h-fit w-full mt-2 mb-3 bg-black shadow-lg rounded-lg py-3 px-3">
+      <div className="flex flex-col h-fit w-full mt-2 mb-3 bg-white shadow-lg rounded-lg py-3 px-3">
   <div className="w-fit px-4 py-2 bg-green-400 rounded-lg shadow-md text-center self-center">
     Upcoming Events
   </div>

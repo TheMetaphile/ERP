@@ -12,6 +12,7 @@ export default {
       colors: {
         aquamarine: '#7FFFD4',
         wheat: '#F5DEB3',
+        secondary: "#AEEEED"
       },
     },
   },

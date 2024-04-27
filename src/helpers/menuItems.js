@@ -30,7 +30,7 @@ const menuItems = [
     image: "src/assets/Dashboard_quiz.png",
     alt: "Play Quiz image",
     text: "Play Quiz",
-    route: "/quiz"
+    route: "/quiz/physics"
   },
   {
     image: "src/assets/Dashboard_assignment.png",
