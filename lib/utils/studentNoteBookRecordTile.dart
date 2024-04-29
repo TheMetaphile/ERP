@@ -24,6 +24,7 @@ class StudentNoteBookRecord extends StatelessWidget {
             SizedBox(width: size.width*0.03,),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AutoSizeText(studentName,
                   style: GoogleFonts.openSans(

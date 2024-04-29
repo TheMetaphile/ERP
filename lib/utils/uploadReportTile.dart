@@ -24,6 +24,7 @@ class UploadReportTile extends StatelessWidget {
             Icon(CupertinoIcons.profile_circled,size: size.height*0.05,color: Colors.black,),
             SizedBox(width: size.width*0.02,),
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AutoSizeText(studentName,
@@ -43,18 +44,16 @@ class UploadReportTile extends StatelessWidget {
               ],
             ),
            Expanded(child: SizedBox()),
-            Row(
-              children: [
-                SizedBox(
-                  width: size.width*0.15,
-                  child: TextField(
-                    controller: obtainedMarks,
-                    maxLength: 3,
-
-                  ),
+            SizedBox(
+              width: size.width*0.2,
+              child: TextField(
+                controller: obtainedMarks,
+                maxLength: 3,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12),borderSide: BorderSide(color: Colors.grey,width: 1))
                 ),
-                Text(" /${100} ",style: TextStyle(fontSize: size.height*0.03),),
-              ],
+
+              ),
             )
 
 

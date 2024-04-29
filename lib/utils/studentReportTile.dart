@@ -25,6 +25,7 @@ class StudentReportTile extends StatelessWidget {
             Icon(CupertinoIcons.profile_circled,size: size.height*0.05,color: Colors.black,),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AutoSizeText(studentName,
                   style: GoogleFonts.openSans(

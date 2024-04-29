@@ -1,12 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molten_navigationbar_flutter/molten_navigationbar_flutter.dart';
 import 'package:untitled/teacher-module/Birthday.dart';
 import 'package:untitled/teacher-module/studentLeaveApplications.dart';
+import 'package:untitled/teacher-module/studentReportCard.dart';
+import 'package:untitled/teacher-module/teacherAttendanceCheckIn.dart';
+import 'package:untitled/teacher-module/teacherLeave.dart';
 import 'package:untitled/teacher-module/teacherSalary.dart';
 
 import '../utils/utils.dart';
+import 'TimeTable.dart';
+import 'noticeBoard.dart';
 
 class teacherDashboard extends StatefulWidget {
   const teacherDashboard({super.key});
@@ -42,17 +49,17 @@ class _teacherDashboardState extends State<teacherDashboard> {
     scrollController2.addListener(listener2);
   }
 
-
+  List navigation = [TeacherAttendanceCheckIn(),Timetable(),studentReportCard(screen: 'Student Fees Status',),studentReportCard(screen: 'Student Attendance',),studentReportCard(screen: 'Report Card',),studentReportCard(screen: 'Note Book Record',),teacherLeave(),noticeBoard()];
   @override
     Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
       return Scaffold(
         backgroundColor: Color(0xFF5A77BC),
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Colors.transparent,
-          title: Text("DashBoard",style: GoogleFonts.openSans(fontSize: size.width*0.05,color:Colors.white,fontWeight:FontWeight.w500),),
-        ),
+        // appBar: AppBar(
+        //   iconTheme: IconThemeData(color: Colors.white),
+        //   backgroundColor: Colors.transparent,
+        //   title: Text("DashBoard",style: GoogleFonts.openSans(fontSize: size.width*0.05,color:Colors.white,fontWeight:FontWeight.w500),),
+        // ),
         body: Stack(
           children: [
             secondStackLayer(size,context),
@@ -103,6 +110,7 @@ class _teacherDashboardState extends State<teacherDashboard> {
                         },),
                     ),
                   ),
+                  SizedBox(height: size.height*0.06,)
                 ],
               ),
             )
@@ -110,90 +118,7 @@ class _teacherDashboardState extends State<teacherDashboard> {
           ],
         ),
 
-        drawer: Drawer(
-            width: size.width*0.8,
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(top: 20),
-                  height: size.height*0.2,
-                  width: size.width*1,
-                  decoration: BoxDecoration(
-                      color: Color(0xFF5A77BC),
 
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                          Icon(CupertinoIcons.profile_circled,size: size.height*0.12,color: Colors.white,),
-                           SizedBox(width: size.width*0.05,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Ankit Sharma",overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.white,fontSize: size.width*0.04,fontWeight: FontWeight.w500),),
-                                Text("ankits459@gmail.com",overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.white70,fontSize: size.width*0.035,fontWeight: FontWeight.w400),),
-                                Text("Id-015",style: TextStyle(color: Colors.white70,fontSize: size.width*0.035,fontWeight: FontWeight.w400),)
-
-
-                              ],
-                            ),
-                          ]
-                      ),
-                      SizedBox(height: size.height*0.02,)
-                    ],
-                  ),
-                ),
-                SizedBox(height: size.height*0.02,),
-                Container(
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading:Icon(Icons.home,size:  size.height*0.04,color: Colors.black,),
-                        title: Text("Home",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w400),),
-                        onTap: (){
-                          Navigator.pop(context);
-
-                        },
-                      ),
-                      ListTile(
-                        leading: Image.asset("assets/Images/gift-box-icon.png",width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                        title: Text("Birthday",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w400),),
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => birthday(),));
-                        },
-                      ),
-                      ListTile(
-                        leading: Image.asset("assets/Images/Leave.png",width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                        title: Text("Student Leave Application",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w400),),
-                        onTap: (){
-                         Navigator.push(context, MaterialPageRoute(builder: (context) => studentLeaveApplications(),));
-                        },
-                      ),
-                      ListTile(
-                        leading: Image.asset("assets/Images/moneybag.png",width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                        title: Text("Salary",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w400),),
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherSalary(),));
-                        },
-                      ),
-                      ListTile(
-                        leading: Image.asset("assets/Images/logout.png",width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                        title: Text("Logout",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w400),),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(child: SizedBox(),),
-                Container(
-                  width: size.width*0.75,
-                  child: Text(" © 2024 All Right Reserved by School\nDesigned by MetaPhile",textAlign: TextAlign.center,),
-                )
-              ],
-            )
-        ),
       );
     }
   Widget secondStackLayer(Size size,BuildContext context) {

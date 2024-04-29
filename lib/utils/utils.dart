@@ -1,3 +1,4 @@
+import 'package:chatview/chatview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/teacher-module/noticeBoard.dart';
@@ -53,5 +54,6 @@ String getPic(String categoryName) {
       return "null";
   }
 }
+
 
 

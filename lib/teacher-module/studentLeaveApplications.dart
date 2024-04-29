@@ -59,6 +59,7 @@ class _studentLeaveApplicationsState extends State<studentLeaveApplications> {
                    return  Card(
                      elevation: 5,
                      child: ExpansionTile(
+                       shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
                        title:  Text("Abhishek from class 11th A want a Leave Request to you...",style: TextStyle(fontSize: size.height*0.02),),
                        leading:  Image.asset("assets/Images/Test Account.png",fit: BoxFit.contain,width: size.width*0.15,),
                        subtitle: Row(

@@ -1,73 +1,173 @@
+import 'package:chatview/chatview.dart';
 import 'package:flutter/material.dart';
+import 'package:untitled/utils/utils.dart';
+
 
 void main() {
-  runApp(MyApp());
+  runApp(const Example());
 }
 
-class MyApp extends StatelessWidget {
+class Example extends StatelessWidget {
+  const Example({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Schedule',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Tuesday'),
-        ),
-        body: Center(
-          child: ScheduleDropdown(),
-        ),
-      ),
+      title: 'Flutter Chat UI Demo',
+      debugShowCheckedModeBanner: false,
+      home: const ChatScreen(),
     );
   }
 }
 
-class ScheduleDropdown extends StatefulWidget {
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({Key? key}) : super(key: key);
+
   @override
-  _ScheduleDropdownState createState() => _ScheduleDropdownState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
+class Data {
 
-class _ScheduleDropdownState extends State<ScheduleDropdown> {
-  Map<String, String>? selectedClass;
-
-  List<Map<String, String>> classes = [
-    {'time': '09:30 - 10:30', 'subject': 'Chemistry'},
-    {'time': '10:30 - 11:30', 'subject': 'Maths'},
-    {'time': '11:30 - 12:30', 'subject': 'Biology'},
-    {'time': '12:30 - 01:30', 'subject': 'Break'},
-    {'time': '01:30 - 02:30', 'subject': 'Physics'},
-    {'time': '02:30 - 03:30', 'subject': 'English', 'class': 'You'},
+  static List<Message> messageList = [
+    Message(
+      id: '1',
+      createdAt: DateTime.now().subtract(const Duration(days: 1)),
+      message: 'Hello',
+      sendBy: '2',
+      messageType: MessageType.text,
+    ),
+    Message(
+      id: '2',
+      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+      message: 'Hi there!',
+      sendBy: '1',
+      messageType: MessageType.text,
+    ),
+    Message(
+      id: '1',
+      createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
+      message: 'How are you?',
+      sendBy: '2',
+      messageType: MessageType.text,
+    ),
+    Message(
+      id: '2',
+      createdAt: DateTime.now().subtract(const Duration(minutes: 10)),
+      message: 'I\'m doing great, thanks for asking!',
+      sendBy: '1',
+      messageType: MessageType.text,
+    ),
   ];
+}
+class _ChatScreenState extends State<ChatScreen>  {
+
+  final currentUser = ChatUser(
+    id: '1',
+    name: 'Simform',
+    profilePhoto: 'Profile photo URL',
+  );
+
+  final chatController = ChatController(
+    initialMessageList:Data.messageList,
+    scrollController: ScrollController(),
+    chatUsers: [
+    ChatUser(
+    id: '2',
+    name: 'Jhon',
+    profilePhoto: 'Profile photo URL',
+  ),
+      ChatUser(
+  id: '3',
+  name: 'Mike',
+  profilePhoto: 'Profile photo URL',
+  ),
+    ],
+  );
+
+
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<Map<String, String>>(
-      value: selectedClass,
-      icon: Icon(Icons.arrow_drop_down),
-      iconSize: 24,
-      elevation: 16,
-      isExpanded: true,
-      underline: Container(
-        height: 2,
-        color: Colors.grey[300],
-      ),
-      onChanged: (Map<String, String>? newValue) {
-        setState(() {
-          selectedClass = newValue;
-        });
-      },
-      items: classes.map<DropdownMenuItem<Map<String, String>>>((Map<String, String> value) {
-        return DropdownMenuItem<Map<String, String>>(
-          value: value,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(child: Text(value['time']!)),
-              Expanded(child: Text(value['subject']!)),
-              Expanded(child: Text(value['class'] ?? '')),
-            ],
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body:  ChatView(
+          currentUser: currentUser,
+          chatController: chatController,
+          chatViewState: ChatViewState.hasMessages,
+          onSendTap: _onSendTap,
+          featureActiveConfig: const FeatureActiveConfig(
+            lastSeenAgoBuilderVisibility: true,
+            receiptsBuilderVisibility: true,
           ),
-        );
-      }).toList(),
+             chatViewStateConfig: ChatViewStateConfiguration(
+              loadingWidgetConfig: ChatViewStateWidgetConfiguration(
+                loadingIndicatorColor: Colors.blue,
+              ),
+              onReloadButtonTap: () {},
+            ),
+           sendMessageConfig: const SendMessageConfiguration(
+             textFieldConfig: TextFieldConfiguration(
+               textStyle: TextStyle(
+                 color: Colors.black
+               )
+             )
+           ),
+
+          appBar: const ChatViewAppBar(
+              elevation: 5,
+              backGroundColor: Colors.grey,
+              backArrowColor: Colors.black,
+              chatTitle: "Name",
+              chatTitleTextStyle: TextStyle(
+              color: Colors.blue,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              letterSpacing: 0.25,
+              ),
+            userStatus: "online",
+            actions: [
+             Icon(Icons.settings)
+
+            ],
+
+          ),
+
+
+      ),
+    )
     );
   }
+
+ void _onSendTap(
+     String message,
+     ReplyMessage replyMessage,
+     MessageType messageType,
+     ) {
+    print(message);
+    print(replyMessage);
+    print(messageType);
+   final id = int.parse(Data.messageList.last.id) + 1;
+   chatController.addMessage(
+     Message(
+       id: id.toString(),
+       createdAt: DateTime.now(),
+       message: message,
+       sendBy: currentUser.id,
+       replyMessage: replyMessage,
+       messageType: messageType,
+     ),
+   );
+   Future.delayed(const Duration(milliseconds: 300), () {
+     chatController.initialMessageList.last.setStatus =
+         MessageStatus.undelivered;
+   });
+   Future.delayed(const Duration(seconds: 1), () {
+     chatController.initialMessageList.last.setStatus = MessageStatus.read;
+   });
+
 }
+}
+
+

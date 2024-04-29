@@ -21,6 +21,7 @@ class ViewAttendanceReportTile extends StatelessWidget {
             Icon(CupertinoIcons.profile_circled,size: size.height*0.05,color: Colors.black,),
             SizedBox(width: size.width*0.02,),
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AutoSizeText(studentName,

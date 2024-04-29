@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:untitled/utils/studentFeesTile.dart';
 import 'package:untitled/utils/studentReportTile.dart';
+import 'package:untitled/utils/uploadNoteBook.dart';
 import 'package:untitled/utils/uploadReportTile.dart';
 import 'package:untitled/utils/viewAttendanceTile.dart';
 import '../utils/studentAttendanceTile.dart';
@@ -343,13 +344,7 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
                   fontWeight: FontWeight.w400,
                   color: Colors.white
               ),
-            ): AutoSizeText("Total",
-              style: GoogleFonts.openSans(
-                  fontSize: size.width*0.05,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white
-              ),
-            )
+            ): SizedBox(),
           ],):
         widget.screen == "Note Book Record" ? Row(
           children: [
@@ -363,15 +358,22 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
               ),
             ),
             Expanded(child: SizedBox()),
+            page=="View" ?
             AutoSizeText("Check",
               style: GoogleFonts.openSans(
                   color: Colors.white,
                   fontSize: size.width*0.05,
                   fontWeight: FontWeight.w400
               ),
-            ),
+            ):SizedBox(),
             SizedBox(width: size.width*0.04,),
-            AutoSizeText("Uncheck",
+            page=="View" ? AutoSizeText("Uncheck",
+              style: GoogleFonts.openSans(
+                  fontSize: size.width*0.05,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white
+              ),
+            ):AutoSizeText("Status",
               style: GoogleFonts.openSans(
                   fontSize: size.width*0.05,
                   fontWeight: FontWeight.w400,
@@ -498,7 +500,7 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
          dropDownButton(size),
          SizedBox(height: size.height*0.01,),
          SizedBox(
-           height: size.height*0.091*16,
+           height: size.height*0.097*16,
            child: TabBarView(
                controller: tabBarController,
                children: [
@@ -517,6 +519,19 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
                      ),
                  Column(
                    children: [
+                     ListTile(
+                       leading: Text("Total Marks",style: GoogleFonts.openSans(fontSize:size.width*0.05),),
+                       trailing: SizedBox(
+                           width: size.width*0.2,
+                           child: TextField(
+                             maxLength: 3,
+                             decoration: InputDecoration(
+                                border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey,width: 1),borderRadius: BorderRadius.circular(12))
+                             ),
+                           )
+                       ),
+                     ),
+                     SizedBox(height: size.height*0.02,),
                      showAttributes(size,"Upload"),
                      SizedBox(height: size.height*0.02,),
                      ListView.builder(
@@ -565,17 +580,17 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
          ),
          dropDownButton(size),
          SizedBox(height: size.height*0.01,),
-         showAttributes(size,""),
-         SizedBox(height: size.height*0.02,),
          SizedBox(
-           height: size.height*0.09*12.3,
+           height: size.height*0.09*11.5,
            child: TabBarView(
                controller: tabBarController,
                children: [
                  Column(
                    children: [
+                     showAttributes(size,"View"),
+                     SizedBox(height: size.height*0.02,),
                      ListView.builder(
-                       itemCount: 12,
+                       itemCount: 10,
                        shrinkWrap: true,
                        physics: NeverScrollableScrollPhysics(),
                        itemBuilder: (context, index) {
@@ -585,12 +600,25 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
                  ),
                   Column(
                   children: [
+                    SizedBox(height: size.height*0.01,),
+                    TextField(
+                      maxLines: 3,
+
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        hintText: "Description",
+                        label: Text("Description")
+                      ),
+                    ),
+                    SizedBox(height: size.height*0.02,),
+                    showAttributes(size,"Upload"),
+                    SizedBox(height: size.height*0.02,),
                   ListView.builder(
-                  itemCount: 12,
+                  itemCount: 10,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                  return StudentNoteBookRecord(sNo: index+1, studentName: "Ankit Sharma", check: index%4==0);
+                  return UploadNoteBook(studentName: "Ankit Sharma", sRollNo: index+1);
                   },),
                   ],
                   ),

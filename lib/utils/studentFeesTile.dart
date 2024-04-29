@@ -25,6 +25,7 @@ class StudentFeesTile extends StatelessWidget {
             Icon(CupertinoIcons.profile_circled,size: size.height*0.05,color: Colors.black,),
             SizedBox(width: size.width*0.04,),
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AutoSizeText(studentName,textAlign: TextAlign.start,
