@@ -14,6 +14,7 @@ import Result from "./components/Result/CustomResult.jsx";
 import  DateSheet  from "./components/DateSheet/datesheet.jsx";
 import Palyquiz from "./components/playquiz/firstquizs.jsx";
 import Attendance from "./components/Attendance/Attendance.jsx";
+import TimeTable from "./components/TimeTable/Timetable.jsx";
 
 const router = createBrowserRouter([
   {
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
       {
         path: "/datesheet",
         element: <DateSheet />,
+      },
+      {
+        path: "/timetable",
+        element: <TimeTable />,
       },
     ],
   },

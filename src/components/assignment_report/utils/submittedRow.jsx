@@ -2,7 +2,7 @@ import SubmittedAssignment from "./submittedAssignments.jsx"
 
 export default function(){
     return (
-        <div>
+        <div className="mt-3">
             <SubmittedAssignment subject='Maths' topic='Partial Differential Calculas' status='Pending' color='text-red-500'/>
             <SubmittedAssignment subject='Science' topic='PhotoSynthesis' status='Submitted' color='text-green-500'/>
             <SubmittedAssignment subject='Physics' topic='Gause theory of electro magnetic induction' status='Waiting for check' color='text-blue-400'/>
