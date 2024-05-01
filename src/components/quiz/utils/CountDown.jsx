@@ -1,35 +1,40 @@
-import { useEffect, useState } from 'react';
-import clock from './../../../assets/clock.png'
+import React, { useEffect, useState } from 'react';
+import clock from './../../../assets/clock.png';
 
-export default function CountDown({ seconds, next }) {
-    const [count, setCount] = useState(seconds);
+export default function CountDown({ seconds, next, updateRemainingTime }) {
+  const [count, setCount] = useState(seconds);
 
-    useEffect(() => {
-      const timer = setInterval(() => {
-        setCount(prevCount => prevCount - 1);
-      }, 1000);
-  
-      // Cleanup function to clear the interval when the component unmounts
-      return () => clearInterval(timer);
-    }, []);
-  
-    useEffect(() => {
-      if (count === 0) {
-        clearInterval();
-        if (next) {
-            setCount(seconds);
+  useEffect(() => {
+    var timer;
+    setCount(seconds);
+     timer = setInterval(() => {
+        if (count === 0) {
+          clearInterval(timer);
+          if (next) {
             next();
-        }
-      }
-    }, [count, next]);
-    return (
-        <div className="flex w-full justify-between ">
-            <h1>Time Left</h1>
-            <div className='flex w-fit bg-secondary rounded-full shadow-md px-3 py-1 items-center'>
-                <img src={clock} alt="clock" className='w-5 h-5 mr-2' />
-                <h2 className='text-sm text-gray-500'>{count} sec</h2>
-            </div>
+          }
+        }else{
 
-        </div>
-    )
+        updateRemainingTime(count);
+        setCount(count-1);
+        }
+          
+        
+    }, 1000);
+  
+    return () => clearInterval(timer);
+  }, [next]); // Ensure only 'next' is included as a dependency
+  
+ // Specify 'count' and 'updateRemainingTime' as dependencies
+  
+
+  return (
+    <div className="flex w-full justify-between">
+      <h1>Time Left</h1>
+      <div className='flex w-fit bg-secondary rounded-full shadow-md px-3 py-1 items-center'>
+        <img src={clock} alt="clock" className='w-5 h-5 mr-2' />
+        <h2 className='text-sm text-gray-500'>{count} sec</h2>
+      </div>
+    </div>
+  );
 }

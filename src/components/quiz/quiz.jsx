@@ -8,14 +8,17 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 function Quiz() {
   let { subject } = useParams();
   subject = subject.charAt(0).toUpperCase() + subject.slice(1);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState({}); // Initialize answers object
   const questions = [
     { id: 1, text: 'this is Question 1', options: ['225', '455', '10', '788'] },
     { id: 2, text: 'this is Question 2', options: ['54', '684', '19//740', '987465'] },
     { id: 3, text: 'this is Question 3', options: ['9/7', '35', '6846', '0'] },
     // Add more questions as needed
   ];
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [remainingTimes, setRemainingTimes] = useState(Array(questions.length).fill(30)); // Default remaining time is 30 seconds for each question
+
+
 
   const goToPreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
@@ -31,17 +34,27 @@ function Quiz() {
   };
 
   const goToNextQuestion = () => {
+    console.log("next");
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
+
+  const updateRemainingTime = (time) => {
+    const updatedRemainingTimes = [...remainingTimes];
+    console.log(remainingTimes);
+    updatedRemainingTimes[currentQuestionIndex] = time;
+    console.log(updatedRemainingTimes[currentQuestionIndex]);
+    setRemainingTimes(updatedRemainingTimes);
+  };
+
 
   return (
     <div className='flex flex-col w-full h-screen overflow-y-auto items-start mt-2 ml-2 mr-3'>
       <h1>{subject}</h1>
       <QuizProgressCard currentQuestionIndex={currentQuestionIndex} len={questions.length} />
       <div className="w-full rounded-lg shadow-lg px-4 py-2 mt-4">
-        <CountDown next={goToNextQuestion} seconds={30} />
+        <CountDown next={goToNextQuestion} seconds={remainingTimes[currentQuestionIndex]} updateRemainingTime={updateRemainingTime} />
         <hr className='border-t-2 mt-2 mb-3' />
 
         <div className="w-full transition-all duration-300">
