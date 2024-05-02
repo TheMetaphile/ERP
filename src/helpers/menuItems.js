@@ -3,6 +3,7 @@ const menuItems = [
     image: "src/assets/Dashboard_assignment.png",
     alt: "Attendance image",
     text: "Attendance",
+    route: '/attendance'
   },
   {
     image: "src/assets/Dashboard_fee.png",
@@ -14,6 +15,7 @@ const menuItems = [
     image: "src/assets/presentation 1.png",
     alt: "presentation image",
     text: "Class Work",
+    route: '/classwork'
   },
   {
     image: "src/assets/freelance 1.png",

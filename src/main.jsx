@@ -15,6 +15,7 @@ import  DateSheet  from "./components/DateSheet/datesheet.jsx";
 import Palyquiz from "./components/playquiz/firstquizs.jsx";
 import Attendance from "./components/Attendance/Attendance.jsx";
 import TimeTable from "./components/TimeTable/Timetable.jsx";
+import ClassWork from "./components/classWork/ClassWork.jsx";
 
 const router = createBrowserRouter([
   {
@@ -42,10 +43,6 @@ const router = createBrowserRouter([
         element: <Border />,
       },
       {
-        path: "/home",
-        element: <Home />,
-      },
-      {
         path: "/profile",
         element: <Profile />,
       },
@@ -66,7 +63,7 @@ const router = createBrowserRouter([
         element: <Result />,
       },
       {
-        path: "/Attendance",
+        path: "/attendance",
         element: <Attendance />,
       },
       {
@@ -76,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: "/timetable",
         element: <TimeTable />,
+      },
+      {
+        path: "/classwork",
+        element: <ClassWork />,
       },
     ],
   },
