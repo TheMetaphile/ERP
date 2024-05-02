@@ -14,7 +14,8 @@ export default {
         wheat: '#F5DEB3',
         secondary: "#AEEEED",
         bg_blue: "#E8EFFD",
-        text_blue: '#032E66'
+        text_blue: '#032E66',
+        login: '#DAFDFF'
       },
     },
   },

@@ -18,10 +18,15 @@ import TimeTable from "./components/TimeTable/Timetable.jsx";
 import SubjectClassWork from "./components/classWork/SubjectClassWork.jsx";
 import ClassWork from "./components/classWork/route.jsx";
 import TodayClassWork from "./components/classWork/TodayClassWork.jsx";
+import Login from "./components/onBoarding/Login.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Login />,
+  },
+  {
+    path: "/dashboard",
     element: <Dashboard />,
     children: [
       {
@@ -29,55 +34,55 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/home",
+        path: "/dashboard/home",
         element: <Home />,
       },
       {
-        path: "/assignment",
+        path: "/dashboard/assignment",
         element: <AssignmentReport />,
       },
       {
-        path: "/fee-due",
+        path: "/dashboard/fee-due",
         element: <Fee />,
       },
       {
-        path: "/events",
+        path: "/dashboard/events",
         element: <Border />,
       },
       {
-        path: "/profile",
+        path: "/dashboard/profile",
         element: <Profile />,
       },
       {
-        path: "/playquiz",
+        path: "/dashboard/playquiz",
         element: <Palyquiz/>,
       },
       {
-        path: "/receipt",
+        path: "/dashboard/receipt",
         element: <Receipt/>,
       },
       {
-        path: "/quiz/:subject",
+        path: "/dashboard/quiz/:subject",
         element: <Quiz/>,
       },
       {
-        path: "/result",
+        path: "/dashboard/result",
         element: <Result />,
       },
       {
-        path: "/attendance",
+        path: "/dashboard/attendance",
         element: <Attendance />,
       },
       {
-        path: "/datesheet",
+        path: "/dashboard/datesheet",
         element: <DateSheet />,
       },
       {
-        path: "/timetable",
+        path: "/dashboard/timetable",
         element: <TimeTable />,
       },
       {
-        path: "/classwork",
+        path: "/dashboard/classwork",
         element: <ClassWork />,
         children: [
           {
@@ -93,6 +98,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+ 
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
