@@ -10,7 +10,7 @@ import Border from "./components/event/border.jsx";
 import Profile from "./components/profile/profile.jsx";
 import Quiz from "./components/quiz/quiz.jsx";
 import Receipt from "./components/receipt/receipt.jsx";
-import Result from "./components/Result/CustomResult.jsx";
+import Result from "./components/Result/Result.jsx";
 import  DateSheet  from "./components/DateSheet/datesheet.jsx";
 import Palyquiz from "./components/playquiz/firstquizs.jsx";
 import Attendance from "./components/Attendance/Attendance.jsx";

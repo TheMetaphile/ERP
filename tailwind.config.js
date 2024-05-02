@@ -13,7 +13,8 @@ export default {
         aquamarine: '#7FFFD4',
         wheat: '#F5DEB3',
         secondary: "#AEEEED",
-        bg_blue: "#E8EFFD"
+        bg_blue: "#E8EFFD",
+        text_blue: '#032E66'
       },
     },
   },
