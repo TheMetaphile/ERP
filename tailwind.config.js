@@ -7,7 +7,8 @@ export default {
   theme: {
     extend: {
       transitionProperty: {
-        'width': 'width',
+        width: 'width',
+        height: 'height'
       },
       colors: {
         aquamarine: '#7FFFD4',
