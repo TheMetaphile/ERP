@@ -3,19 +3,19 @@ const menuItems = [
     image: "src/assets/Dashboard_assignment.png",
     alt: "Attendance image",
     text: "Attendance",
-    route: '/dashboard/attendance'
+    route: '/Student-Dashboard/attendance'
   },
   {
     image: "src/assets/Dashboard_fee.png",
     alt: "Fee Due image",
     text: "Fee Due",
-    route: '/dashboard/fee-due'
+    route: '/Student-Dashboard/fee-due'
   },
   {
     image: "src/assets/presentation 1.png",
     alt: "presentation image",
     text: "Class Work",
-    route: '/dashboard/classwork'
+    route: '/Student-Dashboard/classwork'
   },
   {
     image: "src/assets/freelance 1.png",
@@ -26,19 +26,19 @@ const menuItems = [
     image: "src/assets/Dashboard_events.png",
     alt: "Events image",
     text: "Events",
-    route: '/dashboard/events'
+    route: '/Student-Dashboard/events'
   },
   {
     image: "src/assets/Dashboard_quiz.png",
     alt: "Play Quiz image",
     text: "Play Quiz",
-    route: "/dashboard/quiz/physics"
+    route: "/Student-Dashboard/quiz/physics"
   },
   {
     image: "src/assets/Dashboard_assignment.png",
     alt: "Assignment image",
     text: "Assignment",
-    route: '/dashboard/assignment'
+    route: '/Student-Dashboard/assignment'
   },
   {
     image: "src/assets/Dashboard_time_table.png",
@@ -49,7 +49,7 @@ const menuItems = [
     image: "src/assets/Dashboard_result.png",
     alt: "Result image",
     text: "Result",
-    route: '/dashboard/result'
+    route: '/Student-Dashboard/result'
   },
   {
     image: "src/assets/Dashboard_gallery.png",
@@ -80,7 +80,7 @@ const menuItems = [
     image: "src/assets/datesheet.png",
     alt: "Date sheet image",
     text: "Date Sheet",
-    route: "/dashboard/datesheet"
+    route: "/Student-Dashboard/datesheet"
   },
   {
     image: "src/assets/lifestyle 1.png",

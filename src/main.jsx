@@ -18,7 +18,10 @@ import TimeTable from "./components/TimeTable/Timetable.jsx";
 import SubjectClassWork from "./components/classWork/SubjectClassWork.jsx";
 import ClassWork from "./components/classWork/route.jsx";
 import TodayClassWork from "./components/classWork/TodayClassWork.jsx";
-import Login from "./components/onBoarding/Login.jsx";
+import Login from "./components/onBoarding/Login/Login.jsx";
+import ResetPassword from "./components/onBoarding/ResetPassword/ResetPassword.jsx";
+import SetNewPassword from "./components/onBoarding/SetNewPassword/SetNewPassword.jsx";
+import AdminDashboard from './AdminComponents/Dashboard.jsx'
 
 const router = createBrowserRouter([
   {
@@ -26,7 +29,15 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/dashboard",
+    path: "/resetpassword",
+    element: <ResetPassword />,
+  },
+  {
+    path: "/newPassword",
+    element: <SetNewPassword />,
+  },
+  {
+    path: "/Student-Dashboard",
     element: <Dashboard />,
     children: [
       {
@@ -34,55 +45,55 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/dashboard/home",
+        path: "/Student-Dashboard/home",
         element: <Home />,
       },
       {
-        path: "/dashboard/assignment",
+        path: "/Student-Dashboard/assignment",
         element: <AssignmentReport />,
       },
       {
-        path: "/dashboard/fee-due",
+        path: "/Student-Dashboard/fee-due",
         element: <Fee />,
       },
       {
-        path: "/dashboard/events",
+        path: "/Student-Dashboard/events",
         element: <Border />,
       },
       {
-        path: "/dashboard/profile",
+        path: "/Student-Dashboard/profile",
         element: <Profile />,
       },
       {
-        path: "/dashboard/playquiz",
+        path: "/Student-Dashboard/playquiz",
         element: <Palyquiz/>,
       },
       {
-        path: "/dashboard/receipt",
+        path: "/Student-Dashboard/receipt",
         element: <Receipt/>,
       },
       {
-        path: "/dashboard/quiz/:subject",
+        path: "/Student-Dashboard/quiz/:subject",
         element: <Quiz/>,
       },
       {
-        path: "/dashboard/result",
+        path: "/Student-Dashboard/result",
         element: <Result />,
       },
       {
-        path: "/dashboard/attendance",
+        path: "/Student-Dashboard/attendance",
         element: <Attendance />,
       },
       {
-        path: "/dashboard/datesheet",
+        path: "/Student-Dashboard/datesheet",
         element: <DateSheet />,
       },
       {
-        path: "/dashboard/timetable",
+        path: "/Student-Dashboard/timetable",
         element: <TimeTable />,
       },
       {
-        path: "/dashboard/classwork",
+        path: "/Student-Dashboard/classwork",
         element: <ClassWork />,
         children: [
           {
@@ -98,6 +109,13 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/Adim-Dashboard",
+    element: <AdminDashboard />,
+    children:[
+      
+    ]
+  }
  
 ]);
 

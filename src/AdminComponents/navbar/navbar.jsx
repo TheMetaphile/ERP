@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './../../assets/metaphile_logo.png';
 import { Link } from 'react-router-dom';
 
-export default function Navbar() {
+export default function AdminNavbar() {
 
   return (
     <div className="flex h-16 mt-1 ml-1 mr-1 mb-2 items-center justify-between bg-teal-300 rounded-lg p-4 shadow-md">
@@ -13,16 +13,16 @@ export default function Navbar() {
       <nav>
         <ul className="flex min-w-full">
           <li className="mr-4">
-            <Link to="/Student-Dashboard/home" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Home</Link>
+            <Link to="/dashboard/home" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Home</Link>
           </li>
           <li className="mr-4">
-            <Link to="/Student-Dashboard/fee-due" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Fee</Link>
+            <Link to="/dashboard/fee-due" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Fee</Link>
           </li>
           <li className="mr-4">
-            <Link to="/Student-Dashboard/events" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Events</Link>
+            <Link to="/dashboard/events" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Events</Link>
           </li>
           <li>
-            <Link to="/Student-Dashboard/timetable" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Time Table</Link>
+            <Link to="/dashboard/timetable" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Time Table</Link>
           </li>
         </ul>
       </nav>

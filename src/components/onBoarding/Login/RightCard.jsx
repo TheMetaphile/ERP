@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import logo from '../../../assets/school logo.png'
 
 export default function RightCard() {
     const [email, setEmail] = useState('');
@@ -18,8 +18,12 @@ export default function RightCard() {
     };
     return (
         <div className="flex flex-col w-fit h-8/10 bg-white rounded-3xl shadow-lg ml-16 px-20 justify-center">
+
+            <img src={logo} alt="img" className="mr-4 h-32 w-32 self-center" />
+
             <h1 className="text-5xl font-bold whitespace-nowrap">Welcome Back</h1>
             <h1 className="text-xl mt-2 text-gray-400">Please Enter Your ID & Password</h1>
+
             <h1 className="text-2xl font-bold mt-5 ">Login Id</h1>
 
             <input
@@ -43,13 +47,17 @@ export default function RightCard() {
                 placeholder="Enter your password"
                 className="w-80 rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-3 text-lg "
             />
+            <Link to='/resetpassword' className="w-fit mt-3">
+                <h1 className=" text-lg text-blue-600">Forgot Password?</h1>
+            </Link>
+            
             <div className="flex w-60 px-3 py-2  mt-3 text-lg justify-between">
                 <label className="text-lg font-medium text-center">
                     <input
                         type="radio"
                         name="role"
-                        value="Admin"
-                        checked={role === "Admin"}
+                        value="Adim-Dashboard"
+                        checked={role === "Adim-Dashboard"}
                         onChange={handleRoleChange}
                         className="mr-3 w-4 h-4"
                     />
@@ -60,15 +68,16 @@ export default function RightCard() {
                     <input
                         type="radio"
                         name="role"
-                        value="Student"
-                        checked={role === "Student"}
+                        value="Student-Dashboard"
+                        checked={role === "Student-Dashboard"}
                         onChange={handleRoleChange}
                         className="mr-3 w-4 h-4"
                     />
                     Student
                 </label>
             </div>
-            <Link to='/dashboard' className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8">
+
+            <Link to={`${role}`} className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8">
                 <h1 className="font-medium text-2xl text-white">Login</h1>
             </Link>
         </div>
