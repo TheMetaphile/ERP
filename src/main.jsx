@@ -15,7 +15,9 @@ import  DateSheet  from "./components/DateSheet/datesheet.jsx";
 import Palyquiz from "./components/playquiz/firstquizs.jsx";
 import Attendance from "./components/Attendance/Attendance.jsx";
 import TimeTable from "./components/TimeTable/Timetable.jsx";
-import ClassWork from "./components/classWork/ClassWork.jsx";
+import SubjectClassWork from "./components/classWork/SubjectClassWork.jsx";
+import ClassWork from "./components/classWork/route.jsx";
+import TodayClassWork from "./components/classWork/TodayClassWork.jsx";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +79,17 @@ const router = createBrowserRouter([
       {
         path: "/classwork",
         element: <ClassWork />,
+        children: [
+          {
+            path: '',
+            element: <TodayClassWork />
+          },
+          
+          {
+            path: ':name',
+            element: <SubjectClassWork />
+          }
+        ]
       },
     ],
   },
