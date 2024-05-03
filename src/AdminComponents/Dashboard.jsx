@@ -16,7 +16,7 @@ export default function AdminDashboard() {
         <div className='flex w-full'>
         <Outlet />
         </div>
-          <AdminEnddrawer />
+          {/* <AdminEnddrawer /> */}
         </div>
       </div>
     </div>

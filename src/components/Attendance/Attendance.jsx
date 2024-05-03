@@ -38,7 +38,7 @@ export default function Attendance() {
       </div>
       <div className="flex w-full justify-evenly my-4">
         <Calendar />
-        <Doughnut chartData={data} />
+        <Doughnut chartData={data} title='Attendance Status'/>
       </div>
     </div>
   )
