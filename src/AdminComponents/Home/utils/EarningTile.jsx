@@ -61,9 +61,7 @@ const EarningsChart = () => {
     };
   }, []);
 
-  return <div className='flex-grow'>
-    <canvas ref={chartRef} className='w-full rounded-lg shadow-lg mx-3 mt-3 px-3 py-2'/>
-  </div>;
+  return <canvas ref={chartRef} className='flex flex-col w-full h-full bg-white rounded-lg shadow-md my-2 px-2 mx-2'/>;
 };
 
 export default EarningsChart;

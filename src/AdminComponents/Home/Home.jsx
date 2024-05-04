@@ -15,21 +15,25 @@ export default function AdminHome() {
             <Summary />
             <div className="flex flex-grow justify-between h-82 ">
                 <div className="flex w-full">
-                <div className="flex flex-grow justify-center">
-                    <TotalStudentTile />
-                </div>
-                    <div className="w-5/12  py-2">
-                    <SchoolPerformanceChart />
+                    <div className="flex flex-grow justify-center">
+                        <TotalStudentTile />
                     </div>
-                <div className="w-4/12 py-2">
-                    <ExpensesChart />
-                </div>
+                    <div className="w-5/12  py-2">
+                        <SchoolPerformanceChart />
+                    </div>
+                    <div className="w-4/12 py-2">
+                        <ExpensesChart />
+                    </div>
                 </div>
             </div>
             <h1 className="text-2xl font-medium mt-8">School Calender</h1>
-            <div className="flex flex-grow ">
-                <HomeCalendar />
-                <EarningsChart />
+            <div className="flex flex-grow justify-between">
+                <div className="flex w-2/4">
+                    <HomeCalendar />
+                </div>
+                <div className="flex w-2/4">
+                    <EarningsChart />
+                </div>
             </div>
             <h1 className="text-2xl font-medium mt-8">Teachers Details</h1>
             <div className="flex flex-row w-full mt-4 justify-center">

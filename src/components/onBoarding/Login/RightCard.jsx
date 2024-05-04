@@ -56,8 +56,8 @@ export default function RightCard() {
                     <input
                         type="radio"
                         name="role"
-                        value="Adim-Dashboard"
-                        checked={role === "Adim-Dashboard"}
+                        value="Admin-Dashboard"
+                        checked={role === "Admin-Dashboard"}
                         onChange={handleRoleChange}
                         className="mr-3 w-4 h-4"
                     />
