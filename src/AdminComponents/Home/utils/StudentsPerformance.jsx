@@ -28,6 +28,7 @@ const SchoolPerformanceChart = () => {
     };
 
     const options = {
+      maintainAspectRatio: false,
       scales: {
         y: {
           beginAtZero: true,
@@ -52,7 +53,7 @@ const SchoolPerformanceChart = () => {
     };
   }, []);
 
-  return <canvas ref={chartRef}  className='flex w-full rounded-lg mt-3 shadow-lg px-3 py- ml-5 ' />;
+  return <div className=' h-full'><canvas ref={chartRef}  className='flex-grow rounded-lg mt-3 shadow-lg px-3 py-2 ml-5 ' /></div>;
 };
 
 export default SchoolPerformanceChart;

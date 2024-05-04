@@ -22,9 +22,7 @@ export default function TotalStudentTile(){
         }]
       };
     return(
-        <div>
             <DoughnutChart chartData={data} title='Students'/>
-        </div>
     )
 
 }

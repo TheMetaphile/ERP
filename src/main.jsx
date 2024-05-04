@@ -23,6 +23,7 @@ import ResetPassword from "./components/onBoarding/ResetPassword/ResetPassword.j
 import SetNewPassword from "./components/onBoarding/SetNewPassword/SetNewPassword.jsx";
 import AdminDashboard from './AdminComponents/Dashboard.jsx'
 import AdminHome from "./AdminComponents/Home/Home.jsx";
+import AllStudents from "./AdminComponents/Students/AllStudents/Students.jsx";
 
 const router = createBrowserRouter([
   {
@@ -117,6 +118,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <AdminHome />,
+      },
+      {
+        path: "/Adim-Dashboard/Students",
+        element: <AllStudents />,
       },
     ]
   }

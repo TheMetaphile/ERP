@@ -17,7 +17,7 @@ export default function RightCard() {
         setEmail(event.target.value);
     };
     return (
-        <div className="flex flex-col w-fit h-8/10 bg-white rounded-3xl shadow-lg ml-16 px-20 justify-center">
+        <div className="flex flex-col w-fit  bg-white rounded-2xl shadow-lg px-20 justify-center">
 
             <img src={logo} alt="img" className="mr-4 h-32 w-32 self-center" />
 
@@ -77,7 +77,7 @@ export default function RightCard() {
                 </label>
             </div>
 
-            <Link to={`${role}`} className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8">
+            <Link to={`${role}`} className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-4 justify-center self-center  bg-blue-600">
                 <h1 className="font-medium text-2xl text-white">Login</h1>
             </Link>
         </div>

@@ -61,8 +61,8 @@ const EarningsChart = () => {
     };
   }, []);
 
-  return <div className='w-full'>
-    <canvas ref={chartRef} className='w-1/3 rounded-lg shadow-lg mx-3 mt-3 px-3 py-2'/>
+  return <div className='flex-grow'>
+    <canvas ref={chartRef} className='w-full rounded-lg shadow-lg mx-3 mt-3 px-3 py-2'/>
   </div>;
 };
 

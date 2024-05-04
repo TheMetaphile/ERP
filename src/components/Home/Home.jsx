@@ -36,7 +36,7 @@ export default function Home() {
       <FeeStatus />
       <div className='flex w-full overflow-y-auto no-scrollbar'>
         <AllSubjectProgress />
-        <Doughnut chartData={data} />
+        <Doughnut chartData={data} title='Attendance Status'/>
       </div>
     </div>
   );

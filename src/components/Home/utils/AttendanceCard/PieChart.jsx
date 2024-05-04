@@ -7,9 +7,8 @@ export default function DoughnutChart({ chartData,title }) {
   console.log(chartData.datasets[0].bg);
   const options={
     plugins:{
-      legend: {
+      legend: { 
         display: false,
-        
       }
     }
   };

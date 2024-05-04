@@ -3,7 +3,7 @@ const menuItems = [
     image: "src/assets/home.png",
     alt: "Attendance image",
     title: "Dashboard",
-    route: '/',
+    route: '/Adim-Dashboard',
     children: []
   },
   {
@@ -13,7 +13,7 @@ const menuItems = [
     children: [
       {
         text: 'All Students',
-        route: '/'
+        route: '/Adim-Dashboard/Students'
       },
       {
         text: 'Add New Students',

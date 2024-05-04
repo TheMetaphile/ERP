@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { FaAngleUp, FaAngleDown } from 'react-icons/fa'; // Example icons from react-icons library
+import { FaAngleUp, FaAngleDown } from 'react-icons/fa';
 import ImageTextInRow from '../drawer/ImageTextInRow';
 import { Link } from 'react-router-dom';
 
-function ExpansionTile({ title, childrens ,image, alternateText,route}) {
+function ExpansionTile({ title, childrens, image, alternateText, route }) {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => {
@@ -12,21 +12,31 @@ function ExpansionTile({ title, childrens ,image, alternateText,route}) {
 
   return (
     <div className={`${expanded ? 'bg-secondary rounded-xl px-2 py-3 mb-2' : 'px-2 py-3'}`}>
-      <Link to={route} onClick={toggleExpanded} className="cursor-pointer flex justify-between items-center ">
-      <div className='flex'>
-      <img src={image} alt={alternateText} className="w-7 mr-3" />
-        <span className='text-lg'>{title}</span>
-      </div>
-        {childrens.length>0 ? expanded ? <FaAngleUp /> : <FaAngleDown /> : <></>}
-      </Link>
-      <div className={`overflow-hidden self-center items-center ${expanded ? 'h-auto' : 'h-0'}`}>
-      {childrens.map((children, index) => (
-            <ImageTextInRow
-              key={index}
-              text={children.text}
-              route={children.route}
-            />
-          ))}
+      {childrens.length > 0 
+      ? 
+      (
+        <div className="cursor-pointer flex justify-between items-center" onClick={toggleExpanded}>
+          <div className="flex">
+            <img src={image} alt={alternateText} className="w-7 mr-3" />
+            <span className="text-lg whitespace-nowrap">{title}</span>
+          </div>
+          {expanded ? <FaAngleUp /> : <FaAngleDown />}
+        </div>
+      ) 
+      : 
+      (
+        <Link to={route} className="flex justify-between items-center">
+          <div className="flex">
+            <img src={image} alt={alternateText} className="w-7 mr-3" />
+            <span className="text-lg whitespace-nowrap">{title}</span>
+          </div>
+        </Link>
+      )
+      }
+      <div className={`transition-all duration-800 overflow-hidden self-center items-center ${expanded ? 'h-fit' : 'h-0'}`}>
+        {childrens.map((children, index) => (
+          <ImageTextInRow key={index} text={children.text} route={children.route} />
+        ))}
       </div>
     </div>
   );

@@ -75,9 +75,7 @@ const ExpensesChart = () => {
     };
   }, []);
 
-  return <div className='w-full'>
-    <canvas ref={chartRef} className='h-full w-full rounded-lg shadow-lg mx-3 mt-3 px-3 py-2'/>
-  </div>;
+  return <div className='flex-grow h-full'><canvas ref={chartRef} className='w-full rounded-lg shadow-lg mx-3 px-3 py-2'/></div>;
 };
 
 export default ExpensesChart;
