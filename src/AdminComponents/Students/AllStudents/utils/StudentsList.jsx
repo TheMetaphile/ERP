@@ -58,7 +58,7 @@ export default function StudentsList() {
                     ))) :
                     (
                         filteredStudents.map((student, index) => (
-                            <StudentDetailTile key={index} values={student} id={`${student[1]}?class=${student[2]}`}/>
+                            <StudentDetailTile key={index} values={student} id={`${student[1]}?class=${student[2]}-${student[3]}&rollnumber=${student[0]}&session=2024-25`}/>
                         ))
                     )}
             </div>

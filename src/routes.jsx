@@ -21,9 +21,9 @@ import SetNewPassword from "./components/onBoarding/SetNewPassword/SetNewPasswor
 import AdminDashboard from './AdminComponents/Dashboard.jsx'
 import AdminHome from "./AdminComponents/Home/Home.jsx";
 import AllStudents from "./AdminComponents/Students/AllStudents/AllStudents.jsx";
-import StudentDetailScreen from "./AdminComponents/Students/AllStudents/utils/StudentDetailScreen.jsx";
 import { createBrowserRouter } from "react-router-dom";
 import StudentsList from "./AdminComponents/Students/AllStudents/utils/StudentsList.jsx";
+import StudentDetailScreen from "./AdminComponents/Students/AllStudents/StudentsDeatils/StudentDetailScreen.jsx";
 
 const router = createBrowserRouter([
   {
