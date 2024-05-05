@@ -9,7 +9,7 @@ export default function Drawer() {
     <div className="w-60 h-screen rounded-lg text-center items-center border bg-white py-6 px-4 shadow-md overflow-auto no-scrollbar">
       <div className="flex items-center">
         <img src={schoolImage} alt="school_image" className="w-1/3" />
-        <span className="text-black ml-4">Methaphile Public School</span>
+        <span className="text-black ml-4">Metaphile Public School</span>
       </div>
       <div className="mt-12 bg-teal-300 px-4 py-4 rounded-2xl shadow-lg">
         <h2 className="text-xl font-semibold">Dashboard</h2>

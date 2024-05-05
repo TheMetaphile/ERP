@@ -13,8 +13,8 @@ export default function DoughnutChart({ chartData,title }) {
     }
   };
   return (
-    <div className="flex flex-col justify-evenly items-center md:w-60 md:mx-1 md:my-3 sm:w-full sm:mx-2 shadow-md bg-teal-100 rounded-lg px-4 py-2">
-      <div className="w-full">
+    <div className="flex flex-col h-full justify-evenly items-center md:w-full md:mx-1 md:my-3 sm:w-full sm:mx-2 shadow-md bg-teal-100 rounded-lg px-4 py-2">
+      <div className="w-11/12">
         <h2 className="mb-2 whitespace-nowrap text-xl text-center font-medium">{title}</h2>
         <Doughnut data={chartData} options={options} />
         

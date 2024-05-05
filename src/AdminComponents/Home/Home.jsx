@@ -13,9 +13,9 @@ export default function AdminHome() {
     return (
         <div className=" overflow-y-auto items-start mb-2 px-2  no-scrollbar">
             <Summary />
-            <div className="flex flex-grow justify-between h-82 ">
-                <div className="flex w-full">
-                    <div className="flex flex-grow justify-center">
+            <div className="flex flex-grow justify-between h-80 ">
+                <div className="flex w-full h-full">
+                    <div className="w-3/12 h-full">
                         <TotalStudentTile />
                     </div>
                     <div className="w-5/12  py-2">

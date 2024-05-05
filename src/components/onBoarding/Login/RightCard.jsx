@@ -17,14 +17,14 @@ export default function RightCard() {
         setEmail(event.target.value);
     };
     return (
-        <div className="flex flex-col w-fit  bg-white rounded-2xl shadow-lg px-20 justify-center">
+        <div className="flex flex-col w-fit  bg-white rounded-2xl shadow-lg px-10 justify-center">
 
-            <img src={logo} alt="img" className="mr-4 h-32 w-32 self-center" />
+            <img src={logo} alt="img" className="mr-4 h-28 w-28 self-center" />
 
-            <h1 className="text-5xl font-bold whitespace-nowrap">Welcome Back</h1>
-            <h1 className="text-xl mt-2 text-gray-400">Please Enter Your ID & Password</h1>
+            <h1 className="text-2xl font-bold whitespace-nowrap">Welcome Back</h1>
+            <h1 className="text-lg mt-2 text-gray-400">Please Enter Your ID & Password</h1>
 
-            <h1 className="text-2xl font-bold mt-5 ">Login Id</h1>
+            <h1 className="text-xl font-bold mt-3 ">Login Id</h1>
 
             <input
                 type="email"
@@ -33,10 +33,10 @@ export default function RightCard() {
                 value={email}
                 onChange={handleEmailChange}
                 placeholder="Enter your email"
-                className="w-80 rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-3 text-lg "
+                className="w-80 rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg "
             />
 
-            <h1 className="text-2xl font-bold mt-8">Password</h1>
+            <h1 className="text-xl font-bold mt-3">Password</h1>
 
             <input
                 type="password"
@@ -45,13 +45,13 @@ export default function RightCard() {
                 value={password}
                 onChange={handlePasswordChange}
                 placeholder="Enter your password"
-                className="w-80 rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-3 text-lg "
+                className="w-80 rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg "
             />
-            <Link to='/resetpassword' className="w-fit mt-3">
+            <Link to='/resetpassword' className="w-fit mt-2">
                 <h1 className=" text-lg text-blue-600">Forgot Password?</h1>
             </Link>
             
-            <div className="flex w-60 px-3 py-2  mt-3 text-lg justify-between">
+            <div className="flex w-60 px-3 py-2  mt-2 text-lg justify-between">
                 <label className="text-lg font-medium text-center">
                     <input
                         type="radio"
@@ -77,7 +77,7 @@ export default function RightCard() {
                 </label>
             </div>
 
-            <Link to={`${role}`} className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-4 justify-center self-center  bg-blue-600">
+            <Link to={`${role}`} className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-2 justify-center self-center  bg-blue-600">
                 <h1 className="font-medium text-2xl text-white">Login</h1>
             </Link>
         </div>
