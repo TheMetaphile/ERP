@@ -30,13 +30,15 @@ export default function Home() {
 
 
   return (
-    <div className='flex flex-col w-full h-screen overflow-y-auto items-start mt-2 ml-2 mr-3'>
+    <div className='flex flex-col w-full h-screen overflow-y-auto items-start mt-2 px-2 no-scrollbar'>
       <ProfileCard name='Abhishek' class='4th' section="B" rollNumber='21' session='2023-24' notification={4}/>
       <h1 className='text-2xl font-medium text-black mt-3 mb-2 ml-2'>Fee Status</h1>
       <FeeStatus />
-      <div className='flex w-full overflow-y-auto no-scrollbar'>
+      <div className='flex w-full mt-2 '>
+        <div className='w-2/3 px-2 h-80 overflow-y-auto no-scrollbar'>
         <AllSubjectProgress />
-        <div className='w-1/3'>
+        </div>
+        <div className='w-1/3 px-2'>
         <Doughnut chartData={data} title='Attendance Status'/>
         </div>
       </div>

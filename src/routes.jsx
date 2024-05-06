@@ -9,7 +9,7 @@ import Quiz from "./components/quiz/quiz.jsx";
 import Receipt from "./components/receipt/receipt.jsx";
 import Result from "./components/Result/Result.jsx";
 import DateSheet  from "./components/DateSheet/datesheet.jsx";
-import Palyquiz from "./components/playquiz/firstquizs.jsx";
+// import Palyquiz from "./components/playquiz/firstquizs.jsx";
 import Attendance from "./components/Attendance/Attendance.jsx";
 import TimeTable from "./components/TimeTable/Timetable.jsx";
 import SubjectClassWork from "./components/classWork/SubjectClassWork.jsx";
@@ -66,10 +66,10 @@ const router = createBrowserRouter([
         path: "/Student-Dashboard/profile",
         element: <Profile />,
       },
-      {
-        path: "/Student-Dashboard/playquiz",
-        element: <Palyquiz/>,
-      },
+      // {
+      //   path: "/Student-Dashboard/playquiz",
+      //   element: <Palyquiz/>,
+      // },
       {
         path: "/Student-Dashboard/receipt",
         element: <Receipt/>,

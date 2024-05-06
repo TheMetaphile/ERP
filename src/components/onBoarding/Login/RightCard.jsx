@@ -21,7 +21,7 @@ export default function RightCard() {
 
             <img src={logo} alt="img" className="mr-4 h-28 w-28 self-center" />
 
-            <h1 className="text-2xl font-bold whitespace-nowrap">Welcome Back</h1>
+            <h1 className="text-2xl font-bold self-center whitespace-nowrap">Welcome Back</h1>
             <h1 className="text-lg mt-2 text-gray-400">Please Enter Your ID & Password</h1>
 
             <h1 className="text-xl font-bold mt-3 ">Login Id</h1>

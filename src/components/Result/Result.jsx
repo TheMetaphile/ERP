@@ -7,7 +7,7 @@ export default function Result(){
         window.print();
       };
     return(
-        <div className="flex flex-col w-full h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 p-1 no-scrollbar">
+        <div className="flex flex-col w-full h-screen overflow-y-auto items-start mt-2 px-2 no-scrollbar">
             <h3 className="text-xl font-medium">Result</h3>
             <InfoCard 
                 class='2nd A' 

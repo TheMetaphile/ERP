@@ -4,7 +4,7 @@ import first from './../../assets/ChildrenCrossing.png';
 
 export default function Border() {
   return (
-    <div className=" flex flex-col w-full h-screen overflow-y-auto items-start  ml-2 mr-3 px-3 py-3 no-scrollbar">
+    <div className=" flex flex-col w-full h-screen overflow-y-auto items-start px-2 py-3 no-scrollbar">
       <h1 className="text-lg">Events</h1>
 
       <div className="flex flex-col h-fit w-full mt-2 mb-3 bg-white shadow-lg rounded-lg py-3 px-3">

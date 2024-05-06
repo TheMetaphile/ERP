@@ -28,7 +28,7 @@ export default function Attendance() {
     }]
   };
   return (
-    <div className=" flex flex-col w-full h-screen overflow-y-auto items-start px-3 py-3 no-scrollbar">
+    <div className=" flex flex-col w-full h-screen overflow-y-auto items-start px-2 py-3 no-scrollbar">
       <h1 className="text-2xl font-medium">Attendance</h1>
       <div className="flex w-full justify-start ">
         <TotalAttendance TotalAttendance={260}/>

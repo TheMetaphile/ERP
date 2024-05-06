@@ -14,7 +14,7 @@ export default function RightCard() {
 
             <img src={logo} alt="img" className="mr-4 h-32 self-center" />
 
-            <h1 className="text-2xl font-bold whitespace-nowrap">Reset Password</h1>
+            <h1 className="text-2xl font-bold self-center whitespace-nowrap">Reset Password</h1>
 
             <h1 className="text-xl font-bold mt-5 ">Login Id</h1>
 

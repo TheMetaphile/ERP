@@ -4,7 +4,7 @@ import SubmittedRow from "./utils/submittedRow.jsx";
 
 export default function AssignmentReport() {
   return (
-    <div className=" mt-2 px-3 py-2 h-screen w-full text-left overflow-y-auto overflow-x-hidden no-scrollbar">
+    <div className=" mt-2 px-2 py-2 h-screen w-full text-left overflow-y-auto overflow-x-hidden no-scrollbar">
       <h1 className="text-2xl">My Assignment Report</h1>
       <ProgressCards />
       <h1 className=" text-2xl">New Assignments</h1>

@@ -50,7 +50,7 @@ function Quiz() {
 
 
   return (
-    <div className='flex flex-col w-full h-screen overflow-y-auto items-start mt-2 ml-2 mr-3'>
+    <div className='flex flex-col w-full h-screen overflow-y-auto items-start mt-2 px-2'>
       <h1>{subject}</h1>
       <QuizProgressCard currentQuestionIndex={currentQuestionIndex} len={questions.length} />
       <div className="w-full rounded-lg shadow-lg px-4 py-2 mt-4">
