@@ -5,7 +5,7 @@ import { FaBars } from 'react-icons/fa';
 export default function Navbar({onDrawerToggle}) {
 
   return (
-    <div className="flex flex-grow h-16 mt-1 px-2 py-3 mb-2 items-center justify-between bg-teal-300 rounded-lg shadow-md">
+    <div className="flex flex-grow h-full mt-1 px-2 py-3 mb-2 items-center justify-between bg-teal-300 rounded-lg shadow-md">
       <div className="flex items-center">
       <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-secondary shadow-lg' />
         <img src={logo} alt="Metaphile Public School" className="w-10" />

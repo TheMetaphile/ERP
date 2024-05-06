@@ -4,7 +4,7 @@ import Present from './../../assets/present1.png';
 import Absent from './../../assets/absent1.png';
 import Leave from './../../assets/leave.png';
 import Calendar from "./utils/CalendarTile";
-import  Doughnut  from "./../Home/utils/AttendanceCard/PieChart";
+import Doughnut from "./../Home/utils/AttendanceCard/PieChart";
 export default function Attendance() {
   const data = {
     labels: [
@@ -31,14 +31,18 @@ export default function Attendance() {
     <div className=" flex flex-col w-full h-screen overflow-y-auto items-start px-2 py-3 no-scrollbar">
       <h1 className="text-2xl font-medium">Attendance</h1>
       <div className="flex w-full justify-start ">
-        <TotalAttendance TotalAttendance={260}/>
-        <PresentAttendanceTile Present={230} image={Present} text="Present"/>
-        <PresentAttendanceTile Present={230} image={Absent} text="Absent"/>
-        <PresentAttendanceTile Present={230} image={Leave} text="Leave"/>
+        <TotalAttendance TotalAttendance={260} />
+        <PresentAttendanceTile Present={230} image={Present} text="Present" />
+        <PresentAttendanceTile Present={230} image={Absent} text="Absent" />
+        <PresentAttendanceTile Present={230} image={Leave} text="Leave" />
       </div>
       <div className="flex w-full justify-evenly my-4">
-        <Calendar />
-        <Doughnut chartData={data} title='Attendance Status'/>
+        <div className="w-2/3 pr-2">
+          <Calendar />
+        </div>
+        <div className="w-1/3 px-2">
+          <Doughnut chartData={data} title='Attendance Status' />
+        </div>
       </div>
     </div>
   )
