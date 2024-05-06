@@ -34,6 +34,7 @@ export default function Home() {
       <ProfileCard name='Abhishek' class='4th' section="B" rollNumber='21' session='2023-24' notification={4}/>
       <h1 className='text-2xl font-medium text-black mt-3 mb-2 ml-2'>Fee Status</h1>
       <FeeStatus />
+      <h1 className='text-2xl font-medium text-black mt-3 mb-2 ml-2'>Subject's Progress</h1>
       <div className='flex mobile:max-tablet:flex-col-reverse w-full mt-2 '>
         <div className='flex-grow px-2 tablet:h-80 overflow-y-auto no-scrollbar mobile:max-tablet:mb-5'>
         <AllSubjectProgress />

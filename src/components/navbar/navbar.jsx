@@ -11,7 +11,7 @@ export default function Navbar({onDrawerToggle, onEndDrawerToggle}) {
       <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-secondary shadow-lg' />
         <div className='flex items-center'>
         <img src={logo} alt="Metaphile Public School" className="w-10" />
-        <span className=" text-3xl font-medium text-text_blue mobile:max-tablet:text-2xl">etaphile Public School</span>
+        <span className=" tablet:text-xl font-medium text-text_blue mobile:text-xl">etaphile Public School</span>
         </div>
       </div>
       <nav>
