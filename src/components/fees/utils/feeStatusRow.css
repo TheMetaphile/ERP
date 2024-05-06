@@ -1,8 +1,0 @@
-.feeStatusRow{
-    display: flex;
-    overflow: auto; 
-    padding-bottom: 15px;
-   }
-.feeStatusRow::-webkit-scrollbar {
-    display: none;
-  }

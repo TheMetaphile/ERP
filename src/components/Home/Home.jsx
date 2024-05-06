@@ -34,11 +34,11 @@ export default function Home() {
       <ProfileCard name='Abhishek' class='4th' section="B" rollNumber='21' session='2023-24' notification={4}/>
       <h1 className='text-2xl font-medium text-black mt-3 mb-2 ml-2'>Fee Status</h1>
       <FeeStatus />
-      <div className='flex w-full mt-2 '>
-        <div className='flex-grow px-2 h-80 overflow-y-auto no-scrollbar'>
+      <div className='flex mobile:max-tablet:flex-col-reverse w-full mt-2 '>
+        <div className='flex-grow px-2 tablet:h-80 overflow-y-auto no-scrollbar mobile:max-tablet:mb-5'>
         <AllSubjectProgress />
         </div>
-        <div className='h-80 px-2'>
+        <div className='tablet:h-80 mobile:max-tablet:w-full mobile:max-tablet:mb-4 px-2'>
         <Doughnut chartData={data} title='Attendance Status'/>
         </div>
       </div>
