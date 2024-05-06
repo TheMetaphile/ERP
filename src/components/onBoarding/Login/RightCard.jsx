@@ -17,11 +17,11 @@ export default function RightCard() {
         setEmail(event.target.value);
     };
     return (
-        <div className="flex flex-col w-fit  bg-white rounded-2xl shadow-lg px-10 justify-center">
+        <div className="flex flex-col bg-white rounded-2xl shadow-lg tablet:w-fit tablet:px-10 mobile:w-full mobile:px-7 mobile:max-tablet:mt-10 justify-center">
 
-            <img src={logo} alt="img" className="mr-4 h-28 w-28 self-center" />
+            <img src={logo} alt="img" className="mr-4 h-28 self-center" />
 
-            <h1 className="text-2xl font-bold self-center whitespace-nowrap">Welcome Back</h1>
+            <h1 className="tablet:text-2xl mobile:text-2xl font-bold self-center whitespace-nowrap">Welcome Back</h1>
             <h1 className="text-lg mt-2 text-gray-400">Please Enter Your ID & Password</h1>
 
             <h1 className="text-xl font-bold mt-3 ">Login Id</h1>
@@ -33,7 +33,7 @@ export default function RightCard() {
                 value={email}
                 onChange={handleEmailChange}
                 placeholder="Enter your email"
-                className="w-80 rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg "
+                className=" rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg "
             />
 
             <h1 className="text-xl font-bold mt-3">Password</h1>
@@ -45,7 +45,7 @@ export default function RightCard() {
                 value={password}
                 onChange={handlePasswordChange}
                 placeholder="Enter your password"
-                className="w-80 rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg "
+                className=" rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg "
             />
             <Link to='/resetpassword' className="w-fit mt-2">
                 <h1 className=" text-lg text-blue-600">Forgot Password?</h1>

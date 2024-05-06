@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import logo from '../../../assets/school logo.png'
-import OTPInput from "react-otp-input";
 import { useState } from "react";
 
 export default function RightCard() {
@@ -13,7 +12,7 @@ export default function RightCard() {
         setConfirmPassword(event.target.value);
     };
     return (
-        <div className="flex flex-col w-fit h-8/10 bg-white rounded-3xl shadow-lg ml-16 px-10 justify-center">
+        <div className="flex flex-col flex-shrink tablet:py-10 mobile:max-tablet:py-2 mobile:max-tablet:px-2 mobile:max-tablet:my-10 bg-white rounded-3xl shadow-lg tablet:px-10 justify-center">
 
             <img src={logo} alt="img" className="mr-4 h-32 w-32 self-center" />
 
