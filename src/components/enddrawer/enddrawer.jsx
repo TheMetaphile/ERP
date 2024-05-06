@@ -4,7 +4,7 @@ import Notice from './notice.jsx';
 
 export default function Enddrawer() {
   return (
-    <div className="overflow-auto h-full pr-2 w-full no-scrollbar">
+    <div className="overflow-auto h-full px-2 w-full no-scrollbar">
       <h6 className="flex justify-between text-sm mt-3">Daily Notice <span className="text-blue-500">See All</span></h6>
       <div className="dialyNotices w-full h-2/5 bg-blue-50 rounded-xl p-2 mt-3 mb-3 overflow-auto no-scrollbar">
         <Notice title="Events" description="Today All the student of class 1st to 8th come to Auditorium at 12:00."/>

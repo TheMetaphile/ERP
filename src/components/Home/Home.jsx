@@ -35,10 +35,10 @@ export default function Home() {
       <h1 className='text-2xl font-medium text-black mt-3 mb-2 ml-2'>Fee Status</h1>
       <FeeStatus />
       <div className='flex w-full mt-2 '>
-        <div className='w-2/3 px-2 h-80 overflow-y-auto no-scrollbar'>
+        <div className='flex-grow px-2 h-80 overflow-y-auto no-scrollbar'>
         <AllSubjectProgress />
         </div>
-        <div className='w-1/3 px-2'>
+        <div className='h-80 px-2'>
         <Doughnut chartData={data} title='Attendance Status'/>
         </div>
       </div>
