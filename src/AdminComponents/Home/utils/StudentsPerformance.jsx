@@ -53,7 +53,7 @@ const SchoolPerformanceChart = () => {
     };
   }, []);
 
-  return <div className=' h-full'><canvas ref={chartRef}  className='flex-grow rounded-lg mt-3 shadow-lg px-3 py-2 ml-5 ' /></div>;
+  return <div className='h-full'><canvas ref={chartRef}  className='flex-grow rounded-lg mt-3 shadow-lg px-3 py-2 ml-5 ' /></div>;
 };
 
 export default SchoolPerformanceChart;
