@@ -1,4 +1,5 @@
 import { CircularProgressbar,buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 import ProgressProvider from './ProgressProvider';
 export default function ProgressCard(props) {
   return (
@@ -17,7 +18,16 @@ export default function ProgressCard(props) {
             
           },
           trail: { stroke: props.trailColor },
+          text: { 
+            fontSize: '20px',
+            fill: '#000', 
+          },
         }}
+        renderText={(value) => (
+          <tspan x="50%" y="50%" dominantBaseline="middle" textAnchor="middle">
+            {value}
+          </tspan>
+        )}
       />}
       </ProgressProvider>
       <p className="text-base font-medium mt-3 text-center">{props.title}</p>

@@ -5,9 +5,9 @@ import SubjectClassWorkTile from "./utils/SubjectClassworkTile"
 export default function SubjectClassWork(){
     const { name } = useParams();
     return (
-        <div className="flex flex-col w-full h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 no-scrollbar">
+        <div className=" flex flex-col px-3 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 no-scrollbar">
             <h1 className="text-xl font-medium">{name} ClassWork</h1>
-            <div className="flex w-full">
+            <div className=" flex flex-col tablet:flex-row items-center gap-3 w-full py-2">
                 <ProgressCard
                 title={`Syllabus Completed in ${name} I`}
                 percent='40'

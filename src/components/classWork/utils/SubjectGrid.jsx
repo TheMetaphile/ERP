@@ -10,7 +10,7 @@ import Computer from '../../../assets/computer.png';
 
 export default function SubjectGrid(){
     return (
-        <div className="w-full grid grid-cols-4 gap-6 rounded-lg shadow-md p-4">
+        <div className=" w-full grid grid-cols-2 tablet:grid-cols-4 gap-6 rounded-lg shadow-md p-4">
             <SubjectTile subject='Maths' image={Math}/>
             <SubjectTile subject='English' image={English}/>
             <SubjectTile subject='Hindi' image={Hindi}/>
