@@ -15,7 +15,7 @@ export default function Navbar({onDrawerToggle, onEndDrawerToggle}) {
         </div>
       </div>
       <nav>
-        <ul className="flex w-full items-center">
+        <ul className="flex w-full items-center mobile:max-tablet:text-sm">
           <li className="mr-4">
             <Link to="/Student-Dashboard/home" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Home</Link>
           </li>

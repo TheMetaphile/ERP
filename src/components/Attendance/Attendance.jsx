@@ -30,17 +30,17 @@ export default function Attendance() {
   return (
     <div className=" flex flex-col w-full h-screen overflow-y-auto items-start px-2 py-3 no-scrollbar">
       <h1 className="text-2xl font-medium">Attendance</h1>
-      <div className="flex w-full justify-start ">
+      <div className="flex w-full justify-start mobile:max-tablet:grid mobile:max-tablet:grid-cols-2">
         <TotalAttendance TotalAttendance={260} />
         <PresentAttendanceTile Present={230} image={Present} text="Present" />
         <PresentAttendanceTile Present={230} image={Absent} text="Absent" />
         <PresentAttendanceTile Present={230} image={Leave} text="Leave" />
       </div>
-      <div className="flex w-full justify-evenly my-4">
-        <div className="w-2/3 pr-2">
+      <div className="flex w-full tablet:justify-evenly my-4 mobile:max-tablet:flex-col items-center">
+        <div className="tablet:w-2/3 tablet:pr-6 mobile:max-tablet:w-full mobile:max-tablet:pr-7 mobile:max-tablet:mb-5"> 
           <Calendar />
         </div>
-        <div className="w-1/3 px-2">
+        <div className="tablet:w-1/3 px-2 mobile:max-tablet:w-full ">
           <Doughnut chartData={data} title='Attendance Status' />
         </div>
       </div>

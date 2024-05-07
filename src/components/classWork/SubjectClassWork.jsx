@@ -5,7 +5,7 @@ import SubjectClassWorkTile from "./utils/SubjectClassworkTile"
 export default function SubjectClassWork(){
     const { name } = useParams();
     return (
-        <div className=" flex flex-col px-3 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 no-scrollbar">
+        <div className=" flex flex-col px-3 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
             <h1 className="text-xl font-medium">{name} ClassWork</h1>
             <div className=" flex flex-col tablet:flex-row items-center gap-3 w-full py-2">
                 <ProgressCard
@@ -31,7 +31,7 @@ export default function SubjectClassWork(){
             />
 
             </div>
-            <h1 className="text-xl font-medium mt-4">List of ClassWork</h1>
+            <h1 className="text-xl font-medium mt-4 ">List of ClassWork</h1>
             <SubjectClassWorkTile subject={name} classwork='Complete Exercise 2.9 .' assignedDate='01/05/2024'/>
             <SubjectClassWorkTile subject={name} classwork='Complete Exercise 2.9 .' assignedDate='31/04/2024'/>
             <SubjectClassWorkTile subject={name} classwork='Complete Exercise 2.9 .' assignedDate='30/04/2024'/>

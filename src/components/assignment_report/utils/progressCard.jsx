@@ -3,7 +3,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import ProgressProvider from './ProgressProvider';
 export default function ProgressCard(props) {
   return (
-    <div className="w-52 bg-white shadow-lg rounded-lg mr-2 p-4 flex flex-col items-center justify-center">
+    <div className="w-52 mobile:max-tablet:w-full mobile:max-tablet:h-52 bg-white shadow-lg rounded-lg mr-2 p-4 flex flex-col items-center justify-center">
       <ProgressProvider  valueStart={0} valueEnd={props.percent}>
         {value=><CircularProgressbar 
         value={value} 

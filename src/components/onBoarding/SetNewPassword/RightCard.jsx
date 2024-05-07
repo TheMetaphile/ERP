@@ -12,9 +12,9 @@ export default function RightCard() {
         setConfirmPassword(event.target.value);
     };
     return (
-        <div className="flex flex-col flex-shrink tablet:py-10 mobile:max-tablet:py-2 mobile:max-tablet:px-2 mobile:max-tablet:my-10 bg-white rounded-3xl shadow-lg tablet:px-10 justify-center">
+        <div className="flex flex-col flex-shrink tablet:py-10 mobile:max-tablet:py-5 mobile:max-tablet:px-5 mobile:max-tablet:my-10 bg-white rounded-3xl shadow-lg tablet:px-10 justify-center">
 
-            <img src={logo} alt="img" className="mr-4 h-32 w-32 self-center" />
+            <img src={logo} alt="img" className="mr-4 h-32 self-center" />
 
             <h1 className="text-2xl text-center font-bold whitespace-nowrap">Reset Password</h1>
 
