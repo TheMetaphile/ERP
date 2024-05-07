@@ -6,7 +6,7 @@ import events from './../../../assets/events.png'
 import earning from './../../../assets/earning.png'
 export default function Summary(){
     return (
-        <div className="flex w-full justify-between rounded-lg shadow-lg bg-white px-3 py-2 ">
+        <div className="flex flex-wrap rounded-lg mt-4 mb-4 gap-4">
             <SummaryTile img={students} title='Students' value='1020'/>
             <SummaryTile img={teachers} title='Teachers' value='250'/>
             <SummaryTile img={workers} title='Workers' value='60'/>
