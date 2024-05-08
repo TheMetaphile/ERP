@@ -16,7 +16,7 @@ export default function AllTeachers(){
         <div className="mt-4 mx-4">
             <SearchBar/>
         </div>
-        <div className="mt-4 flex items-center">
+        <div className="mt-4 flex justify-center">
            <TeacherCard/>
         </div>
         </div>

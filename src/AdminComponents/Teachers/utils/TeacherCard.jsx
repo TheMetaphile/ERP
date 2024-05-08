@@ -1,5 +1,6 @@
 import React from "react";
 import { chatLogo, profilelogo, userimg } from "./images/index.js"
+import { Link } from "react-router-dom";
 
 export default function TeacherCard() {
     const userData = [
@@ -16,7 +17,7 @@ export default function TeacherCard() {
     ];
     return (
         <>
-            <div className="flex flex-wrap gap-4 mx-12">
+            <div className="flex flex-wrap gap-4 mx-12 justify-center mb-4">
                 {userData.map((user, index) => (
                     <div key={index} className="flex flex-col h-60 w-80 items-center border rounded-lg p-4">
                         <div className="mt-4">
@@ -28,15 +29,16 @@ export default function TeacherCard() {
                         </div>
                         <div className="flex gap-4 mt-2">
                             {user.subjects.map((subject, i) => (
-                                <h1 key={i} className="bg-green-200 rounded-md">{subject}</h1>
+                                <h1 key={i} className="bg-green-200 rounded-md px-2">{subject}</h1>
                             ))}
                         </div>
-                        <div className="flex mt-4 gap-4 mb-4">
-                            <div className="flex gap-2 items-center bg-blue-300 mx-2 w-20 justify-evenly rounded-md">
+                        <div className="flex mt-4 gap-2 mb-4">
+                            <div className="flex gap-2 items-center bg-blue-300 mx-2 w-30 justify-evenly rounded-md px-4">
                                 <img src={user.profileLogo} alt="" style={{ height: 16 }} />
-                                <button className="text-white">Profile</button>
+                                <button className="text-white">
+                                   <Link to="/Admin-Dashboard/Teachers/profile">Profile</Link></button>
                             </div>
-                            <div className="flex gap-2 items-center bg-blue-300 mx-2 w-20 justify-evenly rounded-md">
+                            <div className="flex gap-2 items-center bg-blue-300 mx-2 w-20 justify-evenly rounded-md px-2">
                                 <img src={user.chatLogo} alt="" style={{ height: 16 }} />
                                 <button className="text-white">Chat</button>
                             </div>
