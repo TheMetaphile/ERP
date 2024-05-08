@@ -13,7 +13,7 @@ export default function SelectTeacher({ onSelect }) {
     return (
         <div className=" rounded-lg shadow-md">
             <h1 className="shadow-lg w-fit mt-4">Select Teacher</h1>
-            <div class="grid grid-cols-2 gap-4 mt-2">
+            <div class="grid grid-cols-2 gap-4 mt-2 py-2">
 
                 <div style={styles} class="  hover:bg-purple-400 " onClick={() => handleSubjectSelect("Anjali Mam")}>Anjali Mam</div>
                 <div style={styles} class="  hover:bg-purple-400 " onClick={() => handleSubjectSelect("Sakshi Mam")}>Sakshi Mam</div>

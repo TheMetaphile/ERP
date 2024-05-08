@@ -27,6 +27,11 @@ import { createBrowserRouter } from "react-router-dom";
 import StudentsList from "./AdminComponents/Students/AllStudents/utils/StudentsList.jsx";
 import StudentDetailScreen from "./AdminComponents/Students/AllStudents/StudentsDeatils/StudentDetailScreen.jsx";
 import AllDoubts from "./components/askDoubt/utils/AllDoubts.jsx";
+import Notification from "./components/notification/Notification.jsx";
+import AllNotification from "./components/notification/utils/AllNotification.jsx";
+import Inbox from "./components/notification/utils/Inbox.jsx";
+import Archived from "./components/notification/utils/Archived.jsx";
+import Leave from "./components/leave/leave.jsx";
 
 const router = createBrowserRouter([
   {
@@ -123,8 +128,38 @@ const router = createBrowserRouter([
           {
             path: '/Student-Dashboard/askdoubt/alldoubt',
             element: <AllDoubts />
+          },
+          {
+            path: '',
+            element: <AllDoubts />
           }
         ]
+      },
+      {
+        path: "/Student-Dashboard/notification",
+        element: <Notification />,
+        children: [
+          {
+            path: '/Student-Dashboard/notification/allnotification',
+            element: <AllNotification />
+          },
+          {
+            path: '/Student-Dashboard/notification/inbox',
+            element: <Inbox />
+          },
+          {
+            path: '/Student-Dashboard/notification/archived',
+            element: <Archived/>
+          },
+          {
+            path: '',
+            element: <AllNotification />
+          },
+        ]
+      },
+      {
+        path: "/Student-Dashboard/leave",
+        element: <Leave />,
       },
     ],
   },

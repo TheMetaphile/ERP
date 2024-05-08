@@ -13,7 +13,7 @@ export default function SelectClass({ onSelect }) {
     return (
         <div className=" rounded-lg shadow-md">
             <h1 className="shadow-lg  w-fit mt-4">Select Class</h1>
-            <div class="grid grid-cols-4 gap-4 mt-2 ">
+            <div class="grid grid-cols-4 gap-4 mt-2 py-2">
 
                 <div style={styles} class="  hover:bg-purple-400 " onClick={() => handleClassSelect("1")}>1st</div>
                 <div style={styles} class="  hover:bg-purple-400 " onClick={() => handleClassSelect("2")}>2nd</div>

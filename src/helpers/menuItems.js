@@ -60,6 +60,7 @@ const menuItems = [
     image: "src/assets/Dashboard_leave.png",
     alt: "Leave application image",
     text: "Leave Application",
+    route: '/Student-Dashboard/leave'
   },
   {
     image: "src/assets/Dashboard_doubt.png",
@@ -71,6 +72,7 @@ const menuItems = [
     image: "src/assets/notification 1.png",
     alt: "notification image",
     text: "Notification ",
+    route: '/Student-Dashboard/notification'
   },
   {
     image: "src/assets/Picture1.png",

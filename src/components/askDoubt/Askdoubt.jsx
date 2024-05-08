@@ -1,9 +1,5 @@
 
-import AllDoubtTile from "./utils/AllDoubtTile";
 import React, { useState } from 'react';
-import SelectClass from './utils/SelectClass'
-import SelectSubject from './utils/SelectSubject'
-import SelectTeacher from "./utils/SelectTeacher";
 import { Link, Outlet } from "react-router-dom";
 
 export default function Askdoubt() {
