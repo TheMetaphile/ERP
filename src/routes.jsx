@@ -32,6 +32,7 @@ import AllNotification from "./components/notification/utils/AllNotification.jsx
 import Inbox from "./components/notification/utils/Inbox.jsx";
 import Archived from "./components/notification/utils/Archived.jsx";
 import Leave from "./components/leave/leave.jsx";
+import AllTeachers from "./AdminComponents/Teachers/AllTeachers.jsx";
 
 const router = createBrowserRouter([
   {
@@ -184,6 +185,11 @@ const router = createBrowserRouter([
             element: <StudentDetailScreen />
           }
         ]
+      },
+      {
+        path: "/Admin-Dashboard/Teachers",
+        element: <AllTeachers />,
+        children:[]
       },
     ]
   }

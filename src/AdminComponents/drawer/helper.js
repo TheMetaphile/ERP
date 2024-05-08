@@ -44,7 +44,7 @@ const menuItems = [
     children: [
       {
         text: 'All Teachers',
-        route: '/'
+        route: '/Admin-Dashboard/Teachers'
       },
       {
         text: 'Add New Teacher',

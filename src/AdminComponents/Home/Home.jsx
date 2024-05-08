@@ -19,7 +19,7 @@ export default function AdminHome() {
                     <div className="w-3/12  mobile:max-tablet:w-full">
                         <TotalStudentTile />
                     </div>
-                    <div className="w-5/12 py-2 mobile:max-tablet:w-full h-60">
+                    <div className="w-5/12 py-2 mobile:max-tablet:w-full mobile:max-tablet:h-60">
                         <SchoolPerformanceChart />
                     </div>
                     <div className="w-4/12 py-2 mobile:max-tablet:w-full">
@@ -27,8 +27,8 @@ export default function AdminHome() {
                     </div>
                 </div>
             </div>
-            <h1 className="text-2xl font-medium mt-40">School Calender</h1>
-            <div className="flex flex-grow justify-between mobile:max-tablet:flex-col">
+            <h1 className="text-2xl font-medium mt-8 mobile:max-tablet:-mt-4">School Calender</h1>
+            <div className="flex flex-grow justify-between mobile:max-tablet:flex-col gap-4">
                 <div className="flex w-2/4 mobile:max-tablet:w-full">
                     <HomeCalendar />
                 </div>

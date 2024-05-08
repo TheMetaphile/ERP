@@ -1,0 +1,50 @@
+import React from "react";
+import { chatLogo, profilelogo, userimg } from "./images/index.js"
+
+export default function TeacherCard() {
+    const userData = [
+        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
+        { name: "Sakshi", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
+        { name: "Ram", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
+        { name: "Amit", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
+        { name: "mayank", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
+        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
+        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
+        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
+        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
+
+    ];
+    return (
+        <>
+            <div className="flex flex-wrap gap-4 mx-12">
+                {userData.map((user, index) => (
+                    <div key={index} className="flex flex-col h-60 w-80 items-center border rounded-lg p-4">
+                        <div className="mt-4">
+                            <img src={userimg} alt="" className="h-16 w-16" />
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <h1 className="text-xl font-semibold">{user.name}</h1>
+                            <p className="text-gray-400">{user.role}</p>
+                        </div>
+                        <div className="flex gap-4 mt-2">
+                            {user.subjects.map((subject, i) => (
+                                <h1 key={i} className="bg-green-200 rounded-md">{subject}</h1>
+                            ))}
+                        </div>
+                        <div className="flex mt-4 gap-4 mb-4">
+                            <div className="flex gap-2 items-center bg-blue-300 mx-2 w-20 justify-evenly rounded-md">
+                                <img src={user.profileLogo} alt="" style={{ height: 16 }} />
+                                <button className="text-white">Profile</button>
+                            </div>
+                            <div className="flex gap-2 items-center bg-blue-300 mx-2 w-20 justify-evenly rounded-md">
+                                <img src={user.chatLogo} alt="" style={{ height: 16 }} />
+                                <button className="text-white">Chat</button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+        </>
+    )
+}
