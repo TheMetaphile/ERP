@@ -3,7 +3,7 @@ import { callIcon, location, userimg, } from "./images";
 
 export default function ProfileDetails() {
     return (
-        <div className="bg-white shadow-lg rounded-xl p-4 mt-8 mx-8">
+        <div className="bg-white shadow-lg w-full rounded-xl p-4">
             <div className="flex flex-col gap-4 mx-4">
                 <div className="mx-4">
                     <img src={userimg} alt="" className="h-16 w-16" />
@@ -39,15 +39,9 @@ export default function ProfileDetails() {
                     </div>
                 </div>
                 <div className="flex gap-4 mt-4">
-                     <div><h1 className="text-3xl">Education&nbsp;:</h1></div>
-                     <div className="flex gap-2">
-                     <div className="mt-1 text-2xl">B.Tech IIT, Kanpur&nbsp;:</div>
-                     <div className="mt-1 text-2xl text-gray-600"><h1>(2013-2017)</h1></div>
-                     </div>
-                     <div className="flex gap-2">
-                     <div className="mt-1 text-2xl">M.Tech IIT, Kanpur&nbsp;:</div>
-                     <div className="mt-1 text-2xl text-gray-600"><h1>(2018-2020)</h1></div>
-                     </div>
+                     <div><h1 className="text-xl">Education&nbsp;:</h1></div>
+                     <div className=" text-lg text-gray-400">B.Tech IIT, Kanpur (2013-2017)</div>
+                     <div className=" text-lg text-gray-400">M.Tech IIT, Kanpur (2018-2020)</div>
                 </div>
             </div>
         </div>

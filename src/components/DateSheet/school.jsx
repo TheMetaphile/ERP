@@ -16,7 +16,7 @@ export default function school(props) {
 
       </div>
 
-      <div className=' border-2 border-solid border-gray-500 mt-2 ml-3 mr-3'></div>
+      <div className=' border border-solid border-gray-300 mt-2 ml-3 mr-3'></div>
       <Term />
 
     </div>

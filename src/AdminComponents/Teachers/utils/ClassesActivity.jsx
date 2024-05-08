@@ -1,7 +1,7 @@
-import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { Bar } from "react-chartjs-2";
 
-const data = [
+
+const dataSet = [
   {
     name: 'January',
     math: 15,
@@ -45,19 +45,50 @@ const data = [
     science: 24,
   },
 ];
-
+const options = {
+  maintainAspectRatio: false,
+  scales: {
+    y: {
+      beginAtZero: true,
+      title: {
+        display: true,
+        text: 'Days',
+        position: 'left',
+        font: {
+          size: 22,
+        },
+      },
+      ticks: {
+        mirror: true,
+      },
+    },
+  },
+};
+const data = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets:  [
+    {
+      label: 'Math',
+      backgroundColor: '#FDA47E',
+      borderRadius: 50, 
+      data: [15, 16, 18, 14, 20, 24, 20],
+    },
+    {
+      label: 'English',
+      backgroundColor: '#81FD7E',
+      borderRadius: 50, 
+      data: [12, 19, 3, 17, 28, 24, 7],
+    },
+    {
+      label: 'Science',
+      backgroundColor: '#FD7E7E',
+      borderRadius: 50, 
+      data: [8, 21, 13, 15, 20, 34, 24],
+    },
+  ],
+};
 const ClassesActivityChart = () => {
-  return (
-    <BarChart width={1000} height={400} data={data}>
-      <XAxis dataKey="name" />
-      <YAxis />
-      <CartesianGrid strokeDasharray="3 3" />
-      <Tooltip />
-      <Bar dataKey="math" fill="#f87979" />
-      <Bar dataKey="english" fill="#7bcbc4" />
-      <Bar dataKey="science" fill="#817d4d" />
-    </BarChart>
-  );
+  return <Bar data={data} options={options} />;
 };
 
 export default ClassesActivityChart;

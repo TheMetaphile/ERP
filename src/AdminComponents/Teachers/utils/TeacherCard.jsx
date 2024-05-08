@@ -16,16 +16,17 @@ export default function TeacherCard() {
 
     ];
     return (
-        <>
-            <div className="flex flex-wrap gap-4 mx-12 justify-center mb-4">
+            <div className="mx-3">
                 {userData.map((user, index) => (
-                    <div key={index} className="flex flex-col h-60 w-80 items-center border rounded-lg p-4">
-                        <div className="mt-4">
-                            <img src={userimg} alt="" className="h-16 w-16" />
-                        </div>
+                    <div key={index} className="flex items-center justify-between border rounded-lg p-4 mb-2">
+                        
+                        <div className="flex w-72">
+                        <img src={userimg} alt="" className="h-16 w-16 mr-3" />
+                        
                         <div className="flex flex-col items-center">
                             <h1 className="text-xl font-semibold">{user.name}</h1>
                             <p className="text-gray-400">{user.role}</p>
+                        </div>
                         </div>
                         <div className="flex gap-4 mt-2">
                             {user.subjects.map((subject, i) => (
@@ -46,7 +47,5 @@ export default function TeacherCard() {
                     </div>
                 ))}
             </div>
-
-        </>
     )
 }

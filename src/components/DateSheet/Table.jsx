@@ -4,9 +4,9 @@ import signature from './../../assets/signature.jpg';
 export default function Table() {
   return (
     <div className=' flex justify-evenly'>
-      <table className=' mt-7  w-full justify-evenly items-center ml-5 mr-5'>
+      <table className=' mt-7  w-full justify-evenly items-center ml-5 mr-5 rounded-lg shadow-lg my-2 px-2'>
 
-        <tr className='outline  outline-slate-500 mt-3  no-underline text-xl'>
+        <tr className='border border-gray-300 rounded-lg mt-3  no-underline text-xl'>
           <th className='no-underline text-xl'>Date </th>
           <th className='no-underline text-xl'>Subject </th>
           <th className='no-underline text-xl'>Time </th>

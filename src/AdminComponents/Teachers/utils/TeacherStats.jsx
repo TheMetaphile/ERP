@@ -13,6 +13,7 @@ const TeacherStats = () => {
         backgroundColor: ['#4267B2', '#D94D94', '#4285F4'],
         borderWidth: 0,
         cutout: '70%',
+        borderRadius: 30,
       },
     ],
   };
@@ -29,7 +30,7 @@ const TeacherStats = () => {
   };
 
   return (
-    <div className="flex justify-center gap-4 mobile:max-tablet:gap-2">
+    <div className="flex gap-4 mobile:max-tablet:gap-2">
       <div className="flex flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border">
         <div className="w-20 h-20">
           {/* <Doughnut data={data} options={options} /> */}
@@ -42,13 +43,15 @@ const TeacherStats = () => {
                   backgroundColor: ['#D94D94', '#4285F4'],
                   borderWidth: 0,
                   cutout: '70%',
+                  borderRadius: 30,
                 },
               ],
             }}
             options={options}
           />
         </div>
-        <p className="text-xl font-semibold mt-1">Total Teachers</p>
+        <p className="text-2xl font-semibold mt-3 ">184</p>
+        <p className="text-lg  font-medium text-gray-400 mt-1">Total Teachers</p>
       </div>
       <div className="flex flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border">
         <div className="w-20 h-20">
@@ -66,7 +69,8 @@ const TeacherStats = () => {
             options={options}
           />
         </div>
-        <p className="text-xl font-semibold mt-1">Female Teachers</p>
+        <p className="text-2xl font-semibold mt-3 ">95</p>
+        <p className="text-lg  font-medium text-gray-400 mt-1">Female Teachers</p>
       </div>
       <div className="flex flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border">
         <div className="w-20 h-20">
@@ -84,7 +88,8 @@ const TeacherStats = () => {
             options={options}
           />
         </div>
-        <p className="text-xl font-semibold mt-1">Male Teachers</p>
+        <p className="text-2xl font-semibold mt-3 ">89</p>
+        <p className="text-lg  font-medium text-gray-400 mt-1">Male Teachers</p>
       </div>
     </div>
   );
