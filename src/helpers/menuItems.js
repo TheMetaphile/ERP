@@ -65,6 +65,7 @@ const menuItems = [
     image: "src/assets/Dashboard_doubt.png",
     alt: "Ask doubt image",
     text: "Ask Doubt",
+    route: '/Student-Dashboard/askdoubt'
   },
   {
     image: "src/assets/notification 1.png",

@@ -12,6 +12,8 @@ import DateSheet  from "./components/DateSheet/datesheet.jsx";
 // import Palyquiz from "./components/playquiz/firstquizs.jsx";
 import Attendance from "./components/Attendance/Attendance.jsx";
 import TimeTable from "./components/TimeTable/Timetable.jsx";
+import AskDoubt from "./components/askDoubt/Askdoubt.jsx";
+import MyDoubts from './components/askDoubt/MyDoubts.jsx'
 import SubjectClassWork from "./components/classWork/SubjectClassWork.jsx";
 import ClassWork from "./components/classWork/route.jsx";
 import TodayClassWork from "./components/classWork/TodayClassWork.jsx";
@@ -24,6 +26,7 @@ import AllStudents from "./AdminComponents/Students/AllStudents/AllStudents.jsx"
 import { createBrowserRouter } from "react-router-dom";
 import StudentsList from "./AdminComponents/Students/AllStudents/utils/StudentsList.jsx";
 import StudentDetailScreen from "./AdminComponents/Students/AllStudents/StudentsDeatils/StudentDetailScreen.jsx";
+import AllDoubts from "./components/askDoubt/utils/AllDoubts.jsx";
 
 const router = createBrowserRouter([
   {
@@ -106,6 +109,20 @@ const router = createBrowserRouter([
           {
             path: ':name',
             element: <SubjectClassWork />
+          }
+        ]
+      },
+      {
+        path: "/Student-Dashboard/askdoubt",
+        element: <AskDoubt />,
+        children: [
+          {
+            path: '/Student-Dashboard/askdoubt/mydoubts',
+            element: <MyDoubts />
+          },
+          {
+            path: '/Student-Dashboard/askdoubt/alldoubt',
+            element: <AllDoubts />
           }
         ]
       },
