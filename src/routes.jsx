@@ -34,6 +34,7 @@ import Archived from "./components/notification/utils/Archived.jsx";
 import Leave from "./components/leave/leave.jsx";
 import AllTeachers from "./AdminComponents/Teachers/AllTeachers.jsx";
 import TeacherProfile from "./AdminComponents/Teachers/utils/TeacherProfile.jsx";
+import AddTeacher from "./AdminComponents/Teachers/AddTeacher.jsx";
 
 const router = createBrowserRouter([
   {
@@ -197,6 +198,11 @@ const router = createBrowserRouter([
         element: <TeacherProfile />,
         children:[]
       },
+      {
+        path: "/Admin-Dashboard/AddTeachers",
+        element: <AddTeacher />,
+        children:[]
+      }
     ]
   }
  

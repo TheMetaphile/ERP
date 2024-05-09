@@ -48,7 +48,7 @@ const menuItems = [
       },
       {
         text: 'Add New Teacher',
-        route: ''
+        route: '/Admin-Dashboard/AddTeachers'
       },
       {
         text: 'Teachers Sallery',
