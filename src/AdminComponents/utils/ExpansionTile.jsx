@@ -18,18 +18,18 @@ function ExpansionTile({ title, childrens, image, alternateText, route }) {
         <div className="cursor-pointer flex justify-between items-center" onClick={toggleExpanded}>
           <div className="flex">
             <img src={image} alt={alternateText} className="w-7 mr-3" />
-            <span className="text-lg whitespace-nowrap">{title}</span>
+            <span className="ttablet:text-lg mobile:max-tablet:text-sm whitespace-nowrap">{title}</span>
           </div>
           {expanded ? <FaAngleUp /> : <FaAngleDown />}
         </div>
       ) 
       : 
       (
-        <Link to={route} className="flex justify-between items-center">
-          <div className="flex">
+        <Link to={route} className="flex justify-start items-center ">
+          
             <img src={image} alt={alternateText} className="w-7 mr-3" />
-            <span className="text-lg whitespace-nowrap">{title}</span>
-          </div>
+            <span className="tablet:text-lg mobile:max-tablet:text-sm whitespace-nowrap">{title}</span>
+          
         </Link>
       )
       }

@@ -17,23 +17,23 @@ const menuItems = [
       },
       {
         text: 'Add New Students',
-        route: '/'
+        route: ''
       },
       {
         text: 'Admission Form',
-        route: '/'
+        route: ''
       },
       {
         text: 'Students Promotion',
-        route: '/'
+        route: ''
       },
       {
         text: 'Students Attendance',
-        route: '/'
+        route: ''
       },
       {
         text: 'Students Result',
-        route: '/'
+        route: ''
       },
     ]
   },
@@ -48,15 +48,15 @@ const menuItems = [
       },
       {
         text: 'Add New Teacher',
-        route: '/'
+        route: ''
       },
       {
         text: 'Teachers Sallery',
-        route: '/'
+        route: ''
       },
       {
         text: 'Teachers Attendance',
-        route: '/'
+        route: ''
       },
     ]
   },
@@ -66,11 +66,11 @@ const menuItems = [
     title: "Parents",
     children: [{
       text: 'All Parents',
-      route: '/'
+      route: ''
     },
     {
       text: 'Add New Parents',
-      route: '/'
+      route: ''
     },
     ]
   },
@@ -80,23 +80,23 @@ const menuItems = [
     title: "File Manager",
     children: [{
       text: 'Calendar',
-      route: '/'
+      route: ''
     },
     {
       text: 'Activities',
-      route: '/'
+      route: ''
     },
     {
       text: 'Chat',
-      route: '/'
+      route: ''
     },
     {
       text: 'Gallery',
-      route: '/'
+      route: ''
     },
     {
       text: 'Documents',
-      route: '/'
+      route: ''
     },
     ]
   },
@@ -107,11 +107,11 @@ const menuItems = [
     title: "Library",
     children: [{
       text: 'All Books',
-      route: '/'
+      route: ''
     },
     {
       text: 'Add New Books',
-      route: '/'
+      route: ''
     },
     ]
   },
@@ -122,19 +122,19 @@ const menuItems = [
     title: "Account",
     children: [{
       text: 'Fees Coolection',
-      route: '/'
+      route: ''
     },
     {
       text: 'Expenses',
-      route: '/'
+      route: ''
     },
     {
       text: 'Add Expenses',
-      route: '/'
+      route: ''
     },
     {
       text: 'Budget',
-      route: '/'
+      route: ''
     },
     ]
   },
@@ -145,15 +145,15 @@ const menuItems = [
     title: "class",
     children: [{
       text: 'All Classes',
-      route: '/'
+      route: ''
     },
     {
       text: 'Add New Class',
-      route: '/'
+      route: ''
     },
     {
       text: 'Class Routine',
-      route: '/'
+      route: ''
     },
     ]
   },
@@ -164,11 +164,11 @@ const menuItems = [
     title: "Subject",
     children: [{
       text: 'All Subjects',
-      route: '/'
+      route: ''
     },
     {
       text: 'Add New Subject',
-      route: '/'
+      route: ''
     },
     ]
   },

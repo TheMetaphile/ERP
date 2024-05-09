@@ -18,7 +18,7 @@ export default function TeacherCard() {
     return (
             <div className="mx-3">
                 {userData.map((user, index) => (
-                    <div key={index} className="flex items-center justify-between border rounded-lg p-4 mb-2">
+                    <div key={index} className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between border rounded-lg p-4 mb-2">
                         
                         <div className="flex w-72">
                         <img src={userimg} alt="" className="h-16 w-16 mr-3" />

@@ -22,7 +22,7 @@ export default function Dashboard() {
     </div>
 
     <div className="flex flex-grow h-screen pt-20 mobile:max-tablet:pt-32">
-      <div className={`mobile:max-tablet:absolute flex-shrink-0 transition-all duration-300 ${isDrawerOpen ? 'w-60 h-full' : 'w-0'} overflow-y-auto no-scrollbar`}>
+      <div className={`mobile:max-tablet:absolute z-50 flex-shrink-0 transition-all duration-300 ${isDrawerOpen ? 'w-60 h-full' : 'w-0'} overflow-y-auto no-scrollbar`}>
         <Drawer isOpen={isDrawerOpen} />
       </div>
       <div className="flex-grow  overflow-y-auto no-scrollbar ">

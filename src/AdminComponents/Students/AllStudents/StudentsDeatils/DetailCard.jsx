@@ -31,12 +31,12 @@ export default function StudentBasicDetails(props) {
                 <FaEdit className='bg-secondary rounded-lg shadow-md px-3 py-1 w-fit h-8' />
             </div>
             <div className='border-gray-300 border-t-2 mt-2'></div>
-            <div className='flex mt-2'>
-            <div className='w-1/2'>
+            <div className='tablet:flex mt-2'>
+            <div className='tablet:w-1/2'>
             {
                 Object.entries(studentDetails).map(([key, value]) => (
                     <div className='flex w-full text-base  mb-2'>
-                        <h1 className='font-medium text-sky-500 w-2/5'>
+                        <h1 className='font-medium text-sky-500 tablet:w-2/5 mobile:max-tablet:w-1/2'>
                             {key}
                         </h1>
                         <h1 className='w-fit ml-2 font-normal text-gray-400'>
@@ -47,11 +47,11 @@ export default function StudentBasicDetails(props) {
                 )
             }
             </div>
-            <div className='w-1/2'>
+            <div className='tablet:w-1/2'>
             {
                 Object.entries(parentsDetails).map(([key, value]) => (
-                    <div className='flex full text-base ml-2 mb-2'>
-                        <h1 className='font-medium text-sky-500 w-3/5'>
+                    <div className='flex full text-base mb-2'>
+                        <h1 className='font-medium text-sky-500 tablet:w-3/5 mobile:max-tablet:w-1/2'>
                             {key}
                         </h1>
                         <h1 className='w-fit ml-2 font-normal text-gray-400'>

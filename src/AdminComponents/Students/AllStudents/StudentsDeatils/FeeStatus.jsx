@@ -31,14 +31,14 @@ export default function FeeStatus(props) {
         }]
     };
     return (
-        <div className="flex w-full mb-1 shadow-md rounded-lg bg-white p-2 h-fit">
+        <div className="flex mobile:max-tablet:flex-col mobile:max-tablet:items-center w-full mb-1 shadow-md rounded-lg bg-white p-2 h-fit">
             <img src={ProfileIcon} alt="ProfileIcon" className="w-20 h-20" />
-            <div className='ml-3'>
-                <h3 className="mb-1">{props.name}</h3>
+            <div className='ml-3 mobile:max-tablet:flex-col'>
+                <h3 className="mb-1 mobile:max-tablet:mt-2">{props.name}</h3>
                 <h5 className="mb-1">Class {props.class} | Roll No. {props.rollNumber}</h5>
-                <p className='px-2 py-1 rounded-md bg-teal-100 w-fit shadow-md'>{props.session}</p>
+                <p className='px-2 py-1 rounded-md bg-teal-100 w-fit text-center shadow-md'>{props.session}</p>
             </div>
-            <div className='flex h-24 ml-auto relative'>
+            <div className='flex h-24 tablet:ml-auto relative'>
                 
                 <div className='flex-1 self-center  text-lg font-medium whitespace-nowrap'>
                     <h1>
