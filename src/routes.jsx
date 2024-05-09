@@ -35,6 +35,7 @@ import Leave from "./components/leave/leave.jsx";
 import AllTeachers from "./AdminComponents/Teachers/AllTeachers.jsx";
 import TeacherProfile from "./AdminComponents/Teachers/utils/TeacherProfile.jsx";
 import AddTeacher from "./AdminComponents/Teachers/AddTeacher.jsx";
+import TeacherAttendance from "./AdminComponents/Teachers/TeacherAttendance.jsx";
 
 const router = createBrowserRouter([
   {
@@ -202,7 +203,12 @@ const router = createBrowserRouter([
         path: "/Admin-Dashboard/AddTeachers",
         element: <AddTeacher />,
         children:[]
-      }
+      },
+      {
+        path: "/Admin-Dashboard/TeachersAttendance",
+        element: <TeacherAttendance />,
+        children:[]
+      },
     ]
   }
  

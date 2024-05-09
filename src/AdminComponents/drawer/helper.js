@@ -56,7 +56,7 @@ const menuItems = [
       },
       {
         text: 'Teachers Attendance',
-        route: ''
+        route: '/Admin-Dashboard/TeachersAttendance'
       },
     ]
   },
