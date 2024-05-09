@@ -53,8 +53,8 @@ export default function TeacherForm() {
         <>
             <div className="w-full flex justify-center mb-4">
                 <form onSubmit={handleSubmit} className="flex flex-col w-3/4 gap-4">
-                    <div className="flex gap-12">
-                        <div className="w-1/2 rounded-md">
+                    <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="firstName">
                                 First Name
                                 <input
@@ -69,7 +69,7 @@ export default function TeacherForm() {
                                 />
                             </label>
                         </div>
-                        <div className="w-1/2 rounded-md">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="lastName">
                                 Last Name
                                 <input
@@ -85,8 +85,8 @@ export default function TeacherForm() {
                             </label>
                         </div>
                     </div>
-                    <div className="flex gap-12">
-                        <div className="w-1/2 rounded-md">
+                    <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="gender">
                                 Gender
                                 <select
@@ -104,7 +104,7 @@ export default function TeacherForm() {
                                 </select>
                             </label>
                         </div>
-                        <div className="w-1/2 rounded-md">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="email">
                                 Email
                                 <input
@@ -120,66 +120,66 @@ export default function TeacherForm() {
                             </label>
                         </div>
                     </div>
-                    <div className="flex gap-12">
-                        <div className="w-1/2 rounded-md">
+                    <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="gender">
                                 Address
                                 <input
                                     className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="email"
+                                    id="address"
                                     type="text"
-                                    name="email"
-                                    value={formData.email}
+                                    name="address"
+                                    value={formData.address}
                                     onChange={handleChange}
                                     placeholder=""
                                     required
                                 />
                             </label>
                         </div>
-                        <div className="w-1/2 rounded-md">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="email">
                              Religion
                              <select
                                     className="border rounded w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
-                                    id="gender"
+                                    id="religion"
                                     name="gender"
-                                    value={formData.gender}
+                                    value={formData.religion}
                                     onChange={handleChange}
                                     required
                                 >
-                                    <option value="">Select gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
+                                    <option value="">Select religion</option>
+                                    <option value="Hindu">Hindu</option>
+                                    <option value="Chrisitian">Christian</option>
                                     <option value="other">Other</option>
                                 </select>
                             </label>
                         </div>
                     </div>
-                    <div className="flex gap-12">
-                        <div className="w-1/2 rounded-md">
+                    <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="firstName">
                                 Subject
                                 <input
                                     className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="firstName"
+                                    id="subject"
                                     type="text"
-                                    name="firstName"
-                                    value={formData.firstName}
+                                    name="subject"
+                                    value={formData.subject}
                                     onChange={handleChange}
                                     placeholder=""
                                     required
                                 />
                             </label>
                         </div>
-                        <div className="w-1/2 rounded-md">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="lastName">
                                 ID Number
                                 <input
                                     className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="lastName"
+                                    id="idNumber"
                                     type="text"
-                                    name="lastName"
-                                    value={formData.lastName}
+                                    name="idNumber"
+                                    value={formData.idNumber}
                                     onChange={handleChange}
                                     placeholder=""
                                     required
@@ -187,31 +187,31 @@ export default function TeacherForm() {
                             </label>
                         </div>
                     </div>
-                    <div className="flex gap-12">
-                        <div className="w-1/2 rounded-md">
+                    <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="firstName">
                                 Date Of Birth
                                 <input
                                     className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="firstName"
+                                    id="dob"
                                     type="text"
-                                    name="firstName"
-                                    value={formData.firstName}
+                                    name="dob"
+                                    value={formData.dateOfBirth}
                                     onChange={handleChange}
                                     placeholder=""
                                     required
                                 />
                             </label>
                         </div>
-                        <div className="w-1/2 rounded-md">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="lastName">
                                 Phone Number
                                 <input
                                     className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="lastName"
+                                    id="phoneNumber"
                                     type="text"
-                                    name="lastName"
-                                    value={formData.lastName}
+                                    name="phoneNumber"
+                                    value={formData.phone}
                                     onChange={handleChange}
                                     placeholder=""
                                     required
@@ -219,31 +219,31 @@ export default function TeacherForm() {
                             </label>
                         </div>
                     </div>
-                    <div className="flex gap-12">
-                        <div className="w-1/2 rounded-md">
+                    <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="firstName">
                                 Experience
                                 <input
                                     className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="firstName"
+                                    id="experience"
                                     type="text"
-                                    name="firstName"
-                                    value={formData.firstName}
+                                    name="experience"
+                                    value={formData.experience}
                                     onChange={handleChange}
                                     placeholder=""
                                     required
                                 />
                             </label>
                         </div>
-                        <div className="w-1/2 rounded-md">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="lastName">
                                 Education
                                 <input
                                     className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="lastName"
+                                    id="education"
                                     type="text"
-                                    name="lastName"
-                                    value={formData.lastName}
+                                    name="education"
+                                    value={formData.education}
                                     onChange={handleChange}
                                     placeholder=""
                                     required
@@ -251,8 +251,8 @@ export default function TeacherForm() {
                             </label>
                         </div>
                     </div> 
-                    <div className="flex gap-12">
-                        <div className="w-1/2 rounded-lg">
+                    <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
+                        <div className="w-1/2 rounded-lg mobile:max-tablet:w-full">
                         <label className="block text-lg mb-2" htmlFor="photo">
                             Upload Photo (150px X 150px)
                             <input
@@ -266,7 +266,7 @@ export default function TeacherForm() {
                             />
                         </label>
                         </div>
-                        <div className="w-1/2 rounded-md mt-8">
+                        <div className="w-1/2 rounded-md mt-8 mobile:max-tablet:w-full">
                         <div className="flex justify-end">
                             <button
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 mr-2 w-1/2"
