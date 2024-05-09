@@ -14,15 +14,15 @@ export default function TeacherAttendanceDetails() {
         {teacher:"Teacher",designation:"Designation", date: "Date", status: "Status", totalHour: "Total Hours" }
     ]
     return (
-        <div className="mx-3 flex flex-col">
+        <div className="flex flex-col">
             {heading.map((heading, index) => (
-                <div key={index} className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between p-4 mb-2 gap-4">
+                <div key={index} className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between p-4">
 
-                    <div className="mx-4">
+                    <div className="mx-8">
                          <h1 className="text-2xl mt-2">{heading.teacher}</h1>
                         </div>
                    
-                    <div className="text-2xl">
+                    <div className="mx-4 text-2xl">
                         {heading.designation}
                     </div>
                     <div className="text-2xl mt-2">
@@ -38,7 +38,7 @@ export default function TeacherAttendanceDetails() {
 
             ))}
             {userData.map((user, index) => (
-                <div key={index} className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between border rounded-lg p-4 mb-2 gap-4 shadow-md">
+                <div key={index} className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between border rounded-lg p-2 mb-2 gap-4 shadow-md">
 
                     <div className="flex">
                         <img src={userimg} alt="" className="h-12 w-12 mr-3" />
@@ -49,18 +49,21 @@ export default function TeacherAttendanceDetails() {
                     <div className="text-lg">
                         {user.designation}
                     </div>
-                    <div className="text-lg mt-2">
+                    <div className="text-lg">
                         <h1>{user.date}</h1>
                     </div>
-                    <div className={`${user.status === 'Present' ? 'text-green-500' : 'text-red-500'}`}>
+                    <div className={`${user.status === 'Present' ? 'text-green-500' : 'text-red-500'} text-xl`}>
                         {user.status}
                     </div>
-                    <div className="text-lg">
+                    <div className="mx-4 text-lg">
                         {user.totalHour}
                     </div>
                 </div>
 
             ))}
         </div>
+
+
     );
 }
+
