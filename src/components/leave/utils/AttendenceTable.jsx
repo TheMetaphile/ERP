@@ -12,7 +12,7 @@ export default function AttendenceTable() {
     { type: 'Leave', start: '07-04-2024', end: '09-04-2024', status: 'Pending' },
   ];
   return (
-    <div className='bg-yellow-400 flex justify-evenly  w-full'>
+    <div className='rounded-lg shadow-lg flex justify-evenly  w-full'>
       <table className=' mt-7  w-full justify-evenly items-center ml-5 mr-5'>
         <thead>
           <tr className='outline  outline-slate-500 mt-3   text-xl'>

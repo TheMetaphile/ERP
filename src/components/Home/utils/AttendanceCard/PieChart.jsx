@@ -4,7 +4,6 @@ import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js/auto";
 ChartJS.register(Tooltip, Legend, ArcElement);
 
 export default function DoughnutChart({ chartData,title }) {
-  console.log(chartData.datasets[0].bg);
   const options={
     maintainAspectRatio: false,
     plugins:{
@@ -14,7 +13,7 @@ export default function DoughnutChart({ chartData,title }) {
     }
   };
   return (
-    <div className="flex flex-col h-full justify-evenly items-center shadow-md bg-teal-100 rounded-lg px-4 py-2">
+    <div className="flex flex-col h-full justify-evenly items-center shadow-lg bg-teal-100 rounded-lg px-4 py-2">
       <div className="w-11/12">
         <h2 className="mb-2  whitespace-nowrap mobile:max-tablet:text-3xl tablet:text-xl text-center font-medium">{title}</h2>
         <div>

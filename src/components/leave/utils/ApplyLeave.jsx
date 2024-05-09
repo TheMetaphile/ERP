@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function ApplyLeave() {
     return (
-        <div className="bg-red-400 flex flex-col items-center p-4 ml-2 mr-2 rounded-lg shadow-md">
+        <div className=" flex flex-col items-center p-4 ml-2 mr-2 rounded-lg shadow-md">
             <h1 className="text-center text-lg md:text-xl font-medium">Apply Leave</h1>
             <div className='mt-3 w-full md:w-2/3 lg:w-1/2'>
                 <div className="mt-3">
