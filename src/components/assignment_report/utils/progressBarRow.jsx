@@ -2,7 +2,7 @@ import ProgressCard from './progressCard.jsx';
 
 export default function ProgressBarRow() {
     return (
-        <div className='flex justify-between overflow-x-auto pb-4'>
+        <div className='flex justify-between overflow-x-auto pb-4 flex-col gap-2 tablet:flex-row  mx-auto'>
             <ProgressCard 
                 title='Total Assignments'
                 percent='63'

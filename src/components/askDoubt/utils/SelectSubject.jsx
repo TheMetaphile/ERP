@@ -1,7 +1,13 @@
+import React, { useState } from 'react';
+
 export default function SelectSubject({ onSelect }) {
-    const handleSubjectSelect = (selectedSubject) => {
-        onSelect(selectedSubject);
+    const [selectedSubject, setSelectedSubject] = useState(null);
+
+    const handleSubjectSelect = (subject) => {
+        onSelect(subject);
+        setSelectedSubject(subject);
     };
+
     const styles = {
         paddingLeft: '0.75rem',
         paddingRight: '0.75rem',
@@ -9,22 +15,26 @@ export default function SelectSubject({ onSelect }) {
         borderRadius: '0.5rem',
         cursor: 'pointer',
     };
+
     return (
-        <div className=" rounded-lg shadow-md">
+        <div className="rounded-lg shadow-md">
             <h1 className="shadow-lg w-fit mt-4">Select Subject</h1>
-            <div class="grid grid-cols-2 gap-4 mt-2 py-2">
-
-                <div style={styles} class="  hover:bg-purple-400 " onClick={() => handleSubjectSelect("Hindi")}>Hindi</div>
-                <div style={styles} class="  hover:bg-purple-400 " onClick={() => handleSubjectSelect("Math")}>Math</div>
-                <div style={styles} class="  hover:bg-purple-400 " onClick={() => handleSubjectSelect("English")}>English</div>
-                <div style={styles} class="  hover:bg-purple-400 " onClick={() => handleSubjectSelect("Computer")}>Computer</div>
-
-                <div style={styles} class="  hover:bg-purple-400 " onClick={() => handleSubjectSelect("Science")}>Science</div>
-                <div style={styles} class="  hover:bg-purple-400 " onClick={() => handleSubjectSelect("Chemistry")}>Chemistry</div>
-                <div style={styles} class="  hover:bg-purple-400 " onClick={() => handleSubjectSelect("Physics")}>Physics</div>
-                <div style={styles} class="  hover:bg-purple-400 " onClick={() => handleSubjectSelect("Sanskrit")}>Sanskrit</div>
-
+            <div className="grid grid-cols-2 gap-4 mt-2 py-2">
+                {['Hindi', 'Math', 'English', 'Computer', 'Science', 'Chemistry', 'Physics', 'Sanskrit'].map(
+                    (subject, index) => (
+                        <div
+                            key={index}
+                            style={styles}
+                            className={`hover:bg-purple-400 ${
+                                selectedSubject === subject ? 'bg-purple-400' : ''
+                            }`}
+                            onClick={() => handleSubjectSelect(subject)}
+                        >
+                            {subject}
+                        </div>
+                    )
+                )}
             </div>
         </div>
-    )
+    );
 }

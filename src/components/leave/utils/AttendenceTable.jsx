@@ -12,30 +12,31 @@ export default function AttendenceTable() {
     { type: 'Leave', start: '07-04-2024', end: '09-04-2024', status: 'Pending' },
   ];
   return (
-    <div className=' flex justify-evenly  w-full'>
+    <div className='bg-yellow-400 flex justify-evenly  w-full'>
       <table className=' mt-7  w-full justify-evenly items-center ml-5 mr-5'>
+        <thead>
+          <tr className='outline  outline-slate-500 mt-3   text-xl'>
+            <th className=' text-xl'>Leave Type </th>
+            <th className=' text-xl'>Start Date </th>
+            <th className=' text-xl'>End Date </th>
+            <th className=' text-xl'>Status </th>
 
-        <tr className='outline  outline-slate-500 mt-3  no-underline text-xl'>
-          <th className='no-underline text-xl'>Leave Type </th>
-          <th className='no-underline text-xl'>Start Date </th>
-          <th className='no-underline text-xl'>End Date </th>
-          <th className='no-underline text-xl'>Status </th>
+          </tr>
+        </thead>
+        <tbody>
+          {content.map((con, index) => (
+            <tr key={index}>
 
-        </tr>
-        
-        {content.map((con, index) => (
-          <tr>
 
-            <React.Fragment key={index}>
               <th className='font-normal'>{con.type}</th>
               <th className='font-normal'>{con.start}</th>
               <th className='font-normal'>{con.end}</th>
-              <th className={`${con.status==="Pending"? "text-orange-300": con.status==="Rejected" ?"text-red-400":"text-green-400"}`}>{con.status}</th>
-            </React.Fragment>
+              <th className={`${con.status === "Pending" ? "text-orange-300" : con.status === "Rejected" ? "text-red-400" : "text-green-400"}`}>{con.status}</th>
 
-          </tr>
-        ))}
 
+            </tr>
+          ))}
+        </tbody>
       </table>
 
 
