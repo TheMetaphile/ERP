@@ -58,7 +58,7 @@ export default function TeacherForm() {
                             <label className="block text-lg mb-2" htmlFor="firstName">
                                 First Name
                                 <input
-                                    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="firstName"
                                     type="text"
                                     name="firstName"
@@ -73,7 +73,7 @@ export default function TeacherForm() {
                             <label className="block text-lg mb-2" htmlFor="lastName">
                                 Last Name
                                 <input
-                                    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="lastName"
                                     type="text"
                                     name="lastName"
@@ -90,7 +90,7 @@ export default function TeacherForm() {
                             <label className="block text-lg mb-2" htmlFor="gender">
                                 Gender
                                 <select
-                                    className="border rounded w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
+                                    className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
                                     id="gender"
                                     name="gender"
                                     value={formData.gender}
@@ -108,7 +108,7 @@ export default function TeacherForm() {
                             <label className="block text-lg mb-2" htmlFor="email">
                                 Email
                                 <input
-                                    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="email"
                                     type="text"
                                     name="email"
@@ -125,7 +125,7 @@ export default function TeacherForm() {
                             <label className="block text-lg mb-2" htmlFor="gender">
                                 Address
                                 <input
-                                    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="address"
                                     type="text"
                                     name="address"
@@ -140,7 +140,7 @@ export default function TeacherForm() {
                             <label className="block text-lg mb-2" htmlFor="email">
                              Religion
                              <select
-                                    className="border rounded w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
+                                    className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
                                     id="religion"
                                     name="gender"
                                     value={formData.religion}
@@ -160,7 +160,7 @@ export default function TeacherForm() {
                             <label className="block text-lg mb-2" htmlFor="firstName">
                                 Subject
                                 <input
-                                    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="subject"
                                     type="text"
                                     name="subject"
@@ -175,7 +175,7 @@ export default function TeacherForm() {
                             <label className="block text-lg mb-2" htmlFor="lastName">
                                 ID Number
                                 <input
-                                    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="idNumber"
                                     type="text"
                                     name="idNumber"
@@ -192,7 +192,7 @@ export default function TeacherForm() {
                             <label className="block text-lg mb-2" htmlFor="firstName">
                                 Date Of Birth
                                 <input
-                                    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="dob"
                                     type="text"
                                     name="dob"
@@ -207,7 +207,7 @@ export default function TeacherForm() {
                             <label className="block text-lg mb-2" htmlFor="lastName">
                                 Phone Number
                                 <input
-                                    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="phoneNumber"
                                     type="text"
                                     name="phoneNumber"
@@ -224,7 +224,7 @@ export default function TeacherForm() {
                             <label className="block text-lg mb-2" htmlFor="firstName">
                                 Experience
                                 <input
-                                    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="experience"
                                     type="text"
                                     name="experience"
@@ -239,7 +239,7 @@ export default function TeacherForm() {
                             <label className="block text-lg mb-2" htmlFor="lastName">
                                 Education
                                 <input
-                                    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="education"
                                     type="text"
                                     name="education"
@@ -256,7 +256,7 @@ export default function TeacherForm() {
                         <label className="block text-lg mb-2" htmlFor="photo">
                             Upload Photo (150px X 150px)
                             <input
-                                className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                 id="photo"
                                 type="file"
                                 name="photo"
