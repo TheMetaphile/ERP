@@ -5,7 +5,7 @@ export default function SalaryDetails({ teachers }) {
                 <thead className="">
                     <tr>
                         <th className="px-6 py-3 text-left text-xl font-normal border-r">Name</th>
-                        <th className="px-6 py-3 text-left text-xl font-normal border-r-">ID</th>
+                        <th className="px-6 py-3 text-left text-xl font-normal border-r">ID</th>
                         <th className="px-6 py-3 text-left text-xl font-normal border-r">Paid Hours</th>
                         <th className="px-6 py-3 text-left text-xl font-normal border-r">Gross Pay</th>
                         <th className="px-6 py-3 text-left text-xl font-normal border-r">Deduction</th>
