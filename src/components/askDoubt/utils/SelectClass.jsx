@@ -1,38 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export default function SelectClass({ onSelect }) {
-    const [selectedButton, setSelectedButton] = useState(null);
-
-    const handleClassSelect = (selectedClass) => {
-        onSelect(selectedClass);
-        setSelectedButton(selectedClass);
+    const handleClassSelect = (event) => {
+        const selectedSubject = event.target.value;
+        onSelect(selectedSubject);
     };
 
-    const styles = {
-        paddingLeft: '0.75rem',
-        paddingRight: '0.75rem',
-        textAlign: 'center',
-        borderRadius: '0.5rem',
-        cursor: 'pointer',
-    };
 
     return (
-        <div className="rounded-lg shadow-md">
+        <div className="rounded-lg shadow-md w-30">
             <h1 className="shadow-lg w-fit mt-4">Select Class</h1>
-            <div className="grid grid-cols-4 gap-4 mt-2 py-2">
-                {[...Array(12).keys()].map((index) => (
-                    <div
-                        key={index}
-                        style={styles}
-                        className={`hover:bg-purple-400 ${
-                            selectedButton === `${index + 1}` ? 'bg-purple-400' : ''
-                        }`}
-                        onClick={() => handleClassSelect(`${index + 1}`)}
-                    >
-                        {`${index + 1}th`}
-                    </div>
-                ))}
+            <div className="mt-3 text-sm font-medium">
+                <select
+                    className="mt-2 shadow-md border border-grey-400 rounded-lg p-2 w-full"
+                    onChange={handleClassSelect}
+                >
+                    {['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map(
+                        (classes, index) => (
+                            <option key={index} value={classes}>
+                                {classes}
+                            </option>
+                        )
+                    )}
+                </select>
             </div>
         </div>
     );
 }
+

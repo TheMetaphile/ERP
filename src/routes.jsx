@@ -37,6 +37,11 @@ import TeacherProfile from "./AdminComponents/Teachers/utils/TeacherProfile.jsx"
 import AddTeacher from "./AdminComponents/Teachers/AddTeacher.jsx";
 import TeacherAttendance from "./AdminComponents/Teachers/TeacherAttendance.jsx";
 import TeachersSalary from "./AdminComponents/Teachers/TeachersSalary.jsx";
+import BroadCast from "./components/broadcast/broadcast.jsx"
+import Activities from "./components/activities/Activities.jsx";
+import RecentActivity from "./components/activities/utils/RecentActivity.jsx";
+import AllActivity from "./components/activities/utils/AllActivity.jsx";
+import Mediacal from "./components/medical/Medical.jsx";
 
 const router = createBrowserRouter([
   {
@@ -165,6 +170,32 @@ const router = createBrowserRouter([
       {
         path: "/Student-Dashboard/leave",
         element: <Leave />,
+      },
+      {
+        path: "/Student-Dashboard/broadcast",
+        element: <BroadCast />,
+      },
+      {
+        path: "/Student-Dashboard/activities",
+        element: <Activities />,
+        children: [
+          {
+            path: '/Student-Dashboard/activities/recentactivity',
+            element: <RecentActivity />
+          },
+          {
+            path: '/Student-Dashboard/activities/allactivity',
+            element: <AllActivity />
+          },
+          {
+            path: '',
+            element: <RecentActivity />
+          },
+        ]
+      },
+      {
+        path: "/Student-Dashboard/medical",
+        element: <Mediacal/>,
       },
     ],
   },

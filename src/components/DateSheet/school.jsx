@@ -9,7 +9,7 @@ export default function school(props) {
 
         <img src={props.img} className='w-16 h-16 mt-3' />
 
-        <div className='text-center mt-5 px-3'>
+        <div className='text-center mt-5 px-3 font-semibold'>
           <h2 className='text-xl'>{props.schoolname}</h2>
           <span className=' text-sm'>{props.address}</span>
         </div>

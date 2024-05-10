@@ -26,10 +26,10 @@ function AllDoubts() {
                 <div className="flex-1 mobile:max-tablet:w-full">
                     <SelectClass onSelect={handleClassSelect} />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 mobile:max-tablet:w-full">
                     <SelectSubject onSelect={handleSubjectSelect} />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 mobile:max-tablet:w-full">
                     <SelectTeacher onSelect={handleSubjectTeacher} />
                 </div>
             </div>

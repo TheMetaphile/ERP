@@ -1,37 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export default function SelectTeacher({ onSelect }) {
-    const [selectedTeacher, setSelectedTeacher] = useState(null);
-
-    const handleTeacherSelect = (teacher) => {
-        onSelect(teacher);
-        setSelectedTeacher(teacher);
-    };
-
-    const styles = {
-        paddingLeft: '0.75rem',
-        paddingRight: '0.75rem',
-        textAlign: 'center',
-        borderRadius: '0.5rem',
-        cursor: 'pointer',
+    const handleTeacherSelect = (event) => {
+        const selectedSubject = event.target.value;
+        onSelect(selectedSubject);
     };
 
     return (
-        <div className="rounded-lg shadow-md">
+        <div className="rounded-lg shadow-md w-30">
             <h1 className="shadow-lg w-fit mt-4">Select Teacher</h1>
-            <div className="grid grid-cols-2 gap-4 mt-2 py-2">
-                {['Anjali Mam', 'Sakshi Mam', 'Abhishek Sir', 'Yash Sir', 'Bhanu Sir', 'Preeti Mam', 'Shiva Sir', 'Ravi Sir'].map(
-                    (teacher, index) => (
-                        <div
-                            key={index}
-                            style={styles}
-                            className={`hover:bg-purple-400 ${selectedTeacher === teacher ? 'bg-purple-400' : ''}`}
-                            onClick={() => handleTeacherSelect(teacher)}
-                        >
-                            {teacher}
-                        </div>
-                    )
-                )}
+            <div className="mt-3 text-sm font-medium">
+            <select
+                    className="mt-2 shadow-md border border-grey-400 rounded-lg p-2 w-full"
+                    onChange={handleTeacherSelect}
+                >
+                    {['Anjali Mam', 'Sakshi Mam', 'Abhishek Sir', 'Yash Sir', 'Bhanu Sir', 'Preeti Mam', 'Shiva Sir', 'Ravi Sir'].map(
+                        (teacher, index) => (
+                            <option key={index} value={teacher}>
+                                {teacher}
+                            </option>
+                        )
+                    )}
+                </select>
             </div>
         </div>
     );

@@ -14,58 +14,58 @@ export default function Table() {
         <br></br>
 
         <tr className='mt-2'>
-          <td className='text-base text-gray-700 text-center'>11 Jan 2024</td>
-          <td className='text-base text-gray-700 text-center'>Maths</td>
-          <td className='text-base text-gray-700 text-center'>10:00 am to 12:00 pm</td>
+          <td className='text-sm text-gray-700 text-center'>11 Jan 2024</td>
+          <td className='text-sm text-gray-700 text-center'>Maths</td>
+          <td className='text-sm text-gray-700 text-center'>10:00 am to 12:00 pm</td>
 
         </tr>
         <br></br>
         <tr>
-          <td className='text-base text-gray-700 text-center'>12 Jan 2024</td>
-          <td className='text-base text-gray-700 text-center'>English</td>
-          <td className='text-base text-gray-700 text-center'>10:00 am to 12:00 pm</td>
+          <td className='text-sm text-gray-700 text-center'>12 Jan 2024</td>
+          <td className='text-sm text-gray-700 text-center'>English</td>
+          <td className='text-sm text-gray-700 text-center'>10:00 am to 12:00 pm</td>
         </tr>
         <br></br>
 
         <tr>
-          <td className='text-base text-gray-700 text-center '>13 Jan 2024</td>
-          <td className='text-base text-gray-700 text-center'>Hindi</td>
-          <td className='text-base text-gray-700 text-center '>10:00 am to 12:00 pm</td>
+          <td className='text-sm text-gray-700 text-center '>13 Jan 2024</td>
+          <td className='text-sm text-gray-700 text-center'>Hindi</td>
+          <td className='text-sm text-gray-700 text-center '>10:00 am to 12:00 pm</td>
         </tr>
         <br></br>
 
         <tr>
-          <td className='text-base text-gray-700 text-center' >14 Jan 2024</td>
-          <td className='text-base text-gray-700 text-center'>S.S.T</td>
-          <td className='text-base text-gray-700 text-center '>10:00 am to 12:00 pm</td>
+          <td className='text-sm text-gray-700 text-center' >14 Jan 2024</td>
+          <td className='text-sm text-gray-700 text-center'>S.S.T</td>
+          <td className='text-sm text-gray-700 text-center '>10:00 am to 12:00 pm</td>
         </tr>
         <br></br>
 
         <tr>
-          <td className='text-base text-gray-700 text-center'>15 Jan 2024</td>
-          <td className='text-base text-gray-700 text-center '>Moral-value</td>
-          <td className='text-base text-gray-700 text-center'>10:00 am to 12:00 pm</td>
+          <td className='text-sm text-gray-700 text-center'>15 Jan 2024</td>
+          <td className='text-sm text-gray-700 text-center '>Moral-value</td>
+          <td className='text-sm text-gray-700 text-center'>10:00 am to 12:00 pm</td>
         </tr>
         <br></br>
 
         <tr>
-          <td className='text-base text-gray-700 text-center'>18 Jan 2024</td>
-          <td className='text-base text-gray-700 text-center'>Science</td>
-          <td className='text-base text-gray-700 text-center'>10:00 am to 12:00 pm</td>
+          <td className='text-sm text-gray-700 text-center'>18 Jan 2024</td>
+          <td className='text-sm text-gray-700 text-center'>Science</td>
+          <td className='text-sm text-gray-700 text-center'>10:00 am to 12:00 pm</td>
         </tr>
         <br></br>
 
         <tr>
-          <td className='text-base text-gray-700 text-center'>19 Jan 2024</td>
-          <td className='text-base text-gray-700 text-center'>Drawing</td>
-          <td className='text-base text-gray-700 text-center'>10:00 am to 12:00 pm</td>
+          <td className='text-sm text-gray-700 text-center'>19 Jan 2024</td>
+          <td className='text-sm text-gray-700 text-center'>Drawing</td>
+          <td className='text-sm text-gray-700 text-center'>10:00 am to 12:00 pm</td>
         </tr>
         <br></br>
 
         <tr>
-          <td className='text-base text-gray-700 text-center'>20 Jan 2024</td>
-          <td className='text-base text-gray-700 text-center'>G.k</td>
-          <td className='text-base text-gray-700 text-center'>10:00 am to 12:00 pm</td>
+          <td className='text-sm text-gray-700 text-center'>20 Jan 2024</td>
+          <td className='text-sm text-gray-700 text-center'>G.k</td>
+          <td className='text-sm text-gray-700 text-center'>10:00 am to 12:00 pm</td>
         </tr>
         <br></br>
 
