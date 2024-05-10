@@ -5,8 +5,8 @@ export default function MyDoubtTile(props) {
                 <div className="text-gray-400 px-3 ">{props.question}</div>
 
                 <div className="flex   gap-6">
-                    <h1 className=" px-3 py-1 bg-bg_blue rounded-lg w-fit">Class {props.selectedClass}</h1>
-                    <h1 className=" px-3 py-1 bg-bg_blue rounded-lg w-fit"> {props.selectedSubject}</h1>
+                    <h1 className=" px-3 py-1 bg-bg_blue rounded-lg w-fit">Class {props.selectedClass || '1'}</h1>
+                    <h1 className=" px-3 py-1 bg-bg_blue rounded-lg w-fit"> {props.selectedSubject || 'Hindi'}</h1>
                 </div>
             </div>
 

@@ -44,6 +44,7 @@ const menuItems = [
     image: "src/assets/Dashboard_time_table.png",
     alt: "Time table image",
     text: "Time Table",
+    route: '/Student-Dashboard/timetable'
   },
   {
     image: "src/assets/Dashboard_result.png",
@@ -78,6 +79,7 @@ const menuItems = [
     image: "src/assets/Picture1.png",
     alt: "medical image",
     text: "Medical Records",
+    route: '/Student-Dashboard/medical'
   },
   {
     image: "src/assets/datesheet.png",
@@ -89,11 +91,13 @@ const menuItems = [
     image: "src/assets/lifestyle 1.png",
     alt: "lifestyle image",
     text: "Activities",
+    route: "/Student-Dashboard/activities"
   },
   {
     image: "src/assets/live 1.png",
     alt: "live image",
     text: "Broadcast channels",
+    route: "/Student-Dashboard/broadcast"
   },
   {
     image: "src/assets/change_password.png",

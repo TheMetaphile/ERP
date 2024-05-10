@@ -1,39 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export default function SelectSubject({ onSelect }) {
-    const [selectedSubject, setSelectedSubject] = useState(null);
-
-    const handleSubjectSelect = (subject) => {
-        onSelect(subject);
-        setSelectedSubject(subject);
-    };
-
-    const styles = {
-        paddingLeft: '0.75rem',
-        paddingRight: '0.75rem',
-        textAlign: 'center',
-        borderRadius: '0.5rem',
-        cursor: 'pointer',
+    const handleSubjectSelect = (event) => {
+        const selectedSubject = event.target.value;
+        onSelect(selectedSubject);
     };
 
     return (
-        <div className="rounded-lg shadow-md">
-            <h1 className="shadow-lg w-fit mt-4">Select Subject</h1>
-            <div className="grid grid-cols-2 gap-4 mt-2 py-2">
-                {['Hindi', 'Math', 'English', 'Computer', 'Science', 'Chemistry', 'Physics', 'Sanskrit'].map(
-                    (subject, index) => (
-                        <div
-                            key={index}
-                            style={styles}
-                            className={`hover:bg-purple-400 ${
-                                selectedSubject === subject ? 'bg-purple-400' : ''
-                            }`}
-                            onClick={() => handleSubjectSelect(subject)}
-                        >
-                            {subject}
-                        </div>
-                    )
-                )}
+        <div className="rounded-lg shadow-md w-30">
+            <h1 className="shadow-lg w-fit mt-4">Select Subject</h1>     
+            <div className="mt-3 text-sm font-medium">
+                <select
+                    className="mt-2 shadow-md border border-grey-400 rounded-lg p-2 w-full"
+                    onChange={handleSubjectSelect}
+                >
+                    {['Hindi', 'Math', 'English', 'Computer', 'Science', 'Chemistry', 'Physics', 'Sanskrit'].map(
+                        (subject, index) => (
+                            <option key={index} value={subject}>
+                                {subject}
+                            </option>
+                        )
+                    )}
+                </select>
             </div>
         </div>
     );

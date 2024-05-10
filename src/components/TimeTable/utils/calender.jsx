@@ -12,7 +12,7 @@ const HorizontalCalendar = () => {
   const dateRange = eachDayOfInterval({ start: startDate, end: endDate });
   
   return (
-    <div className="flex w-full overflow-x-auto">
+    <div className="flex w-full overflow-x-auto mt-3 ">
       {dateRange.map((date, index) => (
         <div
           key={index}
