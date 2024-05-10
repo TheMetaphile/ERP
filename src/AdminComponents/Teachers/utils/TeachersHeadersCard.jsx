@@ -1,16 +1,6 @@
 
-export default function HeadersCard() {
-    const data = [
-        {
-            heading: "Rs.18000", description: "Monthly Salary"
-        },
-        {
-            heading: "7.9/10", description: "Average Rating"
-        },
-        {
-            heading: "4 Years", description: "Experience"
-        }
-    ];
+export default function HeadersCard(props) {
+    const {data} = props;
     return (
         <div className="flex flex-wrap justify-center w-full">
         <div className="flex w-full justify-center mobile:max-tablet:flex-col mobile:max-tablet:gap-4">

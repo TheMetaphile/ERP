@@ -5,10 +5,21 @@ import ClassesActivityChart from "./ClassesActivity.jsx";
 
 
 export default function TeacherProfile() {
+   const data = [
+      {
+          heading: "Rs.18000", description: "Monthly Salary"
+      },
+      {
+          heading: "7.9/10", description: "Average Rating"
+      },
+      {
+          heading: "4 Years", description: "Experience"
+      }
+  ];
    return (
       <div className="flex flex-col  px-3 my-3">
 
-         <TeacherHeadersCard />
+         <TeacherHeadersCard data={data}/>
 
          <h1 className="text-2xl font-semibold mt-4 mb-2">Basic Details</h1>
          <ProfileDetails />
