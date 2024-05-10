@@ -36,6 +36,7 @@ import AllTeachers from "./AdminComponents/Teachers/AllTeachers.jsx";
 import TeacherProfile from "./AdminComponents/Teachers/utils/TeacherProfile.jsx";
 import AddTeacher from "./AdminComponents/Teachers/AddTeacher.jsx";
 import TeacherAttendance from "./AdminComponents/Teachers/TeacherAttendance.jsx";
+import TeachersSalary from "./AdminComponents/Teachers/TeachersSalary.jsx";
 
 const router = createBrowserRouter([
   {
@@ -209,6 +210,12 @@ const router = createBrowserRouter([
         element: <TeacherAttendance />,
         children:[]
       },
+      {
+        path: "/Admin-Dashboard/TeachersSalary",
+        element: <TeachersSalary />,
+        children:[]
+      },
+
     ]
   }
  

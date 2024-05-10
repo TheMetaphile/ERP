@@ -52,7 +52,7 @@ const menuItems = [
       },
       {
         text: 'Teachers Sallery',
-        route: ''
+        route: '/Admin-Dashboard/TeachersSalary'
       },
       {
         text: 'Teachers Attendance',
