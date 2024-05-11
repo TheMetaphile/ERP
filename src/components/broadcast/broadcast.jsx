@@ -10,7 +10,7 @@ export default function broadcast() {
             <h1 className='text-2xl ml-3'>Multi Media</h1>
 
             <div className='w-full mt-3 px-3 '>
-                <h2 className='text-xl'>  Videos </h2>
+                <h2>  Videos </h2>
                 <div className=' flex'>
                     <VideoTile img={broad} description='All Chapter Revision' text='Live Stream Capture' />
                     <VideoTile img={broad} description='All Chapter Revision' text='Live Stream Capture' />

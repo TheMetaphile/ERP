@@ -45,6 +45,7 @@ import Mediacal from "./components/medical/Medical.jsx";
 import AddmissionForm from "./AdminComponents/Students/AllStudents/AddmissionForm.jsx";
 import StudentPromotion from "./AdminComponents/Students/AllStudents/StudentPromotion.jsx";
 import StudentAttendance from "./AdminComponents/Students/AllStudents/StudentAttendance.jsx";
+import HomeWork from "./components/homeWork/HomeWork.jsx"
 
 const router = createBrowserRouter([
   {
@@ -199,6 +200,10 @@ const router = createBrowserRouter([
       {
         path: "/Student-Dashboard/medical",
         element: <Mediacal/>,
+      },
+      {
+        path: "/Student-Dashboard/homework",
+        element: <HomeWork />,
       },
     ],
   },

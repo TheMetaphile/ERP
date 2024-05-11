@@ -21,6 +21,7 @@ const menuItems = [
     image: "src/assets/freelance 1.png",
     alt: "freelance image",
     text: "Home Work",
+    route: '/Student-Dashboard/homework'
   },
   {
     image: "src/assets/Dashboard_events.png",
