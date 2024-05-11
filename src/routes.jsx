@@ -49,6 +49,10 @@ import HomeWork from "./components/homeWork/HomeWork.jsx"
 import SubjectHomeWork from "./components/homeWork/SubjectHomeWork.jsx"
 import TodayHomeWork from "./components/homeWork/TodayHomeWork.jsx";
 import Route from './components/homeWork/route.jsx';
+import StudentResult from "./AdminComponents/Students/AllStudents/StudentResult.jsx";
+import AllParents from "./AdminComponents/Parents/AllParents.jsx";
+import AllBooks from "./AdminComponents/Library/AllBooks.jsx";
+import AddNewBook from "./AdminComponents/Library/AddNewBook.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -263,6 +267,12 @@ const router = createBrowserRouter([
         children:[]
       },
       {
+        path: "/Admin-Dashboard/StudentResult",
+        element: <StudentResult/>,
+        children:[]
+      },
+
+      {
         path: "/Admin-Dashboard/Teachers",
         element: <AllTeachers />,
         children:[]
@@ -287,7 +297,21 @@ const router = createBrowserRouter([
         element: <TeachersSalary />,
         children:[]
       },
-
+      {
+        path: "/Admin-Dashboard/Parents/AllParents",
+        element: <AllParents />,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Library/AllBooks",
+        element: <AllBooks />,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Library/AddNewBooks",
+        element: <AddNewBook />,
+        children:[]
+      },
     ]
   }
  

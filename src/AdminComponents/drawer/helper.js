@@ -29,7 +29,7 @@ const menuItems = [
       },
       {
         text: 'Students Result',
-        route: ''
+        route: '/Admin-Dashboard/StudentResult'
       },
     ]
   },
@@ -62,11 +62,7 @@ const menuItems = [
     title: "Parents",
     children: [{
       text: 'All Parents',
-      route: ''
-    },
-    {
-      text: 'Add New Parents',
-      route: ''
+      route: '/Admin-Dashboard/Parents/AllParents'
     },
     ]
   },
@@ -103,11 +99,11 @@ const menuItems = [
     title: "Library",
     children: [{
       text: 'All Books',
-      route: ''
+      route: '/Admin-Dashboard/Library/AllBooks'
     },
     {
       text: 'Add New Books',
-      route: ''
+      route: '/Admin-Dashboard/Library/AddNewBooks'
     },
     ]
   },
