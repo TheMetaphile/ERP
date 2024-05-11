@@ -46,7 +46,8 @@ import AddmissionForm from "./AdminComponents/Students/AllStudents/AddmissionFor
 import StudentPromotion from "./AdminComponents/Students/AllStudents/StudentPromotion.jsx";
 import StudentAttendance from "./AdminComponents/Students/AllStudents/StudentAttendance.jsx";
 import HomeWork from "./components/homeWork/HomeWork.jsx"
-
+import SubjectHomeWork from "./components/homeWork/SubjectHomeWork.jsx"
+import TodayHomeWork from "./components/homeWork/TodayHomeWork.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -128,6 +129,21 @@ const router = createBrowserRouter([
           {
             path: ':name',
             element: <SubjectClassWork />
+          }
+        ]
+      },
+      {
+        path: "/Student-Dashboard/homework",
+        element: <HomeWork />,
+        children: [
+          {
+            path: '',
+            element: <TodayHomeWork />
+          },
+          
+          {
+            path: ':name',
+            element: <SubjectHomeWork />
           }
         ]
       },
