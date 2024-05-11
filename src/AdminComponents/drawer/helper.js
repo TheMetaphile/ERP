@@ -16,10 +16,6 @@ const menuItems = [
         route: '/Admin-Dashboard/Students'
       },
       {
-        text: 'Add New Students',
-        route: ''
-      },
-      {
         text: 'Admission Form',
         route: '/Admin-Dashboard/StudentsAddmissionForm'
       },

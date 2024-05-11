@@ -11,15 +11,23 @@ export default function AddmissionForm() {
             email: '',
             address: '',
             religion: '',
-            subject: '',
-            idNumber: '',
             dateOfBirth: '',
             phone: '',
-            experience: '',
-            education: '',
+            photo:'',
             fatherName: '',
             motherName: '',
             guardianName: '',
+            BloodGroup:'',
+            class:'',
+            section:'',
+            addmissionId:'',
+            fatherOccupation:'',
+            fatherPhoneNumber:'',
+            motherOccupation:'',
+            motherPhoneNumber:'',
+            guardianName:'',
+            guardianOccupation:'',
+            guardianPhoneNumber:'',
         }
     );
     const handleChange = (e) => {
@@ -37,14 +45,23 @@ export default function AddmissionForm() {
             email: '',
             address: '',
             religion: '',
-            subject: '',
-            idNumber: '',
             dateOfBirth: '',
             phone: '',
-            experience: '',
-            education: '',
-            photo: null,
-            class: '',
+            photo:null,
+            fatherName: '',
+            motherName: '',
+            guardianName: '',
+            BloodGroup:'',
+            class:'',
+            section:'',
+            addmissionId:'',
+            fatherOccupation:'',
+            fatherPhoneNumber:'',
+            motherOccupation:'',
+            motherPhoneNumber:'',
+            guardianName:'',
+            guardianOccupation:'',
+            guardianPhoneNumber:'',
         });
     };
 
@@ -57,8 +74,8 @@ export default function AddmissionForm() {
         <div className="mx-16">
             <div className="mt-8"><h1 className="text-xl">Add New Student</h1></div>
             <form onSubmit={handleSubmit} className="flex flex-col w-full gap-8 mx-auto">
-                <div className="flex w-full gap-4">
-                <div className="flex flex-col mobile:max-tablet:gap-2 mt-8">
+                <div className="flex w-full gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
+                <div className="flex flex-col mt-8">
                     <div className="w-full rounded-md mobile:max-tablet:w-full">
                         <label className="block text-lg mb-2" htmlFor="firstName">
                             First Name
@@ -308,10 +325,10 @@ export default function AddmissionForm() {
                             Date Of Birth
                             <input
                                 className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                id="phone"
+                                id="dateOfBirth"
                                 type="text"
-                                name="phone"
-                                value={formData.phone}
+                                name="dateOfBirth"
+                                value={formData.dateOfBirth}
                                 onChange={handleChange}
                                 placeholder=""
                                 required
@@ -323,10 +340,10 @@ export default function AddmissionForm() {
                             Email
                             <input
                                 className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                id="phone"
+                                id="email"
                                 type="text"
-                                name="phone"
-                                value={formData.phone}
+                                name="email"
+                                value={formData.email}
                                 onChange={handleChange}
                                 placeholder=""
                                 required
@@ -339,7 +356,7 @@ export default function AddmissionForm() {
                             <select
                                 className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
                                 id="religion"
-                                name="gender"
+                                name="religion"
                                 value={formData.religion}
                                 onChange={handleChange}
                                 required
@@ -356,10 +373,10 @@ export default function AddmissionForm() {
                             Addmission Id
                             <input
                                 className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                id="fatherOccupation"
+                                id="admissionId"
                                 type="text"
-                                name="fatherOccupation"
-                                value={formData.fatherOccupation}
+                                name="admissionId"
+                                value={formData.addmissionId}
                                 onChange={handleChange}
                                 placeholder=""
                                 required
@@ -371,10 +388,10 @@ export default function AddmissionForm() {
                             Father Phone Number
                             <input
                                 className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                id="motherOccupation"
+                                id="fatherPhoneNumber"
                                 type="text"
-                                name="motherOccupation"
-                                value={formData.motherOccupation}
+                                name="fatherPhoneNumber"
+                                value={formData.fatherPhoneNumber}
                                 onChange={handleChange}
                                 placeholder=""
                                 required
@@ -386,10 +403,10 @@ export default function AddmissionForm() {
                             Mother Phone Number
                             <input
                                 className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                id="guardianOccupation"
+                                id="motherPhoneNumber"
                                 type="text"
-                                name="guardianOccupation"
-                                value={formData.guardianOccupation}
+                                name="motherPhoneNumber"
+                                value={formData.motherPhoneNumber}
                                 onChange={handleChange}
                                 placeholder=""
                                 required
@@ -401,10 +418,10 @@ export default function AddmissionForm() {
                             Guardian Phone Number
                             <input
                                 className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                id="guardianOccupation"
+                                id="guardianPhoneNumber"
                                 type="text"
-                                name="guardianOccupation"
-                                value={formData.guardianOccupation}
+                                name="guardianPhoneNumbe"
+                                value={formData.guardianPhoneNumber}
                                 onChange={handleChange}
                                 placeholder=""
                                 required
@@ -432,14 +449,14 @@ export default function AddmissionForm() {
                         <div className="w-1/2 rounded-md mt-8 mobile:max-tablet:w-full">
                         <div className="flex justify-center">
                             <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 mr-2 w-1/4"
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 mr-2 w-1/4 mobile:max-tablet:w-1/2"
                                 type="reset"
                                 onClick={handleReset}
                             >
                                 Reset
                             </button>
                             <button
-                                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2 w-1/4"
+                                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2 w-1/4 mobile:max-tablet:w-1/2"
                                 type="submit"
                             >
                                 Save

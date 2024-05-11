@@ -11,10 +11,10 @@ export default function AttendanceSearchBar({ handleNameChange, handleYearChange
                     value={name}
                     onChange={handleNameChange}
                     placeholder="Search Teacher"
-                    className="rounded-lg shadow-md mr-3 px-3 py-1 border-gray-200 text-lg mobile:max-tablet:w-1/2  placeholder-sm:text-sm"
+                    className="rounded-lg shadow-md mr-3 px-3 py-1 h-10 mt-4 border-gray-200 text-lg mobile:max-tablet:w-1/2  placeholder-sm:text-sm"
                 />
                 <div className="flex gap-4 mt-4">
-                    <label className="block text-lg mb-2">
+                    <label className="block text-lg mb-2 px-2">
                         Year
                         <select id="year" value={year} onChange={handleYearChange} className="rounded-lg mr-3 shadow-md px-3 py-1 border-2 border-gray-200 text-lg mobile:max-tablet:w-1/2 mobile:max-tablet:text-sm">
                             <option value="">Select Year</option>
