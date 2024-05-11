@@ -12,7 +12,7 @@ export default function SearchBar({rollNumber, handleClassChange,handleNameChang
                 name="rollNumber"
                 value={rollNumber}
                 onChange={handleRollNumberChange}
-                placeholder="Search by Roll Number"
+                placeholder="Search by ID"
                 className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg"
             />
             <input

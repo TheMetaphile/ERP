@@ -49,7 +49,6 @@ export default function AddmissionForm() {
             photo:null,
             fatherName: '',
             motherName: '',
-            guardianName: '',
             BloodGroup:'',
             class:'',
             section:'',

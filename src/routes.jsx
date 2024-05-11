@@ -53,6 +53,7 @@ import StudentResult from "./AdminComponents/Students/AllStudents/StudentResult.
 import AllParents from "./AdminComponents/Parents/AllParents.jsx";
 import AllBooks from "./AdminComponents/Library/AllBooks.jsx";
 import AddNewBook from "./AdminComponents/Library/AddNewBook.jsx";
+import ResultLayout from "./AdminComponents/Students/AllStudents/utils/ResultLayout.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -310,6 +311,11 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/Library/AddNewBooks",
         element: <AddNewBook />,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/StudentResult/Details",
+        element: <ResultLayout/>,
         children:[]
       },
     ]
