@@ -48,6 +48,7 @@ import StudentAttendance from "./AdminComponents/Students/AllStudents/StudentAtt
 import HomeWork from "./components/homeWork/HomeWork.jsx"
 import SubjectHomeWork from "./components/homeWork/SubjectHomeWork.jsx"
 import TodayHomeWork from "./components/homeWork/TodayHomeWork.jsx";
+import Route from './components/homeWork/route.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -134,7 +135,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/Student-Dashboard/homework",
-        element: <HomeWork />,
+        element: <Route />,
         children: [
           {
             path: '',

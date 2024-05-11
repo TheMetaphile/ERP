@@ -36,9 +36,9 @@ function HomeWork() {
           strokeColor='#FF0000'
         />
       </div>
-     <TodayHomeWork/>
-           
-        </div>
+      <TodayHomeWork />
+
+    </div>
   )
 }
 

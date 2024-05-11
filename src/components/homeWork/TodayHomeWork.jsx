@@ -1,7 +1,7 @@
 import HomeWorkGrid from "./utils/HomeWorkGrid";
 import HomeSubjectGrid from "./utils/HomeSubjectGrid";
 
-export default function TodayHomeWork(){
+export default function TodayHomeWork() {
     return (
         <div className="flex flex-col  h-screen  items-start mt-2 ml-2 mr-3 no-scrollbar">
             <h1 className="text-xl font-medium px-2">Today HomeWork</h1>
