@@ -21,15 +21,15 @@ const menuItems = [
       },
       {
         text: 'Admission Form',
-        route: ''
+        route: '/Admin-Dashboard/StudentsAddmissionForm'
       },
       {
         text: 'Students Promotion',
-        route: ''
+        route: '/Admin-Dashboard/StudentPromotion'
       },
       {
         text: 'Students Attendance',
-        route: ''
+        route: '/Admin-Dashboard/StudentAttendance'
       },
       {
         text: 'Students Result',

@@ -42,6 +42,9 @@ import Activities from "./components/activities/Activities.jsx";
 import RecentActivity from "./components/activities/utils/RecentActivity.jsx";
 import AllActivity from "./components/activities/utils/AllActivity.jsx";
 import Mediacal from "./components/medical/Medical.jsx";
+import AddmissionForm from "./AdminComponents/Students/AllStudents/AddmissionForm.jsx";
+import StudentPromotion from "./AdminComponents/Students/AllStudents/StudentPromotion.jsx";
+import StudentAttendance from "./AdminComponents/Students/AllStudents/StudentAttendance.jsx";
 
 const router = createBrowserRouter([
   {
@@ -220,6 +223,22 @@ const router = createBrowserRouter([
             element: <StudentDetailScreen />
           }
         ]
+      },
+      {
+        path: "/Admin-Dashboard/StudentsAddmissionForm",
+        element: <AddmissionForm/>,
+        children:[]
+      },
+
+      {
+        path: "/Admin-Dashboard/StudentAttendance",
+        element: <StudentAttendance/>,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/StudentPromotion",
+        element: <StudentPromotion/>,
+        children:[]
       },
       {
         path: "/Admin-Dashboard/Teachers",

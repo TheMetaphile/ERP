@@ -23,7 +23,7 @@ export default function TeacherCard() {
                         <div className="flex w-72">
                         <img src={userimg} alt="" className="h-16 w-16 mr-3" />
                         
-                        <div className="flex flex-col items-center">
+                        <div className="mt-2 flex flex-col items-center">
                             <h1 className="text-xl font-semibold">{user.name}</h1>
                             <p className="text-gray-400">{user.role}</p>
                         </div>
