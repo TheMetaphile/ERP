@@ -44,7 +44,7 @@ export default function ParentsDetails() {
     <div className="flex flex-col gap-4">
       <div className="flex justify-center gap-20 mt-8 mobile:max-tablet:gap-0 mobile:max-tablet:flex-col">
         {parentDetails.map((parent, index) => (
-          <div className="rounded-md shadow-lg p-4 w-1/3  mobile:max-tablet:w-full" key={index}>
+          <div className="rounded-md shadow-lg p-4 w-1/3  mobile:max-tablet:w-full bg-secondary" key={index}>
             <div className="flex justify-between">
               <h1 className="text-2xl">{parent.title} Details</h1>
               <button className="text-xl">Edit</button>
@@ -86,9 +86,9 @@ export default function ParentsDetails() {
           </div>
         ))}
       </div>
-      <div className="flex mt-4">
+      <div className="flex mt-4 flex-col">
         {guardianDetail.map((guardian, index) => (
-          <div className="flex flex-col rounded-md shadow-lg p-4 w-3/4 mx-auto  mobile:max-tablet:w-full" key={index}>
+          <div className="flex flex-col rounded-md shadow-lg p-4 w-3/4 mx-auto  mobile:max-tablet:w-full bg-secondary" key={index}>
             <div className="flex justify-between">
               <h1 className="text-2xl">{guardian.title} Details</h1>
               <button className="text-xl">Edit</button>
@@ -123,14 +123,14 @@ export default function ParentsDetails() {
             </div>
           </div>
         ))}
-      </div>
-      <div className="flex w-1/3 rounded-lg mb-8 mx-auto ">
+        <div className="flex w-3/4 rounded-lg mb-8 justify-end mt-4 mx-auto">
       <button
         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2 mobile:max-tablet:w-1/2"
         type="submit"
       >
         Save
       </button>
+      </div>
       </div>
     </div>
   );
