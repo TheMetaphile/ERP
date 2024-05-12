@@ -32,19 +32,19 @@ export default function ParentsList(){
             {details.map((detail, index) => (
                 <tr key={index}>
                     <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">
-                        <Link to={``} className="block">{detail.child}</Link>
+                        <Link to={`/Admin-Dashboard/Parents/AllParents/Details`} className="block">{detail.child}</Link>
                     </td>
                     <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">
-                        <Link to={``} className="block">{detail.father}</Link>
+                        <Link to={`/Admin-Dashboard/Parents/AllParents/Details`} className="block">{detail.father}</Link>
                     </td>
                     <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">
-                        <Link to={``} className="block">{detail.mother}</Link>
+                        <Link to={`/Admin-Dashboard/Parents/AllParents/Details`} className="block">{detail.mother}</Link>
                     </td>
                     <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">
-                        <Link to={``} className="block">{detail.contact}</Link>
+                        <Link to={`/Admin-Dashboard/Parents/AllParents/Details`} className="block">{detail.contact}</Link>
                     </td>
                     <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">
-                        <Link to={``} className="block">{detail.email}</Link>
+                        <Link to={`/Admin-Dashboard/Parents/AllParents/Details`} className="block">{detail.email}</Link>
                     </td>
                 </tr>
             ))}

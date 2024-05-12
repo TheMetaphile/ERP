@@ -54,6 +54,7 @@ import AllParents from "./AdminComponents/Parents/AllParents.jsx";
 import AllBooks from "./AdminComponents/Library/AllBooks.jsx";
 import AddNewBook from "./AdminComponents/Library/AddNewBook.jsx";
 import ResultLayout from "./AdminComponents/Students/AllStudents/utils/ResultLayout.jsx";
+import ParentsDetails from "./AdminComponents/Parents/utils/ParentsDetails.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -301,6 +302,11 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/Parents/AllParents",
         element: <AllParents />,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Parents/AllParents/Details",
+        element: <ParentsDetails />,
         children:[]
       },
       {
