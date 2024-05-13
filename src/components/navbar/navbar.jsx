@@ -26,7 +26,7 @@ export default function Navbar({onDrawerToggle, onEndDrawerToggle}) {
             <Link to="/Student-Dashboard/events" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Events</Link>
           </li>
           <li>
-            <Link to="/Student-Dashboard/timetable" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Time Table</Link>
+            <Link to="/Student-Dashboard/exam" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Examination</Link>
           </li>
           <li>
             <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-tablet:w-9 mobile:max-tablet:h-9 rounded-lg" />
