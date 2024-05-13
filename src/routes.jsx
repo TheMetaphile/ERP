@@ -58,6 +58,7 @@ import ParentsDetails from "./AdminComponents/Parents/utils/ParentsDetails.jsx";
 import Panel from "./components/quiz/Panel.jsx";
 import QuizRoute from "./components/quiz/QuizRoute.jsx"
 import Examination from "./components/exam/Examination.jsx"
+import ExamRoute from "./components/exam/ExamRoute.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -124,7 +125,17 @@ const router = createBrowserRouter([
       },
       {
         path: "/Student-Dashboard/exam",
-        element: <Examination />,
+        element: <ExamRoute />,
+        children: [
+          {
+            path: '',
+            element: <Examination />
+          },
+          {
+            path: ':subject',
+            element: <Quiz />
+          }
+        ]
       },
       {
         path: "/Student-Dashboard/result",
