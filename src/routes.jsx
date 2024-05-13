@@ -60,6 +60,10 @@ import QuizRoute from "./components/quiz/QuizRoute.jsx"
 import Examination from "./components/exam/Examination.jsx"
 import ExamRoute from "./components/exam/ExamRoute.jsx";
 import Gallery from "./components/gallery/Gallery.jsx"
+import Transport from "./AdminComponents/Transport/Transport.jsx";
+import Notice from "./AdminComponents/Notice/Notice.jsx";
+import Leaves from "./AdminComponents/Leave/Leaves.jsx";
+import Class from "./AdminComponents/Classes/Class.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -356,6 +360,26 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/StudentResult/Details",
         element: <ResultLayout/>,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Transport",
+        element: <Transport/>,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Notice",
+        element: <Notice/>,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Leave",
+        element: <Leaves/>,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Classes",
+        element: <Class/>,
         children:[]
       },
     ]

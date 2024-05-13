@@ -67,33 +67,6 @@ const menuItems = [
     ]
   },
   {
-    image: "src/assets/file.png",
-    alt: "img",
-    title: "File Manager",
-    children: [{
-      text: 'Calendar',
-      route: ''
-    },
-    {
-      text: 'Activities',
-      route: ''
-    },
-    {
-      text: 'Chat',
-      route: ''
-    },
-    {
-      text: 'Gallery',
-      route: ''
-    },
-    {
-      text: 'Documents',
-      route: ''
-    },
-    ]
-  },
-
-  {
     image: "src/assets/library.png",
     alt: "img",
     title: "Library",
@@ -137,15 +110,7 @@ const menuItems = [
     title: "class",
     children: [{
       text: 'All Classes',
-      route: ''
-    },
-    {
-      text: 'Add New Class',
-      route: ''
-    },
-    {
-      text: 'Class Routine',
-      route: ''
+      route: '/Admin-Dashboard/Classes'
     },
     ]
   },
@@ -176,6 +141,7 @@ const menuItems = [
     image: "src/assets/transport.png",
     alt: "img",
     title: "Transport",
+    route:"/Admin-Dashboard/Transport",
     children: []
   },
 
@@ -183,6 +149,7 @@ const menuItems = [
     image: "src/assets/notice.png",
     alt: "img",
     title: "Notice",
+    route:"/Admin-Dashboard/Notice",
     children: []
   },
 
@@ -197,6 +164,7 @@ const menuItems = [
     image: "src/assets/leave_icon.png",
     alt: "img",
     title: "Leave",
+    route:"/Admin-Dashboard/Leave",
     children: []
   },
 ];
