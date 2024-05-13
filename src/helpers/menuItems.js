@@ -57,6 +57,7 @@ const menuItems = [
     image: "src/assets/Dashboard_gallery.png",
     alt: "School gallery image",
     text: "School Gallery",
+    route: '/Student-Dashboard/gallery'
   },
   {
     image: "src/assets/Dashboard_leave.png",

@@ -18,7 +18,7 @@ export default function Examination() {
     setInternalAllTiles(!internalAllTiles);
   };
   return (
-    <div className=" flex flex-col w-full overflow-y-auto items-start px-2 mb-1 pb-4 no-scrollbar rounded-lg shadow-md">
+    <div className=" flex flex-col w-full overflow-y-auto items-start px-2 mb-1 pb-4 no-scrollbar">
       <h1 className="text-2xl font-medium px-2">Mock Tests</h1>
       <div className=' w-full'>
       <MockGrid showAll={mockAllTiles} />

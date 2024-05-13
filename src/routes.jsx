@@ -59,6 +59,7 @@ import Panel from "./components/quiz/Panel.jsx";
 import QuizRoute from "./components/quiz/QuizRoute.jsx"
 import Examination from "./components/exam/Examination.jsx"
 import ExamRoute from "./components/exam/ExamRoute.jsx";
+import Gallery from "./components/gallery/Gallery.jsx"
 const router = createBrowserRouter([
   {
     path: "/",
@@ -226,6 +227,10 @@ const router = createBrowserRouter([
       {
         path: "/Student-Dashboard/leave",
         element: <Leave />,
+      },
+      {
+        path: "/Student-Dashboard/gallery",
+        element: <Gallery />,
       },
       {
         path: "/Student-Dashboard/broadcast",

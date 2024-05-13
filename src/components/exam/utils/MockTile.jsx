@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function MockTile(props) {
     return (
-        <div className=" p-3 tablet:mr-2 mobile:max-tablet:mb-3 rounded-lg shadow-md mt-2">
+        <div className=" p-3 tablet:mr-2 mobile:max-tablet:mb-3  mt-2">
             <h1 className='text-xs text-gray-400 font-medium'>{props.completed} completed</h1>
             <div className='mt-2'>
                 <LinearProgressBar />
