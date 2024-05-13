@@ -55,6 +55,8 @@ import AllBooks from "./AdminComponents/Library/AllBooks.jsx";
 import AddNewBook from "./AdminComponents/Library/AddNewBook.jsx";
 import ResultLayout from "./AdminComponents/Students/AllStudents/utils/ResultLayout.jsx";
 import ParentsDetails from "./AdminComponents/Parents/utils/ParentsDetails.jsx";
+import Panel from "./components/quiz/Panel.jsx";
+import QuizRoute from "./components/quiz/QuizRoute.jsx"
 const router = createBrowserRouter([
   {
     path: "/",
@@ -105,9 +107,21 @@ const router = createBrowserRouter([
         element: <Receipt/>,
       },
       {
-        path: "/Student-Dashboard/quiz/:subject",
-        element: <Quiz/>,
+        path: "/Student-Dashboard/quiz",
+        element: <QuizRoute />,
+        children: [
+          {
+            path: '',
+            element: <Panel />
+          },
+          
+          {
+            path: ':subject',
+            element: <Quiz />
+          }
+        ]
       },
+     
       {
         path: "/Student-Dashboard/result",
         element: <Result />,

@@ -6,6 +6,7 @@ function HomeWork() {
   return (
     <div className=" flex flex-col px-3 h-screen overflow-y-auto items-start mt-2 py-3 mb-3 no-scrollbar">
       <h1 className="text-xl font-medium">Your HomeWork</h1>
+      <h1 className="text-lg font-medium mt-4 px-2 ml-1">Pending HomeWork</h1>
       <div className=" flex flex-col tablet:flex-row items-center gap-3 w-full py-2 px-2">
         <ProgressCard
           title={`English`}
