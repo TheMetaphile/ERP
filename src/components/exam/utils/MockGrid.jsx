@@ -11,7 +11,7 @@ export default function MockGrid({ showAll }){
         { completed: "0%", subject: 'Social Science' }
       ];
     return (
-        <div className=" grid grid-cols-4 mobile:max-laptop:grid-cols-2 gap-2 p-3 w-full">
+        <div className="  grid grid-cols-4 mobile:max-laptop:grid-cols-2 gap-2 p-3 w-full">
         {mock.slice(0, showAll ? mock.length : 4).map((test, index) => (
           <MockTile key={index} completed={test.completed} subject={test.subject} />
         ))}
