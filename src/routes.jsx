@@ -47,7 +47,7 @@ import StudentPromotion from "./AdminComponents/Students/AllStudents/StudentProm
 import StudentAttendance from "./AdminComponents/Students/AllStudents/StudentAttendance.jsx";
 import HomeWork from "./components/homeWork/HomeWork.jsx"
 import SubjectHomeWork from "./components/homeWork/SubjectHomeWork.jsx"
-import TodayHomeWork from "./components/homeWork/TodayHomeWork.jsx";
+
 import Route from './components/homeWork/route.jsx';
 import StudentResult from "./AdminComponents/Students/AllStudents/StudentResult.jsx";
 import AllParents from "./AdminComponents/Parents/AllParents.jsx";
@@ -145,7 +145,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: '',
-            element: <TodayHomeWork />
+            element: <HomeWork />
           },
           
           {
