@@ -21,21 +21,21 @@ export default function PanelTile(props) {
                 </div>
                 <div className=' flex mt-2 mb-2 flex-col laptop:flex-row'>
                     <div className='flex  flex-1'>
-                        <img src={check} alt="" />
+                        <img src={check} alt="" className='w-10 h-10'/>
                         <span className='px-2'>
                             <h1 className='font-normal'>{props.correct}</h1>
                             <h1 className='text-gray-400 text-xs'>Correct Answers</h1>
                         </span>
                     </div>
                     <div className='flex flex-1'>
-                        <img src={cross} alt="" />
+                        <img src={cross} alt="" className='w-10 h-10'/>
                         <span  className='px-2'>
                             <h1 className='font-normal'>{props.wrong}</h1>
                             <h1 className='text-gray-400 text-xs'>Wrong Answers</h1>
                         </span>
                     </div>
                     <div className='flex  flex-1'>
-                        <img src={excla} alt="" />
+                        <img src={excla} alt="" className='w-10 h-10'/>
                         <span className='px-2'>
                             <h1 className='font-normal'>{props.skipped}</h1>
                             <h1 className='text-xs text-gray-400'>Question Skipped</h1>

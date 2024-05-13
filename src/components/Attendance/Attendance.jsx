@@ -36,7 +36,7 @@ export default function Attendance() {
         <PresentAttendanceTile Present={230} image={Absent} text="Absent" />
         <PresentAttendanceTile Present={230} image={Leave} text="Leave" />
       </div>
-      <div className="flex w-full h-80 tablet:justify-evenly mobile:max-tablet:flex-col items-center mb-4">
+      <div className=" flex w-full h-80 tablet:justify-evenly mobile:max-tablet:flex-col items-center mb-4 mt-5">
         <div className="tablet:w-2/3 tablet:pr-6 mobile:max-tablet:w-full mobile:max-tablet:mb-5"> 
           <Calendar />
         </div>
