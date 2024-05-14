@@ -2,7 +2,7 @@ import React from "react";
 
 export default function AttendanceSearchBar({ handleNameChange, handleYearChange, handleMonthChange, name, year, month }) {
     return (
-        <div className="flex w-full justify-between items-center self-center h-fit rounded-xl shadow-md border-2 px-2 py-2 mb-3 mobile:max-tablet:w-full">
+        <div className="flex w-full justify-between items-center self-center h-fit rounded-xl shadow-md border px-2 py mb-3 mobile:max-tablet:w-full">
             <div className="flex">
                 <input
                     type="text"
@@ -14,9 +14,11 @@ export default function AttendanceSearchBar({ handleNameChange, handleYearChange
                     className="rounded-lg shadow-md mr-3 px-3 py-1 h-10 mt-4 border-gray-200 text-lg mobile:max-tablet:w-1/2  placeholder-sm:text-sm"
                 />
                 <div className="flex gap-4 mt-4">
-                    <label className="block text-lg mb-2 px-2">
+                    <label className="block text-lg mb-2">
                         Year
-                        <select id="year" value={year} onChange={handleYearChange} className="rounded-lg mr-3 shadow-md px-3 py-1 border-2 border-gray-200 text-lg mobile:max-tablet:w-1/2 mobile:max-tablet:text-sm">
+                        <select id="year" value={year} onChange={handleYearChange} className="rounded-lg mr-3 shadow-md px-3 py-1 border-2 border-gray-200 text-lg mobile:max-tablet:w-1/2 mobile:max-tablet:text-sm"
+                         style={{ marginLeft: '10px' }}
+                        >
                             <option value="">Select Year</option>
                             <option value="2024">2024</option>
                             <option value="2011">2011</option>
@@ -27,7 +29,9 @@ export default function AttendanceSearchBar({ handleNameChange, handleYearChange
                     </label>
                     <label className="block text-lg mb-2">
                         Month
-                        <select id="month" value={month} onChange={handleMonthChange} className="rounded-lg mr-3 shadow-md px-3 py-1 border-2 border-gray-200 text-lg mobile:max-tablet:w-1/2 mobile:max-tablet:text-sm">
+                        <select id="month" value={month} onChange={handleMonthChange} className="rounded-lg mr-3 shadow-md px-3 py-1 border-2 border-gray-200 text-lg mobile:max-tablet:w-1/2 mobile:max-tablet:text-sm"
+                        style={{ marginLeft: '10px' }}
+                        >
                             <option value="">Select Month</option>
                             <option value="1">January</option>
                             <option value="2">February</option>

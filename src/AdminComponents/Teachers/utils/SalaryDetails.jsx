@@ -1,17 +1,18 @@
 export default function SalaryDetails({ teachers }) {
     return (
-        <div className="overflow-x-auto max-w-screen-lg mx-auto">
+        <div className="rounded-xl shadow-lg mb-4">
+        <div className="overflow-x-auto w-full mt-4">
             <table className="min-w-full divide-y divide-gray-600">
                 <thead className="">
                     <tr>
-                        <th className="px-6 py-3 text-left text-xl font-normal border-r">Name</th>
-                        <th className="px-6 py-3 text-left text-xl font-normal border-r">ID</th>
-                        <th className="px-6 py-3 text-left text-xl font-normal border-r">Paid Hours</th>
-                        <th className="px-6 py-3 text-left text-xl font-normal border-r">Gross Pay</th>
-                        <th className="px-6 py-3 text-left text-xl font-normal border-r">Deduction</th>
-                        <th className="px-6 py-3 text-left text-xl font-normal border-r">Incentive</th>
-                        <th className="px-6 py-3 text-left text-xl font-normal border-r">Net Pay</th>
-                        <th className="px-6 py-3 text-left text-xl font-normal border-r">Status</th>
+                        <th className="px-6 py-3 text-left text-xl font-normal border-r bg-secondary">Name</th>
+                        <th className="px-6 py-3 text-left text-xl font-normal border-r bg-secondary">ID</th>
+                        <th className="px-6 py-3 text-left text-xl font-normal border-r bg-secondary">Paid Hours</th>
+                        <th className="px-6 py-3 text-left text-xl font-normal border-r bg-secondary">Gross Pay</th>
+                        <th className="px-6 py-3 text-left text-xl font-normal border-r bg-secondary">Deduction</th>
+                        <th className="px-6 py-3 text-left text-xl font-normal border-r bg-secondary">Incentive</th>
+                        <th className="px-6 py-3 text-left text-xl font-normal border-r bg-secondary">Net Pay</th>
+                        <th className="px-6 py-3 text-left text-xl font-normal border-r bg-secondary">Status</th>
                     </tr>
                 </thead>
                 <tbody className="bg-white">
@@ -29,6 +30,7 @@ export default function SalaryDetails({ teachers }) {
                     ))}
                 </tbody>
             </table>
+        </div>
         </div>
     );
 }

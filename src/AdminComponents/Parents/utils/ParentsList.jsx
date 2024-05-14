@@ -17,15 +17,16 @@ export default function ParentsList(){
         { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
     ];
     return(
-    <div className="overflow-x-auto w-full mt-8 mb-4">
+        <div className="rounded-xl shadow-lg mb-4">
+    <div className="overflow-x-auto w-full mt-8">
     <table className="min-w-full divide-y divide-gray-600">
         <thead>
             <tr>
-                <th className="px-6 py-3 text-center text-2xl font-normal border-r">Child</th>
-                <th className="px-6 py-3 text-center text-2xl font-normal border-r">Father</th>
-                <th className="px-6 py-3 text-center text-2xl font-normal border-r">Mother</th>
-                <th className="px-6 py-3 text-center text-2xl font-normal border-r">Contact No</th>
-                <th className="px-6 py-3 text-center text-2xl font-normal border-r">Email</th>
+                <th className="px-6 py-3 text-center text-2xl font-normal border-r bg-secondary">Child</th>
+                <th className="px-6 py-3 text-center text-2xl font-normal border-r bg-secondary">Father</th>
+                <th className="px-6 py-3 text-center text-2xl font-normal border-r bg-secondary">Mother</th>
+                <th className="px-6 py-3 text-center text-2xl font-normal border-r bg-secondary">Contact No</th>
+                <th className="px-6 py-3 text-center text-2xl font-normal border-r bg-secondary">Email</th>
             </tr>
         </thead>
         <tbody className="bg-white">
@@ -50,6 +51,7 @@ export default function ParentsList(){
             ))}
         </tbody>
     </table>
+</div>
 </div>
 
 

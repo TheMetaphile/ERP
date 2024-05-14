@@ -7,7 +7,7 @@ export default function HeadersCard(props) {
             {data.map((item, index) => (
                 <div key={index} className="bg-secondary shadow-md rounded-lg p-4 w-64 mx-auto flex flex-col items-center hover:bg-secondary">
                     <h1 className="text-xl font-semibold">{item.heading}</h1>
-                    <p className="text-gray-400 font-semibold">{item.description}</p>
+                    <p className="text-gray-700 font-semibold">{item.description}</p>
                 </div>
             ))}
         </div>
