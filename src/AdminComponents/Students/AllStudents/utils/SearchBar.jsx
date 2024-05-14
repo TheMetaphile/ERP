@@ -3,7 +3,8 @@ export default function SearchBar({rollNumber, handleClassChange,handleNameChang
     
 
     return (
-        <div className="flex w-full overflow-x-auto no-scrollbar justify-between items-center self-center h-fit rounded-xl shadow-md border-2 px-2 py-2 mb-3">
+        <div className="mx-2">
+        <div className="flex w-full overflow-x-auto no-scrollbar justify-between items-center self-center h-fit rounded-xl shadow-md border px-2 py-2 mb-3 mx-auto">
             
             <div className="flex">
             <input
@@ -44,5 +45,6 @@ export default function SearchBar({rollNumber, handleClassChange,handleNameChang
                 Search
             </button>
         </div>
+       </div> 
     )
 }

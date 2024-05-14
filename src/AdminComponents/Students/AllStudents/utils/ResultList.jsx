@@ -17,17 +17,18 @@ export default function ResultList(){
         { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", totalMarks: "1000", percentage:'90%' },
     ];
     return(
+        <div className="rounded-xl shadow-lg mb-4">
     <div className="overflow-x-auto w-full mt-8 mb-4">
     <table className="min-w-full divide-y divide-gray-600">
         <thead>
             <tr>
-                <th className="px-6 py-3 text-center text-xl font-normal border-r">ID</th>
-                <th className="px-6 py-3 text-center text-xl font-normal border-r">Name</th>
-                <th className="px-6 py-3 text-center text-xl font-normal border-r">Class</th>
-                <th className="px-6 py-3 text-center text-xl font-normal border-r">Section</th>
-                <th className="px-6 py-3 text-center text-xl font-normal border-r">Marks Obtain</th>
-                <th className="px-6 py-3 text-center text-xl font-normal border-r">Total Marks</th>
-                <th className="px-6 py-3 text-center text-xl font-normal border-r">Percentage %</th>
+                <th className="px-6 py-3 text-center text-xl font-normal border-r bg-secondary">ID</th>
+                <th className="px-6 py-3 text-center text-xl font-normal border-r bg-secondary">Name</th>
+                <th className="px-6 py-3 text-center text-xl font-normal border-r bg-secondary">Class</th>
+                <th className="px-6 py-3 text-center text-xl font-normal border-r bg-secondary">Section</th>
+                <th className="px-6 py-3 text-center text-xl font-normal border-r bg-secondary">Marks Obtain</th>
+                <th className="px-6 py-3 text-center text-xl font-normal border-r bg-secondary">Total Marks</th>
+                <th className="px-6 py-3 text-center text-xl font-normal border-r bg-secondary">Percentage %</th>
             </tr>
         </thead>
         <tbody className="bg-white">
@@ -58,6 +59,7 @@ export default function ResultList(){
             ))}
         </tbody>
     </table>
+</div>
 </div>
 
 
