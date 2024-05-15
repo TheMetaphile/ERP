@@ -10,7 +10,7 @@ export default function ClassList() {
             {classes.map((className, index) => (
                 <div key={index} className="border rounded-md flex flex-col w-1/4 px-2 py-2 items-center bg-secondary">
                     <div className="class-card">
-                        <h3 className="text-xl">{className}</h3>
+                        <h3 className="text-2xl">{className}</h3>
                         <ClassDetailsModal className={className} />
                     </div>
                 </div>

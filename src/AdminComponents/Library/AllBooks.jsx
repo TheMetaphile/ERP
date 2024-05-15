@@ -24,10 +24,12 @@ export default function AllBooks(){
         <div className="text-2xl mx-8 mt-4">
             <h1>All Books</h1>
         </div>
-         <div className="mt-4">
+         <div className="mt-4 mx-2">
             <SearchBar/>
          </div>
+         <div className="mx-2">
          <BookList books={bookList}/>
+         </div>
        </div>
     )
 }

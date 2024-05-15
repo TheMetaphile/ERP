@@ -11,7 +11,9 @@ export default function AllParents(){
            <div className="mt-2">
             <SearchBar/>
            </div>
+           <div className="mx-2">
            <ParentsList/>
+           </div>
         </div>
         </>
     )

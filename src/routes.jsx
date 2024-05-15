@@ -64,6 +64,8 @@ import Transport from "./AdminComponents/Transport/Transport.jsx";
 import Notice from "./AdminComponents/Notice/Notice.jsx";
 import Leaves from "./AdminComponents/Leave/Leaves.jsx";
 import Class from "./AdminComponents/Classes/Class.jsx";
+import Exam from "./AdminComponents/Exam/Exam.jsx";
+import Message from "./AdminComponents/Message/Message.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -380,6 +382,16 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/Classes",
         element: <Class/>,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Exam",
+        element: <Exam/>,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Message",
+        element: <Message/>,
         children:[]
       },
     ]

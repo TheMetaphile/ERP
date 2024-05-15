@@ -12,7 +12,7 @@ export default function StudentResult(){
            <div className="mt-2">
             <SearchBar/>
            </div>
-           <div>
+           <div className="mx-2">
             <ResultList/>
            </div>
            

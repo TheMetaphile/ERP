@@ -23,7 +23,9 @@ export default function StudentPromotion(){
            <div className="mt-2">
             <SearchBar/>
            </div>
+           <div className="mx-2">
            <PromotedStudentsDetails students={students}/>
+           </div>
         </div>
     )
 }

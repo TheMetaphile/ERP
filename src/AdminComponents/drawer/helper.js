@@ -134,6 +134,7 @@ const menuItems = [
     image: "src/assets/exam.png",
     alt: "img",
     title: "Exam",
+    route:"/Admin-Dashboard/Exam",
     children: []
   },
 
@@ -157,6 +158,7 @@ const menuItems = [
     image: "src/assets/message.png",
     alt: "img",
     title: "Message",
+    route:"/Admin-Dashboard/Message",
     children: []
   },
 

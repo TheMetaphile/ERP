@@ -41,7 +41,7 @@ export default function ParentsDetails() {
   ]
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       <div className="flex justify-center gap-20 mt-8 mobile:max-tablet:gap-0 mobile:max-tablet:flex-col">
         {parentDetails.map((parent, index) => (
           <div className="rounded-md shadow-lg p-4 w-1/2 mx-2 mobile:max-tablet:w-full bg-secondary" key={index}>

@@ -34,7 +34,7 @@ export default function TeachersSalary() {
             <div className="mt-8 mobile:max-tablet:mt-0">
                 <HeadersCard data={Cardsdata} />
             </div>
-            <div className="mt-12">
+            <div className="mt-12 mx-1">
                 <SalaryDetails teachers={teachersList} />
             </div>
         </div>

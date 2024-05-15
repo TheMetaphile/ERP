@@ -18,7 +18,7 @@ export default function ResultList(){
     ];
     return(
         <div className="rounded-xl shadow-lg mb-4">
-    <div className="overflow-x-auto w-full mt-8 mb-4">
+    <div className="overflow-x-auto w-full mt-8 mb-4 rounded-lg">
     <table className="min-w-full divide-y divide-gray-600">
         <thead>
             <tr>

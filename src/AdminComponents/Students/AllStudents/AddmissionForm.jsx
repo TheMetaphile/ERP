@@ -69,8 +69,8 @@ export default function AddmissionForm() {
     }
 
     return (
-        <div className="rounded-lg shadow-lg mx-4">
-            <div className="mt-8"><h1 className="text-2xl font-semibold">Add New Student</h1></div>
+        <div className="rounded-lg shadow-lg mx-4 mb-4">
+            <div className="mt-8"><h1 className="text-2xl font-semibold mx-2">Add New Student</h1></div>
             <form onSubmit={handleSubmit} className="flex flex-col w-full gap-8 px-2 mb-2">
                 <div className="flex w-full gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
                 <div className="flex flex-col mt-8">
