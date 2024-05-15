@@ -13,7 +13,7 @@ export default function TransportDetails(){
         { routeName: 'Sector 54', vehicleNumber: "UP15090909", driverName: "Arun Kumar", driverLicense: "000347278", contact: "9989898989"},
     ];
     return(
-        <div className="overflow-x-auto w-full mt-8 rounded-lg shadow-lg mb-4">
+        <div className="overflow-x-auto w-full mt-8 rounded-lg shadow-lg mb-4 mobile:max-tablet:mt-2">
             <table className="min-w-full divide-y divide-gray-600 rounded-md">
                 <thead className="">
                     <tr>
