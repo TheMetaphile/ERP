@@ -123,7 +123,7 @@ export default function StudentLeaves() {
             <p>Duration: {selectedLeave.duration}</p>
             <p>Class: {selectedLeave.class}</p>
             <p>Reason for Leave: Illness due to lack of vitamin E in the body</p>
-            <div className="mt-4">
+            <div className="mt-4 flex justify-center">
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded-md mr-2"
                 onClick={handleClosePopup}

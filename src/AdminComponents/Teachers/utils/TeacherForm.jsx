@@ -267,7 +267,7 @@ export default function TeacherForm() {
                         </label>
                         </div>
                         <div className="w-1/2 rounded-md mt-8 mobile:max-tablet:w-full">
-                        <div className="flex justify-end">
+                        <div className="flex justify-end tablet:mt-6">
                             <button
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 mr-2 w-1/2"
                                 type="reset"

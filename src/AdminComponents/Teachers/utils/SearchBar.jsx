@@ -3,7 +3,7 @@ export default function SearchBar({ handleNameChange, name, newest }) {
 
 
     return (
-        <div className="flex w-full justify-between items-center self-center h-fit rounded-xl shadow-md border-2 px-2 py-2 mb-3 mobile:max-tablet:w-full">
+        <div className="flex w-full justify-between items-center self-center h-fit rounded-xl shadow-md border-2 px-2 py-2 mb-3 mobile:max-tablet:w-full tablet:overflow-y-auto">
 
             <div className="flex">
                 <input

@@ -46,12 +46,12 @@ export default function StudentsList() {
         );
     });
     return (
-        <div className="overflow-y-auto w-full items-start mb-2 px-2  no-scrollbar">
+        <div className="overflow-y-auto w-full items-start mb-2 px-2 no-scrollbar">
             <h1 className="text-2xl font-medium  mb-2">All Students Data</h1>
-            <div className=" rounded-lg shadow-md no-scrollbar w-full overflow-x-auto">
+            <div className="no-scrollbar w-full overflow-x-auto">
             <SearchBar rollNumber={rollNumber} name={name} Class={Class} Section={Section} handleRollNumberChange={handleRollNumberChange} handleNameChange={handleNameChange} handleClassChange={handleClassChange} handleSectionChange={handleSectionChange} />
             </div>
-            <div className=" rounded-lg shadow-md border-2 border-black w-full overflow-x-auto no-scrollbar">
+            <div className=" rounded-lg shadow-md border-2 border-black w-full overflow-x-auto no-scrollable">
                 <Header headings={['ID', 'Name', 'Class', 'Section', 'Gender', 'Parent Name', 'Phone No.', 'Adress', 'Date of Birth', 'E-mail']} />
                 {filteredStudents.length === 0 ? (
                     Students.map((student,index) => (
