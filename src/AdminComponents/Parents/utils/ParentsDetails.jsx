@@ -44,7 +44,7 @@ export default function ParentsDetails() {
     <div className="flex flex-col gap-4">
       <div className="flex justify-center gap-20 mt-8 mobile:max-tablet:gap-0 mobile:max-tablet:flex-col">
         {parentDetails.map((parent, index) => (
-          <div className="rounded-md shadow-lg p-4 w-1/3  mobile:max-tablet:w-full bg-secondary" key={index}>
+          <div className="rounded-md shadow-lg p-4 w-1/2 mx-2 mobile:max-tablet:w-full bg-secondary" key={index}>
             <div className="flex justify-between">
               <h1 className="text-2xl">{parent.title} Details</h1>
               <button className="text-xl">Edit</button>
@@ -86,14 +86,14 @@ export default function ParentsDetails() {
           </div>
         ))}
       </div>
-      <div className="flex mt-4 flex-col">
+      <div className="flex mt-4 flex-col mx-2">
         {guardianDetail.map((guardian, index) => (
-          <div className="flex flex-col rounded-md shadow-lg p-4 w-3/4 mx-auto  mobile:max-tablet:w-full bg-secondary" key={index}>
+          <div className="flex flex-col rounded-md shadow-lg p-4 w-full mx-auto mobile:max-tablet:w-full bg-secondary" key={index}>
             <div className="flex justify-between">
               <h1 className="text-2xl">{guardian.title} Details</h1>
               <button className="text-xl">Edit</button>
             </div>
-            <div className="flex gap-40 mt-4  mobile:max-tablet:flex-col mobile:max-tablet:gap-0">
+            <div className="flex gap-20 mt-4  mobile:max-tablet:flex-col mobile:max-tablet:gap-0">
               <div className="flex items-center flex-col">
                 <img src={logo} alt="" className="h-28 w-28" />
                 <p className="ml-2 text-2xl">{guardian.name}</p>

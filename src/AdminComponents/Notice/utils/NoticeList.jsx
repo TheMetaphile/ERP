@@ -54,7 +54,7 @@ const AnnouncementList = () => {
    ];
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 mx-2">
       <div className="flex justify-between mb-4">
                 <div className="flex gap-8">
                     <h1 className="text-xl">All</h1>

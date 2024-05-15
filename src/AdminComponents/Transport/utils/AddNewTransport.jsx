@@ -22,8 +22,8 @@ export default function AddNewTransport(){
     }
     return(
         <>
-        <div className="flex flex-col mx-16">
-            <div className="mt-8 text-2xl">Add New Transport</div>
+        <div className="flex flex-col rounded-lg px-2 w-full shadow-lg">
+            <div className="mt-8 text-3xl">Add New Transport</div>
             <div>
             <form onSubmit={handleSubmit} className="flex flex-col w-full gap-8 mx-auto">
             <div className="flex w-full gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">

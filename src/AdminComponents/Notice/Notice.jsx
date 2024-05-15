@@ -4,7 +4,7 @@ import AnnouncementList from "./utils/NoticeList.jsx";
 export default function Notice(){
     return(
         
-            <div className="mt-2 w-3/4 flex flex-col mx-auto">
+            <div className="mt-2 w-full flex flex-col mx-auto rounded-lg shadow-lg mb-4">
                 <AnnouncementList/>
             </div>
    
