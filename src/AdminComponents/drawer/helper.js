@@ -121,12 +121,9 @@ const menuItems = [
     title: "Subject",
     children: [{
       text: 'All Subjects',
-      route: ''
+      route: '/Admin-Dashboard/Subjects'
     },
-    {
-      text: 'Add New Subject',
-      route: ''
-    },
+    
     ]
   },
 
