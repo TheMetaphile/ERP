@@ -1,16 +1,57 @@
-import { Link } from "react-router-dom";
 import logo from '../../../assets/school logo.png'
+import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
 import { useState } from "react";
 
 export default function RightCard() {
     const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const email = localStorage.getItem('email'); 
+
     const handleNewPasswordChange = (event) => {
         setNewPassword(event.target.value);
     };
-    const [confirmPassword, setConfirmPassword] = useState('');
+
     const handleConfirmPasswordChange = (event) => {
         setConfirmPassword(event.target.value);
     };
+    const handleConfirm = async () => {
+        if(newPassword!==confirmPassword){
+            setError('Passwords do not match');
+            setTimeout(() => {
+                setError('');
+            }, 2000);
+            return;
+        }
+        try {
+            console.log("mail password", email , newPassword)
+            const response = await axios.post(`https://loginapi-y0aa.onrender.com/password/forgot/Student`, {
+                email,
+                newPassword
+            });
+            const success = response.data;
+            if (success) {
+                console.log("Success")
+                navigate('/');
+            }
+            else {
+                setError('Failed to Reset');
+                setTimeout(() => {
+                    setError('');
+                }, 2000)
+            }
+
+        }
+        catch (error) {
+            console.error(error);
+            setError(error.response?.data?.error || 'An error ocured');
+            setTimeout(() => {
+                setError('');
+            }, 2000);
+        }
+    }
     return (
         <div className="flex flex-col flex-shrink tablet:py-10 mobile:max-tablet:py-5 mobile:max-tablet:px-5 mobile:max-tablet:my-10 bg-white rounded-3xl shadow-lg tablet:px-10 justify-center">
 
@@ -22,8 +63,8 @@ export default function RightCard() {
 
             <input
                 type="password"
-                id="email"
-                name="email"
+                id="newPassword"
+                name="newPassword"
                 value={newPassword}
                 onChange={handleNewPasswordChange}
                 placeholder="Enter new password"
@@ -33,17 +74,19 @@ export default function RightCard() {
 
             <input
                 type="password"
-                id="email"
-                name="email"
+                id="confirmPassword"
+                name="confirmPassword"
                 value={confirmPassword}
                 onChange={handleConfirmPasswordChange}
                 placeholder="Re-enter new password"
                 className="w- rounded-xl shadow-md px-3 py-2 border-2 border-gray-500 mt-3 text-lg "
             />
+            {error && <p className="text-red-500">{error}</p>}
+            <button className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8" onClick={handleConfirm}>
 
-            <Link to='/' className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8">
                 <h1 className="font-medium text-2xl text-white">Change</h1>
-            </Link>
+            </button>
         </div>
+
     )
 }

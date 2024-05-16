@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
 import logo from '../../../assets/school logo.png'
 import OTPInput from "react-otp-input";
 
@@ -7,6 +8,9 @@ export default function RightCard() {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
     const [role, setRole] = useState('');
+    const [otpToken, setOtpToken] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleRoleChange = (event) => {
         setRole(event.target.value);
@@ -14,6 +18,55 @@ export default function RightCard() {
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
     };
+    const sendOTP = async () => {
+        try {
+            const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/send`, {
+                email,
+            });
+            const { otpToken } = response.data;
+            console.log(otpToken);
+            setOtpToken(otpToken);
+            localStorage.setItem('otpToken', otpToken);
+        }
+        catch (error) {
+            console.error(error);
+            setError(error.response?.data?.error || 'An error ocured');
+            setTimeout(() => {
+                setError('');
+            }, 2000);
+        }
+
+    }
+
+    const verifyOTP = async () => {
+        try {
+            const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/verify`, {
+                email,
+                otp,
+                otpToken
+            });
+            const  success  = response.data;
+            localStorage.setItem('email', email);
+            if (success) {
+                navigate('/newPassword');
+            }
+            else {
+                setError('Invalid OTP');
+                setTimeout(() => {
+                    setError('');
+                }, 2000)
+            }
+        }
+        catch (error) {
+            console.error(error);
+            setError(error.response?.data?.error || 'An error ocured');
+            setTimeout(() => {
+                setError('');
+            }, 2000);
+        }
+
+    }
+
     return (
         <div className="flex flex-col flex-shrink tablet:py-10 mobile:max-tablet:py-5 mobile:max-tablet:px-5 mobile:max-tablet:my-10 bg-white rounded-3xl shadow-lg tablet:px-10 justify-center">
 
@@ -33,7 +86,7 @@ export default function RightCard() {
                     placeholder="Enter your email"
                     className="w-2/3 rounded-xl shadow-md px-3 py-2 border-2 border-gray-500  text-lg "
                 />
-                <button className="py-2 px-3 whitespace-nowrap rounded-xl shadow-md self-center bg-secondary">
+                <button className="py-2 px-3 whitespace-nowrap rounded-xl shadow-md self-center bg-secondary" onClick={sendOTP}>
                     Send OTP
                 </button>
             </div>
@@ -73,9 +126,11 @@ export default function RightCard() {
                 containerStyle={'mt-5'}
             />
 
-            <Link to='/newPassword' className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8">
+            {error && <p className="text-red-500">{error}</p>}
+            <button className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8" onClick={verifyOTP}>
+
                 <h1 className="font-medium text-2xl text-white">Submit</h1>
-            </Link>
+            </button>
         </div>
     )
 }
