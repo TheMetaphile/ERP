@@ -6,6 +6,11 @@ import OTPInput from "react-otp-input";
 export default function RightCard() {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
+    const [role, setRole] = useState('');
+
+    const handleRoleChange = (event) => {
+        setRole(event.target.value);
+    };
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
     };
@@ -31,6 +36,31 @@ export default function RightCard() {
                 <button className="py-2 px-3 whitespace-nowrap rounded-xl shadow-md self-center bg-secondary">
                     Send OTP
                 </button>
+            </div>
+            <div className="flex w-60 px-3 py-2  mt-2 text-lg justify-between">
+                <label className="text-lg font-medium text-center">
+                    <input
+                        type="radio"
+                        name="role"
+                        value="Admin-Dashboard"
+                        checked={role === "Admin-Dashboard"}
+                        onChange={handleRoleChange}
+                        className="mr-3 w-4 h-4"
+                    />
+                    Admin
+                </label>
+
+                <label className="text-lg font-medium text-center">
+                    <input
+                        type="radio"
+                        name="role"
+                        value="Student-Dashboard"
+                        checked={role === "Student-Dashboard"}
+                        onChange={handleRoleChange}
+                        className="mr-3 w-4 h-4"
+                    />
+                    Student
+                </label>
             </div>
             <h1 className="text-xl font-bold mt-5 ">Verify OTP</h1>
             <OTPInput
