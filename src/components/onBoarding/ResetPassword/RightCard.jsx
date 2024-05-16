@@ -20,7 +20,7 @@ export default function RightCard() {
     };
     const sendOTP = async () => {
         try {
-            const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/send`, {
+            const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/send/${role}`, {
                 email,
             });
             const { otpToken } = response.data;
@@ -95,8 +95,8 @@ export default function RightCard() {
                     <input
                         type="radio"
                         name="role"
-                        value="Admin-Dashboard"
-                        checked={role === "Admin-Dashboard"}
+                        value="teacher"
+                        checked={role === "teacher"}
                         onChange={handleRoleChange}
                         className="mr-3 w-4 h-4"
                     />
@@ -107,8 +107,8 @@ export default function RightCard() {
                     <input
                         type="radio"
                         name="role"
-                        value="Student-Dashboard"
-                        checked={role === "Student-Dashboard"}
+                        value="student"
+                        checked={role === "student"}
                         onChange={handleRoleChange}
                         className="mr-3 w-4 h-4"
                     />
