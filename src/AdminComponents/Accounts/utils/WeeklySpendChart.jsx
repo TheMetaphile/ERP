@@ -6,7 +6,7 @@ const data = {
   datasets: [
     {
       data: [20000, 25000, 30000, 28000, 27000, 18000, 22000],
-      backgroundColor: ['#964B00', '#0000FF', '#FF0000', '#964B00', '#0000FF', '#FF0000', '#964B00'],
+      backgroundColor: ['#d18b4a', '#6a8cff', '#ff5959','#d18b4a', '#6a8cff', '#ff5959'],
       barThickness: 40,
       borderRadius: 10,
     },

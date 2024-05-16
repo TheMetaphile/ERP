@@ -52,6 +52,7 @@ const AnnouncementList = () => {
         message: 'All The Teacher have to Come on Sunday Due to Some important Meeting.',
     },
    ];
+   const colors = ['bg-red-200', 'bg-blue-200', 'bg-green-200', 'bg-yellow-200', 'bg-purple-200'];
 
   return (
     <div className="mt-8 mx-2">
@@ -68,7 +69,7 @@ const AnnouncementList = () => {
         {announcements.map((announcement, index) => (
           <div
             key={index}
-            className="rounded-md  border p-4"
+            className={`rounded-md border p-4 ${colors[index % colors.length]}`}
           >
             <p className="text-lg font-semibold mb-2">{announcement.message}</p>
             <div className="flex justify-between text-gray-600">
