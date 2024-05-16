@@ -86,19 +86,15 @@ const menuItems = [
     alt: "img",
     title: "Account",
     children: [{
-      text: 'Fees Coolection',
+      text: 'Fees Collection',
       route: ''
     },
     {
       text: 'Expenses',
-      route: ''
+      route: '/Admin-Dashboard/Account/Expenses'
     },
     {
       text: 'Add Expenses',
-      route: ''
-    },
-    {
-      text: 'Budget',
       route: ''
     },
     ]

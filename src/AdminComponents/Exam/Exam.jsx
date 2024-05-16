@@ -8,7 +8,7 @@ export default function Exam(){
             <div className="mx-4">
             <NewExam/>
             </div>
-           <div className="mt-8 mx-2 rounded-lg shadow-lg">
+           <div className="mt-8 mx-2">
             <AllExam/>
            </div>
         </div>

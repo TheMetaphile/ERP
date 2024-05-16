@@ -429,12 +429,12 @@ export default function AddmissionForm() {
                     </div>
 
                 </div>
-                <div className="flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4 -mt-2">
+                <div className="flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4">
                         <div className="w-1/2 rounded-lg mobile:max-tablet:w-full">
                         <label className="block text-lg mb-2">
                            Add Google Drive Link for Photo
                             <input
-                                className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-1"
                                 id="photo"
                                 type="text"
                                 name="photo"
@@ -443,8 +443,8 @@ export default function AddmissionForm() {
                             />
                         </label>
                         </div>
-                        <div className="w-1/2 rounded-md mt-8 mobile:max-tablet:w-full">
-                        <div className="flex justify-center tablet:mt-6">
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
+                        <div className="flex justify-center tablet:mt-6 mt-1">
                             <button
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 mr-2 w-1/4 mobile:max-tablet:w-1/2 tablet:w-1/2"
                                 type="reset"
