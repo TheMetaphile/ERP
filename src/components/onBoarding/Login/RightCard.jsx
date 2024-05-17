@@ -8,6 +8,7 @@ export default function RightCard() {
     const [role, setRole] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleRoleChange = (event) => {
         setRole(event.target.value);
@@ -20,6 +21,7 @@ export default function RightCard() {
     };
 
     const handleSubmit = async () => {
+        setIsSubmitting(true);
         try {
             const endpoint = role === "Admin-Dashboard" ? "/login/teacher" : "/login/student";
             await axios.post(`https://loginapi-y0aa.onrender.com${endpoint}`, {
@@ -45,6 +47,9 @@ export default function RightCard() {
                 setError('');
             }, 2000);
         }
+        finally {
+            setIsSubmitting(false);
+        }
     }
     return (
         <div className="flex flex-col bg-white rounded-2xl shadow-lg tablet:w-fit tablet:px-10 mobile:w-full mobile:px-7 mobile:max-tablet:mt-10 justify-center">
@@ -64,6 +69,7 @@ export default function RightCard() {
                 onChange={handleEmailChange}
                 placeholder="Enter your email"
                 className=" rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg "
+                disabled={isSubmitting}
             />
 
             <h1 className="text-xl font-bold mt-3">Password</h1>
@@ -76,6 +82,7 @@ export default function RightCard() {
                 onChange={handlePasswordChange}
                 placeholder="Enter your password"
                 className=" rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg "
+                disabled={isSubmitting}
             />
             <Link to='/resetpassword' className="w-fit mt-2">
                 <h1 className=" text-lg text-blue-600">Forgot Password?</h1>
@@ -90,6 +97,7 @@ export default function RightCard() {
                         checked={role === "Admin-Dashboard"}
                         onChange={handleRoleChange}
                         className="mr-3 w-4 h-4"
+                        disabled={isSubmitting}
                     />
                     Admin
                 </label>
@@ -102,13 +110,14 @@ export default function RightCard() {
                         checked={role === "Student-Dashboard"}
                         onChange={handleRoleChange}
                         className="mr-3 w-4 h-4"
+                        disabled={isSubmitting}
                     />
                     Student
                 </label>
             </div>
 
             {error && <div className="text-red-500 text-center mt-2">{error}</div>}
-            <button className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-2 justify-center self-center  bg-blue-600" onClick={handleSubmit}>
+            <button className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-2 justify-center self-center  bg-blue-600" onClick={handleSubmit} disabled={isSubmitting}>
 
                 <h1 className="font-medium text-2xl text-white">Login</h1>
 
