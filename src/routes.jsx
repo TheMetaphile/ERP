@@ -68,6 +68,7 @@ import Exam from "./AdminComponents/Exam/Exam.jsx";
 import Message from "./AdminComponents/Message/Message.jsx";
 import Subject from "./AdminComponents/Subjects/Subject.jsx";
 import Expenses from "./AdminComponents/Accounts/Expenses.jsx";
+import TeacherStudent from "./AdminComponents/Accounts/TeacherStudent.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -404,6 +405,11 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/Account/Expenses",
         element: <Expenses/>,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Account/TeacherStudents",
+        element: <TeacherStudent/>,
         children:[]
       },
     ]

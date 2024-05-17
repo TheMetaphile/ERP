@@ -57,11 +57,6 @@ const AnnouncementList = () => {
   return (
     <div className="mt-8 mx-2">
       <div className="flex justify-between mb-4 mobile:max-tablet:gap-2">
-                <div className="flex gap-8">
-                    <h1 className="text-xl">All</h1>
-                    <h1 className="text-xl">Student</h1>
-                    <h1 className="text-xl">Teachers</h1>
-                </div>
                 <div><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mobile:max-tablet:py-0 mobile:max-tablet:px-2" onClick={handleOpenModal}>Write Notice</button></div>
             </div>
       <div className="">

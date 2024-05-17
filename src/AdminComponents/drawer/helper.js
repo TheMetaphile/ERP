@@ -86,16 +86,12 @@ const menuItems = [
     alt: "img",
     title: "Account",
     children: [{
-      text: 'Fees Collection',
-      route: ''
+      text: 'Teacher/Students',
+      route: '/Admin-Dashboard/Account/TeacherStudents'
     },
     {
       text: 'Expenses',
       route: '/Admin-Dashboard/Account/Expenses'
-    },
-    {
-      text: 'Add Expenses',
-      route: ''
     },
     ]
   },

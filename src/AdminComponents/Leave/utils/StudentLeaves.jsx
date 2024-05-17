@@ -117,12 +117,12 @@ export default function StudentLeaves() {
 
       {selectedLeave && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
-          <div className="bg-white rounded-lg p-6">
-            <h2 className="text-xl mb-4">Confirm Leave</h2>
-            <p>Name of Student: {selectedLeave.name}</p>
-            <p>Duration: {selectedLeave.duration}</p>
-            <p>Class: {selectedLeave.class}</p>
-            <p>Reason for Leave: Illness due to lack of vitamin E in the body</p>
+          <div className="bg-white rounded-lg p-6 items-center">
+            <h2 className="text-2xl mb-4 text-center">Confirm Leave</h2>
+            <p className="text-xl">Name of Student: {selectedLeave.name}</p>
+            <p className="text-xl">Duration: {selectedLeave.duration}</p>
+            <p className="text-xl">Class: {selectedLeave.class}</p>
+            <p className="text-xl">Reason for Leave: Illness due to lack of vitamin E in the body</p>
             <div className="mt-4 flex justify-center">
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded-md mr-2"

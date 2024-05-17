@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import StudentLeaves from "./StudentLeaves";
+import AnnouncementList from "./NoticeList";
 
-const LeaveCard = () => {
+
+const NoticeUser = () => {
     const [selectedRole, setSelectedRole] = useState('teacher');
 
     const selectRole = (role) => {
@@ -27,24 +28,24 @@ const LeaveCard = () => {
             <div className="mt-2">
                 {selectedRole === 'teacher' && (
                     <div className="">
-                    <StudentLeaves/>
+                    <AnnouncementList/>
                    </div>
                 )}
 
                 {selectedRole === 'employee' && (
                     <div className="">
-                    <StudentLeaves/>
+                    <AnnouncementList/>
                    </div>
                 )}
 
                 {selectedRole === 'student' && (
                     <div className="">
-                     <StudentLeaves/>
+                    <AnnouncementList/>
                     </div>
                 )}
                 {selectedRole === 'all' && (
                     <div className="">
-                     <StudentLeaves/>
+                     <AnnouncementList/>
                     </div>
                 )}
             </div>
@@ -52,4 +53,4 @@ const LeaveCard = () => {
     );
 };
 
-export default LeaveCard;
+export default NoticeUser;
