@@ -44,7 +44,7 @@ import AllActivity from "./components/activities/utils/AllActivity.jsx";
 import Mediacal from "./components/medical/Medical.jsx";
 import AddmissionForm from "./AdminComponents/Students/AllStudents/AddmissionForm.jsx";
 import StudentPromotion from "./AdminComponents/Students/AllStudents/StudentPromotion.jsx";
-import StudentAttendance from "./AdminComponents/Students/AllStudents/StudentAttendance.jsx";
+import StudentAttendance from "./AdminComponents/Students/Students Attendance/StudentAttendance.jsx";
 import HomeWork from "./components/homeWork/HomeWork.jsx"
 import SubjectHomeWork from "./components/homeWork/SubjectHomeWork.jsx"
 

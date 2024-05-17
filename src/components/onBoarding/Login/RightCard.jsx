@@ -19,27 +19,31 @@ export default function RightCard() {
         setEmail(event.target.value);
     };
 
-    const handleSubmit =async()=>{
-        try{
-            const endpoint= role=== "Admin-Dashboard" ? "/login/teacher" : "/login/student";
-            const response =await axios.post(`https://loginapi-y0aa.onrender.com${endpoint}`, {
+    const handleSubmit = async () => {
+        try {
+            const endpoint = role === "Admin-Dashboard" ? "/login/teacher" : "/login/student";
+            await axios.post(`https://loginapi-y0aa.onrender.com${endpoint}`, {
                 email,
                 password
+            }).then((response) => {
+                if (response.status == 200) {
+                    const { userDetails, tokens } = response.data;
+                    console.log(userDetails, tokens);
+
+                    localStorage.setItem('accessToken', tokens.accessToken);
+                    localStorage.setItem('refereshToken', tokens.refreshToken);
+
+                    navigate(`/${role}`);
+                }
             });
-            const {userDetails, tokens}=response.data;
-            console.log(userDetails,tokens);
 
-            localStorage.setItem('accessToken',tokens.accessToken);
-            localStorage.setItem('refereshToken',tokens.refreshToken);
-
-            navigate(`/${role}`);
         }
-        catch(error){
+        catch (error) {
             console.error(error);
             setError(error.response?.data?.error || 'An error occured');
-            setTimeout(()=>{
+            setTimeout(() => {
                 setError('');
-            },2000);
+            }, 2000);
         }
     }
     return (
@@ -105,9 +109,9 @@ export default function RightCard() {
 
             {error && <div className="text-red-500 text-center mt-2">{error}</div>}
             <button className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-2 justify-center self-center  bg-blue-600" onClick={handleSubmit}>
-               
-                    <h1 className="font-medium text-2xl text-white">Login</h1>
-                
+
+                <h1 className="font-medium text-2xl text-white">Login</h1>
+
             </button>
         </div>
     )
