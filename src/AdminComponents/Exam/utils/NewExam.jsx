@@ -1,147 +1,134 @@
-import React,{useState} from "react";
 
-export default function NewExam() {
-    const [formData, setFormData] = useState(
-        {
-            ExamName: '',
-            AddSubject: '',
-            SelectClass: '',
-            SelectTime: '',
-            SelectDate: '',
-            GapBetween: '',
-        }
-    );
-    const handleChange = (e) => {
+import React,{useState} from 'react';
+
+const NewExam = ({ onClose, addExam }) => {
+    const [examData, setExamData] = useState({
+        name: '',
+        subject: '',
+        Time: '',
+        date: '',
+        duration: '',
+      });
+    
+      const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-        }));
-    };
-    const handleSubmit = (e) => {
+        setExamData({ ...examData, [name]: value });
+      };
+    
+      const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData);
-    }
-    return (
-        <>
-            <div className="flex flex-col rounded-xl px-2 w-full shadow-lg">
-                <div className="mt-8 text-3xl">Schedule New Exam</div>
-                <div>
-                    <form onSubmit={handleSubmit} className="flex flex-col w-full gap-8 mx-auto">
-                        <div className="flex w-full gap-8 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
-                            <div className="flex flex-col mt-8 gap-8">
-                                <div className="w-full rounded-md mobile:max-tablet:w-full">
-                                    <label className="block text-lg mb-2" htmlFor="">
-                                        Exam Name
-                                        <input
-                                            className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                            id="ExamName"
-                                            type="text"
-                                            name="ExamName"
-                                            value={formData.ExamName}
-                                            onChange={handleChange}
-                                            placeholder=""
-                                            required
-                                        />
-                                    </label>
-                                </div>
-                                <div className="w-full rounded-md mobile:max-tablet:w-full">
-                                    <label className="block text-lg mb-2" htmlFor="">
-                                        Select Time
-                                        <input
-                                            className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                            id="time"
-                                            type="text"
-                                            name="time"
-                                            value={formData.SelectTime}
-                                            onChange={handleChange}
-                                            placeholder=""
-                                            required
-                                        />
-                                    </label>
-                                </div>
-                            </div>
-                            <div className="flex flex-col mt-8 gap-8">
-                                <div className="w-full rounded-md mobile:max-tablet:w-full">
-                                    <label className="block text-lg mb-2" htmlFor="addSubject">
-                                        Add Subjects
-                                        <select
-                                            className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                            id="addSubject"
-                                            name="addSubject"
-                                            value={formData.AddSubject}
-                                            onChange={handleChange}
-                                            required
-                                        >
-                                            <option value="">Select a Subject</option>
-                                            <option value="Math">Math</option>
-                                            <option value="Science">Science</option>
-                                            <option value="History">History</option>
-                                          
-                                        </select>
-                                    </label>
-                                </div>
-                                <div className="w-full rounded-md mobile:max-tablet:w-full">
-                                    <label className="block text-lg mb-2" >
-                                        Select Date
-                                        <input
-                                            className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                            id="date"
-                                            type="number"
-                                            name="date"
-                                            value={formData.SelectDate}
-                                            onChange={handleChange}
-                                            placeholder=""
-                                            required
-                                        />
-                                    </label>
-                                </div>
-                            </div>
-                            <div className="flex flex-col mt-8 gap-8">
-                                <div className="w-full rounded-md mobile:max-tablet:w-full">
-                                    <label className="block text-lg mb-2" htmlFor="">
-                                       Select Class
-                                        <input
-                                            className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                            id="class"
-                                            type="text"
-                                            name="class"
-                                            value={formData.SelectClass}
-                                            onChange={handleChange}
-                                            placeholder=""
-                                            required
-                                        />
-                                    </label>
-                                    <div className="w-full rounded-md mobile:max-tablet:w-full mt-10">
-                                    <label className="block text-lg mb-2" htmlFor="">
-                                      Gap In Between
-                                        <input
-                                            className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                            id="gap"
-                                            type="text"
-                                            name="gap"
-                                            value={formData.GapBetween}
-                                            onChange={handleChange}
-                                            placeholder=""
-                                            required
-                                        />
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        <div className="w-1/2 rounded-md mt-4 mobile:max-tablet:w-full mb-8 ">
-                            <button
-                                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-1/2 mobile:max-tablet:w-1/2"
-                                type="submit"
-                            >
-                                Save
-                            </button>
-                        </div>
-                      
-                    </form>
-                </div>
-            </div>
+        addExam(examData);
+        setExamData({
+          name: '',
+          subject: '',
+          Time: '',
+          date: '',
+          duration: '',
+        });
+        onClose();
+      };
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-lg">
+      <button
+        className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-700"
+        onClick={onClose}
+      >
+        ✖
+      </button>
+      <h2 className="text-2xl font-bold mb-4">Schedule New Exam</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="examName">
+            Class
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="examName"
+            type="text"
+            name="name"
+            value={examData.name}
+            onChange={handleChange}
+            placeholder="Enter Class"
+            required
+          />
+        </div>
+        <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="subject">
+              Subject Name
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="text"
+              type="text"
+              name='subject'
+              value={examData.subject}
+              onChange={handleChange}
+              placeholder='Enter Subject Name'
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date">
+              Date
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="date"
+              type="date"
+              name='date'
+              value={examData.date}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          {/* <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="time">
+              Time
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="time"
+              type="time"
+              name='time'
+              value={examData.Time}
+              onChange={handleChange}
+              required
+            />
+          </div> */}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="duaration">
+              Duration(in hrs)
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="duaration"
+              type="duaration"
+              name='duration'
+              value={examData.duration}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        </>
-    )
-}
+        <div className="flex items-center justify-between">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+);
+};
+export default NewExam;

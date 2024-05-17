@@ -40,8 +40,8 @@ export default function StudentPromotion(){
         const nameMatch = student.name.toLowerCase().includes(name.toLowerCase());
         const classMatch = student.class.toLowerCase().includes(Class.toLowerCase());
         const sectionMatch = student.section.toLowerCase().includes(Section.toLowerCase());
-    
-        return idMatch && nameMatch && classMatch && sectionMatch;
+       
+       return idMatch && nameMatch && classMatch && sectionMatch;
     });
     
     
