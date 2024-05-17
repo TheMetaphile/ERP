@@ -1,7 +1,6 @@
 import profile from '../../../assets/Profile1.png'
-import check from './../../../assets/Checkmark.png'
-import cross from './../../../assets/Circled X.png'
-import excla from './../../../assets/exclamation.png'
+import { FaRegCircleCheck, FaRegCircleXmark } from "react-icons/fa6";
+import { BsExclamationCircle } from "react-icons/bs";
 import LinearProgressBar from './../../Home/utils/SubjectProgress/LinearProgressBar/LinearProgressBar.jsx'
 
 export default function PanelTile(props) {
@@ -21,21 +20,21 @@ export default function PanelTile(props) {
                 </div>
                 <div className=' flex mt-2 mb-2 flex-col laptop:flex-row'>
                     <div className='flex  flex-1'>
-                        <img src={check} alt="" className='w-10 h-10'/>
+                        <FaRegCircleCheck className='w-9 h-9 text-green-400'/>
                         <span className='px-2'>
                             <h1 className='font-normal'>{props.correct}</h1>
                             <h1 className='text-gray-400 text-xs'>Correct Answers</h1>
                         </span>
                     </div>
                     <div className='flex flex-1'>
-                        <img src={cross} alt="" className='w-10 h-10'/>
+                        <FaRegCircleXmark className='w-9 h-9 text-red-400'/>
                         <span  className='px-2'>
                             <h1 className='font-normal'>{props.wrong}</h1>
                             <h1 className='text-gray-400 text-xs'>Wrong Answers</h1>
                         </span>
                     </div>
                     <div className='flex  flex-1'>
-                        <img src={excla} alt="" className='w-10 h-10'/>
+                    <BsExclamationCircle className='w-9 h-9 text-purple-400'/>
                         <span className='px-2'>
                             <h1 className='font-normal'>{props.skipped}</h1>
                             <h1 className='text-xs text-gray-400'>Question Skipped</h1>

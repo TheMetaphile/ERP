@@ -12,25 +12,25 @@ export default function AttendenceTable() {
     { type: 'Leave', start: '07-04-2024', end: '09-04-2024', status: 'Pending' },
   ];
   return (
-    <div className='rounded-lg shadow-lg flex justify-evenly  w-full'>
-      <table className=' mt-7  w-full justify-evenly items-center ml-5 mr-5'>
+    <div className='rounded-lg shadow-lg   w-full'>
+      <table className='mt-7 mb-3 w-full justify-evenly items-center  outline  outline-gray-400 rounded-lg '>
         <thead>
-          <tr className='outline  outline-slate-500 mt-3   text-xl'>
-            <th className=' text-xl'>Leave Type </th>
-            <th className=' text-xl'>Start Date </th>
-            <th className=' text-xl'>End Date </th>
-            <th className=' text-xl'>Status </th>
+          <tr className='rounded-t-lg border-b-2 border-gray-400 mt-3  text-lg font-medium '>
+            <th className=' '>Leave Type </th>
+            <th className='bg-blue-200 '>Start Date </th>
+            <th className='bg-green-200 '>End Date </th>
+            <th className=''>Status </th>
 
           </tr>
         </thead>
-        <tbody>
+        <tbody >
           {content.map((con, index) => (
-            <tr key={index}>
+            <tr key={index} >
 
 
-              <th className='font-normal'>{con.type}</th>
-              <th className='font-normal'>{con.start}</th>
-              <th className='font-normal'>{con.end}</th>
+              <th className="font-normal ">{con.type}</th>
+              <th className="font-normal bg-blue-200">{con.start}</th>
+              <th className="font-normal bg-green-200">{con.end}</th>
               <th className={`${con.status === "Pending" ? "text-orange-300" : con.status === "Rejected" ? "text-red-400" : "text-green-400"}`}>{con.status}</th>
 
 
