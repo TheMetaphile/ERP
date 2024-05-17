@@ -13,26 +13,26 @@ const InvoiceSection = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <h2 className="text-xl font-bold mb-4">INVOICES</h2>
-      <div className="flex items-center mb-4">
+    <div className="flex flex-col">
+      <h2 className="text-xl font-semibold mb-4 text-red-600 px-4 mt-4">INVOICES</h2>
+      <div className="flex items-center mb-4 mx-auto gap-4">
         <input
           type="date"
           value={startDate}
           onChange={handleStartDateChange}
-          className="border border-gray-300 rounded px-2 py-1 mr-2"
+          className="border border-gray-700 rounded-lg px-2 py-1 mr-2"
         />
-        <span className="mx-2">TO</span>
+        <span className="">To</span>
         <input
           type="date"
           value={endDate}
           onChange={handleEndDateChange}
-          className="border border-gray-300 rounded px-2 py-1 ml-2"
+          className="border border-gray-700 rounded-lg px-2 py-1 ml-2"
         />
-      </div>
-      <button className="bg-blue-500 text-white px-4 py-2 rounded">
+         <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">
         Download
       </button>
+      </div>
     </div>
   );
 };
