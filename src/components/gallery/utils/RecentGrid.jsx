@@ -2,7 +2,7 @@ import React from 'react'
 
 function RecentGrid() {
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-4 gap-3  p-4">
 
       <div className="col-span-1">
         <div className="border border-gray-400 p-4">First Column</div>
