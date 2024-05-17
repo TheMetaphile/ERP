@@ -1,6 +1,10 @@
 import React from "react";
 
 export default function PromotedStudentsDetails({ students }) {
+    const numToRoman = {
+        '1': "I",
+        "12" : "XII"
+    };
     return (
         <div className="rounded-xl shadow-lg mb-4">
         <div className="overflow-x-auto w-full mt-4 rounded-lg">
@@ -21,7 +25,7 @@ export default function PromotedStudentsDetails({ students }) {
                         <tr key={index}>
                             <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">{student.id}</td>
                             <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">{student.name}</td>
-                            <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">{student.class}</td>
+                            <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">{numToRoman[student.class]}</td>
                             <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">{student.section}</td>
                             <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">{student.marks}</td>
                             <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">{student.gpa}</td>

@@ -22,21 +22,21 @@ export default function StudentPromotion(){
         setSection(event.target.value);
     };
     const students = [
-        { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
-        { id: '1006', name: "Alice", class: "XII", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
-        { id: '1004', name: "bob", class: "XII", section: "A", marks: "900", gpa: "9", remark: 'Detained' },
-        { id: '1002', name: "Abhishek", class: "XII", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
-        { id: '1055', name: "Avni", class: "XII", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
-        { id: '1032', name: "Avni", class: "XII", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
-        { id: '1006', name: "Avni", class: "XII", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
-        { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
-        { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
-        { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
-        { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
-        { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
+        { id: '1007', name: "Avni", class: "12", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
+        { id: '1006', name: "Alice", class: "12", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
+        { id: '1004', name: "bob", class: "1", section: "A", marks: "900", gpa: "9", remark: 'Detained' },
+        { id: '1002', name: "Abhishek", class: "12", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
+        { id: '1055', name: "Avni", class: "12", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
+        { id: '1032', name: "Avni", class: "12", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
+        { id: '1006', name: "Avni", class: "12", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
+        { id: '1007', name: "Avni", class: "12", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
+        { id: '1007', name: "Avni", class: "12", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
+        { id: '1007', name: "Avni", class: "12", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
+        { id: '1007', name: "Avni", class: "12", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
+        { id: '1007', name: "Avni", class: "12", section: "A", marks: "900", gpa: "9", remark: 'Promoted' },
     ];
     const filteredStudents = students.filter(student => {
-        const idMatch = student.id === rollNumber;
+        const idMatch = student.id.includes(rollNumber);
         const nameMatch = student.name.toLowerCase().includes(name.toLowerCase());
         const classMatch = student.class.toLowerCase().includes(Class.toLowerCase());
         const sectionMatch = student.section.toLowerCase().includes(Section.toLowerCase());
