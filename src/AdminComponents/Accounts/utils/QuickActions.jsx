@@ -20,7 +20,7 @@ export default function QuickActions() {
                     <h1 className="text-2xl mt-4">Quick Actions</h1>
                 </div>
                 <div>
-                    <button className="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center mt-4">
+                    <button className="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center text-lg justify-center mt-4">
                         +
                     </button>
                 </div>

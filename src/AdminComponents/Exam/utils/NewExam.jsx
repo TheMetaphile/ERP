@@ -42,10 +42,10 @@ const NewExam = ({ onClose, addExam }) => {
         >
           ✖
         </button>
-        <h2 className="text-2xl font-bold mb-4">Schedule New Exam</h2>
+        <h2 className="text-2xl mb-4">Schedule New Exam</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="examName">
+            <label className="block text-gray-700 text-xl mb-2" htmlFor="examName">
               Class
             </label>
             <input
@@ -60,7 +60,7 @@ const NewExam = ({ onClose, addExam }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="subject">
+            <label className="block text-gray-700 text-xl mb-2" htmlFor="subject">
               Subject Name
             </label>
             <input
@@ -75,7 +75,7 @@ const NewExam = ({ onClose, addExam }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date">
+            <label className="block text-gray-700 text-xl mb-2" htmlFor="date">
               Date
             </label>
             <input
@@ -89,7 +89,7 @@ const NewExam = ({ onClose, addExam }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="time">
+            <label className="block text-gray-700 text-xl mb-2" htmlFor="time">
               Time
             </label>
             <TimePicker
@@ -101,7 +101,7 @@ const NewExam = ({ onClose, addExam }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="duaration">
+            <label className="block text-gray-700 text-xl mb-2" htmlFor="duaration">
               Duration(in hrs)
             </label>
             <input
