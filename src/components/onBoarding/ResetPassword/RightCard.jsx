@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {  useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import logo from '../../../assets/school logo.png'
 import OTPInput from "react-otp-input";
@@ -11,6 +11,7 @@ export default function RightCard() {
     const [otpToken, setOtpToken] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleRoleChange = (event) => {
         setRole(event.target.value);
@@ -19,6 +20,7 @@ export default function RightCard() {
         setEmail(event.target.value);
     };
     const sendOTP = async () => {
+        setIsSubmitting(true);
         try {
             const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/send/${role}`, {
                 email,
@@ -35,10 +37,14 @@ export default function RightCard() {
                 setError('');
             }, 2000);
         }
+        finally {
+            setIsSubmitting(false);
+        }
 
     }
 
     const verifyOTP = async () => {
+        setIsSubmitting(true);
         try {
             const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/verify`, {
                 email,
@@ -64,6 +70,9 @@ export default function RightCard() {
                 setError('');
             }, 2000);
         }
+        finally {
+            setIsSubmitting(false);
+        }
 
     }
 
@@ -73,7 +82,7 @@ export default function RightCard() {
             <img src={logo} alt="img" className="mr-4 h-32 self-center" />
 
             <h1 className="tablet:text-2xl mobile:text-xl font-bold self-center whitespace-nowrap">Reset Password</h1>
-
+            {error && <p className="text-red-500">{error}</p>}
             <h1 className="text-xl font-bold mt-5 ">Login Id</h1>
 
             <div className="flex justify-between mt-3">
@@ -85,6 +94,7 @@ export default function RightCard() {
                     onChange={handleEmailChange}
                     placeholder="Enter your email"
                     className="w-2/3 rounded-xl shadow-md px-3 py-2 border-2 border-gray-500  text-lg "
+                    disabled={isSubmitting}
                 />
                 <button className="py-2 px-3 whitespace-nowrap rounded-xl shadow-md self-center bg-secondary" onClick={sendOTP}>
                     Send OTP
@@ -99,6 +109,7 @@ export default function RightCard() {
                         checked={role === "teacher"}
                         onChange={handleRoleChange}
                         className="mr-3 w-4 h-4"
+                        disabled={isSubmitting}
                     />
                     Admin
                 </label>
@@ -111,6 +122,7 @@ export default function RightCard() {
                         checked={role === "student"}
                         onChange={handleRoleChange}
                         className="mr-3 w-4 h-4"
+                        disabled={isSubmitting}
                     />
                     Student
                 </label>
@@ -124,10 +136,11 @@ export default function RightCard() {
                 inputStyle={'p-2 rounded-2xl shadow-lg border-grey-400 border-4 text-2xl mr-7 w-14 text-center'}
                 skipDefaultStyles={true}
                 containerStyle={'mt-5'}
+                disabled={isSubmitting}
             />
 
-            {error && <p className="text-red-500">{error}</p>}
-            <button className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8" onClick={verifyOTP}>
+            
+            <button className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8" onClick={verifyOTP} disabled={isSubmitting}>
 
                 <h1 className="font-medium text-2xl text-white">Submit</h1>
             </button>

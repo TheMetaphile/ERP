@@ -59,6 +59,7 @@ export default function RightCard() {
             <h1 className="tablet:text-2xl mobile:text-2xl font-bold self-center whitespace-nowrap">Welcome Back</h1>
             <h1 className="text-lg mt-2 text-gray-400">Please Enter Your ID & Password</h1>
 
+            {error && <div className="text-red-500 text-center mt-2">{error}</div>}
             <h1 className="text-xl font-bold mt-3 ">Login Id</h1>
 
             <input
@@ -116,7 +117,7 @@ export default function RightCard() {
                 </label>
             </div>
 
-            {error && <div className="text-red-500 text-center mt-2">{error}</div>}
+            
             <button className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-2 justify-center self-center  bg-blue-600" onClick={handleSubmit} disabled={isSubmitting}>
 
                 <h1 className="font-medium text-2xl text-white">Login</h1>
