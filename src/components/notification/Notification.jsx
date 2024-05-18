@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, Outlet } from "react-router-dom";
 
 export default function Notification() {
-    const [selectedLink, setSelectedLink] = useState(null);
+    const [selectedLink, setSelectedLink] = useState('/Student-Dashboard/notification/allnotification');
 
     const handleLinkSelect = (link) => {
         setSelectedLink(link);

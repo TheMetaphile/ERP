@@ -26,13 +26,10 @@ export default function AttendenceTable() {
         <tbody >
           {content.map((con, index) => (
             <tr key={index} >
-
-
-              <th className="font-normal ">{con.type}</th>
-              <th className="font-normal bg-blue-200">{con.start}</th>
-              <th className="font-normal bg-green-200">{con.end}</th>
-              <th className={`${con.status === "Pending" ? "text-orange-300" : con.status === "Rejected" ? "text-red-400" : "text-green-400"}`}>{con.status}</th>
-
+              <td className="font-normal ">{con.type}</td>
+              <td className="font-normal bg-blue-200">{con.start}</td>
+              <td className="font-normal bg-green-200">{con.end}</td>
+              <td className={`${con.status === "Pending" ? "text-orange-300" : con.status === "Rejected" ? "text-red-400" : "text-green-400"}`}>{con.status}</td>
 
             </tr>
           ))}

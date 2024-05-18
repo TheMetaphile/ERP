@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, Outlet } from "react-router-dom";
 
 export default function Askdoubt() {
-    const [selectedLink, setSelectedLink] = useState(null);
+    const [selectedLink, setSelectedLink] = useState('/Student-Dashboard/askdoubt/alldoubt');
 
     const handleLinkSelect = (link) => {
         setSelectedLink(link);
