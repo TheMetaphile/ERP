@@ -39,12 +39,13 @@ export default function ParentsDetails() {
       religion: "Hindu"
     },
   ]
+  const colors = ['bg-red-200', 'bg-blue-200', 'bg-green-200', 'bg-yellow-200', 'bg-purple-200'];
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className="flex justify-center gap-20 mt-8 mobile:max-tablet:gap-0 mobile:max-tablet:flex-col">
+      <div className="flex justify-center gap-20 mt-8 w-3/4 mx-auto mobile:max-tablet:gap-0 mobile:max-tablet:flex-col">
         {parentDetails.map((parent, index) => (
-          <div className="rounded-md shadow-lg p-4 w-1/2 mx-2 mobile:max-tablet:w-full bg-secondary" key={index}>
+          <div className={`rounded-md shadow-lg p-4 w-1/2 mx-2 mobile:max-tablet:w-full whitespace-nowrap ${colors[index % colors.length]}`} key={index}>
             <div className="flex justify-between">
               <h1 className="text-2xl">{parent.title} Details</h1>
               <button className="text-xl">Edit</button>
@@ -88,7 +89,7 @@ export default function ParentsDetails() {
       </div>
       <div className="flex mt-4 flex-col mx-2">
         {guardianDetail.map((guardian, index) => (
-          <div className="flex flex-col rounded-md shadow-lg p-4 w-full mx-auto mobile:max-tablet:w-full bg-secondary" key={index}>
+          <div className={`flex flex-col rounded-md shadow-lg p-4 w-3/4 mx-auto mobile:max-tablet:w-full bg-yellow-200`} key={index}>
             <div className="flex justify-between">
               <h1 className="text-2xl">{guardian.title} Details</h1>
               <button className="text-xl">Edit</button>

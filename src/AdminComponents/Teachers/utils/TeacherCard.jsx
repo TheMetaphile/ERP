@@ -1,20 +1,8 @@
 import React from "react";
-import { chatLogo, profilelogo, userimg } from "./images/index.js"
+import { userimg } from "./images/index.js"
 import { Link } from "react-router-dom";
 
-export default function TeacherCard() {
-    const userData = [
-        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Sakshi", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Ram", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Amit", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "mayank", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-
-    ];
+export default function TeacherCard({userData}) {
     return (
             <div className="mx-3">
                 {userData.map((user, index) => (

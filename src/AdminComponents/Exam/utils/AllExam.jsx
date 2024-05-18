@@ -51,7 +51,7 @@ export default function AllExam() {
 
                 </select>
             </div>
-            <div><button className="rounded-lg border bg-blue-400 px-4 text-xl hover:bg-blue-600" onClick={togglePopUp}>Schedule New Exam</button></div>
+            <div><button className="rounded-lg border bg-blue-400 px-4 text-xl hover:bg-blue-200" onClick={togglePopUp}>Schedule New Exam</button></div>
             </div>
             <div className="rounded-xl shadow-lg mb-4">
           <div className="overflow-x-auto w-full mt-4 rounded-lg">

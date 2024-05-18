@@ -63,13 +63,13 @@ export default function Subject() {
         <div className="flex flex-col mx-2">
             <div className="flex mt-4 mb-4 mx-2 justify-between">
                 <div className="flex flex-col">
-                    <h1 className="text-2xl">All Subjects</h1>
-                    <span className="text-lg">Total Number of Subjects:36</span>
+                    <h1 className="text-2xl px-4">All Subjects</h1>
+                    <span className="text-lg px-4">Total Number of Subjects:36</span>
                 </div>
                 <div className="flex justify-between gap-2">
                     <button className="text-xl rounded-lg">
                         <select
-                            className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                            className="border rounded-md w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline mt-2 bg-blue-400"
                             id="addSubject"
                             name="addSubject"
                             required
@@ -81,7 +81,7 @@ export default function Subject() {
 
                         </select>
                     </button>
-                    <button className="text-xl px-2 rounded-lg border" onClick={handleClick}>Add Subject +</button>
+                    <button className="text-xl px-2 rounded-lg border bg-blue-400 hover:bg-blue-200" onClick={handleClick}>Add Subject +</button>
                 </div>
             </div>
             <div className="rounded-lg shadow-lg mx-2 mb-2 border">

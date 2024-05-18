@@ -1,5 +1,5 @@
 
-export default function SearchBar({handleNameChange,authorName,name,handleAuthorNameChange,id,handleIdChange}) {
+export default function SearchBar({handleSubjectNameChange,authorName,subjectName,handleAuthorNameChange,id,handleIdChange}) {
     
 
     return (
@@ -11,9 +11,9 @@ export default function SearchBar({handleNameChange,authorName,name,handleAuthor
                 type="text"
                 id="name"
                 name="name"
-                value={name}
-                onChange={handleNameChange}
-                placeholder="Search by Name"
+                value={subjectName}
+                onChange={handleSubjectNameChange}
+                placeholder="Search by Subject Name"
                 className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg"
             />
              <input
@@ -31,7 +31,7 @@ export default function SearchBar({handleNameChange,authorName,name,handleAuthor
                 name="Author"
                 value={authorName}
                 onChange={handleAuthorNameChange}
-                placeholder="Search by Author"
+                placeholder="Search by Writer"
                 className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg"
             />
             </div>

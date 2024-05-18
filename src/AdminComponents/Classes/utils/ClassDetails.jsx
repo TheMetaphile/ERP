@@ -30,7 +30,7 @@ const ClassDetailsModal = ({ className }) => {
 
   return (
     <>
-      <button className="view-details-btn text-blue-500" onClick={toggleModal}>
+      <button className="view-details-btn text-red-500 text-lg" onClick={toggleModal}>
         View Details
       </button>
 

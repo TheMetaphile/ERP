@@ -1,21 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function ResultList(){
-    const students = [
-        { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", totalMarks: "1000", percentage:'90%' },
-        { id: '1006', name: "Alice", class: "XII", section: "A", marks: "900", totalMarks: "1000", percentage:'90%' },
-        { id: '1004', name: "bob", class: "XII", section: "A", marks: "900", totalMarks: "1000", percentage:'90%' },
-        { id: '1002', name: "Abhishek", class: "XII", section: "A", marks: "900",totalMarks: "1000", percentage:'90%' },
-        { id: '1055', name: "Avni", class: "XII", section: "A", marks: "900", totalMarks: "1000", percentage:'90%' },
-        { id: '1032', name: "Avni", class: "XII", section: "A", marks: "900", totalMarks: "1000", percentage:'90%' },
-        { id: '1006', name: "Avni", class: "XII", section: "A", marks: "900", totalMarks: "1000", percentage:'90%' },
-        { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", totalMarks: "1000", percentage:'90%' },
-        { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", totalMarks: "1000", percentage:'90%'},
-        { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", totalMarks: "1000", percentage:'90%' },
-        { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", totalMarks: "1000", percentage:'90%' },
-        { id: '1007', name: "Avni", class: "XII", section: "A", marks: "900", totalMarks: "1000", percentage:'90%' },
-    ];
+export default function ResultList({students}){
     return(
         <div className="rounded-xl shadow-lg mb-4">
     <div className="overflow-x-auto w-full mt-8 mb-4 rounded-lg">

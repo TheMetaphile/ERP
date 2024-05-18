@@ -13,7 +13,7 @@ export default function SearchBar({handleNameChange,handleNumberChange,name,phon
                 name="name"
                 value={name}
                 onChange={handleNameChange}
-                placeholder="Search by Name"
+                placeholder="Search by Name of Child"
                 className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg"
             />
             <input

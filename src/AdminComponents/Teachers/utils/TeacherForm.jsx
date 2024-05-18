@@ -51,7 +51,7 @@ export default function TeacherForm() {
 
     return (
         <>
-            <div className="rounded-lg shadow-lg mx-4">
+            <div className="mx-4">
                 <div className="w-full flex justify-center mb-4">
                     <form onSubmit={handleSubmit} className="flex flex-col w-full px-2 mb-2 gap-4">
                         <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
@@ -253,9 +253,10 @@ export default function TeacherForm() {
                             </div>
                         </div>
                         <div className="flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4">
-                            <div className="w-1/2 rounded-lg mobile:max-tablet:w-full">
+                            <div className="w-1/2 rounded-lg mobile:max-tablet:w-full text-lg whitespace-nowrap">
+                                 Add Google Drive Link for Photo
                                 <label className="block text-lg mb-2">
-                                    Add Google Drive Link for Photo
+                                    {/* Add Google Drive Link for Photo */}
                                     <input
                                         className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-1"
                                         id="photo"

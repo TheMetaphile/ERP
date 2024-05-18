@@ -1,21 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function ParentsList(){
-    const details = [
-        { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
-        { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
-        { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
-        { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
-        { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
-        { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
-        { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
-        { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
-        { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
-        { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
-        { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
-        { child:'Alice', father: "Arjun", mother: "Sakshi", contact: "+91-989898989",email: "a123@gmail.com"},
-    ];
+export default function ParentsList({details}){
     return(
         <div className="rounded-xl shadow-lg mb-4">
     <div className="overflow-x-auto w-full mt-8 rounded-lg">
