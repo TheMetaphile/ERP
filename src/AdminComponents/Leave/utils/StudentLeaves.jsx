@@ -89,7 +89,7 @@ export default function StudentLeaves() {
   return (
     <div className="flex flex-col space-y-4 mb-4">
       {leaves.map((leave, index) => (
-        <div key={index} className="rounded-md border p-4 flex flex-col w-full">
+        <div key={index} className={`rounded-md border p-4 flex flex-col w-full`}>
           <div className="flex justify-between">
             <div className="flex">
               <img src={userimg} alt="" className="h-12 w-12 mobile:max-tablet:hidden" />
