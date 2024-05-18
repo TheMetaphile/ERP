@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import logo from '../../../assets/school logo.png'
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
@@ -8,6 +9,7 @@ export default function RightCard() {
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('');
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { login } = useContext(AuthContext);
@@ -20,6 +22,9 @@ export default function RightCard() {
     };
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
+    };
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
     const handleSubmit = async () => {
@@ -76,17 +81,26 @@ export default function RightCard() {
             />
 
             <h1 className="text-xl font-bold mt-3">Password</h1>
-
-            <input
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={handlePasswordChange}
-                placeholder="Enter your password"
-                className=" rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg "
-                disabled={isSubmitting}
-            />
+            <div className="relative">
+                <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    name="password"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    placeholder="Enter your password"
+                    className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg pr-10" // Add padding to the right
+                    disabled={isSubmitting}
+                />
+                <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2" // Center the button vertically
+                    disabled={isSubmitting}
+                >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+            </div>
             <Link to='/resetpassword' className="w-fit mt-2">
                 <h1 className=" text-lg text-blue-600">Forgot Password?</h1>
             </Link>
@@ -119,7 +133,7 @@ export default function RightCard() {
                 </label>
             </div>
 
-            
+
             <button className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-2 justify-center self-center  bg-blue-600" onClick={handleSubmit} disabled={isSubmitting}>
 
                 <h1 className="font-medium text-2xl text-white">Login</h1>

@@ -39,7 +39,7 @@ export default function Notification() {
                         </Link>
                     </div>
 
-                    <h1 className=' border border-grey-300 items-center px-4 py-2'>Mark all as read</h1>
+                    <h1 className=' border border-grey-300 items-center px-4 py-2 cursor-pointer'>Mark all as read</h1>
                 </div>
                 <hr className='border-t-2 bg-slate-500 mt-2 mb-3 ml-3 mr-3' />
                 <Outlet />
