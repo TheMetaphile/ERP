@@ -7,7 +7,7 @@ import { IoCameraOutline } from "react-icons/io5";
 
 export default function MyDoubts() {
 
-    const [selectedClass, setSelectedClass] = useState(null);
+    // const [selectedClass, setSelectedClass] = useState(null);
     const [selectedSubject, setSelectedSubject] = useState(null);
     const [selectedTeacher, setSelectedTeacher] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,9 +16,9 @@ export default function MyDoubts() {
     const [doubtDescription, setDoubtDescription] = useState('');
     const [error, setError] = useState('');
 
-    const handleClassSelect = (selectedClass) => {
-        setSelectedClass(selectedClass);
-    };
+    // const handleClassSelect = (selectedClass) => {
+    //     setSelectedClass(selectedClass);
+    // };
     const handleSubjectSelect = (selectedSubject) => {
         setSelectedSubject(selectedSubject);
     };
@@ -43,14 +43,14 @@ export default function MyDoubts() {
     return (
         <div className="flex flex-row mobile:max-laptop:flex-col-reverse w-full">
             <div className="flex flex-col laptop:mr-3 mt-2 mb-3 no-scrollbar w-full">
-                <MyDoubtTile question='Question: 01' description='Which is the form of Energy that can move from hot place to a cold place, or the transfer of energy from one body to another body ?' selectedClass={selectedClass} selectedSubject={selectedSubject} selectedTeacher={selectedTeacher} />
-                <MyDoubtTile question='Question: 02' description='Which is the form of Energy that can move from hot place to a cold place, or the transfer of energy from one body to another body ?' selectedClass={selectedClass} selectedSubject={selectedSubject} selectedTeacher={selectedTeacher} />
+                <MyDoubtTile question='Question: 01' description='Which is the form of Energy that can move from hot place to a cold place, or the transfer of energy from one body to another body ?'  selectedSubject={selectedSubject} selectedTeacher={selectedTeacher} />
+                <MyDoubtTile question='Question: 02' description='Which is the form of Energy that can move from hot place to a cold place, or the transfer of energy from one body to another body ?'  selectedSubject={selectedSubject} selectedTeacher={selectedTeacher} />
                 <div className="mt-3 ml-auto md:hidden">
                     <button className='bg-purple-400 rounded-lg shadow-md px-3 py-1 text-white' onClick={handleAskDoubt}>+ Ask A Doubt</button>
                 </div>
             </div>
             <div className="md:order-2 md:w-full lg:w-fit md:ml-2">
-                <SelectClass onSelect={handleClassSelect} />
+                {/* <SelectClass onSelect={handleClassSelect} /> */}
                 <SelectSubject onSelect={handleSubjectSelect} />
                 <SelectTeacher onSelect={handleSubjectTeacher} />
             </div>
@@ -61,7 +61,8 @@ export default function MyDoubts() {
 
                         <div className="flex flex-col tablet:flex-row items-center gap-3 w-full py-2 ">
                             <div className="flex-1 mobile:max-tablet:w-full">
-                                <SelectClass onSelect={handleClassSelect}  />
+                            <SelectTeacher onSelect={handleSubjectTeacher} />
+
                             </div>
                             <div className="flex-1 mobile:max-tablet:w-full">
                                 <SelectSubject onSelect={handleSubjectSelect}/>
@@ -74,15 +75,7 @@ export default function MyDoubts() {
                             onChange={(e) => setDoubtDescription(e.target.value)}></textarea>
 
                         <IoCameraOutline className='w-6 h-6 ' />
-                        <div className='flex mb-2'>
-                            <div className=' px-2 w-full'>
-                            <h1 className=" mb-2 mt-2 ">Ask a Teacher</h1>
-                            <button className='bg-blue-500 '>OK</button>
-                            </div>
-                            <div className=" mobile:max-tablet:w-full  w-full ">
-                                <SelectTeacher onSelect={handleSubjectTeacher} />
-                            </div>
-                        </div>
+                       
 
                         {error && <div className="text-red-500 text-center mb-4">{error}</div>}
                         <div className="flex justify-end">
