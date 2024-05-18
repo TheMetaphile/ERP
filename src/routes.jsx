@@ -52,7 +52,6 @@ import Route from './components/homeWork/route.jsx';
 import StudentResult from "./AdminComponents/Students/AllStudents/StudentResult.jsx";
 import AllParents from "./AdminComponents/Parents/AllParents.jsx";
 import AllBooks from "./AdminComponents/Library/AllBooks.jsx";
-import AddNewBook from "./AdminComponents/Library/AddNewBook.jsx";
 import ResultLayout from "./AdminComponents/Students/AllStudents/utils/ResultLayout.jsx";
 import ParentsDetails from "./AdminComponents/Parents/utils/ParentsDetails.jsx";
 import Panel from "./components/quiz/Panel.jsx";
@@ -360,11 +359,6 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/Library/AllBooks",
         element: <AllBooks />,
-        children:[]
-      },
-      {
-        path: "/Admin-Dashboard/Library/AddNewBooks",
-        element: <AddNewBook />,
         children:[]
       },
       {

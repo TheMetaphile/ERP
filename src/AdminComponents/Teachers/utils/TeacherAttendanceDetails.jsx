@@ -1,19 +1,19 @@
 import React from "react";
 import { userimg } from "./images";
-export default function TeacherAttendanceDetails() {
-    const userData = [
-        { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Absent", totalHour: "7.5 min" },
-        { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
-        { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
-        { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Absent", totalHour: "7.5 min" },
-        { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
-        { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
-        { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
-        { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
-        { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
-        { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
-        { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
-    ];
+export default function TeacherAttendanceDetails({userData}) {
+    // const userData = [
+    //     { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Absent", totalHour: "7.5 min" },
+    //     { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
+    //     { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
+    //     { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Absent", totalHour: "7.5 min" },
+    //     { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
+    //     { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
+    //     { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
+    //     { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
+    //     { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
+    //     { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
+    //     { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
+    // ];
     return (
         <div className="flex flex-col">
             <div className="flex mobile:max-tablet:gap-4 items-center justify-between p-2 mb-2 gap-8 ">

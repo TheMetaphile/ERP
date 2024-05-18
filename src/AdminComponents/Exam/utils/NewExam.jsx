@@ -15,12 +15,7 @@ const NewExam = ({ onClose, addExam }) => {
     const { name, value } = e.target;
     setExamData({ ...examData, [name]: value });
   };
-  const [time, setTime] = useState("12:00");
 
-  const handleTimeChange = (newTime) => {
-    setTime(newTime);
-    setExamData({ ...examData, Time: newTime }); // Update the Time property in examData
-  };
   const handleSubmit = (e) => {
     e.preventDefault();
     addExam(examData);
@@ -92,12 +87,14 @@ const NewExam = ({ onClose, addExam }) => {
             <label className="block text-gray-700 text-xl mb-2" htmlFor="time">
               Time
             </label>
-            <TimePicker
-              className="border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
-              onChange={handleTimeChange}
-              value={time}
-              format={"hh:mm a"} // Update the format to 12-hour
-              clearIcon={null} // To remove the clear icon
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="time"
+              type="time"
+              name="Time"
+              value={examData.Time}
+              onChange={handleChange}
+              required
             />
           </div>
           <div className="mb-4">

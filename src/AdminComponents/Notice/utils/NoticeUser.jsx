@@ -27,13 +27,13 @@ const NoticeUser = () => {
         <div className="bg-white p-4 rounded-lg shadow-md w-full flex flex-col">
            <div className="flex justify-between">
            <div className="flex gap-10  mobile:max-tablet:gap-4">
-                <button className={`text-xl px-4 ${selectedRole === 'all' ? 'text-red-600' : 'text-black'} rounded-lg bg-blue-300`}
+                <button className={`text-xl px-4 ${selectedRole === 'all' ? 'bg-blue-400' : 'bg-white'} rounded-lg`}
                     onClick={() => selectRole('all')}>All</button>
-                <button className={`text-xl  ${selectedRole === 'student' ? 'text-red-600' : 'text-black'} rounded-lg px-4 bg-blue-300`}
+                <button className={`text-xl  ${selectedRole === 'student' ? 'bg-blue-400' : 'bg-white'} rounded-lg px-4`}
                     onClick={() => selectRole('student')}>Student</button>
-                <button className={`text-xl  ${selectedRole === 'teacher' ? 'text-red-600' : 'text-black'} rounded-lg px-4 bg-blue-300`}
+                <button className={`text-xl  ${selectedRole === 'teacher' ? 'bg-blue-400' : 'bg-white'} rounded-lg px-4`}
                     onClick={() => selectRole('teacher')}>Teacher</button>
-                 <button className={`text-xl ${selectedRole === 'employee' ? 'text-red-600' : 'text-black'} rounded-lg px-4 bg-blue-300`}
+                 <button className={`text-xl ${selectedRole === 'employee' ? 'bg-blue-400' : 'bg-white'} rounded-lg px-4`}
                     onClick={() => selectRole('employee')}>Employee</button>
             </div>
             <div className="flex justify-between mobile:max-tablet:gap-2">

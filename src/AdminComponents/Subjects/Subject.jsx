@@ -69,7 +69,7 @@ export default function Subject() {
                 <div className="flex justify-between gap-2">
                     <button className="text-xl rounded-lg">
                         <select
-                            className="border rounded-md w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline mt-2 bg-blue-400"
+                            className="border rounded-md w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline mt-2"
                             id="addSubject"
                             name="addSubject"
                             required

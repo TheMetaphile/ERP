@@ -74,10 +74,6 @@ const menuItems = [
       text: 'All Books',
       route: '/Admin-Dashboard/Library/AllBooks'
     },
-    {
-      text: 'Add New Books',
-      route: '/Admin-Dashboard/Library/AddNewBooks'
-    },
     ]
   },
 
