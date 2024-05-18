@@ -43,16 +43,28 @@ const NewExam = ({ onClose, addExam }) => {
             <label className="block text-gray-700 text-xl mb-2" htmlFor="examName">
               Class
             </label>
-            <input
+            <select
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="examName"
-              type="text"
+              id="examClass"
               name="class"
               value={examData.class}
               onChange={handleChange}
-              placeholder="Enter Class"
               required
-            />
+            >
+              <option value="" disabled>Select Class</option>
+              <option value="I">I</option>
+              <option value="II">II</option>
+              <option value="III">III</option>
+              <option value="IV">IV</option>
+              <option value="V">V</option>
+              <option value="VI">VI</option>
+              <option value="VII">VII</option>
+              <option value="VIII">VIII</option>
+              <option value="IX">IX</option>
+              <option value="X">X</option>
+              <option value="XI">XI</option>
+              <option value="XII">XII</option>
+            </select>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 text-xl mb-2" htmlFor="subject">

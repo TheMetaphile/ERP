@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function ParentsList({details}){
     return(
         <div className="rounded-xl shadow-lg mb-4">
-    <div className="overflow-x-auto w-full mt-8 rounded-lg">
+    <div className="overflow-x-auto w-full mt-4 rounded-lg">
     <table className="min-w-full divide-y divide-gray-600">
         <thead>
             <tr>

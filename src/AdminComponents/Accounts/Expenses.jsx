@@ -9,8 +9,8 @@ import Activity from "./utils/Activity";
 export default function Expenses() {
     return (
         <div className="flex flex-col">
-        <div className="flex gap-2">
-            <div className="flex flex-col w-1/2">
+        <div className="flex gap-2 mobile:max-tablet:flex-col">
+            <div className="flex flex-col w-1/2 mobile:max-tablet:w-full">
                 <div className="flex-1 mx-2 shadow-lg rounded-lg border">
                     <WeeklySpend />
                 </div>
@@ -18,15 +18,15 @@ export default function Expenses() {
                     <InvoiceSection />
                 </div>
             </div>
-            <div className="w-1/2 mx-2 shadow-lg rounded-lg">
+            <div className="w-1/2 mx-2 shadow-lg rounded-lg mobile:max-tablet:w-full mobile:max-tablet:mx-0">
                 <QuickActions />
             </div>
         </div>
-        <div className="flex gap-2">
-            <div className="w-1/2 mt-2">
+        <div className="flex gap-2 mobile:max-tablet:flex-col">
+            <div className="w-1/2 mt-2 px-2 my-2 mobile:max-tablet:w-full">
             <Card/>
             </div>
-            <div className="w-1/2 mt-2 mb-2">
+            <div className="w-1/2 mt-2 mb-2 px-2 mobile:max-tablet:w-full">
                 <Budget/>
             </div>
         </div>

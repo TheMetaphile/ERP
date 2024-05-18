@@ -1,16 +1,7 @@
 import React from "react";
 
-export default function TeacherSalary(){
-    const details=[
-        {id:"101",name:"Ram",subjects:"Hindi,Maths",workingDays:"26/30",bonus:"Rs 1500",deduction:"Rs 500",salary:"Rs 15000",TotalAmt:"Rs 16000",status:"paid"},
-        {id:"101",name:"Ram",subjects:"Hindi,Maths",workingDays:"26/30",bonus:"Rs 1500",deduction:"Rs 500",salary:"Rs 15000",TotalAmt:"Rs 16000",status:"paid"},
-        {id:"101",name:"Ram",subjects:"Hindi,Maths",workingDays:"26/30",bonus:"Rs 1500",deduction:"Rs 500",salary:"Rs 15000",TotalAmt:"Rs 16000",status:"paid"},
-        {id:"101",name:"Ram",subjects:"Hindi,Maths",workingDays:"26/30",bonus:"Rs 1500",deduction:"Rs 500",salary:"Rs 15000",TotalAmt:"Rs 16000",status:"paid"},
-        {id:"101",name:"Ram",subjects:"Hindi,Maths",workingDays:"26/30",bonus:"Rs 1500",deduction:"Rs 500",salary:"Rs 15000",TotalAmt:"Rs 16000",status:"paid"},
-        {id:"101",name:"Ram",subjects:"Hindi,Maths",workingDays:"26/30",bonus:"Rs 1500",deduction:"Rs 500",salary:"Rs 15000",TotalAmt:"Rs 16000",status:"paid"},
-        {id:"101",name:"Ram",subjects:"Hindi,Maths",workingDays:"26/30",bonus:"Rs 1500",deduction:"Rs 500",salary:"Rs 15000",TotalAmt:"Rs 16000",status:"paid"},
-        {id:"101",name:"Ram",subjects:"Hindi,Maths",workingDays:"26/30",bonus:"Rs 1500",deduction:"Rs 500",salary:"Rs 15000",TotalAmt:"Rs 16000",status:"unpaid"},
-    ];
+export default function TeacherSalary({details}){
+ 
     return(
         <div className="rounded-xl shadow-lg mb-4">
         <div className="overflow-x-auto w-full mt-4 rounded-lg">

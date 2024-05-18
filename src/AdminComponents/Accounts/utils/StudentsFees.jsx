@@ -1,16 +1,7 @@
 import React from "react";
 
-export default function StudentsFees(){
-    const details=[
-        {studentId:"12",name:"Ankit",misc:"Rs 100",total:"Rs 12300",payed:"Rs 5000",pending:"Rs7300"},
-        {studentId:"12",name:"Ankit",misc:"Rs 100",total:"Rs 12300",payed:"Rs 5000",pending:"Rs7300"},
-        {studentId:"12",name:"Ankit",misc:"Rs 100",total:"Rs 12300",payed:"Rs 5000",pending:"Rs7300"},
-        {studentId:"12",name:"Ankit",misc:"Rs 100",total:"Rs 12300",payed:"Rs 5000",pending:"Rs7300"},
-        {studentId:"12",name:"Ankit",misc:"Rs 100",total:"Rs 12300",payed:"Rs 5000",pending:"Rs7300"},
-        {studentId:"12",name:"Ankit",misc:"Rs 100",total:"Rs 12300",payed:"Rs 5000",pending:"Rs7300"},
-        {studentId:"12",name:"Ankit",misc:"Rs 100",total:"Rs 12300",payed:"Rs 5000",pending:"Rs7300"},
-        {studentId:"12",name:"Ankit",misc:"Rs 100",total:"Rs 12300",payed:"Rs 5000",pending:"Rs7300"},
-    ]
+export default function StudentsFees({details}){
+   
     return(
         <div className="rounded-xl shadow-lg mb-4">
         <div className="overflow-x-auto w-full mt-4 rounded-lg">
@@ -28,7 +19,7 @@ export default function StudentsFees(){
                 <tbody className="bg-white">
                     {details.map((detail, index) => (
                         <tr key={index}>
-                            <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">{detail.studentId}</td>
+                            <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">{detail.id}</td>
                             <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">{detail.name}</td>
                             <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center text-red-500">{detail.misc}</td>
                             <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">{detail.total}</td>

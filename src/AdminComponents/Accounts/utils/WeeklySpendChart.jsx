@@ -5,10 +5,12 @@ const data = {
   labels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
   datasets: [
     {
+      label: 'Weekly Expenses',
       data: [20000, 25000, 30000, 28000, 27000, 18000, 22000],
       backgroundColor: ['#d18b4a', '#6a8cff', '#ff5959','#d18b4a', '#6a8cff', '#ff5959'],
       barThickness: 40,
       borderRadius: 10,
+    
     },
   ],
 };

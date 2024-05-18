@@ -10,7 +10,7 @@ export default function TeacherAttendance(){
         { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Absent", totalHour: "7.5 min" },
         { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
         { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
-        { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
+        { teacher: "ram", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
         { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
         { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },
         { teacher: "Abhishek", designation: "Hindi Teacher", date: "12.03.24", status: "Present", totalHour: "7.5 min" },

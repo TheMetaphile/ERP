@@ -14,16 +14,17 @@ export default function QuickActions() {
 
     ]
     return (
-        <div className="flex flex-col px-2 rounded-lg">
+        <div className="flex flex-col px-2 rounded-lg mobile:max-tablet:mx-auto">
             <div className="flex justify-between items-center">
                 <div>
                     <h1 className="text-2xl mt-4">Quick Actions</h1>
                 </div>
-                <div>
-                    <button className="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center text-lg justify-center mt-4">
+                <div className="flex items-center justify-center">
+                    <button className="bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center text-2xl hover:bg-blue-300">
                         +
                     </button>
                 </div>
+
             </div>
             <div className="w-full px-2 h-1 mx-auto border-b-2 mb-2"></div>
             <div className="flex flex-wrap justify-center items-center">

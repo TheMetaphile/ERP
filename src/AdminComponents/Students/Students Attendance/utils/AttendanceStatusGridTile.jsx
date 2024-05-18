@@ -27,7 +27,7 @@ export default function AttendanceStatusGridTile() {
     const endDate = endOfMonth(currentDate);
     const dateRange = eachDayOfInterval({ start: startDate, end: endDate });
     return (
-        <div className="flex">
+        <div className="flex mb-2">
 
             <div className="flex w-full h-full overflow-x-auto mt-3 items-start">
                 {dateRange.map((date, index) => (

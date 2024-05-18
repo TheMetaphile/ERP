@@ -3,7 +3,7 @@ import React from 'react';
 const Card = () => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg">
-      <div className="flex justify-between space-x-6">
+      <div className="flex justify-between space-x-6 mobile:max-tablet:space-x-2">
         <div className="shadow-lg rounded-lg p-4  w-1/3 h-40 flex flex-col justify-between bg-yellow-200">
         <div className="text-center font-semibold text-lg">Spend this week</div>
             <span className="text-xl mr-2">Rs.5400</span>
