@@ -3,7 +3,7 @@ import React from 'react'
 import Term from './Term.jsx';
 export default function school(props) {
   return (
-    <div className='flex-1 w-full h-full  rounded-lg  mt-6 shadow-md border 2 border-solid  border-gray-200 ml-2   relative '>
+    <div className='flex-1 w-full h-full  rounded-lg  mt-6 shadow-md border 2 border-solid  border-gray-200    relative '>
 
       <div className='flex justify-center'>
 

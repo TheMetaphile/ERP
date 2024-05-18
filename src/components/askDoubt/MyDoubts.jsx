@@ -80,7 +80,7 @@ export default function MyDoubts() {
                             <button className='bg-blue-500 '>OK</button>
                             </div>
                             <div className=" mobile:max-tablet:w-full  w-full ">
-                                <SelectSubject onSelect={handleSubjectSelect} />
+                                <SelectTeacher onSelect={handleSubjectTeacher} />
                             </div>
                         </div>
 

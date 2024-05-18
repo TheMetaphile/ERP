@@ -15,7 +15,7 @@ export default function Table() {
   ];
 
   return (
-    <div className=' flex justify-evenly'>
+    <div className=' flex justify-evenly '>
       <table className=' mt-7  w-full justify-evenly items-center ml-5 mr-5 shadow-lg my-2 px-2 outline  outline-gray-400 rounded-lg mb-3'>
         <thead>
           <tr className='rounded-t-lg border-b-2 border-gray-400 mt-3  no-underline text-xl'>

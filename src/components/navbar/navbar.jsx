@@ -8,7 +8,7 @@ export default function Navbar({onDrawerToggle, onEndDrawerToggle}) {
   return (
     <div className="flex flex-grow mobile:max-tablet:flex-col h-full mt-1 px-2 py-3 mb-2 items-center justify-between bg-teal-300 rounded-lg shadow-md">
       <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-3">
-      <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-secondary shadow-lg' />
+      <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-secondary shadow-lg cursor-pointer' />
         <div className='flex items-center'>
         <img src={logo} alt="Metaphile Public School" className="w-10" />
         <span className=" tablet:text-xl font-medium text-text_blue mobile:text-xl">etaphile Public School</span>

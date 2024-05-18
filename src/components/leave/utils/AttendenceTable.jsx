@@ -13,9 +13,9 @@ export default function AttendenceTable() {
   ];
   return (
     <div className='rounded-lg shadow-lg   w-full'>
-      <table className='mt-7 mb-3 w-full justify-evenly items-center  outline  outline-gray-400 rounded-lg '>
+      <table className='mt-7 mb-3 w-full justify-evenly text-center  outline  outline-gray-400 rounded-lg '>
         <thead>
-          <tr className='rounded-t-lg border-b-2 border-gray-400 mt-3  text-lg font-medium '>
+          <tr className='rounded-t-lg border-b-2 border-gray-400 mt-3  text-base font-medium '>
             <th className=' '>Leave Type </th>
             <th className='bg-blue-200 '>Start Date </th>
             <th className='bg-green-200 '>End Date </th>
@@ -29,7 +29,7 @@ export default function AttendenceTable() {
               <td className="font-normal ">{con.type}</td>
               <td className="font-normal bg-blue-200">{con.start}</td>
               <td className="font-normal bg-green-200">{con.end}</td>
-              <td className={`${con.status === "Pending" ? "text-orange-300" : con.status === "Rejected" ? "text-red-400" : "text-green-400"}`}>{con.status}</td>
+              <td className={`${con.status === "Pending" ? "text-orange-300" : con.status === "Rejected" ? "text-red-400" : "text-green-400"} font-medium`}>{con.status}</td>
 
             </tr>
           ))}
