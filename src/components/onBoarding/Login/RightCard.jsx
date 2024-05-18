@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../../assets/school logo.png'
 import axios from 'axios';
+import AuthContext from "../../../Context/AuthContext";
 export default function RightCard() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -9,6 +10,7 @@ export default function RightCard() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const { login } = useContext(AuthContext);
 
     const handleRoleChange = (event) => {
         setRole(event.target.value);
@@ -32,9 +34,9 @@ export default function RightCard() {
                     const { userDetails, tokens } = response.data;
                     console.log(userDetails, tokens);
 
-                    localStorage.setItem('accessToken', tokens.accessToken);
-                    localStorage.setItem('refereshToken', tokens.refreshToken);
-
+                    // localStorage.setItem('accessToken', tokens.accessToken);
+                    // localStorage.setItem('refereshToken', tokens.refreshToken);
+                    login(userDetails, tokens);
                     navigate(`/${role}`);
                 }
             });
