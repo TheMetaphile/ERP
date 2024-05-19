@@ -28,7 +28,7 @@ export default function Table() {
 
         <tbody >
           {schedule.map((sch, index) => (
-            <tr key={index} >
+            <tr key={index} className='rounded-t-lg border-b-2 border-gray-400 mt-3  no-underline text-xl' >
               <td className="font-normal text-gray-700 text-center py-3 ">{sch.date}</td>
               <td className="font-normal bg-blue-200 text-gray-700 text-center py-3">{sch.subject}</td>
               <td className="font-normal bg-green-200 text-gray-700 text-center py-3">{sch.time}</td>

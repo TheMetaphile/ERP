@@ -8,7 +8,8 @@ export default function ImageTextInRow(props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [oldPassword, setoldPassword] = useState('');
+  const [newPassword, setnewPassword] =useState('');
   const [role, setRole] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -19,8 +20,11 @@ export default function ImageTextInRow(props) {
   const handleRoleChange = (event) => {
     setRole(event.target.value);
   };
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
+  const handleoldPassword = (event) => {
+    setoldPassword(event.target.value);
+  };
+  const handlenewPassword = (event) => {
+    setnewPassword(event.target.value);
   };
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -32,19 +36,20 @@ export default function ImageTextInRow(props) {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      const endpoint = role === "Admin-Dashboard" ? "/login/teacher" : "/login/student";
-      await axios.post(`https://loginapi-y0aa.onrender.com${endpoint}`, {
+    
+      await axios.post(`https://loginapi-y0aa.onrender.com/password/change/${role}`, {
         email,
-        password
+        oldPassword,
+        newPassword
       }).then((response) => {
         if (response.status == 200) {
-          const { userDetails, tokens } = response.data;
-          console.log(userDetails, tokens);
+          // const { userDetails, tokens } = response.data;
+          console.log(response.data);
 
           // localStorage.setItem('accessToken', tokens.accessToken);
           // localStorage.setItem('refereshToken', tokens.refreshToken);
-          login(userDetails, tokens);
-          navigate(`/${role}`);
+          // login(userDetails, tokens);
+          // navigate(`/${role}`);
         }
       });
 
@@ -95,7 +100,7 @@ export default function ImageTextInRow(props) {
               <h1 className="text-lg mt-2 text-gray-400">Please Enter Your ID & Password</h1>
 
               {error && <div className="text-red-500 text-center mt-2">{error}</div>}
-              <h1 className="text-xl font-bold mt-3 ">Old Password</h1>
+              <h1 className="text-xl font-bold mt-3 ">Email</h1>
 
               <input
                 type="email"
@@ -108,15 +113,28 @@ export default function ImageTextInRow(props) {
                 disabled={isSubmitting}
               />
 
+              <h1 className="text-xl font-bold mt-3 ">Old Password</h1>
+
+              <input
+                type="password"
+                id="oldpassword"
+                name="oldpassword"
+                value={oldPassword}
+                onChange={handleoldPassword}
+                placeholder="Enter your old password"
+                className=" rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg "
+                disabled={isSubmitting}
+              />
+
               <h1 className="text-xl font-bold mt-3">New Password</h1>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  name="password"
-                  value={password}
-                  onChange={handlePasswordChange}
-                  placeholder="Enter your password"
+                  id="newpassword"
+                  name="newpassword"
+                  value={newPassword}
+                  onChange={handlenewPassword}
+                  placeholder="Enter your new password"
                   className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg pr-10" // Add padding to the right
                   disabled={isSubmitting}
                 />
