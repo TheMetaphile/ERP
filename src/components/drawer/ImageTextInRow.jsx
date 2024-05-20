@@ -100,7 +100,7 @@ export default function ImageTextInRow(props) {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded-lg shadow-lg">
             <div className="flex flex-col bg-white tablet:w-fit tablet:px-10 mobile:w-full mobile:px-7 mobile:max-tablet:mt-10 justify-center">
-              <img src={logo} alt="img" className="mr-4 h-28 self-center" />
+              <img src={logo} alt="img" className=" h-28 self-center" />
               <h1 className="tablet:text-2xl mobile:text-2xl font-bold self-center whitespace-nowrap">Welcome Back</h1>
               <h1 className="text-lg mt-2 text-gray-400">Change Your Password</h1>
 

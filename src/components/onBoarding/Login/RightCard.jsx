@@ -87,13 +87,13 @@ export default function RightCard() {
                     value={password}
                     onChange={handlePasswordChange}
                     placeholder="Enter your password"
-                    className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg pr-10" // Add padding to the right
+                    className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg pr-10" 
                     disabled={isSubmitting}
                 />
                 <button
                     type="button"
                     onClick={togglePasswordVisibility}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2" // Center the button vertically
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2"
                     disabled={isSubmitting}
                 >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
