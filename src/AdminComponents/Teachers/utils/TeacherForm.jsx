@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { FaCloudUploadAlt } from "react-icons/fa";
 
 export default function TeacherForm() {
 
@@ -52,8 +53,8 @@ export default function TeacherForm() {
     return (
         <>
             <div className="mx-4">
-                <div className="w-full flex justify-center mb-4">
-                    <form onSubmit={handleSubmit} className="flex flex-col w-full px-2 mb-2 gap-4">
+                <div className=" w-full flex justify-center mb-4 items-center">
+                    <form onSubmit={handleSubmit} className=" flex flex-col w-full px-2 mb-2 gap-4">
                         <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
                             <div className="w-full rounded-md mobile:max-tablet:w-full">
                                 <label className="block text-lg mb-2" htmlFor="firstName">
@@ -252,9 +253,9 @@ export default function TeacherForm() {
                                 </label>
                             </div>
                         </div>
-                        <div className="flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4">
+                        <div className=" flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4">
                             <div className="w-1/2 rounded-lg mobile:max-tablet:w-full text-lg whitespace-nowrap">
-                                 Add Google Drive Link for Photo
+                                Add Google Drive Link for Photo
                                 <label className="block text-lg mb-2">
                                     {/* Add Google Drive Link for Photo */}
                                     <input
@@ -267,7 +268,7 @@ export default function TeacherForm() {
                                     />
                                 </label>
                             </div>
-                            <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
+                            <div className=" w-1/2 rounded-md mobile:max-tablet:w-full">
                                 <div className="flex justify-center tablet:mt-6 mt-1">
                                     <button
                                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 mr-2 w-1/4 mobile:max-tablet:w-1/2 tablet:w-1/2"
@@ -282,10 +283,19 @@ export default function TeacherForm() {
                                     >
                                         Save
                                     </button>
+
                                 </div>
                             </div>
-                        </div>
 
+
+                        </div>
+                        <div className=" flex justify-center items-center">
+                            <label className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded mt-2 w-1/4 mobile:max-tablet:w-1/2 tablet:w-1/2 flex justify-center items-center cursor-pointer">
+                                Upload CSV
+                                <input type="file" accept=".csv" className="hidden" />
+                                <FaCloudUploadAlt className="ml-2" />
+                            </label>
+                        </div>
                     </form>
                 </div>
             </div>
