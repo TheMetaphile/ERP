@@ -39,8 +39,6 @@ export default function RightCard() {
                     const { userDetails, tokens } = response.data;
                     console.log(userDetails, tokens);
 
-                    // localStorage.setItem('accessToken', tokens.accessToken);
-                    // localStorage.setItem('refereshToken', tokens.refreshToken);
                     login(userDetails, tokens);
                     navigate(`/${role}`);
                 }

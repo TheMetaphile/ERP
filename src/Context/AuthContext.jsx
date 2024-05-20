@@ -8,6 +8,8 @@ export const AuthProvider = ({ children }) => {
         userDetails: null,
         accessToken: null,
         refreshToken: null,
+        email:null,
+        otpToken:null,
     });
 
     const login = (userDetails, tokens) => {
@@ -15,7 +17,14 @@ export const AuthProvider = ({ children }) => {
             userDetails,
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
+        otpToken:null,
+            
         });
+        console.log("auth user",userDetails);
+        console.log("auth access",tokens.accessToken);
+        console.log("auth refre",tokens.refreshToken);
+        console.log("auth adhaar",userDetails.aadhaarNumber);
+
     };
 
     const logout = () => {
@@ -23,14 +32,25 @@ export const AuthProvider = ({ children }) => {
             userDetails: null,
             accessToken: null,
             refreshToken: null,
+        otpToken:null,
+
         });
         console.log("logout complete")
     };
 
-    
+    const reset = (email,otpToken) => {
+        setAuthState( {
+           
+            email,
+            otpToken // Update otpToken in the auth state
+        });
+        console.log("auth ema",email);
+        console.log("auth tok",otpToken);
+
+    };
 
     return (
-        <AuthContext.Provider value={{ authState, login, logout }}>
+        <AuthContext.Provider value={{ authState, login, logout ,reset}}>
             {children}
         </AuthContext.Provider>
     );

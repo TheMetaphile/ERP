@@ -1,17 +1,19 @@
-import {  useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import logo from '../../../assets/school logo.png'
 import OTPInput from "react-otp-input";
-
+import AuthContext from "../../../Context/AuthContext";
 export default function RightCard() {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
     const [role, setRole] = useState('');
-    const [otpToken, setOtpToken] = useState('');
+    // const [otpToken, setOtpToken] = useState('');
     const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const { authState, reset } = useContext(AuthContext);
 
     const handleRoleChange = (event) => {
         setRole(event.target.value);
@@ -25,10 +27,13 @@ export default function RightCard() {
             const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/send/${role}`, {
                 email,
             });
-            const { otpToken } = response.data;
-            console.log(otpToken);
-            setOtpToken(otpToken);
-            localStorage.setItem('otpToken', otpToken);
+            if (response.status === 200) {
+                const { otpToken } = response.data;
+                reset(email, otpToken);
+                console.log("OTP toooken", otpToken)
+                setSuccessMessage('OTP sent successfully');
+                setTimeout(() => setSuccessMessage(''), 4000);
+            }
         }
         catch (error) {
             console.error(error);
@@ -46,22 +51,18 @@ export default function RightCard() {
     const verifyOTP = async () => {
         setIsSubmitting(true);
         try {
-            const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/verify`, {
-                email,
+            const response=await axios.post(`https://loginapi-y0aa.onrender.com/otp/verify`, {
+                email: authState.email,
                 otp,
-                otpToken
+                otpToken: authState.otpToken
             });
-            const  success  = response.data;
-            localStorage.setItem('email', email);
-            if (success) {
+            if (response.status === 200 && response.data.valid) {
                 navigate('/newPassword');
-            }
-            else {
+            } else {
                 setError('Invalid OTP');
-                setTimeout(() => {
-                    setError('');
-                }, 2000)
+                setTimeout(() => setError(''), 2000);
             }
+
         }
         catch (error) {
             console.error(error);
@@ -83,6 +84,7 @@ export default function RightCard() {
 
             <h1 className="tablet:text-2xl mobile:text-xl font-bold self-center whitespace-nowrap">Reset Password</h1>
             {error && <p className="text-red-500">{error}</p>}
+            {successMessage && <p className="text-green-500 text-center mt-2">{successMessage}</p>}
             <h1 className="text-xl font-bold mt-5 ">Login Id</h1>
 
             <div className="flex justify-between mt-3">
@@ -139,7 +141,7 @@ export default function RightCard() {
                 disabled={isSubmitting}
             />
 
-            
+
             <button className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8" onClick={verifyOTP} disabled={isSubmitting}>
 
                 <h1 className="font-medium text-2xl text-white">Submit</h1>

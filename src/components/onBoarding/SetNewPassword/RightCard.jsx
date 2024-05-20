@@ -1,16 +1,16 @@
 import logo from '../../../assets/school logo.png'
 import {useNavigate } from "react-router-dom";
 import axios from 'axios';
-import { useState } from "react";
-
+import { useState, useContext } from "react";
+import AuthContext from '../../../Context/AuthContext';
 export default function RightCard() {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const email = localStorage.getItem('email'); 
+    
     const [isSubmitting, setIsSubmitting] = useState(false);
-
+    const { authState } = useContext(AuthContext);
     const handleNewPasswordChange = (event) => {
         setNewPassword(event.target.value);
     };
@@ -25,12 +25,13 @@ export default function RightCard() {
             setTimeout(() => {
                 setError('');
             }, 2000);
+            setIsSubmitting(false);
             return;
         }
         try {
-            console.log("mail password", email , newPassword)
+            console.log("mail password", authState.email , newPassword)
             const response = await axios.post(`https://loginapi-y0aa.onrender.com/password/forgot/Student`, {
-                email,
+                email:authState.email,
                 newPassword
             });
             const success = response.data;
