@@ -290,7 +290,7 @@ export default function TeacherForm() {
 
                         </div>
                         <div className=" flex justify-center items-center">
-                            <label className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded mt-2 w-1/4 mobile:max-tablet:w-1/2 tablet:w-1/2 flex justify-center items-center cursor-pointer">
+                            <label className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded mt-2 w-1/4 mobile:max-tablet:w-1/2 tablet:w-1/2 flex justify-center items-center cursor-pointer whitespace-nowrap">
                                 Upload CSV
                                 <input type="file" accept=".csv" className="hidden" />
                                 <FaCloudUploadAlt className="ml-2" />

@@ -3,12 +3,12 @@ import { callIcon, location, userimg, } from "./images";
 import { MdEmail } from 'react-icons/md';
 export default function ProfileDetails() {
     return (
-        <div className="flex justify-center mobile:max-tablet:flex-col bg-white shadow-lg w-full rounded-xl p-4 ">
+        <div className=" flex justify-center mobile:max-tablet:flex-col bg-white shadow-lg w-full rounded-xl p-4 ">
             <div className="flex flex-col items-center gap-4 mx-4">
                 <div className="mx-4">
                     <img src={userimg} alt="" className="h-16 w-16" />
                 </div>
-                <div>
+                <div className=" flex flex-col justify-center items-center">
                     <h1 className="font-semibold text-2xl">Abhishek</h1>
                     <p className="text-gray-600">Maths & Science Teacher</p>
                 </div>
