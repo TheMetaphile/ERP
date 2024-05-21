@@ -5,6 +5,10 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import axios from 'axios'
 
 export default function AddmissionForm() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+
     const [formData, setFormData] = useState(
         {
             name: '',
@@ -77,15 +81,39 @@ export default function AddmissionForm() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        setLoading(true);
+
+
+        try {
+            const response = await axios.post('https://loginapi-y0aa.onrender.com/signup/student', formData);
+            if (response.status === 200) {
+                setSuccess('Student registered successfully!');
+                console.log(formData)
+                setTimeout(() => setSuccess(''), 4000);
+                handleReset();
+            }
+
+        } catch (err) {
+            console.error(error);
+            setError(error.response?.data?.error || 'An error ocured');
+            setTimeout(() => {
+                setError('');
+            }, 2000);
+        }
+        finally {
+            setLoading(false);
+
+        }
     }
 
     return (
         <div className="rounded-lg shadow-lg mx-4 mb-4 border-gray-100 px-4">
             <div className="mt-2"><h1 className="text-2xl font-semibold px-4 mt-4">Add New Student</h1></div>
             <form onSubmit={handleSubmit} className="flex flex-col w-full gap-8 px-2 mb-2">
+                {error && <div className="bg-red-100 text-red-700 p-2 rounded">{error}</div>}
+                {success && <div className="bg-green-100 text-green-700 p-2 rounded">{success}</div>}
                 <div className="flex w-full gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
                     <div className="flex flex-col mt-8">
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
@@ -103,7 +131,7 @@ export default function AddmissionForm() {
                                 />
                             </label>
                         </div>
-                        
+
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="permanentAddress">
                                 Permanent Address
@@ -169,7 +197,7 @@ export default function AddmissionForm() {
                                 </select>
                             </label>
                         </div>
-                        
+
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="oldAdmissionNumber">
                                 Old Admission Number
@@ -482,7 +510,7 @@ export default function AddmissionForm() {
                                 </select>
                             </label>
                         </div>
-                        
+
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2" htmlFor="guardiansName">
                                 Guardian Name

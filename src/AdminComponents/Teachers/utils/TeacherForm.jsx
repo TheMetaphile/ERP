@@ -1,8 +1,12 @@
 
 import React, { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
-
+import axios from 'axios';
 export default function TeacherForm() {
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     const [formData, setFormData] = useState(
         {
@@ -12,7 +16,7 @@ export default function TeacherForm() {
             gender: '',
             profileLink: '',
             religion: '',
-            subject:'',
+            subject: '',
             employeeId: '',
             phoneNumber: '',
             experience: '',
@@ -39,7 +43,7 @@ export default function TeacherForm() {
             gender: '',
             profileLink: '',
             religion: '',
-            subject:'',
+            subject: '',
             employeeId: '',
             phoneNumber: '',
             experience: '',
@@ -50,18 +54,45 @@ export default function TeacherForm() {
             DOB: '',
             permanentAddress: '',
         });
+
     };
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
-    }
+        setLoading(true);
+
+
+        try {
+            const response = await axios.post('https://loginapi-y0aa.onrender.com/signup/teacher', formData);
+            if (response.status === 200) {
+                setSuccess('Teacher registered successfully!');
+                console.log(formData)
+                setTimeout(() => setSuccess(''), 4000);
+                handleReset();
+            }
+
+        } catch (err) {
+            console.error(error);
+            setError(error.response?.data?.error || 'An error ocured');
+            setTimeout(() => {
+                setError('');
+            }, 2000);
+        }
+        finally {
+            setLoading(false);
+
+        }
+    };
+
 
     return (
         <>
             <div className="mx-4">
                 <div className=" w-full flex justify-center mb-4 items-center">
                     <form onSubmit={handleSubmit} className=" flex flex-col w-full px-2 mb-2 gap-4">
+                        {error && <div className="bg-red-100 text-red-700 p-2 rounded">{error}</div>}
+                        {success && <div className="bg-green-100 text-green-700 p-2 rounded">{success}</div>}
                         <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
                             <div className="w-full rounded-md mobile:max-tablet:w-full">
                                 <label className="block text-lg mb-2" htmlFor="name">
