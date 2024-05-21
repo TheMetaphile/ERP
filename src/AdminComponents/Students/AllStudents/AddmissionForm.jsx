@@ -2,33 +2,39 @@ import React, { useState } from "react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaCloudUploadAlt } from "react-icons/fa";
-
+import axios from 'axios'
 
 export default function AddmissionForm() {
     const [formData, setFormData] = useState(
         {
-            firstName: '',
-            lastName: '',
-            gender: '',
+            name: '',
             email: '',
-            address: '',
-            religion: '',
-            dateOfBirth: '',
-            phone: '',
-            photo: '',
-            fatherName: '',
-            motherName: '',
-            BloodGroup: '',
-            class: '',
+            password: 'School@123',
+            aadhaarNumber: '',
+            academicYear: '2024',
+            admissionClass: '',
+            currentClass: '',
             section: '',
-            addmissionId: '',
-            fatherOccupation: '',
-            fatherPhoneNumber: '',
+            admissionDate: '',
+            oldAdmissionNumber: '',
+            emergencyContactNumber: '',
+            DOB: '',
+            fatherEmailId: '',
+            motherEmailId: '',
+            motherName: '',
+            fatherName: '',
+            permanentAddress: '',
+            fathersOccupation: '',
             motherOccupation: '',
+            fatherPhoneNumber: '',
             motherPhoneNumber: '',
-            guardianName: '',
-            guardianOccupation: '',
-            guardianPhoneNumber: '',
+            profileLink: '',
+            bloodGroup: '',
+            guardiansName: '',
+            guardiansOccupation: '',
+            guardiansPhoneNumber: '',
+            gender: '',
+            religion: ''
         }
     );
     const handleChange = (e) => {
@@ -40,28 +46,34 @@ export default function AddmissionForm() {
     };
     const handleReset = () => {
         setFormData({
-            firstName: '',
-            lastName: '',
-            gender: '',
+            name: '',
             email: '',
-            address: '',
-            religion: '',
-            dateOfBirth: '',
-            phone: '',
-            photo: null,
-            fatherName: '',
-            motherName: '',
-            BloodGroup: '',
-            class: '',
+            password: '',
+            aadhaarNumber: '',
+            academicYear: '',
+            admissionClass: '',
+            currentClass: '',
             section: '',
-            addmissionId: '',
-            fatherOccupation: '',
-            fatherPhoneNumber: '',
+            admissionDate: '',
+            oldAdmissionNumber: '',
+            emergencyContactNumber: '',
+            DOB: '',
+            fatherEmailId: '',
+            motherEmailId: '',
+            motherName: '',
+            fatherName: '',
+            permanentAddress: '',
+            fathersOccupation: '',
             motherOccupation: '',
+            fatherPhoneNumber: '',
             motherPhoneNumber: '',
-            guardianName: '',
-            guardianOccupation: '',
-            guardianPhoneNumber: '',
+            profileLink: '',
+            bloodGroup: '',
+            guardiansName: '',
+            guardiansOccupation: '',
+            guardiansPhoneNumber: '',
+            gender: '',
+            religion: ''
         });
     };
 
@@ -77,14 +89,30 @@ export default function AddmissionForm() {
                 <div className="flex w-full gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
                     <div className="flex flex-col mt-8">
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="firstName">
-                                First Name
+                            <label className="block text-lg mb-2" htmlFor="name">
+                                Name
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="firstName"
+                                    id="name"
                                     type="text"
-                                    name="firstName"
-                                    value={formData.firstName}
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder=""
+                                    required
+                                />
+                            </label>
+                        </div>
+                        
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="permanentAddress">
+                                Permanent Address
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="permanentAddress"
+                                    type="text"
+                                    name="permanentAddress"
+                                    value={formData.permanentAddress}
                                     onChange={handleChange}
                                     placeholder=""
                                     required
@@ -110,46 +138,54 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
-                                Address
-                                <input
-                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="address"
-                                    type="text"
-                                    name="address"
-                                    value={formData.address}
-                                    onChange={handleChange}
-                                    placeholder=""
-                                    required
-                                />
-                            </label>
-                        </div>
-                        <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
-                                Class
+                            <label className="block text-lg mb-2" htmlFor="currentClass">
+                                Current Class
                                 <select
                                     className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
-                                    id="class"
-                                    name="class"
-                                    value={formData.class}
+                                    id="currentClass"
+                                    type="text"
+                                    name="currentClass"
+                                    value={formData.currentClass}
                                     onChange={handleChange}
                                     required
                                 >
                                     <option value="">Select Class</option>
-                                    <option value="male">Pre-Nursery</option>
-                                    <option value="female">Nursery</option>
-                                    <option value="other">L.K.J</option>
-                                    <option value="other">U.K.J</option>
-                                    <option value="other">1st</option>
-                                    <option value="other">2nd</option>
-                                    <option value="other">3rd</option>
-                                    <option value="other">4th</option>
-                                    <option value="other">5th</option>
+                                    <option value="Pre-Nursery">Pre-Nursery</option>
+                                    <option value="Nursery">Nursery</option>
+                                    <option value="L.K.J">L.K.J</option>
+                                    <option value="U.K.J">U.K.J</option>
+                                    <option value="1st">1st</option>
+                                    <option value="2nd">2nd</option>
+                                    <option value="3rd">3rd</option>
+                                    <option value="4th">4th</option>
+                                    <option value="5th">5th</option>
+                                    <option value="6th">6th</option>
+                                    <option value="7th">7th</option>
+                                    <option value="8th">8th</option>
+                                    <option value="9th">9th</option>
+                                    <option value="10th">10th</option>
+                                    <option value="11th">11th</option>
+                                    <option value="12th">12th</option>
                                 </select>
                             </label>
                         </div>
+                        
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
+                            <label className="block text-lg mb-2" htmlFor="oldAdmissionNumber">
+                                Old Admission Number
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="oldAdmissionNumber"
+                                    type="text"
+                                    name="oldAdmissionNumber"
+                                    value={formData.oldAdmissionNumber}
+                                    onChange={handleChange}
+                                />
+                            </label>
+                        </div>
+
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="fatherName">
                                 Father Name
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
@@ -164,14 +200,14 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
-                                Mother Name
+                            <label className="block text-lg mb-2" htmlFor="fatherEmailId">
+                                Father Email
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="motherName"
+                                    id="fatherEmailId"
                                     type="text"
-                                    name="motherName"
-                                    value={formData.motherName}
+                                    name="fatherEmailId"
+                                    value={formData.fatherEmailId}
                                     onChange={handleChange}
                                     placeholder=""
                                     required
@@ -179,134 +215,14 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
-                                Guardian Name
-                                <input
-                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="guardianName"
-                                    type="text"
-                                    name="guardianName"
-                                    value={formData.guardianName}
-                                    onChange={handleChange}
-                                    placeholder=""
-                                    required
-                                />
-                            </label>
-                        </div>
-
-                    </div>
-                    <div className="flex flex-col mt-8">
-                        <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="firstName">
-                                Last Name
-                                <input
-                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="lastName"
-                                    type="text"
-                                    name="lastName"
-                                    value={formData.lastName}
-                                    onChange={handleChange}
-                                    placeholder=""
-                                    required
-                                />
-                            </label>
-                        </div>
-                        <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
-                                Phone Number
-                                <input
-                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="phone"
-                                    type="text"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    placeholder=""
-                                    required
-                                />
-                            </label>
-                        </div>
-                        <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
-                                Blood Group
-                                <select
-                                    className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
-                                    id="BloodGroup"
-                                    name="BloodGroup"
-                                    value={formData.BloodGroup}
-                                    onChange={handleChange}
-                                    required
-                                >
-                                    <option value="">Select Blood Group</option>
-                                    <option value="">A+</option>
-                                    <option value="">A-</option>
-                                    <option value="">B+</option>
-                                    <option value="">B-</option>
-                                    <option value="">O+</option>
-                                    <option value="">O-</option>
-
-                                </select>
-                            </label>
-                        </div>
-
-                        <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
-                                Section
-                                <select
-                                    className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
-                                    id="Section"
-                                    name="section"
-                                    value={formData.section}
-                                    onChange={handleChange}
-                                    required
-                                >
-                                    <option value="">Select Section</option>
-                                    <option value="">A</option>
-                                    <option value="">B</option>
-                                    <option value="">C</option>
-                                    <option value="">D</option>
-                                </select>
-                            </label>
-                        </div>
-                        <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
+                            <label className="block text-lg mb-2" htmlFor="fathersOccupation">
                                 Father Occupation
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="fatherOccupation"
+                                    id="fathersOccupation"
                                     type="text"
-                                    name="fatherOccupation"
-                                    value={formData.fatherOccupation}
-                                    onChange={handleChange}
-                                    placeholder=""
-                                    required
-                                />
-                            </label>
-                        </div>
-                        <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
-                                Mother Occupation
-                                <input
-                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="motherOccupation"
-                                    type="text"
-                                    name="motherOccupation"
-                                    value={formData.motherOccupation}
-                                    onChange={handleChange}
-                                    placeholder=""
-                                    required
-                                />
-                            </label>
-                        </div>
-                        <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
-                                Guardian Occupation
-                                <input
-                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="guardianOccupation"
-                                    type="text"
-                                    name="guardianOccupation"
-                                    value={formData.guardianOccupation}
+                                    name="fathersOccupation"
+                                    value={formData.fathersOccupation}
                                     onChange={handleChange}
                                     placeholder=""
                                     required
@@ -314,29 +230,26 @@ export default function AddmissionForm() {
                             </label>
                         </div>
 
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="fatherPhoneNumber">
+                                Father Phone Number
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="fatherPhoneNumber"
+                                    type="text"
+                                    name="fatherPhoneNumber"
+                                    value={formData.fatherPhoneNumber}
+                                    onChange={handleChange}
+                                    placeholder=""
+                                    required
+                                />
+                            </label>
+                        </div>
 
                     </div>
-
                     <div className="flex flex-col mt-8">
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-
-
-                            <label className="block text-lg mb-2" htmlFor="dob">
-                                Date Of Birth
-                                <input
-                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="dateOfBirth"
-                                    type="text"
-                                    name="dateOfBirth"
-                                    value={formData.dateOfBirth}
-                                    onChange={handleChange}
-                                    placeholder=""
-                                    required
-                                />
-                            </label>
-                        </div>
-                        <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
+                            <label className="block text-lg mb-2" htmlFor="email">
                                 Email
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
@@ -345,13 +258,27 @@ export default function AddmissionForm() {
                                     name="email"
                                     value={formData.email}
                                     onChange={handleChange}
+                                    required
+                                />
+                            </label>
+                        </div>
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="aadhaarNumber">
+                                Aadhaar Number
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="aadhaarNumber"
+                                    type="text"
+                                    name="aadhaarNumber"
+                                    value={formData.aadhaarNumber}
+                                    onChange={handleChange}
                                     placeholder=""
                                     required
                                 />
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="email">
+                            <label className="block text-lg mb-2" htmlFor="religion">
                                 Religion
                                 <select
                                     className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
@@ -368,15 +295,49 @@ export default function AddmissionForm() {
                                 </select>
                             </label>
                         </div>
+
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
-                                Addmission Id
+                            <label className="block text-lg mb-2" htmlFor="admissionClass">
+                                Admission Class
+                                <select
+                                    className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
+                                    id="admissionClass"
+                                    type="text"
+                                    name="admissionClass"
+                                    value={formData.admissionClass}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">Select Class</option>
+                                    <option value="Pre-Nursery">Pre-Nursery</option>
+                                    <option value="Nursery">Nursery</option>
+                                    <option value="L.K.J">L.K.J</option>
+                                    <option value="U.K.J">U.K.J</option>
+                                    <option value="1st">1st</option>
+                                    <option value="2nd">2nd</option>
+                                    <option value="3rd">3rd</option>
+                                    <option value="4th">4th</option>
+                                    <option value="5th">5th</option>
+                                    <option value="6th">6th</option>
+                                    <option value="7th">7th</option>
+                                    <option value="8th">8th</option>
+                                    <option value="9th">9th</option>
+                                    <option value="10th">10th</option>
+                                    <option value="11th">11th</option>
+                                    <option value="12th">12th</option>
+                                </select>
+                            </label>
+                        </div>
+
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="admissionDate">
+                                Addmission Date
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="admissionId"
+                                    id="admissionDate"
                                     type="text"
-                                    name="admissionId"
-                                    value={formData.addmissionId}
+                                    name="admissionDate"
+                                    value={formData.admissionDate}
                                     onChange={handleChange}
                                     placeholder=""
                                     required
@@ -384,14 +345,14 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
-                                Father Phone Number
+                            <label className="block text-lg mb-2" htmlFor="motherName">
+                                Mother Name
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="fatherPhoneNumber"
+                                    id="motherName"
                                     type="text"
-                                    name="fatherPhoneNumber"
-                                    value={formData.fatherPhoneNumber}
+                                    name="motherName"
+                                    value={formData.motherName}
                                     onChange={handleChange}
                                     placeholder=""
                                     required
@@ -399,7 +360,37 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
+                            <label className="block text-lg mb-2" htmlFor="motherEmailId">
+                                Mother Email
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="motherEmailId"
+                                    type="text"
+                                    name="motherEmailId"
+                                    value={formData.motherEmailId}
+                                    onChange={handleChange}
+                                    placeholder=""
+                                    required
+                                />
+                            </label>
+                        </div>
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="motherOccupation">
+                                Mother Occupation
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="motherOccupation"
+                                    type="text"
+                                    name="motherOccupation"
+                                    value={formData.motherOccupation}
+                                    onChange={handleChange}
+                                    placeholder=""
+                                    required
+                                />
+                            </label>
+                        </div>
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="motherPhoneNumber">
                                 Mother Phone Number
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
@@ -413,17 +404,141 @@ export default function AddmissionForm() {
                                 />
                             </label>
                         </div>
+
+
+                    </div>
+
+                    <div className="flex flex-col mt-8">
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
+                            <label className="block text-lg mb-2" htmlFor="password">
+                                Password
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </label>
+                        </div>
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+
+
+                            <label className="block text-lg mb-2" htmlFor="DOB">
+                                Date Of Birth
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="DOB"
+                                    type="text"
+                                    name="DOB"
+                                    value={formData.DOB}
+                                    onChange={handleChange}
+                                    placeholder=""
+                                    required
+                                />
+                            </label>
+                        </div>
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="bloodGroup">
+                                Blood Group
+                                <select
+                                    className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
+                                    id="bloodGroup"
+                                    name="bloodGroup"
+                                    value={formData.bloodGroup}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">Select Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="section">
+                                Section
+                                <select
+                                    className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
+                                    id="section"
+                                    name="section"
+                                    value={formData.section}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">Select Section</option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                </select>
+                            </label>
+                        </div>
+                        
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="guardiansName">
+                                Guardian Name
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="guardiansName"
+                                    type="text"
+                                    name="guardiansName"
+                                    value={formData.guardiansName}
+                                    onChange={handleChange}
+                                    placeholder=""
+                                    required
+                                />
+                            </label>
+                        </div>
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="guardiansOccupation">
+                                Guardian Occupation
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="guardiansOccupation"
+                                    type="text"
+                                    name="guardiansOccupation"
+                                    value={formData.guardiansOccupation}
+                                    onChange={handleChange}
+                                    placeholder=""
+                                    required
+                                />
+                            </label>
+                        </div>
+
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="guardiansPhoneNumber">
                                 Guardian Phone Number
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                    id="guardianPhoneNumber"
+                                    id="guardiansPhoneNumber"
                                     type="text"
-                                    name="guardianPhoneNumbe"
-                                    value={formData.guardianPhoneNumber}
+                                    name="guardiansPhoneNumber"
+                                    value={formData.guardiansPhoneNumber}
                                     onChange={handleChange}
                                     placeholder=""
+                                    required
+                                />
+                            </label>
+                        </div>
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="emergencyContactNumber">
+                                Emergency Contact Number
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="emergencyContactNumber"
+                                    type="text"
+                                    name="emergencyContactNumber"
+                                    value={formData.emergencyContactNumber}
+                                    onChange={handleChange}
                                     required
                                 />
                             </label>
@@ -438,9 +553,10 @@ export default function AddmissionForm() {
                             {/* Add Google Drive Link for Photo */}
                             <input
                                 className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-1"
-                                id="photo"
+                                id="profileLink"
                                 type="text"
-                                name="photo"
+                                name="profileLink"
+                                value={formData.profileLink}
                                 onChange={handleChange}
                                 capture="user"
                             />
