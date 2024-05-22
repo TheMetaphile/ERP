@@ -64,6 +64,7 @@ export default function TeacherForm() {
 
 
         try {
+            formData.password=formData.aadhaarNumber;
             const response = await axios.post('https://loginapi-y0aa.onrender.com/signup/teacher', formData);
             if (response.status === 200) {
                 setSuccess('Teacher registered successfully!');
@@ -109,21 +110,7 @@ export default function TeacherForm() {
                                     />
                                 </label>
                             </div>
-                            <div className="w-full rounded-md mobile:max-tablet:w-full">
-                                <label className="block text-lg mb-2" htmlFor="password">
-                                    Password
-                                    <input
-                                        className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                                        id="password"
-                                        type="password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        placeholder=""
-                                        required
-                                    />
-                                </label>
-                            </div>
+                            
                         </div>
                         <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
                             <div className="w-1/2 rounded-md mobile:max-tablet:w-full">

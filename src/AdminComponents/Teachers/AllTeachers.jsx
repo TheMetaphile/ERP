@@ -1,32 +1,55 @@
-import React,{useState} from "react";
+import React,{useState,useEffect,useContext} from "react";
 import TeacherStats from "./utils/TeacherStats";
 import SearchBar from "./utils/SearchBar";
 import TeacherCard from "./utils/TeacherCard";
 import { chatLogo, profilelogo} from "./utils/images/index.js"
-
+import axios from 'axios'
+import AuthContext from "../../Context/AuthContext.jsx";
 
 export default function AllTeachers(){
     const [name, setName] = useState('');
+    const [userData, setUserData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const { authState } = useContext(AuthContext);
+
     const handleNameChange = (event) => {
         setName(event.target.value);
     };
-    const userData = [
-        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Sakshi", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Ram", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Amit", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "mayank", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
-        { name: "Abhishek", role: "Teacher", subjects: ["Mathematics", "Science", "Computer"], profileLogo: profilelogo, chatLogo: chatLogo },
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchMultiple/teacher', {
+                    accessToken:authState.accessToken
+                });
+                console.log("tooken",response.data);
+                const users = response.data.map(user => ({
+                    ...user,
+                    profileLogo: profilelogo,
+                    chatLogo: chatLogo,
+                }));
+                setUserData(users);
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
+        };
 
-    ];
+        if (authState.accessToken) {
+            fetchUserData();
+        } else {
+            setError('No access token available');
+            setLoading(false);
+        }
+    }, [authState.accessToken]);
+
     const filteredTeachers = userData.filter(user => {
         const nameMatch = user.name.toLowerCase().includes(name.toLowerCase());
-       
-       return nameMatch;
+        return nameMatch;
     });
+
+
     return(
         <div className="flex flex-col mx-4">
         <div className="mt-4 mobile:max-tablet:w-full mobile:max-tablet:mx-2 mobile:max-tablet:my-8">
@@ -39,11 +62,15 @@ export default function AllTeachers(){
             <SearchBar handleNameChange={handleNameChange} name={name}/>
         </div>
         <div className="mt-4 ">
-            {
-                filteredTeachers.length===0?(<TeacherCard userData={userData} />)
-                :
-                ( <TeacherCard userData={filteredTeachers} />)
-            }
+        {loading ? (
+                    <div>Loading...</div>
+                ) : error ? (
+                    <div>Error: {error}</div>
+                ) : filteredTeachers.length === 0 ? (
+                    <TeacherCard userData={userData} />
+                ) : (
+                    <TeacherCard userData={filteredTeachers} />
+                )}
            
         </div>
         </div>

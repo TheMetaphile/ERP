@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import logo from '../../assets/school logo.png';
 import axios from 'axios';
+import { FaRegCircleXmark } from "react-icons/fa6";
 
 
 export default function ImageTextInRow(props) {
@@ -49,7 +50,7 @@ export default function ImageTextInRow(props) {
       return;
   }
     try {
-      const response = await axios.post(`https://loginapi-y0aa.onrender.com/password/change/${role}`, {
+      const response = await axios.post(`https://loginapi-y0aa.onrender.com/password/change/student`, {
         email,
         oldPassword,
         newPassword
@@ -99,10 +100,11 @@ export default function ImageTextInRow(props) {
       {isDialogOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded-lg shadow-lg">
+            <FaRegCircleXmark className="text-red-600 float-right w-5 h-5 cursor-pointer" onClick={handleCloseDialog}/>
             <div className="flex flex-col bg-white tablet:w-fit tablet:px-10 mobile:w-full mobile:px-7 mobile:max-tablet:mt-10 justify-center">
-              <img src={logo} alt="img" className=" h-28 self-center" />
-              <h1 className="tablet:text-2xl mobile:text-2xl font-bold self-center whitespace-nowrap">Welcome Back</h1>
-              <h1 className="text-lg mt-2 text-gray-400">Change Your Password</h1>
+              
+              <h1 className="tablet:text-2xl mobile:text-2xl font-bold self-center whitespace-nowrap">Change Your Password</h1>
+
 
               {error && <div className="text-red-500 text-center mt-2">{error}</div>}
               {successMessage && <div className="text-green-500 text-center mt-2">{successMessage}</div>}
@@ -154,47 +156,16 @@ export default function ImageTextInRow(props) {
                 </button>
               </div>
 
-              <div className="flex w-60 px-3 py-2 mt-2 text-lg justify-between">
-                <label className="text-lg font-medium text-center">
-                  <input
-                    type="radio"
-                    name="role"
-                    value="Admin-Dashboard"
-                    checked={role === "Admin-Dashboard"}
-                    onChange={handleRoleChange}
-                    className="mr-3 w-4 h-4"
-                    disabled={isSubmitting}
-                  />
-                  Admin
-                </label>
-                <label className="text-lg font-medium text-center">
-                  <input
-                    type="radio"
-                    name="role"
-                    value="Student-Dashboard"
-                    checked={role === "Student-Dashboard"}
-                    onChange={handleRoleChange}
-                    className="mr-3 w-4 h-4"
-                    disabled={isSubmitting}
-                  />
-                  Student
-                </label>
-              </div>
+             
 
               <button
-                className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-2 justify-center self-center bg-blue-600"
+                className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-4 justify-center self-center bg-blue-600"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
               >
                 <h1 className="font-medium text-2xl text-white">Change Password</h1>
               </button>
 
-              <button
-                className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-2 justify-center self-center bg-blue-600"
-                onClick={handleCloseDialog}
-              >
-                <h1 className="font-medium text-2xl text-white">Close</h1>
-              </button>
             </div>
           </div>
         </div>

@@ -10,7 +10,7 @@ export default function Drawer() {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     try {
       await logout();
       navigate("/");
@@ -39,7 +39,7 @@ export default function Drawer() {
         </div>
       </div>
       <div className="flex justify-center mt-8"> {/* Added flex justify-center here */}
-      <button
+        <button
           onClick={handleLogout}
           className="bg-teal-300 border border-transparent rounded-xl px-4 py-2 flex items-center shadow-md"
         >
