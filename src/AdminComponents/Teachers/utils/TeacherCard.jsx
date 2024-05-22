@@ -18,7 +18,7 @@ export default function TeacherCard({ userData }) {
                     </div>
                     <div className="flex gap-4 mt-2">
                         {(user.subjects || []).map((subject, i) => (
-                            <h1 key={i} className="bg-green-200 rounded-md px-2">{user.subjects}</h1>
+                            <h1 key={i} className="bg-green-200 rounded-md px-2">{subject.subject}</h1>
                         ))}
                     </div>
                     <div className="flex mt-4 gap-2 mb-4">
@@ -27,7 +27,7 @@ export default function TeacherCard({ userData }) {
                             <button className="text-white">
                                 <Link to={{
                                     pathname: "/Admin-Dashboard/Teachers/profile",
-                                    state: { userData: user}
+                                    userData:{userData}
                                 }}>Profile</Link></button>
                         </div>
                         <div className="flex gap-2 items-center bg-blue-300 mx-2 w-20 justify-evenly rounded-md px-2">

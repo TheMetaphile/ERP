@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useState,useContext,useEffect } from "react";
 import Header from "../../../Home/utils/TeachersDetails/LeftCard/Header";
 import SearchBar from "../utils/SearchBar";
 import StudentDetailTile from "../utils/StudentDetailTile";
+import axios from 'axios'
+import AuthContext from "../../../../Context/AuthContext";
 
 export default function StudentsList() {
+    const [name, setName] = useState('');
+    const [userData, setUserData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const { authState } = useContext(AuthContext);
+
     const [rollNumber, setRollNumber] = useState('');
     const handleRollNumberChange = (event) => {
         setRollNumber(event.target.value);
     };
 
-    const [name, setName] = useState('');
     const handleNameChange = (event) => {
         setName(event.target.value);
     };
@@ -22,6 +29,44 @@ export default function StudentsList() {
     const handleSectionChange = (event) => {
         setSection(event.target.value);
     };
+    
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchMultiple/student', {
+                    accessToken: authState.accessToken
+                });
+                console.log("API response:", response.data);
+
+
+                if (response.data.Students) {
+                    const users = response.data.Students.map(user => ({
+                        ...user,
+                        profileLogo: user.profileLink || profilelogo,
+     
+                    }));
+                    setUserData(users);
+                } else {
+                    setError('Unexpected response format');
+                }
+                
+                console.log(response.data.Students[4].name);
+                
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
+        };
+
+        if (authState.accessToken) {
+            fetchUserData();
+        } else {
+            setError('No access token available');
+            setLoading(false);
+        }
+    }, [authState.accessToken]);
+
     const Students = [
         ['12', 'Abhishek', '9', 'A', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
         ['25', 'Bhuvneshwar Tyagi', '10', 'B', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
