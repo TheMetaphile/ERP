@@ -97,7 +97,7 @@ export default function StudentsList() {
             <SearchBar rollNumber={rollNumber} name={name} Class={Class} Section={Section} handleRollNumberChange={handleRollNumberChange} handleNameChange={handleNameChange} handleClassChange={handleClassChange} handleSectionChange={handleSectionChange} />
             </div>
             <div className=" rounded-lg shadow-md border-2 border-black w-full overflow-x-auto no-scrollable">
-                <Header headings={['ID', 'Name', 'Class', 'Section', 'Gender', 'Parent Name', 'Phone No.', 'Adress', 'Date of Birth', 'E-mail']} />
+                <Header headings={['ID', 'Name', 'Class', 'Section', 'Gender', 'Parent Name', 'Phone No.', 'Address', 'Date of Birth', 'E-mail']} />
                 {filteredStudents.length === 0 ? (
                     Students.map((student,index) => (
 

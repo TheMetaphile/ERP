@@ -9,7 +9,7 @@ export default function TeacherCard({ userData }) {
                 <div key={user._id || index} className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between border rounded-lg p-4 mb-2">
 
                     <div className="flex w-72">
-                        <img src={user.profileLogo || userimg} alt="" className="h-16 w-16 mr-3" />
+                        <img src={user.profileLogo || userimg} alt="" className="h-16 w-16 mr-3 rounded-full" />
 
                         <div className="mt-2 flex flex-col items-center">
                             <h1 className="text-xl font-semibold">{user.name}</h1>
@@ -23,11 +23,12 @@ export default function TeacherCard({ userData }) {
                     </div>
                     <div className="flex mt-4 gap-2 mb-4">
                         <div className="flex gap-2 items-center bg-blue-300 mx-2 w-30 justify-evenly rounded-md px-4">
-                            <img src={user.profileLogo || userimg} alt="" style={{ height: 16 }} />
+                            
                             <button className="text-white">
                                 <Link to={{
                                     pathname: "/Admin-Dashboard/Teachers/profile",
-                                    userData:{userData}
+                                    search: `?employeeId=${user.employeeId}&profileLogo=${user.profileLogo}`,
+                                    
                                 }}>Profile</Link></button>
                         </div>
                         <div className="flex gap-2 items-center bg-blue-300 mx-2 w-20 justify-evenly rounded-md px-2">

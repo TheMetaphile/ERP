@@ -1,15 +1,20 @@
-import React from "react";
+import { useLocation } from "react-router-dom";
+import React  from "react";
 import { callIcon, location, userimg, } from "./images";
 import { MdEmail } from 'react-icons/md';
 export default function ProfileDetails() {
+    const query=new URLSearchParams(useLocation().search);
+    const employeeId = query.get('employeeId');
+    const profile=query.get('profileLogo')
     return (
         <div className=" flex justify-center mobile:max-tablet:flex-col bg-white shadow-lg w-full rounded-xl p-4 ">
             <div className="flex flex-col items-center gap-4 mx-4">
                 <div className="mx-4">
-                    <img src={userimg} alt="" className="h-16 w-16" />
+                    <img src={profile} alt="" className="h-16 w-16 rounded-full" />
                 </div>
+                
                 <div className=" flex flex-col justify-center items-center">
-                    <h1 className="font-semibold text-2xl">Abhishek</h1>
+                    <h1 className="font-semibold text-2xl">{employeeId}</h1>
                     <p className="text-gray-600">Maths & Science Teacher</p>
                 </div>
                 <div className="flex mt-4 tablet:gap-24 mobile:max-tablet:gap-2 mobile:max-tablet:flex-col">
