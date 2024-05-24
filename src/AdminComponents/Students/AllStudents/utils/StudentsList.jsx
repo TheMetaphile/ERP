@@ -67,47 +67,42 @@ export default function StudentsList() {
         }
     }, [authState.accessToken]);
 
-    const Students = [
-        ['12', 'Abhishek', '9', 'A', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
-        ['25', 'Bhuvneshwar Tyagi', '10', 'B', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
-        ['33', 'Chowmine', '10', 'C', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
-        ['49', 'Deepak', '11', 'D', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
-        ['55', 'Gyanesh', '11', 'A', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
-        ['67', 'Harsh', '12', 'B', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
-        ['12', 'Yash', '9', 'A', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
-        ['25', 'aditya', '10', 'B', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
-        ['33', 'Umang', '10', 'C', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
-        ['49', 'Tushar', '11', 'D', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
-        ['55', 'Mukul Morya', '11', 'A', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
-        ['67', 'Avni', '12', 'B', 'Male', 'abc', '1234567890', 'Kankar Khera', '11/12/2004', 'abcd@gmail.com'],
-    ];
-    const filteredStudents = Students.filter(student => {
-        const [studentRollNumber, studentName, studentClass, studentSection] = [student[0],student[1],student[2],student[3]];
+   
+    const filteredStudents = userData.filter(student => {
         return (
-            studentRollNumber.includes(rollNumber) &&
-            studentName.toLowerCase().includes(name.toLowerCase()) &&
-            studentClass.toLowerCase().includes(Class.toLowerCase()) &&
-            studentSection.toLowerCase().includes(Section.toLowerCase())
+            student.name.toLowerCase().includes(name.toLowerCase()) &&
+            student.currentClass.toLowerCase().includes(Class.toLowerCase()) &&
+            student.section.toLowerCase().includes(Section.toLowerCase())
         );
     });
     return (
         <div className="overflow-y-auto w-full items-start mb-2 px-2 no-scrollbar">
-            <h1 className="text-2xl font-medium  mb-2">All Students Data</h1>
+            <h1 className="text-2xl font-medium mb-2">All Students Data</h1>
             <div className="no-scrollbar w-full overflow-x-auto">
-            <SearchBar rollNumber={rollNumber} name={name} Class={Class} Section={Section} handleRollNumberChange={handleRollNumberChange} handleNameChange={handleNameChange} handleClassChange={handleClassChange} handleSectionChange={handleSectionChange} />
+                <SearchBar
+                    rollNumber={rollNumber}
+                    name={name}
+                    Class={Class}
+                    Section={Section}
+                    handleRollNumberChange={handleRollNumberChange}
+                    handleNameChange={handleNameChange}
+                    handleClassChange={handleClassChange}
+                    handleSectionChange={handleSectionChange}
+                />
             </div>
-            <div className=" rounded-lg shadow-md border-2 border-black w-full overflow-x-auto no-scrollable">
-                <Header headings={['ID', 'Name', 'Class', 'Section', 'Gender', 'Parent Name', 'Phone No.', 'Address', 'Date of Birth', 'E-mail']} />
-                {filteredStudents.length === 0 ? (
-                    Students.map((student,index) => (
-
-                        <StudentDetailTile key={index} values={student} id={`${student[1]}`}/>
-                    ))) :
-                    (
-                        filteredStudents.map((student, index) => (
-                            <StudentDetailTile key={index} values={student} id={`${student[1]}?class=${student[2]}-${student[3]}&rollnumber=${student[0]}&session=2024-25`}/>
-                        ))
-                    )}
+            <div className="rounded-lg shadow-md border-2 border-black w-full overflow-x-auto no-scrollable">
+                <Header headings={['ID','Image', 'Name', 'Class', 'Section', 'Gender', 'Parent Name', 'Phone No.', 'Address', 'Date of Birth', 'E-mail']} />
+                {loading ? (
+                    <div>Loading...</div>
+                ) : error ? (
+                    <div>Error: {error}</div>
+                ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
+                    <div>No students found</div>
+                ) : Array.isArray(filteredStudents) ? (
+                    <StudentDetailTile userData={filteredStudents} />
+                ) : (
+                    <div>Unexpected data format</div>
+                )}
             </div>
         </div>
     )

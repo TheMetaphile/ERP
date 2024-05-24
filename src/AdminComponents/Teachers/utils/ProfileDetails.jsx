@@ -1,11 +1,51 @@
 import { useLocation } from "react-router-dom";
-import React  from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { callIcon, location, userimg, } from "./images";
 import { MdEmail } from 'react-icons/md';
+import axios from 'axios';
+import AuthContext from "../../../Context/AuthContext";
+
 export default function ProfileDetails() {
+    const [error, setError] = useState(null);
+    const [userData, setUserData] = useState(null);
     const query=new URLSearchParams(useLocation().search);
     const employeeId = query.get('employeeId');
     const profile=query.get('profileLogo')
+    const { authState } = useContext(AuthContext);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchSingle/teacher', {
+                    accessToken: authState.accessToken,
+                    employeeId
+                });
+                console.log("API response Single teacher:", response.data);  
+                if (response.data.TeacherDetails && response.data.TeacherDetails.length > 0) {
+                    setUserData(response.data.TeacherDetails[0]);
+                    console.log("Experience:", response.data.TeacherDetails[0].experience);
+                } else {
+                    setError('No teacher details found');
+                }
+            } catch (err) {
+                setError(err.message);
+                console.log(err);
+        
+            }
+        };
+
+        if (authState.accessToken) {
+            fetchUserData();
+        } else {
+            setError(err.message);
+            console.log('No access token available');
+            
+        }
+    }, [authState.accessToken,employeeId]);
+
+    if (!userData) {
+        return <div>Loading...</div>;
+    }
     return (
         <div className=" flex justify-center mobile:max-tablet:flex-col bg-white shadow-lg w-full rounded-xl p-4 ">
             <div className="flex flex-col items-center gap-4 mx-4">
@@ -24,13 +64,13 @@ export default function ProfileDetails() {
                         </div>
                         <div className="ml-2 flex gap-2">
                             <h1 className="font-semibold text-gray-600">Phone&nbsp;:</h1>
-                            <h1 className="">(+91)9999343593</h1>
+                            <h1 className="">(+91){userData.phoneNumber}</h1>
                         </div>
                     </div>
                     <div className="flex items-center">
                         <div className="ml-2 flex gap-2">
                             <h1 className="flex font-semibold text-gray-600"><MdEmail className="w-6 h-6"/>&nbsp;Email&nbsp;:</h1>
-                            <h1 className="">abhishek@gamil.com</h1>
+                            <h1 className="">{userData.email}</h1>
                         </div>
                     </div>
                     <div className="flex items-center">
@@ -39,14 +79,14 @@ export default function ProfileDetails() {
                         </div>
                         <div className="ml-2 flex gap-2">
                             <h1 className="font-semibold text-gray-600">Address&nbsp;:</h1>
-                            <h1 className="">Sector 62,Noida</h1>
+                            <h1 className="">{userData.permanentAddress}</h1>
                         </div>
                     </div>
                 </div>
                 <div className="flex gap-4 mt-4">
                      <div><h1 className="text-xl">Education&nbsp;:</h1></div>
-                     <div className=" text-lg text-gray-400">B.Tech IIT, Kanpur (2013-2017)</div>
-                     <div className=" text-lg text-gray-400">M.Tech IIT, Kanpur (2018-2020)</div>
+                     <div className=" text-lg text-gray-400">{userData.education}</div>
+                    
                 </div>
             </div>
         </div>

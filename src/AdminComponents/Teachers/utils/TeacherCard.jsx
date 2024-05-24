@@ -11,9 +11,9 @@ export default function TeacherCard({ userData }) {
                     <div className="flex w-72">
                         <img src={user.profileLogo || userimg} alt="" className="h-16 w-16 mr-3 rounded-full" />
 
-                        <div className="mt-2 flex flex-col items-center">
+                        <div className="mt-2 flex flex-col items-start">
                             <h1 className="text-xl font-semibold">{user.name}</h1>
-                            <p className="text-gray-400">{user.role || 'Teacher'}</p>
+                            <p className="text-gray-400">{user.employeeId}</p>
                         </div>
                     </div>
                     <div className="flex gap-4 mt-2">

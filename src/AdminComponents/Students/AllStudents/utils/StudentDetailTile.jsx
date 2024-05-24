@@ -1,14 +1,54 @@
 import { Link } from "react-router-dom";
 
-export default function StudentDetailTile(props) {
+export default function StudentDetailTile({ userData }) {
     return (
-        <Link to={props.id} className=" flex w-fit justify-between py-2 pl-2 rounded-md shadow-sm h-fit rounded-t-lg border-b-2 border-gray-300">
-            {props.values.map((value,index) => (
-                
-                    <h1 key={index} className="w-40  ">
-                        {value}
-                    </h1>
+
+        <div className=" bg-yellow-200 w-fit ">
+            {userData.map((user, index) => (
+                <Link to={{
+                    pathname: "/Admin-Dashboard/Students",
+                    search: `?id=${user.email}`,
+                    
+                }} key={index}>
+                    <div key={index} className="bg-red-400 flex  mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between border rounded-lg p-4 mb-2">
+
+                        <div className="w-40">
+                            <img src={user.profileLogo || userimg} alt="" className="h-8 w-8  rounded-full" />
+                        </div>
+                        <h1 className="text-base font-medium  w-32">{user.id || '101'}</h1>
+
+
+                        <h1 className="text-base font-medium w-40 ">{user.name}</h1>
+                        <h1 className="text-base font-medium w-40 ">{user.currentClass}</h1>
+                        <h1 className="text-base font-medium w-40">{user.section}</h1>
+                        <h1 className="text-base font-medium w-40">{user.gender}</h1>
+                        <h1 className="text-base font-medium w-40">{user.fatherName}</h1>
+                        <h1 className="text-base font-medium w-40">{user.fatherPhoneNumber}</h1>
+                        <h1 className="text-base font-medium w-40">{user.permanentAddress}</h1>
+                        <h1 className="text-base font-medium w-40">{user.DOB}</h1>
+                        <h1 className="text-base font-medium w-40">{user.email}</h1>
+
+                    </div>
+                </Link>
             ))}
-        </Link>
-    )
+        </div>
+
+
+
+    );
 }
+
+
+{/* {userData.map((student, index) => (
+                <Link
+                    key={index}
+                    to={`/student/${student.id}`} 
+                    className="flex w-fit justify-between py-2 pl-2 rounded-md shadow-sm h-fit rounded-t-lg border-b-2 border-gray-300 bg-red-400"
+                >
+                    {Object.values(student).map((value, idx) => (
+                        <h1 key={idx} className="w-40">
+                            {value}
+                        </h1>
+                    ))}
+                </Link>
+            ))} */}
