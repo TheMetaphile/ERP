@@ -47,7 +47,7 @@ export default function StudentBasicDetails(props) {
         return <div>Loading...</div>;
     }
     const studentDetails = {
-        "Roll No.": 'Remaning',
+        "Roll No.": userData.rollNumber,
         'Class' : userData.currentClass,
         'Date of Birth': userData.DOB,
         'Admission Date' : userData.admissionDate,

@@ -91,7 +91,7 @@ export default function StudentsList() {
                 />
             </div>
             <div className="rounded-lg shadow-md border-2 border-black w-full overflow-x-auto no-scrollable">
-                <Header headings={['ID', 'Name', 'Class', 'Section', 'Gender', 'Parent Name', 'Phone No.', 'Address', 'Date of Birth', 'E-mail']} />
+                <Header headings={['ID', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
                 {loading ? (
                     <div>Loading...</div>
                 ) : error ? (

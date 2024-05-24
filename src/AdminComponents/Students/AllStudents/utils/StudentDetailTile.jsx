@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function StudentDetailTile({ userData }) {
     return (
 
-        <div className=" w-fit ">
+        <div className=" w-full ">
             {userData.map((user, index) => (
                 <Link to={{
                     pathname: `/Admin-Dashboard/Students/${user.email}`,
@@ -18,11 +18,11 @@ export default function StudentDetailTile({ userData }) {
                         <h1 className="text-base font-medium w-40 ">{user.name}</h1>
                         <h1 className="text-base font-medium w-40 ">{user.currentClass}</h1>
                         <h1 className="text-base font-medium w-40">{user.section}</h1>
-                        <h1 className="text-base font-medium w-40">{user.gender}</h1>
-                        <h1 className="text-base font-medium w-40">{user.fatherName}</h1>
+                        {/* <h1 className="text-base font-medium w-40">{user.gender}</h1> */}
+                        {/* <h1 className="text-base font-medium w-40">{user.fatherName}</h1> */}
                         <h1 className="text-base font-medium w-40">{user.fatherPhoneNumber}</h1>
-                        <h1 className="text-base font-medium w-40">{user.permanentAddress}</h1>
-                        <h1 className="text-base font-medium w-40">{user.DOB}</h1>
+                        {/* <h1 className="text-base font-medium w-40">{user.permanentAddress}</h1> */}
+                        {/* <h1 className="text-base font-medium w-40">{user.DOB}</h1> */}
                         <h1 className="text-base font-medium w-40">{user.email}</h1>
 
                     </div>
