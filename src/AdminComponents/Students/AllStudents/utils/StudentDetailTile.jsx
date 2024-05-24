@@ -15,8 +15,6 @@ export default function StudentDetailTile({ userData }) {
                             <h1 className="text-base font-medium ml-4">{user.id || '101'}</h1>
                         </div>
                         
-
-
                         <h1 className="text-base font-medium w-40 ">{user.name}</h1>
                         <h1 className="text-base font-medium w-40 ">{user.currentClass}</h1>
                         <h1 className="text-base font-medium w-40">{user.section}</h1>

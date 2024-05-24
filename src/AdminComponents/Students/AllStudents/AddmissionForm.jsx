@@ -87,7 +87,7 @@ export default function AddmissionForm() {
 
 
         try {
-            formData.password=formData.aadhaarNumber;
+            formData.password = formData.aadhaarNumber;
             const response = await axios.post('https://loginapi-y0aa.onrender.com/signup/student', formData);
             if (response.status === 200) {
                 setSuccess('Student registered successfully!');
@@ -319,6 +319,8 @@ export default function AddmissionForm() {
                                 >
                                     <option value="">Select religion</option>
                                     <option value="Hindu">Hindu</option>
+                                    <option value="Sikh">Sikh</option>
+                                    <option value="Muslim">Muslim</option>
                                     <option value="Chrisitian">Christian</option>
                                     <option value="other">Other</option>
                                 </select>
@@ -438,7 +440,7 @@ export default function AddmissionForm() {
                     </div>
 
                     <div className="flex flex-col mt-8">
-                        
+
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
 
 
@@ -495,6 +497,11 @@ export default function AddmissionForm() {
                                     <option value="B">B</option>
                                     <option value="C">C</option>
                                     <option value="D">D</option>
+                                    <option value="E">E</option>
+                                    <option value="F">F</option>
+                                    <option value="G">G</option>
+                                    <option value="H">H</option>
+                                    <option value="I">I</option>
                                 </select>
                             </label>
                         </div>

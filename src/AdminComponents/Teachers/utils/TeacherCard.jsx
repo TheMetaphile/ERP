@@ -22,16 +22,18 @@ export default function TeacherCard({ userData }) {
                         ))}
                     </div>
                     <div className="flex mt-4 gap-2 mb-4">
-                        <div className="flex gap-2 items-center bg-blue-300 mx-2 w-30 justify-evenly rounded-md px-4">
+                    <Link to={{
+                                    pathname: "/Admin-Dashboard/Teachers/profile",
+                                    search: `?employeeId=${user.employeeId}&name=${user.name}&profileLogo=${user.profileLogo}`,
+                                    
+                                }}>
+                        <div className="flex gap-2 items-center bg-blue-300 mx-2 w-30 justify-evenly rounded-md px-4 ">
                             
                             <button className="text-white">
-                                <Link to={{
-                                    pathname: "/Admin-Dashboard/Teachers/profile",
-                                    search: `?employeeId=${user.employeeId}&profileLogo=${user.profileLogo}`,
-                                    
-                                }}>Profile</Link></button>
+                                Profile</button>
                         </div>
-                        <div className="flex gap-2 items-center bg-blue-300 mx-2 w-20 justify-evenly rounded-md px-2">
+                        </Link>
+                        <div className="flex gap-2 items-center bg-blue-300 mx-2 w-20 justify-evenly rounded-md px-2 cursor-pointer">
                             <img src={user.chatLogo} alt="" style={{ height: 16 }} />
                             <button className="text-white">Chat</button>
                         </div>

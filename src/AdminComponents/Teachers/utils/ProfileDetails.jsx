@@ -10,6 +10,7 @@ export default function ProfileDetails() {
     const [userData, setUserData] = useState(null);
     const query=new URLSearchParams(useLocation().search);
     const employeeId = query.get('employeeId');
+    const name=query.get('name')
     const profile=query.get('profileLogo')
     const { authState } = useContext(AuthContext);
 
@@ -54,7 +55,7 @@ export default function ProfileDetails() {
                 </div>
                 
                 <div className=" flex flex-col justify-center items-center">
-                    <h1 className="font-semibold text-2xl">{employeeId}</h1>
+                    <h1 className="font-semibold text-2xl">{name}</h1>
                     <p className="text-gray-600">Maths & Science Teacher</p>
                 </div>
                 <div className="flex mt-4 tablet:gap-24 mobile:max-tablet:gap-2 mobile:max-tablet:flex-col">

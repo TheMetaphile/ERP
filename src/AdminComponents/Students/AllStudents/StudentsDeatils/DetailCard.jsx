@@ -1,26 +1,71 @@
 import { FaEdit } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from "react";
+import axios from 'axios'
+import AuthContext from '../../../../Context/AuthContext';
 
 export default function StudentBasicDetails(props) {
+    const [userData, setUserData] = useState(null);
+    const [error, setError] = useState(null);
+    const { authState } = useContext(AuthContext);
+    const { id } = useParams();
+
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            console.log('Email from params:', id);
+            console.log('Access Token from context:', authState.accessToken);
+            try {
+                const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchSingle/student', {
+                    accessToken: authState.accessToken,
+                    email: id
+                });
+                console.log("API response Single Student:", response.data);  
+                if (response.data.StudentDetails && response.data.StudentDetails.length > 0) {
+                    setUserData(response.data.StudentDetails[0]);
+                    
+                } else {
+                    setError('No stud details found');
+                }
+            } catch (err) {
+                setError(err.message);
+                console.log(err);
+        
+            }
+        };
+
+        if (authState.accessToken) {
+            fetchUserData();
+        } else {
+            setError(err.message);
+            console.log('No access token available');
+            
+        }
+    }, [authState.accessToken,id]);
+
+    if (!userData) {
+        return <div>Loading...</div>;
+    }
     const studentDetails = {
-        "Roll No.": props.rollNumber,
-        'Class' : props.class,
-        'Date of Birth': '12/27/2000',
-        'Admission Date' : '01/12/2020',
-        'Registration Number':'123489756',
-        'Permanent Address': "'O'-Block, Ganga Nagar,Meerut-250001",
-        'Academic Year': '2024-25',
-        'Aadhar Number': '2456-9875-7896-3219',
-        'Personal Email':'bhanu68tyagi@gmail.com',
-        'Emergency Contact': '(+91) 9874563210'
+        "Roll No.": 'Remaning',
+        'Class' : userData.currentClass,
+        'Date of Birth': userData.DOB,
+        'Admission Date' : userData.admissionDate,
+        'Registration Number':'Remaning',
+        'Permanent Address': userData.permanentAddress,
+        'Academic Year': 'Remaning',
+        'Aadhar Number': userData.aadhaarNumber,
+        'Personal Email':userData.email,
+        'Emergency Contact': userData.emergencyContactNumber
     }
     const parentsDetails={
-        'Father Name': 'Mr. Raj kumar Tyagi',
-        'Mother Name' : 'Mrs. Manju Tyagi',
-        'Father Phone Number': '(+91) 9871236549',
-        'Mother Phone Number': '(+91) 4561237895',
-        'Parent Email': 'ygbjh@gmail.com',
-        'Father Occupation': 'Physiotherapist',
-        'Mothers Occupation': 'House wife'
+        'Father Name': userData.fatherName,
+        'Mother Name' : userData.motherName,
+        'Father Phone Number': userData.fatherPhoneNumber,
+        'Mother Phone Number': userData.motherPhoneNumber,
+        'Parent Email': userData.fatherEmailId,
+        'Father Occupation': userData.fathersOccupation,
+        'Mothers Occupation': userData.motherOccupation
     }
     return (
         <div className="flex-1 w-full mt-3 mb-2 shadow-md rounded-lg bg-white p-2 h-fit">
