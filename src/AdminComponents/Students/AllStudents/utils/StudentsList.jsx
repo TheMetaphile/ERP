@@ -44,7 +44,6 @@ export default function StudentsList() {
         }
     }, [Class, Section, bothEventsCalled]);
 
-    useEffect(() => {
         const fetchUserData = async () => {
             try {
                 const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchMultiple/student', {
@@ -72,6 +71,7 @@ export default function StudentsList() {
                 setLoading(false);
             }
         };
+        useEffect(() => {
 
         if (authState.accessToken) {
             fetchUserData();
@@ -89,6 +89,30 @@ export default function StudentsList() {
             student.section.toLowerCase().includes(Section.toLowerCase())
         );
     });
+
+    const showAddRollNumberButton = filteredStudents.some(student => !student.rollNumber);
+
+    const handleRollNumber = async () => {
+        if (!Class || !Section) {
+            setError('Please select a class and section first');
+            return;
+        }
+        try {
+
+            const response=await axios.post('https://loginapi-y0aa.onrender.com/assignRollNumber', {
+                accessToken: authState.accessToken,
+                currentClass: Class,
+                section: Section,
+                
+            });
+
+            console.log(response.data)
+            fetchUserData();
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     return (
         <div className="overflow-y-auto w-full items-start mb-2 px-2 no-scrollbar">
             <h1 className="text-2xl font-medium mb-2">All Students Data</h1>
@@ -117,6 +141,14 @@ export default function StudentsList() {
                     <StudentDetailTile userData={filteredStudents} />
                 ) : (
                     <div>Unexpected data format</div>
+                )}
+                {showAddRollNumberButton && (
+                    <button
+                        className="rounded-lg shadow-md px-3 py-1 mr-2 border-2 border-r-gray-200 text-lg bg-secondary float-right mb-3"
+                        onClick={handleRollNumber}
+                    >
+                        Add Roll Number
+                    </button>
                 )}
             </div>
         </div>

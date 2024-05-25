@@ -25,7 +25,7 @@ export default function StudentBasicDetails(props) {
                     setUserData(response.data.StudentDetails[0]);
                     
                 } else {
-                    setError('No stud details found');
+                    setError('No student details found');
                 }
             } catch (err) {
                 setError(err.message);

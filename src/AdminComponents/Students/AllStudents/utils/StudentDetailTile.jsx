@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function StudentDetailTile({ userData }) {
     return (
 
-        <div className=" w-full bg-green-400 ">
+        <div className=" w-full ">
             {userData.map((user, index) => (
                 <Link to={{
                     pathname: `/Admin-Dashboard/Students/${user.email}`,
@@ -12,7 +12,7 @@ export default function StudentDetailTile({ userData }) {
 
                         <div className="w-40 flex">
                             <img src={user.profileLogo || userimg} alt="" className="h-8 w-8  rounded-full" />
-                            <h1 className="text-base font-medium ml-4">{user.id || '101'}</h1>
+                            <h1 className="text-base font-medium ml-4">{user.rollNumber}</h1>
                         </div>
                         
                         <h1 className="text-base font-medium w-40 ">{user.name}</h1>
