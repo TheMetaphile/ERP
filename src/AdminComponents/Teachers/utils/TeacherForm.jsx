@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import axios from 'axios';
+import Papa from 'papaparse'
+
 export default function TeacherForm() {
 
     const [loading, setLoading] = useState(false);
@@ -64,7 +66,7 @@ export default function TeacherForm() {
 
 
         try {
-            formData.password=formData.aadhaarNumber;
+            formData.password = formData.aadhaarNumber;
             const response = await axios.post('https://loginapi-y0aa.onrender.com/signup/teacher', formData);
             if (response.status === 200) {
                 setSuccess('Teacher registered successfully!');
@@ -87,15 +89,47 @@ export default function TeacherForm() {
     };
 
 
-    const handleUpload=(e)=>{
-        const file=e.target.files[0];
-        if(file){
-            const reader=new FileReader();
-            reader.onload=(event)=>{
-                const csvData=event.target.result;
-                console.log(csvData);
+    const handleUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const csvData = event.target.result;
+                Papa.parse(csvData, {
+                    header: true,
+                    complete: (results) => {
+                        console.log(results.data);
+                        handleMultiSignUp(results.data);
+                    }
+                })
+
             }
             reader.readAsText(file);
+        }
+    }
+
+    const handleMultiSignUp = async (data) => {
+        setLoading(true);
+        setError('');
+        setSuccess('');
+        try {
+            for (let i = 0; i < data.length; i++) {
+                const userData = data[i];
+                userData.password = userData.aadhaarNumber;
+
+                await axios.post('https://loginapi-y0aa.onrender.com/signup/teacher', userData);
+            }
+            setSuccess('All teachers registered successfully');
+            setTimeout(() => setSuccess(''), 4000);
+        }
+        catch (err) {
+            console.error(err);
+            setError(err.response?.data?.error || 'An error occurred');
+            setTimeout(() => {
+                setError('');
+            }, 2000);
+        } finally {
+            setLoading(false);
         }
     }
     return (
@@ -121,7 +155,7 @@ export default function TeacherForm() {
                                     />
                                 </label>
                             </div>
-                            
+
                         </div>
                         <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
                             <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
@@ -363,7 +397,7 @@ export default function TeacherForm() {
                         <div className=" flex justify-center items-center">
                             <label className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded mt-2 w-1/4 mobile:max-tablet:w-1/2 tablet:w-1/2 flex justify-center items-center cursor-pointer whitespace-nowrap">
                                 Upload CSV
-                                <input type="file" accept=".csv" className="hidden" onChange={handleUpload}/>
+                                <input type="file" accept=".csv" className="hidden" onChange={handleUpload} />
                                 <FaCloudUploadAlt className="ml-2" />
                             </label>
                         </div>

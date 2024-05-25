@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import axios from 'axios'
+import Papa from 'papaparse'
 
 export default function AddmissionForm() {
     const [loading, setLoading] = useState(false);
@@ -106,6 +107,50 @@ export default function AddmissionForm() {
         finally {
             setLoading(false);
 
+        }
+    }
+
+    const handleUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const csvData = event.target.result;
+                Papa.parse(csvData, {
+                    header: true,
+                    complete: (results) => {
+                        console.log(results.data);
+                        // handleMultiSignUp(results.data);
+                    }
+                })
+
+            }
+            reader.readAsText(file);
+        }
+    }
+
+    const handleMultiSignUp = async (data) => {
+        setLoading(true);
+        setError('');
+        setSuccess('');
+        try {
+            for (let i = 0; i < data.length; i++) {
+                const userData = data[i];
+                userData.password = userData.aadhaarNumber;
+
+                await axios.post('https://loginapi-y0aa.onrender.com/signup/student', userData);
+            }
+            setSuccess('All Students registered successfully');
+            setTimeout(() => setSuccess(''), 4000);
+        }
+        catch (err) {
+            console.error(err);
+            setError(err.response?.data?.error || 'An error occurred');
+            setTimeout(() => {
+                setError('');
+            }, 2000);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -607,7 +652,7 @@ export default function AddmissionForm() {
                 <div className=" flex justify-center items-center mb-3">
                     <label className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded mt-2 w-1/4 mobile:max-tablet:w-1/2 tablet:w-1/2 flex justify-center items-center cursor-pointer whitespace-nowrap">
                         Upload CSV
-                        <input type="file" accept=".csv" className="hidden" />
+                        <input type="file" accept=".csv" className="hidden" onChange={handleUpload}/>
                         <FaCloudUploadAlt className="ml-2" />
                     </label>
                 </div>
