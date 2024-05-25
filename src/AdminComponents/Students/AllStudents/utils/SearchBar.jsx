@@ -1,5 +1,5 @@
 
-export default function SearchBar({ rollNumber, handleClassChange, handleNameChange, handleRollNumberChange, handleSectionChange, name, Class, Section }) {
+export default function SearchBar({ rollNumber, handleClassChange, handleNameChange, handleRollNumberChange, handleSectionChange, handlebothEventsCalled, name, Class, Section }) {
 
 
     return (
@@ -59,7 +59,7 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
 
                     </select>
                 </div>
-                <button className="rounded-lg shadow-md px-3 py-1 ml-2 border-2 border-gray-200 text-lg bg-secondary">
+                <button className="rounded-lg shadow-md px-3 py-1 ml-2 border-2 border-gray-200 text-lg bg-secondary " onClick={handlebothEventsCalled}>
                     Search
                 </button>
             </div>

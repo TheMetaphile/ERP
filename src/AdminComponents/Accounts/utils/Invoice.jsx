@@ -15,7 +15,7 @@ const InvoiceSection = () => {
   return (
     <div className="flex flex-col">
       <h2 className="text-xl font-semibold mb-4 text-red-600 px-4 mt-4">INVOICES</h2>
-      <div className="flex items-center mb-4 mx-auto gap-4 mobile:max-tablet:gap-2 mobile:max-tablet:flex-col">
+      <div className=" px-2 flex items-center mb-4 mx-auto gap-4 mobile:max-tablet:gap-2 mobile:max-tablet:flex-col">
         <input
           type="date"
           value={startDate}

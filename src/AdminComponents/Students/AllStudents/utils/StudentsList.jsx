@@ -1,4 +1,4 @@
-import { useState,useContext,useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import Header from "../../../Home/utils/TeachersDetails/LeftCard/Header";
 import SearchBar from "../utils/SearchBar";
 import StudentDetailTile from "../utils/StudentDetailTile";
@@ -24,12 +24,26 @@ export default function StudentsList() {
     const [Class, setClass] = useState('');
     const handleClassChange = (event) => {
         setClass(event.target.value);
+
     };
     const [Section, setSection] = useState('');
     const handleSectionChange = (event) => {
         setSection(event.target.value);
     };
-    
+
+    const [bothEventsCalled, setBothEventsCalled] = useState(false);
+    const handlebothEventsCalled = (event) => {
+        setBothEventsCalled(true)
+    }
+
+    useEffect(() => {
+        if (bothEventsCalled) {
+            console.log(Class);
+            console.log(Section)
+            setBothEventsCalled(false)
+        }
+    }, [Class, Section, bothEventsCalled]);
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -43,15 +57,15 @@ export default function StudentsList() {
                     const users = response.data.Students.map(user => ({
                         ...user,
                         profileLogo: user.profileLink || profilelogo,
-     
+
                     }));
                     setUserData(users);
                 } else {
                     setError('Unexpected response format');
                 }
-                
+
                 console.log(response.data.Students[4].name);
-                
+
                 setLoading(false);
             } catch (err) {
                 setError(err.message);
@@ -67,7 +81,7 @@ export default function StudentsList() {
         }
     }, [authState.accessToken]);
 
-   
+
     const filteredStudents = userData.filter(student => {
         return (
             student.name.toLowerCase().includes(name.toLowerCase()) &&
@@ -88,6 +102,7 @@ export default function StudentsList() {
                     handleNameChange={handleNameChange}
                     handleClassChange={handleClassChange}
                     handleSectionChange={handleSectionChange}
+                    handlebothEventsCalled={handlebothEventsCalled}
                 />
             </div>
             <div className="rounded-lg shadow-md border-2 border-black w-full overflow-x-auto no-scrollable">
