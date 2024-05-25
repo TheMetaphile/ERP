@@ -1,6 +1,6 @@
 import React from "react";
 import { electricity, insurance, internet, paper, holiday, furniture, events, bus, bills } from "../images";
-
+import { FaCirclePlus } from "react-icons/fa6";
 export default function QuickActions() {
     const cards = [
         { icon: electricity, title: "Electricity" },
@@ -19,11 +19,11 @@ export default function QuickActions() {
                 <div>
                     <h1 className="text-2xl mt-4">Quick Actions</h1>
                 </div>
-                <div className="flex w-10 h-10 bg-red-400">
-                    <button className="bg-blue-500 text-white w-full h-full rounded-full  text-4xl hover:bg-blue-300">
-                        +
+             
+                    <button className=" text-blue-500 w-10 h-10 rounded-full  text-4xl  items-center">
+                        <FaCirclePlus />
                     </button>
-                </div>
+                
 
             </div>
             <div className="w-full px-2 h-1 mx-auto border-b-2 mb-2"></div>
