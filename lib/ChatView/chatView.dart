@@ -75,49 +75,61 @@ class _ChatScreenState extends State<ChatScreen>  {
   Widget build(BuildContext context) {
 
     return Scaffold(
-          body:  ChatView(
-            currentUser: currentUser,
-            chatController: chatController,
-            chatViewState: ChatViewState.hasMessages,
-            onSendTap: _onSendTap,
-            featureActiveConfig: const FeatureActiveConfig(
-              lastSeenAgoBuilderVisibility: true,
-              receiptsBuilderVisibility: true,
+          body:  Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+
+                image: AssetImage("assets/Images/Admin Drawer/enlarge_Picture1.png")
+              )
             ),
-            chatViewStateConfig: ChatViewStateConfiguration(
-              loadingWidgetConfig: ChatViewStateWidgetConfiguration(
-                loadingIndicatorColor: Colors.blue,
+            child: ChatView(
+              currentUser: currentUser,
+              chatController: chatController,
+              chatViewState: ChatViewState.hasMessages,
+              // chatBackgroundConfig:ChatBackgroundConfiguration(
+              //   backgroundImage: "assets/Images/Background/bg-25.jpg",
+              // ) ,
+
+              onSendTap: _onSendTap,
+              featureActiveConfig: const FeatureActiveConfig(
+                lastSeenAgoBuilderVisibility: true,
+                receiptsBuilderVisibility: true,
               ),
-              onReloadButtonTap: () {},
-            ),
-            sendMessageConfig: const SendMessageConfiguration(
-                textFieldConfig: TextFieldConfiguration(
-                    textStyle: TextStyle(
-                        color: Colors.black
-                    )
-                )
-            ),
-
-            appBar: const ChatViewAppBar(
-              backGroundColor: Colors.grey,
-              backArrowColor: Colors.white,
-              chatTitle: "Nme",
-              chatTitleTextStyle: TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                letterSpacing: 0.25,
+              chatViewStateConfig: ChatViewStateConfiguration(
+                loadingWidgetConfig: ChatViewStateWidgetConfiguration(
+                  loadingIndicatorColor: Colors.blue,
+                ),
+                onReloadButtonTap: () {},
               ),
-              userStatus: "online",
-              profilePicture: "",
+              sendMessageConfig: const SendMessageConfiguration(
+                  textFieldConfig: TextFieldConfiguration(
+                      textStyle: TextStyle(
+                          color: Colors.black
+                      )
+                  )
+              ),
 
-              actions: [
-                Icon(Icons.settings)
-              ],
+              appBar: const ChatViewAppBar(
+                backGroundColor: Colors.grey,
+                backArrowColor: Colors.white,
+                chatTitle: "Name",
+                chatTitleTextStyle: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  letterSpacing: 0.25,
+                ),
+                userStatus: "online",
+                profilePicture: "",
+
+                actions: [
+                  Icon(Icons.settings)
+                ],
+              ),
+
+
+
             ),
-
-
-
           ),
         );
   }

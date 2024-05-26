@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:untitled/teacher-module/result.dart';
 import 'package:untitled/utils/studentFeesTile.dart';
 import 'package:untitled/utils/studentReportTile.dart';
 import 'package:untitled/utils/uploadNoteBook.dart';
@@ -12,18 +13,16 @@ import 'package:untitled/utils/viewAttendanceTile.dart';
 import '../utils/studentAttendanceTile.dart';
 import '../utils/studentNoteBookRecordTile.dart';
 
-class studentReportCard extends StatefulWidget {
-  const studentReportCard({super.key, required this.screen});
+class StudentReportCard extends StatefulWidget {
+  const StudentReportCard({super.key, required this.screen});
   final String screen;
 
   @override
-  State<studentReportCard> createState() => _studentReportCardState();
+  State<StudentReportCard> createState() => _StudentReportCardState();
 }
 
-class _studentReportCardState extends State<studentReportCard> with TickerProviderStateMixin{
+class _StudentReportCardState extends State<StudentReportCard> with TickerProviderStateMixin{
 
-  List<String> standards = ['11 Sci', '12 Arts', '10 Com'];
-  List<String> sections = ['A', 'B', 'C', 'D'];
   String? _selectedClass;
   String? _selectedSection;
   String? _selectedSubject;
@@ -513,7 +512,10 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
                            shrinkWrap: true,
                            physics: NeverScrollableScrollPhysics(),
                            itemBuilder: (context, index) {
-                             return StudentReportTile(sNo: index+1, studentName: "Ankit Sharma", totalMark: 1000, gpa: 9.5, obtainedMark: 950);
+                             return InkWell(
+                                 onTap:() =>  Navigator.push(context, MaterialPageRoute(builder: (context) => Result(),)),
+
+                                 child: StudentReportTile(sNo: index+1, studentName: "Ankit Sharma", totalMark: 1000, gpa: 9.5, obtainedMark: 950));
                            },),
                        ],
                      ),
@@ -542,7 +544,9 @@ class _studentReportCardState extends State<studentReportCard> with TickerProvid
                          // final TextEditingController totalMarks=TextEditingController();
                          final TextEditingController obtainedMarks=TextEditingController();
                          final int totalMarks=100;
-                         return UploadReportTile(studentName: "Ankit Sharma", totalMarks: 100, obtainedMarks: obtainedMarks, sRollNo: index+1,);
+                         return InkWell(
+
+                             child: UploadReportTile(studentName: "Ankit Sharma", totalMarks: 100, obtainedMarks: obtainedMarks, sRollNo: index+1,));
                        },),
                    ],
                  ),

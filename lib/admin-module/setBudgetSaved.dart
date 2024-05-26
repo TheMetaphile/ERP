@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class setBudgetSaved extends StatefulWidget {
-  const setBudgetSaved({super.key});
+class SetBudgetSaved extends StatefulWidget {
+  const SetBudgetSaved({super.key});
 
   @override
-  State<setBudgetSaved> createState() => _setBudgetSavedState();
+  State<SetBudgetSaved> createState() => _SetBudgetSavedState();
 }
 
-class _setBudgetSavedState extends State<setBudgetSaved> {
+class _SetBudgetSavedState extends State<SetBudgetSaved> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

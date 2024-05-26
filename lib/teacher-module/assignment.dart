@@ -123,12 +123,9 @@ class _TeacherAssignmentState extends State<TeacherAssignment> with TickerProvid
                                                   color: Color(0xFFE8EFFD),
                                                   elevation: 5,
                                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                                  margin: EdgeInsets.all(0),
-                                                  child: Container(
-                                                    width: size.width*0.3,
-                                                    child: Text("MathMatics",textAlign:TextAlign.center,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.blue),),
-
-
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(5.0),
+                                                    child: Text("Mathematics",textAlign:TextAlign.center,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.blue),),
                                                   ),
 
                                                 ),
@@ -138,8 +135,8 @@ class _TeacherAssignmentState extends State<TeacherAssignment> with TickerProvid
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                    Text("Assign Date",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.grey),),
-                                                    Text("10 Nov 2023",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black),)
+                                                    Text("Assign Date",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.black),),
+                                                    Text("10 Nov 2023",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey),)
 
 
                                                   ],
@@ -148,8 +145,8 @@ class _TeacherAssignmentState extends State<TeacherAssignment> with TickerProvid
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                    Text("Last Submission Date",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.grey),),
-                                                    Text("10 Dec 2023",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black),)
+                                                    Text("Last Submission Date",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.black),),
+                                                    Text("10 Dec 2023",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey),)
 
 
                                                   ],
@@ -158,7 +155,7 @@ class _TeacherAssignmentState extends State<TeacherAssignment> with TickerProvid
                                                 Center(
                                                   child: ElevatedButton(
                                                       style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF5A77BC) ),
-                                                      onPressed: (){}, child: Text("Submitted",style: GoogleFonts.openSans(color:Colors.white),)),
+                                                      onPressed: (){}, child: Text("Submitted By",style: GoogleFonts.openSans(color:Colors.white),)),
                                                 ),
 
 

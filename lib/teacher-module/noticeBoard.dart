@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class noticeBoard extends StatefulWidget {
-  const noticeBoard({super.key});
+class NoticeBoard extends StatefulWidget {
+  const NoticeBoard({super.key});
 
   @override
-  State<noticeBoard> createState() => _noticeBoardState();
+  State<NoticeBoard> createState() => _NoticeBoardState();
 }
 
-class _noticeBoardState extends State<noticeBoard> {
+class _NoticeBoardState extends State<NoticeBoard> {
 
 
   @override

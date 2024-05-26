@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-class setBudgetScreen extends StatefulWidget {
+class SetBudgetScreen extends StatefulWidget {
+  const SetBudgetScreen({super.key});
   @override
-  _setBudgetScreenState createState() => _setBudgetScreenState();
+  _SetBudgetScreenState createState() => _SetBudgetScreenState();
 }
 
-class _setBudgetScreenState extends State<setBudgetScreen> {
+class _SetBudgetScreenState extends State<SetBudgetScreen> {
   final List<Map<String, dynamic>> _budgetCategories = [
     {'name': 'Transportation', 'amount': 20000},
     {'name': 'Utilities', 'amount': 20000},
@@ -17,28 +18,29 @@ class _setBudgetScreenState extends State<setBudgetScreen> {
     {'name': 'Fuel', 'amount': 20000},
 
   ];
-  String getPic(String categoryName) {
-    switch (categoryName) {
-      case 'Transportation':
-        return "assets/Images/Public Transportation.png";
-      case 'Electricity':
-        return "assets/Images/Electricity.png";
-      case 'Furniture':
-        return "assets/Images/Shop.png";
-      case 'Utilities':
-        return "assets/Images/Cheque.png";
-      case 'Fuel':
-        return "assets/Images/Fuel Gas.png";
-      default:
-        return "null";
-    }
-  }
+  List<String> paymentTypeImages=[
+    "assets/Images/Payment Images/Transportation.png",
+    "assets/Images/Payment Images/Bills.png",
+    "assets/Images/Payment Images/Electricity.png",
+    "assets/Images/Payment Images/Furniture.png",
+    "assets/Images/Payment Images/Fuel Gas.png",
+  ];
 
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(CupertinoIcons.back,color: Colors.black,),
+          onPressed: () {  },
+        ),
+        title: Text("Set Budget",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: size.width*0.06),),
+
+      ),
       body: Center(
         child: Container(
           width: size.width*0.9,
@@ -46,14 +48,6 @@ class _setBudgetScreenState extends State<setBudgetScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: size.height*0.06,),
-              Center(
-                child: Text("Set Budget", style: TextStyle(
-                  color: Colors.black,
-                  fontSize: size.height*0.035,
-                  fontWeight: FontWeight.w600,
-                ),),
-              ),
               SizedBox(height: size.height*0.03,),
               Flexible(
               child: ListView.builder(
@@ -64,7 +58,7 @@ class _setBudgetScreenState extends State<setBudgetScreen> {
                   return Container(
                     height: size.height*0.08,
                     child: ListTile(
-                      leading: Image.asset(getPic(category['name']),height: size.height*0.07,width: size.width*0.1,),
+                      leading: Image.asset(paymentTypeImages[index],height: size.height*0.07,width: size.width*0.1,),
                       title: Text(category['name']),
                       trailing:  Container(
                         height: size.height*0.05,

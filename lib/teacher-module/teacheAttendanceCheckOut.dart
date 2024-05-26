@@ -147,7 +147,7 @@ class _teacherAttendanceCheckOutState extends State<teacherAttendanceCheckOut> {
                                 ),
                               ),
                               TextButton(onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const teacherAttendance(),));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const TeacherAttendance(),));
                               }, child: const Icon(Icons.arrow_forward_ios_outlined))
                             ],
                           ),

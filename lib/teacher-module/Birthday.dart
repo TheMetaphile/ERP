@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class birthday extends StatefulWidget {
-  const birthday({super.key});
+class Birthday extends StatefulWidget {
+  const Birthday({super.key});
 
   @override
-  State<birthday> createState() => _birthdayState();
+  State<Birthday> createState() => _BirthdayState();
 }
 
-class _birthdayState extends State<birthday> {
+class _BirthdayState extends State<Birthday> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -41,7 +41,7 @@ class _birthdayState extends State<birthday> {
                 SizedBox(height: size.height*0.02,),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: Text("Birthdays Todays",style: TextStyle(fontSize: size.width*0.05),),
+                  child: Text("Birthdays Today's",style: TextStyle(fontSize: size.width*0.05),),
                 ),
                 SizedBox(height: size.height*0.02,),
                Expanded(
@@ -54,8 +54,9 @@ class _birthdayState extends State<birthday> {
                      child: Row(
                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                        children: [
-                         SizedBox(
-                             height: size.height*0.1,
+                         Container(
+                           margin: EdgeInsets.only(left: 5),
+                             height: size.height*0.08,
                              child: Image.asset("assets/Images/Test Account.png",fit: BoxFit.fill,)),
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,

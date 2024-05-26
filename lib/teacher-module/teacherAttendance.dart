@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:untitled/utils/attendanceTile.dart';
 
-class teacherAttendance extends StatefulWidget {
-  const teacherAttendance({super.key});
+class TeacherAttendance extends StatefulWidget {
+  const TeacherAttendance({super.key});
 
   @override
-  State<teacherAttendance> createState() => _teacherAttendanceState();
+  State<TeacherAttendance> createState() => _TeacherAttendanceState();
 }
 
-class _teacherAttendanceState extends State<teacherAttendance> {
+class _TeacherAttendanceState extends State<TeacherAttendance> {
   final List<Map<String, dynamic>> _attendance = [
     {'date': '11 Tue', 'check-in': '09:00am', 'check-out': '08:45pm','working-hour':'08:20m'},
     {'date': '11 Tue', 'check-in': '09:00am','check-out':'08:45pm','working-hour':'08:20m'},

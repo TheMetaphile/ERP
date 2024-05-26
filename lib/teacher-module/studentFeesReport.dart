@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class studentFeesStatus extends StatefulWidget {
+class StudentFeesStatus extends StatefulWidget {
 
   @override
-  State<studentFeesStatus> createState() => _studentFeesStatusState();
+  State<StudentFeesStatus> createState() => _StudentFeesStatusState();
 }
 
-class _studentFeesStatusState extends State<studentFeesStatus> {
+class _StudentFeesStatusState extends State<StudentFeesStatus> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

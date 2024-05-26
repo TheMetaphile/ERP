@@ -49,7 +49,7 @@ class _teacherDashboardState extends State<teacherDashboard> {
     scrollController2.addListener(listener2);
   }
 
-  List navigation = [TeacherAttendanceCheckIn(),Timetable(),studentReportCard(screen: 'Student Fees Status',),studentReportCard(screen: 'Student Attendance',),studentReportCard(screen: 'Report Card',),studentReportCard(screen: 'Note Book Record',),teacherLeave(),noticeBoard()];
+  List navigation = [TeacherAttendanceCheckIn(),Timetable(),StudentReportCard(screen: 'Student Fees Status',),StudentReportCard(screen: 'Student Attendance',),StudentReportCard(screen: 'Report Card',),StudentReportCard(screen: 'Note Book Record',),TeacherLeave(),NoticeBoard()];
   @override
     Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

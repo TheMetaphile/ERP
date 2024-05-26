@@ -6,14 +6,14 @@ import 'package:untitled/teacher-module/teacherLeaveHistory.dart';
 
 import '../utils/utils.dart';
 
-class teacherLeave extends StatefulWidget {
-  const teacherLeave({super.key});
+class TeacherLeave extends StatefulWidget {
+  const TeacherLeave({super.key});
 
   @override
-  State<teacherLeave> createState() => _teacherLeaveState();
+  State<TeacherLeave> createState() => _TeacherLeaveState();
 }
 
-class _teacherLeaveState extends State<teacherLeave> {
+class _TeacherLeaveState extends State<TeacherLeave> {
 
   ScrollController scrollController1 = ScrollController();
   ScrollController scrollController2 = ScrollController();
