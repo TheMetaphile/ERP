@@ -13,6 +13,8 @@ export default function ProfileDetails() {
     const name=query.get('name')
     const profile=query.get('profileLogo')
     const { authState } = useContext(AuthContext);
+    const [editMode, setEditMode]=useState({});
+    const [tempData, setTempData]=useState({});
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -24,6 +26,7 @@ export default function ProfileDetails() {
                 console.log("API response Single teacher:", response.data);  
                 if (response.data.TeacherDetails && response.data.TeacherDetails.length > 0) {
                     setUserData(response.data.TeacherDetails[0]);
+                    setTempData(response.data.TeacherDetails[0]);
                     console.log("Experience:", response.data.TeacherDetails[0].experience);
                 } else {
                     setError('No teacher details found');
@@ -44,6 +47,34 @@ export default function ProfileDetails() {
         }
     }, [authState.accessToken,employeeId]);
 
+    const handleEdit=(field)=>{
+        setEditMode({...editMode, [field]:true});
+    }
+
+    
+    const handleChange=(e)=>{
+        const {name,value}=e.target;
+        setTempData({...tempData, [temp]:value});
+    }
+
+    const handleSave=async(e)=>{
+        try {
+            const response = await axios.post('https://loginapi-y0aa.onrender.com/edit/teacher', {
+                accessToken: authState.accessToken,
+                employeeId,
+                [field]:tempData[field]
+            });
+            console.log("API response updated:", response.data);  
+          
+            setUserData({ ...userData, [field]: tempData[field] });
+            setEditMode({ ...editMode, [field]: false });
+              
+        } catch (err) {
+            setError(err.message);
+            console.log(err);
+    
+        }
+    }
     if (!userData) {
         return <div>Loading...</div>;
     }
@@ -65,13 +96,38 @@ export default function ProfileDetails() {
                         </div>
                         <div className="ml-2 flex gap-2">
                             <h1 className="font-semibold text-gray-600">Phone&nbsp;:</h1>
-                            <h1 className="">(+91){userData.phoneNumber}</h1>
+                            {editMode.phoneNumber?(
+                                <input
+                                type="text"
+                                name="phoneNumber"
+                                value={tempData.phoneNumber}
+                                onChange={handleChange}
+                                onBlur={()=>handleSave('phoneNumber')}
+                                className="border p-1"
+                                />
+                            ):
+                            (
+                            <h1 onClick={() => handleEdit('phoneNumber')} className="cursor-pointer">(+91){userData.phoneNumber}</h1>
+                            )}
                         </div>
                     </div>
                     <div className="flex items-center">
                         <div className="ml-2 flex gap-2">
                             <h1 className="flex font-semibold text-gray-600"><MdEmail className="w-6 h-6"/>&nbsp;Email&nbsp;:</h1>
-                            <h1 className="">{userData.email}</h1>
+                            {editMode.email ? (
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={tempData.email}
+                                    onChange={handleChange}
+                                    onBlur={() => handleSave('email')}
+                                    className="border p-1"
+                                />
+                            ) : (
+                                <h1 onClick={() => handleEdit('email')} className="cursor-pointer">
+                                    {userData.email}
+                                </h1>
+                            )}
                         </div>
                     </div>
                     <div className="flex items-center">
@@ -80,13 +136,41 @@ export default function ProfileDetails() {
                         </div>
                         <div className="ml-2 flex gap-2">
                             <h1 className="font-semibold text-gray-600">Address&nbsp;:</h1>
-                            <h1 className="">{userData.permanentAddress}</h1>
+                            {editMode.permanentAddress ? (
+                                <input
+                                    type="text"
+                                    name="permanentAddress"
+                                    value={tempData.permanentAddress}
+                                    onChange={handleChange}
+                                    onBlur={() => handleSave('permanentAddress')}
+                                    className="border p-1"
+                                />
+                            ) : (
+                                <h1 onClick={() => handleEdit('permanentAddress')} className="cursor-pointer">
+                                    {userData.permanentAddress}
+                                </h1>
+                            )}
                         </div>
                     </div>
                 </div>
                 <div className="flex gap-4 mt-4">
                      <div><h1 className="text-xl">Education&nbsp;:</h1></div>
-                     <div className=" text-lg text-gray-400">{userData.education}</div>
+                     <div className=" text-lg text-gray-400">
+                     {editMode.education ? (
+                            <input
+                                type="text"
+                                name="education"
+                                value={tempData.education}
+                                onChange={handleChange}
+                                onBlur={() => handleSave('education')}
+                                className="border p-1"
+                            />
+                        ) : (
+                            <h1 onClick={() => handleEdit('education')} className="cursor-pointer">
+                                {userData.education}
+                            </h1>
+                        )}
+                     </div>
                     
                 </div>
             </div>
