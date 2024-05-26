@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import React, { useState, useEffect, useContext } from "react";
-import { callIcon, location, userimg, } from "./images";
+import { callIcon, location, userimg } from "./images";
 import { MdEmail } from 'react-icons/md';
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
@@ -8,84 +8,82 @@ import AuthContext from "../../../Context/AuthContext";
 export default function ProfileDetails() {
     const [error, setError] = useState(null);
     const [userData, setUserData] = useState(null);
-    const query=new URLSearchParams(useLocation().search);
+    const query = new URLSearchParams(useLocation().search);
     const employeeId = query.get('employeeId');
-    const name=query.get('name')
-    const profile=query.get('profileLogo')
+    const name = query.get('name');
+    const profile = query.get('profileLogo');
     const { authState } = useContext(AuthContext);
-    const [editMode, setEditMode]=useState({});
-    const [tempData, setTempData]=useState({});
+    const [editMode, setEditMode] = useState({});
+    const [tempData, setTempData] = useState({});
 
-    useEffect(() => {
         const fetchUserData = async () => {
             try {
                 const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchSingle/teacher', {
                     accessToken: authState.accessToken,
                     employeeId
                 });
-                console.log("API response Single teacher:", response.data);  
+                console.log("API response Single teacher:", response.data);
                 if (response.data.TeacherDetails && response.data.TeacherDetails.length > 0) {
                     setUserData(response.data.TeacherDetails[0]);
                     setTempData(response.data.TeacherDetails[0]);
-                    console.log("Experience:", response.data.TeacherDetails[0].experience);
+                    // console.log("Experience:", response.data.TeacherDetails[0].experience);
                 } else {
                     setError('No teacher details found');
                 }
             } catch (err) {
                 setError(err.message);
                 console.log(err);
-        
             }
         };
+        useEffect(() => {
 
         if (authState.accessToken) {
             fetchUserData();
         } else {
-            setError(err.message);
+            setError('No access token available');
             console.log('No access token available');
-            
         }
-    }, [authState.accessToken,employeeId]);
+    }, [authState.accessToken, employeeId]);
 
-    const handleEdit=(field)=>{
-        setEditMode({...editMode, [field]:true});
-    }
+    const handleEdit = (field) => {
+        setEditMode({ ...editMode, [field]: true });
+    };
 
-    
-    const handleChange=(e)=>{
-        const {name,value}=e.target;
-        setTempData({...tempData, [temp]:value});
-    }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setTempData({ ...tempData, [name]: value });
+    };
 
-    const handleSave=async(e)=>{
+    const handleSave = async (field) => {
         try {
-            const response = await axios.post('https://loginapi-y0aa.onrender.com/edit/teacher', {
+            const response = await axios.put('https://loginapi-y0aa.onrender.com/edit/teacher', {
                 accessToken: authState.accessToken,
-                employeeId,
-                [field]:tempData[field]
+                [field]: tempData[field]
             });
-            console.log("API response updated:", response.data);  
-          
+            console.log("API response updated:", response.data);
+            fetchUserData();
+
             setUserData({ ...userData, [field]: tempData[field] });
             setEditMode({ ...editMode, [field]: false });
-              
+
         } catch (err) {
             setError(err.message);
             console.log(err);
-    
         }
-    }
+    };
+
     if (!userData) {
         return <div>Loading...</div>;
     }
+
     return (
-        <div className=" flex justify-center mobile:max-tablet:flex-col bg-white shadow-lg w-full rounded-xl p-4 ">
+        <div className="flex justify-center mobile:max-tablet:flex-col bg-white shadow-lg w-full rounded-xl p-4">
             <div className="flex flex-col items-center gap-4 mx-4">
                 <div className="mx-4">
                     <img src={profile} alt="" className="h-16 w-16 rounded-full" />
                 </div>
-                
-                <div className=" flex flex-col justify-center items-center">
+
+                <div className="flex flex-col justify-center items-center">
                     <h1 className="font-semibold text-2xl">{name}</h1>
                     <p className="text-gray-600">Maths & Science Teacher</p>
                 </div>
@@ -96,24 +94,23 @@ export default function ProfileDetails() {
                         </div>
                         <div className="ml-2 flex gap-2">
                             <h1 className="font-semibold text-gray-600">Phone&nbsp;:</h1>
-                            {editMode.phoneNumber?(
+                            {editMode.phoneNumber ? (
                                 <input
-                                type="text"
-                                name="phoneNumber"
-                                value={tempData.phoneNumber}
-                                onChange={handleChange}
-                                onBlur={()=>handleSave('phoneNumber')}
-                                className="border p-1"
+                                    type="text"
+                                    name="phoneNumber"
+                                    value={tempData.phoneNumber}
+                                    onChange={handleChange}
+                                    onBlur={() => handleSave('phoneNumber')}
+                                    className="border p-1"
                                 />
-                            ):
-                            (
-                            <h1 onClick={() => handleEdit('phoneNumber')} className="cursor-pointer">(+91){userData.phoneNumber}</h1>
+                            ) : (
+                                <h1 onClick={() => handleEdit('phoneNumber')} className="cursor-pointer">(+91){userData.phoneNumber}</h1>
                             )}
                         </div>
                     </div>
                     <div className="flex items-center">
                         <div className="ml-2 flex gap-2">
-                            <h1 className="flex font-semibold text-gray-600"><MdEmail className="w-6 h-6"/>&nbsp;Email&nbsp;:</h1>
+                            <h1 className="flex font-semibold text-gray-600"><MdEmail className="w-6 h-6" />&nbsp;Email&nbsp;:</h1>
                             {editMode.email ? (
                                 <input
                                     type="email"
@@ -154,9 +151,9 @@ export default function ProfileDetails() {
                     </div>
                 </div>
                 <div className="flex gap-4 mt-4">
-                     <div><h1 className="text-xl">Education&nbsp;:</h1></div>
-                     <div className=" text-lg text-gray-400">
-                     {editMode.education ? (
+                    <div><h1 className="text-xl">Education&nbsp;:</h1></div>
+                    <div className="text-lg text-gray-400">
+                        {editMode.education ? (
                             <input
                                 type="text"
                                 name="education"
@@ -170,11 +167,9 @@ export default function ProfileDetails() {
                                 {userData.education}
                             </h1>
                         )}
-                     </div>
-                    
+                    </div>
                 </div>
             </div>
         </div>
-
-    )
+    );
 }
