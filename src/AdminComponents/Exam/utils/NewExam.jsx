@@ -6,9 +6,9 @@ const NewExam = ({ onClose, addExam }) => {
   const { authState } = useContext(AuthContext);
   const [error, setError] = useState(null);
   const [examData, setExamData] = useState({
-    class: '',
+    Class: '',
     subject: '',
-    Time: '',
+    time: '',
     date: '',
     duration: '',
   });
@@ -31,9 +31,9 @@ const NewExam = ({ onClose, addExam }) => {
       if (response.status === 200) {
         addExam(response.data);
         setExamData({
-          class: '',
+          Class: '',
           subject: '',
-          Time: '',
+          time: '',
           date: '',
           duration: '',
         });
@@ -71,8 +71,8 @@ const NewExam = ({ onClose, addExam }) => {
             <select
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="examClass"
-              name="class"
-              value={examData.class}
+              name="Class"
+              value={examData.Class}
               onChange={handleChange}
               required
             >
@@ -132,8 +132,8 @@ const NewExam = ({ onClose, addExam }) => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="time"
               type="time"
-              name="Time"
-              value={examData.Time}
+              name="time"
+              value={examData.time}
               onChange={handleChange}
               required
             />
