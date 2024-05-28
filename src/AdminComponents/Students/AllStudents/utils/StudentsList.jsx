@@ -61,6 +61,9 @@ export default function StudentsList() {
                     setUserData(users);
                 } else {
                     setError('Unexpected response format');
+                    setTimeout(() => {
+                        setError('');
+                    }, 2000);
                 }
 
                 console.log(response.data.Students[4].name);
@@ -68,6 +71,9 @@ export default function StudentsList() {
                 setLoading(false);
             } catch (err) {
                 setError(err.message);
+                setTimeout(() => {
+                    setError('');
+                }, 2000);
                 setLoading(false);
             }
         };
@@ -78,6 +84,9 @@ export default function StudentsList() {
         } else {
             setError('No access token available');
             setLoading(false);
+            setTimeout(() => {
+                setError('');
+            }, 2000);
         }
     }, [authState.accessToken]);
 

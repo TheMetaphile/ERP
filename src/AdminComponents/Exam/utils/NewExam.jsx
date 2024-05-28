@@ -1,10 +1,12 @@
-
-import React, { useState } from 'react';
-import TimePicker from "react-time-picker";
+import React, { useState, useContext } from 'react';
+import axios from 'axios';
+import AuthContext from '../../../Context/AuthContext';
 
 const NewExam = ({ onClose, addExam }) => {
+  const { authState } = useContext(AuthContext);
+  const [error, setError] = useState(null);
   const [examData, setExamData] = useState({
-    name: '',
+    class: '',
     subject: '',
     Time: '',
     date: '',
@@ -16,18 +18,40 @@ const NewExam = ({ onClose, addExam }) => {
     setExamData({ ...examData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    addExam(examData);
-    setExamData({
-      class: '',
-      subject: '',
-      Time: '',
-      date: '',
-      duration: '',
-    });
-    onClose();
+    setError(null);
+    console.log(examData)
+    try {
+      const response = await axios.post('https://examapi-jep8.onrender.com/ScheduleExams', {
+        accessToken: authState.accessToken,
+        ...examData
+      });
+
+      if (response.status === 200) {
+        addExam(response.data);
+        setExamData({
+          class: '',
+          subject: '',
+          Time: '',
+          date: '',
+          duration: '',
+        });
+        onClose();
+      } else {
+        setError("Failed to add Exam. Try again after some time.");
+        setTimeout(() => {
+          setError('');
+      }, 2000);
+      }
+    } catch (error) {
+      setError(error.response?.data?.message || 'Error adding exam. Please try again.');
+      setTimeout(() => {
+        setError('');
+    }, 2000);
+    }
   };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-lg">
@@ -38,9 +62,10 @@ const NewExam = ({ onClose, addExam }) => {
           ✖
         </button>
         <h2 className="text-2xl mb-4">Schedule New Exam</h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 text-xl mb-2" htmlFor="examName">
+            <label className="block text-gray-700 text-xl mb-2" htmlFor="examClass">
               Class
             </label>
             <select
@@ -52,18 +77,22 @@ const NewExam = ({ onClose, addExam }) => {
               required
             >
               <option value="" disabled>Select Class</option>
-              <option value="I">I</option>
-              <option value="II">II</option>
-              <option value="III">III</option>
-              <option value="IV">IV</option>
-              <option value="V">V</option>
-              <option value="VI">VI</option>
-              <option value="VII">VII</option>
-              <option value="VIII">VIII</option>
-              <option value="IX">IX</option>
-              <option value="X">X</option>
-              <option value="XI">XI</option>
-              <option value="XII">XII</option>
+              <option value="Pre-Nursery">Pre-Nursery</option>
+              <option value="Nursery">Nursery</option>
+              <option value="L.K.J">L.K.J</option>
+              <option value="U.K.J">U.K.J</option>
+              <option value="1st">1st</option>
+              <option value="2nd">2nd</option>
+              <option value="3rd">3rd</option>
+              <option value="4th">4th</option>
+              <option value="5th">5th</option>
+              <option value="6th">6th</option>
+              <option value="7th">7th</option>
+              <option value="8th">8th</option>
+              <option value="9th">9th</option>
+              <option value="10th">10th</option>
+              <option value="11th">11th</option>
+              <option value="12th">12th</option>
             </select>
           </div>
           <div className="mb-4">
@@ -72,12 +101,12 @@ const NewExam = ({ onClose, addExam }) => {
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="text"
+              id="subject"
               type="text"
-              name='subject'
+              name="subject"
               value={examData.subject}
               onChange={handleChange}
-              placeholder='Enter Subject Name'
+              placeholder="Enter Subject Name"
               required
             />
           </div>
@@ -89,7 +118,7 @@ const NewExam = ({ onClose, addExam }) => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="date"
               type="date"
-              name='date'
+              name="date"
               value={examData.date}
               onChange={handleChange}
               required
@@ -110,14 +139,14 @@ const NewExam = ({ onClose, addExam }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-xl mb-2" htmlFor="duaration">
-              Duration(in hrs)
+            <label className="block text-gray-700 text-xl mb-2" htmlFor="duration">
+              Duration (in hrs)
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="duaration"
-              type="duaration"
-              name='duration'
+              id="duration"
+              type="text"
+              name="duration"
               value={examData.duration}
               onChange={handleChange}
               required
@@ -144,4 +173,5 @@ const NewExam = ({ onClose, addExam }) => {
     </div>
   );
 };
+
 export default NewExam;
