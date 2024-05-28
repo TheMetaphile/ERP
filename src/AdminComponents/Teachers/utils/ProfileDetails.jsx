@@ -4,6 +4,7 @@ import { callIcon, location, userimg } from "./images";
 import { MdEmail } from 'react-icons/md';
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
+import { CiEdit } from "react-icons/ci";
 
 export default function ProfileDetails() {
     const [error, setError] = useState(null);
@@ -16,26 +17,26 @@ export default function ProfileDetails() {
     const [editMode, setEditMode] = useState({});
     const [tempData, setTempData] = useState({});
 
-        const fetchUserData = async () => {
-            try {
-                const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchSingle/teacher', {
-                    accessToken: authState.accessToken,
-                    employeeId
-                });
-                console.log("API response Single teacher:", response.data);
-                if (response.data.TeacherDetails && response.data.TeacherDetails.length > 0) {
-                    setUserData(response.data.TeacherDetails[0]);
-                    setTempData(response.data.TeacherDetails[0]);
-                    // console.log("Experience:", response.data.TeacherDetails[0].experience);
-                } else {
-                    setError('No teacher details found');
-                }
-            } catch (err) {
-                setError(err.message);
-                console.log(err);
+    const fetchUserData = async () => {
+        try {
+            const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchSingle/teacher', {
+                accessToken: authState.accessToken,
+                employeeId
+            });
+            console.log("API response Single teacher:", response.data);
+            if (response.data.TeacherDetails && response.data.TeacherDetails.length > 0) {
+                setUserData(response.data.TeacherDetails[0]);
+                setTempData(response.data.TeacherDetails[0]);
+                // console.log("Experience:", response.data.TeacherDetails[0].experience);
+            } else {
+                setError('No teacher details found');
             }
-        };
-        useEffect(() => {
+        } catch (err) {
+            setError(err.message);
+            console.log(err);
+        }
+    };
+    useEffect(() => {
 
         if (authState.accessToken) {
             fetchUserData();
@@ -58,6 +59,7 @@ export default function ProfileDetails() {
         try {
             const response = await axios.put('https://loginapi-y0aa.onrender.com/edit/teacher', {
                 accessToken: authState.accessToken,
+                email: userData.email,
                 [field]: tempData[field]
             });
             console.log("API response updated:", response.data);
@@ -104,8 +106,12 @@ export default function ProfileDetails() {
                                     className="border p-1"
                                 />
                             ) : (
-                                <h1 onClick={() => handleEdit('phoneNumber')} className="cursor-pointer">(+91){userData.phoneNumber}</h1>
+                                <h1>(+91){userData.phoneNumber}</h1>
+
                             )}
+                        </div>
+                        <div className="ml-4 cursor-pointer" onClick={() => handleEdit('phoneNumber')}>
+                            <CiEdit />
                         </div>
                     </div>
                     <div className="flex items-center">
@@ -121,10 +127,13 @@ export default function ProfileDetails() {
                                     className="border p-1"
                                 />
                             ) : (
-                                <h1 onClick={() => handleEdit('email')} className="cursor-pointer">
+                                <h1>
                                     {userData.email}
                                 </h1>
                             )}
+                        </div>
+                        <div className="ml-4 cursor-pointer" onClick={() => handleEdit('email')}>
+                            <CiEdit />
                         </div>
                     </div>
                     <div className="flex items-center">
@@ -143,30 +152,38 @@ export default function ProfileDetails() {
                                     className="border p-1"
                                 />
                             ) : (
-                                <h1 onClick={() => handleEdit('permanentAddress')} className="cursor-pointer">
+                                <h1>
                                     {userData.permanentAddress}
                                 </h1>
                             )}
                         </div>
+                        <div className="ml-4 cursor-pointer" onClick={() => handleEdit('permanentAddress')}>
+                            <CiEdit />
+                        </div>
                     </div>
                 </div>
-                <div className="flex gap-4 mt-4">
-                    <div><h1 className="text-xl">Education&nbsp;:</h1></div>
-                    <div className="text-lg text-gray-400">
-                        {editMode.education ? (
-                            <input
-                                type="text"
-                                name="education"
-                                value={tempData.education}
-                                onChange={handleChange}
-                                onBlur={() => handleSave('education')}
-                                className="border p-1"
-                            />
-                        ) : (
-                            <h1 onClick={() => handleEdit('education')} className="cursor-pointer">
-                                {userData.education}
-                            </h1>
-                        )}
+                <div className="flex items-center">
+                    <div className="ml-2 flex gap-2">
+                        <h1 className="text-xl">Education&nbsp;:</h1>
+                        <div className="text-lg text-gray-400">
+                            {editMode.education ? (
+                                <input
+                                    type="text"
+                                    name="education"
+                                    value={tempData.education}
+                                    onChange={handleChange}
+                                    onBlur={() => handleSave('education')}
+                                    className="border p-1"
+                                />
+                            ) : (
+                                <h1>
+                                    {userData.education}
+                                </h1>
+                            )}
+                        </div>
+                    </div>
+                    <div className="ml-4 cursor-pointer" onClick={() => handleEdit('education')}>
+                        <CiEdit />
                     </div>
                 </div>
             </div>

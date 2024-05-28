@@ -120,7 +120,7 @@ export default function AddmissionForm() {
                     header: true,
                     complete: (results) => {
                         console.log(results.data);
-                        // handleMultiSignUp(results.data);
+                        handleMultiSignUp(results.data);
                     }
                 })
 
