@@ -5,8 +5,8 @@ import Upload from "../../assets/upload.png"
 function HomeWork() {
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
-            <div className='flex items-center justify-between'>
+        <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2  mb-3 no-scrollbar">
+            <div className='w-full flex items-center justify-between'>
                 <h1 className='text-2xl'>All HomeWork</h1>
                 <h1 className='flex items-center text-sm bg-secondary p-2 rounded-lg shadow-md self-end'>Edit <MdEdit className='ml-2'/></h1>
             </div>

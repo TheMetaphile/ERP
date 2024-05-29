@@ -34,8 +34,8 @@ const Summary = () => {
                 {entries.map((entry, index) => (
                     <tr key={index} className={` ${entry.day === 'Sat' || entry.day === 'Sun' ? 'bg-yellow-100' : ''}`}>
                         <td className="px-4 py-2 text-center border-b">
-                            <div className="flex items-center justify-center">
-                                <span className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center font-bold">
+                            <div className="flex ">
+                                <span className="w-6 h-6 rounded-full bg-gray-300   font-bold">
                                     {entry.date}
                                 </span>
                                 <span className="ml-2">{entry.day}</span>
