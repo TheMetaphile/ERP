@@ -69,6 +69,13 @@ import Subject from "./AdminComponents/Subjects/Subject.jsx";
 import Expenses from "./AdminComponents/Accounts/Expenses.jsx";
 import TeacherStudent from "./AdminComponents/Accounts/TeacherStudent.jsx";
 import PrivateRoute from "./components/PrivateRoutes.jsx";
+import TeacherDashboard from './TeacherComponents/Dashboard.jsx'
+import NoticeBoard from "./TeacherComponents/notice/NoticeBoard.jsx";
+import AllNotice from "./TeacherComponents/notice/utils/AllNotice.jsx";
+import Teacher from "./TeacherComponents/notice/utils/Teacher.jsx";
+import Student from "./TeacherComponents/notice/utils/Student.jsx";
+import CheckIn from "./TeacherComponents/checkin/CheckIn.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -413,6 +420,47 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/Account/TeacherStudents",
         element: <TeacherStudent/>,
+        children:[]
+      },
+    ]
+  },
+  {
+    path: "/Teacher-Dashboard",
+    element: (
+   
+    <TeacherDashboard />
+   
+    ),
+    children:[
+      {
+        path: "",
+        element: <AdminHome />,
+      },
+      {
+        path: "/Teacher-Dashboard/noticeboard",
+        element: <NoticeBoard />,
+        children: [
+          {
+            path: '/Teacher-Dashboard/noticeboard/allnotice',
+            element: <AllNotice />
+          },
+          {
+            path: '/Teacher-Dashboard/noticeboard/teacher',
+            element: <Teacher />
+          },
+          {
+            path: '/Teacher-Dashboard/noticeboard/student',
+            element: <Student />
+          },
+          {
+            path: '',
+            element: <AllNotice />
+          },
+        ]
+      },
+      {
+        path: "/Teacher-Dashboard/checkin",
+        element: <CheckIn/>,
         children:[]
       },
     ]

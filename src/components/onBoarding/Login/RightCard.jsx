@@ -30,7 +30,7 @@ export default function RightCard() {
     const handleSubmit = async () => {
         setIsSubmitting(true);
         try {
-            const endpoint = role === "Admin-Dashboard" ? "/login/teacher" : "/login/student";
+            const endpoint = role === "Teacher-Dashboard" ? "/login/teacher" : "/login/student";
             await axios.post(`https://loginapi-y0aa.onrender.com${endpoint}`, {
                 email,
                 password
@@ -108,13 +108,13 @@ export default function RightCard() {
                     <input
                         type="radio"
                         name="role"
-                        value="Admin-Dashboard"
-                        checked={role === "Admin-Dashboard"}
+                        value="Teacher-Dashboard"
+                        checked={role === "Teacher-Dashboard"}
                         onChange={handleRoleChange}
                         className="mr-3 w-4 h-4"
                         disabled={isSubmitting}
                     />
-                    Admin
+                    Teacher
                 </label>
 
                 <label className="text-lg font-medium text-center">
