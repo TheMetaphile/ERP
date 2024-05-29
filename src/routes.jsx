@@ -75,7 +75,8 @@ import AllNotice from "./TeacherComponents/notice/utils/AllNotice.jsx";
 import Teacher from "./TeacherComponents/notice/utils/Teacher.jsx";
 import Student from "./TeacherComponents/notice/utils/Student.jsx";
 import CheckIn from "./TeacherComponents/checkin/CheckIn.jsx";
-
+import ClassWorkTeacher from "./TeacherComponents/classwork/ClassWork.jsx"
+import HomeWorkTeacher from "./TeacherComponents/homework/HomeWork.jsx"
 const router = createBrowserRouter([
   {
     path: "/",
@@ -461,6 +462,16 @@ const router = createBrowserRouter([
       {
         path: "/Teacher-Dashboard/checkin",
         element: <CheckIn/>,
+        children:[]
+      },
+      {
+        path: "/Teacher-Dashboard/classwork",
+        element: <ClassWorkTeacher/>,
+        children:[]
+      },
+      {
+        path: "/Teacher-Dashboard/homework",
+        element: <HomeWorkTeacher/>,
         children:[]
       },
     ]

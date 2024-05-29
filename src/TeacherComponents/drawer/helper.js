@@ -36,6 +36,7 @@ const menuItems = [
     image: "src/assets/library.png",
     alt: "img",
     title: "Home Work",
+    route: '/Teacher-Dashboard/homework',
     children: []
   },
 
@@ -43,6 +44,7 @@ const menuItems = [
     image: "src/assets/account.png",
     alt: "img",
     title: "Class Work",
+    route: '/Teacher-Dashboard/classwork',
     children: []
   },
 
