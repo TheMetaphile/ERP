@@ -87,6 +87,10 @@ import BirthDay from "./TeacherComponents/birthday/BirthDay.jsx";
 import All from "./TeacherComponents/birthday/utils/All.jsx"
 import TeacherBirthDay from "./TeacherComponents/birthday/utils/Teacher.jsx"
 import StudentBirthDay from "./TeacherComponents/birthday/utils/Student.jsx"
+import StudentLeave from "./TeacherComponents/studentleave/StudentLeave.jsx";
+import New from "./TeacherComponents/studentleave/utils/New.jsx"
+import Approved from "./TeacherComponents/studentleave/utils/Approved.jsx";
+import Rejected from "./TeacherComponents/studentleave/utils/Rejected.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -532,6 +536,28 @@ const router = createBrowserRouter([
           {
             path: '',
             element: <All />
+          },
+        ]
+      },
+      {
+        path: "/Teacher-Dashboard/studentleave",
+        element: <StudentLeave />,
+        children: [
+          {
+            path: '/Teacher-Dashboard/studentleave/new',
+            element: <New />
+          },
+          {
+            path: '/Teacher-Dashboard/studentleave/approved',
+            element: <Approved />
+          },
+          {
+            path: '/Teacher-Dashboard/studentleave/rejected',
+            element: <Rejected />
+          },
+          {
+            path: '',
+            element: <New/>
           },
         ]
       },

@@ -34,7 +34,7 @@ function ReportCard() {
                 <Selection />
             </div>
 
-            <div className='  rounded-lg border shadow-md p-2 w-full mb-2'>
+            <div className='  rounded-lg border shadow-md  w-full mb-2'>
             <Header headings={['Sr. No.', 'Name', 'Total Marks', 'GPA']} />
             {details.map((detail, index) => (
                 <Link to={`/Teacher-Dashboard/reportcard/${detail.name}`} key={index}>

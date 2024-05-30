@@ -76,7 +76,7 @@ const menuItems = [
     image: "src/assets/transport.png",
     alt: "img",
     title: "Student Leave",
-    
+    route: '/Teacher-Dashboard/studentleave',
     children: []
   },
 
