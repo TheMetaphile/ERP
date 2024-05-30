@@ -77,6 +77,11 @@ import Student from "./TeacherComponents/notice/utils/Student.jsx";
 import CheckIn from "./TeacherComponents/checkin/CheckIn.jsx";
 import ClassWorkTeacher from "./TeacherComponents/classwork/ClassWork.jsx"
 import HomeWorkTeacher from "./TeacherComponents/homework/HomeWork.jsx"
+import TeacherStudentAttendance from "./TeacherComponents/studentattendence/StudentAttendence.jsx";
+import TakeLeave from "./TeacherComponents/takeleave/TakeLeave.jsx";
+import ReportCard from "./TeacherComponents/reportcard/ReportCard.jsx";
+import AllReport from "./TeacherComponents/reportcard/AllReport.jsx";
+import Performance from "./TeacherComponents/reportcard/utils/performance/Performance.jsx"
 const router = createBrowserRouter([
   {
     path: "/",
@@ -474,6 +479,31 @@ const router = createBrowserRouter([
         element: <HomeWorkTeacher/>,
         children:[]
       },
+      {
+        path: "/Teacher-Dashboard/studentAttendence",
+        element: <TeacherStudentAttendance/>,
+        children:[]
+      },
+      {
+        path: "/Teacher-Dashboard/takeleave",
+        element: <TakeLeave/>,
+        children:[]
+      },
+      {
+        path: "/Teacher-Dashboard/reportcard",
+        element: <AllReport/>,
+        children:[
+          {
+            path: '',
+            element: <ReportCard />
+          },
+          {
+            path: ':id',
+            element: <Performance />
+          }
+        ]
+      },
+      
     ]
   }
  

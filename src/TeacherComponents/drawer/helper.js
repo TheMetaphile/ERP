@@ -24,6 +24,7 @@ const menuItems = [
     image: "src/assets/teacher.png",
     alt: "img",
     title: "Take Leave",
+    route: '/Teacher-Dashboard/takeleave',
     children: []
   },
   {
@@ -59,6 +60,7 @@ const menuItems = [
     image: "src/assets/subject.png",
     alt: "img",
     title: "Report Card",
+    route: '/Teacher-Dashboard/reportcard',
     children: []
   },
 
@@ -81,6 +83,7 @@ const menuItems = [
     image: "src/assets/notice.png",
     alt: "img",
     title: "Student Attendence",
+    route: '/Teacher-Dashboard/studentattendence',
     children: []
   },
   {
