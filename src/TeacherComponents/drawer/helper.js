@@ -53,6 +53,7 @@ const menuItems = [
     image: "src/assets/class.png",
     alt: "img",
     title: "Time Table",
+    route: '/Teacher-Dashboard/timetable',
     children: []
   },
 
@@ -90,6 +91,7 @@ const menuItems = [
     image: "src/assets/notice.png",
     alt: "img",
     title: "Birthdays",
+    route: '/Teacher-Dashboard/birthday',
     children: []
   },
   {

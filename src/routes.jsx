@@ -81,7 +81,12 @@ import TeacherStudentAttendance from "./TeacherComponents/studentattendence/Stud
 import TakeLeave from "./TeacherComponents/takeleave/TakeLeave.jsx";
 import ReportCard from "./TeacherComponents/reportcard/ReportCard.jsx";
 import AllReport from "./TeacherComponents/reportcard/AllReport.jsx";
-import Performance from "./TeacherComponents/reportcard/utils/performance/Performance.jsx"
+import Performance from "./TeacherComponents/reportcard/utils/performance/PerformanceProfile.jsx"
+import TimeTableTeacher from "./TeacherComponents/timetable/TimeTable.jsx"
+import BirthDay from "./TeacherComponents/birthday/BirthDay.jsx";
+import All from "./TeacherComponents/birthday/utils/All.jsx"
+import TeacherBirthDay from "./TeacherComponents/birthday/utils/Teacher.jsx"
+import StudentBirthDay from "./TeacherComponents/birthday/utils/Student.jsx"
 const router = createBrowserRouter([
   {
     path: "/",
@@ -503,7 +508,33 @@ const router = createBrowserRouter([
           }
         ]
       },
-      
+      {
+        path: "/Teacher-Dashboard/timetable",
+        element: <TimeTableTeacher/>,
+        children:[]
+      },
+      {
+        path: "/Teacher-Dashboard/birthday",
+        element: <BirthDay />,
+        children: [
+          {
+            path: '/Teacher-Dashboard/birthday/all',
+            element: <All />
+          },
+          {
+            path: '/Teacher-Dashboard/birthday/teacher',
+            element: <TeacherBirthDay />
+          },
+          {
+            path: '/Teacher-Dashboard/birthday/student',
+            element: <StudentBirthDay />
+          },
+          {
+            path: '',
+            element: <All />
+          },
+        ]
+      },
     ]
   }
  
