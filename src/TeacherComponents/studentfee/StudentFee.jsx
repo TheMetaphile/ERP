@@ -34,11 +34,11 @@ function StudentFee() {
                 <Header headings={['Sr. No.', 'Name', 'Record Name', 'Amount']} />
                 {filterDetails.map((detail, index) => (
 
-                    <div key={index} className='border flex justify-between items-center py-2 px-3  w-full font-normal text-base ' >
-                        <div className=' w-full'>{detail.serial}</div>
-                        <div className=' w-full'>{detail.name}</div>
-                        <div className=' w-full'>{detail.record}</div>
-                        <div className={`w-full ${detail.status === 'Paid' ? 'text-green-400' : 'text-red-400'}`}>{detail.amount}</div>
+                    <div key={index} className='border flex justify-between items-center py-2 pl-2  w-full font-normal text-base ' >
+                        <div className=' w-40'>{detail.serial}</div>
+                        <div className=' w-40'>{detail.name}</div>
+                        <div className=' w-40'>{detail.record}</div>
+                        <div className={`w-40 ${detail.status === 'Paid' ? 'text-green-400' : 'text-red-400'}`}>{detail.amount}</div>
                     </div>
 
                 ))}

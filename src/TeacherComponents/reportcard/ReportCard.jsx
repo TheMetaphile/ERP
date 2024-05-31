@@ -38,11 +38,11 @@ function ReportCard() {
             <Header headings={['Sr. No.', 'Name', 'Total Marks', 'GPA']} />
             {details.map((detail, index) => (
                 <Link to={`/Teacher-Dashboard/reportcard/${detail.name}`} key={index}>
-                    <div key={index} className='flex justify-between items-center py-2 px-3  w-full' >
-                        <span>{detail.serial}</span>
-                        <span>{detail.name}</span>
-                        <span>{detail.marks}</span>
-                        <span>{detail.gpa}</span>
+                    <div key={index} className='flex justify-between items-center py-2 pl-2  w-full' >
+                        <div className=' w-40'>{detail.serial}</div>
+                        <div className=' w-40'>{detail.name}</div>
+                        <div className=' w-40'>{detail.marks}</div>
+                        <div className=' w-40'>{detail.gpa}</div>
                     </div>
                      </Link>
                 ))}

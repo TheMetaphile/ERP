@@ -39,11 +39,11 @@ function NoteBook() {
             <Header headings={['Sr. No.', 'Name', 'Checked', 'UnChecked']} />
             {details.map((detail, index) => (
                
-                    <div key={index} className='border flex justify-between items-center py-2 px-3  w-full' >
-                        <span>{detail.serial}</span>
-                        <span>{detail.name}</span>
-                        <span>{detail.checked === 'true' ? <FaRegCircleCheck className="text-green-500" /> : null}</span>
-                        <span>{detail.checked === 'false' ? <FaRegCircleXmark className="text-red-500" /> : null}</span>
+                    <div key={index} className='border flex justify-between items-center py-2 pl-2  w-full' >
+                        <div className=' w-40'>{detail.serial}</div>
+                        <div className=' w-40'>{detail.name}</div>
+                        <div className=' w-40'>{detail.checked === 'true' ? <FaRegCircleCheck className="text-green-500" /> : null}</div>
+                        <div className=' w-40'>{detail.checked === 'false' ? <FaRegCircleXmark className="text-red-500" /> : null}</div>
                     </div>
                      
                 ))}
