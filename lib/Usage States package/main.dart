@@ -1,54 +1,25 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usage_stats/usage_stats.dart';
 import 'package:workmanager/workmanager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+void main() => runApp(MyApp());
+
+const appUsageTrackingTask = "app_usage_tracking_task";
+
 void callbackDispatcher() {
+  _UsageTrackerState obj=_UsageTrackerState();
   Workmanager().executeTask((task, inputData) async {
-    try {
-      DateTime checkInTime = DateTime.parse(inputData!['checkInTime']);
-      DateTime checkOutTime = DateTime.now();
+    if (task == appUsageTrackingTask) {
+      await obj._trackAppUsageInBackground();
 
-      List<UsageInfo> usageStats = await UsageStats.queryUsageStats(
-        checkInTime.subtract(Duration(minutes: 1)), // Adjusting the start time to ensure we capture usage before check-in
-        checkOutTime,
-      );
-
-      Map<String, int> appUsageMap = {};
-
-      for (UsageInfo info in usageStats) {
-        String? packageName = info.packageName;
-        String? totalTimeInForeground = info.totalTimeInForeground;
-        if (packageName != null && totalTimeInForeground != null) {
-          int? totalTimeInForegroundInt = int.tryParse(totalTimeInForeground);
-          if (totalTimeInForegroundInt != null) {
-            appUsageMap[packageName] = (appUsageMap[packageName] ?? 0) + totalTimeInForegroundInt;
-          }
-        }
-      }
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      for (var entry in appUsageMap.entries) {
-        String key = '${entry.key}_${checkInTime.millisecondsSinceEpoch}';
-        prefs.setInt(key, entry.value);
-        print('Stored: $key -> ${entry.value}'); // Log stored entries
-      }
-    } catch (e) {
-      print('Error in callbackDispatcher: $e');
     }
-
     return Future.value(true);
   });
 }
 
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  Workmanager().initialize(
-    callbackDispatcher,
-    isInDebugMode: true,
-  );
-  runApp(MyApp());
-}
 
 class MyApp extends StatelessWidget {
   @override
@@ -58,8 +29,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
 
 class UsageTracker extends StatefulWidget {
   @override
@@ -71,94 +40,134 @@ class _UsageTrackerState extends State<UsageTracker> {
   DateTime? _checkOutTime;
   Map<String, Duration> _appUsageMap = {};
 
+  Future<void> _storeCheckInTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('checkInTimeMillis', _checkInTime!.millisecondsSinceEpoch);
+  }
+
+  Future<void> _loadCheckInTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final checkInTimeMillis = prefs.getInt('checkInTimeMillis');
+    if (checkInTimeMillis != null) {
+      _checkInTime = DateTime.fromMillisecondsSinceEpoch(checkInTimeMillis);
+    } else {
+      _checkInTime = null;
+    }
+  }
   void _startTracking() async {
     setState(() {
       _checkInTime = DateTime.now();
       _checkOutTime = null;
-      _appUsageMap = {};
+      _appUsageMap.clear();
     });
-
-    Workmanager().registerOneOffTask(
-      '1',
-      'usageTrackerTask',
-      inputData: {
-        'checkInTime': _checkInTime!.toIso8601String(),
-      },
-    );
+    await _storeCheckInTime(); // Store the check-in time
+    _scheduleUsageTracking();
   }
 
   void _stopTracking() async {
-    setState(() {
-      _checkOutTime = DateTime.now();
-    });
+    if (_checkInTime == null) {
+      print('Check-in time is not set.');
+      return;
+    }
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    Set<String> keys = prefs.getKeys();
-    Map<String, Duration> usageMap = {};
+    _checkOutTime = DateTime.now();
+    await _trackAppUsage();
+    Workmanager().cancelAll();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('checkInTimeMillis'); // Remove the check-in time
+  }
 
-    print('Keys in SharedPreferences: $keys'); // Log all keys
+  void _scheduleUsageTracking() {
+    Workmanager().registerOneOffTask(
+      appUsageTrackingTask,
+      appUsageTrackingTask,
+    );
+  }
 
-    for (String key in keys) {
-      print('Processing key: $key'); // Log each key processing
-      List<String> keyParts = key.split('_');
-      if (keyParts.length == 2) {
-        String packageName = keyParts[0];
-        int? millisecondsSinceEpoch = int.tryParse(keyParts[1]);
-        if (millisecondsSinceEpoch != null &&
-            millisecondsSinceEpoch >= _checkInTime!.millisecondsSinceEpoch) {
-          int? totalTimeInMilliseconds = prefs.getInt(key);
-          if (totalTimeInMilliseconds != null) {
-            print('Retrieved: $key -> $totalTimeInMilliseconds'); // Log retrieved entries
-            if (!usageMap.containsKey(packageName)) {
-              usageMap[packageName] = Duration(milliseconds: totalTimeInMilliseconds);
-            } else {
-              usageMap[packageName] = usageMap[packageName]! + Duration(milliseconds: totalTimeInMilliseconds);
-            }
-          }
+  Future<void> _trackAppUsage() async {
+    List<UsageInfo> usageStats = await UsageStats.queryUsageStats(
+      _checkInTime!,
+      _checkOutTime!,
+    );
+
+    for (UsageInfo info in usageStats) {
+      String? packageName = info.packageName;
+      String? totalTimeInForeground = info.totalTimeInForeground;
+      print("totalTimeInForeground ${totalTimeInForeground}");
+      if (packageName != null && totalTimeInForeground != null) {
+        int totalTimeInForegroundInt = int.parse(totalTimeInForeground);
+        Duration usageDuration = Duration(milliseconds: totalTimeInForegroundInt);
+        if (_appUsageMap.containsKey(packageName)) {
+          _appUsageMap[packageName] = _appUsageMap[packageName]! + usageDuration;
+        } else {
+          _appUsageMap[packageName] = usageDuration;
         }
       }
     }
+    print("_checkInTime ${_checkInTime}");
+    print("_checkOutTime ${_checkOutTime}");
 
-    setState(() {
-      _appUsageMap = usageMap;
-    });
 
-    print('Usage Map: $_appUsageMap'); // Log the final usage map
+    setState(() {});
+  }
+
+  Future<void> _trackAppUsageInBackground() async {
+    await _loadCheckInTime(); // Load the check-in time
+    if (_checkInTime != null && _checkOutTime == null) {
+      // Only track usage if check-in time is set and check-out time is not set
+      await _trackAppUsage();
+      _scheduleUsageTracking(); // Reschedule the task to continue tracking
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    _loadCheckInTime(); // Load the check-in time when the app opens
   }
 
   @override
   Widget build(BuildContext context) {
+    print(_appUsageMap);
     return Scaffold(
       appBar: AppBar(
-        title: Text('App Usage Tracker'),
+        title: Text('Teacher App Usage Tracker'),
       ),
-      body: Column(
-        children: [
-          ElevatedButton(
-            onPressed: _startTracking,
-            child: Text('Check In'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: _startTracking,
+                child: Text('Check In'),
+              ),
+              ElevatedButton(
+                onPressed: _stopTracking,
+                child: Text('Check Out'),
+              ),
+              SizedBox(height: 16),
+              Text(
+                "App Usage",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              SizedBox(height: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: _appUsageMap.entries
+                    .map((entry) => ListTile(
+                  title: Text(entry.key),
+                  subtitle: Text(
+                      '${entry.value.inMinutes} minutes ${entry.value.inSeconds % 60} seconds'),
+                ))
+                    .toList(),
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: _stopTracking,
-            child: Text('Check Out'),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _appUsageMap.keys.length,
-              itemBuilder: (context, index) {
-                String packageName = _appUsageMap.keys.elementAt(index);
-                Duration usageDuration = _appUsageMap[packageName]!;
-                return ListTile(
-                  title: Text(packageName),
-                  subtitle: Text('${usageDuration.inMinutes} minutes ${usageDuration.inSeconds % 60} seconds'),
-                );
-              },
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
+
+
 }
-
-
