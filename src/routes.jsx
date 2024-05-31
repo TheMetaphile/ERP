@@ -91,6 +91,10 @@ import StudentLeave from "./TeacherComponents/studentleave/StudentLeave.jsx";
 import New from "./TeacherComponents/studentleave/utils/New.jsx"
 import Approved from "./TeacherComponents/studentleave/utils/Approved.jsx";
 import Rejected from "./TeacherComponents/studentleave/utils/Rejected.jsx";
+import StudentFee from "./TeacherComponents/studentfee/StudentFee.jsx";
+import NoteBook from "./TeacherComponents/notebook/NoteBook.jsx";
+import TeacherMessage from "./TeacherComponents/message/Message.jsx"
+import TeacherHome from "./TeacherComponents/Home/TeacherHome.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -449,7 +453,7 @@ const router = createBrowserRouter([
     children:[
       {
         path: "",
-        element: <AdminHome />,
+        element: <TeacherHome />,
       },
       {
         path: "/Teacher-Dashboard/noticeboard",
@@ -560,6 +564,21 @@ const router = createBrowserRouter([
             element: <New/>
           },
         ]
+      },
+      {
+        path: "/Teacher-Dashboard/studentfee",
+        element: <StudentFee/>,
+        children:[]
+      },
+      {
+        path: "/Teacher-Dashboard/notebook",
+        element: <NoteBook/>,
+        children:[]
+      },
+      {
+        path: "/Teacher-Dashboard/message",
+        element: <TeacherMessage/>,
+        children:[]
       },
     ]
   }

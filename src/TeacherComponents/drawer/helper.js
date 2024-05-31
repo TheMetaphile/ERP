@@ -69,6 +69,7 @@ const menuItems = [
     image: "src/assets/exam.png",
     alt: "img",
     title: "Student Fees",
+    route: '/Teacher-Dashboard/studentfee',
     children: []
   },
 
@@ -98,7 +99,7 @@ const menuItems = [
     image: "src/assets/message.png",
     alt: "img",
     title: "Message",
-    
+    route: '/Teacher-Dashboard/message',
     children: []
   },
   {
@@ -113,7 +114,7 @@ const menuItems = [
     image: "src/assets/leave_icon.png",
     alt: "img",
     title: "Note Book Record",
-
+    route: '/Teacher-Dashboard/notebook',
     children: []
   },
 ];

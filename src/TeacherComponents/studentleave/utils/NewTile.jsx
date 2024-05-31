@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Logo from '../../../assets/Test Account.png'
-import { FaGreaterThan, FaChevronDown } from "react-icons/fa6";
+import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
+
 export default function NewTile(props) {
     const [expanded, setExpanded] = useState(false);
 
@@ -32,7 +33,7 @@ export default function NewTile(props) {
                 </div>
             </div>
             <div className=' items-center px-3 cursor-pointer' onClick={hanleClick}>
-                {expanded ? <FaChevronDown /> : <FaGreaterThan />}
+            {expanded ?   <FaChevronUp />: <FaChevronDown />}
             </div>
 
 
