@@ -1,9 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/APIs/StudentsData/StudentApi.dart';
+import 'package:untitled/APIs/StudentsData/student.dart';
 
 class StudentDetail extends StatefulWidget {
-  const StudentDetail({super.key});
+
+  const StudentDetail({super.key,required this.email, });
+ final String email;
+
 
   @override
   State<StudentDetail> createState() => _StudentDetailState();
@@ -33,29 +40,71 @@ class _StudentDetailState extends State<StudentDetail> {
     super.initState();
     scrollController1.addListener(listener1);
     scrollController2.addListener(listener2);
+    fetchTeacherData();
+
+
   }
- List<List<String>> studentDetail=[
- ["Roll No","08"],
-   ["Class","V'A'"],
-   ["Birth Date","12/08/2003"],
-   ["Admission Date","08/05/2015"],
-   ["Registration Number","1234567541"],
-   ["Permanent Address","O,Bock No.2123"],
-   ["Academic Year","2020-2025"],
-   ["Addhar Number","2535-2325-2351"],
-   ["Personal Email","ankits45987@gmail.com"],
-   ["Father's Name","Ankit"],
-   ["Mother's Name","Nita"],
-   ["Father's Phone Number","82XXXXXXXXX"],
-   ["Mother's Phone Number","82XXXXXXXXX"],
-   ["Father's Occupation","Business Man"],
-   ["Mother's Occupation","House Wife"],
-   ["Parent Email","anstXXX@gmail.com"],
-   ["Emergency Contact","78468595612"],
+  Map<String, dynamic>? studentData;
+  final studentApiobj=StudentApi();
+
+
+  Future<void> fetchTeacherData() async {
+
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    try {
+      final accessToken = pref.getString("accessToken");
+       final student = await studentApiobj.fetchStudentData(accessToken!, widget.email);
+      setState(() {
+        studentData=student;
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+  List<List<String>>? studentDetail;
+  void assign(){
+   studentDetail = [
+
+    ['Name', studentData?["name"] ??""],
+    ['Roll Number',studentData?["rollNumber"] ??""],
+    ['Email',studentData?["email"] ??"" ],
+    ['Class', studentData?["currentClass"] ??""],
+    ['Section',studentData?["section"] ??" "],
+    ['AadhaarNumber',studentData?["aadhaarNumber"] ??"" ],
+    ['DOB',studentData?["DOB"] ??"" ],
+    ['Gender',studentData?["gender"] ??"" ],
+    ['Religion',studentData?["religion"] ??"" ],
+    ['ProfileLink',studentData?["profileLink"] ??"" ],
+    ['AcademicYear',studentData?["academicYear"] ??"" ],
+    ['AdmissionClass',studentData?["admissionClass"] ??"" ],
+    ['AdmissionDate',studentData?["admissionDate"] ??"" ],
+    ['EmergencyContactNumber',studentData?["emergencyContactNumber"] ??"" ],
+    ['OldAdmissionNumber',studentData?["oldAdmissionNumber"] ??"" ],
+    ['FatherEmailId',studentData?["fatherEmailId"] ??"" ],
+    ['MotherEmailId',studentData?["motherEmailId"] ??"" ],
+    ['MotherName',studentData?["motherName"] ??"" ],
+    ['FathersOccupation',studentData?["fathersOccupation"] ??"" ],
+    ['MotherOccupation',studentData?["motherOccupation"] ??"" ],
+    ['FatherPhoneNumber',studentData?["fatherPhoneNumber"] ??"" ],
+    ['MotherPhoneNumber',studentData?["motherPhoneNumber"] ??"" ],
+    ['PermanentAddress',studentData?["permanentAddress"] ??"" ],
+    ['BloodGroup',studentData?["bloodGroup"] ??"" ],
+    ['GuardiansName',studentData?["guardiansName"] ??"" ],
+    ['GuardiansOccupation',studentData?["guardiansOccupation"] ??"" ],
+    ['GuardiansPhoneNumber',studentData?["guardiansPhoneNumber"] ??"" ],
   ];
+}
   @override
   Widget build(BuildContext context) {
+    assign();
+    print(studentDetail);
     Size size=MediaQuery.of(context).size;
+    if (studentData == null) {
+      return  Scaffold(body:  Center(child: LoadingAnimationWidget.threeArchedCircle(
+        color: Colors.blue,
+        size: 100,
+      )));
+    }
     return Scaffold(
       backgroundColor: Color(0xFF5A77BC),
       appBar: AppBar(
@@ -90,7 +139,10 @@ class _StudentDetailState extends State<StudentDetail> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(CupertinoIcons.profile_circled,color: Colors.black,size: size.height*0.1,),
+                            CircleAvatar(
+                              radius: size.width*0.1,
+                              backgroundImage: NetworkImage(studentData?["profileLink"]),
+                            ),
                               SizedBox(width: size.width*0.02,),
                             SizedBox(
                               width: size.width*0.35,
@@ -98,9 +150,9 @@ class _StudentDetailState extends State<StudentDetail> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Abhishek ",style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w500),),
-                                  Text("Class-V'A'",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w400),),
-                                  Text("Roll No-08'",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w400),),
+                                  Text(studentData?["name"],style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w500),),
+                                  Text(studentData?["currentClass"],style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w400),),
+                                  Text(studentData?["rollNumber"],style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w400),),
 
                                 ],
                               ),
@@ -206,7 +258,7 @@ class _StudentDetailState extends State<StudentDetail> {
                                   Container(
                                     height: size.width*0.25,
                                     width: size.width*0.25,
-                                    child: CircularProgressIndicator(
+                                    child: const CircularProgressIndicator(
                                       value: 0,
                                       color: Colors.green,
                                       strokeWidth: 10,
@@ -237,10 +289,6 @@ class _StudentDetailState extends State<StudentDetail> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("All Student Data", style: TextStyle(
-                            fontSize: size.width*0.07,
-                            fontWeight: FontWeight.w400// Adjust font size as needed
-                        ),),
                         SizedBox(height: size.height*0.01,),
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 8),
@@ -266,10 +314,17 @@ class _StudentDetailState extends State<StudentDetail> {
                                         children: [
                                           SizedBox(
                                               width:size.width*0.44,
-                                              child: Text("ID",textAlign:TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
-                                          SizedBox(
-                                              width:size.width*0.4,
-                                              child: Text("Class",textAlign: TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                              child: Text("All Details",textAlign:TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                          TextButton(
+                                              style: TextButton.styleFrom(side: BorderSide(width: 2,color: Colors.black),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                                              onPressed: (){},
+                                              child: Row(
+                                                children: [
+                                                  Text("Edit ",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w500),),
+                                                  Icon(Icons.edit,color: Colors.black,),
+                                                ],
+                                              )
+                                          )
 
 
                                         ],
@@ -277,9 +332,10 @@ class _StudentDetailState extends State<StudentDetail> {
                                     ),
                                     ListView.builder(
                                       shrinkWrap: true,
-                                      itemCount: studentDetail.length,
+                                      itemCount: studentDetail!.length,
                                       physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
+
                                         return Container(
                                           height: size.height*0.05,
                                           padding: EdgeInsets.symmetric(horizontal: 5),
@@ -289,11 +345,11 @@ class _StudentDetailState extends State<StudentDetail> {
                                               SizedBox(
 
                                                   width:size.width*0.44,
-                                                  child: Text(studentDetail[index][0].toString(),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                                  child: Text(studentDetail![index][0].toString(),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
                                               SizedBox(
 
                                                   width:size.width*0.4,
-                                                  child: Text(studentDetail[index][1].toString(),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                                  child: Text(studentDetail![index][1].toString(),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
 
                                             ],
                                           ),

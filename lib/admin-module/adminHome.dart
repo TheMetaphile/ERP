@@ -285,29 +285,29 @@ class _AdminHomeState extends State<AdminHome> {
 
                         ],
                       ),
-                      ExpansionTile(
-                        key: GlobalKey(),
-                        initiallyExpanded: _openTileIndex == 2,
-                        onExpansionChanged: (isExpanded) {
-                          _handleTileTap(2);
-                        },
-                        shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
-                        leading:Icon(Icons.family_restroom_sharp,color: Colors.black,),
-                        title: Text("Parents",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
-                        trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
-                        children: [
-                          ListTile(
-                            leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
-                            title:  Text("All Parents",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => AllParents(),));
-                            },
-                          ),
-
-
-
-                        ],
-                      ),
+                      // ExpansionTile(
+                      //   key: GlobalKey(),
+                      //   initiallyExpanded: _openTileIndex == 2,
+                      //   onExpansionChanged: (isExpanded) {
+                      //     _handleTileTap(2);
+                      //   },
+                      //   shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
+                      //   leading:Icon(Icons.family_restroom_sharp,color: Colors.black,),
+                      //   title: Text("Parents",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+                      //   trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
+                      //   children: [
+                      //     ListTile(
+                      //       leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
+                      //       title:  Text("All Parents",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
+                      //       onTap: (){
+                      //         Navigator.push(context, MaterialPageRoute(builder: (context) => AllParents(),));
+                      //       },
+                      //     ),
+                      //
+                      //
+                      //
+                      //   ],
+                      // ),
                       ExpansionTile(
                         key: GlobalKey(),
                         initiallyExpanded: _openTileIndex == 3,

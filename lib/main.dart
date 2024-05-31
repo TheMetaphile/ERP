@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:highlight_text/highlight_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart' as speechToText;
 import 'package:untitled/Charts/eventCalender.dart';
 import 'package:untitled/ChatView/chatView.dart';
@@ -94,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!isListen) {
       bool avail = await speech.initialize(
         onError: (errorNotification) {
-          Startlistening();
+          startlistening();
           print("erp error : ${errorNotification.errorMsg}");
         },
       );
@@ -173,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         isListen = false;
         speech.stop();
-        Startlistening();
+        startlistening();
       });
     }
   }
@@ -186,16 +187,28 @@ class _MyHomePageState extends State<MyHomePage> {
     Permissions().checkAudioPermission();
     _snowBoyWakeUp = SnowBoyWakeUp(listen);
     _snowBoyWakeUp.initPlatformState();
-    Startlistening();
+    startlistening();
+    checkAuthentication();
   }
-
+  bool isAuthenticated = false;
+  Future<void> checkAuthentication() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? accessToken = pref.getString("accessToken");
+    print(accessToken);
+    setState(() {
+      isAuthenticated = accessToken != null;
+    });
+  }
   @override
   Widget build(BuildContext context) {
+
     cnxt = context;
-    return Scaffold(body: Login());
+    return Scaffold(
+        body: isAuthenticated?const TeacherHome():Login(),
+    );
   }
 
-  Startlistening() async {
+  startlistening() async {
     await _snowBoyWakeUp.startDetection();
   }
 }

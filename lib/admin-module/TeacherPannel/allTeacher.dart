@@ -2,7 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/APIs/TeacherData/TeacherApi.dart';
 import 'package:untitled/admin-module/TeacherPannel/teacherDetails.dart';
+
+import '../../APIs/TeacherData/teacher.dart';
 
 class AllTeacher extends StatefulWidget {
   const AllTeacher({super.key});
@@ -12,6 +17,8 @@ class AllTeacher extends StatefulWidget {
 }
 
 class _AllTeacherState extends State<AllTeacher> {
+  List<Teacher>? _teachers;
+  final teachersObj=TeacherApi();
   ScrollController scrollController1 = ScrollController();
   ScrollController scrollController2 = ScrollController();
   var _flag1 = false;
@@ -35,8 +42,20 @@ class _AllTeacherState extends State<AllTeacher> {
     super.initState();
     scrollController1.addListener(listener1);
     scrollController2.addListener(listener2);
+    _fetchTeachers();
   }
-
+  Future<void> _fetchTeachers() async {
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    try {
+       final accessToken = pref.getString("accessToken");
+      final teachers = await teachersObj.fetchTeachers(accessToken!);
+      setState(() {
+        _teachers = teachers;
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
   List<String> subjects=[
     "Hindi",
     "English",
@@ -45,16 +64,22 @@ class _AllTeacherState extends State<AllTeacher> {
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
+    if (_teachers == null) {
+      return  Scaffold(body:  Center(child: LoadingAnimationWidget.threeArchedCircle(
+         color: Colors.blue,
+        size: 100,
+      )));
+    }
     return Scaffold(
-      backgroundColor: Color(0xFF5A77BC),
+      backgroundColor: const Color(0xFF5A77BC),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: (){
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
         ),
         title:   Text("All Teachers",style: GoogleFonts.openSans(fontSize:size.width*0.055,color:Colors.white,fontWeight:FontWeight.w600),),
 
@@ -195,14 +220,19 @@ class _AllTeacherState extends State<AllTeacher> {
 
                     ListView.builder(
                       shrinkWrap: true,
-                      itemCount: 10,
+                      itemCount: _teachers?.length,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
+                        final teacher=_teachers![index];
                         return Card(
                           child: ExpansionTile(
                             shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
-                            leading: Icon(CupertinoIcons.profile_circled,color: Colors.grey,size: size.height*0.06,),
-                            title:Text("Ankit Sharma",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(color:Colors.black,fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
+                            // leading: Icon(CupertinoIcons.profile_circled,color: Colors.grey,size: size.height*0.06,),
+                            subtitle: Text(teacher.employeeId),
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(teacher.profileLink),
+                            ),
+                            title:Text(teacher.name,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(color:Colors.black,fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
                             children: [
                               ListTile(
 
@@ -215,7 +245,7 @@ class _AllTeacherState extends State<AllTeacher> {
                               ListTile(
 
                                 onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherDetails(),));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherDetails(employeID: teacher.employeeId, name: teacher.name, profileLink: teacher.profileLink,),));
                                 },
                                 leading:   Icon(Icons.person,size: size.height*0.035,),
                                 title:   Text("Profile",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(color:Colors.black,fontSize:size.width*0.045,),),

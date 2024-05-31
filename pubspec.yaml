@@ -59,7 +59,9 @@ dependencies:
   highlight_text: ^1.7.0
   http: ^1.2.1
   shared_preferences: ^2.2.3
-
+  loading_animation_widget: ^1.2.1
+  workmanager: ^0.5.2
+  usage_stats: ^1.2.0
 
 
 

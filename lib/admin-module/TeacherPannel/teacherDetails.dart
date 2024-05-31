@@ -1,17 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../APIs/TeacherData/TeacherApi.dart';
 import '../../Charts/classActivity.dart';
 
 class TeacherDetails extends StatefulWidget {
-  const TeacherDetails({super.key});
+  const TeacherDetails({super.key, required this.employeID, required this.name, required this.profileLink});
+  final  String employeID;
+  final String name;
+  final String profileLink;
 
   @override
   State<TeacherDetails> createState() => _TeacherDetailsState();
 }
 
 class _TeacherDetailsState extends State<TeacherDetails> {
+
   ScrollController scrollController1 = ScrollController();
   ScrollController scrollController2 = ScrollController();
   var _flag1 = false;
@@ -35,20 +42,47 @@ class _TeacherDetailsState extends State<TeacherDetails> {
     super.initState();
     scrollController1.addListener(listener1);
     scrollController2.addListener(listener2);
+    fetchTeacherData();
   }
+  Map<String, dynamic>? _userDetails;
+  final TeacherApiObj=TeacherApi();
 
-  List<List<String>> teacherDetails=[
+
+  Future<void> fetchTeacherData() async {
+
+  SharedPreferences pref=await SharedPreferences.getInstance();
+  try {
+  final accessToken = pref.getString("accessToken");
+  final teachers = await TeacherApiObj.fetchTeacherData(accessToken!,widget.employeID);
+  setState(() {
+    _userDetails=teachers;
+  });
+  } catch (e) {
+  print('Error: $e');
+  }
+}
+  List<List<String>>?teacherDetails;
+void assign(){
+  teacherDetails=[
     ["Monthly Salary","Rs. 18000"],
-    ["Experience","4 Year"],
-    ["Phone No","(+91) 9368563585"],
-    ["Email","ankits45@gmail.com"],
-    ["Address","Sector 62, Noida"],
+    ["Experience",_userDetails?['experience'] ?? ''],
+    ["Phone No",'(+91) ${_userDetails?['phoneNumber'] ?? ''}'],
+    ["Email",_userDetails?['email'] ?? ''],
+    ["Address",_userDetails?['permanentAddress'] ?? ''],
   ];
+}
 
   @override
   Widget build(BuildContext context) {
-
+    assign();
+    print(_userDetails);
     Size size=MediaQuery.of(context).size;
+    if (_userDetails == null) {
+      return  Scaffold(body:  Center(child: LoadingAnimationWidget.threeArchedCircle(
+        color: Colors.blue,
+        size: 100,
+      )));
+    }
     return Scaffold(
       backgroundColor: Color(0xFF5A77BC),
       appBar: AppBar(
@@ -60,7 +94,7 @@ class _TeacherDetailsState extends State<TeacherDetails> {
           },
           icon: Icon(Icons.arrow_back_ios,),
         ),
-        title:   Text("Teacher Details",style: GoogleFonts.openSans(fontSize:size.width*0.055,color:Colors.white,fontWeight:FontWeight.w600),),
+        title:   Text("Teacher Deetails",style: GoogleFonts.openSans(fontSize:size.width*0.055,color:Colors.white,fontWeight:FontWeight.w600),),
 
       ),
       body: Stack(
@@ -69,9 +103,9 @@ class _TeacherDetailsState extends State<TeacherDetails> {
           SingleChildScrollView(
             controller: scrollController2,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Card(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
@@ -83,7 +117,10 @@ class _TeacherDetailsState extends State<TeacherDetails> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(CupertinoIcons.profile_circled,color: Colors.black,size: size.height*0.1,),
+                            CircleAvatar(
+                              radius: size.width*0.1,
+                              backgroundImage: NetworkImage(widget.profileLink),
+                            ),
                             SizedBox(width: size.width*0.02,),
                             SizedBox(
                               width: size.width*0.35,
@@ -91,9 +128,9 @@ class _TeacherDetailsState extends State<TeacherDetails> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Ankit Sharna",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w500),),
-                                  Text("Maths & Hindi Teacher'",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w400),),
-                                  Text("Rating: 7.9/10'",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w400),),
+                                  Text(widget.name,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w500),),
+                                  // Text("Maths & Hindi Teacher'",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w400),),
+                                  Text(widget.employeID,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w400),),
 
                                 ],
                               ),
@@ -118,12 +155,12 @@ class _TeacherDetailsState extends State<TeacherDetails> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: teacherDetails.length,
+                  itemCount: teacherDetails?.length,
                   itemBuilder: (context, index) {
                   return Card(
                     child: ListTile(
-                      leading: Text(teacherDetails[index][0],style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w500),),
-                    trailing:  Text(teacherDetails[index][1],style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w500),),
+                      leading: Text(teacherDetails![index][0],style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w500),),
+                    trailing:  Text(teacherDetails![index][1],style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w500),),
 
                     ),
                   );
@@ -142,21 +179,12 @@ class _TeacherDetailsState extends State<TeacherDetails> {
                          Row(
                            children: [
                              SizedBox(width: size.width*0.04,),
-                             Text("B.tech, IIT Kanpur",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w500),),
+                             Text(_userDetails?['education'] ?? '',style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w500),),
                             SizedBox(width: size.width*0.02,),
                              Text("(2013-2017)",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w500),),
 
                            ],
                          ),
-                          Row(
-                            children: [
-                              SizedBox(width: size.width*0.04,),
-                              Text("M.tech, IIT Kanpur",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w500),),
-                              SizedBox(width: size.width*0.02,),
-                              Text("(2013-2017)",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w500),),
-
-                            ],
-                          ),
 
                         ],
                       ),

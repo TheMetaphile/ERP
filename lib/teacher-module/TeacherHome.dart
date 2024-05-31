@@ -1,8 +1,8 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molten_navigationbar_flutter/molten_navigationbar_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/ChatView/chatView.dart';
 import 'package:untitled/teacher-module/classWork.dart';
 import 'package:untitled/teacher-module/assignment.dart';
@@ -10,7 +10,6 @@ import 'package:untitled/teacher-module/homeWork.dart';
 import 'package:untitled/teacher-module/studentLeaveApplications.dart';
 import 'package:untitled/teacher-module/teacherDashboard.dart';
 import 'package:untitled/teacher-module/teacherSalary.dart';
-
 import '../admin-module/adminHome.dart';
 import '../onBoarding/Screens/login.dart';
 import 'Birthday.dart';
@@ -28,14 +27,12 @@ class _TeacherHomeState extends State<TeacherHome> {
   String deviceTokenToSendPushNotification="";
   var _flag1 = false;
   var _flag2 = false;
-
   void listener1() {
     if (_flag2) return;
     _flag1 = true;
     scrollController2.jumpTo(scrollController1.offset);
     _flag1 = false;
   }
-
   void listener2() {
     if (_flag1) return;
     _flag2 = true;
@@ -55,10 +52,7 @@ class _TeacherHomeState extends State<TeacherHome> {
   //    deviceTokenToSendPushNotification = token.toString();
   //   print("Token Value $deviceTokenToSendPushNotification");
   // }
-
-
-
-  List navigationBar=[teacherDashboard(),ClassWork(),HomeWork(),TeacherAssignment()];
+  List navigationBar=[const teacherDashboard(),const ClassWork(),const HomeWork(),const TeacherAssignment()];
   int selectedIndex=0;
   List<String> title=["DashBoard","Class Work","Home Work","Assignment"];
   @override
@@ -66,15 +60,15 @@ class _TeacherHomeState extends State<TeacherHome> {
     Size size = MediaQuery.of(context).size;
     // getDeviceTokenToSendNotification();
     return Scaffold(
-        backgroundColor: Color(0xFF5A77BC),
+        backgroundColor: const Color(0xFF5A77BC),
         appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.white),
+          iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: Colors.transparent,
           title: Text(title[selectedIndex],style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: size.width*0.06),),
           actions: [
             IconButton(onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(),));
-            }, icon: Icon(Icons.message_outlined,color: Colors.white,))
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatScreen(),));
+            }, icon: const Icon(Icons.message_outlined,color: Colors.white,))
           ],
         ),
         drawer: Drawer(
@@ -82,10 +76,10 @@ class _TeacherHomeState extends State<TeacherHome> {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: const EdgeInsets.only(top: 20),
                   height: size.height*0.2,
                   width: size.width*1,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Color(0xFF5A77BC),
       
                   ),
@@ -107,6 +101,7 @@ class _TeacherHomeState extends State<TeacherHome> {
       
                               ],
                             ),
+
                           ]
                       ),
                       SizedBox(height: size.height*0.02,)
@@ -156,17 +151,20 @@ class _TeacherHomeState extends State<TeacherHome> {
                       ListTile(
                         leading:Icon(Icons.logout,color: Colors.black,size: size.width*0.1,),
                         title: Text("Logout",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w400),),
-                      onTap: (){
+                        onTap: () async {
+                          SharedPreferences prefs=await SharedPreferences.getInstance();
+                          await prefs.remove('accessToken');
+                          print(prefs.getString("accessToken"));
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
                       },
                       ),
                     ],
                   ),
                 ),
-                Expanded(child: SizedBox(),),
-                Container(
+                const Expanded(child: SizedBox(),),
+                SizedBox(
                   width: size.width*0.75,
-                  child: Text(" © 2024 All Right Reserved by School\nDesigned by MetaPhile",textAlign: TextAlign.center,),
+                  child: const Text(" © 2024 All Right Reserved by School\nDesigned by MetaPhile",textAlign: TextAlign.center,),
                 )
               ],
             )
@@ -182,7 +180,7 @@ class _TeacherHomeState extends State<TeacherHome> {
           },
           tabs: [
             MoltenTab(
-              icon: Icon(Icons.home,color: Colors.green,),
+              icon: const Icon(Icons.home,color: Colors.green,),
             ),
             MoltenTab(
               icon: Image.asset("assets/Images/Google Classroom.png",fit: BoxFit.contain,),
@@ -191,7 +189,7 @@ class _TeacherHomeState extends State<TeacherHome> {
             MoltenTab(
               icon: Image.asset("assets/Images/Books Emoji.png",fit: BoxFit.contain,),
             ),
-            MoltenTab(icon: Icon(Icons.assignment,color: Colors.green,))
+            MoltenTab(icon: const Icon(Icons.assignment,color: Colors.green,))
           ],
         ),
 

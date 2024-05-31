@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/APIs/Exam/ExamApi.dart';
+import 'package:untitled/utils/utils.dart';
 
 class Exams extends StatefulWidget {
   const Exams({super.key});
@@ -39,9 +42,7 @@ class _ExamsState extends State<Exams> {
 
   }
   TextEditingController examName=TextEditingController();
-  TextEditingController addSubject=TextEditingController();
   TextEditingController selectClass=TextEditingController();
-  TextEditingController selectTime=TextEditingController();
   TextEditingController selectDate=TextEditingController();
   TextEditingController gap=TextEditingController();
   String? _selectedClass;
@@ -53,13 +54,13 @@ class _ExamsState extends State<Exams> {
   ];
   String? _selecteduration;
   List<String> durationOptions = [
-    "1 hrs"
+    "1 hrs",
     '2 hrs',
     '3hrs',
 
   ];
-  DateTime? selectedDate;
 
+  DateTime? selectedDate;
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
@@ -72,6 +73,24 @@ class _ExamsState extends State<Exams> {
       });
     }
   }
+
+  TimeOfDay? _selectedTime;
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (pickedTime != null && pickedTime != _selectedTime) {
+      setState(() {
+        _selectedTime = pickedTime;
+      });
+    }
+  }
+
+  ExamApi examApiObj=ExamApi();
+bool isLoading=false;
+  bool isScheduled=false;
   Future<void>schedulExamtPopup( BuildContext context ,Size size)async {
     return showDialog(
       context: context,
@@ -161,18 +180,27 @@ class _ExamsState extends State<Exams> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text("Select Time",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.black),),
-                                            TextField(
-                                              maxLines: 1,
-                                              decoration: InputDecoration(
-                                                  contentPadding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 5),
-                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8),borderSide: const BorderSide(color: Colors.grey)),
-                                                  hintStyle: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.grey,)
+                                            SizedBox(height: size.height*0.01,),
+                                            Container(
+                                                height: size.height*0.055,
+                                                width: size.width,
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(8),
+                                                    border: Border.all(color: Colors.grey)
 
-                                              ),
+                                                ),
+                                                child: TextButton(
+                                                  onPressed: (){
+                                                    _selectTime(context).then((_) {
+                                                      setState(() {});
+                                                    });
+                                                  },
+                                                  child:  _selectedTime==null?
+                                                  Text("Please Select",textAlign: TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.grey),):
+                                                  Text("${_selectedTime?.hour}:${_selectedTime?.minute}",textAlign: TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.grey),),
 
-
-                                              controller: selectTime,
-                                            ),
+                                                )
+                                            )
                                           ],
                                         ),
                                       ),
@@ -200,7 +228,7 @@ class _ExamsState extends State<Exams> {
                                                   },
                                                   child:  selectedDate==null?
                                                   Text("Please Select",textAlign: TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.grey),):
-                                                  Text("${selectedDate.toString()}",textAlign: TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.grey),),
+                                                  Text("${selectedDate?.year}-${selectedDate?.month.toString().padLeft(2, '0')}-${selectedDate?.day.toString().padLeft(2, '0')}",textAlign: TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.grey),),
 
                                                 )
                                             )
@@ -251,9 +279,41 @@ class _ExamsState extends State<Exams> {
                                 child: SizedBox(
                                   width: size.width*0.3,
                                   child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(backgroundColor:Color(0XFF6FF87D),shape: RoundedRectangleBorder(side: BorderSide(color: Colors.grey,width: 1),borderRadius: BorderRadius.circular(8))),
-                                      onPressed: (){},
-                                      child: Text("Save",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.black),)),
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                          backgroundColor:isLoading?Colors.transparent:Color(0XFF6FF87D),
+                                          shape:isLoading?RoundedRectangleBorder(side: BorderSide.none):RoundedRectangleBorder(side: BorderSide(color: Colors.grey,width: 1),
+                                              borderRadius: isLoading?BorderRadius.all(Radius.zero):BorderRadius.circular(8))
+                                      ),
+                                      onPressed: () async {
+                                        setState(() {
+                                         isLoading=true;
+                                        });
+                                     try{
+                                       SharedPreferences pref=await SharedPreferences.getInstance();
+                                       final accessToken=pref.getString("accessToken");
+                                        isScheduled =
+                                       await examApiObj.scheduleExam(
+                                         accessToken: accessToken!,
+                                         classValue: _selectedClass!,
+                                         subject: examName.text,
+                                         date: selectedDate!,
+                                         time: _selectedTime!,
+                                         duration: _selecteduration!,
+                                       );
+                                     }catch(error){
+                                       print(error);
+                                     }finally{
+                                       setState(() {
+                                         isLoading=false;
+                                       });
+                                     }
+                                     if(isScheduled){
+                                       Navigator.pop(context);
+                                       showGreenSnackBar("Exam Scheduled", context);
+                                     }
+                                      },
+                                      child: isLoading?CircularProgressIndicator():Text("Save",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.black),)),
                                 ),
                               ),
                             ],
@@ -441,3 +501,4 @@ class _ExamsState extends State<Exams> {
     );
   }
 }
+

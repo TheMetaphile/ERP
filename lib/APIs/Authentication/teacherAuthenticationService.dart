@@ -29,8 +29,16 @@ class TeacherAuthentication{
       );
 
       if (response.statusCode == 200) {
-
         print('Login successful');
+
+        final data = jsonDecode(response.body);
+        final tokens = data['tokens'];
+        final accessToken = tokens['accessToken'];
+
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        await pref.setString("accessToken", accessToken);
+        print(pref.getString("accessToken"));
+
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TeacherHome(),));
         showGreenSnackBar("Login successful",context);
       } else {
@@ -62,18 +70,17 @@ class TeacherAuthentication{
         final data = jsonDecode(response.body);
         final otpToken = data['otpToken'];
         print(otpToken);
-
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('otpToken', otpToken); // Await the operation
-        print(prefs.getString('otpToken'));
-         final sharedotpToken=prefs.getString('otpToken');
+        // final SharedPreferences prefs = await SharedPreferences.getInstance();
+        // await prefs.setString('otpToken', otpToken); // Await the operation
+        // print(prefs.getString('otpToken'));
+        //  final sharedotpToken=prefs.getString('otpToken');
 
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => EmailVerification(
               email: email,
-              otpToken: sharedotpToken, // Use getString to read the value
+              otpToken: otpToken, // Use getString to read the value
             ),
           ),
         );

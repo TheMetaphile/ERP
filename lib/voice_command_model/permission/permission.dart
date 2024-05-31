@@ -10,4 +10,5 @@ class Permissions{
     permissionGranted = await Permission.microphone.isGranted;
     return permissionGranted;
   }
+
 }

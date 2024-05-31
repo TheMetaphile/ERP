@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/APIs/StudentsData/StudentApi.dart';
+import 'package:untitled/APIs/StudentsData/student.dart';
 import 'package:untitled/admin-module/StudentPannel/studentDetail.dart';
 
 class AllStudents extends StatefulWidget {
@@ -35,8 +39,25 @@ class _AllStudentsState extends State<AllStudents> {
     super.initState();
     scrollController1.addListener(listener1);
     scrollController2.addListener(listener2);
+    _fetchStudents();
   }
 
+  final studentApiobj=StudentApi();
+  List<Student>? _students;
+
+  Future<void> _fetchStudents() async {
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    try {
+      final accessToken = pref.getString("accessToken");
+      print(accessToken);
+      final students = await studentApiobj.fetchStudents(accessToken!);
+      setState(() {
+        _students = students;
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
   List<Map<String, String>> classDetails=[
     {
       "class":"Pre-Nursery",
@@ -119,9 +140,16 @@ class _AllStudentsState extends State<AllStudents> {
 
     },
   ];
+
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
+    if (_students == null) {
+      return  Scaffold(body:  Center(child: LoadingAnimationWidget.threeArchedCircle(
+        color: Colors.blue,
+        size: 100,
+      )));
+    }
     return Scaffold(
       backgroundColor: Color(0xFF5A77BC),
       appBar: AppBar(
@@ -374,17 +402,16 @@ class _AllStudentsState extends State<AllStudents> {
                                       padding: EdgeInsets.symmetric(horizontal: 5),
 
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           SizedBox(
-                                              width:size.width*0.2,
-                                              child: Text("ID",textAlign:TextAlign.center,style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                              width:size.width*0.25,
+                                              child: Text("ID",textAlign:TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w400),)),
                                           SizedBox(
-                                              width:size.width*0.2,
-                                              child: Text("Name",textAlign: TextAlign.center,style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                              width:size.width*0.5,
+                                              child: Text("Name",textAlign: TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w400),)),
                                           SizedBox(
-                                              width:size.width*0.2,
-                                              child: Text("Class",textAlign: TextAlign.center,style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w400),)),
+
+                                              child: Text("Class",textAlign: TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w400),)),
 
 
                                         ],
@@ -392,31 +419,29 @@ class _AllStudentsState extends State<AllStudents> {
                                     ),
                                     ListView.builder(
                                       shrinkWrap: true,
-                                      itemCount: allStudentData.length,
+                                      itemCount: _students!.length,
                                       physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
-                                        final particularStudentDetail=allStudentData[index];
+                                        final student= _students![index];
                                         return Container(
                                           height: size.height*0.05,
                                           child: TextButton(
                                             onPressed: () {
-                                              Navigator.push(context, MaterialPageRoute(builder: (context) => StudentDetail(),));
+                                              Navigator.push(context, MaterialPageRoute(builder: (context) => StudentDetail( email: student.email,),));
                                             },
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 SizedBox(
 
-                                                    width:size.width*0.2,
-                                                    child: Text(particularStudentDetail["id"]!,textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                                    width:size.width*0.25,
+                                                    child: Text(student.rollNumber,textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
                                                 SizedBox(
 
-                                                    width:size.width*0.2,
-                                                    child: Text(particularStudentDetail["name"]!,textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                                    width:size.width*0.5,
+                                                    child: Text(student.name,textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
                                                 SizedBox(
 
-                                                    width:size.width*0.2,
-                                                    child: Text(particularStudentDetail["class"]!,textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                                    child: Text(student.currentClass,textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
 
                                               ],
                                             ),
