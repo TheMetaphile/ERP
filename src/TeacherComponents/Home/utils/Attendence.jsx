@@ -9,8 +9,8 @@ const Attendence = () => {
       labels: ['Class 2nd','Class 2nd','Class 2nd','Class 2nd','Class 2nd'],
       datasets: [
         {
-        
-          data: ['Week1', 2, 3, 4, 5],
+          label: 'Student Attendence', 
+          data: [4,3,2,4,2],
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1,
@@ -46,7 +46,7 @@ const Attendence = () => {
     };
   }, []);
 
-  return <div className='h-full  w-full'><canvas ref={chartRef}  className='flex-grow rounded-lg mt-3 shadow-lg px-3 py-2 tablet:ml-5 ' /></div>;
+  return <div className='h-2/5 w-full'><canvas ref={chartRef}  className='flex-grow  mt-3  px-3 py-2 tablet:ml-5 ' /></div>;
 };
 
 export default  Attendence;

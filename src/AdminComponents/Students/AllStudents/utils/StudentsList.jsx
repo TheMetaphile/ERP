@@ -4,7 +4,7 @@ import SearchBar from "../utils/SearchBar";
 import StudentDetailTile from "../utils/StudentDetailTile";
 import axios from 'axios'
 import AuthContext from "../../../../Context/AuthContext";
-
+import Loading from '../../../../LoadingScreen/Loading'
 export default function StudentsList() {
     const [name, setName] = useState('');
     const [userData, setUserData] = useState([]);
@@ -141,7 +141,7 @@ export default function StudentsList() {
             <div className="rounded-lg shadow-md border-2 border-black w-full overflow-x-auto no-scrollable">
                 <Header headings={['ID', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
                 {loading ? (
-                    <div>Loading...</div>
+                    <Loading/>
                 ) : error ? (
                     <div>Error: {error}</div>
                 ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (

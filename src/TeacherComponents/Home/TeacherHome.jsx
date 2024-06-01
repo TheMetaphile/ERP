@@ -13,7 +13,7 @@ function TeacherHome() {
                 <img src={bg} alt="teacher-student"></img>
             </div>
 
-            <div className=' flex items-center justify-between border shadow-md mt-4 rounded-lg  w-full mobile:max-laptop:flex-col'>
+            <div className='bg-green-300 flex items-center justify-between border shadow-md mt-4 rounded-lg  w-full mobile:max-laptop:flex-col'>
                 <Progress />
                 <Attendence/>
             </div>

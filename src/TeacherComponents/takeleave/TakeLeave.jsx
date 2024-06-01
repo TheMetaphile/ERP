@@ -3,7 +3,7 @@ import Progress from './utils/Progress'
 import History from './utils/History'
 import NewLeave from './utils/NewLeave'
 function TakeLeave() {
-    const [isDilogOpen, setIsDialogOpen]=useState(false);
+    const [isDialogOpen, setIsDialogOpen]=useState(false);
 
     const handleOpen=()=>{
         setIsDialogOpen(true);
@@ -24,7 +24,7 @@ function TakeLeave() {
             <div className='mt-4  w-full'>
                 <History />
             </div>
-            {isDilogOpen && <NewLeave onClose={handleClose}/>}
+            {isDialogOpen && <NewLeave onClose={handleClose}/>}
         </div>
 
     )

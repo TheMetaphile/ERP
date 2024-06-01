@@ -5,7 +5,7 @@ import TeacherCard from "./utils/TeacherCard";
 import { chatLogo, profilelogo } from "./utils/images/index.js";
 import axios from 'axios';
 import AuthContext from "../../Context/AuthContext.jsx";
-
+import Loading from "../../LoadingScreen/Loading.jsx"
 export default function AllTeachers() {
     const [name, setName] = useState('');
     const [userData, setUserData] = useState([]);
@@ -70,7 +70,7 @@ export default function AllTeachers() {
             </div>
             <div className="mt-4">
                 {loading ? (
-                    <div>Loading...</div>
+                    <Loading />
                 ) : error ? (
                     <div>Error: {error}</div>
                 ) : Array.isArray(filteredTeachers) && filteredTeachers.length === 0 ? (

@@ -1,4 +1,4 @@
-import { MdOutlineFileDownload } from "react-icons/md";
+// import { MdOutlineFileDownload } from "react-icons/md";
 export default function ClassWorkTile(props) {
     return (
         <div className=" p-2 mb-4  border border-black rounded-lg shadow-md mt-3 flex items-center justify-between">
@@ -9,7 +9,7 @@ export default function ClassWorkTile(props) {
                 <div className="pl-2 mt-1 font-light text-xs text-gray-700">Class : {props.classs}</div>
             </div>
 
-            <MdOutlineFileDownload className="w-12 h-12"/>
+            {/* <MdOutlineFileDownload className="w-12 h-12"/> */}
 
             <div className='px-2 w-11/12 text-right'>
                 <div className="pl-2 mt-1 font-light text-sm text-gray-700">{props.subject}</div>

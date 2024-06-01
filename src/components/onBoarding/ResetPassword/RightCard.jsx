@@ -113,7 +113,7 @@ export default function RightCard() {
                         className="mr-3 w-4 h-4"
                         disabled={isSubmitting}
                     />
-                    Admin
+                    Teacher
                 </label>
 
                 <label className="text-lg font-medium text-center">

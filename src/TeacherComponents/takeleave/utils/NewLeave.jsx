@@ -63,14 +63,14 @@ function NewLeave({ onClose }) {
           <div className="flex justify-end">
             <button 
               type="button" 
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2"
+              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 hover:bg-gray-500"
               onClick={onClose}
             >
               Cancel
             </button>
             <button 
               type="submit" 
-              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
             >
               Submit
             </button>

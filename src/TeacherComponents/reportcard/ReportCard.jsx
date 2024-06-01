@@ -1,11 +1,20 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { MdEdit } from "react-icons/md";
 import Selection from './utils/Selection';
 import Header from '../../AdminComponents/Home/utils/TeachersDetails/LeftCard/Header'
 import { Link } from "react-router-dom";
+import NewReport from './utils/NewReport';
 
 function ReportCard() {
    
+    const[isDialogOpen,setIsDialogOpen]=useState(false);
+
+    const handleOpen=()=>{
+        setIsDialogOpen(true);
+    }
+    const handleClose=()=>{
+        setIsDialogOpen(false);
+    }
         const details = [
           
             { serial: '01', name:'Shailesh', marks: '90/100',gpa: '5' },
@@ -26,7 +35,7 @@ function ReportCard() {
                 <h1 className="text-2xl font-medium mb-2">Search Report Card</h1>
                 <span className='flex gap-1'>
                     <h1 className='flex items-center text-sm bg-secondary p-2 rounded-lg shadow-md self-end'>Edit <MdEdit className='ml-1' /></h1>
-                    <h1 className='f text-sm bg-purple-200 p-2 rounded-lg shadow-md self-end'>Add New Report Card</h1>
+                    <h1 className='f text-sm bg-purple-200 p-2 rounded-lg shadow-md self-end cursor-pointer' onClick={handleOpen}>Add New Report Card</h1>
                 </span>
             </div>
 
@@ -48,7 +57,7 @@ function ReportCard() {
                 ))}
             </div>
 
-                
+                {isDialogOpen && <NewReport onClose={handleClose}/>}
             
 
         </div>
