@@ -3,12 +3,14 @@ import React, { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import axios from 'axios';
 import Papa from 'papaparse'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function TeacherForm() {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+
 
     const [formData, setFormData] = useState(
         {
@@ -69,18 +71,15 @@ export default function TeacherForm() {
             formData.password = formData.aadhaarNumber;
             const response = await axios.post('https://loginapi-y0aa.onrender.com/signup/teacher', formData);
             if (response.status === 200) {
-                setSuccess('Teacher registered successfully!');
+                toast.success('Teacher registered successfully!');
                 console.log(formData)
-                setTimeout(() => setSuccess(''), 4000);
                 handleReset();
             }
 
         } catch (err) {
             console.error(error);
-            setError(error.response?.data?.error || 'An error ocured');
-            setTimeout(() => {
-                setError('');
-            }, 2000);
+            const errorMessage = error.response?.data?.error || 'An error occurred';
+            toast.error(errorMessage);
         }
         finally {
             setLoading(false);
@@ -110,8 +109,7 @@ export default function TeacherForm() {
 
     const handleMultiSignUp = async (data) => {
         setLoading(true);
-        setError('');
-        setSuccess('');
+        
         try {
             for (let i = 0; i < data.length; i++) {
                 const userData = data[i];
@@ -119,15 +117,13 @@ export default function TeacherForm() {
 
                 await axios.post('https://loginapi-y0aa.onrender.com/signup/teacher', userData);
             }
-            setSuccess('All teachers registered successfully');
-            setTimeout(() => setSuccess(''), 4000);
+            toast.success('All teachers registered successfully');
+           
         }
         catch (err) {
             console.error(err);
-            setError(err.response?.data?.error || 'An error occurred');
-            setTimeout(() => {
-                setError('');
-            }, 2000);
+            const errorMessage = error.response?.data?.error || 'An error occurred';
+            toast.error(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -135,10 +131,12 @@ export default function TeacherForm() {
     return (
         <>
             <div className="mx-4">
+            <ToastContainer />
+
                 <div className=" w-full flex justify-center mb-4 items-center">
                     <form onSubmit={handleSubmit} className=" flex flex-col w-full px-2 mb-2 gap-4">
-                        {error && <div className="bg-red-100 text-red-700 p-2 rounded">{error}</div>}
-                        {success && <div className="bg-green-100 text-green-700 p-2 rounded">{success}</div>}
+                        {/* {error && <div className="bg-red-100 text-red-700 p-2 rounded">{error}</div>}
+                        {success && <div className="bg-green-100 text-green-700 p-2 rounded">{success}</div>} */}
                         <div className="flex gap-12 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
                             <div className="w-full rounded-md mobile:max-tablet:w-full">
                                 <label className="block text-lg mb-2" htmlFor="name">

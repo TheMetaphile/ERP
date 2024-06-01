@@ -4,6 +4,10 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import logo from '../../../assets/school logo.png'
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
+import Loading from "../../../LoadingScreen/Loading"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function RightCard() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -47,10 +51,9 @@ export default function RightCard() {
         }
         catch (error) {
             console.error(error);
-            setError(error.response?.data?.error || 'An error occured');
-            setTimeout(() => {
-                setError('');
-            }, 2000);
+            const errorMessage = error.response?.data?.error || 'An error occured'
+            setError(errorMessage);
+            toast.error(errorMessage);
         }
         finally {
             setIsSubmitting(false);
@@ -58,13 +61,13 @@ export default function RightCard() {
     }
     return (
         <div className="flex flex-col bg-white rounded-2xl shadow-lg tablet:w-fit tablet:px-10 mobile:w-full mobile:px-7 mobile:max-tablet:mt-10 justify-center">
-
+            <ToastContainer />
             <img src={logo} alt="img" className="mr-4 h-28 self-center" />
 
             <h1 className="tablet:text-2xl mobile:text-2xl font-bold self-center whitespace-nowrap">Welcome Back</h1>
             <h1 className="text-lg mt-2 text-gray-400">Please Enter Your ID & Password</h1>
 
-            {error && <div className="text-red-500 text-center mt-2">{error}</div>}
+            {/* {error && <div className="text-red-500 text-center mt-2">{error}</div>} */}
             <h1 className="text-xl font-bold mt-3 ">Login Id</h1>
 
             <input
@@ -87,7 +90,7 @@ export default function RightCard() {
                     value={password}
                     onChange={handlePasswordChange}
                     placeholder="Enter your password"
-                    className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg pr-10" 
+                    className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg pr-10"
                     disabled={isSubmitting}
                 />
                 <button
@@ -134,7 +137,7 @@ export default function RightCard() {
 
             <button className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-2 justify-center self-center  bg-blue-600" onClick={handleSubmit} disabled={isSubmitting}>
 
-                <h1 className="font-medium text-2xl text-white">Login</h1>
+                {isSubmitting ? <Loading /> : <h1 className="font-medium text-2xl text-white">Login</h1>}
 
             </button>
         </div>

@@ -4,13 +4,16 @@ import axios from 'axios';
 import logo from '../../../assets/school logo.png'
 import OTPInput from "react-otp-input";
 import AuthContext from "../../../Context/AuthContext";
+import Loading from '../../../LoadingScreen/Loading'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function RightCard() {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
     const [role, setRole] = useState('');
     // const [otpToken, setOtpToken] = useState('');
-    const [error, setError] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
+    // const [error, setError] = useState('');
+    // const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { authState, reset } = useContext(AuthContext);
@@ -31,16 +34,14 @@ export default function RightCard() {
                 const { otpToken } = response.data;
                 reset(email, otpToken);
                 console.log("OTP toooken", otpToken)
-                setSuccessMessage('OTP sent successfully');
-                setTimeout(() => setSuccessMessage(''), 4000);
+
+                toast.success('OTP sent successfully');
             }
         }
         catch (error) {
             console.error(error);
-            setError(error.response?.data?.error || 'An error ocured');
-            setTimeout(() => {
-                setError('');
-            }, 2000);
+            const errorMessage = error.response?.data?.error || 'An error occurred';
+            toast.error(errorMessage);
         }
         finally {
             setIsSubmitting(false);
@@ -51,7 +52,7 @@ export default function RightCard() {
     const verifyOTP = async () => {
         setIsSubmitting(true);
         try {
-            const response=await axios.post(`https://loginapi-y0aa.onrender.com/otp/verify`, {
+            const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/verify`, {
                 email: authState.email,
                 otp,
                 otpToken: authState.otpToken
@@ -59,17 +60,14 @@ export default function RightCard() {
             if (response.status === 200 && response.data.valid) {
                 navigate('/newPassword');
             } else {
-                setError('Invalid OTP');
-                setTimeout(() => setError(''), 2000);
+                toast.error('Invalid OTP');
             }
 
         }
         catch (error) {
             console.error(error);
-            setError(error.response?.data?.error || 'An error ocured');
-            setTimeout(() => {
-                setError('');
-            }, 2000);
+            const errorMessage = error.response?.data?.error || 'An error occurred';
+            toast.error(errorMessage);
         }
         finally {
             setIsSubmitting(false);
@@ -79,12 +77,12 @@ export default function RightCard() {
 
     return (
         <div className="flex flex-col flex-shrink tablet:py-10 mobile:max-tablet:py-5 mobile:max-tablet:px-5 mobile:max-tablet:my-10 bg-white rounded-3xl shadow-lg tablet:px-10 justify-center">
-
+            <ToastContainer />
             <img src={logo} alt="img" className="mr-4 h-32 self-center" />
 
             <h1 className="tablet:text-2xl mobile:text-xl font-bold self-center whitespace-nowrap">Reset Password</h1>
-            {error && <p className="text-red-500">{error}</p>}
-            {successMessage && <p className="text-green-500 text-center mt-2">{successMessage}</p>}
+            {/* {error && <p className="text-red-500">{error}</p>}
+            {successMessage && <p className="text-green-500 text-center mt-2">{successMessage}</p>} */}
             <h1 className="text-xl font-bold mt-5 ">Login Id</h1>
 
             <div className="flex justify-between mt-3">
@@ -144,7 +142,7 @@ export default function RightCard() {
 
             <button className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8" onClick={verifyOTP} disabled={isSubmitting}>
 
-                <h1 className="font-medium text-2xl text-white">Submit</h1>
+            {isSubmitting ? <Loading /> : <h1 className="font-medium text-2xl text-white">Submit</h1>}
             </button>
         </div>
     )
