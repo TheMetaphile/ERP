@@ -13,10 +13,10 @@ function Progress() {
     ]
 
     return (
-        <div className="container mx-auto px-4 bg-red-400 w-full h-2/5"  >
+        <div className="container mx-auto px-4  w-full h-96"  >
             <h1 className="text-2xl font-medium mb-3">Class Progress</h1>
 
-            <div className=' bg-gray-500 overflow-auto no-scrollbar h-5/6'>
+            <div className='  overflow-auto  h-5/6'>
 
                 {details.map((detail, index) => (
 
