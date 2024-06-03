@@ -3,12 +3,13 @@ import logout1 from "../../assets/logout.png";
 import ImageTextInRow from "./ImageTextInRow.jsx";
 import menuItems from "../../helpers/menuItems.js";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext,useState } from "react";
 import AuthContext from "../../Context/AuthContext";
 
 export default function Drawer() {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [active,setActive]=useState(null)
 
   const handleLogout = async () => {
     try {
@@ -18,6 +19,10 @@ export default function Drawer() {
       console.error("Logout failed", error);
     }
   };
+
+  const handleClick=(index)=>{
+    setActive(index)
+  }
   return (
     <div className="w-60 h-full rounded-lg text-center items-center border bg-white py-6 px-4 shadow-md overflow-auto no-scrollbar">
       <div className="flex items-center">
@@ -28,6 +33,11 @@ export default function Drawer() {
         <h2 className="text-xl font-semibold">Dashboard</h2>
         <div className="mt-4">
           {menuItems.map((menuItem, index) => (
+            <div
+            key={index}
+            onClick={() => handleClick(index)}
+            className={`cursor-pointer ${active === index ? 'text-black' : 'text-gray-500'}`}
+          >
             <ImageTextInRow
               key={index}
               image={menuItem.image}
@@ -35,6 +45,7 @@ export default function Drawer() {
               text={menuItem.text}
               route={menuItem.route}
             />
+            </div>
           ))}
         </div>
       </div>

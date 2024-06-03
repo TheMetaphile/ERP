@@ -3,12 +3,13 @@ import logout1 from "../../assets/logout.png";
 import ExpansionTile from "../utils/ExpansionTile.jsx";
 import menuItems from "./helper.js";
 import { Link,useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../../Context/AuthContext.jsx";
 
 export default function TeacherDrawer({ isOpen }) {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [active,setActive]=useState(null)
 
   const handleLogout = async () => {
     try {
@@ -18,6 +19,10 @@ export default function TeacherDrawer({ isOpen }) {
       console.error("Logout failed", error);
     }
   };
+
+  const handleClick=(index)=>{
+    setActive(index)
+  }
   return (
     <div className={` ${isOpen ? '  py-6 px-2' : ''} w-full overflow-y-auto rounded-lg text-center items-center border bg-white shadow-md no-scrollbar`}>
       <div className="flex items-center">
@@ -28,14 +33,20 @@ export default function TeacherDrawer({ isOpen }) {
         <h2 className="text-xl font-semibold">Dashboard</h2>
         <div className="mt-4">
           {menuItems.map((menuItem, index) => (
+             <div
+             key={index}
+             onClick={() => handleClick(index)}
+             className={`cursor-pointer ${active === index ? 'text-black' : 'text-gray-500'}`}
+           >
             <ExpansionTile
-              key={index}
+             
               image={menuItem.image}
               alternateText={menuItem.alt}
               title={menuItem.title}
               childrens={menuItem.children}
               route={menuItem.route}
             />
+            </div>
           ))}
         </div>
       </div>
