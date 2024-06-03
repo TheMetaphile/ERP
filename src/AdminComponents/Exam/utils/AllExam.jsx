@@ -40,7 +40,7 @@ export default function AllExam() {
             }
         }
         catch (error) {
-            toast.error('Failed to delete exam');
+            toast.error(error.error);
 
         }
 
