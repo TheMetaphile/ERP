@@ -1,21 +1,53 @@
-import React from 'react'
+import React, { useEffect, useState, useContext } from "react";
+import AuthContext from "../../Context/AuthContext";
 import signature from './../../assets/signature.jpg';
+import axios from 'axios'
+import Loading from "../../LoadingScreen/Loading";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Table() {
-  const schedule = [
-    { date: '11 Jan 2024', subject: 'Maths', time: '10:00 am to 12:00 pm' },
-    { date: '12 Jan 2024', subject: 'English', time: '10:00 am to 12:00 pm' },
-    { date: '13 Jan 2024', subject: 'Hindi', time: '10:00 am to 12:00 pm' },
-    { date: '14 Jan 2024', subject: 'S.S.T', time: '10:00 am to 12:00 pm' },
-    { date: '15 Jan 2024', subject: 'Moral-value', time: '10:00 am to 12:00 pm' },
-    { date: '18 Jan 2024', subject: 'Science', time: '10:00 am to 12:00 pm' },
-    { date: '19 Jan 2024', subject: 'Drawing', time: '10:00 am to 12:00 pm' },
-    { date: '20 Jan 2024', subject: 'G.k', time: '10:00 am to 12:00 pm' }
+  const { authState } = useContext(AuthContext);
+  const [exams, setExams] = useState([]);
 
-  ];
+ 
+
+  const fetchDateSheet = async () => {
+   
+    try {
+      const response = await axios.post('https://examapi-jep8.onrender.com/fetchDateSheet', {
+        accessToken: authState.accessToken,
+        Class: authState.userDetails.currentClass
+      });
+      console.log("API response datesheet:", response.data);
+      if (response.data && response.data.dateSheet) {
+        setExams(response.data.dateSheet);
+      } else {
+        toast.error('Unexpected response format');
+      }
+
+    }
+    catch (error) {
+      const errorMessage = error.response?.data?.error || 'An error occurred';
+      toast.error(errorMessage);
+    }
+  }
+
+  useEffect(() => {
+
+    if (authState.accessToken && authState.userDetails.currentClass) {
+      fetchDateSheet();
+    } else {
+      toast.error('No access token available');
+
+
+    }
+  }, [authState.accessToken, authState.userDetails.currentClass]);
 
   return (
     <div className=' flex justify-evenly '>
+            <ToastContainer />
+
       <table className=' mt-7  w-full justify-evenly items-center ml-5 mr-5 shadow-lg my-2 px-2 outline  outline-gray-400 rounded-lg mb-3'>
         <thead>
           <tr className='rounded-t-lg border-b-2 border-gray-400 mt-3  no-underline text-xl'>
@@ -27,16 +59,22 @@ export default function Table() {
 
 
         <tbody >
-          {schedule.map((sch, index) => (
-            <tr key={index} className='rounded-t-lg border-b-2 border-gray-400 mt-3  no-underline text-xl' >
-              <td className="font-normal text-gray-700 text-center py-3 ">{sch.date}</td>
-              <td className="font-normal bg-blue-200 text-gray-700 text-center py-3">{sch.subject}</td>
-              <td className="font-normal bg-green-200 text-gray-700 text-center py-3">{sch.time}</td>
-            </tr>          
-          ))}        
+          {exams && exams.length > 0 ? (
+            exams.map((exam, index) => (
+              <tr key={index} className='rounded-t-lg border-b-2 border-gray-400 mt-3  no-underline text-xl'>
+                <td className="font-normal text-gray-700 text-center py-3 ">{exam.date}</td>
+                <td className="font-normal bg-blue-200 text-gray-700 text-center py-3">{exam.subject}</td>
+                <td className="font-normal bg-green-200 text-gray-700 text-center py-3">{exam.time}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" className="px-4 py-2 text-center text-lg"><Loading /></td>
+            </tr>
+          )}
         </tbody>
 
-        
+
         <tr>
           <td></td>
           <td></td>

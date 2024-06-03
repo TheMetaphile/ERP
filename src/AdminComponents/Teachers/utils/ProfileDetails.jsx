@@ -5,6 +5,9 @@ import { MdEmail } from 'react-icons/md';
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
 import { CiEdit } from "react-icons/ci";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Loading from "../../../LoadingScreen/Loading";
 
 export default function ProfileDetails() {
     const [error, setError] = useState(null);
@@ -63,6 +66,8 @@ export default function ProfileDetails() {
                 [field]: tempData[field]
             });
             console.log("API response updated:", response.data);
+            toast.success('Field Updated');
+
             fetchUserData();
 
             setUserData({ ...userData, [field]: tempData[field] });
@@ -75,11 +80,13 @@ export default function ProfileDetails() {
     };
 
     if (!userData) {
-        return <div>Loading...</div>;
+        return <Loading/>;
     }
 
     return (
         <div className="flex justify-center mobile:max-tablet:flex-col bg-white shadow-lg w-full rounded-xl p-4">
+            <ToastContainer />
+            
             <div className="flex flex-col items-center gap-4 mx-4">
                 <div className="mx-4">
                     <img src={profile} alt="" className="h-16 w-16 rounded-full" />

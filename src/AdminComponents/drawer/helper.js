@@ -7,6 +7,13 @@ const menuItems = [
     children: []
   },
   {
+    image: "src/assets/teacher2.png",
+    alt: "Teacher image",
+    title: "Teacher",
+    route: '/Teacher-Dashboard',
+    children: []
+  },
+  {
     image: "src/assets/student.png",
     alt: "img",
     title: "Students",

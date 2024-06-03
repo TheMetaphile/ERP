@@ -4,6 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import AuthContext from '../../../../Context/AuthContext';
 import { CiEdit } from "react-icons/ci";
+import Loading from '../../../../LoadingScreen/Loading'
 
 export default function StudentBasicDetails() {
     const [userData, setUserData] = useState(null);
@@ -52,6 +53,7 @@ export default function StudentBasicDetails() {
     };
 
     const handleSave = async (field) => {
+        console.log("field", tempData[field], [field])
         try {
             const response = await axios.put('https://loginapi-y0aa.onrender.com/edit/student', {
                 accessToken: authState.accessToken,
@@ -69,7 +71,7 @@ export default function StudentBasicDetails() {
     };
 
     if (!userData) {
-        return <div>Loading...</div>;
+        return <Loading/>;
     }
 
     const studentDetails = {

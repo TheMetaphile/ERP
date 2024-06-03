@@ -7,67 +7,67 @@ const menuItems = [
     children: []
   },
   {
-    image: "src/assets/home.png",
-    alt: "Admin",
+    image: "src/assets/admin.png",
+    alt: "Admin image",
     title: "Admin",
     route: '/Admin-Dashboard',
     children: []
   },
   {
-    image: "src/assets/student.png",
-    alt: "img",
+    image: "src/assets/checkin.png",
+    alt: "Check In Image",
     title: "Check In",
     route: '/Teacher-Dashboard/checkin',
     children: []
   },
   {
-    image: "src/assets/teacher.png",
-    alt: "img",
+    image: "src/assets/Dashboard_leave.png",
+    alt: "Leave application image",
     title: "Take Leave",
     route: '/Teacher-Dashboard/takeleave',
     children: []
   },
   {
-    image: "src/assets/parent.png",
-    alt: "img",
+    image: "src/assets/salary.png",
+    alt: "Salary Image",
     title: "Salary",
     children: []
   },
   {
-    image: "src/assets/library.png",
-    alt: "img",
+    image: "src/assets/freelance 1.png",
+    alt: "Home Work Image",
     title: "Home Work",
     route: '/Teacher-Dashboard/homework',
     children: []
   },
 
   {
-    image: "src/assets/account.png",
-    alt: "img",
+    image: "src/assets/presentation 1.png",
+    alt: "Class Work Image",
     title: "Class Work",
     route: '/Teacher-Dashboard/classwork',
     children: []
   },
 
   {
-    image: "src/assets/class.png",
-    alt: "img",
+    image: "src/assets/Dashboard_time_table.png",
+    alt: "Time Table Image",
     title: "Time Table",
     route: '/Teacher-Dashboard/timetable',
     children: []
   },
 
   {
-    image: "src/assets/subject.png",
-    alt: "img",
+    image: "src/assets/Dashboard_result.png",
+    alt: "Result image",
     title: "Report Card",
     route: '/Teacher-Dashboard/reportcard',
     children: []
   },
 
   {
-    image: "src/assets/exam.png",
-    alt: "img",
+    image: "src/assets/Dashboard_fee.png",
+    alt: "Fee Due image",
     title: "Student Fees",
     route: '/Teacher-Dashboard/studentfee',
     children: []
@@ -82,15 +82,15 @@ const menuItems = [
   },
 
   {
-    image: "src/assets/notice.png",
-    alt: "img",
+    image: "src/assets/Dashboard_assignment.png",
+    alt: "Attendance image",
     title: "Student Attendence",
     route: '/Teacher-Dashboard/studentattendence',
     children: []
   },
   {
-    image: "src/assets/notice.png",
-    alt: "img",
+    image: "src/assets/birthday.png",
+    alt: "BirthDay Image",
     title: "Birthdays",
     route: '/Teacher-Dashboard/birthday',
     children: []
@@ -103,16 +103,16 @@ const menuItems = [
     children: []
   },
   {
-    image: "src/assets/notice.png",
-    alt: "img",
+    image: "src/assets/notice2.png",
+    alt: "Notice Image",
     title: "Notice Board",
     route: '/Teacher-Dashboard/noticeboard',
     children: []
     
   },
   {
-    image: "src/assets/leave_icon.png",
-    alt: "img",
+    image: "src/assets/notebook.png",
+    alt: "Note Book Image",
     title: "Note Book Record",
     route: '/Teacher-Dashboard/notebook',
     children: []

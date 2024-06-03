@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const NewExam = ({ onClose, addExam }) => {
   const { authState } = useContext(AuthContext);
@@ -29,6 +31,9 @@ const NewExam = ({ onClose, addExam }) => {
       });
 
       if (response.status === 200) {
+        console.log('Success from toast')
+        toast.success('Exam Added')
+
         addExam(response.data);
         setExamData({
           Class: '',
@@ -39,21 +44,19 @@ const NewExam = ({ onClose, addExam }) => {
         });
         onClose();
       } else {
-        setError("Failed to add Exam. Try again after some time.");
-        setTimeout(() => {
-          setError('');
-      }, 2000);
+        toast.error('Failed to add Exam. Try again after some time.');
+        
       }
     } catch (error) {
-      setError(error.response?.data?.message || 'Error adding exam. Please try again.');
-      setTimeout(() => {
-        setError('');
-    }, 2000);
+      const errorMessage = error.response?.data?.error || 'An error occurred';
+      toast.error(errorMessage);
     }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <ToastContainer />
+      
       <div className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-lg">
         <button
           className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-700"
@@ -62,7 +65,7 @@ const NewExam = ({ onClose, addExam }) => {
           ✖
         </button>
         <h2 className="text-2xl mb-4">Schedule New Exam</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {/* {error && <p className="text-red-500 mb-4">{error}</p>} */}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 text-xl mb-2" htmlFor="examClass">

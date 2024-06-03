@@ -15,14 +15,14 @@ export default function Activities() {
                     <div className=" flex   ">
                         <Link
                             to={'/Student-Dashboard/activities/recentactivity'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/activities/recentactivity' ? 'bg-secondary' : ''}`}
+                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/activities/recentactivity' ? 'bg-secondary text-black' : 'text-gray-500'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/activities/recentactivity')}
                         >
                             Recent
                         </Link>
                         <Link
                             to={'/Student-Dashboard/activities/allactivity'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/activities/allactivity' ? 'bg-secondary' : ''}`}
+                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/activities/allactivity' ? 'bg-secondary text-black' : 'text-gray-500'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/activities/allactivity')}
                         >
                             All

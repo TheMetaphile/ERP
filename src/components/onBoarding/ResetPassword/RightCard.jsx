@@ -7,6 +7,7 @@ import AuthContext from "../../../Context/AuthContext";
 import Loading from '../../../LoadingScreen/Loading'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 export default function RightCard() {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');

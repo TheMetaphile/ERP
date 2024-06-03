@@ -18,21 +18,21 @@ function NoticeBoard() {
                     <div className=" flex   ">
                         <Link
                             to={'/Teacher-Dashboard/noticeboard/allnotice'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/noticeboard/allnotice' ? 'bg-secondary' : ''}`}
+                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/noticeboard/allnotice' ? 'bg-secondary text-black' : 'text-gray-500'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/allnotice')}
                         >
                             All
                         </Link>
                         <Link
                             to={'/Teacher-Dashboard/noticeboard/teacher'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/noticeboard/teacher' ? 'bg-secondary' : ''}`}
+                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/noticeboard/teacher' ? 'bg-secondary text-black' : 'text-gray-500'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/teacher')}
                         >
                             Teacher
                         </Link>
                         <Link
                             to={'/Teacher-Dashboard/noticeboard/student'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/noticeboard/student' ? 'bg-secondary' : ''}`}
+                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/noticeboard/student' ? 'bg-secondary text-black' : 'text-gray-500'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/student')}
                         >
                             Student

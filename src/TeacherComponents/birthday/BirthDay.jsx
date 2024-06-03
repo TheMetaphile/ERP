@@ -18,21 +18,21 @@ function BirthDay() {
                     <div className=" flex   ">
                         <Link
                             to={'/Teacher-Dashboard/birthday/all'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/birthday/all' ? 'bg-secondary' : ''}`}
+                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/birthday/all' ? 'bg-secondary text-black' : 'text-gray-500'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/all')}
                         >
                             All
                         </Link>
                         <Link
                             to={'/Teacher-Dashboard/birthday/teacher'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/birthday/teacher' ? 'bg-secondary' : ''}`}
+                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/birthday/teacher' ? 'bg-secondary text-black' : 'text-gray-500'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/teacher')}
                         >
                             Teacher
                         </Link>
                         <Link
                             to={'/Teacher-Dashboard/birthday/student'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/birthday/student' ? 'bg-secondary' : ''}`}
+                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/birthday/student' ? 'bg-secondary text-black' : 'text-gray-500'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/student')}
                         >
                             Student

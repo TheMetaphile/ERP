@@ -18,21 +18,21 @@ export default function Notification() {
                     <div className=" flex   ">
                         <Link
                             to={'/Student-Dashboard/notification/allnotification'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/notification/allnotification' ? 'bg-secondary' : ''}`}
+                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/notification/allnotification' ? 'bg-secondary text-black' : 'text-gray-500'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/notification/allnotification')}
                         >
                             All
                         </Link>
                         <Link
                             to={'/Student-Dashboard/notification/inbox'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/notification/inbox' ? 'bg-secondary' : ''}`}
+                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/notification/inbox' ? 'bg-secondary text-black' : 'text-gray-500'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/notification/inbox')}
                         >
                             Indox
                         </Link>
                         <Link
                             to={'/Student-Dashboard/notification/archived'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/notification/archived' ? 'bg-secondary' : ''}`}
+                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/notification/archived' ? 'bg-secondary text-black' : 'text-gray-500'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/notification/archived')}
                         >
                             Archived

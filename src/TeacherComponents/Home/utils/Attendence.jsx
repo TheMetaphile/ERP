@@ -55,7 +55,7 @@ const Attendence = () => {
     };
   }, []);
 
-  return <div className='h-96 w-full'><canvas ref={chartRef} className='flex-grow  mt-3  px-3 py-2 tablet:ml-5 ' /></div>;
+  return <div className='h-96 w-full border shadow-md rounded-lg'><canvas ref={chartRef} className='flex-grow  mt-3  px-3 py-2 tablet:ml-5 ' /></div>;
 };
 
 export default Attendence;
