@@ -15,24 +15,24 @@ export default function Notification() {
             <h1 className='text-3xl'>Notifications</h1>
             <div className=' border border-black mt-4 rounded-lg '>
                 <div className=" flex   mt-4 ml-3 mr-3 items-center justify-between">
-                    <div className=" flex   ">
+                    <div className=" flex  gap-2 ">
                         <Link
                             to={'/Student-Dashboard/notification/allnotification'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/notification/allnotification' ? 'bg-secondary text-black' : 'text-gray-500'}`}
+                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Student-Dashboard/notification/allnotification' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/notification/allnotification')}
                         >
                             All
                         </Link>
                         <Link
                             to={'/Student-Dashboard/notification/inbox'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/notification/inbox' ? 'bg-secondary text-black' : 'text-gray-500'}`}
+                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Student-Dashboard/notification/inbox' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/notification/inbox')}
                         >
                             Indox
                         </Link>
                         <Link
                             to={'/Student-Dashboard/notification/archived'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/notification/archived' ? 'bg-secondary text-black' : 'text-gray-500'}`}
+                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Student-Dashboard/notification/archived' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/notification/archived')}
                         >
                             Archived

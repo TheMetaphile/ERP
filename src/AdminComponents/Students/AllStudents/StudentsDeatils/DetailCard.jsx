@@ -5,6 +5,8 @@ import axios from 'axios';
 import AuthContext from '../../../../Context/AuthContext';
 import { CiEdit } from "react-icons/ci";
 import Loading from '../../../../LoadingScreen/Loading'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function StudentBasicDetails() {
     const [userData, setUserData] = useState(null);
@@ -53,7 +55,6 @@ export default function StudentBasicDetails() {
     };
 
     const handleSave = async (field) => {
-        console.log("field", tempData[field], [field])
         try {
             const response = await axios.put('https://loginapi-y0aa.onrender.com/edit/student', {
                 accessToken: authState.accessToken,
@@ -61,44 +62,48 @@ export default function StudentBasicDetails() {
                 [field]: tempData[field]
             });
             console.log("API response updated:", response.data);
+            toast.success('Field Updated');
             fetchUserData();
             setUserData({ ...userData, [field]: tempData[field] });
             setEditMode({ ...editMode, [field]: false });
-        } catch (err) {
-            setError(err.message);
-            console.log(err);
+        } catch (error) {
+            console.log(error);
+            const errorMessage = error.response?.data?.error || 'An error occured'
+            setError(errorMessage);
+            toast.error(errorMessage);
         }
     };
 
     if (!userData) {
-        return <Loading/>;
+        return <Loading />;
     }
 
     const studentDetails = {
-        "Roll No.": userData.rollNumber,
-        "Class": userData.currentClass,
-        "Date of Birth": userData.DOB,
-        "Admission Date": userData.admissionDate,
-        "Registration Number": "Remaining",
-        "Permanent Address": userData.permanentAddress,
-        "Academic Year": "Remaining",
-        "Aadhar Number": userData.aadhaarNumber,
-        "Personal Email": userData.email,
-        "Emergency Contact": userData.emergencyContactNumber
+        "rollNumber": "Roll No.",
+        "currentClass": "Class",
+        "DOB": "Date of Birth",
+        "admissionDate": "Admission Date",
+        "registrationNumber": "Registration Number",
+        "permanentAddress": "Permanent Address",
+        "academicYear": "Academic Year",
+        "aadhaarNumber": "Aadhar Number",
+        "email": "Personal Email",
+        "emergencyContactNumber": "Emergency Contact"
     };
 
     const parentsDetails = {
-        "Father Name": userData.fatherName,
-        "Mother Name": userData.motherName,
-        "Father Phone Number": userData.fatherPhoneNumber,
-        "Mother Phone Number": userData.motherPhoneNumber,
-        "Parent Email": userData.fatherEmailId,
-        "Father Occupation": userData.fathersOccupation,
-        "Mothers Occupation": userData.motherOccupation
+        "fatherName": "Father Name",
+        "motherName": "Mother Name",
+        "fatherPhoneNumber": "Father Phone Number",
+        "motherPhoneNumber": "Mother Phone Number",
+        "fatherEmailId": "Parent Email",
+        "fathersOccupation": "Father Occupation",
+        "motherOccupation": "Mother's Occupation"
     };
 
     return (
         <div className="flex-1 w-full mt-3 mb-2 shadow-md rounded-lg bg-white p-2 h-fit">
+            <ToastContainer />
             <div className="flex justify-between flex-grow items-center">
                 <h1 className="text-xl font-medium">
                     All Details
@@ -108,26 +113,26 @@ export default function StudentBasicDetails() {
             <div className='tablet:flex mt-2'>
                 <div className='tablet:w-1/2'>
                     {
-                        Object.entries(studentDetails).map(([key, value]) => (
-                            <div className='flex w-full text-base mb-2' key={key}>
+                        Object.entries(studentDetails).map(([apiField, label]) => (
+                            <div className='flex w-full text-base mb-2' key={apiField}>
                                 <h1 className='font-medium text-sky-500 tablet:w-2/5 mobile:max-tablet:w-1/2'>
-                                    {key}
+                                    {label}
                                 </h1>
-                                {editMode[key] ? (
+                                {editMode[apiField] ? (
                                     <input
                                         type="text"
-                                        name={key}
-                                        value={tempData[key] || ''}
+                                        name={apiField}
+                                        value={tempData[apiField] || ''}
                                         onChange={handleChange}
-                                        onBlur={() => handleSave(key)}
+                                        onBlur={() => handleSave(apiField)}
                                         className='border p-1'
                                     />
                                 ) : (
                                     <h1 className='w-fit ml-2 font-normal text-gray-400'>
-                                        {value}
+                                        {userData[apiField]}
                                     </h1>
                                 )}
-                                <div className="ml-4 cursor-pointer" onClick={() => handleEdit(key)}>
+                                <div className="ml-4 cursor-pointer" onClick={() => handleEdit(apiField)}>
                                     <CiEdit />
                                 </div>
                             </div>
@@ -136,26 +141,27 @@ export default function StudentBasicDetails() {
                 </div>
                 <div className='tablet:w-1/2'>
                     {
-                        Object.entries(parentsDetails).map(([key, value]) => (
-                            <div className='flex w-full text-base mb-2' key={key}>
+                        Object.entries(parentsDetails).map(([apiField, label]) => (
+                            <div className='flex w-full text-base mb-2' key={apiField}>
                                 <h1 className='font-medium text-sky-500 tablet:w-3/5 mobile:max-tablet:w-1/2'>
-                                    {key}
+                                    {label}
                                 </h1>
-                                {editMode[key] ? (
+                                {editMode[apiField] ? (
                                     <input
                                         type="text"
-                                        name={key}
-                                        value={tempData[key]}
+                                        name={apiField}
+                                        value={tempData[apiField]}
                                         onChange={handleChange}
-                                        onBlur={() => handleSave(key)}
+                                        onBlur={() => handleSave(apiField)}
                                         className='border p-1'
                                     />
                                 ) : (
                                     <h1 className='w-fit ml-2 font-normal text-gray-400'>
-                                        {value}
+                                        {userData[apiField]}
+
                                     </h1>
                                 )}
-                                <div className="ml-4 cursor-pointer" onClick={() => handleEdit(key)}>
+                                <div className="ml-4 cursor-pointer" onClick={() => handleEdit(apiField)}>
                                     <CiEdit />
                                 </div>
                             </div>

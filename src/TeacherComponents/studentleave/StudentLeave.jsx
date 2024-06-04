@@ -15,24 +15,24 @@ function StudentLeave() {
             <h1 className='text-3xl'>Student Leave</h1>
             <div className='  mt-4  w-full'>
                 <div className=" flex   mt-4 ml-3 mr-3 items-center justify-between">
-                    <div className=" flex  gap-1 ">
+                    <div className=" flex  gap-2 ">
                         <Link
                             to={'/Teacher-Dashboard/studentleave/new'}
-                            className={`text-xl font-medium px-2 rounded-lg  ${selectedLink === '/Teacher-Dashboard/studentleave/new' ? 'bg-secondary text-black' : 'text-gray-500'}`}
+                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/studentleave/new' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/studentleave/new')}
                         >
                             New Leave
                         </Link>
                         <Link
                             to={'/Teacher-Dashboard/studentleave/approved'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/studentleave/approved' ? 'bg-secondary text-black' : 'text-gray-500'}`}
+                            className={`text-xl font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Teacher-Dashboard/studentleave/approved' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/studentleave/approved')}
                         >
                             Approved Leave
                         </Link>
                         <Link
                             to={'/Teacher-Dashboard/studentleave/rejected'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/studentleave/rejected' ? 'bg-secondary text-black' : 'text-gray-500'}`}
+                            className={`text-xl font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Teacher-Dashboard/studentleave/rejected' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/studentleave/rejected')}
                         >
                             Rejected Leave

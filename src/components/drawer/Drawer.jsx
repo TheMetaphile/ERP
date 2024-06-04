@@ -31,12 +31,12 @@ export default function Drawer() {
       </div>
       <div className="mt-12 bg-teal-300 px-4 py-4 rounded-2xl shadow-lg">
         <h2 className="text-xl font-semibold">Dashboard</h2>
-        <div className="mt-4">
+        <div className="  items-center">
           {menuItems.map((menuItem, index) => (
             <div
             key={index}
             onClick={() => handleClick(index)}
-            className={`cursor-pointer ${active === index ? 'text-black' : 'text-gray-500'}`}
+            className={`cursor-pointer rounded-lg p-2 mt-3  ${active === index ? 'bg-secondary' : ''}`}
           >
             <ImageTextInRow
               key={index}

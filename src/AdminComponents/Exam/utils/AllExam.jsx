@@ -46,6 +46,33 @@ export default function AllExam() {
 
     };
 
+    const editExam =async (index) => {
+        const examToEdit=exams[index];
+        console.log('id',examToEdit._id, 'class', examToEdit.Class)
+        // try{
+        //     const response=await axios.put('https://examapi-jep8.onrender.com/updateExam',{
+        //         data: {
+        //         accessToken:authState.accessToken,
+        //         _id: examToEdit._id,
+        //         Class : examToEdit.Class
+        //         }
+        //     })
+        //     if (response.status === 200) {
+                
+        //         console.log("Success")
+        //         toast.success('Exam Updated')
+
+        //     } else {
+        //         toast.error('Failed to update exam');
+        //     }
+        // }
+        // catch (error) {
+        //     toast.error(error.error);
+
+        // }
+
+    };
+
     const fetchExam = async () => {
         try {
             const response = await axios.post('https://examapi-jep8.onrender.com/fetchExams', {
@@ -124,7 +151,9 @@ export default function AllExam() {
                                         <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.date}</td>
                                         <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.duration}</td>
                                         <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">
-                                            <button onClick={() => deleteExam(index)} className="text-red-600 hover:text-red-900">Delete</button>
+                                            <button onClick={() => deleteExam(index)} className="text-red-600 hover:text-red-900">Delete</button>&nbsp;&nbsp;/ &nbsp;
+                                            <button onClick={() => editExam(index)} className="text-green-600 hover:text-green-900">Edit</button>
+
                                         </td>
                                     </tr>
                                 ))

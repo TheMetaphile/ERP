@@ -12,17 +12,17 @@ export default function Activities() {
             <h1 className='text-2xl'>Activities</h1>
             <div className=' border  mt-4 rounded-lg w-full shadow-md'>
                 <div className=" flex   mt-4 ml-3 mr-3 items-center justify-between">
-                    <div className=" flex   ">
+                    <div className=" flex  gap-2 ">
                         <Link
                             to={'/Student-Dashboard/activities/recentactivity'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/activities/recentactivity' ? 'bg-secondary text-black' : 'text-gray-500'}`}
+                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Student-Dashboard/activities/recentactivity' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/activities/recentactivity')}
                         >
                             Recent
                         </Link>
                         <Link
                             to={'/Student-Dashboard/activities/allactivity'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Student-Dashboard/activities/allactivity' ? 'bg-secondary text-black' : 'text-gray-500'}`}
+                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Student-Dashboard/activities/allactivity' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/activities/allactivity')}
                         >
                             All

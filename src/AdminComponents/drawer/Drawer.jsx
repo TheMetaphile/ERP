@@ -37,7 +37,7 @@ export default function AdminDrawer({ isOpen }) {
             <div
             key={index}
             onClick={() => handleClick(index)}
-            className={`cursor-pointer ${active === index ? 'text-black' : 'text-gray-500'}`}
+            className={`cursor-pointer rounded-lg ${active === index ? 'bg-secondary' : ''}`}
           >
             <ExpansionTile
              

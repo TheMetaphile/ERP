@@ -50,7 +50,7 @@ export default function RightCard() {
 
         }
         catch (error) {
-            console.error(error);
+            console.log(error);
             const errorMessage = error.response?.data?.error || 'An error occured'
             setError(errorMessage);
             toast.error(errorMessage);

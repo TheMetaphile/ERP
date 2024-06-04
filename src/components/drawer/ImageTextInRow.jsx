@@ -86,13 +86,13 @@ export default function ImageTextInRow(props) {
   return (
     <div>
       {props.route ? (
-        <Link to={props.route} className="flex items-start  text-sm no-underline">
-          <img src={props.image} alt={props.alternateText} className="w-1/6 mb-4" />
+        <Link to={props.route} className="flex  items-center text-sm no-underline">
+          <img src={props.image} alt={props.alternateText} className="w-1/6 " />
           <span className="ml-2">{props.text}</span>
         </Link>
       ) : (
-        <button onClick={handleButtonClick} className="flex items-start  text-sm no-underline">
-          <img src={props.image} alt={props.alternateText} className="w-1/6 mb-4" />
+        <button onClick={handleButtonClick} className="flex items-center  text-sm no-underline">
+          <img src={props.image} alt={props.alternateText} className="w-1/6 " />
           <span className="ml-2">{props.text}</span>
         </button>
       )}

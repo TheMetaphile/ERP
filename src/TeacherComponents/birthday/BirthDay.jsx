@@ -15,24 +15,24 @@ function BirthDay() {
             <h1 className='text-3xl'>Birthday</h1>
             <div className='  mt-4  w-full'>
                 <div className=" flex   mt-4 ml-3 mr-3 items-center justify-between">
-                    <div className=" flex   ">
+                    <div className=" flex  gap-2 ">
                         <Link
                             to={'/Teacher-Dashboard/birthday/all'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/birthday/all' ? 'bg-secondary text-black' : 'text-gray-500'}`}
+                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/birthday/all' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/all')}
                         >
                             All
                         </Link>
                         <Link
                             to={'/Teacher-Dashboard/birthday/teacher'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/birthday/teacher' ? 'bg-secondary text-black' : 'text-gray-500'}`}
+                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/birthday/teacher' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/teacher')}
                         >
                             Teacher
                         </Link>
                         <Link
                             to={'/Teacher-Dashboard/birthday/student'}
-                            className={`text-xl font-medium px-2 rounded-lg ${selectedLink === '/Teacher-Dashboard/birthday/student' ? 'bg-secondary text-black' : 'text-gray-500'}`}
+                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/birthday/student' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/student')}
                         >
                             Student
