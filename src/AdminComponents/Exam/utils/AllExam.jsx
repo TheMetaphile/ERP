@@ -49,27 +49,27 @@ export default function AllExam() {
     const editExam =async (index) => {
         const examToEdit=exams[index];
         console.log('id',examToEdit._id, 'class', examToEdit.Class)
-        // try{
-        //     const response=await axios.put('https://examapi-jep8.onrender.com/updateExam',{
-        //         data: {
-        //         accessToken:authState.accessToken,
-        //         _id: examToEdit._id,
-        //         Class : examToEdit.Class
-        //         }
-        //     })
-        //     if (response.status === 200) {
+        try{
+            const response=await axios.put('https://examapi-jep8.onrender.com/updateExam',{
+                data: {
+                accessToken:authState.accessToken,
+                _id: examToEdit._id,
+                Class : examToEdit.Class
+                }
+            })
+            if (response.status === 200) {
                 
-        //         console.log("Success")
-        //         toast.success('Exam Updated')
+                console.log("Success")
+                toast.success('Exam Updated')
 
-        //     } else {
-        //         toast.error('Failed to update exam');
-        //     }
-        // }
-        // catch (error) {
-        //     toast.error(error.error);
+            } else {
+                toast.error('Failed to update exam');
+            }
+        }
+        catch (error) {
+            toast.error(error.error);
 
-        // }
+        }
 
     };
 

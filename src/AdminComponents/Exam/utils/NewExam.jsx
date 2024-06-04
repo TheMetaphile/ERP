@@ -45,7 +45,7 @@ const NewExam = ({ onClose, addExam }) => {
         onClose();
       } else {
         toast.error('Failed to add Exam. Try again after some time.');
-        
+
       }
     } catch (error) {
       const errorMessage = error.response?.data?.error || 'An error occurred';
@@ -55,8 +55,8 @@ const NewExam = ({ onClose, addExam }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-            <ToastContainer />
-      
+      <ToastContainer />
+
       <div className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-lg">
         <button
           className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-700"
@@ -145,15 +145,22 @@ const NewExam = ({ onClose, addExam }) => {
             <label className="block text-gray-700 text-xl mb-2" htmlFor="duration">
               Duration (in hrs)
             </label>
-            <input
+            <select
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="duration"
-              type="text"
               name="duration"
               value={examData.duration}
               onChange={handleChange}
               required
-            />
+            >
+                <option value="" disabled>Select Duration</option>
+                <option value="1:00 hr">1:00 hr</option>
+                <option value="1:30 hr">1:30 hr</option>
+                <option value="2:00 hr">2:00 hr</option>
+                <option value="2:30 hr">2:30 hr</option>
+                <option value="3:00 hr">3:00 hr</option>
+              </select>
+            
           </div>
 
           <div className="flex items-center justify-between">
