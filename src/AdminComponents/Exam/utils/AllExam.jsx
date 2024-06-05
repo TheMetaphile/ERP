@@ -133,10 +133,23 @@ export default function AllExam() {
                         name="Class"
                         required
                     >
-                        <option value="">Select a Class</option>
-                        <option value="Math">1st</option>
-                        <option value="Science">2nd</option>
-                        <option value="History">3rd</option>
+                        <option value="" disabled>Select Class</option>
+                        <option value="Pre-Nursery">Pre-Nursery</option>
+                        <option value="Nursery">Nursery</option>
+                        <option value="L.K.J">L.K.J</option>
+                        <option value="U.K.J">U.K.J</option>
+                        <option value="1st">1st</option>
+                        <option value="2nd">2nd</option>
+                        <option value="3rd">3rd</option>
+                        <option value="4th">4th</option>
+                        <option value="5th">5th</option>
+                        <option value="6th">6th</option>
+                        <option value="7th">7th</option>
+                        <option value="8th">8th</option>
+                        <option value="9th">9th</option>
+                        <option value="10th">10th</option>
+                        <option value="11th">11th</option>
+                        <option value="12th">12th</option>
 
                     </select>
                 </div>
