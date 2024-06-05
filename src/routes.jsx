@@ -324,7 +324,7 @@ const router = createBrowserRouter([
             element: <StudentsList />
           },
           {
-            path: ':id',
+            path: '/Admin-Dashboard/Students/studentdetails',
             element: <StudentDetailScreen />
           }
         ]

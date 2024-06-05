@@ -6,8 +6,8 @@ export default function StudentDetailTile({ userData }) {
         <div className=" w-full ">
             {userData.map((user, index) => (
                 <Link to={{
-                    pathname: `/Admin-Dashboard/Students/${user.email}`,
-                    search: `?email=${user.email}&rollNumber=${user.rollNumber}&classs=${user.currentClass}`,
+                    pathname: `/Admin-Dashboard/Students/studentdetails`,
+                    search: `?email=${user.email}&name=${user.name}&rollNumber=${user.rollNumber}&classs=${user.currentClass}`,
                    
                 }} key={index}>
                     <div key={index} className=" flex  mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between border rounded-lg py-2 pl-2 mb-2">

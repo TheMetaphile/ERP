@@ -1,5 +1,5 @@
-import { FaEdit } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
+import { FaEdit, FaCheck } from 'react-icons/fa';
+import { useLocation, useParams } from "react-router-dom";
 import React, { useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import AuthContext from '../../../../Context/AuthContext';
@@ -12,16 +12,18 @@ export default function StudentBasicDetails() {
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState(null);
     const { authState } = useContext(AuthContext);
-    const { id } = useParams();
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const email = searchParams.get('email');
     const [editMode, setEditMode] = useState({});
     const [tempData, setTempData] = useState({});
 
     const fetchUserData = async () => {
-
+        console.log(email)
         try {
             const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchSingle/student', {
                 accessToken: authState.accessToken,
-                email: id
+                email: email
             });
             console.log("API response Single Student:", response.data);
             if (response.data.StudentDetails && response.data.StudentDetails.length > 0) {
@@ -43,7 +45,7 @@ export default function StudentBasicDetails() {
             setError('No access token available');
             console.log('No access token available');
         }
-    }, [authState.accessToken, id]);
+    }, [authState.accessToken, email]);
 
     const handleEdit = (field) => {
         setEditMode({ ...editMode, [field]: true });
@@ -63,7 +65,7 @@ export default function StudentBasicDetails() {
             });
             console.log("API response updated:", response.data);
             toast.success('Field Updated');
-            fetchUserData();
+            // fetchUserData();
             setUserData({ ...userData, [field]: tempData[field] });
             setEditMode({ ...editMode, [field]: false });
         } catch (error) {
@@ -114,7 +116,7 @@ export default function StudentBasicDetails() {
                 <div className='tablet:w-1/2'>
                     {
                         Object.entries(studentDetails).map(([apiField, label]) => (
-                            <div className='flex w-full text-base mb-2' key={apiField}>
+                            <div className='flex w-full text-base mb-2 items-center' key={apiField}>
                                 <h1 className='font-medium text-sky-500 tablet:w-2/5 mobile:max-tablet:w-1/2'>
                                     {label}
                                 </h1>
@@ -133,7 +135,7 @@ export default function StudentBasicDetails() {
                                     </h1>
                                 )}
                                 <div className="ml-4 cursor-pointer" onClick={() => handleEdit(apiField)}>
-                                    <CiEdit />
+                                    {editMode[apiField] ? <FaCheck className='text-green-400' /> : <CiEdit />}
                                 </div>
                             </div>
                         ))
@@ -142,7 +144,7 @@ export default function StudentBasicDetails() {
                 <div className='tablet:w-1/2'>
                     {
                         Object.entries(parentsDetails).map(([apiField, label]) => (
-                            <div className='flex w-full text-base mb-2' key={apiField}>
+                            <div className='flex w-full text-base mb-2 items-center' key={apiField}>
                                 <h1 className='font-medium text-sky-500 tablet:w-3/5 mobile:max-tablet:w-1/2'>
                                     {label}
                                 </h1>
@@ -162,7 +164,7 @@ export default function StudentBasicDetails() {
                                     </h1>
                                 )}
                                 <div className="ml-4 cursor-pointer" onClick={() => handleEdit(apiField)}>
-                                    <CiEdit />
+                                    {editMode[apiField] ? <FaCheck className='text-green-400' /> : <CiEdit />}
                                 </div>
                             </div>
                         ))

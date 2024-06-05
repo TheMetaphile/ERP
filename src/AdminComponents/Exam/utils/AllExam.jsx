@@ -11,6 +11,8 @@ export default function AllExam() {
     const [error, setError] = useState(null);
     const [popUp, setPopUp] = useState(false);
     const { authState } = useContext(AuthContext);
+    const [edit, setEdit] = useState(null);
+    const [tempExam, setTempExam] = useState({});
 
 
     const togglePopUp = () => {
@@ -20,13 +22,13 @@ export default function AllExam() {
         setExams([...exams, newExam]);
         togglePopUp();
     };
-    const deleteExam =async (index) => {
-        const examToDelete=exams[index];
-        try{
-            const response=await axios.delete('https://examapi-jep8.onrender.com/deleteExam',{
+    const deleteExam = async (index) => {
+        const examToDelete = exams[index];
+        try {
+            const response = await axios.delete('https://examapi-jep8.onrender.com/deleteExam', {
                 data: {
-                accessToken:authState.accessToken,
-                _id: examToDelete._id
+                    accessToken: authState.accessToken,
+                    _id: examToDelete._id
                 }
             })
             if (response.status === 200) {
@@ -46,32 +48,6 @@ export default function AllExam() {
 
     };
 
-    const editExam =async (index) => {
-        const examToEdit=exams[index];
-        console.log('id',examToEdit._id, 'class', examToEdit.Class)
-        try{
-            const response=await axios.put('https://examapi-jep8.onrender.com/updateExam',{
-                data: {
-                accessToken:authState.accessToken,
-                _id: examToEdit._id,
-                Class : examToEdit.Class
-                }
-            })
-            if (response.status === 200) {
-                
-                console.log("Success")
-                toast.success('Exam Updated')
-
-            } else {
-                toast.error('Failed to update exam');
-            }
-        }
-        catch (error) {
-            toast.error(error.error);
-
-        }
-
-    };
 
     const fetchExam = async () => {
         try {
@@ -84,7 +60,7 @@ export default function AllExam() {
             } else {
                 toast.error('Unexpected response format');
             }
-            
+
         }
         catch (error) {
             const errorMessage = error.response?.data?.error || 'An error occurred';
@@ -98,10 +74,49 @@ export default function AllExam() {
             fetchExam();
         } else {
             toast.error('No access token available');
- 
+
 
         }
     }, [authState.accessToken]);
+
+
+    const handleEditClick = (index) => {
+        setEdit(index);
+        setTempExam(exams[index]);
+    };
+
+    const handleCancelEdit = () => {
+        setEdit(null);
+        setTempExam({});
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setTempExam({ ...tempExam, [name]: value });
+    };
+
+    const handleSave = async (index) => {
+        const examToEdit = tempExam;
+        try {
+            const response = await axios.put('https://examapi-jep8.onrender.com/updateExam', {
+                accessToken: authState.accessToken,
+                _id: examToEdit._id,
+                ...examToEdit
+            });
+            if (response.status === 200) {
+                const updatedExams = [...exams];
+                updatedExams[index] = tempExam;
+                setExams(updatedExams);
+                setEdit(null);
+                setTempExam({});
+                toast.success('Exam Updated');
+            } else {
+                toast.error('Failed to update exam');
+            }
+        } catch (error) {
+            toast.error(error.error);
+        }
+    };
 
     return (
         <div className="flex flex-col mb-4">
@@ -144,17 +159,72 @@ export default function AllExam() {
                         <tbody className="bg-white">
                             {exams && exams.length > 0 ? (
                                 exams.map((exam, index) => (
-                                    <tr key={exam._id?exam._id:index}>
-                                        <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.Class}</td>
-                                        <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.subject}</td>
-                                        <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.time}</td>
-                                        <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.date}</td>
-                                        <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.duration}</td>
-                                        <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">
-                                            <button onClick={() => deleteExam(index)} className="text-red-600 hover:text-red-900">Delete</button>&nbsp;&nbsp;/ &nbsp;
-                                            <button onClick={() => editExam(index)} className="text-green-600 hover:text-green-900">Edit</button>
-
-                                        </td>
+                                    <tr key={exam._id ? exam._id : index}>
+                                        {edit === index ? (
+                                            <>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">
+                                                    <input
+                                                        type="text"
+                                                        name="Class"
+                                                        value={tempExam.Class}
+                                                        onChange={handleChange}
+                                                        className="border p-1"
+                                                    />
+                                                </td>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">
+                                                    <input
+                                                        type="text"
+                                                        name="subject"
+                                                        value={tempExam.subject}
+                                                        onChange={handleChange}
+                                                        className="border p-1"
+                                                    />
+                                                </td>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">
+                                                    <input
+                                                        type="text"
+                                                        name="time"
+                                                        value={tempExam.time}
+                                                        onChange={handleChange}
+                                                        className="border p-1"
+                                                    />
+                                                </td>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">
+                                                    <input
+                                                        type="text"
+                                                        name="date"
+                                                        value={tempExam.date}
+                                                        onChange={handleChange}
+                                                        className="border p-1"
+                                                    />
+                                                </td>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">
+                                                    <input
+                                                        type="text"
+                                                        name="duration"
+                                                        value={tempExam.duration}
+                                                        onChange={handleChange}
+                                                        className="border p-1"
+                                                    />
+                                                </td>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">
+                                                    <button onClick={() => handleSave(index)} className="text-green-600 hover:text-green-900">Save</button>&nbsp;&nbsp;/ &nbsp;
+                                                    <button onClick={handleCancelEdit} className="text-red-600 hover:text-red-900">Cancel</button>
+                                                </td>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.Class}</td>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.subject}</td>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.time}</td>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.date}</td>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.duration}</td>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">
+                                                    <button onClick={() => deleteExam(index)} className="text-red-600 hover:text-red-900">Delete</button>&nbsp;&nbsp;/ &nbsp;
+                                                    <button onClick={() => handleEditClick(index)} className="text-green-600 hover:text-green-900">Edit</button>
+                                                </td>
+                                            </>
+                                        )}
                                     </tr>
                                 ))
                             ) : (
