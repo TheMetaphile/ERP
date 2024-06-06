@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Upload from './Upload';
+import { Link } from "react-router-dom";
 
 function Table() {
     const days = [
@@ -58,12 +59,9 @@ function Table() {
         },
     ];
     const [selectedDay, setSelectedDay] = useState('Monday');
-    const [popUp,setPopUp]=useState(false);
+
     const currentDay = days.find(day => day.name === selectedDay);
 
-    const togglePopUp=()=>{
-        setPopUp(!popUp)
-    }
     return (
         <div className="container mx-auto p-4">
 
@@ -79,13 +77,8 @@ function Table() {
                     </button>
                 ))}
                 </div>
-
-                <button
-                    className='px-4 py-2 rounded-md mr-2 bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white'
-                    onClick={togglePopUp}
-                >
-                    Upload
-                </button>
+                <Link to="/Admin-Dashboard/timetablestructure" className="px-4 py-2 rounded-md mr-2 bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white">Upload</Link>
+                
             </div>
             <div className="  p-4">
                 <h2 className="text-xl font-medium mb-2">
@@ -113,11 +106,7 @@ function Table() {
                 )}
             </div>
 
-            {
-                    popUp && (
-                        <Upload onClose={togglePopUp} />
-                    )
-                }
+
         </div>
     );
 }

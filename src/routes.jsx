@@ -96,6 +96,7 @@ import NoteBook from "./TeacherComponents/notebook/NoteBook.jsx";
 import TeacherMessage from "./TeacherComponents/message/Message.jsx"
 import TeacherHome from "./TeacherComponents/Home/TeacherHome.jsx";
 import TimeTableAdmin from "./AdminComponents/timetable/TimeTable.jsx"
+import Upload from "./AdminComponents/timetable/utils/Upload.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -445,8 +446,13 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/timetable",
         element: <TimeTableAdmin/>,
-        children:[]
+        children:[ 
+        ]
       },
+      {
+        path: '/Admin-Dashboard/timetablestructure',
+            element: <Upload />
+      }
     ]
   },
   {

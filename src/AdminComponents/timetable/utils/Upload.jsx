@@ -4,7 +4,7 @@ import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Upload = ({ onClose }) => {
+const Upload = () => {
     const { authState } = useContext(AuthContext);
 
     const [data, setData] = useState([
@@ -12,10 +12,10 @@ const Upload = ({ onClose }) => {
             Class: '',
             start: '',
             end: '',
-            break: '',
+            before: '',
             lecture: '',
-            day: '',
-
+            break: '',
+            duration: ''
         },
     ]);
 
@@ -33,29 +33,60 @@ const Upload = ({ onClose }) => {
 
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log('Submitted Data:', data);
+        const createStructureData = {
+            accessToken: authState.accessToken,
+            classRange: data[0].Class,
+            numberOfLecture: parseInt(data[0].lecture),
+            durationOfEachLeacture: `${data[0].duration} m`,
+            firstLectureTiming: data[0].start,
+            numberOfLeacturesBeforeLunch: parseInt(data[0].before),
+            durationOfLunch: `${data[0].break} m`
+        };
+
+        try {
+            const structureResponse = await axios.post('https://timetablestructureapi.onrender.com/timeTableStructure/create', createStructureData);
+            toast.success('Time table structure created successfully!');
+
+            // Sample data for the second API
+            const uploadData = {
+                accessToken: authState.accessToken,
+                class: '7th', // You can replace this with dynamic values if needed
+                section: 'A', // You can replace this with dynamic values if needed
+                day: 'monday', // You can replace this with dynamic values if needed
+                schedule: [
+                    {
+                        subject: 'Math', // You can replace this with dynamic values if needed
+                        teacher: 'Mr. Smith', // You can replace this with dynamic values if needed
+                        startAt: '10:30 am', // You can replace this with dynamic values if needed
+                        endAt: '11:10 am', // You can replace this with dynamic values if needed
+                        lectureNo: 1
+                    }
+                ]
+            };
+
+            const uploadResponse = await axios.post('https://timetableapi-1wfp.onrender.com/timetable/upload', uploadData);
+            toast.success('Time table uploaded successfully!');
+
+        } catch (error) {
+            console.error('Error creating time table structure:', error);
+            toast.error('Failed to create time table structure!');
+        }
+
         onClose();
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 overflow-y-auto no-scrollbar">
+        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
             <ToastContainer />
-            <div className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-3xl">
-                <button
-                    className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-700"
-                    onClick={onClose}
-                >
-                    ✖
-                </button>
-                <h2 className="text-2xl mb-4">Schedule Time Table</h2>
-                <form onSubmit={handleSubmit}>
+            
+            <h1 className='text-2xl'>Schedule Time Table</h1>
+                <form onSubmit={handleSubmit} className='bg-slate-400'>
 
                     {data.map((value, index) => (
                         <div key={index} className="grid grid-cols-1 gap-4 mb-4">
                             <div className="grid grid-cols-3 gap-4 ">
                                 <div>
-                                    <label className='text-black font-medium'>Class</label>
+                                    <label className='text-black font-medium'>Class Range</label>
                                     <select
                                         className="w-full border p-2"
                                         name="Class"
@@ -64,22 +95,8 @@ const Upload = ({ onClose }) => {
                                         required
                                     >
                                         <option value="" disabled>Select Class</option>
-                                        <option value="Pre-Nursery">Pre-Nursery</option>
-                                        <option value="Nursery">Nursery</option>
-                                        <option value="L.K.J">L.K.J</option>
-                                        <option value="U.K.J">U.K.J</option>
-                                        <option value="1st">1st</option>
-                                        <option value="2nd">2nd</option>
-                                        <option value="3rd">3rd</option>
-                                        <option value="4th">4th</option>
-                                        <option value="5th">5th</option>
-                                        <option value="6th">6th</option>
-                                        <option value="7th">7th</option>
-                                        <option value="8th">8th</option>
-                                        <option value="9th">9th</option>
-                                        <option value="10th">10th</option>
-                                        <option value="11th">11th</option>
-                                        <option value="12th">12th</option>
+                                        <option value="Pre-Nursery - U.K.J">Pre-Nursery - U.K.J</option>
+                                        <option value="1st- 12th">1st - 12th</option>
                                     </select>
                                 </div>
                                 <div>
@@ -94,15 +111,21 @@ const Upload = ({ onClose }) => {
                                     />
                                 </div>
                                 <div>
-                                    <label className='text-black font-medium'>End</label>
-                                    <input
+                                    <label className='text-black font-medium'>Lecture Before Lunch</label>
+                                    <select
                                         className="w-full border p-2"
-                                        type="time"
-                                        name="end"
-                                        value={value.end}
+                                        name="before"
+                                        value={value.before}
                                         onChange={(e) => handleChange(index, e)}
                                         required
-                                    />
+                                    >
+                                        <option value="" disabled>Lecture </option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5 </option>
+                                    </select>
+
                                 </div>
                             </div>
                             <div className="grid grid-cols-4 gap-4">
@@ -140,27 +163,9 @@ const Upload = ({ onClose }) => {
                                         <option value="50">50 min</option>
                                     </select>
                                 </div>
+
                                 <div>
-                                    <label className='text-black font-medium'>Day</label>
-                                    <select
-                                        className="w-full border p-2"
-                                        name="day"
-                                        value={value.day}
-                                        onChange={(e) => handleChange(index, e)}
-                                        required
-                                    >
-                                        <option value="" disabled>Select Day</option>
-                                        <option value="Monday">Monday</option>
-                                        <option value="Tuesday">Tuesday</option>
-                                        <option value="Wednesday">Wednesday</option>
-                                        <option value="Thursday">Thursday</option>
-                                        <option value="Friday">Friday</option>
-                                        <option value="Saturday">Saturday</option>
-                                        <option value="Sunday">Sunday</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className='text-black font-medium'>Lecture</label>
+                                    <label className='text-black font-medium'>Total Lecture</label>
                                     <select
                                         className="w-full border p-2"
                                         name="lecture"
@@ -190,16 +195,10 @@ const Upload = ({ onClose }) => {
                         >
                             Done
                         </button>
-                        <button
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            type="button"
-                            onClick={onClose}
-                        >
-                            Cancel
-                        </button>
+
                     </div>
                 </form>
-            </div>
+          
         </div>
     );
 };
