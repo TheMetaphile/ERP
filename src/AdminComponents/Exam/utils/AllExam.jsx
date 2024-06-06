@@ -105,12 +105,22 @@ export default function AllExam() {
 
     const handleSave = async (index) => {
         const examToEdit = tempExam;
+        const updateFields = {
+            subject: examToEdit.subject,
+            time: examToEdit.time,
+            date: examToEdit.date,
+            duration: examToEdit.duration,
+            class: examToEdit.class
+        };
         try {
             const response = await axios.put('https://examapi-jep8.onrender.com/updateExam', {
                 accessToken: authState.accessToken,
-                _id: examToEdit._id,
-                ...examToEdit
+                examId: examToEdit._id,
+                class: examToEdit.class,
+                update: updateFields
+                
             });
+            
             if (response.status === 200) {
                 const updatedExams = [...exams];
                 updatedExams[index] = tempExam;

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Upload from './Upload';
 
 function Table() {
     const days = [
@@ -57,8 +58,12 @@ function Table() {
         },
     ];
     const [selectedDay, setSelectedDay] = useState('Monday');
+    const [popUp,setPopUp]=useState(false);
     const currentDay = days.find(day => day.name === selectedDay);
 
+    const togglePopUp=()=>{
+        setPopUp(!popUp)
+    }
     return (
         <div className="container mx-auto p-4">
 
@@ -77,7 +82,7 @@ function Table() {
 
                 <button
                     className='px-4 py-2 rounded-md mr-2 bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white'
-                    // onClick={() => setSelectedDay(day.name)}
+                    onClick={togglePopUp}
                 >
                     Upload
                 </button>
@@ -107,6 +112,12 @@ function Table() {
                     </table>
                 )}
             </div>
+
+            {
+                    popUp && (
+                        <Upload onClose={togglePopUp} />
+                    )
+                }
         </div>
     );
 }
