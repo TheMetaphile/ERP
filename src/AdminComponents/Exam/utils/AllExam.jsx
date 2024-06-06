@@ -8,12 +8,11 @@ import Loading from "../../../LoadingScreen/Loading";
 
 export default function AllExam() {
     const [exams, setExams] = useState([]);
-    const [error, setError] = useState(null);
     const [popUp, setPopUp] = useState(false);
     const { authState } = useContext(AuthContext);
     const [edit, setEdit] = useState(null);
     const [tempExam, setTempExam] = useState({});
-
+    const [selectedClass, setSelectedClass] = useState("");
 
     const togglePopUp = () => {
         setPopUp(!popUp);
@@ -28,7 +27,8 @@ export default function AllExam() {
             const response = await axios.delete('https://examapi-jep8.onrender.com/deleteExam', {
                 data: {
                     accessToken: authState.accessToken,
-                    _id: examToDelete._id
+                    examId: examToDelete._id,
+                    class : examToDelete.class
                 }
             })
             if (response.status === 200) {
@@ -56,7 +56,15 @@ export default function AllExam() {
             });
             console.log("API response exam:", response.data);
             if (response.data && response.data.Exams) {
-                setExams(response.data.Exams);
+                const flattenedExams = response.data.Exams.flatMap((exam) =>
+                    exam.schedule.map((schedule) => ({
+                        ...schedule,
+                        class: exam.class,
+                        stream: exam.stream,
+                        term: exam.term
+                    }))
+                );
+                setExams(flattenedExams);
             } else {
                 toast.error('Unexpected response format');
             }
@@ -118,6 +126,12 @@ export default function AllExam() {
         }
     };
 
+    const handleClassChange = (e) => {
+        setSelectedClass(e.target.value);
+    };
+
+    const filteredExams = selectedClass ? exams.filter(exam => exam.class === selectedClass) : exams;
+
     return (
         <div className="flex flex-col mb-4">
             <ToastContainer />
@@ -131,9 +145,11 @@ export default function AllExam() {
                         className="mx-4 border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                         id="Class"
                         name="Class"
+                        value={selectedClass}
+                        onChange={handleClassChange}
                         required
                     >
-                        <option value="" disabled>Select Class</option>
+                        <option value="" >Select Class</option>
                         <option value="Pre-Nursery">Pre-Nursery</option>
                         <option value="Nursery">Nursery</option>
                         <option value="L.K.J">L.K.J</option>
@@ -155,7 +171,6 @@ export default function AllExam() {
                 </div>
                 <div><button className="rounded-lg border bg-blue-400 px-4 text-xl hover:bg-blue-200" onClick={togglePopUp}>Schedule New Exam</button></div>
             </div>
-            {/* {error && <p className="text-red-500 mx-4">{error}</p>} */}
             <div className="rounded-xl shadow-lg mb-4">
                 <div className="overflow-x-auto w-full mt-4 rounded-lg">
                     <table className="min-w-full divide-y divide-gray-600">
@@ -170,8 +185,8 @@ export default function AllExam() {
                             </tr>
                         </thead>
                         <tbody className="bg-white">
-                            {exams && exams.length > 0 ? (
-                                exams.map((exam, index) => (
+                            {filteredExams && filteredExams.length > 0 ? (
+                                filteredExams.map((exam, index) => (
                                     <tr key={exam._id ? exam._id : index}>
                                         {edit === index ? (
                                             <>
@@ -179,7 +194,7 @@ export default function AllExam() {
                                                     <input
                                                         type="text"
                                                         name="Class"
-                                                        value={tempExam.Class}
+                                                        value={tempExam.class}
                                                         onChange={handleChange}
                                                         className="border p-1"
                                                     />
@@ -227,7 +242,7 @@ export default function AllExam() {
                                             </>
                                         ) : (
                                             <>
-                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.Class}</td>
+                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.class}</td>
                                                 <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.subject}</td>
                                                 <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.time}</td>
                                                 <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.date}</td>

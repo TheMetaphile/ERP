@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const NewExam = ({ onClose, addExam }) => {
   const { authState } = useContext(AuthContext);
   const [selectedTerm, setSelectedTerm] = useState('');
+  const [stream, setStream] = useState('');
   const [exams, setExams] = useState([
     {
       Class: '',
@@ -22,6 +23,10 @@ const NewExam = ({ onClose, addExam }) => {
     const newExams = [...exams];
     newExams[index][name] = value;
     setExams(newExams);
+  };
+
+  const handleStreamChange = (e) => {
+    setStream(e.target.value);
   };
 
   const addNewExam = () => {
@@ -49,35 +54,38 @@ const NewExam = ({ onClose, addExam }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    onClose();
-    console.log('Exams:', exams);
-    // try {
-    //   const response = await axios.post('https://examapi-jep8.onrender.com/ScheduleExams', {
-    //     accessToken: authState.accessToken,
-    //     ...examData
-    //   });
 
-    //   if (response.status === 200) {
-    //     console.log('Success from toast')
-    //     toast.success('Exam Added')
 
-    //     addExam(response.data);
-    //     setExamData({
-    //       Class: '',
-    //       subject: '',
-    //       time: '',
-    //       date: '',
-    //       duration: '',
-    //     });
-    //     onClose();
-    //   } else {
-    //     toast.error('Failed to add Exam. Try again after some time.');
+    const schedules = exams.map(exam => ({
+      subject: exam.subject,
+      date: exam.date,
+      time: exam.time,
+      duration: exam.duration,
+    }));
 
-    //   }
-    // } catch (error) {
-    //   const errorMessage = error.response?.data?.error || 'An error occurred';
-    //   toast.error(errorMessage);
-    // }
+    const examData = {
+      accessToken: authState.accessToken,
+      stream: stream || "Not applicable",
+      class: exams[0].Class,
+      term: selectedTerm,
+      schedule: schedules,
+    };
+
+    console.log('examData', examData)
+    try {
+      const response = await axios.post('https://examapi-jep8.onrender.com/ScheduleExams', examData);
+
+      if (response.status === 200) {
+        toast.success('Exam Added')
+        addExam(response.data);
+      } else {
+        toast.error('Failed to add Exam. Try again after some time.');
+
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || 'An error occurred';
+      toast.error(errorMessage);
+    }
   };
 
   return (
@@ -92,22 +100,45 @@ const NewExam = ({ onClose, addExam }) => {
         </button>
         <h2 className="text-2xl mb-4">Schedule New Exams</h2>
         <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-            <label htmlFor="term" className="block text-gray-700 font-bold mb-2">
-              Select Term:
-            </label>
-            <select
-              id="term"
-              name="term"
-              value={selectedTerm}
-              onChange={handleTermChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              required
-            >
-              <option value="" disabled>Select Term</option>
-              <option value="1">Term 1</option>
-              <option value="2">Term 2</option>
-            </select>
+          <div className='flex gap-3'>
+            <div className="mb-4 w-full">
+              <label htmlFor="term" className="block text-gray-700 font-bold mb-2">
+                Select Term
+              </label>
+              <select
+                id="term"
+                name="term"
+                value={selectedTerm}
+                onChange={handleTermChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              >
+                <option value="" disabled>Select Term</option>
+                <option value="1">Term 1</option>
+                <option value="2">Term 2</option>
+              </select>
+            </div>
+            <div className="mb-4 w-full">
+              <label htmlFor="stream" className="block text-gray-700 font-bold mb-2">
+                Stream
+              </label>
+              <select
+                id="stream"
+                name="stream"
+                value={stream}
+                onChange={handleStreamChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+
+              >
+                <option value="" disabled>Select Stream (optional)</option>
+                <option value="PCM">PCM</option>
+                <option value="PCB">PCB</option>
+                <option value="Commerce">Commerce</option>
+                <option value="Arts">Arts</option>
+
+              </select>
+
+            </div>
           </div>
           <table className=" bg-white ">
             <thead>
@@ -121,7 +152,7 @@ const NewExam = ({ onClose, addExam }) => {
             </thead>
             <tbody>
               {exams.map((exam, index) => (
-                <tr key={index} className=' bg-red-300'>
+                <tr key={index} className=' '>
                   <td className="border px-4 py-2">
                     <select
                       className="w-full"

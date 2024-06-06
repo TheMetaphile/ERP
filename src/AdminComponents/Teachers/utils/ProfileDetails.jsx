@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import {  FaCheck } from 'react-icons/fa';
 import React, { useState, useEffect, useContext } from "react";
 import { callIcon, location, userimg } from "./images";
 import { MdEmail } from 'react-icons/md';
@@ -68,7 +69,7 @@ export default function ProfileDetails() {
             console.log("API response updated:", response.data);
             toast.success('Field Updated');
 
-            fetchUserData();
+            // fetchUserData();
 
             setUserData({ ...userData, [field]: tempData[field] });
             setEditMode({ ...editMode, [field]: false });
@@ -192,6 +193,7 @@ export default function ProfileDetails() {
                     <div className="ml-4 cursor-pointer" onClick={() => handleEdit('education')}>
                         <CiEdit />
                     </div>
+                    
                 </div>
             </div>
         </div>

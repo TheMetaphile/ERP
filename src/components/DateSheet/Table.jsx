@@ -17,11 +17,12 @@ export default function Table() {
     try {
       const response = await axios.post('https://examapi-jep8.onrender.com/fetchDateSheet', {
         accessToken: authState.accessToken,
-        Class: authState.userDetails.currentClass
+        class: authState.userDetails.currentClass
       });
       console.log("API response datesheet:", response.data);
       if (response.data && response.data.dateSheet) {
-        setExams(response.data.dateSheet);
+        const schedules = response.data.dateSheet.flatMap(sheet => sheet.schedule);
+        setExams(schedules);
       } else {
         toast.error('Unexpected response format');
       }

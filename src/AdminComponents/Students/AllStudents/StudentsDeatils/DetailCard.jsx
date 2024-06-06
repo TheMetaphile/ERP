@@ -1,4 +1,4 @@
-import { FaEdit, FaCheck } from 'react-icons/fa';
+import {  FaCheck } from 'react-icons/fa';
 import { useLocation, useParams } from "react-router-dom";
 import React, { useState, useEffect, useContext } from "react";
 import axios from 'axios';
