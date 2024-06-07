@@ -53,7 +53,7 @@ const Upload = () => {
         };
         console.log(createStructureData)
         try {
-            const structureResponse = await axios.post('https://timetablestructureapi.onrender.com/timeTableStructure/create', { createStructureData });
+            const structureResponse = await axios.post('https://timetablestructureapi.onrender.com/timeTableStructure/create',  createStructureData );
             toast.success('Time table structure created successfully!');
 
             if (structureResponse.status === 200) {
@@ -99,7 +99,7 @@ const Upload = () => {
             });
 
             if(response.status === 200){
-                console.log(response)
+                console.log(response.data)
             }
 
         } catch (err) {
