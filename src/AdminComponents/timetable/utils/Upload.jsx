@@ -35,6 +35,7 @@ const Upload = () => {
             ]
         }
     ]);
+    const [fetchedStructure, setFetchedStructure] = useState(null);
 
     const handleChange = (index, e, isUpload = false) => {
         const { name, value } = e.target;
@@ -102,7 +103,8 @@ const Upload = () => {
             });
 
             if (response.status === 200) {
-                console.log(response.data)
+                setFetchedStructure(response.data);
+                console.log('response from fetch',response.data)
             }
 
         } catch (err) {
@@ -111,27 +113,66 @@ const Upload = () => {
         }
     }
 
+    const calculateLectureTimes = (start, duration, beforeLunch, breakDuration, totalLectures) => {
+        const times = [];
+        let currentTime = start;
+
+        for (let i = 1; i <= totalLectures; i++) {
+            const endTime = new Date(currentTime.getTime() + duration * 60000);
+            times.push({ start: currentTime, end: endTime });
+
+            currentTime = endTime;
+
+            if (i === beforeLunch) {
+                currentTime = new Date(currentTime.getTime() + breakDuration * 60000);
+            }
+        }
+
+        return times;
+    }
+
     const handleUpload = async (e) => {
         e.preventDefault();
-        const uploadPayload = {
-            accessToken: authState.accessToken,
-            class: uploadData[0].Class,
-            section: uploadData[0].section,
-            day: uploadData[0].day,
-            schedule: uploadData[0].schedule.map(scheduleItem => ({
-                ...scheduleItem,
-                startAt: convertTo12HourFormat(scheduleItem.startAt),
-                endAt: convertTo12HourFormat(scheduleItem.endAt)
-            }))
-        };
-        console.log(uploadPayload);
+        if (!fetchedStructure) {
+            toast.error('Please fetch the structure first!');
+            return;
+        }
         try {
-            const uploadResponse = await axios.post('https://timetableapi-1wfp.onrender.com/timetable/upload', uploadPayload);
-            toast.success('Time table uploaded successfully!');
+            const { firstLectureTiming, durationOfEachLeacture, numberOfLeacturesBeforeLunch, durationOfLunch, numberOfLecture } = fetchedStructure;
 
-            if (uploadResponse.status === 200) {
-                console.log(uploadResponse.data);
-            }
+            const start = firstLectureTiming;
+            const duration = durationOfEachLeacture;
+            const beforeLunch = numberOfLeacturesBeforeLunch;
+            const breakDuration = durationOfLunch;
+            const totalLectures = numberOfLecture;
+
+            // Debugging: check parsed values
+            console.log('check', { start, duration, beforeLunch, breakDuration, totalLectures });
+
+            const lectureTimes = calculateLectureTimes(start, duration, beforeLunch, breakDuration, totalLectures);
+
+            // Debugging: check lecture times
+            console.log('Lecture Times:', lectureTimes);
+
+            const uploadPayload = {
+                accessToken: authState.accessToken,
+                class: uploadData[0].Class,
+                section: uploadData[0].section,
+                day: uploadData[0].day,
+                schedule: uploadData[0].schedule.map((scheduleItem, index) => ({
+                    ...scheduleItem,
+                    startAt: convertTo12HourFormat(lectureTimes[index].start.toTimeString().slice(0, 5)),
+                    endAt: convertTo12HourFormat(lectureTimes[index].end.toTimeString().slice(0, 5))
+                }))
+            };
+            console.log(uploadPayload);
+
+            // const uploadResponse = await axios.post('https://timetableapi-1wfp.onrender.com/timetable/upload', uploadPayload);
+
+            // if (uploadResponse.status === 200) {
+            //     toast.success('Time table uploaded successfully!');
+            //     console.log(uploadResponse.data);
+            // }
         } catch (error) {
             console.error('Error uploading time table:', error);
             toast.error('Failed to upload time table!');
@@ -150,18 +191,16 @@ const Upload = () => {
         setUploadData(newUploadData);
     };
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+
+        <div className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
             <ToastContainer />
 
             <h1 className='text-2xl'>Schedule Time Table</h1>
 
             <form onSubmit={handleFetch} className='bg-slate-400 mt-4 w-full p-3 rounded-lg shadow-md '>
-
                 {structureData.map((value, index) => (
-                    <div key={index} className="grid grid-cols-1 gap-4 mb-4  rounded-lg ">
+                    <div key={index} className="grid grid-cols-1 gap-4 mb-4 rounded-lg ">
                         <h1 className='text-xl'>Check Structure</h1>
-
-
                         <div>
                             <label className='text-black font-medium'>Class Range</label>
                             <select
@@ -176,12 +215,9 @@ const Upload = () => {
                                 <option value="1st- 12th">1st - 12th</option>
                             </select>
                         </div>
-
                     </div>
                 ))}
-
                 <div className="flex items-center justify-between mt-4">
-
                     <button
                         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         type="submit"
@@ -189,16 +225,13 @@ const Upload = () => {
                     >
                         Done
                     </button>
-
                 </div>
             </form>
 
             <form onSubmit={handleSubmit} className='bg-slate-400 mt-4 w-full p-3 rounded-lg shadow-md'>
-
                 {structureData.map((value, index) => (
-                    <div key={index} className="grid grid-cols-1 gap-4 mb-4  rounded-lg ">
+                    <div key={index} className="grid grid-cols-1 gap-4 mb-4 rounded-lg ">
                         <h1 className='text-xl'>Create Structure</h1>
-
                         <div className="grid grid-cols-3 gap-4 ">
                             <div>
                                 <label className='text-black font-medium'>Class Range</label>
@@ -214,79 +247,29 @@ const Upload = () => {
                                     <option value="1st- 12th">1st - 12th</option>
                                 </select>
                             </div>
+
                             <div>
-                                <label className='text-black font-medium'>Start</label>
+                                <label className='text-black font-medium'>Starting Time</label>
                                 <input
-                                    className="w-full border p-2"
                                     type="time"
                                     name="start"
                                     value={value.start}
                                     onChange={(e) => handleChange(index, e)}
                                     required
+                                    className="w-full border p-2"
                                 />
                             </div>
-                            <div>
-                                <label className='text-black font-medium'>Lecture Before Lunch</label>
-                                <select
-                                    className="w-full border p-2"
-                                    name="before"
-                                    value={value.before}
-                                    onChange={(e) => handleChange(index, e)}
-                                    required
-                                >
-                                    <option value="" disabled>Lecture </option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5 </option>
-                                </select>
 
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-3 gap-4">
-                            <div>
-                                <label className='text-black font-medium'>Break</label>
-                                <select
-                                    className="w-full border p-2"
-                                    name="break"
-                                    value={value.break}
-                                    onChange={(e) => handleChange(index, e)}
-                                    required
-                                >
-                                    <option value="" disabled>Select Duration</option>
-                                    <option value="30 m">30 min</option>
-                                    <option value="35 m">35 min</option>
-                                    <option value="40 m">40 min</option>
-                                    <option value="45 m">45 min</option>
-                                    <option value="50 m">50 min</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className='text-black font-medium'>Duration</label>
-                                <select
-                                    className="w-full border p-2"
-                                    name="duration"
-                                    value={value.duration}
-                                    onChange={(e) => handleChange(index, e)}
-                                    required
-                                >
-                                    <option value="" disabled>Select Duration</option>
-                                    <option value="30 m">30 min</option>
-                                    <option value="35 m">35 min</option>
-                                    <option value="40 m">40 min</option>
-                                    <option value="45 m">45 min</option>
-                                    <option value="50 m">50 min</option>
-                                </select>
-                            </div>
 
                             <div>
-                                <label className='text-black font-medium'>Total Lecture</label>
+                                <label className='text-black font-medium'>Number Of Lecture</label>
                                 <select
-                                    className="w-full border p-2"
+                                    type="number"
                                     name="lecture"
                                     value={value.lecture}
                                     onChange={(e) => handleChange(index, e)}
                                     required
+                                    className="w-full border p-2"
                                 >
                                     <option value="" disabled>Select Lecture</option>
                                     <option value="1">1</option>
@@ -298,28 +281,75 @@ const Upload = () => {
                                     <option value="7">7</option>
                                 </select>
                             </div>
+
+
+                            <div>
+                                <label className='text-black font-medium'>Lecture Duration</label>
+                                <select
+                                    type="number"
+                                    name="duration"
+                                    value={value.duration}
+                                    onChange={(e) => handleChange(index, e)}
+                                    required
+                                    className="w-full border p-2"
+                                >
+                                    <option value="" disabled>Select Duration</option>
+                                    <option value="30 m">30 min</option>
+                                    <option value="35 m">35 min</option>
+                                    <option value="40 m">40 min</option>
+                                    <option value="45 m">45 min</option>
+                                    <option value="50 m">50 min</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className='text-black font-medium'>No. Of Lecture Before Lunch</label>
+                                <input
+                                    type="number"
+                                    name="before"
+                                    value={value.before}
+                                    onChange={(e) => handleChange(index, e)}
+                                    required
+                                    className="w-full border p-2"
+                                />
+                            </div>
+
+
+                            <div>
+                                <label className='text-black font-medium'>Duration Of Lunch</label>
+                                <select
+                                    type="number"
+                                    name="break"
+                                    value={value.break}
+                                    onChange={(e) => handleChange(index, e)}
+                                    required
+                                    className="w-full border p-2"
+                                >
+                                    <option value="" disabled>Select Duration</option>
+                                    <option value="30 m">30 min</option>
+                                    <option value="35 m">35 min</option>
+                                    <option value="40 m">40 min</option>
+                                    <option value="45 m">45 min</option>
+                                    <option value="50 m">50 min</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 ))}
-
                 <div className="flex items-center justify-between mt-4">
-
                     <button
                         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         type="submit"
                     >
                         Done
                     </button>
-
                 </div>
             </form>
 
             <form onSubmit={handleUpload} className='bg-slate-400 mt-4 w-full p-3 rounded-lg shadow-md'>
-
                 {uploadData.map((value, index) => (
-                    <div key={index} className="grid grid-cols-1 gap-4 mb-4  rounded-lg ">
+                    <div key={index} className="grid grid-cols-1 gap-4 mb-4 rounded-lg">
                         <h1 className='text-xl'>Upload Time Table</h1>
-                        <div className="grid grid-cols-3 gap-4 ">
+                        <div className="grid grid-cols-3 gap-4">
                             <div>
                                 <label className='text-black font-medium'>Class</label>
                                 <select
@@ -329,10 +359,10 @@ const Upload = () => {
                                     onChange={(e) => handleChange(index, e, true)}
                                     required
                                 >
-                                    <option value="">Select Class</option>
+                                    <option value="" disabled>Select Class</option>
                                     <option value="Pre-Nursery">Pre-Nursery</option>
-                                    <option value="Nursery">Nursery</option>
-                                    <option value="L.K.J">L.K.J</option>
+                                    <option value="L.K.G">L.K.G</option>
+                                    <option value="U.K.G">U.K.G</option>
                                     <option value="U.K.J">U.K.J</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option>
@@ -351,12 +381,12 @@ const Upload = () => {
                             <div>
                                 <label className='text-black font-medium'>Section</label>
                                 <select
-                                    className="w-full border p-2"
                                     type="text"
                                     name="section"
                                     value={value.section}
                                     onChange={(e) => handleChange(index, e, true)}
                                     required
+                                    className="w-full border p-2"
                                 >
                                     <option value="">Select Section</option>
                                     <option value="A">A</option>
@@ -373,33 +403,34 @@ const Upload = () => {
                             <div>
                                 <label className='text-black font-medium'>Day</label>
                                 <select
-                                    className="w-full border p-2"
+                                    type="text"
                                     name="day"
                                     value={value.day}
                                     onChange={(e) => handleChange(index, e, true)}
                                     required
+                                    className="w-full border p-2"
                                 >
                                     <option value="" disabled>Select Day</option>
-                                    <option value="Monday">Monday</option>
-                                    <option value="Tuesday">Tuesday</option>
-                                    <option value="Wednesday">Wednesday</option>
-                                    <option value="Thursday">Thursday</option>
-                                    <option value="Friday">Friday</option>
-                                    <option value="Saturday">Saturday</option>
+                                    <option value="monday">Monday</option>
+                                    <option value="tuesday">Tuesday</option>
+                                    <option value="wednesday">Wednesday</option>
+                                    <option value="thursday">Thursday</option>
+                                    <option value="friday">Friday</option>
+                                    <option value="saturday">Saturday</option>
                                 </select>
                             </div>
                         </div>
-                        {value.schedule.map((scheduleItem, scheduleIndex) => (
-                            <div key={scheduleIndex} className="grid grid-cols-5 gap-4 mb-2">
+                        {value.schedule.map((schedule, scheduleIndex) => (
+                            <div key={scheduleIndex} className="grid grid-cols-3 gap-4 mt-4">
                                 <div>
                                     <label className='text-black font-medium'>Subject</label>
                                     <select
-                                        className="w-full border p-2"
                                         type="text"
                                         name="subject"
-                                        value={scheduleItem.subject}
+                                        value={schedule.subject}
                                         onChange={(e) => handleScheduleChange(index, scheduleIndex, e)}
                                         required
+                                        className="w-full border p-2"
                                     >
                                         <option value="" disabled>Select Subject</option>
                                         <option value="Hindi">Hindi</option>
@@ -416,80 +447,53 @@ const Upload = () => {
                                         <option value="Business">Business</option>
                                         <option value="Accounts">Accounts</option>
                                     </select>
-
                                 </div>
                                 <div>
                                     <label className='text-black font-medium'>Teacher</label>
                                     <input
-                                        className="w-full border p-2"
                                         type="text"
                                         name="teacher"
-                                        value={scheduleItem.teacher}
+                                        value={schedule.teacher}
                                         onChange={(e) => handleScheduleChange(index, scheduleIndex, e)}
                                         required
-                                    />
-                                </div>
-                                <div>
-                                    <label className='text-black font-medium'>Start Time</label>
-                                    <input
                                         className="w-full border p-2"
-                                        type="time"
-                                        name="startAt"
-                                        value={scheduleItem.startAt}
-                                        onChange={(e) => handleScheduleChange(index, scheduleIndex, e)}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className='text-black font-medium'>End Time</label>
-                                    <input
-                                        className="w-full border p-2"
-                                        type="time"
-                                        name="endAt"
-                                        value={scheduleItem.endAt}
-                                        onChange={(e) => handleScheduleChange(index, scheduleIndex, e)}
-                                        required
                                     />
                                 </div>
                                 <div>
                                     <label className='text-black font-medium'>Lecture No.</label>
                                     <input
-                                        className="w-full border p-2"
                                         type="number"
                                         name="lectureNo"
-                                        value={scheduleItem.lectureNo}
+                                        value={schedule.lectureNo}
                                         onChange={(e) => handleScheduleChange(index, scheduleIndex, e)}
                                         required
+                                        className="w-full border p-2"
                                     />
                                 </div>
                             </div>
                         ))}
-                        <div className="flex items-center justify-between mt-4">
-                            <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                type="button"
-                                onClick={() => addScheduleRow(index)}
-                            >
-                                Add New Row
-                            </button>
-                        </div>
+                        <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4 rounded focus:outline-none focus:shadow-outline"
+                            type="button"
+                            onClick={() => addScheduleRow(index)}
+                        >
+                            Add Lecture
+                        </button>
                     </div>
-
                 ))}
-
                 <div className="flex items-center justify-between mt-4">
-
                     <button
                         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         type="submit"
                     >
-                        Done
+                        Upload
                     </button>
-
                 </div>
             </form>
-
         </div>
+
+
+
     );
 };
 
