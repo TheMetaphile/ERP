@@ -107,6 +107,10 @@ const menuItems = [
       text: 'All Classes',
       route: '/Admin-Dashboard/Classes'
     },
+    {
+      text: 'Class Teacher',
+      route: '/Admin-Dashboard/Classteacher'
+    },
     ]
   },
 

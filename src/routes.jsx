@@ -97,6 +97,7 @@ import TeacherMessage from "./TeacherComponents/message/Message.jsx"
 import TeacherHome from "./TeacherComponents/Home/TeacherHome.jsx";
 import TimeTableAdmin from "./AdminComponents/timetable/TimeTable.jsx"
 import Upload from "./AdminComponents/timetable/utils/Upload.jsx";
+import ClassTeacher from "./AdminComponents/Classes/utils/ClassTeacher.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -416,6 +417,11 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/Classes",
         element: <Class/>,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Classteacher",
+        element: <ClassTeacher/>,
         children:[]
       },
       {
