@@ -113,12 +113,33 @@ const Upload = () => {
         }
     }
 
+    const convertToDate = (timeString) => {
+        const [time, modifier] = timeString.split(' ');
+        let [hours, minutes] = time.split(':');
+    
+        if (hours === '12') {
+          hours = '0';
+        }
+        if (modifier === 'pm') {
+          hours = parseInt(hours, 10) + 12;
+        }
+    
+        const date = new Date();
+        date.setHours(hours);
+        date.setMinutes(minutes);
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+    
+        return date;
+      };
+
     const calculateLectureTimes = (start, duration, beforeLunch, breakDuration, totalLectures) => {
         const times = [];
-        let currentTime = start;
+        let currentTime = convertToDate(start);
 
         for (let i = 1; i <= totalLectures; i++) {
             const endTime = new Date(currentTime.getTime() + duration * 60000);
+            console.log('func', {currentTime,endTime})
             times.push({ start: currentTime, end: endTime });
 
             currentTime = endTime;
@@ -146,12 +167,11 @@ const Upload = () => {
             const breakDuration = durationOfLunch;
             const totalLectures = numberOfLecture;
 
-            // Debugging: check parsed values
+            
             console.log('check', { start, duration, beforeLunch, breakDuration, totalLectures });
 
             const lectureTimes = calculateLectureTimes(start, duration, beforeLunch, breakDuration, totalLectures);
 
-            // Debugging: check lecture times
             console.log('Lecture Times:', lectureTimes);
 
             const uploadPayload = {
