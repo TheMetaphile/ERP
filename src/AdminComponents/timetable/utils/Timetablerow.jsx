@@ -10,7 +10,7 @@ export default function TimetableRow({ index, lectureNo, Time, Subject, Teacher,
     useEffect(() => {
         const handler = setTimeout(() => {
             setTemp(teacherInput);
-        }, 10000);
+        }, 1000);
 
         return () => {
             clearTimeout(handler);
@@ -24,7 +24,7 @@ export default function TimetableRow({ index, lectureNo, Time, Subject, Teacher,
                     const resposne = await axios.post('https://loginapi-y0aa.onrender.com/search/teacher', {
                         accessToken: authState.accessToken,
                         searchString: temp,
-                        start: 1,
+                        start: 0,
                         end: 30
                     })
                     console.log(resposne.data)
