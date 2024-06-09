@@ -2,9 +2,15 @@ import React, { useState, useEffect } from 'react';
 import TimetableHeader from './timetableHeader';
 import TimetableRow from './Timetablerow';
 
-export default function UploadTimetable({ fetchedTimeTableStructure, handleUpload,handleChange }) {
+export default function UploadTimetable({ fetchedTimeTableStructure, onSubmit, handleChange }) {
     const [lectureTimes, setLectureTimes] = useState([]);
+    const [lunch, setLunch] = useState(false);
+    const subjects = ["Select", "Hindi", "English", "Maths", "Science", " Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", " Accounts"];
+    const [selectedSubjects, setSelectedSubjects] = useState(Array(lectureTimes.length).fill(subjects[0]));
 
+    const handleSubjectChange = (index, newSubject) => {
+        handleChange(index, { target: { name: 'schedule', value: { subject: newSubject } } });
+    };
     // useEffect(() => {
     //     console.log('UploadTimetable - fetchedTimeTableStructure:', fetchedTimeTableStructure);
     // }, []);
@@ -29,6 +35,8 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleUploa
         return date;
     };
 
+
+
     const calculateLectureTimes = () => {
         const { firstLectureTiming, durationOfEachLeacture, numberOfLeacturesBeforeLunch, durationOfLunch, numberOfLecture } = fetchedTimeTableStructure;
 
@@ -44,8 +52,14 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleUploa
             currentTime = endTime;
 
             if (i === numberOfLeacturesBeforeLunch) {
+                setLunch(true);
                 currentTime = new Date(currentTime.getTime() + lunchDuration * 60000);
             }
+            else {
+                setLunch(false);
+            }
+
+
         }
 
         setLectureTimes(times);
@@ -84,14 +98,14 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleUploa
     const [selectedDay, setDay] = useState('');
     useEffect(() => {
         if (selectedDay != "") {
-            const e = { target: { name: "section", value: selectedDay } };
+            const e = { target: { name: "day", value: selectedDay } };
             handleChange(0, e);
         }
     }, [selectedDay]);
 
 
     return (
-        <form onSubmit={handleUpload} className='bg-slate-400 mt-4 w-full p-3 rounded-lg shadow-md'>
+        <form onSubmit={onSubmit} className='bg-slate-400 mt-4 w-full p-3 rounded-lg shadow-md'>
             {/* {uploadTimetableData.map((value, index) => ( */}
             <div className=" mb-4 rounded-lg">
                 <h1 className='text-xl'>Upload Time Table</h1>
@@ -133,7 +147,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleUploa
                             type="text"
                             name="section"
                             value={selectedSection}
-                            onChange={(e) => {setSection(e.target.value)}}
+                            onChange={(e) => { setSection(e.target.value) }}
                             required
                             className="w-full border p-2"
                         >
@@ -155,7 +169,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleUploa
                             type="text"
                             name="day"
                             value={selectedDay}
-                            onChange={(e) => {setDay(e.target.value)}}
+                            onChange={(e) => { setDay(e.target.value) }}
                             required
                             className="w-full border p-2"
                         >
@@ -172,7 +186,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleUploa
                 <TimetableHeader />
 
                 {lectureTimes.map((time, index) => (
-                    <TimetableRow  index={index} Subject={"subject"} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} Teacher={"teacher"} />
+                    <TimetableRow key={index} index={index} Subject={selectedSubjects[index]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} Teacher={"teacher"} lunch={lunch} subjects={subjects} handleSubjectChange={handleSubjectChange} />
                 ))}
 
             </div>
@@ -216,7 +230,6 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleUploa
         <option value="Accounts">Accounts</option>
     </select>
 </div> */}
-
 
 
 //select teacher
