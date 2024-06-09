@@ -1,21 +1,22 @@
 import { useState, useContext, useEffect } from "react";
 import Header from '../../Home/utils/TeachersDetails/LeftCard/Header'
 import SearchBar from "../../Students/AllStudents/utils/SearchBar";
-import StudentDetailTile from "../../Students/AllStudents/utils/StudentDetailTile";
 import axios from 'axios'
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
+import TeacherDetailTile from "./TeacherDetailTile";
 
 export default function ClassTeacher() {
     const [name, setName] = useState('');
     const [userData, setUserData] = useState([]);
+    const [filteredTeachers, setFilteredTeachers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { authState } = useContext(AuthContext);
 
-    const [rollNumber, setRollNumber] = useState('');
+    const [assignClass, setAssign] = useState('');
     const handleRollNumberChange = (event) => {
-        setRollNumber(event.target.value);
+        setAssign(event.target.value);
     };
 
     const handleNameChange = (event) => {
@@ -43,23 +44,24 @@ export default function ClassTeacher() {
             console.log(Section)
             setBothEventsCalled(false)
         }
-    }, [Class, Section, bothEventsCalled]);
+    }, [Class, Section,name, bothEventsCalled]);
 
         const fetchUserData = async () => {
             try {
-                const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchMultiple/student', {
+                const response = await axios.post('https://class-teacher.onrender.com/classTeacher/fetch/multi', {
                     accessToken: authState.accessToken
                 });
                 console.log("API response:", response.data);
 
 
-                if (response.data.Students) {
-                    const users = response.data.Students.map(user => ({
+                if (response.data.classTeachers) {
+                    const users = response.data.classTeachers.map(user => ({
                         ...user,
-                        profileLogo: user.profileLink || profilelogo,
+                        profileLogo: user.profileLink ,
 
                     }));
                     setUserData(users);
+                    setFilteredTeachers(users);
                 } else {
                     setError('Unexpected response format');
                     setTimeout(() => {
@@ -67,7 +69,6 @@ export default function ClassTeacher() {
                     }, 2000);
                 }
 
-                console.log(response.data.Students[4].name);
 
                 setLoading(false);
             } catch (err) {
@@ -92,24 +93,27 @@ export default function ClassTeacher() {
     }, [authState.accessToken]);
 
 
-    const filteredStudents = userData.filter(student => {
-        return (
-            student.name.toLowerCase().includes(name.toLowerCase()) &&
-            student.currentClass.toLowerCase().includes(Class.toLowerCase()) &&
-            student.section.toLowerCase().includes(Section.toLowerCase())
+    const filterData = () => {
+        const filtered = userData.filter((teacher) => 
+            (Class ? teacher.class === Class : true) &&
+            (Section ? teacher.section === Section : true) &&
+            (name ? teacher.name.toLowerCase().includes(name.toLowerCase()) : true)
         );
-    });
+        setFilteredTeachers(filtered);
+    };
+    
 
+    
     return (
         <div className="overflow-y-auto w-full items-start mb-2 px-2 no-scrollbar">
             <h1 className="text-2xl font-medium mb-2">All Class Teacher</h1>
             <div className="no-scrollbar w-full overflow-x-auto">
                 <SearchBar
-                    rollNumber={rollNumber}
+                    
                     name={name}
                     Class={Class}
                     Section={Section}
-                    handleRollNumberChange={handleRollNumberChange}
+                    
                     handleNameChange={handleNameChange}
                     handleClassChange={handleClassChange}
                     handleSectionChange={handleSectionChange}
@@ -117,15 +121,15 @@ export default function ClassTeacher() {
                 />
             </div>
             <div className="rounded-lg shadow-md border-2 border-black w-full overflow-x-auto no-scrollable">
-                <Header headings={['ID', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
+                <Header headings={['Class','Section','Name', 'ID','E-mail']} />
                 {loading ? (
                     <Loading/>
                 ) : error ? (
                     <div>Error: {error}</div>
-                ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
-                    <div>No students found</div>
-                ) : Array.isArray(filteredStudents) ? (
-                    <StudentDetailTile userData={filteredStudents} />
+                ) : Array.isArray(filteredTeachers) && filteredTeachers.length === 0 ? (
+                    <div>No teachers found</div>
+                ) : Array.isArray(filteredTeachers) ? (
+                    <TeacherDetailTile userData={filteredTeachers} />
                 ) : (
                     <div>Unexpected data format</div>
                 )}

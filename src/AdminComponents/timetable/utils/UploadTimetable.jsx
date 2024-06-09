@@ -11,6 +11,10 @@ export default function UploadTimetable({ fetchedTimeTableStructure, onSubmit, h
     const handleSubjectChange = (index, newSubject) => {
         handleChange(index, { target: { name: 'schedule', value: { subject: newSubject } } });
     };
+
+    const handleTeacherChange = (index, newTeacher) => {
+        handleChange(index, { target: { name: 'schedule', value: { subject: newTeacher } } });
+    };
     // useEffect(() => {
     //     console.log('UploadTimetable - fetchedTimeTableStructure:', fetchedTimeTableStructure);
     // }, []);
@@ -186,7 +190,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, onSubmit, h
                 <TimetableHeader />
 
                 {lectureTimes.map((time, index) => (
-                    <TimetableRow key={index} index={index} Subject={selectedSubjects[index]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} Teacher={"teacher"} lunch={lunch} subjects={subjects} handleSubjectChange={handleSubjectChange} />
+                    <TimetableRow key={index} index={index} Subject={selectedSubjects[index]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`}  lunch={lunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange}/>
                 ))}
 
             </div>
