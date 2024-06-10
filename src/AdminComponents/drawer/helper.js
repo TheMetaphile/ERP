@@ -102,14 +102,18 @@ const menuItems = [
   {
     image: "src/assets/class.png",
     alt: "img",
-    title: "class",
+    title: "Class",
     children: [{
       text: 'All Classes',
       route: '/Admin-Dashboard/Classes'
     },
     {
-      text: 'Class Teacher',
+      text: 'Class Teachers',
       route: '/Admin-Dashboard/Classteacher'
+    },
+    {
+      text: 'Assign Class Teacher',
+      route: '/Admin-Dashboard/Assignteacher'
     },
     ]
   },

@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import Header from '../../Home/utils/TeachersDetails/LeftCard/Header'
+import Header from './Header'
 import SearchBar from "../../Students/AllStudents/utils/SearchBar";
 import axios from 'axios'
 import AuthContext from "../../../Context/AuthContext";
@@ -14,10 +14,7 @@ export default function ClassTeacher() {
     const [error, setError] = useState(null);
     const { authState } = useContext(AuthContext);
 
-    const [assignClass, setAssign] = useState('');
-    const handleRollNumberChange = (event) => {
-        setAssign(event.target.value);
-    };
+    
 
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -121,7 +118,7 @@ export default function ClassTeacher() {
                 />
             </div>
             <div className="rounded-lg shadow-md border-2 border-black w-full overflow-x-auto no-scrollable">
-                <Header headings={['Class','Section','Name', 'ID','E-mail']} />
+                <Header headings={['E-mail', 'Class','Section','Name', 'ID',]} />
                 {loading ? (
                     <Loading/>
                 ) : error ? (

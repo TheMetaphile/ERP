@@ -1,13 +1,13 @@
 import React from 'react'
 
-function Selection() {
+function Selection({selectClass, selectedSection, onClassChange, onSectionChange, onSearch}) {
     return (
         <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0  overflow-y-auto items-start mt-2  mb-3 no-scrollbar">
             <div className="container p-3  ">
 
                 <div className="flex justify-between">
                     <div className="w-1/4">
-                        <select className="w-full px-4 py-2 border rounded-md">
+                        <select className="w-full px-4 py-2 border rounded-md" value={selectClass} onChange={(e)=>onClassChange(e.target.value)}>
                             <option value="">Select Class</option>
                             <option value="Pre-Nursery">Pre-Nursery</option>
                             <option value="Nursery">Nursery</option>
@@ -28,7 +28,7 @@ function Selection() {
                         </select>
                     </div>
                     <div className="w-1/4">
-                        <select className="w-full px-4 py-2 border rounded-md">
+                        <select className="w-full px-4 py-2 border rounded-md" value={selectedSection} onChange={(e)=>onSectionChange(e.target.value)}>
                             <option value="">Select Section</option>
                             <option value="A">A</option>
                             <option value="B">B</option>
@@ -42,7 +42,7 @@ function Selection() {
                         </select>
                     </div>
 
-                    <button className="px-4 py-2 bg-green-500 text-white rounded-md">
+                    <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={onSearch}>
                         Search
                     </button>
                 </div>

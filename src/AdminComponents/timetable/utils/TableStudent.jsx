@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Upload from './Upload';
 import { Link } from "react-router-dom";
 
-function Table({data}) {
+function TableStudent({data}) {
     const days = [
         {
             name: 'Monday', lectures: 4, timetable: [
@@ -65,7 +65,7 @@ function Table({data}) {
     const currentDay = days.find(day => day.name === selectedDay);
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 bg-red-300">
 
             <div className="flex mb-4 justify-between">
                 <div>
@@ -113,4 +113,4 @@ function Table({data}) {
     );
 }
 
-export default Table;
+export default TableStudent;
