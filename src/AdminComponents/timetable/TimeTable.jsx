@@ -1,19 +1,26 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import Selection from './utils/Selection'
 import Table from './utils/Table'
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import TableStudent from './utils/TableStudent';
 import SelectionTeacher from './utils/SelectionTeacher';
+import Loading from '../../LoadingScreen/Loading'
 function TimeTable() {
 
-    const [selectClass, setClass] = useState('')
-    const [selectedSection, setSection] = useState('');
+    const [selectClass, setClass] = useState('3rd')
+    const [selectedSection, setSection] = useState('C');
     const [data, setData] = useState(null);
     const { authState } = useContext(AuthContext);
     const [role, setRole] = useState('Teacher');
-    const [teacherEmail, setTeacherEmail] = useState('');
-    const [day, setDay] = useState('');
+    const [teacherEmail, setTeacherEmail] = useState('bhanu68tyagi@gmail.com');
+    const [dayStudent, setDayStudent]=useState('tuesday');
+    const [day, setDay] = useState('tuesday');
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        handleSearch();
+    }, [role]);
 
     const handleRoleChange = (event) => {
         setRole(event.target.value);
@@ -33,17 +40,22 @@ function TimeTable() {
     const handleDayChange = (value) => {
         setDay(value);
     };
-
+    
+    const handleStudentDayChange = (value) => {
+        setDayStudent(value);
+    };
     const handleSearch = async () => {
         if ((selectClass && selectedSection) || (teacherEmail && day)) {
             console.log(selectClass, selectedSection);
             console.log(teacherEmail, day)
+            setLoading(true);
             try {
                 const url = role === 'Teacher' ? 'https://timetableapi-1wfp.onrender.com/timetable/fetch/teacher' : 'https://timetableapi-1wfp.onrender.com/timetable/fetch/student';
                 const payload = {
                     accessToken: authState.accessToken,
                     class: selectClass,
                     section: selectedSection,
+                    day: dayStudent
                 };
                 if (role === 'Teacher') {
                     payload.email = teacherEmail;
@@ -51,11 +63,14 @@ function TimeTable() {
                 }
                 const response = await axios.post(url, payload);
                 if (response.status === 200) {
-                    console.log('response from fetch', response.data);
+                    console.log('response from fetchh', response.data);
                     setData(response.data); 
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
+            }
+            finally {
+                setLoading(false); 
             }
         }
     };
@@ -103,15 +118,21 @@ function TimeTable() {
                     <Selection
                         selectClass={selectClass}
                         selectedSection={selectedSection}
+                        dayStudent={dayStudent}
                         onClassChange={handleClass}
                         onSectionChange={handleSection}
+                        onStudentDayChange={handleStudentDayChange}
                         onSearch={handleSearch}
                     />
                 )}
             </div>
 
             <div className=' mt-4  w-full rounded-lg border shadow-md'>
-            {role === 'Teacher' ? <Table data={data} /> : <TableStudent data={data} />}
+            {loading ? (
+                    <Loading />
+                ) : (
+                    role === 'Teacher' ? <Table data={data} /> : <TableStudent data={data}  selectClass={selectClass} selectedSection={selectedSection} dayStudent={dayStudent}/>
+                )}
             </div>
 
         </div>

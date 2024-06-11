@@ -1,23 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import TimetableHeader from './timetableHeader';
 import TimetableRow from './Timetablerow';
+import axios from 'axios';
+import AuthContext from '../../../Context/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function UploadTimetable({ fetchedTimeTableStructure, onSubmit, handleChange }) {
+export default function UploadTimetable({ fetchedTimeTableStructure, handleChange }) {
     const [lectureTimes, setLectureTimes] = useState([]);
-    const [lunch, setLunch] = useState(false);
+
     const subjects = ["Select", "Hindi", "English", "Maths", "Science", " Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", " Accounts"];
-    const [selectedSubjects, setSelectedSubjects] = useState(Array(lectureTimes.length).fill(subjects[0]));
+    const [selectedSubjects, setSelectedSubjects] = useState([]);
+    const [selectedTeachers, setSelectedTeachers] = useState([]);
+    const { authState } = useContext(AuthContext);
 
     const handleSubjectChange = (index, newSubject) => {
-        handleChange(index, { target: { name: 'schedule', value: { subject: newSubject } } });
+        const updatedSubjects = [...selectedSubjects];
+        updatedSubjects[index] = newSubject;
+        setSelectedSubjects(updatedSubjects);
     };
 
     const handleTeacherChange = (index, newTeacher) => {
-        handleChange(index, { target: { name: 'schedule', value: { subject: newTeacher } } });
+        const updatedTeachers = [...selectedTeachers];
+        updatedTeachers[index] = newTeacher;
+        setSelectedTeachers(updatedTeachers);
     };
-    // useEffect(() => {
-    //     console.log('UploadTimetable - fetchedTimeTableStructure:', fetchedTimeTableStructure);
-    // }, []);
+
 
     const convertToDate = (timeString) => {
         const [time, modifier] = timeString.split(' ');
@@ -34,7 +42,6 @@ export default function UploadTimetable({ fetchedTimeTableStructure, onSubmit, h
         date.setHours(hours);
         date.setMinutes(minutes);
         date.setSeconds(0);
-        //date.setMilliseconds(0);
 
         return date;
     };
@@ -56,13 +63,10 @@ export default function UploadTimetable({ fetchedTimeTableStructure, onSubmit, h
             currentTime = endTime;
 
             if (i === numberOfLeacturesBeforeLunch) {
-                setLunch(true);
+                
                 currentTime = new Date(currentTime.getTime() + lunchDuration * 60000);
             }
-            else {
-                setLunch(false);
-            }
-
+            
 
         }
 
@@ -108,9 +112,36 @@ export default function UploadTimetable({ fetchedTimeTableStructure, onSubmit, h
     }, [selectedDay]);
 
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const schedule = selectedSubjects.map((subject, index) => ({
+            subject,
+            teacher: selectedTeachers[index],
+            lectureNo: index + 1
+        }));
+        const timetableData = {
+            accessToken: authState.accessToken,
+            class: selectedClass,
+            section: selectedSection,
+            day: selectedDay,
+            schedule
+        };
+        console.log(timetableData)
+
+        try {
+            const response = await axios.post('https://timetableapi-1wfp.onrender.com/timetable/upload', timetableData);
+            toast.success('Timetable uploaded successfully:');
+
+        } catch (error) {
+            toast.error(error);
+        }
+    };
+
     return (
-        <form onSubmit={onSubmit} className='bg-slate-400 mt-4 w-full p-3 rounded-lg shadow-md'>
+        <form onSubmit={handleSubmit} className='bg-slate-400 mt-4 w-full p-3 rounded-lg shadow-md'>
             {/* {uploadTimetableData.map((value, index) => ( */}
+            <ToastContainer />
+
             <div className=" mb-4 rounded-lg">
                 <h1 className='text-xl'>Upload Time Table</h1>
                 <div className="grid grid-cols-3 gap-4 mb-4">
@@ -190,7 +221,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, onSubmit, h
                 <TimetableHeader />
 
                 {lectureTimes.map((time, index) => (
-                    <TimetableRow key={index} index={index} Subject={selectedSubjects[index]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`}  lunch={lunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange}/>
+                    <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`}  numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange}/>
                 ))}
 
             </div>
@@ -206,45 +237,3 @@ export default function UploadTimetable({ fetchedTimeTableStructure, onSubmit, h
     )
 }
 
-//select subject
-
-{/* <div>
-    <label className='text-black font-medium'>Subject</label>
-    <select
-        type="text"
-        name="subject"
-        value={schedule.subject}
-        onChange={(e) => handleScheduleChange(index, scheduleIndex, e)}
-        required
-        className="w-full border p-2"
-    >
-        <option value="" disabled>Select Subject</option>
-        <option value="Hindi">Hindi</option>
-        <option value="English">English</option>
-        <option value="Maths">Maths</option>
-        <option value="Science">Science</option>
-        <option value="Social Science">Social Science</option>
-        <option value="Drawing">Drawing</option>
-        <option value="Computer">Computer</option>
-        <option value="Sanskrit">Sanskrit</option>
-        <option value="Physics">Physics</option>
-        <option value="Chemistry">Chemistry</option>
-        <option value="Economics">Economics</option>
-        <option value="Business">Business</option>
-        <option value="Accounts">Accounts</option>
-    </select>
-</div> */}
-
-
-//select teacher
-{/* <div>
-                                    <label className='text-black font-medium'>Teacher</label>
-                                    <input
-                                        type="text"
-                                        name="teacher"
-                                        value={schedule.teacher}
-                                        onChange={(e) => handleScheduleChange(index, scheduleIndex, e)}
-                                        required
-                                        className="w-full border p-2"
-                                    />
-                                </div> */}

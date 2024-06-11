@@ -205,12 +205,7 @@ const Upload = () => {
 
         }
     }
-    const handleUploadTimetable = async (e) => {
-        e.preventDefault();
-       
-        console.log('Upload Timetable Data:', uploadTimetableData);
-      
-    };
+
 
     return (
 
@@ -238,7 +233,7 @@ const Upload = () => {
 
                         {showTimetable
                             ?
-                            <UploadTimetable fetchedTimeTableStructure={fetchedTimeTableStructure} uploadTimetableData={uploadTimetableData} handleChange={handleTimetableChange}  onSubmit={handleUploadTimetable}/>
+                            <UploadTimetable fetchedTimeTableStructure={fetchedTimeTableStructure} uploadTimetableData={uploadTimetableData} handleChange={handleTimetableChange} />
                             :
                             <div></div>
                         }
