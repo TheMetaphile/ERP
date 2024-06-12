@@ -2,7 +2,7 @@ export default function Header(props){
     return (
         <div className="flex justify-between w-full py-2 pl-2 bg-bg_blue h-fit rounded-t-lg border-b-2 border-black ">
             {props.headings.map((heading,index) => (
-            <h1 key={index} className="bg-purple-300 w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+            <h1 key={index} className=" w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                 {heading}
             </h1>
           ))}

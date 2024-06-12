@@ -7,6 +7,8 @@ export default function TimetableRow({ index, lectureNo, Time, numberOfLeactures
     const [temp, setTemp] = useState(Teacher);
     const { authState } = useContext(AuthContext);
     const [suggestions, setSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -29,9 +31,11 @@ export default function TimetableRow({ index, lectureNo, Time, numberOfLeactures
                         end: 30
                     })
                     console.log(response.data)
-                    const teacherNames = response.data.Teachers.map(teacher => teacher.name);
+                    const teacherNames = response.data.Teachers.map(teacher => ({
+                        name: teacher.name,
+                        profileLink: teacher.profileLink
+                    }));
                     setSuggestions(teacherNames);
-                    console.log(suggestions)
 
                 }
                 catch (error) {
@@ -42,11 +46,17 @@ export default function TimetableRow({ index, lectureNo, Time, numberOfLeactures
         }
     }, [temp, authState.accessToken])
 
+    const handleSuggestionClick = (suggestion) => {
+        setTeacher(suggestion.name);
+        setShowSuggestions(false);
+    };
+
     const handleChange = (event) => {
         handleSubjectChange(index, event.target.value);
     };
 
     const handleTeacher = (event) => {
+        setShowSuggestions(true);
         setTeacher(event.target.value);
         handleTeacherChange(index, event.target.value);
     };
@@ -68,18 +78,29 @@ export default function TimetableRow({ index, lectureNo, Time, numberOfLeactures
                         </option>
                     ))}
                 </select>
-                <input
-                    type="text"
-                    className="w-36 border"
-                    list={`teacher-suggestions-${index}`}
-                    value={teacherInput}
-                    onChange={handleTeacher}
-                />
-                <datalist id={`teacher-suggestions-${index}`}>
-                    {suggestions.map((suggestion, idx) => (
-                        <option key={idx} value={suggestion} />
-                    ))}
-                </datalist>
+                <div>
+                    <input
+                        type="text"
+                        className="w-36 border"
+                        list={`teacher-suggestions`}
+                        value={teacherInput}
+                        onChange={handleTeacher}
+                    />
+                    {showSuggestions && suggestions.length > 0 && (
+                        <ul className="absolute z-10  bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                            {suggestions.map((suggestion, idx) => (
+                                <li
+                                    key={idx}
+                                    className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                    onClick={() => handleSuggestionClick(suggestion)}
+                                >
+                                    <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                    {suggestion.name}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
             </div>
         </div>
     )

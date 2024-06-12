@@ -73,7 +73,7 @@ function SelectionTeacher({ onSearch, onEmailChange, onDayChange }) {
                         <input
                             type="email"
                             className="w-full px-4 py-2 border rounded-md"
-                            placeholder="Teacher's Email"
+                            placeholder="bhanu68tyagi@gmail.com"
                             list={`teacher-suggestions`}
                             value={email}
                             onChange={handleEmailChange}
