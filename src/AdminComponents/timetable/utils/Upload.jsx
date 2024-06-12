@@ -11,15 +11,18 @@ import Loading from './../../../LoadingScreen/Loading';
 const Upload = () => {
     const { authState } = useContext(AuthContext);
 
-    useEffect(() => {
-        setLoading(true);
-        handleFetch();
-    }, []);
+    
 
     const [showTimetableStructure, setShowTimetableStructure] = useState(true);
     const [showTimetable, setShowTimetable] = useState(true);
     const [loading, setLoading] = useState(true);
     const [ClassRange, setClassRange] = useState('1st-12th');
+
+    useEffect(() => {
+        setLoading(true);
+        handleFetch();
+    }, []);
+    
     const [structureData, setStructureData] = useState(
         {
             Class: ClassRange,
