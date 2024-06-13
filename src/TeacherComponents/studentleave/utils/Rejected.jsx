@@ -1,12 +1,56 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import RejectedTile from './RejectedTile'
+import Loading from '../../../LoadingScreen/Loading'
+import axios from 'axios'
+import AuthContext from '../../../Context/AuthContext'
 export default  function Rejected() {
+
+    const { authState } = useContext(AuthContext);
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    const fetchUserData = async () => {
+        setLoading(true);
+
+        try {
+            const response = await axios.post('https://studentleaveapi.onrender.com/leave/fetch/classTeacher', {
+                accessToken: authState.accessToken,
+            });
+            console.log("API response:", response.data);
+            setData(response.data || []); 
+            
+        } catch (err) {
+            setError(err.message);
+        
+        }
+        finally{
+            setLoading(false);
+
+        }
+    };
+    useEffect(() => {
+
+        if (authState.accessToken) {
+            fetchUserData();
+        } else {
+            setError('No access token available');
+            setLoading(false);
+        }
+    }, [authState.accessToken]);
+
+    if (loading) {
+        return <Loading />;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
+   
     return (
         <div className='ml-3 mr-3'>
-            <RejectedTile name='Yash' class='9th' reason='Dear Sir/Madam, I am writing this leave application to inform you that, I Abhishek a student of 11th A need your permission for two days leave due to health emergency. I have a fever right now and will not be able to go to school for the next two days.'/>
-            <RejectedTile name='Yash' class='9th' reason='Dear Sir/Madam, I am writing this leave application to inform you that, I Abhishek a student of 11th A need your permission for two days leave due to health emergency. I have a fever right now and will not be able to go to school for the next two days.'/>
-            <RejectedTile name='Raju' class='9th' reason='Dear Sir/Madam, I am writing this leave application to inform you that, I Abhishek a student of 11th A need your permission for two days leave due to health emergency. I have a fever right now and will not be able to go to school for the next two days.'/>
-            <RejectedTile name='Yash' class='9th' reason='Dear Sir/Madam, I am writing this leave application to inform you that, I Abhishek a student of 11th A need your permission for two days leave due to health emergency. I have a fever right now and will not be able to go to school for the next two days.'/>
+            <RejectedTile data={data}/>   
         </div>
     )
 }
