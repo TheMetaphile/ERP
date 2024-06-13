@@ -132,19 +132,16 @@ export default function TimeTable() {
                     setShowTimetable(false);
                 }
             }
-
-            if (loading) {
-                setLoading(false);
-                console.log("Fetch successful")
-            }
         } catch (err) {
             console.error(err);
 
         }
+        finally {
+            setLoading(false);
+        }
     }
 
     useEffect(() => {
-        setLoading(true);
         handleFetch();
     }, [day]);
 
@@ -184,7 +181,7 @@ export default function TimeTable() {
             </div>
             <Calendar />
             <br></br>
-            <div className="flex justify-between w-full items-center">
+            <div className="flex justify-between w-full items-center p-3">
                 <h1 className="text-xl font-medium">
                     Today Lectures
                 </h1>
@@ -208,9 +205,15 @@ export default function TimeTable() {
             </div>
             <TimeTableHeader />
             <div className=' w-full '>
-                {lectureTimes.map((time, index) => (
-                    <LeactureTile key={index} index={index} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} data={data} day={day} />
-                ))}
+            {loading ? (
+                <Loading /> 
+            ) : (
+                <div className='w-full'>
+                    {lectureTimes.map((time, index) => (
+                        <LeactureTile key={index} index={index} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} data={data} day={day} />
+                    ))}
+                </div>
+            )}
             </div>
         </div>
     )

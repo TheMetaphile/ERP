@@ -1,8 +1,9 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AssignTeacherRow from './AssignTeacherRow';
 
 function AssignTeacher() {
     const { authState } = useContext(AuthContext);
@@ -14,7 +15,25 @@ function AssignTeacher() {
     const [temp, setTemp] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const inputRef = useRef(null);
 
+    const content = [
+        { class: 'Pre-Nursery' },
+        { class: 'L.K.J' },
+        { class: 'U.K.J' },
+        { class: '1st' },
+        { class: '2nd' },
+        { class: '3rd' },
+        { class: '4th' },
+        { class: '5th' },
+        { class: '6th' },
+        { class: '7th' },
+        { class: '8th' },
+        { class: '9th' },
+        { class: '10th' },
+        { class: '11th' },
+        { class: '12th' },
+    ];
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -24,8 +43,7 @@ function AssignTeacher() {
         return () => {
             clearTimeout(handler);
         }
-    }, [teacherEmail])
-
+    }, [teacherEmail]);
 
     useEffect(() => {
         if (selectClass) {
@@ -44,23 +62,19 @@ function AssignTeacher() {
                         searchString: temp,
                         start: 0,
                         end: 30
-                    })
-                    console.log(response.data)
+                    });
                     const teacherEmails = response.data.Teachers.map(teacher => ({
                         email: teacher.email,
                         profileLink: teacher.profileLink
                     }));
                     setSuggestions(teacherEmails);
-                    console.log(suggestions)
-
-                }
-                catch (error) {
+                } catch (error) {
                     console.error("Error searching for teachers:", error);
                 }
-            }
+            };
             searchTeacher();
         }
-    }, [temp, authState.accessToken])
+    }, [temp, authState.accessToken]);
 
     const handleSuggestionClick = (suggestion) => {
         setTeacherEmail(suggestion.email);
@@ -77,7 +91,6 @@ function AssignTeacher() {
         setSelectedSection('');
         setIsClassTeacherAssigned(null);
         setTeacherEmail('');
-
     };
 
     const handleSectionChange = async (event) => {
@@ -106,9 +119,7 @@ function AssignTeacher() {
     };
 
     const handleEmailChange = (event) => {
-
         setShowSuggestions(true);
-
         setTeacherEmail(event.target.value);
     };
 
@@ -133,31 +144,31 @@ function AssignTeacher() {
         }
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (inputRef.current && !inputRef.current.contains(event.target)) {
+                setShowSuggestions(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+        <div className="bg-red-300 flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
             <ToastContainer />
-            <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0 overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
+            {/* <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0 overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
                 <div className="container p-3">
                     <div className="flex justify-between">
                         <div className="w-1/4">
                             <select className="w-full px-4 py-2 border rounded-md" value={selectClass} onChange={handleClassChange}>
                                 <option value="">Select Class</option>
-                                <option value="Pre-Nursery">Pre-Nursery</option>
-                                <option value="Nursery">Nursery</option>
-                                <option value="L.K.J">L.K.J</option>
-                                <option value="U.K.J">U.K.J</option>
-                                <option value="1st">1st</option>
-                                <option value="2nd">2nd</option>
-                                <option value="3rd">3rd</option>
-                                <option value="4th">4th</option>
-                                <option value="5th">5th</option>
-                                <option value="6th">6th</option>
-                                <option value="7th">7th</option>
-                                <option value="8th">8th</option>
-                                <option value="9th">9th</option>
-                                <option value="10th">10th</option>
-                                <option value="11th">11th</option>
-                                <option value="12th">12th</option>
+                                {content.map((con, index) => (
+                                    <option key={index} value={con.class}>{con.class}</option>
+                                ))}
                             </select>
                         </div>
                         <div className="w-1/4">
@@ -168,36 +179,52 @@ function AssignTeacher() {
                                 ))}
                             </select>
                         </div>
-                        <div className="w-1/4">
+                        <div className="w-1/4" ref={inputRef}>
                             <input
                                 type="email"
                                 placeholder="Teacher's Email"
                                 className="w-full px-4 py-2 border rounded-md"
-                                list={`teacher-suggestions`}
+                                list="teacher-suggestions"
                                 value={teacherEmail}
                                 onChange={handleEmailChange}
                                 disabled={isClassTeacherAssigned === true}
                             />
                             {showSuggestions && suggestions.length > 0 && (
-                            <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
-                                {suggestions.map((suggestion, idx) => (
-                                    <li
-                                        key={idx}
-                                        className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
-                                        onClick={() => handleSuggestionClick(suggestion)}
-                                    >
-                                        <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                        {suggestion.email}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
+                                <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                    {suggestions.map((suggestion, idx) => (
+                                        <li
+                                            key={idx}
+                                            className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                            onClick={() => handleSuggestionClick(suggestion)}
+                                        >
+                                            <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                            {suggestion.email}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
                         <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={handleAssign} disabled={isClassTeacherAssigned === true}>
                             {isClassTeacherAssigned === true ? 'Assigned' : 'Assign'}
                         </button>
                     </div>
                 </div>
+            </div> */}
+
+            <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0 overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
+                {content.map((con, index) => (
+                    <AssignTeacherRow
+                        key={index}
+                        classs={con.class}
+                        teacherEmail={teacherEmail}
+                        isClassTeacherAssigned={isClassTeacherAssigned}
+                        suggestions={suggestions}
+                        showSuggestions={showSuggestions}
+                        handleEmailChange={handleEmailChange}
+                        handleAssign={handleAssign}
+                        handleSuggestionClick={handleSuggestionClick}
+                    />
+                ))}
             </div>
         </div>
     );
