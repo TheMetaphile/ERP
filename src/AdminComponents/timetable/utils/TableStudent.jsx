@@ -1,11 +1,11 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from "react-router-dom";
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
+import TimetableHeader from './timetableHeader';
 
-function TableStudent({ data, selectClass, selectedSection, dayStudent }) {
+function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOfLeacturesBeforeLunch, Time }) {
     const timetableData = data || {};
-    const days = Object.keys(timetableData);
     const [editMode, setEditMode] = useState(false);
     const [editedData, setEditedData] = useState({});
     const { authState } = useContext(AuthContext);
@@ -13,11 +13,18 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent }) {
     const handleEditClick = () => {
         setEditMode(true);
     };
+    const formatTime = (date) => {
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        const strMinutes = minutes < 10 ? '0' + minutes : minutes;
+        return `${hours}:${strMinutes} ${ampm}`;
+    };
 
+    
     const handleSaveClick = async () => {
-
-       
-
         try {
             const url = 'https://timetableapi-1wfp.onrender.com/update';
             const payload = {
@@ -30,7 +37,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent }) {
             const response = await axios.post(url, payload);
             if (response.status === 200) {
                 console.log('Update response:', response.data);
-                setEditMode(false); 
+                setEditMode(false);
             }
         } catch (error) {
             console.error('Error updating data:', error);
@@ -50,107 +57,87 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent }) {
         }));
     };
 
+    const lectures = timetableData[dayStudent] || [];
+
     return (
-        <div className="container">
-        <div className="flex p-3 mb-4 justify-between">
-            <Link
-                to="/Admin-Dashboard/timetablestructure"
-                className="px-4 py-2 rounded-md mr-2 bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white"
-            >
-                Upload
-            </Link>
-            {editMode ? (
-                <button
-                    onClick={handleSaveClick}
-                    className="px-4 py-2 rounded-md bg-green-200 text-gray-800 hover:bg-green-500 hover:text-white"
+        <div className="  w-full">
+            <div className="flex p-3 mb-4 justify-between w-full">
+                <Link
+                    to="/Admin-Dashboard/timetablestructure"
+                    className="px-4 py-2 rounded-md mr-2 bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white"
                 >
-                    Save
-                </button>
-            ) : (
-                <button
-                    onClick={handleEditClick}
-                    className="px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white"
-                >
-                    Edit
-                </button>
-            )}
-        </div>
-        <div className="">
-            {days.map((day) => (
-                <React.Fragment key={day}>
-                    <table className="w-full table-auto items-center">
-                        <thead className='bg-secondary'>
-                            <tr>
-                                <th className="px-4 py-2">Lecture No</th>
-                                <th className="px-4 py-2">Subject</th>
-                                <th className="px-4 py-2">Teacher</th>
-                                <th className="px-4 py-2">Employee_ID</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {timetableData[day].sort((a, b) => a.lectureNo - b.lectureNo).map((info) => (
-                                <tr key={info._id} className='text-center'>
-                                    <td className="px-4 py-2">
-                                        {editMode ? (
-                                            <input
-                                                type="text"
-                                                value={editedData[day]?.[info._id]?.lectureNo || info.lectureNo}
-                                                onChange={(e) => handleInputChange(day, info._id, 'lectureNo', e.target.value)}
-                                            />
-                                        ) : (
-                                            info.lectureNo
-                                        )}
-                                    </td>
-                                    <td className="px-4 py-2 bg-blue-200">
-                                        {editMode ? (
-                                            <input
-                                                type="text"
-                                                value={editedData[day]?.[info._id]?.subject || info.subject}
-                                                onChange={(e) => handleInputChange(day, info._id, 'subject', e.target.value)}
-                                            />
-                                        ) : (
-                                            info.subject
-                                        )}
-                                    </td>
-                                    <td className="px-4 py-2 flex items-center">
-                                        {editMode ? (
-                                            <>
-                                                <input
-                                                    type="text"
-                                                    value={editedData[day]?.[info._id]?.teacher?.name || info.teacher?.name || ''}
-                                                    onChange={(e) => handleInputChange(day, info._id, 'teacher', { ...info.teacher, name: e.target.value })}
-                                                />
-                                                {info.teacher?.profileLink && (
-                                                    <img src={info.teacher.profileLink} alt="Teacher" className='w-8 h-8 rounded-full ml-2' />
-                                                )}
-                                            </>
-                                        ) : (
-                                            <>
-                                                {info.teacher?.profileLink && (
-                                                    <img src={info.teacher.profileLink} alt="Teacher" className='w-8 h-8 rounded-full' />
-                                                )}
-                                                <span className="px-4 py-2">{info.teacher?.name || 'Teacher information not available'}</span>
-                                            </>
-                                        )}
-                                    </td>
-                                    <td className="px-4 py-2 bg-green-200">
-                                        {editMode ? (
-                                            <input
-                                                type="text"
-                                                value={editedData[day]?.[info._id]?.teacher?.employeeId || info.teacher?.employeeId || ''}
-                                                onChange={(e) => handleInputChange(day, info._id, 'teacher', { ...info.teacher, employeeId: e.target.value })}
-                                            />
-                                        ) : (
-                                            info.teacher?.employeeId || 'N/A'
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </React.Fragment>
-            ))}
-        </div>
+                    Upload
+                </Link>
+                {editMode ? (
+                    <button
+                        onClick={handleSaveClick}
+                        className="px-4 py-2 rounded-md bg-green-200 text-gray-800 hover:bg-green-500 hover:text-white"
+                    >
+                        Save
+                    </button>
+                ) : (
+                    <button
+                        onClick={handleEditClick}
+                        className="px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white"
+                    >
+                        Edit
+                    </button>
+                )}
+            </div>
+            <TimetableHeader />
+            <div className="">
+
+                {lectures.map((lecture, idx) => (
+                    <React.Fragment key={lecture._id}>
+                        {numberOfLeacturesBeforeLunch === idx ? (
+                            <div className="w-full h-8 bg-secondary text-xl text-center">LUNCH</div>
+                        ) : null}
+                        <div className="flex w-full justify-between px-4 py-2 mb-2 mt-2">
+                            <div className="w-full flex items-center justify-between">
+                                <h1 className="w-36">
+                                    {editMode ? (
+                                        <input
+                                            type="text"
+                                            value={editedData[dayStudent]?.[lecture._id]?.lectureNo || lecture.lectureNo}
+                                            onChange={(e) => handleInputChange(dayStudent, lecture._id, 'lectureNo', e.target.value)}
+                                        />
+                                    ) : (
+                                        lecture.lectureNo
+                                    )}
+                                </h1>
+                                <h1 className="w-36">{`${formatTime(Time[idx].start)}-${formatTime(Time[idx].end)}`}</h1>
+
+                                <h1 className="w-36">
+                                    {editMode ? (
+                                        <input
+                                            type="text"
+                                            value={editedData[dayStudent]?.[lecture._id]?.subject || lecture.subject}
+                                            onChange={(e) => handleInputChange(dayStudent, lecture._id, 'subject', e.target.value)}
+                                        />
+                                    ) : (
+                                        lecture.subject
+                                    )}
+                                </h1>
+                                <div className="w-36 flex items-center">
+                                    {lecture.teacher?.profileLink && (
+                                        <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full" />
+                                    )}
+                                    {editMode ? (
+                                        <input
+                                            type="text"
+                                            value={editedData[dayStudent]?.[lecture._id]?.teacher?.name || lecture.teacher?.name || ''}
+                                            onChange={(e) => handleInputChange(dayStudent, lecture._id, 'teacher', { ...lecture.teacher, name: e.target.value })}
+                                            className="text-sm px-2"
+                                        />
+                                    ) : (
+                                        <p className="text-sm px-2">{lecture.teacher?.name || 'Teacher information not available'}</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </React.Fragment>
+                ))}
+            </div>
         </div>
     );
 }

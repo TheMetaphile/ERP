@@ -37,9 +37,6 @@ export default function TimeTable() {
     };
 
 
-
-
-
     const calculateLectureTimes = () => {
         if (!fetchedTimeTableStructure) {
             return;
@@ -56,29 +53,22 @@ export default function TimeTable() {
             times.push({ start: new Date(currentTime), end: new Date(endTime) });
 
             currentTime = endTime;
-
             if (i === numberOfLeacturesBeforeLunch) {
-
                 currentTime = new Date(currentTime.getTime() + lunchDuration * 60000);
             }
-
-
         }
-
         setLectureTimes(times);
     };
 
     const convertToDate = (timeString) => {
         const [time, modifier] = timeString.split(' ');
         let [hours, minutes] = time.split(':');
-
         if (hours === '12') {
             hours = '0';
         }
         if (modifier === 'pm') {
             hours = parseInt(hours, 10) + 12;
         }
-
         const date = new Date();
         date.setHours(hours);
         date.setMinutes(minutes);
@@ -108,14 +98,12 @@ export default function TimeTable() {
         console.log(authState.accessToken)
         console.log('classaaa', ClassRange)
         try {
-
             const response = await axios.post('https://timetablestructureapi.onrender.com/timeTableStructure/fetch', {
                 accessToken: authState.accessToken,
                 classRange: ClassRange,
             });
 
             if (response.status === 200) {
-
                 console.log('response from fetch', response.data);
                 if (response.data) {
                     console.log("here", response.data.numberOfLecture);

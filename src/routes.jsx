@@ -99,6 +99,7 @@ import TimeTableAdmin from "./AdminComponents/timetable/TimeTable.jsx"
 import Upload from "./AdminComponents/timetable/utils/Upload.jsx";
 import ClassTeacher from "./AdminComponents/Classes/utils/ClassTeacher.jsx";
 import AssignTeacher from "./AdminComponents/Classes/utils/AssignTeacher.jsx";
+import AssignSubject from "./AdminComponents/Subjects/utils/AssignSubject.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -443,6 +444,11 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/Subjects",
         element: <Subject/>,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Assignsubject",
+        element: <AssignSubject/>,
         children:[]
       },
       {

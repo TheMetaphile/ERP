@@ -19,6 +19,7 @@ function SelectionTeacher({ onSearch, onEmailChange, onDayChange }) {
 
     const handleSuggestionClick = (suggestion) => {
         setEmail(suggestion.email);
+        onEmailChange(suggestion.email);
         setShowSuggestions(false);
     };
 

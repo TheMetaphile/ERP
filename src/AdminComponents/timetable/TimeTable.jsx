@@ -17,6 +17,111 @@ function TimeTable() {
     const [dayStudent, setDayStudent]=useState('tuesday');
     const [day, setDay] = useState('tuesday');
     const [loading, setLoading] = useState(false);
+    const [fetchedTimeTableStructure, setTimetableStructure] = useState(null);
+
+    const [lectureTimes, setLectureTimes] = useState([]);
+
+    var ClassRange = null;
+    const Class = selectClass;
+    useEffect(() => {
+        if (Class === 'Pre-Nursery' || Class === 'L.K.G' || Class === 'U.K.G' || Class === 'U.K.J') {
+            ClassRange = 'Pre-Nursery - U.K.J'
+        } else {
+            ClassRange = '1st-12th'
+        }
+    }, [Class]);
+
+    useEffect(() => {
+        if(!loading){
+            setLoading(true);
+            handleTimeFetch();
+        }
+        
+    }, []);
+
+    const calculateLectureTimes = () => {
+        if (!fetchedTimeTableStructure) {
+            return;
+        }
+        const { firstLectureTiming, durationOfEachLeacture, numberOfLeacturesBeforeLunch, durationOfLunch, numberOfLecture } = fetchedTimeTableStructure;
+
+        const times = [];
+        let currentTime = convertToDate(firstLectureTiming);
+        const lectureDuration = parseInt(durationOfEachLeacture.split(' ')[0], 10);
+        const lunchDuration = parseInt(durationOfLunch.split(' ')[0], 10);
+
+        for (let i = 1; i <= numberOfLecture; i++) {
+            const endTime = new Date(currentTime.getTime() + lectureDuration * 60000);
+            times.push({ start: new Date(currentTime), end: new Date(endTime) });
+
+            currentTime = endTime;
+            if (i === numberOfLeacturesBeforeLunch) {
+                currentTime = new Date(currentTime.getTime() + lunchDuration * 60000);
+            }
+        }
+        setLectureTimes(times);
+    };
+
+    const convertToDate = (timeString) => {
+        const [time, modifier] = timeString.split(' ');
+        let [hours, minutes] = time.split(':');
+        if (hours === '12') {
+            hours = '0';
+        }
+        if (modifier === 'pm') {
+            hours = parseInt(hours, 10) + 12;
+        }
+        const date = new Date();
+        date.setHours(hours);
+        date.setMinutes(minutes);
+        date.setSeconds(0);
+
+        return date;
+    };
+
+
+    useEffect(() => {
+        calculateLectureTimes();
+    }, [fetchedTimeTableStructure]);
+
+  
+
+
+    const handleTimeFetch = async () => {
+        console.log(authState.accessToken)
+        console.log('classaaa', ClassRange)
+        try {
+            const response = await axios.post('https://timetablestructureapi.onrender.com/timeTableStructure/fetch', {
+                accessToken: authState.accessToken,
+                classRange: ClassRange,
+            });
+
+            if (response.status === 200) {
+                console.log('response from fetch', response.data);
+                if (response.data) {
+                    console.log("here", response.data.numberOfLecture);
+                    const scheduleArray = [];
+                    for (let i = 0; i < response.data.numberOfLecture; i++) {
+                        scheduleArray.push({
+                            subject: '',
+                            teacher: ''
+                        });
+                    }
+                    setTimetableStructure(response.data);
+                    console.log('ressssss', response.data)
+                } else {
+                    setShowTimetable(false);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
 
     useEffect(() => {
         handleSearch();
@@ -74,6 +179,7 @@ function TimeTable() {
             }
         }
     };
+
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
             <div className='flex justify-between items-center w-full'>
@@ -127,11 +233,15 @@ function TimeTable() {
                 )}
             </div>
 
-            <div className=' mt-4  w-full rounded-lg border shadow-md'>
-            {loading ? (
-                    <Loading />
+            <div className=' mt-4  w-full rounded-lg border shadow-md '>
+            {!loading && fetchedTimeTableStructure ?  (
+                 role === 'Teacher' ? 
+                 <Table data={data}   Time={lectureTimes}  numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} />
+               :   
+                 <TableStudent data={data}  selectClass={selectClass} selectedSection={selectedSection} dayStudent={dayStudent}  Time={lectureTimes} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}  />            
+                   
                 ) : (
-                    role === 'Teacher' ? <Table data={data} /> : <TableStudent data={data}  selectClass={selectClass} selectedSection={selectedSection} dayStudent={dayStudent}/>
+                    <Loading />
                 )}
             </div>
 

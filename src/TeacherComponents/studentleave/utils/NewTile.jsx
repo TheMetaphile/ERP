@@ -14,40 +14,43 @@ export default function NewTile({ data }) {
         setExpanded(expanded === index ? null : index);
     }
     const handleStatusUpdate = async (leaveId, status, email) => {
-        setLoading(true);
-        try {
-            const response = await axios.post('https://studentleaveapi.onrender.com/leave/update', {
-                accessToken: authState.accessToken,
-                status: status,
-                email: email,
-                leaveId: leaveId
-            });
-            console.log(`Leave ${leaveId} status updated to ${status}:`, response.data);
-        } catch (err) {
-            console.error(`Error updating status for leave ${leaveId}:`, err);
-            setError(`Error updating status: ${err.message}`);
-        } finally {
-            setLoading(false);
-        }
+        console.log('id',leaveId, 'status', status, 'email', email)
+        // setLoading(true);
+        // try {
+        //     const response = await axios.post('https://studentleaveapi.onrender.com/leave/update', {
+        //         accessToken: authState.accessToken,
+        //         status: status,
+        //         email: email,
+        //         leaveId: leaveId
+        //     });
+        //     console.log(`Leave ${leaveId} status updated to ${status}:`, response.data);
+        // } catch (err) {
+        //     console.error(`Error updating status for leave ${leaveId}:`, err);
+        //     setError(`Error updating status: ${err.message}`);
+        // } finally {
+        //     setLoading(false);
+        // }
     };
 
     return (
         <div className="w-full">
-            {data.map((student, studentIndex) => (
-                student.leaves.filter(leave => !leave.status).map((leave, leaveIndex) => (
-                    <div key={leave._id} className="border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
-                        <div className='flex'>
-                            <img src={Logo} alt="" className='h-12' />
+            {data.StudentsLeaves.map((student, studentIndex) => (
+                student.status === "Pending" && (
+                    <div key={studentIndex} className="border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
+                        <div className='flex items-center'>
+                            <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full' />
                             <div>
                                 <div className='flex gap-2 font-medium text-base ml-2'>
                                     <span className='text-red-500'>{student.name}</span> from class
-                                    <span className='text-red-500'>{student.class || 'N/A'}</span> wants a Leave Request to you
+                                    <span className='text-red-500'>{data.class } {data.section}</span> wants a Leave Request to you from 
+                                    <span className='text-red-500'>{student.startDate}</span> to 
+                                    <span className='text-red-500'>{student.endDate}</span>  
                                 </div>
-                                {expanded === `${studentIndex}-${leaveIndex}` && (
+                                {expanded === `${studentIndex}` && (
                                     <div className='font-medium text-base ml-2 mt-2'>
                                         <span className='text-gray-400 text-xl'>Reason</span>
-                                        <div className='border rounded-lg shadow-md p-3'>
-                                            <span className='text-gray-700'>{leave.reason}</span>
+                                        <div className='mt-2'>
+                                            <span className='text-gray-700'>{student.reason}</span>
                                         </div>
                                     </div>
                                 )}
@@ -55,14 +58,14 @@ export default function NewTile({ data }) {
                                     <>
                                         <button
                                             className='p-1 rounded-lg text-green-500 bg-green-300'
-                                            onClick={() => handleStatusUpdate(leave._id, 'Approved', student.email)}
+                                            onClick={() => handleStatusUpdate(student._id, 'Approved', student.email)}
                                             disabled={loading}
                                         >
                                             Approve
                                         </button>
                                         <button
                                             className='p-1 rounded-lg text-red-500 bg-red-300'
-                                            onClick={() => handleStatusUpdate(leave._id, 'Rejected', student.email)}
+                                            onClick={() => handleStatusUpdate(student._id, 'Rejected', student.email)}
                                             disabled={loading}
                                         >
                                             Reject
@@ -71,12 +74,12 @@ export default function NewTile({ data }) {
                                 </div>
                             </div>
                         </div>
-                        <div className='items-center px-3 cursor-pointer' onClick={() => handleClick(`${studentIndex}-${leaveIndex}`)}>
-                            {expanded === `${studentIndex}-${leaveIndex}` ? <FaChevronUp /> : <FaChevronDown />}
+                        <div className='items-center px-3 cursor-pointer' onClick={() => handleClick(`${studentIndex}`)}>
+                            {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}
                         </div>
                     </div>
                 ))
-            ))}
+            )}
             {error && <div className="text-red-500 mt-3">{error}</div>}
         </div>
     )

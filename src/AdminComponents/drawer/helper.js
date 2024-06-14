@@ -126,6 +126,10 @@ const menuItems = [
       text: 'All Subjects',
       route: '/Admin-Dashboard/Subjects'
     },
+    {
+      text: 'Assign Subject Teacher',
+      route: '/Admin-Dashboard/Assignsubject'
+    },
     
     ]
   },
