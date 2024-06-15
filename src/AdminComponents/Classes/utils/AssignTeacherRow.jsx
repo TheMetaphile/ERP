@@ -12,24 +12,14 @@ export default function AssignTeacherRow({ Class }) {
     const [sectionsDetails, setSections] = useState([]);
     const [newSection, setNewSection] = useState('');
     const [email, setEmail] = useState('');
-    const [suggestions, setSuggestions] = useState([]);
     const [temp, setTemp] = useState();
+    const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [loading, setLoading] = useState(false);
     const { authState } = useContext(AuthContext);
 
     const handleClick = () => {
         setExpanded(!expanded);
-    };
-    
-    const handleEmailChange = (event) => {
-        const value = event.target.value;
-        setEmail(value);
-        setShowSuggestions(true);
-    };
-    const handleSuggestionClick = (suggestion) => {
-        setEmail(suggestion.email);
-        setShowSuggestions(false);
     };
 
     useEffect(() => {
@@ -39,41 +29,54 @@ export default function AssignTeacherRow({ Class }) {
         }
     }, [expanded]);
 
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setTemp(email);
-        }, 1000);
+    const handleEmailChange = (e) => {
+        const email = e.target.value;
+        setEmail(email);
+        setTemp(email);
+    }
 
-        return () => {
-            clearTimeout(handler);
-        }
-    }, [email])
+    const handleSuggestionClick = (suggestion) => {
+        setEmail(suggestion.email);
+        setShowSuggestions(false);
+    }
 
     useEffect(() => {
         if (temp) {
-            const searchTeacher = async () => {
-                try {
-                    const response = await axios.post('https://loginapi-y0aa.onrender.com/search/teacher', {
-                        accessToken: authState.accessToken,
-                        searchString: temp,
-                        start: 0,
-                        end: 30
-                    })
-                    console.log(response.data)
-                    const teacherEmails = response.data.Teachers.map(teacher => ({
-                        email: teacher.email,
-                        profileLink: teacher.profileLink || ''
-                    }));
-                    setSuggestions(teacherEmails);
-                    console.log(teacherEmails, 'j')
+            const handler = setTimeout(() => {
+                setShowSuggestions(true);
+                const searchTeacher = async () => {
+                    try {
+                        const response = await axios.post('https://loginapi-y0aa.onrender.com/search/teacher', {
+                            accessToken: authState.accessToken,
+                            searchString: temp,
+                            start: 0,
+                            end: 30
+                        })
+                        console.log(response.data)
+                        const teacherEmails = response.data.Teachers.map(teacher => ({
+                            email: teacher.email,
+                            profileLink: teacher.profileLink
+                        }));
+                        setSuggestions(teacherEmails);
+
+                    }
+                    catch (error) {
+                        console.error("Error searching for teachers:", error);
+                    }
                 }
-                catch (error) {
-                    console.error("Error searching for teachers:", error);
-                }
+                searchTeacher();
+            }, 1000);
+
+            return () => {
+                clearTimeout(handler);
             }
-            searchTeacher();
+        } else {
+            setShowSuggestions(false);
         }
     }, [temp, authState.accessToken])
+
+
+
 
     const fetchSections = async () => {
         try {
@@ -105,6 +108,7 @@ export default function AssignTeacherRow({ Class }) {
             });
             if (response.status === 200) {
                 toast.success('Teacher Assigned successfully');
+                fetchSections();
             }
 
         } catch (error) {
@@ -166,30 +170,30 @@ export default function AssignTeacherRow({ Class }) {
                             value={newSection}
                             onChange={(e) => setNewSection(e.target.value)}
                         />
+                        <div className='relative '>
+                            <input
+                                type="text"
+                                className="w-56  border px-3 py-2 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-md"
+                                placeholder="bhanu68tyagi@gmail.com"
+                                value={email}
+                                onChange={handleEmailChange}
+                            />
+                            {showSuggestions && suggestions.length > 0 && (
+                                <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                    {suggestions.map((suggest, idx) => (
+                                        <li
+                                            key={idx}
+                                            className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                            onClick={() => handleSuggestionClick(suggest)}
+                                        >
+                                            <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                            {suggest.email}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
 
-                        <input
-                            type="email"
-                            className="w-56  border px-1 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-md"
-                            placeholder="bhanu68tyagi@gmail.com"
-                            list={`teacher-suggestions`}
-                            value={email}
-                            onChange={handleEmailChange}
-                        />
-                        {showSuggestions && suggestions.length > 0 && (
-                            <ul className="absolute z-10 w-40 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
-                                {suggestions.map((suggestion, idx) => (
-                                    <li
-                                        key={idx}
-                                        className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
-                                        onClick={() => handleSuggestionClick(suggestion)}
-                                    >
-                                        <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                        {suggestion.email}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-
+                        </div>
                         <button
                             className=" bg-green-200 text-gray-800 hover:bg-green-500 hover:text-white rounded-md w-40 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm px-3 py-2"
                             onClick={handleAddSection}

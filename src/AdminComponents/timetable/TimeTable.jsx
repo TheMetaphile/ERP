@@ -23,6 +23,7 @@ function TimeTable() {
 
     var ClassRange = null;
     const Class = selectClass;
+    
     useEffect(() => {
         if (Class === 'Pre-Nursery' || Class === 'L.K.G' || Class === 'U.K.G' || Class === 'U.K.J') {
             ClassRange = 'Pre-Nursery - U.K.J'

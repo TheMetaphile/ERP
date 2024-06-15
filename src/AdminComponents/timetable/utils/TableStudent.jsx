@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import TimetableHeader from './timetableHeader';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOfLeacturesBeforeLunch, Time }) {
     const timetableData = data || {};
@@ -13,6 +15,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
     const handleEditClick = () => {
         setEditMode(true);
     };
+
     const formatTime = (date) => {
         let hours = date.getHours();
         const minutes = date.getMinutes();
@@ -23,29 +26,33 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
         return `${hours}:${strMinutes} ${ampm}`;
     };
 
-    
     const handleSaveClick = async () => {
         try {
-            const url = 'https://timetableapi-1wfp.onrender.com/update';
+            const url = 'https://timetableapi-1wfp.onrender.com/timetable/update';
+            const updatedPeriodId = Object.keys(editedData[dayStudent])[0];
             const payload = {
                 accessToken: authState.accessToken,
                 class: selectClass,
                 section: selectedSection,
                 day: dayStudent,
-                update: editedData
+                update: editedData[dayStudent][updatedPeriodId],
+                periodId: updatedPeriodId
             };
+            console.log(payload)
             const response = await axios.post(url, payload);
             if (response.status === 200) {
+                toast.success('Updated Successfully')
                 console.log('Update response:', response.data);
                 setEditMode(false);
             }
         } catch (error) {
+            toast.error(error)
             console.error('Error updating data:', error);
         }
     };
 
     const handleInputChange = (day, periodId, field, value) => {
-        setEditedData((prevData) => ({
+        setEditedData(prevData => ({
             ...prevData,
             [day]: {
                 ...prevData[day],
@@ -60,7 +67,8 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
     const lectures = timetableData[dayStudent] || [];
 
     return (
-        <div className="  w-full">
+        <div className="w-full">
+            <ToastContainer />
             <div className="flex p-3 mb-4 justify-between w-full">
                 <Link
                     to="/Admin-Dashboard/timetablestructure"
@@ -85,8 +93,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                 )}
             </div>
             <TimetableHeader />
-            <div className="">
-
+            <div>
                 {lectures.map((lecture, idx) => (
                     <React.Fragment key={lecture._id}>
                         {numberOfLeacturesBeforeLunch === idx ? (
@@ -94,7 +101,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                         ) : null}
                         <div className="flex w-full justify-between px-4 py-2 mb-2 mt-2">
                             <div className="w-full flex items-center justify-between">
-                                <h1 className="w-36">
+                                <h1 className="w-1/4 ">
                                     {editMode ? (
                                         <input
                                             type="text"
@@ -105,9 +112,9 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                         lecture.lectureNo
                                     )}
                                 </h1>
-                                <h1 className="w-36">{`${formatTime(Time[idx].start)}-${formatTime(Time[idx].end)}`}</h1>
+                                <h1 className="w-1/4">{`${formatTime(Time[idx].start)}-${formatTime(Time[idx].end)}`}</h1>
 
-                                <h1 className="w-36">
+                                <h1 className="w-1/4 ">
                                     {editMode ? (
                                         <input
                                             type="text"
@@ -118,15 +125,15 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                         lecture.subject
                                     )}
                                 </h1>
-                                <div className="w-36 flex items-center">
+                                <div className="w-1/4 flex items-center whitespace-nowrap">
                                     {lecture.teacher?.profileLink && (
                                         <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full" />
                                     )}
                                     {editMode ? (
                                         <input
                                             type="text"
-                                            value={editedData[dayStudent]?.[lecture._id]?.teacher?.name || lecture.teacher?.name || ''}
-                                            onChange={(e) => handleInputChange(dayStudent, lecture._id, 'teacher', { ...lecture.teacher, name: e.target.value })}
+                                            value={editedData[dayStudent]?.[lecture._id]?.teacher || lecture.teacher?.name || ''}
+                                            onChange={(e) => handleInputChange(dayStudent, lecture._id, 'teacher', e.target.value )}
                                             className="text-sm px-2"
                                         />
                                     ) : (

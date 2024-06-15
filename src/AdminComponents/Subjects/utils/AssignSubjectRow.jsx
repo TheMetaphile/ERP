@@ -117,8 +117,8 @@ export default function AssignSubjectRow({ Class }) {
         </div>
 
         {expanded && (
-            <div className='items-center'>
-                <div className="flex justify-between py-2 pl-2  h-fit rounded-t-lg ">
+            <div className='  px-5'>
+                <div className="flex justify-between py-2 pl-2  h-fit rounded-t-lg border bg-secondary">
                     <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                         Section
                     </h1>
