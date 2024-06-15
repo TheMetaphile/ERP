@@ -115,7 +115,7 @@ function SubjectDetails({ Class, section }) {
     }, [temp, authState.accessToken])
 
     return (
-        <div className='px-5 mt-2 mb-2'>
+        <div className='px-5 mt-2 mb-2 py-2'>
             <ToastContainer />
             <div className="flex justify-between py-2 pl-2  h-fit rounded-t-lg border bg-blue-200">
                 <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">

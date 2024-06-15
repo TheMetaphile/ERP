@@ -17,6 +17,7 @@ export default function AssignTeacherRow({ Class }) {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [loading, setLoading] = useState(false);
     const { authState } = useContext(AuthContext);
+    const [showNewRow, setShowNewRow] = useState(false);
 
     const handleClick = () => {
         setExpanded(!expanded);
@@ -109,6 +110,9 @@ export default function AssignTeacherRow({ Class }) {
             if (response.status === 200) {
                 toast.success('Teacher Assigned successfully');
                 fetchSections();
+                setNewSection('');
+                setEmail('');
+                setShowNewRow(false);
             }
 
         } catch (error) {
@@ -163,43 +167,47 @@ export default function AssignTeacherRow({ Class }) {
                     )}
 
                     <div className="flex justify-between w-full px-3 py-1  h-fit ">
-                        <input
-                            type="text"
-                            className=" border rounded-md w-40 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm"
-                            placeholder="Enter new section"
-                            value={newSection}
-                            onChange={(e) => setNewSection(e.target.value)}
-                        />
-                        <div className='relative '>
-                            <input
-                                type="text"
-                                className="w-56  border px-3 py-2 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-md"
-                                placeholder="bhanu68tyagi@gmail.com"
-                                value={email}
-                                onChange={handleEmailChange}
-                            />
-                            {showSuggestions && suggestions.length > 0 && (
-                                <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
-                                    {suggestions.map((suggest, idx) => (
-                                        <li
-                                            key={idx}
-                                            className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
-                                            onClick={() => handleSuggestionClick(suggest)}
-                                        >
-                                            <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                            {suggest.email}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-
-                        </div>
-                        <button
-                            className=" bg-green-200 text-gray-800 hover:bg-green-500 hover:text-white rounded-md w-40 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm px-3 py-2"
-                            onClick={handleAddSection}
-                        >
-                            Assign
-                        </button>
+                        {showNewRow ? (
+                            <>
+                                <input
+                                    type="text"
+                                    className="border rounded-md w-40 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm"
+                                    placeholder="Enter new section"
+                                    value={newSection}
+                                    onChange={(e) => setNewSection(e.target.value)}
+                                />
+                                <div className='relative'>
+                                    <input
+                                        type="text"
+                                        className="w-56 border px-3 py-2 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-md"
+                                        placeholder="bhanu68tyagi@gmail.com"
+                                        value={email}
+                                        onChange={handleEmailChange}
+                                    />
+                                    {showSuggestions && suggestions.length > 0 && (
+                                        <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                            {suggestions.map((suggest, idx) => (
+                                                <li
+                                                    key={idx}
+                                                    className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                                    onClick={() => handleSuggestionClick(suggest)}
+                                                >
+                                                    <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                                    {suggest.email}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                                <button className='mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg' onClick={handleAddSection}>
+                                    Save
+                                </button>
+                            </>
+                        ) : (
+                            <button className='mt-2 px-4 py-2 bg-green-500 text-white rounded-lg' onClick={() => setShowNewRow(true)}>
+                                Add Row
+                            </button>
+                        )}
                     </div>
                 </div>
             )}

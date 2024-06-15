@@ -138,13 +138,13 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
     };
 
     return (
-        <form onSubmit={handleSubmit} className='bg-slate-400 mt-4 w-full p-3 rounded-lg shadow-md'>
+        <form onSubmit={handleSubmit} className=' mt-4 w-full p-3 rounded-lg shadow-md'>
             {/* {uploadTimetableData.map((value, index) => ( */}
             <ToastContainer />
 
             <div className=" mb-4 rounded-lg">
                 <h1 className='text-xl'>Upload Time Table</h1>
-                <div className="grid grid-cols-3 gap-4 mb-4">
+                <div className="grid grid-cols-3 gap-4 mb-4 mt-4">
                     <div>
                         <label className='text-black font-medium'>Class</label>
                         <select

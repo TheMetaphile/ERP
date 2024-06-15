@@ -20,9 +20,9 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
                     <thead className="bg-secondary">
                         <tr>
                             <th className="px-4 py-2">Lecture</th>
+                            <th className="px-4 py-2">Timing</th>
                             <th className="px-4 py-2">Class</th>
                             <th className="px-4 py-2">Section</th>
-                            <th className="px-4 py-2">Timing</th>
                             <th className="px-4 py-2">Subject</th>
                         </tr>
                     </thead>
@@ -37,9 +37,9 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
                                     )}
                                     <tr className='text-center'>
                                         <td className="px-4 py-2">{item.lectureNo}</td>
+                                        <td className="px-4 py-2 bg-green-200">{`${formatTime(Time[idx].start)}-${formatTime(Time[idx].end)}`}</td>
                                         <td className="px-4 py-2 bg-green-200">{item.class}</td>
                                         <td className="px-4 py-2 bg-blue-200">{item.section}</td>
-                                        <td className="px-4 py-2 bg-green-200">{`${formatTime(Time[idx].start)}-${formatTime(Time[idx].end)}`}</td>
                                         <td className="px-4 py-2 bg-blue-200">{item.subject}</td>
                                     </tr>
                                 </React.Fragment>

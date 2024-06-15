@@ -118,7 +118,7 @@ export default function AssignSubjectRow({ Class }) {
 
         {expanded && (
             <div className='  px-5'>
-                <div className="flex justify-between py-2 pl-2  h-fit rounded-t-lg border bg-secondary">
+                {/* <div className="flex justify-between py-2 pl-2  h-fit rounded-t-lg border bg-secondary">
                     <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                         Section
                     </h1>
@@ -126,11 +126,11 @@ export default function AssignSubjectRow({ Class }) {
                         Class Teacher
                     </h1>
                     <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm"></h1>
-                </div>
+                </div> */}
 
                 {!loading ? (
                     sectionsDetails.map((details, index) => (
-                        <div key={index}>
+                        <div key={index} className='mb-3 rounded-lg shadow-md'>
                             <div className="px-2 flex justify-between  py-2 pl-2 h-fit border">
                                 <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                                     {details.section}
