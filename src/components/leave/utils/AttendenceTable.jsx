@@ -2,11 +2,17 @@ import React, { useContext, useState, useEffect } from 'react'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
 import Loading from '../../../LoadingScreen/Loading';
+import { CiEdit } from "react-icons/ci";
+import { MdDeleteForever, MdSave } from "react-icons/md";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function AttendenceTable() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState('');
   const [error, setError] = useState('');
+  const [editRowIndex, setEditRowIndex] = useState(null);
+  const [editData, setEditData] = useState({});
   const { authState } = useContext(AuthContext);
 
 
@@ -34,10 +40,48 @@ export default function AttendenceTable() {
     }
   }, [authState.accessToken]);
 
+  const handleEditClick = (index) => {
+    setEditRowIndex(index);
+    setEditData(data[index]);
+  };
+
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditData({
+      ...editData,
+      [name]: value,
+    });
+  };
+
+  const handleUpdate = async (index) => {
+    const updatedLeave = {
+      accessToken: authState.accessToken,
+      email: authState.userDetails.email,
+      ...editData,
+      leaveId: data[index]._id
+    };
+    console.log(updatedLeave)
+    try {
+      
+      const response = await axios.post('https://studentleaveapi.onrender.com/leave/update', updatedLeave);
+      const updatedData = [...data];
+      updatedData[index] = editData;
+      setData(updatedData);
+      setEditRowIndex(null);
+      if (response.status === 200) {
+       toast.success('Leave Updated');
+    }
+    } catch (err) {
+      setError(err.message);
+      toast.error(err)
+    }
+  };
 
 
   return (
     <div className='rounded-lg shadow-lg   w-full'>
+      <ToastContainer />
       {loading ? (
         <Loading />
       ) : error ? (
@@ -50,18 +94,50 @@ export default function AttendenceTable() {
               <th className='bg-blue-200'>Start Date</th>
               <th className='bg-green-200'>End Date</th>
               <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {data.map((leave, index) => (
               <tr key={index}>
-                <td className="font-normal">{leave.reason}</td>
-                <td className="font-normal bg-blue-200">{leave.startDate}</td>
-                <td className="font-normal bg-green-200">{leave.endDate}</td>
+                <td className="font-normal">
+                  {editRowIndex === index ? (
+                    <input type="text" name="reason" value={editData.reason} onChange={handleInputChange} />
+                  ) : (leave.reason)
+                  }
+                </td>
+
+                <td className="font-normal bg-blue-200">
+                  {editRowIndex === index ? (
+                    <input
+                      type="text" name='startDate' value={editData.startDate} onChange={handleInputChange} />
+                  ) :
+                    (leave.startDate)
+                  }
+                </td>
+
+                <td className="font-normal bg-green-200">
+                  {editRowIndex === index ?
+                    (
+                      <input type="text" name='endDate' value={editData.endDate} onChange={handleInputChange} />
+                    ) :
+                    (leave.endDate)
+                  }
+                </td>
+
                 <td className={`${leave.status === "Pending" ? "text-orange-300" :
-                    leave.status === "Rejected" ? "text-red-400" :
-                      "text-green-400"
+                  leave.status === "Rejected" ? "text-red-400" :
+                    "text-green-400"
                   } font-medium`}>{leave.status}</td>
+                <td className='flex justify-center items-center'>
+                  {editRowIndex === index ? (
+                    <MdSave className='text-green-500 cursor-pointer' onClick={() => handleUpdate(index)} />
+                  ) : (
+                    <CiEdit className='text-green-500 cursor-pointer' onClick={() => handleEditClick(index)} />
+                  )}
+                  &nbsp; / &nbsp;
+                  <MdDeleteForever className='text-red-500 cursor-pointer' />
+                </td>
               </tr>
             ))}
           </tbody>

@@ -13,7 +13,7 @@ export default function TimetableRow({ index, lectureNo, Time, numberOfLeactures
     useEffect(() => {
         const handler = setTimeout(() => {
             setTemp(teacherInput);
-        }, 1000);
+        }, 500);
 
         return () => {
             clearTimeout(handler);
@@ -71,7 +71,7 @@ export default function TimetableRow({ index, lectureNo, Time, numberOfLeactures
             <div className="flex w-full justify-between px-4 py-2">
                 <h1 className="w-36">{lectureNo}</h1>
                 <h1 className="w-36">{Time}</h1>
-                <select className="w-36" value={Subject} onChange={handleChange}>
+                <select className="w-36" value={Subject} onChange={handleChange} required>
                     {subjects.map((subject, idx) => (
                         <option key={idx} value={subject}>
                             {subject}
@@ -85,6 +85,7 @@ export default function TimetableRow({ index, lectureNo, Time, numberOfLeactures
                         list={`teacher-suggestions`}
                         value={teacherInput}
                         onChange={handleTeacher}
+                        required
                     />
                     {showSuggestions && suggestions.length > 0 && (
                         <ul className="absolute z-10  bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">

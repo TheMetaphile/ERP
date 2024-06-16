@@ -49,7 +49,7 @@ export default function CreateTimetableStrucutre({ handleSubmit, handleChange })
         }
     }, [selectbreak]);
     return (
-        <form onSubmit={handleSubmit} className='bg-slate-400 mt-4 w-full p-3 rounded-lg shadow-md'>
+        <form onSubmit={handleSubmit} className=' mt-4 w-full p-3 rounded-lg shadow-md'>
 
             <div className="grid grid-cols-1 gap-4 mb-4 rounded-lg ">
                 <h1 className='text-xl'>Create Structure</h1>

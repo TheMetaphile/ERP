@@ -6,7 +6,7 @@ function SelectionTeacher({ onSearch, onEmailChange, onDayChange }) {
     const { authState } = useContext(AuthContext);
     const [temp, setTemp] = useState();
     const [email, setEmail] = useState('');
-    const [day, setDay] = useState('');
+    const [day, setDay] = useState('tuesday');
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -32,7 +32,7 @@ function SelectionTeacher({ onSearch, onEmailChange, onDayChange }) {
     useEffect(() => {
         const handler = setTimeout(() => {
             setTemp(email);
-        }, 1000);
+        }, 500);
 
         return () => {
             clearTimeout(handler);

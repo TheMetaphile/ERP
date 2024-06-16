@@ -14,7 +14,7 @@ export default function NewTile({ data }) {
         setExpanded(expanded === index ? null : index);
     }
     const handleStatusUpdate = async (leaveId, status, email) => {
-        console.log('id',leaveId, 'status', status, 'email', email)
+        console.log('id', leaveId, 'status', status, 'email', email)
         // setLoading(true);
         // try {
         //     const response = await axios.post('https://studentleaveapi.onrender.com/leave/update', {
@@ -34,19 +34,17 @@ export default function NewTile({ data }) {
 
     return (
         <div className="w-full">
-            {
-                data.length>0 ?
-            data.StudentsLeaves.map((student, studentIndex) => (
-                student.status === "Pending" && (
+            {data && data.StudentsLeaves.length > 0 ? (
+                data.StudentsLeaves.filter(student => student.status === "Pending").map((student, studentIndex) => (
                     <div key={studentIndex} className="border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
                         <div className='flex items-center'>
                             <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full' />
                             <div>
-                                <div className='flex gap-2 font-medium text-base ml-2'>
-                                    <span className='text-red-500'>{student.name}</span> from class
-                                    <span className='text-red-500'>{data.class } {data.section}</span> wants a Leave Request to you from 
-                                    <span className='text-red-500'>{student.startDate}</span> to 
-                                    <span className='text-red-500'>{student.endDate}</span>  
+                                <div className='font-medium text-base ml-2'>
+                                    <span className='text-red-500 whitespace-nowrap'>{student.name}</span> from class &nbsp;
+                                    <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span> wants a Leave Request from &nbsp;
+                                    <span className='text-red-500 whitespace-nowrap'>{student.startDate}</span> to &nbsp;
+                                    <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
                                 </div>
                                 {expanded === `${studentIndex}` && (
                                     <div className='font-medium text-base ml-2 mt-2'>
@@ -81,9 +79,9 @@ export default function NewTile({ data }) {
                         </div>
                     </div>
                 ))
-            ):
-            <div>No new leave</div>
-        }
+            ) : (
+                <div>No new leave</div>
+            )}
             {error && <div className="text-red-500 mt-3">{error}</div>}
         </div>
     )

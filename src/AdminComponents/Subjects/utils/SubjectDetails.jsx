@@ -44,23 +44,30 @@ function SubjectDetails({ Class, section }) {
         console.log('class', Class, 'section', section, 'email', newRow.email, 'subject', newRow.subject)
 
         try {
-            const response = await axios.post('https://assignsubjectapi.onrender.com/assign', {
-                accessToken: authState.accessToken,
-                class: Class,
-                section: section,
-                email: newRow.email,
-                subject: newRow.subject
-            });
-            if (response.status === 200) {
-                setSubjects([...subjectDetails, { ...newRow, name: 'New Teacher', profileLink: '' }]);
-                setNewRow({ email: '', subject: '' });
-                setShowNewRow(false);
-                console.log('suucccc', response.data)
-                toast.success('Subject Assigned Successfully');
+            if(newRow.email){
+                const response = await axios.post('https://assignsubjectapi.onrender.com/assign', {
+                    accessToken: authState.accessToken,
+                    class: Class,
+                    section: section,
+                    email: newRow.email,
+                    subject: newRow.subject
+                });
+                if (response.status === 200) {
+                    setSubjects([...subjectDetails, { ...newRow, name: 'New Teacher', profileLink: '' }]);
+                    setNewRow({ email: '', subject: '' });
+                    setShowNewRow(false);
+                    console.log('suucccc', response.data)
+                    toast.success('Subject Assigned Successfully');
+                }
             }
+            else{
+                toast.error('Please specify teacher');
+            }
+            
         } catch (error) {
             console.error("Error assigning subject:", error);
-            toast.error('error');
+            toast.error('Please specify subject');
+           
         }
     }
 
@@ -104,7 +111,7 @@ function SubjectDetails({ Class, section }) {
                     }
                 }
                 searchTeacher();
-            }, 1000);
+            }, 500);
 
             return () => {
                 clearTimeout(handler);
@@ -128,32 +135,38 @@ function SubjectDetails({ Class, section }) {
                     Email
                 </h1>
             </div>
-            {subjectLoading ? (
-                <Loading />
-            ) : (
-                subjectDetails.map((detail, index) => (
-                    <div key={index} className="px-2 flex justify-between  py-2 pl-2 h-fit border">
-                        <div className='flex w-full whitespace-nowrap items-center'>
-                            <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
-                            <h1 className="ml-2 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm ">
-                                {detail.name}
-                            </h1>
-                        </div>
-                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                            {detail.subject}
-                        </h1>
-                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                            {detail.email}
-                        </h1>
-                    </div>
-                ))
-            )}
-            {showNewRow && (
+            {!subjectLoading ?
+                subjectDetails.length > 0 ?
+                    (
+                        subjectDetails.map((detail, index) => (
+                            <div key={index} className="px-2 flex justify-between  py-2 pl-2 h-fit border">
+                                <div className='flex w-full whitespace-nowrap items-center'>
+                                    <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
+                                    <h1 className="ml-2 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm ">
+                                        {detail.name}
+                                    </h1>
+                                </div>
+                                <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                    {detail.subject}
+                                </h1>
+                                <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                    {detail.email}
+                                </h1>
+                            </div>
+                        ))
+                    )
+                    :
+                    <div className='text-center'>No subject added</div>
+                :
+                (
+                    <Loading />
+                )}
+            {showNewRow ? (
                 <div className="px-2 flex justify-between  py-2 pl-2 h-fit border  gap-4">
                     <div className='w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'></div>
-                    <input type="text" value={newRow.subject} onChange={(e) => handleChange(e, 'subject')} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Subject" />
+                    <input type="text" value={newRow.subject} onChange={(e) => handleChange(e, 'subject')} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Subject" required/>
                     <div className='relative w-full'>
-                        <input type="text" value={newRow.email} onChange={handleEmailChange} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Email" />
+                        <input type="text" value={newRow.email} onChange={handleEmailChange} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Email" required />
                         {showSuggestions && suggestions.length > 0 && (
                             <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
                                 {suggestions.map((suggestion, idx) => (
@@ -169,9 +182,25 @@ function SubjectDetails({ Class, section }) {
                             </ul>
                         )}
                     </div>
+                    <div className='flex items-center'>
+                        <button className=' px-4 text-green-400 hover:text-green-700 ' onClick={handleAddRow}>
+                            Save
+                        </button>
+                        {" / "}
+                        <button className=' px-4 text-red-400 hover:text-red-700 ' onClick={() => { setShowNewRow(false) }}>
+                            Cancel
+                        </button>
+                    </div>
                 </div>
+            ) : (
+                <div></div>
             )}
-            {!showNewRow ? (
+            <div className="flex justify-center w-full px-3 py-1  h-fit ">
+                <button className='mt-2 px-4 py-2 bg-green-400 hover:bg-green-500 text-white rounded-lg' onClick={() => setShowNewRow(true)}>
+                    Add subject
+                </button>
+            </div>
+            {/* {!showNewRow ? (
                 <button className='mt-2 px-4 py-2 bg-green-500 text-white rounded-lg ' onClick={() => setShowNewRow(true)}>
                     Add Row
                 </button>
@@ -179,7 +208,7 @@ function SubjectDetails({ Class, section }) {
                 <button className='mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg' onClick={handleAddRow}>
                     Save
                 </button>
-            )}
+            )} */}
         </div>
     )
 }

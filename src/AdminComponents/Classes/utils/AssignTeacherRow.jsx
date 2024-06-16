@@ -197,6 +197,7 @@ export default function AssignTeacherRow({ Class }) {
                                     placeholder="Teacher"
                                     value={email}
                                     onChange={handleEmailChange}
+                                    required
                                 />
                                 {showSuggestions && suggestions.length > 0 && (
                                     <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
@@ -214,12 +215,12 @@ export default function AssignTeacherRow({ Class }) {
                                 )}
                             </div>
                             <div>
-                            <button className=' px-4 bg-blue-300 hover:bg-blue-500 text-white rounded-lg' onClick={handleAddSection}>
+                            <button className=' px-4 text-green-400 hover:text-green-700 ' onClick={handleAddSection}>
                                 Save
                             </button>
                             {" / "}
-                            <button className=' px-4 bg-blue-300 hover:bg-blue-500 text-white rounded-lg' onClick={()=>{setShowNewRow(false)}}>
-                                cancel
+                            <button className=' px-4  text-red-400 hover:text-red-700' onClick={()=>{setShowNewRow(false)}}>
+                                Cancel
                             </button>
                             </div>
                         </div>

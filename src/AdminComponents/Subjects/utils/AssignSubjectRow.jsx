@@ -41,7 +41,7 @@ export default function AssignSubjectRow({ Class }) {
     useEffect(() => {
         const handler = setTimeout(() => {
             setTemp(email);
-        }, 1000);
+        }, 500);
 
         return () => {
             clearTimeout(handler);
@@ -97,61 +97,61 @@ export default function AssignSubjectRow({ Class }) {
 
 
     const handleSectionClick = (index) => {
-        setSections(sectionsDetails.map((section, i) => 
+        setSections(sectionsDetails.map((section, i) =>
             i === index ? { ...section, expanded: !section.expanded } : section
         ));
     };
 
     return (
         <div key={Class} className="w-full mt-3 mb-4 rounded-lg shadow-md border ">
-        <ToastContainer />
-        <div className="flex justify-between items-center p-2">
-            <div className="w-1/4">
-                <div className="px-4 py-2">
-                    {Class}
+            <ToastContainer />
+            <div className="flex justify-between items-center p-2">
+                <div className="w-1/4">
+                    <div className="px-4 py-2">
+                        {Class}
+                    </div>
+                </div>
+                <div className="self-center cursor-pointer" onClick={handleClick}>
+                    {expanded ? <FaChevronUp /> : <FaChevronDown />}
                 </div>
             </div>
-            <div className="self-center cursor-pointer" onClick={handleClick}>
-                {expanded ? <FaChevronUp /> : <FaChevronDown />}
-            </div>
-        </div>
 
-        {expanded && (
-            <div className='  px-5'>
-                {/* <div className="flex justify-between py-2 pl-2  h-fit rounded-t-lg border bg-secondary">
-                    <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                        Section
-                    </h1>
-                    <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                        Class Teacher
-                    </h1>
-                    <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm"></h1>
-                </div> */}
-
-                {!loading ? (
-                    sectionsDetails.map((details, index) => (
-                        <div key={index} className='mb-3 rounded-lg shadow-md'>
-                            <div className="px-2 flex justify-between  py-2 pl-2 h-fit border">
-                                <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                                    {details.section}
-                                </h1>
-                                <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                    {details.name}
-                                </h1>
-                                <div className="self-center cursor-pointer" onClick={() => handleSectionClick(index)}>
-                                    {details.expanded ? <FaChevronUp /> : <FaChevronDown />}
-                                </div>
+            {expanded && (
+                <div className="px-5">
+                    {!loading ? (
+                        sectionsDetails.length > 0 ? (
+                            <div>
+                                {sectionsDetails.map((details, index) => (
+                                    <div key={index} className="mb-3 rounded-lg shadow-md">
+                                        <div className="px-2 flex justify-between py-2 pl-2 h-fit border">
+                                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                                                {details.section}
+                                            </h1>
+                                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.name}
+                                            </h1>
+                                            <div
+                                                className="self-center cursor-pointer"
+                                                onClick={() => handleSectionClick(index)}
+                                            >
+                                                {details.expanded ? <FaChevronUp /> : <FaChevronDown />}
+                                            </div>
+                                        </div>
+                                        {details.expanded && (
+                                            <SubjectDetails key={index} Class={Class} section={details.section} />
+                                        )}
+                                    </div>
+                                ))}
                             </div>
-                            {details.expanded && (
-                                <SubjectDetails key={index} Class={Class} section={details.section} />
-                            )}
-                        </div>
-                    ))
-                ) : (
-                    <Loading />
-                )}
-            </div>
-        )}
-    </div>
+                        ) : (
+                            <div className="text-center">No section added</div>
+                        )
+                    ) : (
+                        <Loading />
+                    )}
+                </div>
+            )}
+
+        </div>
     );
 }
