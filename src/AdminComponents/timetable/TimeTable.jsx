@@ -6,6 +6,7 @@ import AuthContext from '../../Context/AuthContext';
 import TableStudent from './utils/TableStudent';
 import SelectionTeacher from './utils/SelectionTeacher';
 import Loading from '../../LoadingScreen/Loading'
+import { Link } from 'react-router-dom';
 function TimeTable() {
 
     const [selectClass, setClass] = useState('3rd')
@@ -14,16 +15,16 @@ function TimeTable() {
     const { authState } = useContext(AuthContext);
     const [role, setRole] = useState('Teacher');
     const [teacherEmail, setTeacherEmail] = useState('bhanu68tyagi@gmail.com');
-    const [dayStudent, setDayStudent]=useState('tuesday');
+    const [dayStudent, setDayStudent] = useState('tuesday');
     const [day, setDay] = useState('tuesday');
     const [loading, setLoading] = useState(false);
     const [fetchedTimeTableStructure, setTimetableStructure] = useState(null);
-
+    const [error, setError] = useState();
     const [lectureTimes, setLectureTimes] = useState([]);
 
     var ClassRange = null;
     const Class = selectClass;
-    
+
     useEffect(() => {
         if (Class === 'Pre-Nursery' || Class === 'L.K.G' || Class === 'U.K.G' || Class === 'U.K.J') {
             ClassRange = 'Pre-Nursery - U.K.J'
@@ -33,11 +34,11 @@ function TimeTable() {
     }, [Class]);
 
     useEffect(() => {
-        if(!loading){
+        if (!loading) {
             setLoading(true);
             handleTimeFetch();
         }
-        
+
     }, []);
 
     const calculateLectureTimes = () => {
@@ -85,7 +86,7 @@ function TimeTable() {
         calculateLectureTimes();
     }, [fetchedTimeTableStructure]);
 
-  
+
 
 
     const handleTimeFetch = async () => {
@@ -111,7 +112,8 @@ function TimeTable() {
                     setTimetableStructure(response.data);
                     console.log('ressssss', response.data)
                 } else {
-                    setShowTimetable(false);
+                    // setLoading(false)
+                    //     // setShowTimetable(false);
                 }
             }
         } catch (err) {
@@ -146,7 +148,7 @@ function TimeTable() {
     const handleDayChange = (value) => {
         setDay(value);
     };
-    
+
     const handleStudentDayChange = (value) => {
         setDayStudent(value);
     };
@@ -170,13 +172,13 @@ function TimeTable() {
                 const response = await axios.post(url, payload);
                 if (response.status === 200) {
                     console.log('response from fetchh', response.data);
-                    setData(response.data); 
+                    setData(response.data);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
             finally {
-                setLoading(false); 
+                setLoading(false);
             }
         }
     };
@@ -184,38 +186,39 @@ function TimeTable() {
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
             <div className='flex justify-between items-center w-full'>
-            <h1 className='text-2xl'>Time Table</h1>
-            <div className="flex gap-4 px-3 py-2  mt-2 text-lg justify-between">
-                <label className="text-lg font-medium text-center">
-                    <input
-                        type="radio"
-                        name="role"
-                        value="Teacher"
-                        checked={role === "Teacher"}
-                        onChange={handleRoleChange}
-                        className="mr-3 w-4 h-4"
-                        
-                    />
-                    Teacher
-                </label>
+                <h1 className='text-2xl'>Time Table</h1>
+                <div className="flex gap-4 px-3 py-2  mt-2 text-lg justify-between">
+                    <label className="text-lg font-medium text-center">
+                        <input
+                            type="radio"
+                            name="role"
+                            value="Teacher"
+                            checked={role === "Teacher"}
+                            onChange={handleRoleChange}
+                            className="mr-3 w-4 h-4"
 
-                <label className="text-lg font-medium text-center">
-                    <input
-                        type="radio"
-                        name="role"
-                        value="Student"
-                        checked={role === "Student"}
-                        onChange={handleRoleChange}
-                        className="mr-3 w-4 h-4"
-                     
-                    />
-                    Student
-                </label>
+                        />
+                        Teacher
+                    </label>
+
+                    <label className="text-lg font-medium text-center">
+                        <input
+                            type="radio"
+                            name="role"
+                            value="Student"
+                            checked={role === "Student"}
+                            onChange={handleRoleChange}
+                            className="mr-3 w-4 h-4"
+
+                        />
+                        Student
+                    </label>
+                </div>
+
             </div>
 
-            </div>
             <div className=' mt-4  w-full'>
-            {role === 'Teacher' ? (
+                {role === 'Teacher' ? (
                     <SelectionTeacher
                         onSearch={handleSearch}
                         onEmailChange={handleEmailChange}
@@ -234,16 +237,34 @@ function TimeTable() {
                 )}
             </div>
 
-            <div className=' mt-4  w-full rounded-lg border shadow-md '>
-            {!loading && fetchedTimeTableStructure ?  (
-                 role === 'Teacher' ? 
-                 <Table data={data}   Time={lectureTimes}  numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} />
-               :   
-                 <TableStudent data={data}  selectClass={selectClass} selectedSection={selectedSection} dayStudent={dayStudent}  Time={lectureTimes} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}  />            
-                   
-                ) : (
-                    <Loading />
-                )}
+            <div className=' mt-4 w-full rounded-lg border shadow-md '>
+                {
+
+                    !loading ?
+                        (
+                            fetchedTimeTableStructure ?
+
+                                role === 'Teacher' ?
+                                    <Table data={data} Time={lectureTimes} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} />
+                                    :
+                                    <TableStudent data={data} selectClass={selectClass} selectedSection={selectedSection} dayStudent={dayStudent} Time={lectureTimes} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} />
+                                :
+                                <div className='py-2 text-center '>
+                                    No Timetable found please upload one.
+                                    <Link
+                                        to="/Admin-Dashboard/timetablestructure"
+                                        className="px-4 py-1 ml-5 rounded-md mr-2 bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white"
+                                    >
+                                        Upload
+                                    </Link>
+                                </div>
+
+                        )
+                        :
+                        (
+                            <Loading />
+                        )
+                }
             </div>
 
         </div>

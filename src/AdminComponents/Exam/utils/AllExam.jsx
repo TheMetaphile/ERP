@@ -195,7 +195,7 @@ export default function AllExam() {
                             </tr>
                         </thead>
                         <tbody className="bg-white">
-                            {filteredExams && filteredExams.length > 0 ? (
+                            {filteredExams ? filteredExams.length > 0 ?(
                                 filteredExams.map((exam, index) => (
                                     <tr key={exam._id ? exam._id : index}>
                                         {edit === index ? (
@@ -265,7 +265,7 @@ export default function AllExam() {
                                         )}
                                     </tr>
                                 ))
-                            ) : (
+                            ) : <div className="text-center py-2 ">No exam schedule found</div> :(
                                 <tr>
                                     <td colSpan="6" className="px-4 py-2 text-center text-lg"><Loading /></td>
                                 </tr>

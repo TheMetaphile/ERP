@@ -17,7 +17,7 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
         <div className="w-full rounded-lg">
             <div className="">
                 <table className="w-full items-center rounded-lg">
-                    <thead className="bg-secondary">
+                    <thead className="bg-secondary rounded-lg">
                         <tr>
                             <th className="px-4 py-2">Lecture</th>
                             <th className="px-4 py-2">Timing</th>

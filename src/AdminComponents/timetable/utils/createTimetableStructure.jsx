@@ -78,8 +78,9 @@ export default function CreateTimetableStrucutre({ handleSubmit, handleChange })
                             name="start"
                             value={selectStart}
                             onChange={(e) => { setStart(e.target.value) }}
+                            
                             required
-                            className="w-full border p-2"
+                            className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
 
@@ -102,6 +103,10 @@ export default function CreateTimetableStrucutre({ handleSubmit, handleChange })
                             <option value="5">5</option>
                             <option value="6">6</option>
                             <option value="7">7</option>
+                            <option value="7">8</option>
+                            <option value="7">9</option>
+                            <option value="7">10</option>
+
                         </select>
                     </div>
 

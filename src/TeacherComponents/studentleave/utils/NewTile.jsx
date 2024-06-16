@@ -34,7 +34,9 @@ export default function NewTile({ data }) {
 
     return (
         <div className="w-full">
-            {data.StudentsLeaves.map((student, studentIndex) => (
+            {
+                data.length>0 ?
+            data.StudentsLeaves.map((student, studentIndex) => (
                 student.status === "Pending" && (
                     <div key={studentIndex} className="border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
                         <div className='flex items-center'>
@@ -79,7 +81,9 @@ export default function NewTile({ data }) {
                         </div>
                     </div>
                 ))
-            )}
+            ):
+            <div>No new leave</div>
+        }
             {error && <div className="text-red-500 mt-3">{error}</div>}
         </div>
     )

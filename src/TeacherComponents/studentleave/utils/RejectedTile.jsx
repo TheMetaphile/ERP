@@ -14,7 +14,9 @@ export default function RejectedTile({data}) {
  
     return (
         <div className=" w-full">
-            {data.map((student, studentIndex) => (
+            {
+            data.length>0 ?
+            data.map((student, studentIndex) => (
                 student.leaves.filter(leave=>leave.status==='Rejected').map((leave, leaveIndex) => (
                     <div key={leave._id} className="border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
                         <div className='flex'>
@@ -42,7 +44,9 @@ export default function RejectedTile({data}) {
                         </div>
                     </div>
                 ))
-            ))}
+            )) :
+            <div>No rejected leaves</div>
+        }
 
 
         </div>

@@ -3,7 +3,6 @@ import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import CheckStructure from './checkStructure';
 import CreateTimetableStrucutre from './createTimetableStructure';
 import UploadTimetable from './UploadTimetable';
 import Loading from './../../../LoadingScreen/Loading';

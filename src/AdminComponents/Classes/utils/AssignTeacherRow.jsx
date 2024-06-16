@@ -66,7 +66,7 @@ export default function AssignTeacherRow({ Class }) {
                     }
                 }
                 searchTeacher();
-            }, 1000);
+            }, 500);
 
             return () => {
                 clearTimeout(handler);
@@ -77,18 +77,23 @@ export default function AssignTeacherRow({ Class }) {
     }, [temp, authState.accessToken])
 
 
-
+    const getNextAsciiValues = (inputString) => {
+        setNewSection(String.fromCharCode(inputString.charCodeAt(0) + 1));
+        setShowNewRow(true);
+    };
 
     const fetchSections = async () => {
         try {
-            const response = await axios.post('https://class-teacher.onrender.com/classTeacher/fetch/sections', {
-                accessToken: authState.accessToken,
-                class: Class,
-            });
-            const sectionsdetail = response.data.sections;
-            console.log(Class);
-
-            setSections(sectionsdetail);
+            if(sectionsDetails.length <=0){
+                const response = await axios.post('https://class-teacher.onrender.com/classTeacher/fetch/sections', {
+                    accessToken: authState.accessToken,
+                    class: Class,
+                });
+                const sectionsdetail = response.data.sections;
+                console.log(Class);
+    
+                setSections(sectionsdetail);
+            }
         } catch (error) {
             console.error("Error searching for teachers:", error);
         } finally {
@@ -101,18 +106,22 @@ export default function AssignTeacherRow({ Class }) {
         console.log('section', newSection)
         console.log('teacher', email)
         try {
-            const response = await axios.post('https://class-teacher.onrender.com/classTeacher/assign', {
-                accessToken: authState.accessToken,
-                class: Class,
-                section: newSection,
-                teacherEmail: email
-            });
-            if (response.status === 200) {
-                toast.success('Teacher Assigned successfully');
-                fetchSections();
-                setNewSection('');
-                setEmail('');
-                setShowNewRow(false);
+            if(email){
+                const response = await axios.post('https://class-teacher.onrender.com/classTeacher/assign', {
+                    accessToken: authState.accessToken,
+                    class: Class,
+                    section: newSection,
+                    teacherEmail: email
+                });
+                if (response.status === 200) {
+                    toast.success('Teacher Assigned successfully');
+                    fetchSections();
+                    setNewSection('');
+                    setEmail('');
+                    setShowNewRow(false);
+                }
+            }else{
+                toast.error('Please specify teacher');
             }
 
         } catch (error) {
@@ -121,21 +130,22 @@ export default function AssignTeacherRow({ Class }) {
     };
 
     return (
-        <div key={Class} className="w-full mb-4 rounded-lg mt-2 shadow-md border">
+        <div key={Class} className=" w-full mb-4 rounded-lg mt-2 shadow-md border" >
             <ToastContainer />
-            <div className="flex justify-between items-center p-2" >
+            <div className="flex justify-between items-center p-2  hover:cursor-pointer" onClick={handleClick}>
                 <div className="w-1/4">
                     <div className="px-4 py-2 ">
                         {Class}
                     </div>
                 </div>
-                <div className="self-center cursor-pointer" onClick={handleClick}>
+                <div className="self-center cursor-pointer" >
                     {expanded ? <FaChevronUp /> : <FaChevronDown />}
                 </div>
             </div>
 
             {expanded && (
-                <div>
+                <div className='mx-3'>
+
                     <div className="flex justify-between w-full py-2 pl-2 bg-bg_blue h-fit rounded-t-lg border border-black">
                         <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Section
@@ -147,67 +157,79 @@ export default function AssignTeacherRow({ Class }) {
                             Action
                         </h1>
                     </div>
+                    {!loading ?
+                        sectionsDetails.length > 0 ?
+                            (
 
-                    {!loading ? (
-                        sectionsDetails.map((details, index) => (
-                            <div key={index} className={`flex justify-between w-full py-2 pl-2  h-fit border border-black ${index === sectionsDetails.length - 1 ? "rounded-b-lg" : ""}`}>
-                                <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                                    {details.section}
-                                </h1>
-                                <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                    {details.name}
-                                </h1>
-                                <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                                    {details.name ? "Assigned" : <button onClick={() => handleUpdateClick(index)}>Update</button>}
-                                </h1>
-                            </div>
-                        ))
-                    ) : (
-                        <Loading />
-                    )}
+                                <div>
 
-                    <div className="flex justify-between w-full px-3 py-1  h-fit ">
-                        {showNewRow ? (
-                            <>
+                                    {sectionsDetails.map((details, index) => (
+                                        <div key={index} className={`flex justify-between w-full py-2 pl-2  h-fit border border-black ${index === sectionsDetails.length - 1 && !showNewRow ? "rounded-b-lg" : ""}`}>
+                                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                                                {details.section}
+                                            </h1>
+                                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.name}
+                                            </h1>
+                                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                                                {details.name ? "Assigned" : <button onClick={() => handleUpdateClick(index)}>Update</button>}
+                                            </h1>
+                                        </div>
+                                    ))}
+
+                                </div>
+                            )
+                            :
+                            <div className='text-center'>No section added</div>
+                        :
+                        (
+                            <Loading />
+                        )}
+                    {showNewRow ? (
+                        <div className={`flex justify-between w-full py-2 px-4  h-fit border border-black ${sectionsDetails.length > 0 ? "rounded-b-lg" : "rounded-lg"}`}>
+                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                                {newSection}
+                            </h1>
+                            <div className='relative'>
                                 <input
                                     type="text"
-                                    className="border rounded-md w-40 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm"
-                                    placeholder="Enter new section"
-                                    value={newSection}
-                                    onChange={(e) => setNewSection(e.target.value)}
+                                    className="w-36 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap"
+                                    placeholder="Teacher"
+                                    value={email}
+                                    onChange={handleEmailChange}
                                 />
-                                <div className='relative'>
-                                    <input
-                                        type="text"
-                                        className="w-56 border px-3 py-2 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-md"
-                                        placeholder="bhanu68tyagi@gmail.com"
-                                        value={email}
-                                        onChange={handleEmailChange}
-                                    />
-                                    {showSuggestions && suggestions.length > 0 && (
-                                        <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
-                                            {suggestions.map((suggest, idx) => (
-                                                <li
-                                                    key={idx}
-                                                    className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
-                                                    onClick={() => handleSuggestionClick(suggest)}
-                                                >
-                                                    <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                                    {suggest.email}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-                                </div>
-                                <button className='mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg' onClick={handleAddSection}>
-                                    Save
-                                </button>
-                            </>
-                        ) : (
-                            <button className='mt-2 px-4 py-2 bg-green-500 text-white rounded-lg' onClick={() => setShowNewRow(true)}>
-                                Add Row
+                                {showSuggestions && suggestions.length > 0 && (
+                                    <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                        {suggestions.map((suggest, idx) => (
+                                            <li
+                                                key={idx}
+                                                className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                                onClick={() => handleSuggestionClick(suggest)}
+                                            >
+                                                <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                                {suggest.email}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                            <div>
+                            <button className=' px-4 bg-blue-300 hover:bg-blue-500 text-white rounded-lg' onClick={handleAddSection}>
+                                Save
                             </button>
-                        )}
+                            {" / "}
+                            <button className=' px-4 bg-blue-300 hover:bg-blue-500 text-white rounded-lg' onClick={()=>{setShowNewRow(false)}}>
+                                cancel
+                            </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div></div>
+                    )}
+                    <div className="flex justify-center w-full px-3 py-1  h-fit ">
+                        <button className='mt-2 px-4 py-2 bg-green-400 hover:bg-green-500 text-white rounded-lg' onClick={() => getNextAsciiValues(sectionsDetails.length > 0 ? sectionsDetails[sectionsDetails.length - 1].section : '@')}>
+                            Add section
+                        </button>
                     </div>
                 </div>
             )}

@@ -13,6 +13,7 @@ const menuItems = [
     route: '/Teacher-Dashboard',
     children: []
   },
+  
   {
     image: "src/assets/student.png",
     alt: "img",
@@ -64,6 +65,30 @@ const menuItems = [
     ]
   },
   {
+    image: "src/assets/class.png",
+    alt: "img",
+    title: "Class",
+    children: [
+    {
+      text: 'Class Teachers',
+      route: '/Admin-Dashboard/Classteacher'
+    },
+    {
+      text: 'Assign Class Teacher',
+      route: '/Admin-Dashboard/Assignteacher'
+    },
+    ]
+  },
+
+  {
+    image: "src/assets/subject.png",
+    alt: "img",
+    title: "Subject Teacher",
+    route: '/Admin-Dashboard/Assignsubject',
+    children: [
+    ]
+  },
+  {
     image: "src/assets/parent.png",
     alt: "img",
     title: "Parents",
@@ -99,46 +124,13 @@ const menuItems = [
     ]
   },
 
-  {
-    image: "src/assets/class.png",
-    alt: "img",
-    title: "Class",
-    children: [{
-      text: 'All Classes',
-      route: '/Admin-Dashboard/Classes'
-    },
-    {
-      text: 'Class Teachers',
-      route: '/Admin-Dashboard/Classteacher'
-    },
-    {
-      text: 'Assign Class Teacher',
-      route: '/Admin-Dashboard/Assignteacher'
-    },
-    ]
-  },
-
-  {
-    image: "src/assets/subject.png",
-    alt: "img",
-    title: "Subject",
-    children: [{
-      text: 'All Subjects',
-      route: '/Admin-Dashboard/Subjects'
-    },
-    {
-      text: 'Assign Subject Teacher',
-      route: '/Admin-Dashboard/Assignsubject'
-    },
-    
-    ]
-  },
+ 
 
   {
     image: "src/assets/exam.png",
     alt: "img",
     title: "Exam",
-    route:"/Admin-Dashboard/Exam",
+    route: "/Admin-Dashboard/Exam",
     children: []
   },
 
@@ -146,7 +138,7 @@ const menuItems = [
     image: "src/assets/transport.png",
     alt: "img",
     title: "Transport",
-    route:"/Admin-Dashboard/Transport",
+    route: "/Admin-Dashboard/Transport",
     children: []
   },
 
@@ -154,7 +146,7 @@ const menuItems = [
     image: "src/assets/notice.png",
     alt: "img",
     title: "Notice",
-    route:"/Admin-Dashboard/Notice",
+    route: "/Admin-Dashboard/Notice",
     children: []
   },
 
@@ -162,7 +154,7 @@ const menuItems = [
     image: "src/assets/message.png",
     alt: "img",
     title: "Message",
-    route:"/Admin-Dashboard/Message",
+    route: "/Admin-Dashboard/Message",
     children: []
   },
 
@@ -170,7 +162,7 @@ const menuItems = [
     image: "src/assets/leave_icon.png",
     alt: "img",
     title: "Leave",
-    route:"/Admin-Dashboard/Leave",
+    route: "/Admin-Dashboard/Leave",
     children: []
   },
 ];
