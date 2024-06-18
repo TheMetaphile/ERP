@@ -42,6 +42,9 @@ export default function ApprovedTile({ data }) {
                     </div>
                 </div>
             ))}
+            {data.StudentsLeaves.filter(student => student.status === 'Approved').length === 0 && (
+                <div>No approved leaves</div>
+            )}
         </div>
     )
 }

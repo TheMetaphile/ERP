@@ -9,7 +9,7 @@ import TimeTableHeader from './utils/TimeTableHeader'
 export default function TimeTable() {
     const [data, setData] = useState(null);
     const { authState } = useContext(AuthContext);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [day, setDay] = useState('tuesday');
     const [fetchedTimeTableStructure, setTimetableStructure] = useState(null);
 
@@ -26,9 +26,11 @@ export default function TimeTable() {
     }, [Class]);
 
     useEffect(() => {
-        setLoading(true);
-        handleTimeFetch();
-    }, []);
+        if (!loading) {
+            setLoading(true);
+            handleTimeFetch();
+        }
+    }, [ClassRange]);
 
 
     const handleDayChange = (event) => {
@@ -117,21 +119,21 @@ export default function TimeTable() {
                     setTimetableStructure(response.data);
                     console.log('ressssss', response.data)
                 } else {
-                    setShowTimetable(false);
+                    // setShowTimetable(false);
                 }
             }
         } catch (err) {
             console.error(err);
 
         }
-        finally {
-            setLoading(false);
-        }
+
     }
 
     useEffect(() => {
-        handleFetch();
-    }, [day]);
+        if (fetchedTimeTableStructure != null) {
+            handleFetch();
+        }
+    }, [fetchedTimeTableStructure, day]);
 
     const handleFetch = async () => {
         console.log(authState.userDetails.currentClass, authState.userDetails.section, day);
@@ -146,7 +148,11 @@ export default function TimeTable() {
             });
             if (response.status === 200) {
                 console.log('response from fetchh', response.data);
-                setData(response.data);
+                if ( response.data[day].length > 0) {
+                    setData(response.data);
+                } else {
+                    setData([]);
+                }
             }
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -182,7 +188,7 @@ export default function TimeTable() {
                 >
                     <option value="">Select Day</option>
                     <option value="monday">Monday</option>
-                    <option value="tuesday">Tuesady</option>
+                    <option value="tuesday">Tuesday</option>
                     <option value="wednesday">Wednesday</option>
                     <option value="thursday">Thursday</option>
                     <option value="friday">Friday</option>
@@ -193,15 +199,25 @@ export default function TimeTable() {
             </div>
             <TimeTableHeader />
             <div className=' w-full '>
-            {loading ? (
-                <Loading /> 
-            ) : (
-                <div className='w-full'>
-                    {lectureTimes.map((time, index) => (
-                        <LeactureTile key={index} index={index} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} data={data} day={day} />
-                    ))}
-                </div>
-            )}
+                {loading ? (
+                    <Loading />
+                ) : data === null || data.length === 0 ? (
+                    <div>No data available</div>
+                ) : (
+                    <div className='w-full'>
+                        {lectureTimes.map((time, index) => (
+                            <LeactureTile
+                                key={index}
+                                index={index}
+                                lectureNo={`${index + 1} `}
+                                Time={`${formatTime(time.start)}-${formatTime(time.end)}`}
+                                numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}
+                                data={data}
+                                day={day}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     )

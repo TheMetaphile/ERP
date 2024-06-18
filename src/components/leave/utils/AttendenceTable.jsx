@@ -79,6 +79,38 @@ export default function AttendenceTable() {
   };
 
 
+   
+    // console.log(data[index]._id)
+
+    const handleDelete = async (index) => {
+      
+      const id = (data[index]._id);
+      console.log(id)
+      console.log('stat',(data[index].status))
+      if ((data[index].status) === "Pending") {
+        try {
+          const response = await axios.post('https://studentleaveapi.onrender.com/leave/delete', {
+            accessToken: authState.accessToken,
+            leaveId: id
+          });
+          if (response.status === 200) {
+            const updatedData = data.filter((_, i) => i !== index);
+            setData(updatedData);
+            console.log('succeess')
+            toast.success('Leave Deleted');
+          }
+        } catch (err) {
+          setError(err.message);
+          toast.error(err.message);
+        }
+      } else {
+        toast.error('Cannot delete leave that is not pending');
+      }
+    };
+    
+  
+
+
   return (
     <div className='rounded-lg shadow-lg   w-full'>
       <ToastContainer />
@@ -136,7 +168,7 @@ export default function AttendenceTable() {
                     <CiEdit className='text-green-500 cursor-pointer' onClick={() => handleEditClick(index)} />
                   )}
                   &nbsp; / &nbsp;
-                  <MdDeleteForever className='text-red-500 cursor-pointer' />
+                  <MdDeleteForever className='text-red-500 cursor-pointer' onClick={() => handleDelete(index)}/>
                 </td>
               </tr>
             ))}

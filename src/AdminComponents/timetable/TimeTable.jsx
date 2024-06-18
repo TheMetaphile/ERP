@@ -19,7 +19,6 @@ function TimeTable() {
     const [day, setDay] = useState('tuesday');
     const [loading, setLoading] = useState(false);
     const [fetchedTimeTableStructure, setTimetableStructure] = useState(null);
-    const [error, setError] = useState();
     const [lectureTimes, setLectureTimes] = useState([]);
 
     var ClassRange = null;
@@ -34,12 +33,11 @@ function TimeTable() {
     }, [Class]);
 
     useEffect(() => {
-        if (!loading) {
+        if(!loading){
             setLoading(true);
             handleTimeFetch();
         }
-
-    }, []);
+    }, [ClassRange]);
 
     const calculateLectureTimes = () => {
         if (!fetchedTimeTableStructure) {
@@ -120,15 +118,17 @@ function TimeTable() {
             console.error(err);
 
         }
-        finally {
-            setLoading(false);
-        }
+
     }
 
 
     useEffect(() => {
-        handleSearch();
-    }, [role]);
+        if (fetchedTimeTableStructure != null) {
+            var time=new Date()
+            console.log(time)
+            handleSearch();
+        }
+    }, [fetchedTimeTableStructure,role]);
 
     const handleRoleChange = (event) => {
         setRole(event.target.value);

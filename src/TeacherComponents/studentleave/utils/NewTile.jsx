@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Logo from '../../../assets/Test Account.png'
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import axios from 'axios'
@@ -9,33 +9,41 @@ export default function NewTile({ data }) {
     const { authState } = useContext(AuthContext);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [leaves, setLeaves] = useState([]);
+
+    useEffect(() => {
+        if (data && data.StudentsLeaves) {
+            setLeaves(data.StudentsLeaves);
+        }
+    }, [data]);
 
     const handleClick = (index) => {
         setExpanded(expanded === index ? null : index);
     }
     const handleStatusUpdate = async (leaveId, status, email) => {
         console.log('id', leaveId, 'status', status, 'email', email)
-        // setLoading(true);
-        // try {
-        //     const response = await axios.post('https://studentleaveapi.onrender.com/leave/update', {
-        //         accessToken: authState.accessToken,
-        //         status: status,
-        //         email: email,
-        //         leaveId: leaveId
-        //     });
-        //     console.log(`Leave ${leaveId} status updated to ${status}:`, response.data);
-        // } catch (err) {
-        //     console.error(`Error updating status for leave ${leaveId}:`, err);
-        //     setError(`Error updating status: ${err.message}`);
-        // } finally {
-        //     setLoading(false);
-        // }
+        setLoading(true);
+        try {
+            const response = await axios.post('https://studentleaveapi.onrender.com/leave/update', {
+                accessToken: authState.accessToken,
+                status: status,
+                email: email,
+                leaveId: leaveId
+            });
+            console.log(`Leave ${leaveId} status updated to ${status}:`, response.data);
+            setLeaves(prevLeaves => prevLeaves.filter(leave => leave._id !== leaveId));
+        } catch (err) {
+            console.error("Error updating status");
+            setError(`Error updating status: ${err.message}`);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="w-full">
-            {data && data.StudentsLeaves.length > 0 ? (
-                data.StudentsLeaves.filter(student => student.status === "Pending").map((student, studentIndex) => (
+            {leaves.length > 0 ? (
+                leaves.filter(student => student.status === "Pending").map((student, studentIndex) => (
                     <div key={studentIndex} className="border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
                         <div className='flex items-center'>
                             <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full' />
@@ -84,6 +92,7 @@ export default function NewTile({ data }) {
             )}
             {error && <div className="text-red-500 mt-3">{error}</div>}
         </div>
+
     )
 }
 

@@ -37,7 +37,7 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
                                     )}
                                     <tr className='text-center'>
                                         <td className="px-4 py-2">{item.lectureNo}</td>
-                                        <td className="px-4 py-2 bg-green-200">{`${formatTime(Time[idx].start)}-${formatTime(Time[idx].end)}`}</td>
+                                        <td className="px-4 py-2 bg-green-200">{`${formatTime(Time[item.lectureNo-1].start)}-${formatTime(Time[item.lectureNo-1].end)}`}</td>
                                         <td className="px-4 py-2 bg-green-200">{item.class}</td>
                                         <td className="px-4 py-2 bg-blue-200">{item.section}</td>
                                         <td className="px-4 py-2 bg-blue-200">{item.subject}</td>

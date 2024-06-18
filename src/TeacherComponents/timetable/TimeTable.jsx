@@ -3,6 +3,7 @@ import Selection from './utils/Selection'
 import Table from './utils/Table'
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
+import Loading from '../../LoadingScreen/Loading';
 
 function TimeTable() {
     const [data, setData] = useState(null);
@@ -31,15 +32,17 @@ function TimeTable() {
             handleTimeFetch();
         }
 
-    }, []);
+    }, [ClassRange]);
 
     useEffect(() => {
         calculateLectureTimes();
     }, [fetchedTimeTableStructure]);
 
     useEffect(() => {
-        handleSearch();
-    }, []);
+        if (fetchedTimeTableStructure != null) {
+            handleSearch();
+        }
+    }, [fetchedTimeTableStructure, day]);
 
 
 
@@ -107,16 +110,16 @@ function TimeTable() {
                     setTimetableStructure(response.data);
                     console.log('ressssss', response.data)
                 } else {
-                    setShowTimetable(false);
+                    // setShowTimetable(false);
                 }
             }
         } catch (err) {
             console.error(err);
 
         }
-        finally {
-            setLoading(false);
-        }
+        // finally {
+        //     setLoading(false);
+        // }
     }
 
 
@@ -125,9 +128,10 @@ function TimeTable() {
     };
 
     const handleSearch = async () => {
-        // console.log(authState.userDetails.email, day)
-        try {
+        console.log('hhha', authState.userDetails.email, day)
+        setLoading(true);
 
+        try {
             const payload = {
                 accessToken: authState.accessToken,
                 email: authState.userDetails.email,
@@ -142,6 +146,9 @@ function TimeTable() {
         } catch (error) {
             console.error('Error fetching data:', error);
         }
+        finally {
+            setLoading(false);
+        }
 
     };
 
@@ -154,14 +161,14 @@ function TimeTable() {
                     onDayChange={handleDayChange} />
             </div>
             <div className='   w-full rounded-lg border shadow-md'>
-                {!loading && fetchedTimeTableStructure ? (
+                {loading ? (
+                    <Loading />
+                ) : (
                     <Table
                         data={data}
                         Time={lectureTimes}
                         numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}
                     />
-                ) : (
-                  <></>
                 )}
             </div>
 

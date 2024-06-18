@@ -94,7 +94,7 @@ function StudentAttendance() {
                         </select>
                     </div>
                     <button className="px-4 py-2 bg-green-500 text-white rounded-md">
-                        Take Attendance
+                        Mark Attendance
                     </button>
                 </div>
                 <div className=" border rounded-lg shadow-md mt-2">

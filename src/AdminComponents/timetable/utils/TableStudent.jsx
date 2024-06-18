@@ -93,58 +93,64 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                 )}
             </div>
             <TimetableHeader />
-            <div>
-                {lectures.map((lecture, idx) => (
-                    <React.Fragment key={lecture._id}>
-                        {numberOfLeacturesBeforeLunch === idx ? (
-                            <div className="w-full h-8 bg-secondary text-xl text-center border">LUNCH</div>
-                        ) : null}
-                        <div className="flex w-full justify-between px-4 py-2 mb-2 mt-2">
-                            <div className="w-full flex items-center justify-between">
-                                <h1 className="w-1/4 ">
-                                    {editMode ? (
-                                        <input
-                                            type="text"
-                                            value={editedData[dayStudent]?.[lecture._id]?.lectureNo || lecture.lectureNo}
-                                            onChange={(e) => handleInputChange(dayStudent, lecture._id, 'lectureNo', e.target.value)}
-                                        />
-                                    ) : (
-                                        lecture.lectureNo
-                                    )}
-                                </h1>
-                                <h1 className="w-1/4">{`${formatTime(Time[idx].start)}-${formatTime(Time[idx].end)}`}</h1>
+            {lectures.length === 0 ? (
+                <div>No data available</div>
+            ) :
+                (
+                    <div>
+                        {lectures.map((lecture, idx) => (
+                            <React.Fragment key={lecture._id}>
+                                {numberOfLeacturesBeforeLunch === idx ? (
+                                    <div className="w-full h-8 bg-secondary text-xl text-center border">LUNCH</div>
+                                ) : null}
+                                <div className="flex w-full justify-between px-4 py-2 mb-2 mt-2">
+                                    <div className="w-full flex items-center justify-between">
+                                        <h1 className="w-1/4 ">
+                                            {editMode ? (
+                                                <input
+                                                    type="text"
+                                                    value={editedData[dayStudent]?.[lecture._id]?.lectureNo || lecture.lectureNo}
+                                                    onChange={(e) => handleInputChange(dayStudent, lecture._id, 'lectureNo', e.target.value)}
+                                                />
+                                            ) : (
+                                                lecture.lectureNo
+                                            )}
+                                        </h1>
+                                        <h1 className="w-1/4">{`${formatTime(Time[lecture.lectureNo - 1].start)}-${formatTime(Time[lecture.lectureNo - 1].end)}`}</h1>
 
-                                <h1 className="w-1/4 ">
-                                    {editMode ? (
-                                        <input
-                                            type="text"
-                                            value={editedData[dayStudent]?.[lecture._id]?.subject || lecture.subject}
-                                            onChange={(e) => handleInputChange(dayStudent, lecture._id, 'subject', e.target.value)}
-                                        />
-                                    ) : (
-                                        lecture.subject
-                                    )}
-                                </h1>
-                                <div className="w-1/4 flex items-center whitespace-nowrap">
-                                    {lecture.teacher?.profileLink && (
-                                        <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full" />
-                                    )}
-                                    {editMode ? (
-                                        <input
-                                            type="text"
-                                            value={editedData[dayStudent]?.[lecture._id]?.teacher || lecture.teacher?.name || ''}
-                                            onChange={(e) => handleInputChange(dayStudent, lecture._id, 'teacher', e.target.value )}
-                                            className="text-sm px-2"
-                                        />
-                                    ) : (
-                                        <p className="text-sm px-2">{lecture.teacher?.name || 'Teacher information not available'}</p>
-                                    )}
+                                        <h1 className="w-1/4 ">
+                                            {editMode ? (
+                                                <input
+                                                    type="text"
+                                                    value={editedData[dayStudent]?.[lecture._id]?.subject || lecture.subject}
+                                                    onChange={(e) => handleInputChange(dayStudent, lecture._id, 'subject', e.target.value)}
+                                                />
+                                            ) : (
+                                                lecture.subject
+                                            )}
+                                        </h1>
+                                        <div className="w-1/4 flex items-center whitespace-nowrap">
+                                            {lecture.teacher?.profileLink && (
+                                                <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full" />
+                                            )}
+                                            {editMode ? (
+                                                <input
+                                                    type="text"
+                                                    value={editedData[dayStudent]?.[lecture._id]?.teacher || lecture.teacher?.name || ''}
+                                                    onChange={(e) => handleInputChange(dayStudent, lecture._id, 'teacher', e.target.value)}
+                                                    className="text-sm px-2"
+                                                />
+                                            ) : (
+                                                <p className="text-sm px-2">{lecture.teacher?.name || 'Teacher information not available'}</p>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </React.Fragment>
-                ))}
-            </div>
+                            </React.Fragment>
+                        ))}
+                    </div>
+                )}
+
         </div>
     );
 }

@@ -2,14 +2,7 @@ import React,{ useEffect, useState } from 'react';
 import Loading from '../../../LoadingScreen/Loading'
 
 function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
-    const [isLoading, setIsLoading] = useState(true);
- 
-
-    useEffect(() => {
-        if (data) {
-            setIsLoading(false);
-        }
-    }, [data]);
+    
 
     const formatTime = (date) => {
         let hours = date.getHours();
@@ -25,11 +18,7 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
 
     return (
         <div className=" rounded-lg ">
-            {isLoading ? (
-                <div className="flex justify-center items-center h-full">
-                    <Loading />
-                </div>
-            ) : (
+           
                 <div className=" rounded-lg">
                     <table className="w-full  items-center  rounded-lg">
                         <thead className='  bg-secondary '>
@@ -52,7 +41,7 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
                                     )}
                                     <tr className='text-center'>
                                         <td className="px-4 py-2">{item.lectureNo}</td>
-                                        <td className="px-4 py-2 bg-green-200">{`${formatTime(Time[idx].start)}-${formatTime(Time[idx].end)}`}</td>
+                                        <td className="px-4 py-2 bg-green-200">{`${formatTime(Time[item.lectureNo-1].start)}-${formatTime(Time[item.lectureNo-1].end)}`}</td>
                                         <td className="px-4 py-2 bg-green-200">{item.class}</td>
                                         <td className="px-4 py-2 bg-blue-200">{item.section}</td>
                                         <td className="px-4 py-2 bg-blue-200">{item.subject}</td>
@@ -67,7 +56,7 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
                         </tbody>
                     </table>
                 </div>
-            )}
+          
         </div>
     );
 }
