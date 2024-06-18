@@ -30,7 +30,7 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
                         {timetable.length > 0 ? (
                             timetable.sort((a, b) => a.lectureNo - b.lectureNo).map((item, idx) => (
                                 <React.Fragment key={item._id}>
-                                    {numberOfLeacturesBeforeLunch === idx && (
+                                    {numberOfLeacturesBeforeLunch === idx+1 && (
                                         <tr className="w-full h-8 bg-secondary text-xl text-center">
                                             <td colSpan="5">LUNCH</td>
                                         </tr>

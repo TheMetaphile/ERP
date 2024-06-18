@@ -148,7 +148,7 @@ export default function TimeTable() {
             });
             if (response.status === 200) {
                 console.log('response from fetchh', response.data);
-                if ( response.data[day].length > 0) {
+                if (response.data[day].length > 0) {
                     setData(response.data);
                 } else {
                     setData([]);
@@ -205,7 +205,8 @@ export default function TimeTable() {
                     <div>No data available</div>
                 ) : (
                     <div className='w-full'>
-                        {lectureTimes.map((time, index) => (
+                        {lectureTimes.map((time, index) => {
+                            return(
                             <LeactureTile
                                 key={index}
                                 index={index}
@@ -215,7 +216,9 @@ export default function TimeTable() {
                                 data={data}
                                 day={day}
                             />
-                        ))}
+                        )
+
+                        })}
                     </div>
                 )}
             </div>

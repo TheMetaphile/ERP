@@ -18,6 +18,7 @@ export default function AssignTeacherRow({ Class }) {
     const [loading, setLoading] = useState(false);
     const { authState } = useContext(AuthContext);
     const [showNewRow, setShowNewRow] = useState(false);
+    const [editingRow, setEditingRow] = useState(null);
 
     const handleClick = () => {
         setExpanded(!expanded);
@@ -84,14 +85,14 @@ export default function AssignTeacherRow({ Class }) {
 
     const fetchSections = async () => {
         try {
-            if(sectionsDetails.length <=0){
+            if (sectionsDetails.length <= 0) {
                 const response = await axios.post('https://class-teacher.onrender.com/classTeacher/fetch/sections', {
                     accessToken: authState.accessToken,
                     class: Class,
                 });
                 const sectionsdetail = response.data.sections;
                 console.log(Class);
-    
+
                 setSections(sectionsdetail);
             }
         } catch (error) {
@@ -106,7 +107,7 @@ export default function AssignTeacherRow({ Class }) {
         console.log('section', newSection)
         console.log('teacher', email)
         try {
-            if(email){
+            if (email) {
                 const response = await axios.post('https://class-teacher.onrender.com/classTeacher/assign', {
                     accessToken: authState.accessToken,
                     class: Class,
@@ -119,13 +120,40 @@ export default function AssignTeacherRow({ Class }) {
                     setNewSection('');
                     setEmail('');
                     setShowNewRow(false);
+                    setEditingRow(null);
                 }
-            }else{
+            } else {
                 toast.error('Please specify teacher');
             }
 
         } catch (error) {
             toast.error('Error assigning teacher');
+        }
+    };
+
+    const handleUpdateClick = (index) => {
+        setEditingRow(index);
+        setEmail(sectionsDetails[index].name);
+    };
+
+    const handleConfirmClick = async (index) => {
+        try {
+            if (email) {
+                const response = await axios.post('https://class-teacher.onrender.com/classTeacher/assign', {
+                    accessToken: authState.accessToken,
+                    class: Class,
+                    section: sectionsDetails[index].section,
+                    teacherEmail: email
+                });
+                if (response.status === 200) {
+                    toast.success('Teacher Updated successfully');
+                    fetchSections();
+                    setEmail('');
+                    setEditingRow(null);
+                }
+            } 
+        } catch (error) {
+            toast.error('Error updating teacher');
         }
     };
 
@@ -145,7 +173,6 @@ export default function AssignTeacherRow({ Class }) {
 
             {expanded && (
                 <div className='mx-3'>
-
                     <div className="flex justify-between w-full py-2 pl-2 bg-bg_blue h-fit rounded-t-lg border border-black">
                         <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Section
@@ -160,23 +187,51 @@ export default function AssignTeacherRow({ Class }) {
                     {!loading ?
                         sectionsDetails.length > 0 ?
                             (
-
                                 <div>
-
                                     {sectionsDetails.map((details, index) => (
                                         <div key={index} className={`flex justify-between w-full py-2 pl-2  h-fit border border-black ${index === sectionsDetails.length - 1 && !showNewRow ? "rounded-b-lg" : ""}`}>
                                             <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                                                 {details.section}
                                             </h1>
-                                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.name}
-                                            </h1>
-                                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                                                {details.name ? "Assigned" : <button onClick={() => handleUpdateClick(index)}>Update</button>}
-                                            </h1>
+                                            <div className='relative'>
+                                                {editingRow === index ? (
+                                                    <input
+                                                        type="text"
+                                                        className="w-36 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap"
+                                                        placeholder="Teacher"
+                                                        value={email}
+                                                        onChange={handleEmailChange}
+                                                        required
+                                                    />
+                                                ) : (
+                                                    <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                        {details.name}
+                                                    </h1>
+                                                )}
+                                                {showSuggestions && suggestions.length > 0 && (
+                                                    <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                                        {suggestions.map((suggest, idx) => (
+                                                            <li
+                                                                key={idx}
+                                                                className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                                                onClick={() => handleSuggestionClick(suggest)}
+                                                            >
+                                                                <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                                                {suggest.email}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+                                            </div>
+                                            <div className='w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
+                                                {editingRow === index ? (
+                                                    <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleConfirmClick(index)}>Confirm</button>
+                                                ) : (
+                                                    <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdateClick(index)}>Update</button>
+                                                )}
+                                            </div>
                                         </div>
                                     ))}
-
                                 </div>
                             )
                             :
@@ -215,13 +270,13 @@ export default function AssignTeacherRow({ Class }) {
                                 )}
                             </div>
                             <div>
-                            <button className=' px-4 text-green-400 hover:text-green-700 ' onClick={handleAddSection}>
-                                Save
-                            </button>
-                            {" / "}
-                            <button className=' px-4  text-red-400 hover:text-red-700' onClick={()=>{setShowNewRow(false)}}>
-                                Cancel
-                            </button>
+                                <button className=' px-4 text-green-400 hover:text-green-700 ' onClick={handleAddSection}>
+                                    Save
+                                </button>
+                                {" / "}
+                                <button className=' px-4  text-red-400 hover:text-red-700' onClick={() => { setShowNewRow(false) }}>
+                                    Cancel
+                                </button>
                             </div>
                         </div>
                     ) : (

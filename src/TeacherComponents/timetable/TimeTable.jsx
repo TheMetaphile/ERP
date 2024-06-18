@@ -163,7 +163,12 @@ function TimeTable() {
             <div className='   w-full rounded-lg border shadow-md'>
                 {loading ? (
                     <Loading />
-                ) : (
+                ) : !fetchedTimeTableStructure ?
+                (
+                    <>No</>
+                ):
+                (
+                    
                     <Table
                         data={data}
                         Time={lectureTimes}

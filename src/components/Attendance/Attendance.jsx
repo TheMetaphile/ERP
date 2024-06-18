@@ -1,3 +1,4 @@
+import React, { useState, useContext,useEffect } from "react";
 import PresentAttendanceTile from "./utils/PresentTile";
 import TotalAttendance from "./utils/TotalAttendaceTile";
 import Present from './../../assets/present1.png';
@@ -5,7 +6,36 @@ import Absent from './../../assets/absent1.png';
 import Leave from './../../assets/leave.png';
 import Calendar from "./utils/CalendarTile";
 import Doughnut from "./../Home/utils/AttendanceCard/PieChart";
+import AuthContext from "../../Context/AuthContext";
+import axios from 'axios'
+
 export default function Attendance() {
+  const { authState } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+  
+        try {
+            const today = new Date();
+            const month=parseInt(today.getMonth()+1,10);
+            const year=today.getFullYear();
+            const response = await axios.get(`https://attendance-api-lako.onrender.com/studentAttendance/fetch/student?month=${month}&year=${year}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`,
+                }
+            });
+           console.log('y',year);
+           console.log('m',month)
+            console.log('data', response.data)
+        } catch (error) {
+            console.error("Error fetching student month attendance:", error);
+        }
+    };
+
+    fetchStudents();
+}, [authState.accessToken]);
+
+
   const data = {
     labels: [
       'Absent',

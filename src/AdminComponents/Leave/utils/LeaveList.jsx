@@ -12,8 +12,6 @@ const LeaveCard = () => {
         <div className="bg-white p-4 rounded-lg shadow-md w-full flex flex-col">
            
             <div className="flex gap-10  mobile:max-tablet:gap-4">
-                <button className={`text-xl px-4 border border-gray-300 ${selectedRole === 'all' ? 'bg-blue-400' : 'bg-white'} rounded-lg`}
-                    onClick={() => selectRole('all')}>All</button>
                 <button className={`text-xl border border-gray-300 ${selectedRole === 'student' ? 'bg-blue-400' : 'bg-white'} rounded-lg px-4`}
                     onClick={() => selectRole('student')}>Student</button>
                 <button className={`text-xl border border-gray-300 ${selectedRole === 'teacher' ? 'bg-blue-400' : 'bg-white'} rounded-lg px-4`}
@@ -42,11 +40,7 @@ const LeaveCard = () => {
                      <StudentLeaves/>
                     </div>
                 )}
-                {selectedRole === 'all' && (
-                    <div className="">
-                     <StudentLeaves/>
-                    </div>
-                )}
+
             </div>
         </div>
     );

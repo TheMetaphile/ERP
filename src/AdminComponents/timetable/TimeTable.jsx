@@ -7,6 +7,9 @@ import TableStudent from './utils/TableStudent';
 import SelectionTeacher from './utils/SelectionTeacher';
 import Loading from '../../LoadingScreen/Loading'
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function TimeTable() {
 
     const [selectClass, setClass] = useState('3rd')
@@ -20,20 +23,25 @@ function TimeTable() {
     const [loading, setLoading] = useState(false);
     const [fetchedTimeTableStructure, setTimetableStructure] = useState(null);
     const [lectureTimes, setLectureTimes] = useState([]);
-
+    const [error, setError] = useState(null);
     var ClassRange = null;
     const Class = selectClass;
 
     useEffect(() => {
         if (Class === 'Pre-Nursery' || Class === 'L.K.G' || Class === 'U.K.G' || Class === 'U.K.J') {
-            ClassRange = 'Pre-Nursery - U.K.J'
+            if (ClassRange != 'Pre-Nursery - U.K.J') {
+                ClassRange = 'Pre-Nursery - U.K.J'
+            }
+
         } else {
-            ClassRange = '1st-12th'
+            if (ClassRange != '1st-12th') {
+                ClassRange = '1st-12th'
+            }
         }
     }, [Class]);
 
     useEffect(() => {
-        if(!loading){
+        if (!loading) {
             setLoading(true);
             handleTimeFetch();
         }
@@ -60,6 +68,8 @@ function TimeTable() {
             }
         }
         setLectureTimes(times);
+        setLoading(false)
+
     };
 
     const convertToDate = (timeString) => {
@@ -81,8 +91,10 @@ function TimeTable() {
 
 
     useEffect(() => {
-        calculateLectureTimes();
-    }, [fetchedTimeTableStructure]);
+        if(fetchedTimeTableStructure!=null){
+            calculateLectureTimes();
+        }
+    }, [fetchedTimeTableStructure,role]);
 
 
 
@@ -124,11 +136,11 @@ function TimeTable() {
 
     useEffect(() => {
         if (fetchedTimeTableStructure != null) {
-            var time=new Date()
+            var time = new Date()
             console.log(time)
             handleSearch();
         }
-    }, [fetchedTimeTableStructure,role]);
+    }, [fetchedTimeTableStructure, role]);
 
     const handleRoleChange = (event) => {
         setRole(event.target.value);
@@ -156,7 +168,7 @@ function TimeTable() {
         if ((selectClass && selectedSection) || (teacherEmail && day)) {
             console.log(selectClass, selectedSection);
             console.log(teacherEmail, day)
-            setLoading(true);
+         
             try {
                 const url = role === 'Teacher' ? 'https://timetableapi-1wfp.onrender.com/timetable/fetch/teacher' : 'https://timetableapi-1wfp.onrender.com/timetable/fetch/student';
                 const payload = {
@@ -175,16 +187,16 @@ function TimeTable() {
                     setData(response.data);
                 }
             } catch (error) {
-                console.error('Error fetching data:', error);
+                toast.error(error.response.data.error)
+                console.error('Error fetching dataaaa:', error.response.data.error);
             }
-            finally {
-                setLoading(false);
-            }
+            
         }
     };
 
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+            <ToastContainer />
             <div className='flex justify-between items-center w-full'>
                 <h1 className='text-2xl'>Time Table</h1>
                 <div className="flex gap-4 px-3 py-2  mt-2 text-lg justify-between">

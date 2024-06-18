@@ -4,6 +4,7 @@ import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MdDeleteForever } from "react-icons/md";
 
 function SubjectDetails({ Class, section }) {
     const [subjectDetails, setSubjects] = useState([]);
@@ -44,7 +45,7 @@ function SubjectDetails({ Class, section }) {
         console.log('class', Class, 'section', section, 'email', newRow.email, 'subject', newRow.subject)
 
         try {
-            if(newRow.email){
+            if (newRow.email) {
                 const response = await axios.post('https://assignsubjectapi.onrender.com/assign', {
                     accessToken: authState.accessToken,
                     class: Class,
@@ -60,14 +61,14 @@ function SubjectDetails({ Class, section }) {
                     toast.success('Subject Assigned Successfully');
                 }
             }
-            else{
+            else {
                 toast.error('Please specify teacher');
             }
-            
+
         } catch (error) {
             console.error("Error assigning subject:", error);
             toast.error('Please specify subject');
-           
+
         }
     }
 
@@ -121,6 +122,29 @@ function SubjectDetails({ Class, section }) {
         }
     }, [temp, authState.accessToken])
 
+    const handleDelete = async (index) => {
+        const { email, subject } = subjectDetails[index];
+        console.log('Deleting ', Class, 'section:', section, 'email:', email, 'subject:', subject);
+
+        try {
+            const response = await axios.delete('https://assignsubjectapi.onrender.com/delete', {
+                accessToken: authState.accessToken,
+                class: Class,
+                section: section,
+                subject: subject
+            });
+
+            if (response.status === 200) {
+                const updatedSubjects = subjectDetails.filter((_, i) => i !== index);
+                setSubjects(updatedSubjects);
+                toast.success('Subject Deleted Successfully');
+            }
+        } catch (error) {
+            console.error("Error deleting subject:", error);
+            toast.error('Error deleting subject');
+        }
+    };
+
     return (
         <div className='px-5 mt-2 mb-2 py-2'>
             <ToastContainer />
@@ -133,6 +157,9 @@ function SubjectDetails({ Class, section }) {
                 </h1>
                 <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                     Email
+                </h1>
+                <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                    Action
                 </h1>
             </div>
             {!subjectLoading ?
@@ -152,6 +179,10 @@ function SubjectDetails({ Class, section }) {
                                 <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                     {detail.email}
                                 </h1>
+                                <h1 className=" items-center cursor-pointer w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap text-red-500">
+                                    <MdDeleteForever  onClick={() => handleDelete(index)}/>
+                                </h1>
+
                             </div>
                         ))
                     )
@@ -164,7 +195,7 @@ function SubjectDetails({ Class, section }) {
             {showNewRow ? (
                 <div className="px-2 flex justify-between  py-2 pl-2 h-fit border  gap-4">
                     <div className='w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'></div>
-                    <input type="text" value={newRow.subject} onChange={(e) => handleChange(e, 'subject')} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Subject" required/>
+                    <input type="text" value={newRow.subject} onChange={(e) => handleChange(e, 'subject')} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Subject" required />
                     <div className='relative w-full'>
                         <input type="text" value={newRow.email} onChange={handleEmailChange} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Email" required />
                         {showSuggestions && suggestions.length > 0 && (

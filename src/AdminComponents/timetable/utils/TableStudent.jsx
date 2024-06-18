@@ -15,7 +15,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
     const handleEditClick = () => {
         setEditMode(true);
     };
-
+console.log('ttt',Time)
     const formatTime = (date) => {
         let hours = date.getHours();
         const minutes = date.getMinutes();
@@ -100,7 +100,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                     <div>
                         {lectures.map((lecture, idx) => (
                             <React.Fragment key={lecture._id}>
-                                {numberOfLeacturesBeforeLunch === idx ? (
+                                {numberOfLeacturesBeforeLunch === idx+1  ? (
                                     <div className="w-full h-8 bg-secondary text-xl text-center border">LUNCH</div>
                                 ) : null}
                                 <div className="flex w-full justify-between px-4 py-2 mb-2 mt-2">
@@ -116,7 +116,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                                 lecture.lectureNo
                                             )}
                                         </h1>
-                                        <h1 className="w-1/4">{`${formatTime(Time[lecture.lectureNo - 1].start)}-${formatTime(Time[lecture.lectureNo - 1].end)}`}</h1>
+                                        <h1 className="w-1/4">{`${formatTime(Time[lecture.lectureNo-1].start)}-${formatTime(Time[lecture.lectureNo-1].end)}`}</h1>
 
                                         <h1 className="w-1/4 ">
                                             {editMode ? (

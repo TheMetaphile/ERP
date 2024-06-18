@@ -3,6 +3,7 @@ import React from "react";
 
 export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, Time, data, day }) {
     const lectures = data && data[day] ? data[day] : [];
+   
     return (
         <div className=" flex-1 w-full justify-between px-4 py-2 mb-2 mt-2" key={index}>
             {numberOfLeacturesBeforeLunch === index ? (

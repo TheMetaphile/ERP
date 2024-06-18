@@ -1,37 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Profile from '../../assets/Test Account.png'
-function StudentAttendance() {
-    const [students, setStudents] = useState([
-        {
-            name: "Abhishek",
-            class: "A",
-            present: true,
-            absent: false,
-            late: false,
-        },
+import axios from 'axios'
+import AuthContext from '../../Context/AuthContext'
+import Loading from '../../LoadingScreen/Loading'
 
-        {
-            name: "Bhanu",
-            class: "B",
-            present: false,
-            absent: true,
-            late: false,
-        },
-        {
-            name: "Chetan",
-            class: "C",
-            present: false,
-            absent: false,
-            late: true,
-        },
-        {
-            name: "Dharmesh",
-            class: "D",
-            present: true,
-            absent: false,
-            late: false,
-        }, 
-    ]);
+function StudentAttendance() {
+    const [students, setStudents] = useState([]);
+    const { authState } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        const fetchStudents = async () => {
+            setLoading(true);
+            try {
+                const today = new Date();
+                const formattedDate = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+                const response = await axios.get(`https://attendance-api-lako.onrender.com/studentAttendance/fetch/student/list?date=${formattedDate}`, {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    }
+                });
+                setStudents(response.data.studentsList);
+                console.log('fetch', response.data)
+            } catch (error) {
+                console.error("Error fetching student attendance:", error);
+            }
+            finally {
+                setLoading(false)
+            }
+        };
+
+        fetchStudents();
+    }, [authState.accessToken]);
 
     const handleAttendance = (index, type) => {
         const updatedStudents = [...students];
@@ -41,15 +41,15 @@ function StudentAttendance() {
             case "present":
                 student.present = !student.present;
                 student.absent = false;
-                student.late = false;
+                student.leave = false;
                 break;
             case "absent":
                 student.absent = !student.absent;
                 student.present = false;
-                student.late = false;
+                student.leave = false;
                 break;
-            case "late":
-                student.late = !student.late;
+            case "leave":
+                student.leave = !student.leave;
                 student.present = false;
                 student.absent = false;
                 break;
@@ -98,47 +98,42 @@ function StudentAttendance() {
                     </button>
                 </div>
                 <div className=" border rounded-lg shadow-md mt-2">
-                    {students.map((student, index) => (
-                        <div
-                            key={index}
-                            className=" p-4  items-center "
-                        >
-                            <div className="flex w-full  items-center">
-                                <span className="mr-2 ">{student.class}</span>
-                                <div className="bg-gray-300 h-1 w-full"></div>
-                            </div>
-                            <div className="flex w-full  justify-between items-center border p-2 rounded-lg">
-                                <div className="flex items-center  px-3">
-                                    <img src={Profile} alt="User image" className="w-7 h-7"></img>
-                                    <span className="ml-2 ">{student.name}</span>
+                    {loading ? (
+                        <Loading />
+                    )
+                        : (
+                            <>
+                                { students.map((student, index) => (
+                                        <div key={index} className=" p-4  items-center ">
+                                            <div className="flex w-full  items-center">
+                                                <span className="mr-2 ">{student.class}</span>
+                                                <div className="bg-gray-300 h-1 w-full"></div>
+                                            </div>
+                                            <div className="flex w-full  justify-between items-center border p-2 rounded-lg">
+                                                <div className="flex items-center  px-3">
+                                                    <img src={student.profileLink} alt="User image" className="w-7 h-7 rounded-full"></img>
+                                                    <span className="ml-2 ">{student.name}</span>
+                                                </div>
+                                                <div className="flex items-center space-x-2 ">
+                                                    <button className={`px-2  rounded-full ${student.present ? "bg-green-500 text-white" : "bg-gray-300" }`} onClick={() => handleAttendance(index, "present")}>
+                                                        P
+                                                    </button>
+                                                    <button
+                                                        className={`px-2  rounded-full ${student.absent ? "bg-red-500 text-white" : "bg-gray-300" }`} onClick={() => handleAttendance(index, "absent")}>
+                                                        A
+                                                    </button>
+                                                    <button
+                                                        className={`px-2  rounded-full ${student.leave ? "bg-yellow-500 text-white" : "bg-gray-300" }`} onClick={() => handleAttendance(index, "leave")}>
+                                                        L
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </>
+                        )}
 
-                                </div>
-                                <div className="flex items-center space-x-2 ">
-                                    <button
-                                        className={`px-2  rounded-full ${student.present ? "bg-green-500 text-white" : "bg-gray-300"
-                                            }`}
-                                        onClick={() => handleAttendance(index, "present")}
-                                    >
-                                        P
-                                    </button>
-                                    <button
-                                        className={`px-2  rounded-full ${student.absent ? "bg-red-500 text-white" : "bg-gray-300"
-                                            }`}
-                                        onClick={() => handleAttendance(index, "absent")}
-                                    >
-                                        A
-                                    </button>
-                                    <button
-                                        className={`px-2  rounded-full ${student.late ? "bg-yellow-500 text-white" : "bg-gray-300"
-                                            }`}
-                                        onClick={() => handleAttendance(index, "late")}
-                                    >
-                                        L
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
                 </div>
             </div>
         </div>
@@ -147,3 +142,4 @@ function StudentAttendance() {
 }
 
 export default StudentAttendance
+
