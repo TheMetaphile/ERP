@@ -124,15 +124,16 @@ function SubjectDetails({ Class, section }) {
 
     const handleDelete = async (index) => {
         const { email, subject } = subjectDetails[index];
-        console.log('Deleting ', Class, 'section:', section, 'email:', email, 'subject:', subject);
+        console.log('Deleting ', Class, 'section:', section, 'email:', email, 'subject:', subject , authState.accessToken);
 
         try {
             const response = await axios.delete('https://assignsubjectapi.onrender.com/delete', {
+                data: {
                 accessToken: authState.accessToken,
                 class: Class,
                 section: section,
                 subject: subject
-            });
+            }});
 
             if (response.status === 200) {
                 const updatedSubjects = subjectDetails.filter((_, i) => i !== index);
@@ -146,7 +147,7 @@ function SubjectDetails({ Class, section }) {
     };
 
     return (
-        <div className='px-5 mt-2 mb-2 py-2'>
+        <div className='px-5 mt-2 mb-2 py-2' >
             <ToastContainer />
             <div className="flex justify-between py-2 pl-2  h-fit rounded-t-lg border bg-blue-200">
                 <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
@@ -179,9 +180,12 @@ function SubjectDetails({ Class, section }) {
                                 <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                     {detail.email}
                                 </h1>
-                                <h1 className=" items-center cursor-pointer w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap text-red-500">
+                                <div className='w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
+                                    <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleDelete(index)}>Delete</button>
+                                </div>
+                                {/* <h1 className=" items-center cursor-pointer w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap text-red-500">
                                     <MdDeleteForever  onClick={() => handleDelete(index)}/>
-                                </h1>
+                                </h1> */}
 
                             </div>
                         ))

@@ -18,15 +18,19 @@ export default function ApplyLeave() {
             return;
         }
         setIsLoading(true);
-        console.log(authState.accessToken, startDate,endDate, authState.userDetails.email,reason)
+        console.log(startDate, endDate, reason)
         try {
             const response = await axios.post('https://studentleaveapi.onrender.com/leave/apply', {
-                accessToken: authState.accessToken,
                 startDate,
                 endDate,
-                email: authState.userDetails.email,
                 reason
-            });
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    }
+                }
+            );
             if (response.status === 200) {
                 toast.success('Leave applied successfully!');
                 setStartDate('');
@@ -44,7 +48,7 @@ export default function ApplyLeave() {
 
     return (
         <div className=" flex flex-col items-center p-4 ml-2 mr-2 rounded-lg shadow-md">
-            <ToastContainer />
+            {/* <ToastContainer /> */}
             <h1 className="text-center text-lg md:text-xl font-medium">Apply Leave</h1>
             <div className='mt-3 w-full md:w-2/3 lg:w-1/2'>
 

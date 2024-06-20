@@ -18,21 +18,23 @@ export default function AttendenceTable() {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.post('https://studentleaveapi.onrender.com/leave/fetch/particularStudent', {
-        accessToken: authState.accessToken,
-        email: authState.userDetails.email
+      const response = await axios.get(`https://studentleaveapi.onrender.com/leave/fetch/particularStudent?start=${0}&end=${20}`, {
+        headers: {
+          Authorization: `Bearer ${authState.accessToken}`
+        }
       });
       console.log("API response:", response.data);
-      setData(response.data.leaves);
+      setData(response.data.Leaves);
       setLoading(false);
     } catch (err) {
       setError(err.message);
-      setLoading(false);
     }
   };
+
   useEffect(() => {
 
     if (authState.accessToken) {
+      setLoading(true);
       fetchUserData();
     } else {
       setError('No access token available');
@@ -56,22 +58,30 @@ export default function AttendenceTable() {
 
   const handleUpdate = async (index) => {
     const updatedLeave = {
-      accessToken: authState.accessToken,
-      email: authState.userDetails.email,
       ...editData,
       leaveId: data[index]._id
     };
     console.log(updatedLeave)
     try {
-      
-      const response = await axios.post('https://studentleaveapi.onrender.com/leave/update', updatedLeave);
+
+      const response = await axios.put('https://studentleaveapi.onrender.com/leave/update',
+        {
+          updatedLeave
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authState.accessToken}`,
+          }
+        },
+
+      );
       const updatedData = [...data];
       updatedData[index] = editData;
       setData(updatedData);
       setEditRowIndex(null);
       if (response.status === 200) {
-       toast.success('Leave Updated');
-    }
+        toast.success('Leave Updated');
+      }
     } catch (err) {
       setError(err.message);
       toast.error(err)
@@ -79,36 +89,41 @@ export default function AttendenceTable() {
   };
 
 
-   
-    // console.log(data[index]._id)
 
-    const handleDelete = async (index) => {
-      
-      const id = (data[index]._id);
-      console.log(id)
-      console.log('stat',(data[index].status))
-      if ((data[index].status) === "Pending") {
-        try {
-          const response = await axios.post('https://studentleaveapi.onrender.com/leave/delete', {
-            accessToken: authState.accessToken,
-            leaveId: id
-          });
-          if (response.status === 200) {
-            const updatedData = data.filter((_, i) => i !== index);
-            setData(updatedData);
-            console.log('succeess')
-            toast.success('Leave Deleted');
+  // console.log(data[index]._id)
+
+  const handleDelete = async (index) => {
+
+    const id = (data[index]._id);
+    console.log(id)
+    console.log('stat', (data[index].status))
+    if ((data[index].status) === "Pending") {
+      try {
+        const response = await axios.delete(
+          `https://studentleaveapi.onrender.com/leave/delete?leaveId=${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${authState.accessToken}`
+            }
           }
-        } catch (err) {
-          setError(err.message);
-          toast.error(err.message);
+        );
+
+        if (response.status === 200) {
+          const updatedData = data.filter((_, i) => i !== index);
+          setData(updatedData);
+          console.log('succeess')
+          toast.success('Leave Deleted');
         }
-      } else {
-        toast.error('Cannot delete leave that is not pending');
+      } catch (err) {
+        setError(err.message);
+        toast.error(err.message);
       }
-    };
-    
-  
+    } else {
+      toast.error('Cannot delete leave that is not pending');
+    }
+  };
+
+
 
 
   return (
@@ -116,8 +131,8 @@ export default function AttendenceTable() {
       <ToastContainer />
       {loading ? (
         <Loading />
-      ) : error ? (
-        <div className="text-red-500">{error}</div>
+      ) : data === null ? (
+        <div >No data available</div>
       ) : (
         <table className='mt-7 mb-3 w-full justify-evenly text-center outline outline-gray-400 rounded-lg'>
           <thead>
@@ -168,7 +183,7 @@ export default function AttendenceTable() {
                     <CiEdit className='text-green-500 cursor-pointer' onClick={() => handleEditClick(index)} />
                   )}
                   &nbsp; / &nbsp;
-                  <MdDeleteForever className='text-red-500 cursor-pointer' onClick={() => handleDelete(index)}/>
+                  <MdDeleteForever className='text-red-500 cursor-pointer' onClick={() => handleDelete(index)} />
                 </td>
               </tr>
             ))}

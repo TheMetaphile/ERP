@@ -3,9 +3,13 @@ import Profile from '../../assets/Test Account.png'
 import axios from 'axios'
 import AuthContext from '../../Context/AuthContext'
 import Loading from '../../LoadingScreen/Loading'
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function StudentAttendance() {
     const [students, setStudents] = useState([]);
+    const [studentClone, setStudentClone] = useState([]);
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false)
 
@@ -20,8 +24,15 @@ function StudentAttendance() {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }
                 });
-                setStudents(response.data.studentsList);
-                console.log('fetch', response.data)
+                const studentsList = response.data.studentsList.map(student => ({
+                    ...student,
+                    present: false,
+                    absent: false,
+                    leave: student.leave
+                }));
+                setStudents(studentsList);
+                setStudentClone(studentsList)
+                console.log('fetch', studentsList)
             } catch (error) {
                 console.error("Error fetching student attendance:", error);
             }
@@ -34,35 +45,90 @@ function StudentAttendance() {
     }, [authState.accessToken]);
 
     const handleAttendance = (index, type) => {
-        const updatedStudents = [...students];
+        const updatedStudents = [...studentClone];
         const student = updatedStudents[index];
 
         switch (type) {
-            case "present":
+            case "Present":
                 student.present = !student.present;
-                student.absent = false;
-                student.leave = false;
+                if (student.present) {
+                    student.absent = false;
+                    student.leave = false;
+                }
                 break;
-            case "absent":
+            case "Absent":
                 student.absent = !student.absent;
-                student.present = false;
-                student.leave = false;
+                if (student.absent) {
+                    student.present = false;
+                    student.leave = false;
+                }
                 break;
-            case "leave":
+            case "Leave":
                 student.leave = !student.leave;
-                student.present = false;
-                student.absent = false;
+                if (student.leave) {
+                    student.present = false;
+                    student.absent = false;
+                }
                 break;
             default:
                 break;
         }
 
-        setStudents(updatedStudents);
+        setStudentClone(updatedStudents);
     };
+
+    const handleMark = async () => {
+        const today = new Date();
+        const formattedDate = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
+        const studentAttendance = studentClone.map(student => ({
+            email: student.email,
+            status: student.present ? "Present" : student.absent ? "Absent" : student.leave ? "Leave" : "Absent"
+        }));
+
+        const requestData = {
+            accessToken: authState.accessToken,
+            date: formattedDate,
+            studentAttendance
+        };
+        console.log(requestData)
+
+        try {
+            const response = await axios.post('https://attendance-api-lako.onrender.com/studentAttendance/mark', 
+                requestData
+            );
+            if(response.status === 200){
+                console.log('Attendance marked:', response.data);
+                toast.success('Attendence marked')
+                const resetStudents = studentClone.map(student => ({
+                    ...student,
+                    present: false,
+                    absent: false,
+                    leave: false
+                }));
+                setStudentClone(resetStudents);
+            }
+            
+        } catch (error) {
+            toast.error('Error',error)
+            console.error("Error marking attendance:", error);
+        }
+    };
+
     return (
         <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2  mb-3 no-scrollbar">
+            <ToastContainer />
             <div className="container mx-auto p-4">
-                <h1 className="text-2xl  mb-4">Student Attendance</h1>
+                <div className=" flex justify-between items-center mb-4">
+                    <h1 className="text-2xl  ">Student Attendance</h1>
+                    <Link
+                        to="/Teacher-Dashboard/studentattendence/record"
+                        className="text-2xl px-4 py-2 bg-green-500 text-white rounded-md cursor-pointer"
+                    >
+                        Previous Record
+                    </Link>
+
+
+                </div>
                 <div className="flex justify-between mb-4">
                     <div className="w-1/3">
                         <select className="w-full px-4 py-2 border rounded-md">
@@ -93,7 +159,7 @@ function StudentAttendance() {
                             <option value="English">English</option>
                         </select>
                     </div>
-                    <button className="px-4 py-2 bg-green-500 text-white rounded-md">
+                    <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={handleMark}>
                         Mark Attendance
                     </button>
                 </div>
@@ -103,33 +169,33 @@ function StudentAttendance() {
                     )
                         : (
                             <>
-                                { students.map((student, index) => (
-                                        <div key={index} className=" p-4  items-center ">
-                                            <div className="flex w-full  items-center">
-                                                <span className="mr-2 ">{student.class}</span>
-                                                <div className="bg-gray-300 h-1 w-full"></div>
+                                {studentClone.map((student, index) => (
+                                    <div key={index} className=" p-4  items-center ">
+                                        <div className="flex w-full  items-center">
+                                            <span className="mr-2 ">{student.class}</span>
+                                            <div className="bg-gray-300 h-1 w-full"></div>
+                                        </div>
+                                        <div className="flex w-full  justify-between items-center border p-2 rounded-lg">
+                                            <div className="flex items-center  px-3">
+                                                <img src={student.profileLink} alt="User image" className="w-7 h-7 rounded-full"></img>
+                                                <span className="ml-2 ">{student.name}</span>
                                             </div>
-                                            <div className="flex w-full  justify-between items-center border p-2 rounded-lg">
-                                                <div className="flex items-center  px-3">
-                                                    <img src={student.profileLink} alt="User image" className="w-7 h-7 rounded-full"></img>
-                                                    <span className="ml-2 ">{student.name}</span>
-                                                </div>
-                                                <div className="flex items-center space-x-2 ">
-                                                    <button className={`px-2  rounded-full ${student.present ? "bg-green-500 text-white" : "bg-gray-300" }`} onClick={() => handleAttendance(index, "present")}>
-                                                        P
-                                                    </button>
-                                                    <button
-                                                        className={`px-2  rounded-full ${student.absent ? "bg-red-500 text-white" : "bg-gray-300" }`} onClick={() => handleAttendance(index, "absent")}>
-                                                        A
-                                                    </button>
-                                                    <button
-                                                        className={`px-2  rounded-full ${student.leave ? "bg-yellow-500 text-white" : "bg-gray-300" }`} onClick={() => handleAttendance(index, "leave")}>
-                                                        L
-                                                    </button>
-                                                </div>
+                                            <div className="flex items-center space-x-2 ">
+                                                <button className={`px-2  rounded-full ${student.present ? "bg-green-500 text-white" : "bg-gray-300"}`} onClick={() => handleAttendance(index, "Present")}>
+                                                    P
+                                                </button>
+                                                <button
+                                                    className={`px-2  rounded-full ${student.absent ? "bg-red-500 text-white" : "bg-gray-300"}`} onClick={() => handleAttendance(index, "Absent")}>
+                                                    A
+                                                </button>
+                                                <button
+                                                    className={`px-2  rounded-full ${student.leave ? "bg-yellow-500 text-white" : "bg-gray-300"}`} onClick={() => handleAttendance(index, "Leave")}>
+                                                    L
+                                                </button>
                                             </div>
                                         </div>
-                                    ))
+                                    </div>
+                                ))
                                 }
                             </>
                         )}

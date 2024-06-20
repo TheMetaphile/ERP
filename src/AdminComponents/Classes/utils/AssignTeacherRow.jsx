@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
-import TeacherRowContent from './TeacherRowContent';
 import AuthContext from '../../../Context/AuthContext';
 import Loading from './../../../LoadingScreen/Loading';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 export default function AssignTeacherRow({ Class }) {
     const [expanded, setExpanded] = useState(false);
@@ -159,7 +157,6 @@ export default function AssignTeacherRow({ Class }) {
 
     return (
         <div key={Class} className=" w-full mb-4 rounded-lg mt-2 shadow-md border" >
-            <ToastContainer />
             <div className="flex justify-between items-center p-2  hover:cursor-pointer" onClick={handleClick}>
                 <div className="w-1/4">
                     <div className="px-4 py-2 ">

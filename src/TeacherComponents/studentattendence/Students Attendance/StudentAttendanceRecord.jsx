@@ -1,12 +1,11 @@
 import React, { useEffect, useContext, useState } from "react";
 import AttendanceStatusGridTile from "./utils/AttendanceStatusGridTile";
 import SearchBar from "./utils/SearchBar";
+import Loading from "../../../LoadingScreen/Loading"
 import axios from 'axios'
-import Loading from "../../../LoadingScreen/Loading";
-import AuthContext from "../../../Context/AuthContext";
+import AuthContext from "../../../Context/AuthContext"
 
-export default function StudentAttendance() {
-
+export default function StudentAttendanceRecord() {
     const [data, setData] = useState(null);
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false)
@@ -37,9 +36,11 @@ export default function StudentAttendance() {
     }, [authState.accessToken]);
 
 
+
     return (
         <div className="flex flex-col mx-2 mt-4">
             <div className="text-3xl mx-2 px-4">Student's Attendance Details</div>
+
             <div className="mx-2 mt-4">
                 <SearchBar />
             </div>

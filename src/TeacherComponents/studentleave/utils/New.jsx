@@ -13,17 +13,19 @@ function New() {
         setLoading(true);
 
         try {
-            const response = await axios.post('https://studentleaveapi.onrender.com/leave/fetch/classTeacher', {
-                accessToken: authState.accessToken,
+            const response = await axios.get(`https://studentleaveapi.onrender.com/leave/fetch/classTeacher?start=${0}&end=${20}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
+                }
             });
             console.log("API response:", response.data);
-            setData(response.data || []); 
-            
+            setData(response.data || []);
+
         } catch (err) {
             setError(err.message);
-        
+
         }
-        finally{
+        finally {
             setLoading(false);
 
         }
@@ -48,7 +50,7 @@ function New() {
 
     return (
         <div className='ml-3 mr-3'>
-            <NewTile data={data}/>       
+            <NewTile data={data} />
         </div>
     )
 }

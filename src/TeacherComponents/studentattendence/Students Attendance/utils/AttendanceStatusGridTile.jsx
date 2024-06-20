@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameDay } from 'date-fns';
-import { FaCheck, FaTimes,FaExclamation } from "react-icons/fa";
-
+import { startOfMonth, endOfMonth, eachDayOfInterval, format } from 'date-fns';
+import { FaCheck, FaTimes, FaExclamation } from "react-icons/fa";
 
 export default function AttendanceStatusGridTile({ data }) {
     const [selectedDate, setSelectedDate] = useState(null);
@@ -10,6 +9,7 @@ export default function AttendanceStatusGridTile({ data }) {
     const handleDateClick = (date) => {
         setSelectedDate(date);
     };
+
     const handleStudentClick = (index) => {
         setSelectedStudent(index);
     };
@@ -77,5 +77,5 @@ export default function AttendanceStatusGridTile({ data }) {
                 ))}
             </div>
         </div>
-    )
+    );
 }

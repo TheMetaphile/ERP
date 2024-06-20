@@ -100,6 +100,7 @@ import Upload from "./AdminComponents/timetable/utils/Upload.jsx";
 import ClassTeacher from "./AdminComponents/Classes/utils/ClassTeacher.jsx";
 import AssignTeacher from "./AdminComponents/Classes/utils/AssignTeacher.jsx";
 import AssignSubject from "./AdminComponents/Subjects/utils/AssignSubject.jsx";
+import StudentAttendanceRecord from "./TeacherComponents/studentattendence/Students Attendance/StudentAttendanceRecord.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -525,6 +526,11 @@ const router = createBrowserRouter([
       {
         path: "/Teacher-Dashboard/studentAttendence",
         element: <TeacherStudentAttendance/>,
+        children:[]
+      }, 
+      {
+        path: "/Teacher-Dashboard/studentattendence/record",
+        element: <StudentAttendanceRecord/>,
         children:[]
       },
       {

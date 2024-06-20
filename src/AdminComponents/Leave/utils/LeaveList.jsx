@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import StudentLeaves from "./StudentLeaves";
-
+import TeacherLeaves from "./TeacherLeaves"
+import EmployeeLeaves from "./EmployeeLeaves"
 const LeaveCard = () => {
     const [selectedRole, setSelectedRole] = useState('teacher');
 
@@ -25,13 +26,13 @@ const LeaveCard = () => {
             <div className="mt-2">
                 {selectedRole === 'teacher' && (
                     <div className="">
-                    <StudentLeaves/>
+                    <TeacherLeaves/>
                    </div>
                 )}
 
                 {selectedRole === 'employee' && (
                     <div className="">
-                    <StudentLeaves/>
+                    <EmployeeLeaves />
                    </div>
                 )}
 

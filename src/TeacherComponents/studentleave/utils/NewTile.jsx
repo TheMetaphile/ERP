@@ -20,16 +20,21 @@ export default function NewTile({ data }) {
     const handleClick = (index) => {
         setExpanded(expanded === index ? null : index);
     }
+
     const handleStatusUpdate = async (leaveId, status, email) => {
         console.log('id', leaveId, 'status', status, 'email', email)
         setLoading(true);
         try {
-            const response = await axios.post('https://studentleaveapi.onrender.com/leave/update', {
-                accessToken: authState.accessToken,
-                status: status,
-                email: email,
-                leaveId: leaveId
-            });
+            const response = await axios.put('https://studentleaveapi.onrender.com/leave/update',{
+                    status: status,
+                    leaveId: leaveId
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`
+                    }
+                }
+            );
             console.log(`Leave ${leaveId} status updated to ${status}:`, response.data);
             setLeaves(prevLeaves => prevLeaves.filter(leave => leave._id !== leaveId));
         } catch (err) {
@@ -90,7 +95,7 @@ export default function NewTile({ data }) {
             ) : (
                 <div>No new leave</div>
             )}
-            {error && <div className="text-red-500 mt-3">{error}</div>}
+
         </div>
 
     )

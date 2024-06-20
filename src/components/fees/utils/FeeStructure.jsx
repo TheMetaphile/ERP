@@ -10,50 +10,60 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function FeeStructure() {
-    const { authState } = useContext(AuthContext);
-    const [fees, setFees] = useState([]);
+  const { authState } = useContext(AuthContext);
+  const [fees, setFees] = useState([]);
+  const [loading, setLoading] = useState(false)
+  const [totalAmount, setTotalAmount] = useState(0);
 
-    const fetchFees = async () => {
-        console.log(authState.userDetails.currentClass, 'Class')
-        try {
-          const response = await axios.get(`https://feeapi.onrender.com/fee/details?class=${authState.userDetails.currentClass}`, {
-            headers: {
-                'Authorization': `Bearer ${authState.accessToken}`
-              }
-          });
-          console.log("API response fees:", response.data);
-          if (response.data ) {
-            setFees(response.data.feeStructure);
-          } else {
-            toast.error('Unexpected response format');
-          }
-    
+  useEffect(() => {
+    if (authState.accessToken) {
+      setLoading(true);
+      fetchFees();
+    } else {
+      toast.error('No access token available');
+    }
+  }, [authState.accessToken]);
+
+  const fetchFees = async () => {
+    console.log(authState.userDetails.currentClass, 'Class')
+    try {
+      const response = await axios.get('https://feeapi.onrender.com/fee/fetch/student', {
+        headers: {
+          'Authorization': `Bearer ${authState.accessToken}`
         }
-        catch (error) {
-          const errorMessage = error.response?.data?.error || 'An error occurred';
-          toast.error(errorMessage);
-        }
-      }
-    
-      useEffect(() => {
-        if (authState.accessToken) {
-          fetchFees();
-        } else {
-          toast.error('No access token available');   
-        }
-      }, [authState.accessToken]);
-      
-    return (
-        <div className="w-full h-fit mb-4 bg-white rounded-lg shadow-md ">
-            <ToastContainer />
-            <Header />
-            
-            <FeeStructureField  fees={fees}/>
-            <FeeStructureField  fees={fees} />
-            <FeeStructureField  fees={fees}/>
-            <FeeStructureField  fees={fees}/>
-            <FeeStructureField  fees={fees}/>
-            <FeeStructureFooter fees={fees}/>
+      });
+      const total = response.data.feeStructure.reduce((acc, fee) => acc + fee.amount, 0);
+      console.log(total)
+      setTotalAmount(total)
+      console.log("API response fees:", response.data);
+      setFees(response.data.feeStructure);
+
+    }
+    catch (error) {
+      const errorMessage = error.response?.data?.error || 'An error occurred';
+      toast.error(errorMessage);
+    }
+    finally {
+      setLoading(false)
+    }
+  }
+
+
+
+  return (
+    <div className="w-full h-fit mb-4 bg-white rounded-lg shadow-md ">
+      <ToastContainer />
+      <Header />
+      {loading ? (
+        <Loading />
+      ) : fees === null ? (
+        <div>No data available</div>
+      ) : (
+        <div>
+          <FeeStructureField fees={fees} />
+          <FeeStructureFooter totalAmount={totalAmount} />
         </div>
-    );
+      )}
+    </div>
+  );
 }
