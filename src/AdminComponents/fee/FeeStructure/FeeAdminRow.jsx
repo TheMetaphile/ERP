@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
-import AuthContext from '../../Context/AuthContext';
-import Loading from '../../LoadingScreen/Loading';
+import AuthContext from '../../../Context/AuthContext';
+import Loading from '../../../LoadingScreen/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -46,7 +46,6 @@ export default function FeeAdminRow({ Class }) {
         }
     };
 
-
     const handleAddStructure = async () => {
         const structure = [
             {
@@ -80,7 +79,6 @@ export default function FeeAdminRow({ Class }) {
             toast.error('Error adding structure');
         }
     };
-
 
 
 
@@ -183,3 +181,4 @@ export default function FeeAdminRow({ Class }) {
         </div>
     );
 }
+

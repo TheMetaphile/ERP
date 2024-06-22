@@ -1,39 +1,44 @@
-import React from 'react';
-import FeeAdminRow from './FeeAdminRow';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from 'react';
+import { Link, Outlet } from "react-router-dom";
 
 function FeeAdmin() {
+    const [selectedLink, setSelectedLink] = useState('/Admin-Dashboard/StudentsFee/details');
 
-    const content = [
-        { class: 'Pre-Nursery' },
-        { class: 'L.K.J' },
-        { class: 'U.K.J' },
-        { class: '1st' },
-        { class: '2nd' },
-        { class: '3rd' },
-        { class: '4th' },
-        { class: '5th' },
-        { class: '6th' },
-        { class: '7th' },
-        { class: '8th' },
-        { class: '9th' },
-        { class: '10th' },
-        { class: '11th' },
-        { class: '12th' },
-    ];
+    const handleLinkSelect = (link) => {
+        setSelectedLink(link);
+    };
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2  mb-3 no-scrollbar">
-            <ToastContainer />
-            <h1 className="text-2xl p-2">Student Fee Structure</h1>
-            <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0 overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
-                {content.map((con, index) => (
-                    <FeeAdminRow Class={con.class} />
-                ))}
+        <div className=" flex flex-col px-3 mobile:max-tablet:px-0  overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+            
+            <div className=' border shadow-md mt-4 rounded-lg w-full'>
+                <div className=" flex   mt-4 ml-3 mr-3 items-center justify-between">
+                    <div className=" flex  gap-2 ">
+                        <Link
+                            to={'/Admin-Dashboard/StudentsFee/structure'}
+                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Admin-Dashboard/StudentsFee/structure' ? 'bg-secondary ' : 'bg-gray-300'}`}
+                            onClick={() => handleLinkSelect('/Admin-Dashboard/StudentsFee/structure')}
+                        >
+                            Structure
+                        </Link>
+                        <Link
+                            to={'/Admin-Dashboard/StudentsFee/details'}
+                            className={`text-xl font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Admin-Dashboard/StudentsFee/details' ? 'bg-secondary ' : 'bg-gray-300'}`}
+                            onClick={() => handleLinkSelect('/Admin-Dashboard/StudentsFee/details')}
+                        >
+                            Details
+                        </Link>
+  
+                    </div>
+
+                   
+                </div>
+                <hr className='border-t-2 bg-slate-500 mt-2 mb-3 ml-3 mr-3' />
+                <Outlet />
+                <br></br>
             </div>
         </div>
-    );
+    )
 }
 
-export default FeeAdmin;
+export default FeeAdmin

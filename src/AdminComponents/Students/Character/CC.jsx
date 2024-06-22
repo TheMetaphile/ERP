@@ -42,7 +42,7 @@ function CC() {
             </div>
 
             <div className='  rounded-lg border shadow-md  w-full mb-2'>
-                <Header headings={['Sr. No.', 'TC No.', 'Admission No.', 'Name', 'Class']} />
+                <Header headings={['Sr. No.', 'TC No.', 'Admission No.', 'Name', 'Class', 'Action']} />
                 {details.map((detail, index) => (
                     <Link to={`/Admin-Dashboard/charactercetificate/${detail.name}`} key={index}>
                         <div key={index} className='flex justify-between items-center py-2 pl-2  w-full' >
@@ -51,6 +51,7 @@ function CC() {
                             <div className=' w-40'>{detail.admission}</div>
                             <div className=' w-40'>{detail.name}</div>
                             <div className=' w-40'>{detail.Class}</div>
+                            <div className=' w-40'>Delete</div>
                         </div>
                     </Link>
                 ))}
@@ -58,21 +59,9 @@ function CC() {
 
             {isDialogOpen && <NewCharacter onClose={handleClose} />}
 
-
         </div>
 
     )
 }
 
 export default CC
-
-
-
-
-
-
-
-
-
-
-

@@ -109,7 +109,8 @@ import CC from "./AdminComponents/Students/Character/CC.jsx"
 import Certificate from "./AdminComponents/Students/TransferCharacter/utils/performance/Certificate.jsx";
 import AllCC from "./AdminComponents/Students/Character/AllCC.jsx";
 import CharacterCertificate from "./AdminComponents/Students/Character/utils/performance/CharacterCertificate.jsx";
-
+import FeeDetails from "./AdminComponents/fee/StudentFee/FeeDetails.jsx"
+import FeeStructure from "./AdminComponents/fee/FeeStructure/FeeStructure.jsx"
 const router = createBrowserRouter([
   {
     path: "/",
@@ -351,8 +352,21 @@ const router = createBrowserRouter([
       },
       {
         path: "/Admin-Dashboard/StudentsFee",
-        element: <FeeAdmin />,
-        children:[]
+        element: <FeeAdmin/>,
+        children: [
+          {
+            path: '/Admin-Dashboard/StudentsFee/details',
+            element: <FeeDetails />
+          },
+          {
+            path: '/Admin-Dashboard/StudentsFee/structure',
+            element: <FeeStructure />
+          },
+          {
+            path: '',
+            element: <FeeDetails />
+          },
+        ]
       },
       {
         path: "/Admin-Dashboard/StudentAttendance",
