@@ -73,14 +73,14 @@ export default function Attendance() {
         <Loading />
       ) : (
         <>
-          <div className="flex w-full justify-start mobile:max-tablet:grid mobile:max-tablet:grid-cols-2">
+          <div className=" flex w-full justify-start mobile:max-tablet:grid mobile:max-tablet:grid-cols-2">
             <TotalAttendance TotalAttendance={260} />
             <PresentAttendanceTile Present={230} image={Present} text="Present" />
             <PresentAttendanceTile Present={230} image={Absent} text="Absent" />
             <PresentAttendanceTile Present={230} image={Leave} text="Leave" />
           </div>
-          <div className=" flex w-full h-80 tablet:justify-evenly mobile:max-tablet:flex-col items-center mb-4 mt-5">
-            <div className="tablet:w-2/3 tablet:pr-6 mobile:max-tablet:w-full mobile:max-tablet:mb-5">
+          <div className=" flex w-full h-80 tablet:justify-evenly mobile:max-tablet:flex-col items-center mb-4 mt-10 ">
+            <div className="tablet:w-2/3 tablet:pr-6 mobile:max-tablet:w-full mobile:max-tablet:mb-5 ">
               <Calendar data={data}/>
             </div>
             <div className="tablet:w-1/3 h-full  mobile:max-tablet:w-full ">

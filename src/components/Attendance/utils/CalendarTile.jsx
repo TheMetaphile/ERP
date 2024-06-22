@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameMonth, isSunday, parse, } from 'date-fns';
 
+
 const Calendar = ({ data }) => {
 
   const currentDate = new Date();
@@ -10,7 +11,7 @@ const Calendar = ({ data }) => {
     setSelectedDate(date);
   };
   const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth();
+  const currentMonth = currentDate.getMonth()+1;
 
   // Calculate the year and month for the previous month
   const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
@@ -35,7 +36,14 @@ const Calendar = ({ data }) => {
 
   const getStatusDotColor = (date) => {
     // const formattedDate =  format(date, 'yyyy-MM-dd') ;
-    const status = data[format(date, 'dd/MM/yyyy') ] || data[format(date, 'yyyy-MM-dd') ];
+    console.log(date, 'ppp')
+    const formattedDate1 = format(date, 'dd/MM/yyyy');
+    const formattedDate2 = format(date, 'yyyy-MM-dd');
+    console.log(formattedDate1, 'pppsss')
+    console.log(formattedDate2, 'pppaaaaaaa')
+
+    // Check if the key exists in the data object
+    const status = data[`${formattedDate1}`] || data[`${formattedDate2}`] || 'defaultValue';
     switch (status) {
       case 'Absent':
         return 'bg-red-300';
@@ -69,16 +77,16 @@ const Calendar = ({ data }) => {
             <div
               key={index}
               className={`flex justify-center text-center py-2 rounded-full relative ${!isCurrentMonth
-                  ? 'text-gray-400'
-                  : isSelectedDate
-                    ? 'text-black bg-secondary'
-                    : isDateSunday
-                      ? 'text-red-500 hover:bg-gray-200 cursor-pointer'
-                      : 'text-black hover:bg-gray-200 cursor-pointer'
+                ? 'text-gray-400'
+                : isSelectedDate
+                  ? 'text-black bg-secondary'
+                  : isDateSunday
+                    ? 'text-red-500 hover:bg-gray-200 cursor-pointer'
+                    : 'text-black hover:bg-gray-200 cursor-pointer'
                 }`}
               onClick={() => handleClick(date)}
             >
-              <div className={`${isCurrentMonth ? dotColor  : "bg-white text-gray-400"}  rounded-full w-8 h-8 text-center `}>{format(date, 'dd')}</div>
+              <div className={`${isCurrentMonth ? dotColor : "bg-white text-gray-400"}  rounded-full w-8 h-8 text-center `}>{format(date, 'dd')}</div>
               {dotColor && (
                 <span
                   className={`absolute bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 rounded-full ${dotColor}`}

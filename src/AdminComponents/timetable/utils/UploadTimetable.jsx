@@ -63,10 +63,10 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
             currentTime = endTime;
 
             if (i === numberOfLeacturesBeforeLunch) {
-                
+
                 currentTime = new Date(currentTime.getTime() + lunchDuration * 60000);
             }
-            
+
 
         }
 
@@ -114,33 +114,46 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const schedule = selectedSubjects.map((subject, index) => ({
-            subject,
-            teacher: selectedTeachers[index],
-            lectureNo: index + 1
-        }));
-        const timetableData = {
-            accessToken: authState.accessToken,
-            class: selectedClass,
-            section: selectedSection,
-            day: selectedDay,
-            schedule
-        };
-        console.log(timetableData)
-
-        try {
-            const response = await axios.post('https://timetableapi-1wfp.onrender.com/timetable/upload', timetableData);
-            toast.success('Timetable uploaded successfully:');
-
-        } catch (error) {
-            toast.error(error);
+        
+        if (!selectedSubjects.length || !selectedTeachers.length || !selectedClass || !selectedSection || !selectedDay || !authState.accessToken) {
+          toast.error("Please ensure all fields are filled out correctly.");
+          return;
         }
-    };
+    
+        const schedule = selectedSubjects.map((subject, index) => ({
+          subject,
+          teacher: selectedTeachers[index],
+          lectureNo: index + 1,
+        }));
+    
+        const timetableData = {
+          accessToken: authState.accessToken,
+          class: selectedClass,
+          section: selectedSection,
+          day: selectedDay,
+          schedule,
+        };
+    
+        console.log(timetableData);
+    
+        try {
+          const response = await axios.post('https://timetableapi-1wfp.onrender.com/timetable/upload', timetableData);
+          if (response.status === 200) {
+            console.log(response.data);
+            toast.success('Timetable uploaded successfully');
+          } else {
+            toast.error('Failed to upload timetable');
+          }
+        } catch (error) {
+          const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+          toast.error(errorMessage);
+        }
+      };
 
     return (
         <form onSubmit={handleSubmit} className=' mt-4 w-full p-3 rounded-lg shadow-md'>
             {/* {uploadTimetableData.map((value, index) => ( */}
-            <ToastContainer />
+            {/* <ToastContainer /> */}
 
             <div className=" mb-4 rounded-lg">
                 <h1 className='text-xl'>Upload Time Table</h1>
@@ -221,7 +234,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
                 <TimetableHeader />
 
                 {lectureTimes.map((time, index) => (
-                    <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`}  numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange}/>
+                    <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange} />
                 ))}
 
             </div>

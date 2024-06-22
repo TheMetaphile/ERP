@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
+function Table({ teacherEmail,data, Time, numberOfLeacturesBeforeLunch }) {
 
     const formatTime = (date) => {
         let hours = date.getHours();
@@ -15,6 +15,7 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
     const timetable = data?.timetable || [];
     return (
         <div className="w-full rounded-lg">
+            <span className='mb-4  px-2 text-xl py-3'>Teacher email: {teacherEmail}</span>
             <div className="">
                 <table className="w-full items-center rounded-lg">
                     <thead className="bg-secondary rounded-lg">
@@ -30,7 +31,7 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
                         {timetable.length > 0 ? (
                             timetable.sort((a, b) => a.lectureNo - b.lectureNo).map((item, idx) => (
                                 <React.Fragment key={item._id}>
-                                    {numberOfLeacturesBeforeLunch === idx+1 && (
+                                    {numberOfLeacturesBeforeLunch === item.lectureNo-1 && (
                                         <tr className="w-full h-8 bg-secondary text-xl text-center">
                                             <td colSpan="5">LUNCH</td>
                                         </tr>
@@ -46,7 +47,7 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="5" className="text-center py-4">No data available</td>
+                                <td colSpan="5" className="text-center py-4 ">No data available</td>
                             </tr>
                         )}
                     </tbody>

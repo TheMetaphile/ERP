@@ -66,11 +66,11 @@ export default function leave() {
                 />
             </div>
 
-            <h1 className=" text-xl font-medium">Total New Leave</h1>
+            {/* <h1 className=" text-xl font-medium">Total New Leave</h1> */}
             <div className="gap-2 overflow-x-auto flex w-full tablet:justify-evenly my-4 mobile:max-tablet:flex-col items-center">
-                <div className=" tablet:w-2/3  mobile:max-tablet:w-full  mobile:max-tablet:mb-5 ">
+                {/* <div className=" tablet:w-2/3  mobile:max-tablet:w-full  mobile:max-tablet:mb-5 ">
                     <Calendar />
-                </div>
+                </div> */}
                 <div className=" tablet:w-fit  py-3 mobile:max-tablet:w-full flex-grow">
                     <ApplyLeave />
                 </div>

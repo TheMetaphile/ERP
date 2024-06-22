@@ -18,10 +18,10 @@ export default function AdminNavbar({onDrawerToggle,onEndDrawerToggle}) {
             <Link to="" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Home</Link>
           </li>
           <li className="mr-4">
-            <Link to="" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Fee</Link>
+            <Link to="/Admin-Dashboard/StudentsFee" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Fee</Link>
           </li>
           <li className="mr-4">
-            <Link to="" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Events</Link>
+            <Link to="/Admin-Dashboard/Events" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Events</Link>
           </li>
           <li>
             <Link to="/Admin-Dashboard/timetable" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Time Table</Link>

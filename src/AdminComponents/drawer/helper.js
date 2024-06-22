@@ -39,6 +39,14 @@ const menuItems = [
         text: 'Students Result',
         route: '/Admin-Dashboard/StudentResult'
       },
+      {
+        text: 'Transfer Certificate',
+        route: '/Admin-Dashboard/transfercertificate'
+      },
+      {
+        text: 'Character Certificate',
+        route: '/Admin-Dashboard/charactercetificate'
+      },
     ]
   },
   {

@@ -68,7 +68,7 @@ console.log('ttt',Time)
 
     return (
         <div className="w-full">
-            <ToastContainer />
+            {/* <ToastContainer /> */}
             <div className="flex p-3 mb-4 justify-between w-full">
                 <Link
                     to="/Admin-Dashboard/timetablestructure"
@@ -94,13 +94,13 @@ console.log('ttt',Time)
             </div>
             <TimetableHeader />
             {lectures.length === 0 ? (
-                <div>No data available</div>
+                <div className='text-center'>No data available</div>
             ) :
                 (
                     <div>
                         {lectures.map((lecture, idx) => (
                             <React.Fragment key={lecture._id}>
-                                {numberOfLeacturesBeforeLunch === idx+1  ? (
+                                {numberOfLeacturesBeforeLunch === lecture.lectureNo-1  ? (
                                     <div className="w-full h-8 bg-secondary text-xl text-center border">LUNCH</div>
                                 ) : null}
                                 <div className="flex w-full justify-between px-4 py-2 mb-2 mt-2">

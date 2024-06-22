@@ -87,7 +87,7 @@ export default function EmployeeLeaves() {
   };
 
   return (
-    <div className="flex flex-col space-y-4 mb-4 bg-red-300">
+    <div className="flex flex-col space-y-4 mb-4 ">
       {leaves.map((leave, index) => (
         <div key={index} className={`rounded-md border p-4 flex flex-col w-full`}>
           <div className="flex justify-between">

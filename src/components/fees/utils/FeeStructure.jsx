@@ -5,7 +5,7 @@ import Loading from "../../../LoadingScreen/Loading.jsx";
 import Header from './feestructureheader.jsx';
 import FeeStructureField from './feeStructureField.jsx';
 import FeeStructureFooter from './feeStructureFooter';
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -32,7 +32,7 @@ export default function FeeStructure() {
           'Authorization': `Bearer ${authState.accessToken}`
         }
       });
-      const total = response.data.feeStructure.reduce((acc, fee) => acc + fee.amount, 0);
+      const total = response.data.feeStructure.reduce((acc, fee) => acc + parseFloat(fee.payableAmount), 0);
       console.log(total)
       setTotalAmount(total)
       console.log("API response fees:", response.data);
@@ -51,8 +51,7 @@ export default function FeeStructure() {
 
 
   return (
-    <div className="w-full h-fit mb-4 bg-white rounded-lg shadow-md ">
-      <ToastContainer />
+    <div className="w-full h-fit mb-4  rounded-lg shadow-md overflow-x-auto">
       <Header />
       {loading ? (
         <Loading />

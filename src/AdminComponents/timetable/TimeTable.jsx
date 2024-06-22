@@ -196,7 +196,7 @@ function TimeTable() {
 
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
-            <ToastContainer />
+            {/* <ToastContainer /> */}
             <div className='flex justify-between items-center w-full'>
                 <h1 className='text-2xl'>Time Table</h1>
                 <div className="flex gap-4 px-3 py-2  mt-2 text-lg justify-between">
@@ -257,7 +257,7 @@ function TimeTable() {
                             fetchedTimeTableStructure ?
 
                                 role === 'Teacher' ?
-                                    <Table data={data} Time={lectureTimes} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} />
+                                    <Table data={data} teacherEmail={teacherEmail} Time={lectureTimes} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} />
                                     :
                                     <TableStudent data={data} selectClass={selectClass} selectedSection={selectedSection} dayStudent={dayStudent} Time={lectureTimes} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} />
                                 :

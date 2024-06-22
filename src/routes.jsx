@@ -101,6 +101,15 @@ import ClassTeacher from "./AdminComponents/Classes/utils/ClassTeacher.jsx";
 import AssignTeacher from "./AdminComponents/Classes/utils/AssignTeacher.jsx";
 import AssignSubject from "./AdminComponents/Subjects/utils/AssignSubject.jsx";
 import StudentAttendanceRecord from "./TeacherComponents/studentattendence/Students Attendance/StudentAttendanceRecord.jsx";
+import FeeAdmin from "./AdminComponents/fee/FeeAdmin.jsx";
+import Event from "./AdminComponents/event/Event.jsx";
+import AllTC from "./AdminComponents/Students/TransferCharacter/AllTC.jsx"
+import TC from "./AdminComponents/Students/TransferCharacter/TC.jsx"
+import CC from "./AdminComponents/Students/Character/CC.jsx"
+import Certificate from "./AdminComponents/Students/TransferCharacter/utils/performance/Certificate.jsx";
+import AllCC from "./AdminComponents/Students/Character/AllCC.jsx";
+import CharacterCertificate from "./AdminComponents/Students/Character/utils/performance/CharacterCertificate.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -332,7 +341,7 @@ const router = createBrowserRouter([
           {
             path: '/Admin-Dashboard/Students/studentdetails',
             element: <StudentDetailScreen />
-          }
+          },
         ]
       },
       {
@@ -340,7 +349,11 @@ const router = createBrowserRouter([
         element: <AddmissionForm/>,
         children:[]
       },
-
+      {
+        path: "/Admin-Dashboard/StudentsFee",
+        element: <FeeAdmin />,
+        children:[]
+      },
       {
         path: "/Admin-Dashboard/StudentAttendance",
         element: <StudentAttendance/>,
@@ -355,6 +368,34 @@ const router = createBrowserRouter([
         path: "/Admin-Dashboard/StudentResult",
         element: <StudentResult/>,
         children:[]
+      },
+      {
+        path: "/Admin-Dashboard/transfercertificate",
+        element: <AllTC />,
+        children:[
+          {
+            path: '',
+            element: <TC />
+          },
+          {
+            path: ':id',
+            element: <Certificate/>
+          }
+        ]
+      },
+      {
+        path: "/Admin-Dashboard/charactercetificate",
+        element: <AllCC />,
+        children:[
+          {
+            path: '',
+            element: <CC />
+          },
+          {
+            path: ':id',
+            element: <CharacterCertificate/>
+          }
+        ]
       },
 
       {
@@ -471,7 +512,11 @@ const router = createBrowserRouter([
       {
         path: '/Admin-Dashboard/timetablestructure',
             element: <Upload />
-      }
+      },
+      {
+        path: '/Admin-Dashboard/Events',
+            element: <Event />
+      },
     ]
   },
   {
