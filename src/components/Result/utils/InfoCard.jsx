@@ -2,7 +2,7 @@ import logo from './../../../assets/school logo.png';
 
 export default function InfoCard(props){
     return (
-        <div className="w-full shadow-lg rounded-lg p-4 mt-4 ">
+        <div className="w-full border border-gray-300 shadow-md rounded-lg p-4 mt-4 ">
            <div className="flex justify-center">
                 <img src={logo} alt="img" className='mobile:max-tablet:w-20' />
                 <div className='self-center ml-3'>

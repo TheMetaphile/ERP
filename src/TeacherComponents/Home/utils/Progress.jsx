@@ -22,14 +22,14 @@ function Progress() {
 
                     <div key={index} className='mx-3 rounded-lg bg-blue-100 mt-1 flex justify-between items-center mb-2  '>
                         <div className='px-6  '>
-                            <div className='font-medium text-xl'>Class : {detail.class}</div>
-                            <div className='font-medium text-xl text-gray-400'>{detail.subject}</div>
+                            <div className='font- text-xl'>Class : {detail.class}</div>
+                            <div className='font- text-xl text-gray-500'>{detail.subject}</div>
                         </div>
 
                         <div className=''>
                             <ProgressCard
                                 percent='40'
-                                centerText='05'
+                                centerText='ch: 05'
                                 trailColor='#c8ccc9'
                                 strokeColor='#7dc5f5'
                             />

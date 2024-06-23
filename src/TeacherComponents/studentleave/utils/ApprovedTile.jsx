@@ -12,9 +12,9 @@ export default function ApprovedTile({ data }) {
     }
 
     return (
-        <div className="w-full">
+        <div className="w-full ">
             {data.StudentsLeaves.filter(student => student.status === 'Approved').map((student, studentIndex) => (
-                <div key={student._id} className="border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
+                <div key={student._id} className="border border-gray-300 p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
                     <div className='flex'>
                         <img src={student.profileLink || Logo} alt="" className='w-10 h-10 rounded-full' />
                         <div>
@@ -33,7 +33,7 @@ export default function ApprovedTile({ data }) {
                                 </div>
                             )}
                             <div className='flex gap-2 font-medium text-base ml-2 mt-2'>
-                                <span className='p-1 rounded-lg text-green-500 bg-green-300'>{student.status}</span>
+                                <span className='p-1 rounded-lg text-green-500 '>{student.status}</span>
                             </div>
                         </div>
                     </div>

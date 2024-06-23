@@ -6,7 +6,7 @@ import { MdEdit } from "react-icons/md";
 
 export default function Academic(props) {
     return (
-        <div className="w-full shadow-lg rounded-lg tablet:p-4 mobile:max-tablet:px-2 mt-4 ">
+        <div className="w-full shadow-md border border-gray-300 rounded-lg tablet:p-4 mobile:max-tablet:px-2 mt-4 ">
             <div className="border-t-2 border-text_blue my-3 tablet:mx-2 rounded-full "></div>
             <div className='w-full flex items-center justify-between px-3'>
                 <h1 className='tablet:text-3xl mobile:max-tablet:text-xl font-medium text-text_blue text-center'>Academic Performance</h1>

@@ -154,27 +154,26 @@ function TimeTable() {
 
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2  mb-3 no-scrollbar">
-            <h1 className='text-2xl'>Time Table</h1>
-            <div className=' mt-4  w-full'>
-                <Selection
-                    onSearch={handleSearch}
-                    onDayChange={handleDayChange} />
+            <div className='w-full flex justify-between mb-2'>
+                <h1 className=' text-2xl'>Time Table</h1>
+                <Selection onDayChange={handleDayChange} />
             </div>
+
             <div className='   w-full rounded-lg border shadow-md'>
                 {loading ? (
                     <Loading />
                 ) : !fetchedTimeTableStructure ?
-                (
-                    <>No</>
-                ):
-                (
-                    
-                    <Table
-                        data={data}
-                        Time={lectureTimes}
-                        numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}
-                    />
-                )}
+                    (
+                        <>No</>
+                    ) :
+                    (
+
+                        <Table
+                            data={data}
+                            Time={lectureTimes}
+                            numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}
+                        />
+                    )}
             </div>
 
         </div>

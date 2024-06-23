@@ -49,7 +49,7 @@ export default function Approved() {
     }
 
     return (
-        <div className='ml-3 mr-3'>
+        <div className=' mr-3'>
             <ApprovedTile data={data} />
         </div>
     )

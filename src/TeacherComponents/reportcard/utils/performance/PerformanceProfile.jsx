@@ -10,7 +10,7 @@ export default function PerformanceProfile(){
         window.print();
       };
     return(
-        <div className="flex flex-col w-full h-screen overflow-y-auto items-start mt-2 px-2 no-scrollbar">
+        <div className="flex flex-col  w-full h-screen overflow-y-auto items-start mt-2 px-2 no-scrollbar">
             
             <h3 className="text-xl font-medium">Performance Profile</h3>
             <InfoCard 

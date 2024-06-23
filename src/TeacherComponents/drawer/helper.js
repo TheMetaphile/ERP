@@ -23,13 +23,28 @@ const menuItems = [
     route: '/Teacher-Dashboard',
     children: []
   },
+
   {
-    image: adminImage,
-    alt: "Admin image",
-    title: "Admin",
-    route: '/Admin-Dashboard',
+    image: studentAttendanceImage,
+    alt: "Attendance image",
+    title: "Student Attendence",
+    route: '/Teacher-Dashboard/studentattendence',
     children: []
   },
+  {
+    image: transportImage,
+    alt: "img",
+    title: "Student Leave",
+    route: '/Teacher-Dashboard/studentleave',
+    children: []
+  },
+  // {
+  //   image: adminImage,
+  //   alt: "Admin image",
+  //   title: "Admin",
+  //   route: '/Admin-Dashboard',
+  //   children: []
+  // },
   {
     image: checkinImage,
     alt: "Check In Image",
@@ -44,12 +59,12 @@ const menuItems = [
     route: '/Teacher-Dashboard/takeleave',
     children: []
   },
-  {
-    image: salaryImage,
-    alt: "Salary Image",
-    title: "Salary",
-    children: []
-  },
+  // {
+  //   image: salaryImage,
+  //   alt: "Salary Image",
+  //   title: "Salary",
+  //   children: []
+  // },
   {
     image: homeworkImage,
     alt: "Home Work Image",
@@ -85,20 +100,7 @@ const menuItems = [
     route: '/Teacher-Dashboard/studentfee',
     children: []
   },
-  {
-    image: transportImage,
-    alt: "img",
-    title: "Student Leave",
-    route: '/Teacher-Dashboard/studentleave',
-    children: []
-  },
-  {
-    image: studentAttendanceImage,
-    alt: "Attendance image",
-    title: "Student Attendence",
-    route: '/Teacher-Dashboard/studentattendence',
-    children: []
-  },
+
   {
     image: birthdayImage,
     alt: "BirthDay Image",
@@ -106,13 +108,13 @@ const menuItems = [
     route: '/Teacher-Dashboard/birthday',
     children: []
   },
-  {
-    image: messageImage,
-    alt: "img",
-    title: "Message",
-    route: '/Teacher-Dashboard/message',
-    children: []
-  },
+  // {
+  //   image: messageImage,
+  //   alt: "img",
+  //   title: "Message",
+  //   route: '/Teacher-Dashboard/message',
+  //   children: []
+  // },
   {
     image: noticeImage,
     alt: "Notice Image",

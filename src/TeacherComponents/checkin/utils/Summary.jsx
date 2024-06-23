@@ -3,12 +3,14 @@ import { FaLessThan } from "react-icons/fa";
 import { FaGreaterThan } from "react-icons/fa";
 const Summary = () => {
     const entries = [
-        { date: '11', day: 'Tue', checkIn: '09:00am', checkOut: '05:45pm', hours: '07h 30m', color: 'green' },
-        { date: '10', day: 'Mon', checkIn: '09:00am', checkOut: '05:45pm', hours: '07h 30m', color: 'red' },
-        { date: '09', day: 'Sat',  },
-        { date: '08', day: 'Sun',  },
-        { date: '07', day: 'Fri', checkIn: '09:00am', checkOut: '05:45pm', hours: '07h 30m', color: 'green' },
-        { date: '06', day: 'Thu', checkIn: '09:00am', checkOut: '05:45pm', hours: '07h 30m', color: 'green' },
+        { date: '08', day: 'Sat',  },
+        { date: '09', day: 'Sun',  },
+        { date: '10', day: 'Mon', checkIn: '09:00am', checkOut: '05:45pm', hours: '07h 30m', color: 'green' },
+        { date: '11', day: 'Tue', checkIn: '09:00am', checkOut: '05:45pm', hours: '07h 30m', color: 'red' },
+        { date: '12', day: 'Wed', checkIn: '09:00am', checkOut: '05:45pm', hours: '07h 30m', color: 'green' },
+        { date: '13', day: 'Thru', checkIn: '09:00am', checkOut: '05:45pm', hours: '07h 30m', color: 'red' },
+        { date: '14', day: 'Fri', checkIn: '09:00am', checkOut: '05:45pm', hours: '07h 30m', color: 'green' },
+        
        
     ];
   return (

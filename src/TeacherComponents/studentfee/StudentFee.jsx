@@ -9,9 +9,9 @@ function StudentFee() {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([])
     const { authState } = useContext(AuthContext);
-
+    const [filter, setFilter] = useState('')
     useEffect(() => {
-        if (!loading && details.length<1) {
+        if (!loading && details.length < 1) {
             fetchDetails();
         }
     }, [authState.accessToken]);
@@ -19,21 +19,22 @@ function StudentFee() {
     const fetchDetails = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`https://feeapi.onrender.com/fee/fetch/classTeacher?&start=0&end2`, {
+            const response = await axios.get(`https://feeapi.onrender.com/fee/fetch/classTeacher?&start=0&end=20`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
             });
             if (response.status === 200) {
                 console.log("API response:", response.data);
-                setDetails(response.data.students || []);
+                setDetails(response.data.output || []);
+                console.log("here", response.data);
             }
 
         } catch (err) {
-            console.log(err);
-            
+            console.log("r", err);
+
         }
-        finally{
+        finally {
             setLoading(false);
         }
     }
@@ -56,61 +57,127 @@ function StudentFee() {
     // const filterDetails= filter ?details.filter(detail=>detail.status === filter): details;
     return (
         <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar">
+            <div className=' my-3 flex  w-full justify-between'>
+                <h1 className="text-2xl font-medium mb-2">Student Fee</h1>
 
-            <h1 className="text-2xl font-medium mb-2">Student Fee</h1>
-
-            <div className=' mt-4   w-full'>
-                {/* <Selection setFilter={setFilter} /> */}
-                <Selection />
+                <Selection setFilter={setFilter} />
             </div>
 
-            <div className='  rounded-lg border shadow-md  w-full mb-2'>
-                <Header headings={['Sr. No.','Roll No.','Name', 'Total Fee', 'Fine','Discount','Paid','Payable']} />
-                {/* {filterDetails.map((detail, index) => (
-
-                    <div key={index} className='border flex justify-between items-center py-2 pl-2  w-full font-normal text-base ' >
-                        <div className=' w-40'>{detail.serial}</div>
-                        <div className=' w-40'>{detail.name}</div>
-                        <div className=' w-40'>{detail.record}</div>
-                        <div className={`w-40 ${detail.status === 'Paid' ? 'text-green-400' : 'text-red-400'}`}>{detail.amount}</div>
-                    </div>
-
-                ))} */}
+            <div className='  rounded-lg border shadow-md border-gray-300 w-full mb-2'>
+                <Header headings={['Sr. No.', 'Roll No.', 'Name', 'Total Fee', 'Fine', 'Discount', 'Paid', 'Payable','Pending']} />
+                
                 {loading ? (
                     <Loading />
                 ) : (
                     details.length > 0 ? (
+
                         <div>
                             {details.map((details, index) => (
-                                <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
-                                      <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                        {index+1}
-                                    </h1>
-                                     <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                        {details.rollNumber}
-                                    </h1>
-                                    <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                        {details.name}
-                                    </h1>
-                                    <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                        {details.totalfee}
-                                    </h1>
-                                    <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                        {details.fine}
-                                    </h1>
-                                    <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                        {details.discountAmount}
-                                    </h1>
-                                    <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                        {details.paid}
-                                    </h1>     
-                                    <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                        {details.payableFee}
-                                    </h1>
+                                filter === 'Paid'
+                                    ?
+                                    details.payableFee - details.paid == 0
+                                        ?
+                                        <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
+                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {index + 1}
+                                            </h1>
+                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.rollNumber}
+                                            </h1>
+                                            <h1 className="w-40 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.name}
+                                            </h1>
+                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.totalfee}
+                                            </h1>
+                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.fine}
+                                            </h1>
+                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.discountAmount}
+                                            </h1>
+                                            <h1 className={`w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap`}>
+                                                {details.paid}
+                                            </h1>
+                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.payableFee}
+                                            </h1>
+                                            <h1 className={`w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap ${(details.payableFee - details.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
+                                                {details.payableFee - details.paid}
+                                            </h1>
 
-                                </div>
+                                        </div>
+                                        :
+                                        <div></div>
+                                    :
+                                    filter === 'Pending'
+                                        ?
+                                        details.payableFee - details.paid > 0
+                                            ?
+                                            <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
+                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                    {index + 1}
+                                                </h1>
+                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                    {details.rollNumber}
+                                                </h1>
+                                                <h1 className="w-40 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                    {details.name}
+                                                </h1>
+                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                    {details.totalfee}
+                                                </h1>
+                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                    {details.fine}
+                                                </h1>
+                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                    {details.discountAmount}
+                                                </h1>
+                                                <h1 className={`w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap`}>
+                                                    {details.paid}
+                                                </h1>
+                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                    {details.payableFee}
+                                                </h1>
+                                                <h1 className={`w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap ${(details.payableFee - details.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
+                                                {details.payableFee - details.paid}
+                                            </h1>
+                                            </div>
+                                            :
+                                            <div></div>
+                                        :
+                                        <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
+                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {index + 1}
+                                            </h1>
+                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.rollNumber}
+                                            </h1>
+                                            <h1 className="w-40 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.name}
+                                            </h1>
+                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.totalfee}
+                                            </h1>
+                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.fine}
+                                            </h1>
+                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.discountAmount}
+                                            </h1>
+                                            <h1 className={`w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap`}>
+                                                {details.paid}
+                                            </h1>
+                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.payableFee}
+                                            </h1>
+                                            <h1 className={`w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap ${(details.payableFee - details.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
+                                                {details.payableFee - details.paid}
+                                            </h1>
+                                        </div>
                             ))}
                         </div>
+
                     ) : (
                         <div className='text-center mt-2'>No Fee Details available</div>
                     )

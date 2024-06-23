@@ -49,7 +49,7 @@ function New() {
     }
 
     return (
-        <div className='ml-3 mr-3'>
+        <div className=' mr-3'>
             <NewTile data={data} />
         </div>
     )

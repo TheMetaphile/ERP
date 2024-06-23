@@ -3,7 +3,7 @@ import { IoLogoWhatsapp } from "react-icons/io";
 
 export default function StudentTile(props) {
     return (
-        <div className=" w-full border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
+        <div className=" w-full border-gray-300 border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
             <div className='flex'>
                 <img src={Logo} alt="" className='h-12'></img>
                 <div className='ml-2'>

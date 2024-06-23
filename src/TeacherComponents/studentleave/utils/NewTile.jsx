@@ -70,14 +70,14 @@ export default function NewTile({ data }) {
                                 <div className='flex gap-2 font-medium text-base ml-2 mt-2'>
                                     <>
                                         <button
-                                            className='p-1 rounded-lg text-green-500 bg-green-300'
+                                            className='p-1 rounded-lg border border-gray-300 text-black px-2 bg-green-300'
                                             onClick={() => handleStatusUpdate(student._id, 'Approved', student.email)}
                                             disabled={loading}
                                         >
                                             Approve
                                         </button>
                                         <button
-                                            className='p-1 rounded-lg text-red-500 bg-red-300'
+                                            className='p-1 rounded-lg text-black border border-gray-300 px-2 bg-red-300'
                                             onClick={() => handleStatusUpdate(student._id, 'Rejected', student.email)}
                                             disabled={loading}
                                         >

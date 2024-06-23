@@ -17,7 +17,7 @@ function Mark() {
     }
 
     const handleTakeBreak = () => {
-        setOnBreak(true);
+        setOnBreak(!onBreak);
     }
     return (
         <div className=''>
@@ -48,7 +48,7 @@ function Mark() {
                                     onClick={handleTakeBreak}
                                     className="flex w-64 shadow-md rounded-2xl py-2 mb-2 mt-2 justify-center bg-purple-300"
                                 >
-                                    <h1 className="font-medium text-2xl text-white">Take Break</h1>
+                                    <h1 className="font-medium text-2xl text-white">{onBreak ? "Resume work" :"Take Break"}</h1>
                                 </button></>
                         )
                         }
