@@ -1,21 +1,35 @@
+import homeImage from '../../assets/home.png';
+import teacherImage from '../../assets/teacher2.png';
+import studentImage from '../../assets/student.png';
+import teacherAltImage from '../../assets/teacher.png';
+import classImage from '../../assets/class.png';
+import subjectImage from '../../assets/subject.png';
+import parentImage from '../../assets/parent.png';
+import libraryImage from '../../assets/library.png';
+import accountImage from '../../assets/account.png';
+import examImage from '../../assets/exam.png';
+import transportImage from '../../assets/transport.png';
+import noticeImage from '../../assets/notice.png';
+import messageImage from '../../assets/message.png';
+import leaveImage from '../../assets/leave_icon.png';
+
 const menuItems = [
   {
-    image: "src/assets/home.png",
+    image: homeImage,
     alt: "Attendance image",
     title: "Dashboard",
     route: '/Admin-Dashboard',
     children: []
   },
   {
-    image: "src/assets/teacher2.png",
+    image: teacherImage,
     alt: "Teacher image",
     title: "Teacher",
     route: '/Teacher-Dashboard',
     children: []
   },
-  
   {
-    image: "src/assets/student.png",
+    image: studentImage,
     alt: "img",
     title: "Students",
     children: [
@@ -50,7 +64,7 @@ const menuItems = [
     ]
   },
   {
-    image: "src/assets/teacher.png",
+    image: teacherAltImage,
     alt: "img",
     title: "Teachers",
     children: [
@@ -73,31 +87,29 @@ const menuItems = [
     ]
   },
   {
-    image: "src/assets/class.png",
+    image: classImage,
     alt: "img",
     title: "Class",
     children: [
-    {
-      text: 'Class Teachers',
-      route: '/Admin-Dashboard/Classteacher'
-    },
-    {
-      text: 'Assign Class Teacher',
-      route: '/Admin-Dashboard/Assignteacher'
-    },
+      {
+        text: 'Class Teachers',
+        route: '/Admin-Dashboard/Classteacher'
+      },
+      {
+        text: 'Assign Class Teacher',
+        route: '/Admin-Dashboard/Assignteacher'
+      },
     ]
   },
-
   {
-    image: "src/assets/subject.png",
+    image: subjectImage,
     alt: "img",
     title: "Subject Teacher",
     route: '/Admin-Dashboard/Assignsubject',
-    children: [
-    ]
+    children: []
   },
   {
-    image: "src/assets/parent.png",
+    image: parentImage,
     alt: "img",
     title: "Parents",
     children: [{
@@ -107,7 +119,7 @@ const menuItems = [
     ]
   },
   {
-    image: "src/assets/library.png",
+    image: libraryImage,
     alt: "img",
     title: "Library",
     children: [{
@@ -116,9 +128,8 @@ const menuItems = [
     },
     ]
   },
-
   {
-    image: "src/assets/account.png",
+    image: accountImage,
     alt: "img",
     title: "Account",
     children: [{
@@ -131,48 +142,43 @@ const menuItems = [
     },
     ]
   },
-
- 
-
   {
-    image: "src/assets/exam.png",
+    image: examImage,
     alt: "img",
     title: "Exam",
     route: "/Admin-Dashboard/Exam",
     children: []
   },
-
   {
-    image: "src/assets/transport.png",
+    image: transportImage,
     alt: "img",
     title: "Transport",
     route: "/Admin-Dashboard/Transport",
     children: []
   },
-
   {
-    image: "src/assets/notice.png",
+    image: noticeImage,
     alt: "img",
     title: "Notice",
     route: "/Admin-Dashboard/Notice",
     children: []
   },
-
   {
-    image: "src/assets/message.png",
+    image: messageImage,
     alt: "img",
     title: "Message",
     route: "/Admin-Dashboard/Message",
     children: []
   },
-
   {
-    image: "src/assets/leave_icon.png",
+    image: leaveImage,
     alt: "img",
     title: "Leave",
     route: "/Admin-Dashboard/Leave",
     children: []
   },
 ];
+
+
 
 export default menuItems;
