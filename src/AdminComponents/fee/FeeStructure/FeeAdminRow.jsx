@@ -81,7 +81,33 @@ export default function FeeAdminRow({ Class }) {
     };
 
 
+    const handleDelete = async (index,id) => {
+        console.log(Class)
+        console.log(id)
+        try {
+            const response = await axios.delete('https://feeapi.onrender.com/fee/delete/structure',
+                {
+                  class:Class,
+                  session: session,
+                  structureId: id
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
+                  }
+                }
+              );
 
+            if (response.status === 200) {
+                const updatedStructure = structure.filter((_, i) => i !== index);
+                setStructure(updatedStructure);
+                toast.success('Structure Deleted Successfully');
+            }
+        } catch (error) {
+            console.error("Error deleting Structure:", error);
+            toast.error('Error deleting Structure');
+        }
+    };
 
     return (
         <div key={Class} className="w-full mb-4 rounded-lg mt-2 shadow-md border">
@@ -108,6 +134,9 @@ export default function FeeAdminRow({ Class }) {
                         <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Amount
                         </h1>
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                            Action
+                        </h1>
                     </div>
                     {loading ? (
                         <Loading />
@@ -125,6 +154,9 @@ export default function FeeAdminRow({ Class }) {
                                         <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.amount}
                                         </h1>
+                                        <div className='w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
+                                            <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleDelete(index,details._id)}>Delete</button>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

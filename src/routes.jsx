@@ -111,6 +111,8 @@ import AllCC from "./AdminComponents/Students/Character/AllCC.jsx";
 import CharacterCertificate from "./AdminComponents/Students/Character/utils/performance/CharacterCertificate.jsx";
 import FeeDetails from "./AdminComponents/fee/StudentFee/FeeDetails.jsx"
 import FeeStructure from "./AdminComponents/fee/FeeStructure/FeeStructure.jsx"
+import FeeDiscount from "./AdminComponents/fee/Discount/FeeDiscount.jsx"
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -361,6 +363,10 @@ const router = createBrowserRouter([
           {
             path: '/Admin-Dashboard/StudentsFee/structure',
             element: <FeeStructure />
+          },
+          {
+            path: '/Admin-Dashboard/StudentsFee/feediscount',
+            element: <FeeDiscount />
           },
           {
             path: '',

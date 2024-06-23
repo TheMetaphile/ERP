@@ -29,7 +29,7 @@ function FeeStructure() {
             <h1 className="text-2xl p-2">Fee Structure</h1>
             <div className=" w-full flex flex-col px-3 mobile:max-tablet:px-0 overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
                 {content.map((con, index) => (
-                    <FeeAdminRow Class={con.class} />
+                    <FeeAdminRow Class={con.class} key={index} />
                 ))}
             </div>
         </div>

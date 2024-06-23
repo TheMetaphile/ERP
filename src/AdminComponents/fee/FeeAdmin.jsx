@@ -26,9 +26,15 @@ function FeeAdmin() {
                             className={`text-xl font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Admin-Dashboard/StudentsFee/details' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Admin-Dashboard/StudentsFee/details')}
                         >
-                            Details
+                            Fee Status
                         </Link>
-  
+                        <Link
+                            to={'/Admin-Dashboard/StudentsFee/feediscount'}
+                            className={`text-xl font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Admin-Dashboard/StudentsFee/feediscount' ? 'bg-secondary ' : 'bg-gray-300'}`}
+                            onClick={() => handleLinkSelect('/Admin-Dashboard/StudentsFee/feediscount')}
+                        >
+                            Discount
+                        </Link>
                     </div>
 
                    

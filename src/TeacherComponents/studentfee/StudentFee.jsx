@@ -11,8 +11,8 @@ function StudentFee() {
     const { authState } = useContext(AuthContext);
 
     useEffect(() => {
-        if (details.length === 0) {
-            fetchDetails();
+        if (!loading) {
+            // fetchDetails();
         }
     }, [details]);
 
@@ -27,11 +27,13 @@ function StudentFee() {
             if (response.status === 200) {
                 console.log("API response:", response.data);
                 setDetails(response.data.output || []);
-                setLoading(false);
             }
 
         } catch (err) {
             console.log(err);
+            
+        }
+        finally{
             setLoading(false);
         }
     }
