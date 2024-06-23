@@ -14,7 +14,7 @@ function Question({ question, onSelectAnswer, Qno, len ,answers}) {
       <h3>{question.text}</h3>
       <div className="flex flex-col">
         {question.options.map((option, index) => (
-          <div key={index} className='rounded-lg shadow-md w-full px-3 py-2 mt-3' onClick={() => handleSelectAnswer(option)}>
+          <div key={index} className='rounded-lg border border-gray-300 shadow-md w-full px-3 py-2 mt-3' onClick={() => handleSelectAnswer(option)}>
             <input
               type="radio"
               id={`${question.id}-${index}`}

@@ -49,7 +49,7 @@ export default function Table() {
     <div className=' flex justify-evenly '>
             <ToastContainer />
 
-      <table className=' mt-7  w-full justify-evenly items-center ml-5 mr-5 shadow-lg my-2 px-2 outline  outline-gray-400 rounded-lg mb-3'>
+      <table className=' mt-7  w-full justify-evenly items-center ml-5 mr-5 shadow-md my-2 px-2 border border-gray-300 rounded-lg mb-3'>
         <thead>
           <tr className='rounded-t-lg border-b-2 border-gray-400 mt-3  no-underline text-xl'>
             <th className='no-underline text-xl py-3'>Date </th>

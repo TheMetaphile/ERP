@@ -16,8 +16,8 @@ export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, Time
                 {lectures.map((lecture) => (
                     lecture.lectureNo === index + 1 ? (
                         <div key={lecture._id} className="w-full flex items-center justify-between">
-                            <h1 className="w-36">{lecture.lectureNo}</h1>
-                            <h1 className="w-36">{lecture.subject}</h1>
+                            <h1 className="w-36 text-center">{lecture.lectureNo}</h1>
+                            <h1 className="w-36 text-center">{lecture.subject}</h1>
 
 
                             <div className="w-36 flex items-center">
@@ -25,7 +25,7 @@ export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, Time
                                 <p className="text-sm px-2">{lecture.teacher.name}</p>
                             </div>
 
-                            <h1 className="w-36">{Time}</h1>
+                            <h1 className="w-36 text-center">{Time}</h1>
 
                         </div>
                     ) : null

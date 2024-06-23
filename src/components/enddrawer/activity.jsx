@@ -3,7 +3,7 @@ import Clock from './../../assets/clock-blue.png';
 
 export default function Activity(props) {
   return (
-    <div className="w-88 h-17 bg-teal-100 rounded-xl text-left mt-2 mb-3 shadow-md pl-1 pr-2 pb-1 pt-1">
+    <div className="w-88 h-17 border border-gray-300 bg-teal-100 rounded-xl text-left mt-2 mb-3 shadow-md pl-1 pr-2 pb-1 pt-1">
       <p className="font-normal text-sm">{props.title}</p>
 
       <div className="flex items-start mt-2">

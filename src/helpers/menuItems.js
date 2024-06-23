@@ -95,12 +95,12 @@ const menuItems = [
     text: "Notification",
     route: '/Student-Dashboard/notification'
   },
-  {
-    image: medical,
-    alt: "medical image",
-    text: "Medical Records",
-    route: '/Student-Dashboard/medical'
-  },
+  // {
+  //   image: medical,
+  //   alt: "medical image",
+  //   text: "Medical Records",
+  //   route: '/Student-Dashboard/medical'
+  // },
   {
     image: datesheet,
     alt: "Date sheet image",
@@ -113,12 +113,12 @@ const menuItems = [
     text: "Activities",
     route: "/Student-Dashboard/activities"
   },
-  {
-    image: live,
-    alt: "live image",
-    text: "Broadcast channels",
-    route: "/Student-Dashboard/broadcast"
-  },
+  // {
+  //   image: live,
+  //   alt: "live image",
+  //   text: "Broadcast channels",
+  //   route: "/Student-Dashboard/broadcast"
+  // },
   {
     image: changePassword,
     alt: "Change password image",

@@ -7,7 +7,7 @@ export default function SelectTeacher({ onSelect }) {
     };
 
     return (
-        <div className="rounded-lg shadow-md w-30">
+        <div className="rounded-lg shadow-md border border-gray-300 w-30">
             <h1 className="w-fit mt-4 px-2">Select Teacher</h1>
             <div className="flex justify-center items-center mt-3 text-sm font-medium">
             <select

@@ -51,7 +51,7 @@ export default function FeeStructure() {
 
 
   return (
-    <div className="w-full h-fit mb-4  rounded-lg shadow-md overflow-x-auto">
+    <div className="w-full h-fit mb-4  rounded-lg shadow-md overflow-x-auto border border-gray-300">
       <Header />
       {loading ? (
         <Loading />

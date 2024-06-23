@@ -103,13 +103,13 @@ export default function ImageTextInRow(props) {
             <FaRegCircleXmark className="text-red-600 float-right w-5 h-5 cursor-pointer" onClick={handleCloseDialog}/>
             <div className="flex flex-col bg-white tablet:w-fit tablet:px-10 mobile:w-full mobile:px-7 mobile:max-tablet:mt-10 justify-center">
               
-              <h1 className="tablet:text-2xl mobile:text-2xl font-bold self-center whitespace-nowrap">Change Your Password</h1>
+              <h1 className="tablet:text-2xl mobile:text-2xl font-medium self-center whitespace-nowrap">Change Your Password</h1>
 
 
               {error && <div className="text-red-500 text-center mt-2">{error}</div>}
               {successMessage && <div className="text-green-500 text-center mt-2">{successMessage}</div>}
 
-              <label className="text-xl font-bold mt-3 text-left">Email</label>
+              <label className="text-xl mt-3 text-left">Email</label>
               <input
                 type="email"
                 id="email"
@@ -121,7 +121,7 @@ export default function ImageTextInRow(props) {
                 disabled={isSubmitting}
               />
 
-              <label className="text-xl font-bold mt-3 text-left">Old Password</label>
+              <label className="text-xl  mt-3 text-left">Old Password</label>
               <input
                 type="password"
                 id="oldPassword"
@@ -134,7 +134,7 @@ export default function ImageTextInRow(props) {
               />
               
 
-              <label className="text-xl font-bold mt-3 text-left">New Password</label>
+              <label className="text-xl  mt-3 text-left">New Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -159,11 +159,11 @@ export default function ImageTextInRow(props) {
              
 
               <button
-                className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-4 justify-center self-center bg-blue-600"
+                className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-4 justify-center border border-gray-300 self-center bg-blue-400"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
               >
-                <h1 className="font-medium text-2xl text-white">Change Password</h1>
+                <h1 className=" text-2xl text-white">Change Password</h1>
               </button>
 
             </div>

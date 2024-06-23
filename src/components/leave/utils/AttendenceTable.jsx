@@ -127,16 +127,16 @@ export default function AttendenceTable() {
 
 
   return (
-    <div className='rounded-lg shadow-lg   w-full'>
+    <div className='rounded-lg shadow-md   border mt-1 border-gray-300 w-full'>
       <ToastContainer />
       {loading ? (
         <Loading />
       ) : data === null ? (
-        <div >No data available</div>
+        <div className='text-center w-full'>No data available</div>
       ) : (
-        <table className='mt-7 mb-3 w-full justify-evenly text-center outline outline-gray-400 rounded-lg'>
+        <table className=' w-full justify-evenly text-center  rounded-lg'>
           <thead>
-            <tr className='rounded-t-lg border-b-2 border-gray-400 mt-3 text-base font-medium'>
+            <tr className='rounded-t-lg  mt-3 text-base font-medium'>
               <th>Leave Type</th>
               <th className='bg-blue-200'>Start Date</th>
               <th className='bg-green-200'>End Date</th>
@@ -146,7 +146,7 @@ export default function AttendenceTable() {
           </thead>
           <tbody>
             {data.map((leave, index) => (
-              <tr key={index}>
+              <tr key={index} className='border-t border-gray-400 '>
                 <td className="font-normal">
                   {editRowIndex === index ? (
                     <input type="text" name="reason" value={editData.reason} onChange={handleInputChange} />

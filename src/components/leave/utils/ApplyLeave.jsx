@@ -47,7 +47,7 @@ export default function ApplyLeave() {
 
 
     return (
-        <div className=" flex flex-col items-center p-4 ml-2 mr-2 rounded-lg shadow-md">
+        <div className=" flex flex-col border  border-gray-300 items-center p-4 ml-1 mr-2 rounded-lg shadow-md">
             {/* <ToastContainer /> */}
             <h1 className=" text-lg md:text-xl font-medium">Apply Leave</h1>
             <div className='mt-3 w-full md:w-2/3 lg:w-1/2'>
@@ -75,7 +75,7 @@ export default function ApplyLeave() {
 
 
             </div>
-            <button className="bg-green-400 text-white px-4 py-2 rounded-lg mt-4 mb-1 hover:bg-green-600" onClick={handleApply}>{isLoading ? <Loading /> : 'Apply'}</button>
+            <button className="bg-green-400  border  border-gray-300  px-4 py-2 rounded-lg mt-4 mb-1 text-black hover:bg-green-600" onClick={handleApply}>{isLoading ? <Loading /> : 'Apply'}</button>
         </div>
     );
 }

@@ -36,9 +36,9 @@ export default function leave() {
     return (
         <div className=" flex flex-col px-3 overflow-y-auto items-start mt-2 ml-2 mr-3 pb-4 no-scrollbar">
             <h1 className='text-xl font-medium'>Your Leave</h1>
-            <div className='flex mobile:max-tablet:flex-col items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg justify-between shadow-lg'>
-                <div className='flex flex-col w-44 mobile:max-tablet:w-full h-60 justify-evenly rounded-lg shadow-lg  text-center font-medium text-lg '>
-                    <div>
+            <div className='flex mobile:max-tablet:flex-col border  border-gray-300 items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg justify-between shadow-lg'>
+                <div className='flex flex-col w-44  border border-gray-300 mobile:max-tablet:w-full h-60 justify-evenly rounded-lg shadow-lg  text-center font-medium text-lg '>
+                    <div className='mx-2  '>
                     <Doughnut data={chartData} options={options} className='w-44 h-44'/>
                     </div>
                     <h1>Total Leave Status</h1>

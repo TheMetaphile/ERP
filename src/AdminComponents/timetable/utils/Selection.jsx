@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 
-function Selection({selectClass, selectedSection,dayStudent, onClassChange, onSectionChange,onStudentDayChange, onSearch}) {
+function Selection({selectClass, selectedSection, onClassChange, onSectionChange,onStudentDayChange, onSearch}) {
     const [day, setDay] = useState('tuesday');
     const handleDayChange = (event) => {
         const value = event.target.value;

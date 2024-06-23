@@ -57,7 +57,7 @@ export default function MyDoubts() {
             {isModalOpen && (
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
                     <div className="bg-white rounded-lg p-6 shadow-lg w-1/2">
-                        <h2 className="text-base font-medium mb-4">To Ask a doubt please select class and subject and write tour Question? You can also attached photos for references.</h2>
+                        <h2 className="text-base font-medium mb-4">To Ask a doubt please select class and subject and write your Question? You can also attached photos for references.</h2>
 
                         <div className="flex flex-col tablet:flex-row items-center gap-3 w-full py-2 ">
                             <div className="flex-1 mobile:max-tablet:w-full">

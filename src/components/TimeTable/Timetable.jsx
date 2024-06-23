@@ -177,7 +177,7 @@ export default function TimeTable() {
             <br></br>
             <div className="flex justify-between w-full items-center p-3">
                 <h1 className="text-xl font-medium">
-                    Today Lectures
+                    Day-wise Lectures
                 </h1>
                 <select
                     type="text"
@@ -202,7 +202,7 @@ export default function TimeTable() {
                 {loading ? (
                     <Loading />
                 ) : data === null || data.length === 0 ? (
-                    <div>No data available</div>
+                    <div className=' w-full border border-gray-300 px-4 py-2 text-center'>No data available</div>
                 ) : (
                     <div className='w-full'>
                         {lectureTimes.map((time, index) => {

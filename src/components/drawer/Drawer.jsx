@@ -24,7 +24,7 @@ export default function Drawer() {
     setActive(index)
   }
   return (
-    <div className="w-60 h-full rounded-lg text-center items-center border bg-white py-6 px-4 shadow-md overflow-auto no-scrollbar">
+    <div className="w-60 h-full rounded-lg text-center items-center border bg-white py-6 px-4 shadow-md overflow-auto ">
       <div className="flex items-center">
         <img src={schoolImage} alt="school_image" className="w-1/3" />
         <span className="text-black ml-4">Metaphile Public School</span>

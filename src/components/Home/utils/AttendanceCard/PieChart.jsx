@@ -8,7 +8,7 @@ export default function DoughnutChart({ chartData, title }) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: true,
+        display: false,
       }
     },
     elements: {

@@ -13,14 +13,14 @@ export default function Askdoubt() {
             <div className="flex space-x-5">
                 <Link
                     to={'/Student-Dashboard/askdoubt/alldoubt'}
-                    className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Student-Dashboard/askdoubt/alldoubt' ? 'bg-secondary ' : 'bg-gray-300'}`}
+                    className={`text-xl font-medium px-2 rounded-lg py-1 border border-gray-300 shadow-md ${selectedLink === '/Student-Dashboard/askdoubt/alldoubt' ? 'bg-secondary ' : 'bg-gray-200'}`}
                     onClick={() => handleLinkSelect('/Student-Dashboard/askdoubt/alldoubt')}
                 >
                     All Doubts
                 </Link>
                 <Link
                     to={'/Student-Dashboard/askdoubt/mydoubts'}
-                    className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Student-Dashboard/askdoubt/mydoubts' ? 'bg-secondary ' : 'bg-gray-300'}`}
+                    className={`text-xl font-medium px-2 rounded-lg py-1 border border-gray-300 shadow-md ${selectedLink === '/Student-Dashboard/askdoubt/mydoubts' ? 'bg-secondary ' : 'bg-gray-200'}`}
                     onClick={() => handleLinkSelect('/Student-Dashboard/askdoubt/mydoubts')}
                 >
                     My Doubts
