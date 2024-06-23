@@ -29,7 +29,7 @@ export default function Home() {
       bg: ['text-red-600', 'text-green-600', 'text-yellow-400'],
       hoverOffset: 4,
       cutout: "80%",
-      borderRadius: 30,
+      borderRadius: 60,
       borderColor: "transparent"
     }]
   };
@@ -75,7 +75,7 @@ export default function Home() {
         {loading ? (
           <Loading />
         ) : (
-          <div className='tablet:h-full pb-3 mobile:max-tablet:w-full  mobile:max-tablet:mb-4 px-2'>
+          <div className='tablet:h-full pb-3 mobile:max-tablet:w-full  mobile:max-tablet:mb-4 px-2 tablet:w-80 '>
             <Doughnut chartData={chartData} title='Attendance Status' />
           </div>
         )}

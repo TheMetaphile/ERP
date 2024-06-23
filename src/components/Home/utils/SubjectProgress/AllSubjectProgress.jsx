@@ -2,7 +2,7 @@ import SubjectProgress from './SubjectProgress/subjectProgress.jsx';
 
 export default function AllSubjectProgress() {
   return (
-    <div className="flex-1 w-full h-full bg-teal-100 rounded-lg shadow-md p-3 overflow-y-auto no-scrollbar">
+    <div className="flex-1 w-full h-full bg-teal-100 rounded-lg shadow-md p-3 border border-gray-300 overflow-y-auto no-scrollbar">
       <SubjectProgress subject='Maths' description='Chapter 6' percent={73} />
       <SubjectProgress subject='Hindi' description='Chapter 5.5' percent={63} />
       <SubjectProgress subject='English' description='Chapter 4.3' percent={43} />

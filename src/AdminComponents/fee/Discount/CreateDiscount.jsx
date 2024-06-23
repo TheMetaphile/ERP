@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
+import { useRef } from 'react';
 function CreateDiscount() {
     const { authState } = useContext(AuthContext);
     const [email, setEmail] = useState('');
@@ -10,7 +11,26 @@ function CreateDiscount() {
     const [temp, setTemp] = useState();
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const inputRef = useRef(null);
 
+    const handleClickOutside = (event) => {
+        if (inputRef.current && !inputRef.current.contains(event.target)) {
+          console.log("Clicked outside the input field");
+          setShowSuggestions(false);
+          // Execute your function here
+        }
+      };
+      const handleClickInside = () => {
+        console.log("Clicked inside the input field");
+        // Execute your function for inside click here
+        setShowSuggestions(true);
+      };
+      useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, []);
     const handleEmailChange = (event) => {
         const value = event.target.value;
         setEmail(value);
@@ -102,8 +122,10 @@ function CreateDiscount() {
                         <input
                             type="text"
                             name="email"
+                            ref={inputRef}
                             value={email}
                             onChange={handleEmailChange}
+                            onClick={handleClickInside}
                             required
                             className="w-full border p-2"
                         />

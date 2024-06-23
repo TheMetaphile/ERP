@@ -84,14 +84,14 @@ export default function ImageTextInRow(props) {
   };
 
   return (
-    <div>
+    <div className="hover:bg-blue-100 rounded-full">
       {props.route ? (
-        <Link to={props.route} className="flex  items-center text-sm no-underline">
+        <Link to={props.route} className="flex px-4 py-2 items-center text-sm no-underline">
           <img src={props.image} alt={props.alternateText} className="w-1/6 " />
           <span className="ml-2">{props.text}</span>
         </Link>
       ) : (
-        <button onClick={handleButtonClick} className="flex items-center  text-sm no-underline">
+        <button onClick={handleButtonClick} className="flex items-center px-4 py-2  text-sm no-underline">
           <img src={props.image} alt={props.alternateText} className="w-1/6 " />
           <span className="ml-2">{props.text}</span>
         </button>

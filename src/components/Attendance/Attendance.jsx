@@ -23,7 +23,7 @@ export default function Attendance() {
     ],
     datasets: [{
       label: 'Attendance',
-      data: [data.absent, data.total - data.absent - data.leave, data.leave],
+      data: [data.absent, data.present, data.leave],
       backgroundColor: [
         '#EB3232',
         '#7BD850',
@@ -32,26 +32,53 @@ export default function Attendance() {
       bg: ['text-red-600', 'text-green-600', 'text-yellow-400'],
       hoverOffset: 4,
       cutout: "80%",
-      borderRadius: 30,
-      borderColor: "transparent"
+      borderRadius: 60,
+      borderColor: "transparent",
     }]
   };
 
+  const currentDate = new Date();
+
+  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1);
+  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+
+  const months = [
+    { label: 'January', value: 1 },
+    { label: 'February', value: 2 },
+    { label: 'March', value: 3 },
+    { label: 'April', value: 4 },
+    { label: 'May', value: 5 },
+    { label: 'June', value: 6 },
+    { label: 'July', value: 7 },
+    { label: 'August', value: 8 },
+    { label: 'September', value: 9 },
+    { label: 'October', value: 10 },
+    { label: 'November', value: 11 },
+    { label: 'December', value: 12 },
+  ];
+
+  const years = Array.from({ length: 30 }, (v, i) => ({
+    value: new Date().getFullYear() - 15 + i,
+    label: new Date().getFullYear() - 15 + i,
+  }));
+
+  const handleMonthChange = (selectedOption) => {
+    setSelectedMonth(selectedOption);
+  };
+
+  const handleYearChange = (selectedOption) => {
+    setSelectedYear(selectedOption);
+
+  };
   useEffect(() => {
     const fetchStudents = async () => {
       setLoading(true);
       try {
-        const today = new Date();
-        const month = parseInt(today.getMonth() + 1, 10);
-        const year = today.getFullYear();
-        const response = await axios.get(`https://attendance-api-lako.onrender.com/studentAttendance/fetch/student?month=${month}&year=${year}`, {
+        const response = await axios.get(`https://attendance-api-lako.onrender.com/studentAttendance/fetch/student/stats?month=${selectedMonth}&year=${selectedYear}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
           }
         });
-        console.log('y', year);
-        console.log('m', month)
-        console.log('data', response.data)
         setData(response.data)
       } catch (error) {
         console.error("Error fetching student month attendance:", error);
@@ -62,28 +89,58 @@ export default function Attendance() {
     };
 
     fetchStudents();
-  }, [authState.accessToken]);
-
-
-
+  }, [authState.accessToken, selectedMonth, selectedYear]);
   return (
     <div className=" flex flex-col w-full overflow-y-auto items-start px-2 mb-1 pb-4 no-scrollbar">
-      <h1 className="text-2xl font-medium">Attendance</h1>
+      <div className="flex justify-between w-full">
+        <h1 className="text-2xl font-medium">Attendance</h1>
+        <div>
+
+          <select
+            id="month-selector"
+            value={selectedMonth}
+            onChange={(e) => handleMonthChange(e.target.value)}
+            className="border rounded p-2 mx-2"
+          >
+            <option value="" disabled>Select a month</option>
+            {months.map((month, index) => (
+              <option key={index} value={month.value}>
+                {month.label}
+              </option>
+            ))}
+          </select>
+          <select
+            id="year-selector"
+            value={selectedYear}
+            onChange={(e) => handleYearChange(e.target.value)}
+            className="border rounded p-2 mx-2"
+          >
+            <option value="" disabled>Select a year</option>
+            {years.map((year) => (
+              <option key={year.value} value={year.value}>
+                {year.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
       {loading ? (
-        <Loading />
+        <div className=" self-center ">
+          <Loading />
+        </div>
       ) : (
         <>
           <div className=" flex w-full justify-start mobile:max-tablet:grid mobile:max-tablet:grid-cols-2">
-            <TotalAttendance TotalAttendance={260} />
-            <PresentAttendanceTile Present={230} image={Present} text="Present" />
-            <PresentAttendanceTile Present={230} image={Absent} text="Absent" />
-            <PresentAttendanceTile Present={230} image={Leave} text="Leave" />
+            <TotalAttendance TotalAttendance={data.present + data.leave + data.absent} />
+            <PresentAttendanceTile Present={data.present} image={Present} text="Present" />
+            <PresentAttendanceTile Present={data.absent} image={Absent} text="Absent" />
+            <PresentAttendanceTile Present={data.leave} image={Leave} text="Leave" />
           </div>
           <div className=" flex w-full h-80 tablet:justify-evenly mobile:max-tablet:flex-col items-center mb-4 mt-10 ">
             <div className="tablet:w-2/3 tablet:pr-6 mobile:max-tablet:w-full mobile:max-tablet:mb-5 ">
-              <Calendar data={data}/>
+              <Calendar month={selectedMonth} year={selectedYear} />
             </div>
-            <div className="tablet:w-1/3 h-full  mobile:max-tablet:w-full ">
+            <div className="tablet:w-1/3 h-96  mobile:max-tablet:w-full ">
               <Doughnut chartData={chartData} title='Attendance Status' />
             </div>
           </div>

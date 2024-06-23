@@ -47,23 +47,23 @@ export default function FeeStatusRow() {
                 <div>No data available</div>
             ) : (
                 <>
-                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md rounded-lg mr-3 flex flex-col items-center justify-center bg-yellow-300`}>
+                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md rounded-lg border border-gray-400 mr-3 flex flex-col items-center justify-center bg-yellow-200`}>
                         <h1 className="text-2xl font-semibold">Rs. {details.totalfee}</h1>
-                        <p className="text-lg font-medium text-gray-500">Total Fees</p>
+                        <p className="text-lg font-medium text-gray-600">Total Fees</p>
                     </div>
-                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md rounded-lg mr-3 flex flex-col items-center justify-center bg-green-300`}>
+                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md border border-gray-400 rounded-lg mr-3 flex flex-col items-center justify-center bg-green-200`}>
                         <h1 className="text-2xl font-semibold">Rs. {details.discountAmount}</h1>
-                        <p className="text-lg font-medium text-gray-500">Discount</p>
+                        <p className="text-lg font-medium text-gray-600">Discount</p>
                     </div>
-                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md rounded-lg mr-3 flex flex-col items-center justify-center bg-red-300`}>
+                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md border border-gray-400 rounded-lg mr-3 flex flex-col items-center justify-center bg-red-200`}>
                         <h1 className="text-2xl font-semibold">Rs. {details.fine}</h1>
-                        <p className="text-lg font-medium text-gray-500">Fine</p>
+                        <p className="text-lg font-medium text-gray-600">Fine</p>
                     </div>
-                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md rounded-lg mr-3 flex flex-col items-center justify-center bg-red-300`}>
+                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md rounded-lg mr-3 flex flex-col items-center justify-center border border-gray-400 bg-green-200`}>
                         <h1 className="text-2xl font-semibold">Rs. {details.paid}</h1>
                         <p className="text-lg font-medium text-gray-500">Paid</p>
                     </div>
-                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md rounded-lg mr-3 flex flex-col items-center justify-center bg-red-300`}>
+                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md rounded-lg mr-3 flex flex-col items-center justify-center border border-gray-400 bg-orange-200`}>
                         <h1 className="text-2xl font-semibold">Rs. {details.payableFee}</h1>
                         <p className="text-lg font-medium text-gray-500">Payable</p>
                     </div>
