@@ -91,10 +91,10 @@ function TimeTable() {
 
 
     useEffect(() => {
-        if(fetchedTimeTableStructure!=null){
+        if (fetchedTimeTableStructure != null) {
             calculateLectureTimes();
         }
-    }, [fetchedTimeTableStructure,role]);
+    }, [fetchedTimeTableStructure, role]);
 
 
 
@@ -168,7 +168,7 @@ function TimeTable() {
         if ((selectClass && selectedSection) || (teacherEmail && day)) {
             console.log(selectClass, selectedSection);
             console.log(teacherEmail, day)
-         
+
             try {
                 const url = role === 'Teacher' ? 'https://timetableapi-1wfp.onrender.com/timetable/fetch/teacher' : 'https://timetableapi-1wfp.onrender.com/timetable/fetch/student';
                 const payload = {
@@ -190,7 +190,7 @@ function TimeTable() {
                 toast.error(error.response.data.error)
                 console.error('Error fetching dataaaa:', error.response.data.error);
             }
-            
+
         }
     };
 
@@ -248,8 +248,7 @@ function TimeTable() {
                     />
                 )}
             </div>
-
-            <div className=' mt-4 w-full rounded-lg border shadow-md '>
+            <div className=' mt-3 w-full '>
                 {
 
                     !loading ?
@@ -257,7 +256,11 @@ function TimeTable() {
                             fetchedTimeTableStructure ?
 
                                 role === 'Teacher' ?
-                                    <Table data={data} teacherEmail={teacherEmail} Time={lectureTimes} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} />
+                                    <>
+                                        <span className='mb-4  px-2 text-xl py-3'>Teacher email: {teacherEmail}</span>
+
+                                        <Table data={data} teacherEmail={teacherEmail} Time={lectureTimes} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} />
+                                    </>
                                     :
                                     <TableStudent data={data} selectClass={selectClass} selectedSection={selectedSection} dayStudent={dayStudent} Time={lectureTimes} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} />
                                 :

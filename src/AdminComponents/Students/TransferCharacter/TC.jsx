@@ -30,18 +30,17 @@ function TC() {
 
     ];
     return (
-        <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar">
+        <div className="overflow-y-auto w-full items-start  px-2 ">
             <div className='w-full flex items-center justify-between px-4 mt-2'>
                 <h1 className="text-2xl font-medium mb-2">Transfer Certificate</h1>
                 <h1 className='f text-sm bg-purple-200 p-2 rounded-lg shadow-md self-end cursor-pointer' onClick={handleOpen}>Add New </h1>
 
             </div>
 
-            <div className=' mt-4   w-full'>
                 <Selection />
-            </div>
+            
 
-            <div className='  rounded-lg border shadow-md  w-full mb-2'>
+            <div className='  rounded-lg border border-black shadow-md mobile:max-tablet:w-fit w-full mb-2 overflow-auto'>
                 <Header headings={['Sr. No.', 'TC No.', 'Admission No.', 'Name', 'Class', 'Action']} />
                 {details.map((detail, index) => (
                     <Link to={`/Admin-Dashboard/transfercertificate/${detail.name}`} key={index}>

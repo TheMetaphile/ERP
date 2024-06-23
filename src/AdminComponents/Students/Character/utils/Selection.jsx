@@ -2,7 +2,7 @@ import React from 'react'
 
 function Selection() {
   return (
-    <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0  overflow-y-auto items-start mt-2  mb-3 no-scrollbar">
+    <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0   items-start mt-4  mb-3 ">
             <div className="container p-3  ">
         
         <div className="flex justify-between">

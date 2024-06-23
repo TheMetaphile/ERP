@@ -103,7 +103,7 @@ export default function AssignSubjectRow({ Class }) {
     };
 
     return (
-        <div key={Class} className="w-full mt-3 mb-4 rounded-lg shadow-md border ">
+        <div key={Class} className="w-full mt-3 mb-4 rounded-lg shadow-md border overflow-auto">
             <ToastContainer />
             <div className="flex justify-between items-center p-2">
                 <div className="w-1/4">

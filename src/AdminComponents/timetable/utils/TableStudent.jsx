@@ -67,7 +67,7 @@ console.log('ttt',Time)
     const lectures = timetableData[dayStudent] || [];
 
     return (
-        <div className="w-full">
+        <div className="w-full rounded-lg border shadow-md">
             {/* <ToastContainer /> */}
             <div className="flex p-3 mb-4 justify-between w-full">
                 <Link

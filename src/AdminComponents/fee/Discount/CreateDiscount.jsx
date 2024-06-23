@@ -7,43 +7,89 @@ function CreateDiscount() {
     const [percentage, setPercentage] = useState('');
     const [session, setSession] = useState('');
     const [field, setField] = useState('');
+    const [temp, setTemp] = useState();
+    const [suggestions, setSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+
+    const handleEmailChange = (event) => {
+        const value = event.target.value;
+        setEmail(value);
+        setShowSuggestions(true);
+    };
+
+    const handleSuggestionClick = (suggestion) => {
+        setEmail(suggestion.name);
+        setShowSuggestions(false);
+    };
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setTemp(email);
+        }, 500);
+        return () => {
+            clearTimeout(handler);
+        }
+    }, [email])
+
+    useEffect(() => {
+        if (temp) {
+            const searchStudent = async () => {
+                try {
+                    const response = await axios.get(`https://feeapi.onrender.com/fee/fetch/students/list?searchString=${temp}`, {
+                        headers: {
+                            Authorization: `Bearer ${authState.accessToken}`
+                        }
+                    })
+                    console.log(response.data)
+                    const StudentEmails = response.data.Students.map(Student => ({
+                        name: Student.name,
+                        profileLink: Student.profileLink
+                    }));
+                    setSuggestions(StudentEmails);
+
+                }
+                catch (error) {
+                    console.error("Error searching for Students:", error);
+                }
+            }
+            searchStudent();
+        }
+    }, [temp, authState.accessToken])
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(Number(percentage)<100){
-
+        if (Number(percentage) < 100) {
             try {
                 const response = await axios.post('https://feeapi.onrender.com/fee/apply/discount',
                     {
-                      email: email,
-                      percentage: Number(percentage),
-                      session: session,
-                      field: field
+                        email: email,
+                        percentage: Number(percentage),
+                        session: session,
+                        field: field
                     },
                     {
-                      headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
-                      }
+                        headers: {
+                            Authorization: `Bearer ${authState.accessToken}`
+                        }
                     }
-                  );
+                );
 
-                  if(response.status===200){
+                if (response.status === 200) {
                     console.log('Discount created successfully');
                     setEmail('');
                     setPercentage('');
                     setSession('');
                     setField('');
-                  }
-    
+                }
+
             } catch (error) {
-              console.error('Error:', error);
+                console.error('Error:', error);
             }
         }
-        else{
+        else {
             console.log('Percentage is above 100')
         }
-
-        
     };
 
     return (
@@ -57,10 +103,24 @@ function CreateDiscount() {
                             type="text"
                             name="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={handleEmailChange}
                             required
                             className="w-full border p-2"
                         />
+                        {showSuggestions && suggestions.length > 0 && (
+                            <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                {suggestions.map((suggestion, idx) => (
+                                    <li
+                                        key={idx}
+                                        className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                        onClick={() => handleSuggestionClick(suggestion)}
+                                    >
+                                        <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                        {suggestion.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
 
                     <div>

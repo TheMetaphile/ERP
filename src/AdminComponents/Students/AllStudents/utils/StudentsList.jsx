@@ -44,41 +44,44 @@ export default function StudentsList() {
         }
     }, [Class, Section, bothEventsCalled]);
 
-        const fetchUserData = async () => {
-            try {
-                const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchMultiple/student', {
-                    accessToken: authState.accessToken
-                });
-                console.log("API response:", response.data);
+    const fetchUserData = async () => {
+        try {
+            const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchMultiple/student', {
+                accessToken: authState.accessToken,
+                currentClass: Class,
+                section: Section,
+                rollNumber: rollNumber,
+                end :5
+            });
+            console.log("API response:", response.data);
 
 
-                if (response.data.Students) {
-                    const users = response.data.Students.map(user => ({
-                        ...user,
-                        profileLogo: user.profileLink || profilelogo,
+            if (response.data.Students) {
+                const users = response.data.Students.map(user => ({
+                    ...user,
+                    profileLogo: user.profileLink || profilelogo,
 
-                    }));
-                    setUserData(users);
-                } else {
-                    setError('Unexpected response format');
-                    setTimeout(() => {
-                        setError('');
-                    }, 2000);
-                }
-
-                console.log(response.data.Students[4].name);
-
-                setLoading(false);
-            } catch (err) {
-                setError(err.message);
+                }));
+                setUserData(users);
+            } else {
+                setError('Unexpected response format');
                 setTimeout(() => {
                     setError('');
                 }, 2000);
-                setLoading(false);
             }
-        };
-        useEffect(() => {
 
+            console.log(response.data.Students[4].name);
+
+            setLoading(false);
+        } catch (err) {
+            setError(err.message);
+            setTimeout(() => {
+                setError('');
+            }, 2000);
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
         if (authState.accessToken) {
             fetchUserData();
         } else {
@@ -88,14 +91,17 @@ export default function StudentsList() {
                 setError('');
             }, 2000);
         }
-    }, [authState.accessToken]);
+    }, [authState.accessToken,Class,rollNumber,Section,name]);
 
 
     const filteredStudents = userData.filter(student => {
+
         return (
-            student.name.toLowerCase().includes(name.toLowerCase()) &&
-            student.currentClass.toLowerCase().includes(Class.toLowerCase()) &&
-            student.section.toLowerCase().includes(Section.toLowerCase())
+            rollNumber ?
+                student.rollNumber === rollNumber : true &&
+                student.name.toLowerCase().includes(name.toLowerCase()) &&
+                student.currentClass.toLowerCase().includes(Class.toLowerCase()) &&
+                student.section.toLowerCase().includes(Section.toLowerCase())
         );
     });
 
@@ -108,11 +114,11 @@ export default function StudentsList() {
         }
         try {
 
-            const response=await axios.post('https://loginapi-y0aa.onrender.com/assignRollNumber', {
+            const response = await axios.post('https://loginapi-y0aa.onrender.com/assignRollNumber', {
                 accessToken: authState.accessToken,
                 currentClass: Class,
                 section: Section,
-                
+
             });
 
             console.log(response.data)
@@ -123,9 +129,9 @@ export default function StudentsList() {
     };
 
     return (
-        <div className="overflow-y-auto w-full items-start mb-2 px-2 no-scrollbar">
+        <div className="overflow-x-auto w-full items-start mb-2 px-2 ">
             <h1 className="text-2xl font-medium mb-2">All Students Data</h1>
-            <div className="no-scrollbar w-full overflow-x-auto">
+            <div className="w-full">
                 <SearchBar
                     rollNumber={rollNumber}
                     name={name}
@@ -138,12 +144,10 @@ export default function StudentsList() {
                     handlebothEventsCalled={handlebothEventsCalled}
                 />
             </div>
-            <div className="rounded-lg shadow-md border-2 border-black w-full overflow-x-auto no-scrollable">
+            <div className="rounded-lg shadow-md border border-black w-full mobile:max-tablet:w-fit overflow-auto ">
                 <Header headings={['ID', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
                 {loading ? (
-                    <Loading/>
-                ) : error ? (
-                    <div>Error: {error}</div>
+                    <Loading />
                 ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
                     <div>No students found</div>
                 ) : Array.isArray(filteredStudents) ? (

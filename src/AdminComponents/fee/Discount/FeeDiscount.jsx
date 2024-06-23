@@ -5,6 +5,7 @@ import Loading from '../../../LoadingScreen/Loading';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import CreateDiscount from './CreateDiscount';
+import { MdDeleteForever } from "react-icons/md";
 
 function FeeDiscount() {
     const [selectedClass, setSelectedClass] = useState("9th");
@@ -66,9 +67,9 @@ function FeeDiscount() {
     };
 
     return (
-        <div className="flex flex-col px-3 mobile:max-tablet:px-0  overflow-y-auto items-start mt-2  mb-3 no-scrollbar">
+        <div className="flex flex-col px-3 mobile:max-tablet:px-0  overflow-auto items-start mt-2  mb-3 ">
             <ToastContainer />
-            <div className='flex justify-between w-full items-center'>
+            <div className='flex justify-between w-full items-center px-2'>
                 <h1 className="text-2xl p-2">Student Fee Discount</h1>
                 <h1 
                     className="text-xl p-2 bg-purple-200 rounded-lg cursor-pointer" 
@@ -112,33 +113,33 @@ function FeeDiscount() {
                     : <div></div>
                 }
 
-                <div className='px-2 mt-4 w-full'>
-                    <div className="flex justify-between w-full py-2 pl-2 bg-bg_blue h-fit rounded-t-lg border border-black">
-                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                <div className=' mt-4 w-full overflow-auto  border border-black rounded-lg'>
+                    <div className="px-2 flex justify-between w-fit py-2  bg-bg_blue  rounded-t-lg border border-b-2  whitespace-nowrap ">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             RollNo.
                         </h1>
-                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-40 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Student Name
                         </h1>
-                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Current Class
                         </h1>
-                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Title
                         </h1>
-                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Session
                         </h1>
-                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Discount
                         </h1>
-                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             By
                         </h1>
-                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Employee ID
                         </h1>
-                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Action
                         </h1>
                     </div>
@@ -149,33 +150,33 @@ function FeeDiscount() {
                         details.length > 0? (
                             <div>
                                 {details.map((details, index) => (
-                                    <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
-                                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                    <div key={index} className='flex w-fit justify-between  py-2 pl-2 h-fit border '>
+                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.to.rollNumber}
                                         </h1>
-                                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        <h1 className="w-40 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.to.name}
                                         </h1>
-                                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.to.currentClass}
                                         </h1>
-                                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.field}
                                         </h1>
-                                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.session}
                                         </h1>
-                                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.percentage}
                                         </h1>
-                                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.by.name}
                                         </h1>
-                                        <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.by.employeeId}
                                         </h1>
-                                        <div className='w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
-                                            <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleDelete(index,details._id)}>Delete</button>
+                                        <div className='w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
+                                           <MdDeleteForever className="text-red-500 hover:text-red-700 cursor-pointer" onClick={() => handleDelete(index,details._id)}/> 
                                         </div>
                                     </div>
                                 ))}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
+import { MdDeleteForever } from "react-icons/md";
 import AuthContext from '../../../Context/AuthContext';
 import Loading from '../../../LoadingScreen/Loading';
 import axios from 'axios';
@@ -81,22 +82,22 @@ export default function FeeAdminRow({ Class }) {
     };
 
 
-    const handleDelete = async (index,id) => {
+    const handleDelete = async (index, id) => {
         console.log(Class)
         console.log(id)
         try {
             const response = await axios.delete('https://feeapi.onrender.com/fee/delete/structure',
                 {
-                  class:Class,
-                  session: session,
-                  structureId: id
+                    class: Class,
+                    session: session,
+                    structureId: id
                 },
                 {
-                  headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
-                  }
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`
+                    }
                 }
-              );
+            );
 
             if (response.status === 200) {
                 const updatedStructure = structure.filter((_, i) => i !== index);
@@ -110,7 +111,7 @@ export default function FeeAdminRow({ Class }) {
     };
 
     return (
-        <div key={Class} className="w-full mb-4 rounded-lg mt-2 shadow-md border">
+        <div key={Class} className="w-full mb-4 rounded-lg mt-2 shadow-md  overflow-auto">
             <div className="flex justify-between items-center p-2 hover:cursor-pointer" onClick={handleClick}>
                 <div className="w-1/4">
                     <div className="px-4 py-2">
@@ -123,9 +124,9 @@ export default function FeeAdminRow({ Class }) {
             </div>
 
             {expanded && (
-                <div className='mx-3'>
-                    <div className="flex justify-between w-full py-2 pl-2 bg-bg_blue h-fit rounded-t-lg border border-black">
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                <div className=' mt-2 mobile:max-tablet:w-fit w-full overflow-x-auto no-scrollbar border border-black rounded-lg'>
+                    <div className="flex justify-between px-2 py-2  bg-bg_blue  rounded-t-lg border border-b-2  whitespace-nowrap">
+                        <h1 className="w-40 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Title
                         </h1>
                         <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
@@ -137,7 +138,9 @@ export default function FeeAdminRow({ Class }) {
                         <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Action
                         </h1>
+
                     </div>
+
                     {loading ? (
                         <Loading />
                     ) : (
@@ -145,17 +148,17 @@ export default function FeeAdminRow({ Class }) {
                             <div>
                                 {structure.map((details, index) => (
                                     <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
-                                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        <h1 className="w-40 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.title}
                                         </h1>
-                                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.deadline}
                                         </h1>
-                                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.amount}
                                         </h1>
-                                        <div className='w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
-                                            <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleDelete(index,details._id)}>Delete</button>
+                                        <div className='w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
+                                           <MdDeleteForever className="text-red-500 hover:text-red-700 cursor-pointer" onClick={() => handleDelete(index, details._id)}/> 
                                         </div>
                                     </div>
                                 ))}

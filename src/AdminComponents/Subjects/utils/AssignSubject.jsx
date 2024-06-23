@@ -22,9 +22,9 @@ function AssignSubject() {
     ];
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2  mb-3 no-scrollbar">
+        <div className=" flex flex-col px-3 mobile:max-tablet:px-0  overflow-auto items-start mt-2  mb-3 no-scrollbar">
             <h1 className="text-2xl p-2">Assign Subject Teacher</h1>
-            <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0 overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
+            <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 overflow-auto items-start mt-2 mb-3 no-scrollbar">
                 {content.map((con, index) => (
                     <AssignSubjectRow Class={con.class} key={index}/>
                 ))}

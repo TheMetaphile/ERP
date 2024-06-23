@@ -9,7 +9,7 @@ function FeeAdmin() {
     };
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0  overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+        <div className=" flex flex-col px-3 mobile:max-tablet:px-0  overflow-auto items-start mt-2  mb-3 no-scrollbar">
             
             <div className=' border shadow-md mt-4 rounded-lg w-full'>
                 <div className=" flex   mt-4 ml-3 mr-3 items-center justify-between">
@@ -39,7 +39,7 @@ function FeeAdmin() {
 
                    
                 </div>
-                <hr className='border-t-2 bg-slate-500 mt-2 mb-3 ml-3 mr-3' />
+                <hr className='border-t-2 bg-slate-500 mt-2 mb-3  ' />
                 <Outlet />
                 <br></br>
             </div>

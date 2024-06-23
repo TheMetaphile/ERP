@@ -147,19 +147,20 @@ function SubjectDetails({ Class, section }) {
     };
 
     return (
-        <div className='px-5 mt-2 mb-2 py-2' >
+        <div className='px-5 mt-2 mb-2 py-2 overflow-auto w-full ' >
             <ToastContainer />
-            <div className="flex justify-between py-2 pl-2  h-fit rounded-t-lg border bg-blue-200">
-                <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+            <div className="border border-black rounded-lg mobile:max-tablet:w-fit w-full">
+            <div className="flex justify-between py-2 pl-2 mobile:max-tablet:w-fit w-full h-fit rounded-t-lg border bg-blue-200">
+                <h1 className="w-48 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                     Teacher
                 </h1>
-                <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                     Subject
                 </h1>
-                <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                <h1 className="w-48 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                     Email
                 </h1>
-                <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                     Action
                 </h1>
             </div>
@@ -167,21 +168,21 @@ function SubjectDetails({ Class, section }) {
                 subjectDetails.length > 0 ?
                     (
                         subjectDetails.map((detail, index) => (
-                            <div key={index} className="px-2 flex justify-between  py-2 pl-2 h-fit border">
-                                <div className='flex w-full whitespace-nowrap items-center'>
+                            <div key={index} className="pl-2 mobile:max-tablet:w-fit w-full flex justify-between  py-2  h-fit border items-center">
+                                <div className='flex w-48 whitespace-nowrap items-center'>
                                     <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
-                                    <h1 className="ml-2 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm ">
+                                    <h1 className="ml-2 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm ">
                                         {detail.name}
                                     </h1>
                                 </div>
-                                <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                     {detail.subject}
                                 </h1>
-                                <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                <h1 className="w-48 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                     {detail.email}
                                 </h1>
-                                <div className='w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
-                                    <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleDelete(index)}>Delete</button>
+                                <div className='w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
+                                   <MdDeleteForever className="text-red-500 hover:text-red-700 cursor-pointer" onClick={() => handleDelete(index)}/> 
                                 </div>
                                 {/* <h1 className=" items-center cursor-pointer w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap text-red-500">
                                     <MdDeleteForever  onClick={() => handleDelete(index)}/>
@@ -230,6 +231,7 @@ function SubjectDetails({ Class, section }) {
             ) : (
                 <div></div>
             )}
+            </div>
             <div className="flex justify-center w-full px-3 py-1  h-fit ">
                 <button className='mt-2 px-4 py-2 bg-green-400 hover:bg-green-500 text-white rounded-lg' onClick={() => setShowNewRow(true)}>
                     Add subject

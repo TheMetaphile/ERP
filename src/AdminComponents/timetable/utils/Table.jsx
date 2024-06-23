@@ -14,8 +14,7 @@ function Table({ teacherEmail,data, Time, numberOfLeacturesBeforeLunch }) {
 
     const timetable = data?.timetable || [];
     return (
-        <div className="w-full rounded-lg">
-            <span className='mb-4  px-2 text-xl py-3'>Teacher email: {teacherEmail}</span>
+        <div className="w-full mt-4 rounded-lg border shadow-md">
             <div className="">
                 <table className="w-full items-center rounded-lg">
                     <thead className="bg-secondary rounded-lg">

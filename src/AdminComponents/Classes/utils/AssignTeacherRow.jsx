@@ -169,8 +169,8 @@ export default function AssignTeacherRow({ Class }) {
             </div>
 
             {expanded && (
-                <div className='mx-3'>
-                    <div className="flex justify-between w-full py-2 pl-2 bg-bg_blue h-fit rounded-t-lg border border-black">
+                <div className='mx-3 border border-black rounded-lg mb-2'>
+                    <div className="flex justify-between w-full py-2 pl-2 bg-bg_blue h-fit  ">
                         <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Section
                         </h1>
@@ -186,7 +186,7 @@ export default function AssignTeacherRow({ Class }) {
                             (
                                 <div>
                                     {sectionsDetails.map((details, index) => (
-                                        <div key={index} className={`flex justify-between w-full py-2 pl-2  h-fit border border-black ${index === sectionsDetails.length - 1 && !showNewRow ? "rounded-b-lg" : ""}`}>
+                                        <div key={index} className={`flex justify-between w-full py-2 pl-2  h-fit border  ${index === sectionsDetails.length - 1 && !showNewRow ? "rounded-b-lg" : ""}`}>
                                             <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                                                 {details.section}
                                             </h1>
