@@ -1,112 +1,129 @@
+import dashboardAssignment from "../assets/Dashboard_assignment.png";
+import dashboardFee from "../assets/Dashboard_fee.png";
+import presentation from "../assets/presentation 1.png";
+import freelance from "../assets/freelance 1.png";
+import dashboardEvents from "../assets/Dashboard_events.png";
+import dashboardQuiz from "../assets/Dashboard_quiz.png";
+import dashboardTimeTable from "../assets/Dashboard_time_table.png";
+import dashboardResult from "../assets/Dashboard_result.png";
+import dashboardGallery from "../assets/Dashboard_gallery.png";
+import dashboardLeave from "../assets/Dashboard_leave.png";
+import dashboardDoubt from "../assets/Dashboard_doubt.png";
+import notification from "../assets/notification 1.png";
+import medical from "../assets/Picture1.png";
+import datesheet from "../assets/datesheet.png";
+import lifestyle from "../assets/lifestyle 1.png";
+import live from "../assets/live 1.png";
+import changePassword from "../assets/change_password.png";
+
 const menuItems = [
   {
-    image: "src/assets/Dashboard_assignment.png",
+    image: dashboardAssignment,
     alt: "Attendance image",
     text: "Attendance",
     route: '/Student-Dashboard/attendance'
   },
   {
-    image: "src/assets/Dashboard_fee.png",
+    image: dashboardFee,
     alt: "Fee Due image",
     text: "Fee Due",
     route: '/Student-Dashboard/fee-due'
   },
   {
-    image: "src/assets/presentation 1.png",
+    image: presentation,
     alt: "presentation image",
     text: "Class Work",
     route: '/Student-Dashboard/classwork'
   },
   {
-    image: "src/assets/freelance 1.png",
+    image: freelance,
     alt: "freelance image",
     text: "Home Work",
     route: '/Student-Dashboard/homework'
   },
   {
-    image: "src/assets/Dashboard_events.png",
+    image: dashboardEvents,
     alt: "Events image",
     text: "Events",
     route: '/Student-Dashboard/events'
   },
   {
-    image: "src/assets/Dashboard_quiz.png",
+    image: dashboardQuiz,
     alt: "Play Quiz image",
     text: "Play Quiz",
     route: "/Student-Dashboard/quiz"
   },
   {
-    image: "src/assets/Dashboard_assignment.png",
+    image: dashboardAssignment,
     alt: "Assignment image",
     text: "Assignment",
     route: '/Student-Dashboard/assignment'
   },
   {
-    image: "src/assets/Dashboard_time_table.png",
+    image: dashboardTimeTable,
     alt: "Time table image",
     text: "Time Table",
     route: '/Student-Dashboard/timetable'
   },
   {
-    image: "src/assets/Dashboard_result.png",
+    image: dashboardResult,
     alt: "Result image",
     text: "Result",
     route: '/Student-Dashboard/result'
   },
   {
-    image: "src/assets/Dashboard_gallery.png",
+    image: dashboardGallery,
     alt: "School gallery image",
     text: "School Gallery",
     route: '/Student-Dashboard/gallery'
   },
   {
-    image: "src/assets/Dashboard_leave.png",
+    image: dashboardLeave,
     alt: "Leave application image",
     text: "Leave Application",
     route: '/Student-Dashboard/leave'
   },
   {
-    image: "src/assets/Dashboard_doubt.png",
+    image: dashboardDoubt,
     alt: "Ask doubt image",
     text: "Ask Doubt",
     route: '/Student-Dashboard/askdoubt'
   },
   {
-    image: "src/assets/notification 1.png",
+    image: notification,
     alt: "notification image",
-    text: "Notification ",
+    text: "Notification",
     route: '/Student-Dashboard/notification'
   },
   {
-    image: "src/assets/Picture1.png",
+    image: medical,
     alt: "medical image",
     text: "Medical Records",
     route: '/Student-Dashboard/medical'
   },
   {
-    image: "src/assets/datesheet.png",
+    image: datesheet,
     alt: "Date sheet image",
     text: "Date Sheet",
     route: "/Student-Dashboard/datesheet"
   },
   {
-    image: "src/assets/lifestyle 1.png",
+    image: lifestyle,
     alt: "lifestyle image",
     text: "Activities",
     route: "/Student-Dashboard/activities"
   },
   {
-    image: "src/assets/live 1.png",
+    image: live,
     alt: "live image",
     text: "Broadcast channels",
     route: "/Student-Dashboard/broadcast"
   },
   {
-    image: "src/assets/change_password.png",
+    image: changePassword,
     alt: "Change password image",
     text: "Change Password",
   },
-  
 ];
 
 export default menuItems;
