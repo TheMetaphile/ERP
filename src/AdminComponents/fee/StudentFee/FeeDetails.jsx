@@ -94,13 +94,13 @@ function FeeDetails() {
                         Total Fee
                     </h1>
                     <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                        Paid
-                    </h1>
-                    <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                         Discount
                     </h1>
                     <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                         Fine
+                    </h1>
+                    <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        Paid
                     </h1>
                     <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                         Payable
@@ -115,8 +115,8 @@ function FeeDetails() {
                     details.length > 0 ? (
                         <div>
                             {details.map((details, index) => (
-                                <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
-                                     <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border gap-x-4'>
+                                    <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                         {details.rollNumber}
                                     </h1>
                                     <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
@@ -132,13 +132,13 @@ function FeeDetails() {
                                         {details.totalfee}
                                     </h1>
                                     <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                        {details.paid}
-                                    </h1>
-                                    <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                         {details.discountAmount}
                                     </h1>
                                     <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                         {details.fine}
+                                    </h1>
+                                    <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        {details.paid}
                                     </h1>
                                     <h1 className="w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                         {details.payableFee}
