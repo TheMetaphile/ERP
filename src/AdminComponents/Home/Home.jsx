@@ -1,4 +1,5 @@
 import Notice from "../../components/enddrawer/notice";
+import FetchDataComponent from "../loopfor api";
 import HomeCalendar from "./utils/Calender";
 import EarningsChart from "./utils/EarningTile";
 import ExpensesChart from "./utils/ExpansesTile";
@@ -12,7 +13,7 @@ import TotalStudentTile from "./utils/TotalStudentTile";
 export default function AdminHome() {
     return (
         <div className=" overflow-y-auto items-start mb-2 px-2  no-scrollbar">
-
+            {/* <FetchDataComponent /> */}
             <Summary />
             <div className="flex flex-grow justify-between tablet:h-96 mb-3 mt-4">
                 <div className="flex w-full gap-2 h-full mobile:max-tablet:flex-col">
