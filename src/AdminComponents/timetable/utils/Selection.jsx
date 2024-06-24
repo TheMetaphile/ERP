@@ -8,6 +8,8 @@ function Selection({selectClass, selectedSection, onClassChange, onSectionChange
         setDay(value);
         onStudentDayChange(value);
     };
+
+    
     return (
         <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0  overflow-y-auto items-start mt-2  mb-3 no-scrollbar">
             <div className="container p-3  ">

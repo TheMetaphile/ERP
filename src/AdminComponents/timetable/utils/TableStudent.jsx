@@ -48,6 +48,8 @@ console.log('ttt',Time)
         } catch (error) {
             toast.error(error)
             console.error('Error updating data:', error);
+        }finally{
+            setEditMode(false);
         }
     };
 
@@ -111,6 +113,7 @@ console.log('ttt',Time)
                                                     type="text"
                                                     value={editedData[dayStudent]?.[lecture._id]?.lectureNo || lecture.lectureNo}
                                                     onChange={(e) => handleInputChange(dayStudent, lecture._id, 'lectureNo', e.target.value)}
+                                                    className='border px-3 border-gray-300'
                                                 />
                                             ) : (
                                                 lecture.lectureNo
@@ -124,6 +127,7 @@ console.log('ttt',Time)
                                                     type="text"
                                                     value={editedData[dayStudent]?.[lecture._id]?.subject || lecture.subject}
                                                     onChange={(e) => handleInputChange(dayStudent, lecture._id, 'subject', e.target.value)}
+                                                    className='border border-gray-300 px-3'
                                                 />
                                             ) : (
                                                 lecture.subject
@@ -138,7 +142,7 @@ console.log('ttt',Time)
                                                     type="text"
                                                     value={editedData[dayStudent]?.[lecture._id]?.teacher || lecture.teacher?.name || ''}
                                                     onChange={(e) => handleInputChange(dayStudent, lecture._id, 'teacher', e.target.value)}
-                                                    className="text-sm px-2"
+                                                    className='border border-gray-300 px-3'
                                                 />
                                             ) : (
                                                 <p className="text-sm px-2">{lecture.teacher?.name || 'Teacher information not available'}</p>
