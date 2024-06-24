@@ -63,8 +63,11 @@ export default function TimetableRow({
     setSelectedTeacherEmail(suggestion.email);
     setShowSuggestions(false);
     handleTeacherChange(index, suggestion.email);
-    fetchRemark(index + 1, suggestion.email, day)
+    
   };
+  useEffect(() => {
+    fetchRemark(index + 1, selectedTeacherEmail, day)
+  }, [selectedTeacherEmail,day]);
 
   const handleChange = (event) => {
     console.log(index);
