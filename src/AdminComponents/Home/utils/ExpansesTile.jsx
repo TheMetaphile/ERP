@@ -12,7 +12,7 @@ const ExpensesChart = () => {
       labels: ['Jan 2024', 'Feb 2024', 'Mar 2024'],
       datasets: [
         {
-          label: 'Expenses',
+          label: 'Monthly Expenses',
           data: [130000, 230000, 180000],
           backgroundColor: [
             'rgba(255, 165, 0, 0.7)',
@@ -75,7 +75,9 @@ const ExpensesChart = () => {
     };
   }, []);
 
-  return <div className='flex-grow h-full'><canvas ref={chartRef} className='w-full rounded-lg shadow-lg tablet:mx-3 px-3 py-2'/></div>;
+  return <div className='flex-grow h-full'>
+    
+    <canvas ref={chartRef} className='w-full  border border-gray-300 rounded-lg shadow-lg tablet:mx-3 px-3 py-2'/></div>;
 };
 
 export default ExpensesChart;

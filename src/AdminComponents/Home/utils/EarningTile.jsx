@@ -10,7 +10,7 @@ const EarningsChart = () => {
       labels,
       datasets: [
         {
-          label: 'Total Earnings',
+          label: 'Total Fee',
           data: [90000, 210000, 90000, 40000, 150000, 230000, 160000],
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
@@ -19,7 +19,7 @@ const EarningsChart = () => {
           fill: true,
         },
         {
-          label: 'Fees & Sales',
+          label: 'Salary & Sales',
           data: [70000, 120000, 130000, 80000, 130000, 80000, 140000],
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
@@ -61,7 +61,7 @@ const EarningsChart = () => {
     };
   }, []);
 
-  return <canvas ref={chartRef} className='flex flex-col w-full h-full bg-white rounded-lg shadow-md my-2 px-2 mx-2'/>;
+  return <canvas ref={chartRef} className='flex  border border-gray-300 flex-col w-full h-full bg-white rounded-lg shadow-md my-2 px-2 '/>;
 };
 
 export default EarningsChart;

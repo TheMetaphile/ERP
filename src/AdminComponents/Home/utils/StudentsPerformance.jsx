@@ -9,7 +9,7 @@ const SchoolPerformanceChart = () => {
       labels: ['Week 01', 'Week 02', 'Week 03', 'Week 04', 'Week 05', 'Week 06'],
       datasets: [
         {
-          label: 'This Week',
+          label: 'Income',
           data: [150000, 120000, 200000, 180000, 160000, 200000],
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
@@ -17,7 +17,7 @@ const SchoolPerformanceChart = () => {
           tension: 0.4, // Adjust this value between 0 and 1 for smoother lines
         },
         {
-          label: 'Last Week',
+          label: 'Expanse',
           data: [180000, 240000, 140000, 220000, 280000, 160000],
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
@@ -37,7 +37,7 @@ const SchoolPerformanceChart = () => {
       plugins: {
         tooltip: {
           mode: 'index',
-          intersect: false,
+          intersect: true,
         },
       },
     };
@@ -53,7 +53,7 @@ const SchoolPerformanceChart = () => {
     };
   }, []);
 
-  return <div className='h-full'><canvas ref={chartRef}  className='flex-grow rounded-lg mt-3 shadow-lg px-3 py-2 tablet:ml-5 ' /></div>;
+  return <div className='h-full py-2 text-center rounded-lg shadow-md  border border-gray-300'>School Income and Expenses Analysis<canvas ref={chartRef}  className=' mb-6  tablet:ml-5 ' /></div>;
 };
 
 export default SchoolPerformanceChart;

@@ -147,7 +147,7 @@ function SubjectDetails({ Class, section }) {
     };
 
     return (
-        <div className='px-5 mt-2 mb-2 py-2 overflow-auto w-full ' >
+        <div className='px-5 mt-2 mb-2 py-2 overflow-auto w-full border border-gray-300' >
             <ToastContainer />
             <div className="border border-black rounded-lg mobile:max-tablet:w-fit w-full">
             <div className="flex justify-between py-2 pl-2 mobile:max-tablet:w-fit w-full h-fit rounded-t-lg border bg-blue-200">

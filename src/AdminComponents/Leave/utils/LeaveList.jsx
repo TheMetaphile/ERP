@@ -13,11 +13,11 @@ const LeaveCard = () => {
         <div className="bg-white p-4 rounded-lg shadow-md w-full flex flex-col">
            
             <div className="flex gap-10  mobile:max-tablet:gap-4">
-                <button className={`text-xl border border-gray-300 py-1 ${selectedRole === 'student' ? 'bg-blue-400' : 'bg-gray-300'} rounded-lg px-4`}
+                <button className={`text-xl border border-gray-300 py-1 ${selectedRole === 'student' ? 'bg-blue-300' : 'bg-gray-200'} rounded-lg px-4`}
                     onClick={() => selectRole('student')}>Student</button>
-                <button className={`text-xl border border-gray-300 ${selectedRole === 'teacher' ? 'bg-blue-400' : 'bg-gray-300'} rounded-lg px-4`}
+                <button className={`text-xl border border-gray-300 ${selectedRole === 'teacher' ? 'bg-blue-300' : 'bg-gray-200'} rounded-lg px-4`}
                     onClick={() => selectRole('teacher')}>Teacher</button>
-                 <button className={`text-xl border border-gray-300 ${selectedRole === 'employee' ? 'bg-blue-400' : 'bg-gray-300'} rounded-lg px-4`}
+                 <button className={`text-xl border border-gray-300 ${selectedRole === 'employee' ? 'bg-blue-300' : 'bg-gray-200'} rounded-lg px-4`}
                     onClick={() => selectRole('employee')}>Employee</button>
             </div>
             

@@ -12,10 +12,16 @@ export default function AdminNavbar({onDrawerToggle,onEndDrawerToggle}) {
         <img src={logo} alt="Metaphile Public School" className="w-10" />
         <span className="tablet:text-xl font-medium text-text_blue mobile:text-xl">Metaphile Public School</span>
       </div>
+      <h1 className='text-2xl font-medium'>
+      Admin Panel
+      </h1>
       <nav>
         <ul className="flex w-full items-center mobile:max-tablet:text-sm">
         <li className="mr-4 ">
             <Link to="" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Home</Link>
+          </li>
+          <li className="mr-4">
+            <Link to="/Teacher-Dashboard" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Teacher Panel</Link>
           </li>
           <li className="mr-4">
             <Link to="/Admin-Dashboard/StudentsFee" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Fee</Link>

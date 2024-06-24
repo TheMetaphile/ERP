@@ -31,7 +31,7 @@ export default function PromotedStudentsDetails({ students }) {
                             <td className="px-6 py-2 whitespace-nowrap text-lg border-r text-center">{student.gpa}</td>
                             <td className="px-6 py-2 whitespace-nowrap text-lg border-r">
                                 <div className="flex justify-center">
-                                    <button className={`${student.remark === 'Promoted' ? 'bg-green-500' : 'bg-red-500'} px-2 py-1 text-lg text-black rounded-md`}>
+                                    <button className={`${student.remark === 'Promoted' ? 'bg-green-300' : 'bg-red-300'} px-2 py-1 text-lg text-black rounded-md`}>
                                         {student.remark}
                                     </button>
                                 </div>

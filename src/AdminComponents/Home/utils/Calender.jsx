@@ -35,7 +35,7 @@ const Calendar = () => {
   const finalDateRange = [...prevMonthRange.slice(negativeNum), ...currentMonthRange];
   console.log(`prev ${finalDateRange}`)
   return (
-    <div className="flex flex-col w-full bg-white rounded-lg shadow-md my-2 px-2 mx-2">
+    <div className="flex flex-col  border border-gray-300 w-full bg-white rounded-lg shadow-md my-2 px-2 mx-2">
       <div className="flex justify-between items-center mb-4 text-lg font-semibold">
         {monthName}
       </div>

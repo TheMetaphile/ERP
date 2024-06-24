@@ -105,13 +105,13 @@ export default function AssignSubjectRow({ Class }) {
     return (
         <div key={Class} className="w-full mt-3 mb-4 rounded-lg shadow-md border overflow-auto">
             <ToastContainer />
-            <div className="flex justify-between items-center p-2">
+            <div className="flex justify-between items-center p-2 " onClick={handleClick}>
                 <div className="w-1/4">
                     <div className="px-4 py-2">
                         {Class}
                     </div>
                 </div>
-                <div className="self-center cursor-pointer" onClick={handleClick}>
+                <div className="self-center cursor-pointer" >
                     {expanded ? <FaChevronUp /> : <FaChevronDown />}
                 </div>
             </div>
@@ -123,7 +123,7 @@ export default function AssignSubjectRow({ Class }) {
                             <div>
                                 {sectionsDetails.map((details, index) => (
                                     <div key={index} className="mb-3 rounded-lg shadow-md">
-                                        <div className="px-2 flex justify-between py-2 pl-2 h-fit border">
+                                        <div className="px-2 flex justify-between py-2 pl-2 h-fit border border-gray-300" onClick={() => handleSectionClick(index)}>
                                             <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                                                 {details.section}
                                             </h1>
@@ -144,7 +144,7 @@ export default function AssignSubjectRow({ Class }) {
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center">No section added</div>
+                            <div className="text-center">No section added. Please assign Class Teacher First then assign subjects of that class to other teachers</div>
                         )
                     ) : (
                         <Loading />

@@ -44,13 +44,13 @@ function CC() {
                 <Header headings={['Sr. No.', 'TC No.', 'Admission No.', 'Name', 'Class', 'Action']} />
                 {details.map((detail, index) => (
                     <Link to={`/Admin-Dashboard/charactercetificate/${detail.name}`} key={index}>
-                        <div key={index} className='flex justify-between items-center py-2 pl-2  ' >
+                        <div key={index} className='flex justify-between text-center shadow-md border border-gray-300 items-center py-2 pl-2  ' >
                             <div className=' w-40'>{detail.serial}</div>
                             <div className=' w-40'>{detail.tc}</div>
                             <div className=' w-40'>{detail.admission}</div>
                             <div className=' w-40'>{detail.name}</div>
                             <div className=' w-40'>{detail.Class}</div>
-                            <div className=' w-40'>Delete</div>
+                            <div className='text-red-600 w-40'>Delete</div>
                         </div>
                     </Link>
                 ))}

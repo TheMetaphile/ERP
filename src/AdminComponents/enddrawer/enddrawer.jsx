@@ -4,9 +4,9 @@ import Notice from './notice.jsx';
 
 export default function AdminEnddrawer() {
   return (
-    <div className="overflow-y-auto w-full h-full px-2 no-scrollbar">
+    <div className="overflow-y-auto w-full h-full px-2 ">
       <h6 className="flex justify-between text-sm mt-3">Daily Notice <span className="text-blue-500">See All</span></h6>
-      <div className="dialyNotices w-full h-2/5 bg-blue-50 rounded-xl p-2 mt-3 mb-3 overflow-auto no-scrollbar">
+      <div className="dialyNotices w-full h-2/5 bg-blue-50 rounded-xl p-2 border border-gray-300 mt-3 mb-3 overflow-auto ">
         <Notice title="Events" description="Today All the student of class 1st to 8th come to Auditorium at 12:00."/>
         <Notice title="Exam Schedule" description="From 13 April to 20 April the Exam will be start."/>
         <Notice title="Holiday" description="Tomorrow will be a Holiday on the occasion of Holi."/>

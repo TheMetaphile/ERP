@@ -21,13 +21,13 @@ const menuItems = [
     route: '/Admin-Dashboard',
     children: []
   },
-  {
-    image: teacherImage,
-    alt: "Teacher image",
-    title: "Teacher",
-    route: '/Teacher-Dashboard',
-    children: []
-  },
+  // {
+  //   image: teacherImage,
+  //   alt: "Teacher image",
+  //   title: "Teacher",
+  //   route: '/Teacher-Dashboard',
+  //   children: []
+  // },
   {
     image: studentImage,
     alt: "img",
@@ -89,16 +89,17 @@ const menuItems = [
   {
     image: classImage,
     alt: "img",
-    title: "Class",
+    title: "Assign Class Teacher",
+    route: '/Admin-Dashboard/Assignteacher',
     children: [
-      {
-        text: 'Class Teachers',
-        route: '/Admin-Dashboard/Classteacher'
-      },
-      {
-        text: 'Assign Class Teacher',
-        route: '/Admin-Dashboard/Assignteacher'
-      },
+      // {
+      //   text: 'Class Teachers',
+      //   route: '/Admin-Dashboard/Classteacher'
+      // },
+      // {
+      //   text: 'Assign Class Teacher',
+      //   route: '/Admin-Dashboard/Assignteacher'
+      // },
     ]
   },
   {
@@ -108,16 +109,16 @@ const menuItems = [
     route: '/Admin-Dashboard/Assignsubject',
     children: []
   },
-  {
-    image: parentImage,
-    alt: "img",
-    title: "Parents",
-    children: [{
-      text: 'All Parents',
-      route: '/Admin-Dashboard/Parents/AllParents'
-    },
-    ]
-  },
+  // {
+  //   image: parentImage,
+  //   alt: "img",
+  //   title: "Parents",
+  //   children: [{
+  //     text: 'All Parents',
+  //     route: '/Admin-Dashboard/Parents/AllParents'
+  //   },
+  //   ]
+  // },
   {
     image: libraryImage,
     alt: "img",
@@ -131,15 +132,17 @@ const menuItems = [
   {
     image: accountImage,
     alt: "img",
-    title: "Account",
-    children: [{
-      text: 'Teacher/Students',
-      route: '/Admin-Dashboard/Account/TeacherStudents'
-    },
-    {
-      text: 'Expenses',
-      route: '/Admin-Dashboard/Account/Expenses'
-    },
+    title: "Expenses",
+    route: '/Admin-Dashboard/Account/Expenses',
+    children: [
+    //   {
+    //   text: 'Teacher/Students',
+    //   route: '/Admin-Dashboard/Account/TeacherStudents'
+    // // },
+    // {
+    //   text: 'Expenses',
+    //   route: '/Admin-Dashboard/Account/Expenses'
+    // },
     ]
   },
   {
@@ -163,13 +166,13 @@ const menuItems = [
     route: "/Admin-Dashboard/Notice",
     children: []
   },
-  {
-    image: messageImage,
-    alt: "img",
-    title: "Message",
-    route: "/Admin-Dashboard/Message",
-    children: []
-  },
+  // {
+  //   image: messageImage,
+  //   alt: "img",
+  //   title: "Message",
+  //   route: "/Admin-Dashboard/Message",
+  //   children: []
+  // },
   {
     image: leaveImage,
     alt: "img",

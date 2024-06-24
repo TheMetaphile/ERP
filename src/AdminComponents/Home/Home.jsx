@@ -14,8 +14,8 @@ export default function AdminHome() {
         <div className=" overflow-y-auto items-start mb-2 px-2  no-scrollbar">
 
             <Summary />
-            <div className="flex flex-grow justify-between tablet:h-80 mb-20 mt-16">
-                <div className="flex w-full h-full mobile:max-tablet:flex-col">
+            <div className="flex flex-grow justify-between tablet:h-96 mb-3 mt-4">
+                <div className="flex w-full gap-2 h-full mobile:max-tablet:flex-col">
                     <div className="w-3/12 mobile:max-tablet:w-full">
                         <TotalStudentTile />
                     </div>
@@ -28,7 +28,7 @@ export default function AdminHome() {
                 </div>
             </div>
             <h1 className="text-2xl font-medium mt-8 mobile:max-tablet:-mt-4">School Calender</h1>
-            <div className="flex flex-grow justify-between mobile:max-tablet:flex-col gap-4">
+            <div className="flex flex-grow justify-between mobile:max-tablet:flex-col gap-2">
                 <div className="flex w-2/4 mobile:max-tablet:w-full">
                     <HomeCalendar />
                 </div>
@@ -36,7 +36,7 @@ export default function AdminHome() {
                     <EarningsChart />
                 </div>
             </div>
-            <h1 className="text-2xl font-medium mt-8">Teachers Details</h1>
+            <h1 className="text-2xl font-medium mt-3">Teachers Details</h1>
             <div className="flex flex-row w-full mt-4 justify-center mobile:max-tablet:flex-col gap-4">
                 <div className="w-full rounded-lg shadow-md border border-black overflow-x-auto">
                     <Header headings={['Name', 'Subject', 'Qualification', 'Sallery', 'Performance']} />

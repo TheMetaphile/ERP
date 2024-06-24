@@ -6,7 +6,7 @@ import Loading from '../../../LoadingScreen/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-export default function FeeAdminRow({ Class }) {
+export default function FeeAdminRow({ Class,session }) {
     const [expanded, setExpanded] = useState(false);
     const [structure, setStructure] = useState([])
     const [loading, setLoading] = useState(false);
@@ -15,7 +15,9 @@ export default function FeeAdminRow({ Class }) {
     const [newTitle, setNewTitle] = useState('');
     const [newAmount, setNewAmount] = useState('');
     const [newDeadline, setNewDeadline] = useState('');
-
+  
+    // Fetch data based on queryParams
+    
     const handleClick = () => {
         setExpanded(!expanded);
     };
@@ -23,14 +25,15 @@ export default function FeeAdminRow({ Class }) {
     useEffect(() => {
         if (expanded) {
             setLoading(true);
+            console.log(session);
             fetchStructure();
         }
-    }, [expanded]);
+    }, [expanded,session]);
 
     const fetchStructure = async () => {
         console.log(Class)
         try {
-            const response = await axios.get(`https://feeapi.onrender.com/fee/fetch/structure?class=${Class}&session=2023-24`, {
+            const response = await axios.get(`https://feeapi.onrender.com/fee/fetch/structure?class=${Class}&session=${session}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -44,6 +47,7 @@ export default function FeeAdminRow({ Class }) {
         } catch (err) {
             console.log(err);
             setLoading(false);
+            setStructure([]);
         }
     };
 
@@ -111,7 +115,7 @@ export default function FeeAdminRow({ Class }) {
     };
 
     return (
-        <div key={Class} className="w-full mb-4 rounded-lg mt-2 shadow-md  overflow-auto">
+        <div key={Class} className="w-full mb-4  border border-gray-300 px-4 pb-2 rounded-lg mt-2 shadow-md  overflow-auto">
             <div className="flex justify-between items-center p-2 hover:cursor-pointer" onClick={handleClick}>
                 <div className="w-1/4">
                     <div className="px-4 py-2">
@@ -125,7 +129,7 @@ export default function FeeAdminRow({ Class }) {
 
             {expanded && (
                 <div className=' mt-2 mobile:max-tablet:w-fit w-full overflow-x-auto no-scrollbar border border-black rounded-lg'>
-                    <div className="flex justify-between px-2 py-2  bg-bg_blue  rounded-t-lg border border-b-2  whitespace-nowrap">
+                    <div className="flex justify-between px-2 py-2 text-center bg-bg_blue  rounded-t-lg border border-b-2  whitespace-nowrap">
                         <h1 className="w-40 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Title
                         </h1>
@@ -147,7 +151,7 @@ export default function FeeAdminRow({ Class }) {
                         structure.length > 0 ? (
                             <div>
                                 {structure.map((details, index) => (
-                                    <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
+                                    <div key={index} className='flex text-center justify-between w-full py-2 pl-2 h-fit border '>
                                         <h1 className="w-40 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.title}
                                         </h1>
@@ -157,9 +161,14 @@ export default function FeeAdminRow({ Class }) {
                                         <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.amount}
                                         </h1>
-                                        <div className='w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
-                                           <MdDeleteForever className="text-red-500 hover:text-red-700 cursor-pointer" onClick={() => handleDelete(index, details._id)}/> 
+                                        <div className='w-36 text-lg flex items-center justify-center hover:cursor-pointer text-red-500 font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
+                                            <span>Delete</span>
+                                            <MdDeleteForever
+                                                className="text-red-500 hover:text-red-700 ml-2"
+                                                onClick={() => handleDelete(index, details._id)}
+                                            />
                                         </div>
+
                                     </div>
                                 ))}
                             </div>
