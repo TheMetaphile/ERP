@@ -112,6 +112,9 @@ import CharacterCertificate from "./AdminComponents/Students/Character/utils/per
 import FeeDetails from "./AdminComponents/fee/StudentFee/FeeDetails.jsx"
 import FeeStructure from "./AdminComponents/fee/FeeStructure/FeeStructure.jsx"
 import FeeDiscount from "./AdminComponents/fee/Discount/FeeDiscount.jsx"
+import StudentDoubts from "./TeacherComponents/studentDoubt/StudentDoubts.jsx"
+import NewDoubt from "./TeacherComponents/studentDoubt/utils/NewDoubt.jsx"
+import Answered from "./TeacherComponents/studentDoubt/utils/Answered.jsx"
 
 const router = createBrowserRouter([
   {
@@ -663,6 +666,24 @@ const router = createBrowserRouter([
           {
             path: '',
             element: <New/>
+          },
+        ]
+      },
+      {
+        path: "/Teacher-Dashboard/studentdoubts",
+        element: <StudentDoubts />,
+        children: [
+          {
+            path: '/Teacher-Dashboard/studentdoubts/new',
+            element: <NewDoubt />
+          },
+          {
+            path: '/Teacher-Dashboard/studentdoubts/answered',
+            element: <Answered />
+          },
+          {
+            path: '',
+            element: <NewDoubt/>
           },
         ]
       },

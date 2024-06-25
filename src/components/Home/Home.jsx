@@ -6,6 +6,7 @@ import AllSubjectProgress from './utils/SubjectProgress/AllSubjectProgress.jsx';
 import axios from 'axios'
 import AuthContext from "../../Context/AuthContext.jsx";
 import Loading from "../../LoadingScreen/Loading.jsx";
+import { BASE_URL_Attendence } from "../../Config.js";
 
 export default function Home() {
   const { authState } = useContext(AuthContext);
@@ -41,7 +42,7 @@ export default function Home() {
         const today = new Date();
         const month = parseInt(today.getMonth() + 1, 10);
         const year = today.getFullYear();
-        const response = await axios.get(`https://attendance-api-lako.onrender.com/studentAttendance/fetch/student/stats?month=${month}&year=${year}`, {
+        const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/student/stats?month=${month}&year=${year}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
           }

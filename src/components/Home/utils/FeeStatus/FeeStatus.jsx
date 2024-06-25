@@ -6,6 +6,8 @@ import axios from 'axios'
 import Loading from "../../../../LoadingScreen/Loading.jsx";
 import AuthContext from "../../../../Context/AuthContext.jsx";
 import React, { useEffect, useState, useContext } from "react";
+import { BASE_URL_Fee } from '../../../../Config.js';
+
 export default function FeeStatus() {
 
   const { authState } = useContext(AuthContext);
@@ -24,7 +26,7 @@ export default function FeeStatus() {
   const fetchStatus = async () => {
       console.log(authState.userDetails.currentClass, 'Class')
       try {
-          const response = await axios.get(`https://feeapi.onrender.com/fee/fetch/stats?end=20&start=0&class=${authState.userDetails.currentClass}`, {
+          const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/stats?end=20&start=0&class=${authState.userDetails.currentClass}`, {
               headers: {
                   'Authorization': `Bearer ${authState.accessToken}`
               }

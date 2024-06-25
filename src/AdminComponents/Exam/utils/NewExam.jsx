@@ -3,6 +3,7 @@ import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL_Exam } from '../../../Config';
 
 const NewExam = ({ onClose, addExam }) => {
   const { authState } = useContext(AuthContext);
@@ -73,7 +74,7 @@ const NewExam = ({ onClose, addExam }) => {
 
     console.log('examData', examData)
     try {
-      const response = await axios.post('https://examapi-jep8.onrender.com/ScheduleExams', examData);
+      const response = await axios.post(`${BASE_URL_Exam}/ScheduleExams`, examData);
 
       if (response.status === 200) {
         toast.success('Exam Added')

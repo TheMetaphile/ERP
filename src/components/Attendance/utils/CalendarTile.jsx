@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameMonth, isSunday, } from 'date-fns';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
-
+import { BASE_URL_Attendence } from '../../../Config';
 
 const Calendar = ( {month,year}) => {
   const { authState } = useContext(AuthContext);
@@ -12,7 +12,7 @@ const Calendar = ( {month,year}) => {
     const fetchStudents = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`https://attendance-api-lako.onrender.com/studentAttendance/fetch/student?month=${month}&year=${year}`, {
+        const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/student?month=${month}&year=${year}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
           }

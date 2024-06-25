@@ -6,6 +6,7 @@ import Loading from '../../LoadingScreen/Loading'
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL_Attendence } from "../../Config";
 
 function StudentAttendance() {
     const [students, setStudents] = useState([]);
@@ -19,7 +20,7 @@ function StudentAttendance() {
             try {
                 const today = new Date();
                 const formattedDate = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
-                const response = await axios.get(`https://attendance-api-lako.onrender.com/studentAttendance/fetch/student/list?date=${formattedDate}`, {
+                const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/student/list?date=${formattedDate}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }
@@ -93,7 +94,7 @@ function StudentAttendance() {
         console.log(requestData)
 
         try {
-            const response = await axios.post('https://attendance-api-lako.onrender.com/studentAttendance/mark', 
+            const response = await axios.post(`${BASE_URL_Attendence}/studentAttendance/mark`, 
                 requestData
             );
             if(response.status === 200){

@@ -4,6 +4,7 @@ import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios'
 import Selection from './utils/Selection';
 import Header from '../../AdminComponents/Home/utils/TeachersDetails/LeftCard/Header'
+import { BASE_URL_Fee } from '../../Config';
 
 function StudentFee() {
     const [loading, setLoading] = useState(false);
@@ -19,7 +20,7 @@ function StudentFee() {
     const fetchDetails = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`https://feeapi.onrender.com/fee/fetch/classTeacher?&start=0&end=20`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/classTeacher?&start=0&end=20`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

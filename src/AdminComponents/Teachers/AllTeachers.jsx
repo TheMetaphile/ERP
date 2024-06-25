@@ -6,6 +6,8 @@ import { chatLogo, profilelogo } from "./utils/images/index.js";
 import axios from 'axios';
 import AuthContext from "../../Context/AuthContext.jsx";
 import Loading from "../../LoadingScreen/Loading.jsx"
+import { BASE_URL_Login } from "../../Config.js";
+
 export default function AllTeachers() {
     const [name, setName] = useState('');
     const [userData, setUserData] = useState([]);
@@ -20,7 +22,7 @@ export default function AllTeachers() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchMultiple/teacher', {
+                const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/teacher`, {
                     accessToken: authState.accessToken
                 });
                 console.log("API response:", response.data);

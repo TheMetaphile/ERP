@@ -3,6 +3,7 @@ import { userimg } from "../../Teachers/utils/images/index.js";
 import Loading from "../../../LoadingScreen/Loading.jsx";
 import AuthContext from "../../../Context/AuthContext.jsx";
 import axios from "axios";
+import { BASE_URL_Student_Leave } from "../../../Config.js";
 
 export default function StudentLeaves() {
 
@@ -23,7 +24,7 @@ export default function StudentLeaves() {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get(`https://studentleaveapi.onrender.com/leave/fetch/admin?start=${0}&end=${10}`, {
+      const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/admin?start=${0}&end=${10}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }

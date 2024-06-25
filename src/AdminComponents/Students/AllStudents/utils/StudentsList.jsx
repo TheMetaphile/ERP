@@ -5,6 +5,8 @@ import StudentDetailTile from "../utils/StudentDetailTile";
 import axios from 'axios'
 import AuthContext from "../../../../Context/AuthContext";
 import Loading from '../../../../LoadingScreen/Loading'
+import { BASE_URL_Login } from "../../../../Config";
+
 export default function StudentsList() {
     const [name, setName] = useState('');
     const [userData, setUserData] = useState([]);
@@ -46,7 +48,7 @@ export default function StudentsList() {
 
     const fetchUserData = async () => {
         try {
-            const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchMultiple/student', {
+            const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
                 accessToken: authState.accessToken,
                 currentClass: Class,
                 section: Section,
@@ -114,7 +116,7 @@ export default function StudentsList() {
         }
         try {
 
-            const response = await axios.post('https://loginapi-y0aa.onrender.com/assignRollNumber', {
+            const response = await axios.post(`${BASE_URL_Login}/assignRollNumber`, {
                 accessToken: authState.accessToken,
                 currentClass: Class,
                 section: Section,

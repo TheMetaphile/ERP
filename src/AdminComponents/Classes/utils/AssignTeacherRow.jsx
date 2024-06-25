@@ -4,6 +4,7 @@ import AuthContext from '../../../Context/AuthContext';
 import Loading from './../../../LoadingScreen/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { BASE_URL_Login, BASE_URL_ClassTeacher } from '../../../Config';
 
 export default function AssignTeacherRow({ Class }) {
     const [expanded, setExpanded] = useState(false);
@@ -46,7 +47,7 @@ export default function AssignTeacherRow({ Class }) {
                 setShowSuggestions(true);
                 const searchTeacher = async () => {
                     try {
-                        const response = await axios.post('https://loginapi-y0aa.onrender.com/search/teacher', {
+                        const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
                             accessToken: authState.accessToken,
                             searchString: temp,
                             start: 0,
@@ -84,7 +85,7 @@ export default function AssignTeacherRow({ Class }) {
     const fetchSections = async () => {
         try {
             if (sectionsDetails.length <= 0) {
-                const response = await axios.post('https://class-teacher.onrender.com/classTeacher/fetch/sections', {
+                const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/fetch/sections`, {
                     accessToken: authState.accessToken,
                     class: Class,
                 });
@@ -106,7 +107,7 @@ export default function AssignTeacherRow({ Class }) {
         console.log('teacher', email)
         try {
             if (email) {
-                const response = await axios.post('https://class-teacher.onrender.com/classTeacher/assign', {
+                const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/assign`, {
                     accessToken: authState.accessToken,
                     class: Class,
                     section: newSection,
@@ -137,7 +138,7 @@ export default function AssignTeacherRow({ Class }) {
     const handleConfirmClick = async (index) => {
         try {
             if (email) {
-                const response = await axios.post('https://class-teacher.onrender.com/classTeacher/assign', {
+                const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/assign`, {
                     accessToken: authState.accessToken,
                     class: Class,
                     section: sectionsDetails[index].section,

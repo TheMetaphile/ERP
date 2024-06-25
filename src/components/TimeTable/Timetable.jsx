@@ -5,6 +5,7 @@ import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios';
 import TimeTableHeader from './utils/TimeTableHeader'
+import { BASE_URL_TimeTableStructure, BASE_URL_TimeTable } from '../../Config';
 
 export default function TimeTable() {
     const [data, setData] = useState(null);
@@ -100,7 +101,7 @@ export default function TimeTable() {
         console.log(authState.accessToken)
         console.log('classaaa', ClassRange)
         try {
-            const response = await axios.post('https://timetablestructureapi.onrender.com/timeTableStructure/fetch', {
+            const response = await axios.post(`${BASE_URL_TimeTableStructure}/timeTableStructure/fetch`, {
                 accessToken: authState.accessToken,
                 classRange: ClassRange,
             });
@@ -140,7 +141,7 @@ export default function TimeTable() {
         setLoading(true);
         try {
 
-            const response = await axios.post('https://timetableapi-1wfp.onrender.com/timetable/fetch/student', {
+            const response = await axios.post(`${BASE_URL_TimeTable}/timetable/fetch/student`, {
                 accessToken: authState.accessToken,
                 class: authState.userDetails.currentClass,
                 section: authState.userDetails.section,

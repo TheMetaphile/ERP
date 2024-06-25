@@ -5,6 +5,7 @@ import axios from 'axios'
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
 import TeacherDetailTile from "./TeacherDetailTile";
+import { BASE_URL_ClassTeacher } from "../../../Config";
 
 export default function ClassTeacher() {
     const [name, setName] = useState('');
@@ -45,7 +46,7 @@ export default function ClassTeacher() {
 
         const fetchUserData = async () => {
             try {
-                const response = await axios.post('https://class-teacher.onrender.com/classTeacher/fetch/multi', {
+                const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/fetch/multi`, {
                     accessToken: authState.accessToken
                 });
                 console.log("API response:", response.data);

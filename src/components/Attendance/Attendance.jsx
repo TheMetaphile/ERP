@@ -9,6 +9,7 @@ import Doughnut from "./../Home/utils/AttendanceCard/PieChart";
 import AuthContext from "../../Context/AuthContext";
 import axios from 'axios'
 import Loading from "../../LoadingScreen/Loading"
+import { BASE_URL_Attendence } from "../../Config";
 
 export default function Attendance() {
   const { authState } = useContext(AuthContext);
@@ -74,7 +75,7 @@ export default function Attendance() {
     const fetchStudents = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`https://attendance-api-lako.onrender.com/studentAttendance/fetch/student/stats?month=${selectedMonth}&year=${selectedYear}`, {
+        const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/student/stats?month=${selectedMonth}&year=${selectedYear}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
           }

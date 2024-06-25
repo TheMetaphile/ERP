@@ -4,7 +4,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import logo from '../../assets/school logo.png';
 import axios from 'axios';
 import { FaRegCircleXmark } from "react-icons/fa6";
-
+import { BASE_URL_Login } from "../../Config";
 
 export default function ImageTextInRow(props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -50,7 +50,7 @@ export default function ImageTextInRow(props) {
       return;
   }
     try {
-      const response = await axios.post(`https://loginapi-y0aa.onrender.com/password/change/student`, {
+      const response = await axios.post(`${BASE_URL_Login}/password/change/student`, {
         email,
         oldPassword,
         newPassword

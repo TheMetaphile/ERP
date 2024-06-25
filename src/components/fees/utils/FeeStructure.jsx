@@ -7,7 +7,7 @@ import FeeStructureField from './feeStructureField.jsx';
 import FeeStructureFooter from './feeStructureFooter';
 import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { BASE_URL_Fee } from "../../../Config.js";
 
 export default function FeeStructure() {
   const { authState } = useContext(AuthContext);
@@ -27,7 +27,7 @@ export default function FeeStructure() {
   const fetchFees = async () => {
     console.log(authState.userDetails.currentClass, 'Class')
     try {
-      const response = await axios.get('https://feeapi.onrender.com/fee/fetch/student', {
+      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student`, {
         headers: {
           'Authorization': `Bearer ${authState.accessToken}`
         }

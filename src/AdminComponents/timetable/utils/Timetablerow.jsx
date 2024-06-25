@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import { toast } from "react-toastify";
+import { BASE_URL_Login } from "../../../Config";
 
 export default function TimetableRow({
   index,
@@ -37,7 +38,7 @@ export default function TimetableRow({
     if (temp) {
       const searchTeacher = async () => {
         try {
-          const response = await axios.post("https://loginapi-y0aa.onrender.com/search/teacher", {
+          const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
             accessToken: authState.accessToken,
             searchString: temp,
             start: 0,
@@ -93,7 +94,7 @@ export default function TimetableRow({
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `https://timetableapi-1wfp.onrender.com/timetable/fetch/checkAvailability`,
+        url: `${BASE_URL_TimeTbale}/timetable/fetch/checkAvailability`,
         params: {
           lecture,
           day,
@@ -129,7 +130,10 @@ export default function TimetableRow({
       <div className="flex w-full text-center items-center justify-between  py-2">
         <h1 className="w-40 ">{lectureNo}</h1>
         <h1 className="w-40">{Time}</h1>
-        <select className="w-40" value={Subject} onChange={handleChange} required>
+        <select className="w-40" type="text" name="Subject" value={Subject} onChange={handleChange} required>
+        <option value="" disabled>
+          Select a subject
+        </option>
           {subjects.map((subject, idx) => (
             <option key={idx} value={subject}>
               {subject}

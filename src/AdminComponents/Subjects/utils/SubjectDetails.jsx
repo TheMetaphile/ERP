@@ -5,7 +5,7 @@ import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdDeleteForever } from "react-icons/md";
-
+import { BASE_URL_Login, BASE_URL_Subject } from '../../../Config';
 function SubjectDetails({ Class, section }) {
     const [subjectDetails, setSubjects] = useState([]);
     const [subjectLoading, setSubjectLoading] = useState(false);
@@ -26,7 +26,7 @@ function SubjectDetails({ Class, section }) {
     const fetchSubject = async () => {
         console.log('class', Class, 'section', section)
         try {
-            const response = await axios.post('https://assignsubjectapi.onrender.com/fetch', {
+            const response = await axios.post(`${BASE_URL_Subject}/fetch`, {
                 accessToken: authState.accessToken,
                 class: Class,
                 section: section
@@ -46,7 +46,7 @@ function SubjectDetails({ Class, section }) {
 
         try {
             if (newRow.email) {
-                const response = await axios.post('https://assignsubjectapi.onrender.com/assign', {
+                const response = await axios.post(`${BASE_URL_Subject}/assign`, {
                     accessToken: authState.accessToken,
                     class: Class,
                     section: section,
@@ -93,7 +93,7 @@ function SubjectDetails({ Class, section }) {
                 setShowSuggestions(true);
                 const searchTeacher = async () => {
                     try {
-                        const response = await axios.post('https://loginapi-y0aa.onrender.com/search/teacher', {
+                        const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
                             accessToken: authState.accessToken,
                             searchString: temp,
                             start: 0,
@@ -127,7 +127,7 @@ function SubjectDetails({ Class, section }) {
         console.log('Deleting ', Class, 'section:', section, 'email:', email, 'subject:', subject , authState.accessToken);
 
         try {
-            const response = await axios.delete('https://assignsubjectapi.onrender.com/delete', {
+            const response = await axios.delete(`${BASE_URL_Subject}/delete`, {
                 data: {
                 accessToken: authState.accessToken,
                 class: Class,

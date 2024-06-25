@@ -5,6 +5,7 @@ import axios from 'axios'
 import Loading from "../../LoadingScreen/Loading";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL_Exam } from "../../Config";
 
 export default function Table() {
   const { authState } = useContext(AuthContext);
@@ -15,7 +16,7 @@ export default function Table() {
   const fetchDateSheet = async () => {
    
     try {
-      const response = await axios.post('https://examapi-jep8.onrender.com/fetchDateSheet', {
+      const response = await axios.post(`${BASE_URL_Exam}/fetchDateSheet`, {
         accessToken: authState.accessToken,
         class: authState.userDetails.currentClass
       });

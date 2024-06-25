@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
 import { useRef } from 'react';
+import { BASE_URL_Fee } from '../../../Config';
+
 function CreateDiscount() {
     const { authState } = useContext(AuthContext);
     const [email, setEmail] = useState('');
@@ -55,7 +57,7 @@ function CreateDiscount() {
         if (temp) {
             const searchStudent = async () => {
                 try {
-                    const response = await axios.get(`https://feeapi.onrender.com/fee/fetch/students/list?searchString=${temp}`, {
+                    const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/students/list?searchString=${temp}`, {
                         headers: {
                             Authorization: `Bearer ${authState.accessToken}`
                         }
@@ -81,7 +83,7 @@ function CreateDiscount() {
         e.preventDefault();
         if (Number(percentage) < 100) {
             try {
-                const response = await axios.post('https://feeapi.onrender.com/fee/apply/discount',
+                const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discount`,
                     {
                         email: email,
                         percentage: Number(percentage),

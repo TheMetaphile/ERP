@@ -6,13 +6,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import CreateTimetableStrucutre from './createTimetableStructure';
 import UploadTimetable from './UploadTimetable';
 import Loading from './../../../LoadingScreen/Loading';
+import { BASE_URL_TimeTableStructure } from '../../../Config';
 
 const Upload = () => {
     const { authState } = useContext(AuthContext);
-
-    
-
-    const [showTimetableStructure, setShowTimetableStructure] = useState(true);
+    const [showTimetableStructure, setShowTimetableStructure] = useState(false);
     const [showTimetable, setShowTimetable] = useState(true);
     const [loading, setLoading] = useState(true);
     const [ClassRange, setClassRange] = useState('1st-12th');
@@ -130,7 +128,7 @@ const Upload = () => {
         };
         console.log(createStructureData)
         try {
-            const structureResponse = await axios.post('https://timetablestructureapi.onrender.com/timeTableStructure/create', createStructureData);
+            const structureResponse = await axios.post(`${BASE_URL_TimeTableStructure}/timeTableStructure/create`, createStructureData);
            
             if (structureResponse.status === 200) {
                 console.log(structureResponse, 'OK',structureData.Class)
@@ -149,7 +147,7 @@ const Upload = () => {
                         schedule: scheduleArray
                     }))
                     setTimetableStructure(createStructureData);
-                    setShowTimetableStructure(false);
+                    // setShowTimetableStructure(false);
                     setShowTimetable(true);
             }
         }
@@ -165,7 +163,7 @@ const Upload = () => {
         console.log(ClassRange)
         try {
 
-            const response = await axios.post('https://timetablestructureapi.onrender.com/timeTableStructure/fetch', {
+            const response = await axios.post(`${BASE_URL_TimeTableStructure}/timeTableStructure/fetch`, {
                 accessToken: authState.accessToken,
                 classRange: ClassRange,
             });
@@ -216,7 +214,8 @@ const Upload = () => {
 
             <div className='w-full flex justify-between '>
                 <h1 className='text-2xl'>Schedule Time Table</h1>
-                <button className='px-3 py-2 bg-secondary rounded-lg' onClick={() => setShowTimetableStructure(true)}>Change Layout</button>
+                <button className='px-3 py-2 bg-secondary rounded-lg' onClick={() => setShowTimetableStructure(!showTimetableStructure)}>
+                {showTimetableStructure ? 'Cancel' : 'Change Layout'}</button>
             </div>
 
             {/* <CheckStructure handleFetch={handleFetch} structureData={structureData} handleChange={handleChange}/> */}

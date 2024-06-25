@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
+import { BASE_URL_Fee } from '../../../Config';
 
 function FeeDetails() {
     const [selectedClass, setSelectedClass] = useState("9th");
@@ -37,7 +38,7 @@ function FeeDetails() {
         console.log(selectedClass)
         setLoading(true);
         try {
-            const response = await axios.get(`https://feeapi.onrender.com/fee/fetch/admin?class=${selectedClass}&start=0&end20`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/admin?class=${selectedClass}&start=0&end20`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

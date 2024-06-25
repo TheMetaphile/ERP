@@ -5,6 +5,8 @@ import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from "react-router-dom";
+import { BASE_URL_TimeTable } from '../../../Config';
 
 export default function UploadTimetable({ fetchedTimeTableStructure, handleChange }) {
     const [lectureTimes, setLectureTimes] = useState([]);
@@ -137,7 +139,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
         console.log(timetableData);
 
         try {
-            const response = await axios.post('https://timetableapi-1wfp.onrender.com/timetable/upload', timetableData);
+            const response = await axios.post(`${BASE_URL_TimeTable}/timetable/upload`, timetableData);
             if (response.status === 200) {
                 console.log(response.data);
                 toast.success('Timetable uploaded successfully');
@@ -235,7 +237,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
                     <TimetableHeader />
 
                     {lectureTimes.map((time, index) => (
-                        <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange} day={selectedDay}/>
+                        <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange} day={selectedDay} />
                     ))}
                 </div>
 
@@ -247,6 +249,12 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
                 >
                     Upload
                 </button>
+                <Link
+                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    to={'/Admin-Dashboard/timetable'}
+                >
+                Cancel
+                </Link>
             </div>
         </form>
     )

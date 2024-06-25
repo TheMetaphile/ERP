@@ -7,6 +7,7 @@ import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL_Login } from "../../../Config";
 
 export default function RightCard() {
     const [email, setEmail] = useState('');
@@ -35,7 +36,7 @@ export default function RightCard() {
         setIsSubmitting(true);
         try {
             const endpoint = role === "Teacher-Dashboard" ? "/login/teacher" : "/login/student";
-            await axios.post(`https://loginapi-y0aa.onrender.com${endpoint}`, {
+            await axios.post(`${BASE_URL_Login}${endpoint}`, {
                 email,
                 password
             }).then((response) => {

@@ -6,6 +6,7 @@ import AuthContext from '../../../Context/AuthContext';
 import Loading from '../../../LoadingScreen/Loading'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL_Login } from '../../../Config';
 
 export default function RightCard() {
     const [newPassword, setNewPassword] = useState('');
@@ -33,7 +34,7 @@ export default function RightCard() {
         }
         try {
             console.log("mail password", authState.email, newPassword)
-            const response = await axios.post(`https://loginapi-y0aa.onrender.com/password/forgot/Student`, {
+            const response = await axios.post(`${BASE_URL_Login}/password/forgot/Student`, {
                 email: authState.email,
                 newPassword
             });

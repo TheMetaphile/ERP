@@ -5,6 +5,7 @@ import AuthContext from '../../../Context/AuthContext';
 import Loading from '../../../LoadingScreen/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { BASE_URL_Fee } from '../../../Config';
 
 export default function FeeAdminRow({ Class,session }) {
     const [expanded, setExpanded] = useState(false);
@@ -33,7 +34,7 @@ export default function FeeAdminRow({ Class,session }) {
     const fetchStructure = async () => {
         console.log(Class)
         try {
-            const response = await axios.get(`https://feeapi.onrender.com/fee/fetch/structure?class=${Class}&session=${session}`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/structure?class=${Class}&session=${session}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -62,7 +63,7 @@ export default function FeeAdminRow({ Class,session }) {
         console.log(structure)
 
         try {
-            const response = await axios.post('https://feeapi.onrender.com/fee/create/structure', {
+            const response = await axios.post(`${BASE_URL_Fee}/fee/create/structure`, {
                 class: Class,
                 session: '2023-24',
                 structure: structure
@@ -90,7 +91,7 @@ export default function FeeAdminRow({ Class,session }) {
         console.log(Class)
         console.log(id)
         try {
-            const response = await axios.delete('https://feeapi.onrender.com/fee/delete/structure',
+            const response = await axios.delete(`${BASE_URL_Fee}/fee/delete/structure`,
                 {
                     class: Class,
                     session: session,

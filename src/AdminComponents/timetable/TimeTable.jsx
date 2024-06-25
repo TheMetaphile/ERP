@@ -9,6 +9,7 @@ import Loading from '../../LoadingScreen/Loading'
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL_TimeTableStructure, BASE_URL_TimeTable } from '../../Config';
 
 function TimeTable() {
 
@@ -105,7 +106,7 @@ function TimeTable() {
         console.log(authState.accessToken)
         console.log('classaaa', ClassRange)
         try {
-            const response = await axios.post('https://timetablestructureapi.onrender.com/timeTableStructure/fetch', {
+            const response = await axios.post(`${BASE_URL_TimeTableStructure}/timeTableStructure/fetch`, {
                 accessToken: authState.accessToken,
                 classRange: ClassRange,
             });
@@ -176,7 +177,7 @@ function TimeTable() {
             console.log(teacherEmail, day)
 
             try {
-                const url = role === 'Teacher' ? 'https://timetableapi-1wfp.onrender.com/timetable/fetch/teacher' : 'https://timetableapi-1wfp.onrender.com/timetable/fetch/student';
+                const url = role === 'Teacher' ? `${BASE_URL_TimeTable}/timetable/fetch/teacher` : `${BASE_URL_TimeTable}/timetable/fetch/student`;
                 const payload = {
                     accessToken: authState.accessToken,
                     class: selectClass,
@@ -193,8 +194,8 @@ function TimeTable() {
                     setData(response.data);
                 }
             } catch (error) {
-                toast.error(error.response.data.error)
-                console.error('Error fetching dataaaa:', error.response.data.error);
+                toast.error(error)
+                console.error('Error fetching dataaaa:', error);
             }finally{
                 setLoading(false);
             }

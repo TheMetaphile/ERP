@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
-import RejectedTile from './RejectedTile'
+import AnsweredTile from './AnsweredTile'
 import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext'
 import { BASE_URL_Student_Leave } from '../../../Config'
 
-export default  function Rejected() {
-
+export default function Answered() {
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,13 +21,13 @@ export default  function Rejected() {
                 }
             });
             console.log("API response:", response.data);
-            setData(response.data || []); 
-            
+            setData(response.data || []);
+
         } catch (err) {
             setError(err.message);
-        
+
         }
-        finally{
+        finally {
             setLoading(false);
 
         }
@@ -51,10 +50,9 @@ export default  function Rejected() {
         return <div>Error: {error}</div>;
     }
 
-   
     return (
-        <div className='mr-3'>
-            <RejectedTile data={data}/>   
+        <div className=' mr-3'>
+            <AnsweredTile data={data} />
         </div>
     )
 }

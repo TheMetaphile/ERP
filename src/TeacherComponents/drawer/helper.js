@@ -38,6 +38,13 @@ const menuItems = [
     route: '/Teacher-Dashboard/studentleave',
     children: []
   },
+  {
+    image: transportImage,
+    alt: "img",
+    title: "Student Doubts",
+    route: '/Teacher-Dashboard/studentdoubts',
+    children: []
+  },
   // {
   //   image: adminImage,
   //   alt: "Admin image",

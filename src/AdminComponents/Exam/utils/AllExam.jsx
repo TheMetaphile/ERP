@@ -5,6 +5,7 @@ import AuthContext from "../../../Context/AuthContext";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from "../../../LoadingScreen/Loading";
+import { BASE_URL_Exam } from "../../../Config";
 
 export default function AllExam() {
     const [exams, setExams] = useState([]);
@@ -24,7 +25,7 @@ export default function AllExam() {
     const deleteExam = async (index) => {
         const examToDelete = exams[index];
         try {
-            const response = await axios.delete('https://examapi-jep8.onrender.com/deleteExam', {
+            const response = await axios.delete(`${BASE_URL_Exam}/deleteExam`, {
                 data: {
                     accessToken: authState.accessToken,
                     examId: examToDelete._id,
@@ -51,7 +52,7 @@ export default function AllExam() {
 
     const fetchExam = async () => {
         try {
-            const response = await axios.post('https://examapi-jep8.onrender.com/fetchExams', {
+            const response = await axios.post(`${BASE_URL_Exam}/fetchExams`, {
                 accessToken: authState.accessToken
             });
             console.log("API response exam:", response.data);
@@ -113,7 +114,7 @@ export default function AllExam() {
             class: examToEdit.class
         };
         try {
-            const response = await axios.put('https://examapi-jep8.onrender.com/updateExam', {
+            const response = await axios.put(`${BASE_URL_Exam}/updateExam`, {
                 accessToken: authState.accessToken,
                 examId: examToEdit._id,
                 class: examToEdit.class,

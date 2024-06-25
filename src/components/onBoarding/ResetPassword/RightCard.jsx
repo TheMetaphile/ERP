@@ -7,6 +7,7 @@ import AuthContext from "../../../Context/AuthContext";
 import Loading from '../../../LoadingScreen/Loading'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL_Login } from "../../../Config";
 
 export default function RightCard() {
     const [email, setEmail] = useState('');
@@ -28,7 +29,7 @@ export default function RightCard() {
     const sendOTP = async () => {
         setIsSubmitting(true);
         try {
-            const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/send/${role}`, {
+            const response = await axios.post(`${BASE_URL_Login}/otp/send/${role}`, {
                 email,
             });
             if (response.status === 200) {
@@ -53,7 +54,7 @@ export default function RightCard() {
     const verifyOTP = async () => {
         setIsSubmitting(true);
         try {
-            const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/verify`, {
+            const response = await axios.post(`${BASE_URL_Login}/otp/verify`, {
                 email: authState.email,
                 otp,
                 otpToken: authState.otpToken

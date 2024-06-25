@@ -9,6 +9,7 @@ import { CiEdit } from "react-icons/ci";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from "../../../LoadingScreen/Loading";
+import { BASE_URL_Login } from "../../../Config";
 
 export default function ProfileDetails() {
     const [error, setError] = useState(null);
@@ -23,7 +24,7 @@ export default function ProfileDetails() {
 
     const fetchUserData = async () => {
         try {
-            const response = await axios.post('https://loginapi-y0aa.onrender.com/fetchSingle/teacher', {
+            const response = await axios.post(`${BASE_URL_Login}/fetchSingle/teacher`, {
                 accessToken: authState.accessToken,
                 employeeId
             });
@@ -61,7 +62,7 @@ export default function ProfileDetails() {
 
     const handleSave = async (field) => {
         try {
-            const response = await axios.put('https://loginapi-y0aa.onrender.com/edit/teacher', {
+            const response = await axios.put(`${BASE_URL_Login}/edit/teacher`, {
                 accessToken: authState.accessToken,
                 email: userData.email,
                 [field]: tempData[field]

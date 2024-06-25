@@ -4,6 +4,7 @@ import AuthContext from '../../../Context/AuthContext'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../LoadingScreen/Loading';
+import { BASE_URL_Student_Leave } from '../../../Config';
 
 export default function ApplyLeave() {
     const { authState } = useContext(AuthContext);
@@ -20,7 +21,7 @@ export default function ApplyLeave() {
         setIsLoading(true);
         console.log(startDate, endDate, reason)
         try {
-            const response = await axios.post('https://studentleaveapi.onrender.com/leave/apply', {
+            const response = await axios.post(`${BASE_URL_Student_Leave}/leave/apply`, {
                 startDate,
                 endDate,
                 reason

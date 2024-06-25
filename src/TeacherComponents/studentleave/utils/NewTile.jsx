@@ -3,6 +3,7 @@ import Logo from '../../../assets/Test Account.png'
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
+import { BASE_URL_Student_Leave } from '../../../Config';
 
 export default function NewTile({ data }) {
     const [expanded, setExpanded] = useState(null);
@@ -25,7 +26,7 @@ export default function NewTile({ data }) {
         console.log('id', leaveId, 'status', status, 'email', email)
         setLoading(true);
         try {
-            const response = await axios.put('https://studentleaveapi.onrender.com/leave/update',{
+            const response = await axios.put(`${BASE_URL_Student_Leave}/leave/update`,{
                     status: status,
                     leaveId: leaveId
                 },

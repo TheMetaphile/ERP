@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SubjectDetails from './SubjectDetails';
+import { BASE_URL_Login, BASE_URL_ClassTeacher } from '../../../Config';
 
 export default function AssignSubjectRow({ Class }) {
     const [expanded, setExpanded] = useState(false);
@@ -52,7 +53,7 @@ export default function AssignSubjectRow({ Class }) {
         if (temp) {
             const searchTeacher = async () => {
                 try {
-                    const response = await axios.post('https://loginapi-y0aa.onrender.com/search/teacher', {
+                    const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
                         accessToken: authState.accessToken,
                         searchString: temp,
                         start: 0,
@@ -76,7 +77,7 @@ export default function AssignSubjectRow({ Class }) {
 
     const fetchSections = async () => {
         try {
-            const response = await axios.post('https://class-teacher.onrender.com/classTeacher/fetch/sections', {
+            const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/fetch/sections`, {
                 accessToken: authState.accessToken,
                 class: Class,
             });

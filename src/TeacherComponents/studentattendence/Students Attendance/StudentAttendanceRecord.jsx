@@ -4,6 +4,7 @@ import SearchBar from "./utils/SearchBar";
 import Loading from "../../../LoadingScreen/Loading"
 import axios from 'axios'
 import AuthContext from "../../../Context/AuthContext"
+import { BASE_URL_Attendence } from "../../../Config";
 
 export default function StudentAttendanceRecord() {
     const [data, setData] = useState(null);
@@ -17,7 +18,7 @@ export default function StudentAttendanceRecord() {
                 const today = new Date();
                 const month = parseInt(today.getMonth() + 1, 10);
                 const year = today.getFullYear();
-                const response = await axios.get(`https://attendance-api-lako.onrender.com/studentAttendance/fetch/classTeacher?month=${month}&year=${year}`, {
+                const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/classTeacher?month=${month}&year=${year}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

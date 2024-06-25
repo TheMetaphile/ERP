@@ -5,6 +5,7 @@ import axios from 'axios';
 import TimetableHeader from './timetableHeader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL_TimeTable } from '../../../Config';
 
 function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOfLeacturesBeforeLunch, Time }) {
     const timetableData = data || {};
@@ -28,7 +29,7 @@ console.log('ttt',Time)
 
     const handleSaveClick = async () => {
         try {
-            const url = 'https://timetableapi-1wfp.onrender.com/timetable/update';
+            const url = `${BASE_URL_TimeTable}/timetable/update`;
             const updatedPeriodId = Object.keys(editedData[dayStudent])[0];
             const payload = {
                 accessToken: authState.accessToken,
