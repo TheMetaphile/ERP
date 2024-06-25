@@ -12,7 +12,7 @@ function NewDoubt() {
     const [error, setError] = useState('');
     const [Class, setClass] = useState('9th');
     const [Section, setSection] = useState('A');
-    const [Subject, setSubject] = useState('English');
+    const [Subject, setSubject] = useState('Maths');
 
     const fetchUserData = async () => {
         setLoading(true);
@@ -102,7 +102,7 @@ function NewDoubt() {
                 <select id="subject" value={Subject} onChange={handleSubjectChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg">
                     <option value="">Search by Subject</option>
                     <option value="Hindi">Hindi</option>
-                    <option value="Math">Math</option>
+                    <option value="Maths">Maths</option>
                     <option value="Science">Science</option>
                     <option value="English">English</option>
                     <option value="History">History</option>
@@ -110,10 +110,10 @@ function NewDoubt() {
                     <option value="Physics">Physics</option>
                     <option value="Chemistry">Chemistry</option>
                     <option value="Biology">Biology</option>
-                    <option value="Computer Science">Computer Science</option>
+                    <option value="Computer">Computer</option>
                 </select>
             </div>
-            <NewDoubtTile data={data} />
+            <NewDoubtTile data={data} Class={Class}/>
         </div>
     )
 }

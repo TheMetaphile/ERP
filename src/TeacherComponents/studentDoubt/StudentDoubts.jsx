@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
 import { Link, Outlet } from "react-router-dom";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function StudentDoubts() {
     const [selectedLink, setSelectedLink] = useState('/Teacher-Dashboard/studentdoubts/new');
 
@@ -12,6 +13,7 @@ function StudentDoubts() {
 
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+            <ToastContainer />
             <h1 className='text-3xl'>Student Doubts</h1>
             <div className='  mt-4  w-full'>
                 <div className=" flex   mt-4  mr-3 items-center justify-between">

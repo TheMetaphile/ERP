@@ -3,20 +3,15 @@ import Logo from '../../../assets/Test Account.png'
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Student_Leave } from '../../../Config';
+import { BASE_URL_AskDoubt } from '../../../Config';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function NewDoubtTile({ data }) {
+export default function NewDoubtTile({ data, Class }) {
     const [expanded, setExpanded] = useState(null);
     const { authState } = useContext(AuthContext);
-    const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [answers, setAnswers] = useState({});
-
-    useEffect(() => {
-        if (data && data.StudentsLeaves) {
-            setLeaves(data.StudentsLeaves);
-        }
-    }, [data]);
 
     const handleAnswerChange = (index, value) => {
         setAnswers(prevAnswers => ({
@@ -29,13 +24,40 @@ export default function NewDoubtTile({ data }) {
         setExpanded(expanded === index ? null : index);
     }
 
-    const handleStatusUpdate = async (id, status, email, index) => {
-        if (status === 'Approved' && !answers[index]) {
+
+
+    const handleStatusUpdate = async (id, index) => {
+        if (!answers[index]) {
             alert("Please provide an answer before sending.");
             return;
         }
-        console.log(answers[index])
+
+        console.log(id, Class, answers[index], new Date().toISOString().split('T')[0])
+        setLoading(true);
+        try {
+            const response = await axios.put(`${BASE_URL_AskDoubt}/doubts/update/teacher?id=${id}`, {
+                class: Class,
+                solution: answers[index],
+                replyDate: new Date().toISOString().split('T')[0]
+            }, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
+                }
+            });
+            if (response.status === 200) {
+                console.log(response.data)
+                toast.success('Answered Successfully')
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+            toast.error(error.response.error)
+        } finally {
+            setLoading(false);
+        }
+
     };
+
+
 
     return (
         <div className="w-full">
@@ -48,7 +70,7 @@ export default function NewDoubtTile({ data }) {
                                 <div className='font-medium text-base ml-2'>
                                     <span className='text-red-500 whitespace-nowrap'>{doubt.student[0].name}</span> with roll number &nbsp;
                                     <span className='text-red-500 whitespace-nowrap'>{doubt.student[0].rollNumber}</span> has a doubt in &nbsp;
-                                    <span className='text-red-500 whitespace-nowrap'>{doubt.subject}</span> 
+                                    <span className='text-red-500 whitespace-nowrap'>{doubt.subject}</span>
                                 </div>
                                 {expanded === index && (
                                     <div className='font-medium text-base ml-2 mt-2'>
@@ -60,30 +82,27 @@ export default function NewDoubtTile({ data }) {
                                 )}
                                 <div className='flex flex-col gap-2 font-medium text-base ml-2 mt-2'>
                                     {expanded === index && (
-                                        <textarea
-                                            className="w-full px-3 py-2 mb-2 border rounded-lg"
-                                            placeholder="Type your answer here..."
-                                            rows={2}
-                                            value={answers[index] || ''}
-                                            onChange={(e) => handleAnswerChange(index, e.target.value)}
-                                        />
+                                        <>
+                                            <textarea
+                                                className="w-full px-3 py-2 mb-2 border rounded-lg"
+                                                placeholder="Type your answer here..."
+                                                rows={2}
+                                                value={answers[index] || ''}
+                                                onChange={(e) => handleAnswerChange(index, e.target.value)}
+                                            />
+
+                                            <div className="flex gap-2">
+                                                <button
+                                                    className='p-1 rounded-lg border border-gray-300 text-black px-2 bg-green-300'
+                                                    onClick={() => handleStatusUpdate(doubt._id, index)}
+                                                    disabled={loading}
+                                                >
+                                                    Confirm
+                                                </button>
+                                            </div>
+                                        </>
                                     )}
-                                    <div className="flex gap-2">
-                                        <button
-                                            className='p-1 rounded-lg border border-gray-300 text-black px-2 bg-green-300'
-                                            onClick={() => handleStatusUpdate(doubt._id, 'Approved', doubt.student[0].email, index)}
-                                            disabled={loading}
-                                        >
-                                            {expanded === index ? 'Send' : 'Answer'}
-                                        </button>
-                                        <button
-                                            className='p-1 rounded-lg text-black border border-gray-300 px-2 bg-red-300'
-                                            onClick={() => handleStatusUpdate(doubt._id, 'Rejected', doubt.student[0].email, index)}
-                                            disabled={loading}
-                                        >
-                                            Reject
-                                        </button>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
