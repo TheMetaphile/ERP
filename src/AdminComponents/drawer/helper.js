@@ -51,7 +51,7 @@ const menuItems = [
       },
       {
         text: 'Students Result',
-        route: '/Admin-Dashboard/StudentResult'
+        route: '/Admin-Dashboard/Result',
       },
       {
         text: 'Transfer Certificate',
@@ -150,13 +150,6 @@ const menuItems = [
     alt: "img",
     title: "Exam",
     route: "/Admin-Dashboard/Exam",
-    children: []
-  },
-  {
-    image: examImage,
-    alt: "img",
-    title: "Result",
-    route: "/Admin-Dashboard/Result",
     children: []
   },
   {

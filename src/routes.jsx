@@ -393,10 +393,24 @@ const router = createBrowserRouter([
         children:[]
       },
       {
-        path: "/Admin-Dashboard/StudentResult",
-        element: <StudentResult/>,
-        children:[]
+        path: "/Admin-Dashboard/Result",
+        element: <AllReportAdmin />,
+        children:[
+          {
+            path: '',
+            element: <ReportCardAdmin />
+          },
+          {
+            path: ':id',
+            element: <PerformanceProfileAdmin />
+          }
+        ]
       },
+      // {
+      //   path: "/Admin-Dashboard/StudentResult",
+      //   element: <StudentResult/>,
+      //   children:[]
+      // },
       {
         path: "/Admin-Dashboard/transfercertificate",
         element: <AllTC />,
@@ -505,20 +519,6 @@ const router = createBrowserRouter([
         path: "/Admin-Dashboard/Exam",
         element: <Exam/>,
         children:[]
-      },
-      {
-        path: "/Admin-Dashboard/Result",
-        element: <AllReportAdmin />,
-        children:[
-          {
-            path: '',
-            element: <ReportCardAdmin />
-          },
-          {
-            path: ':id',
-            element: <PerformanceProfileAdmin />
-          }
-        ]
       },
       {
         path: "/Admin-Dashboard/Message",

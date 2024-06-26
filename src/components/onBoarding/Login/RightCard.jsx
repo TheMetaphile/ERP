@@ -43,6 +43,7 @@ export default function RightCard() {
                 if (response.status == 200) {
                     const { userDetails, tokens } = response.data;
                     console.log(userDetails, tokens);
+                    console.log(response.data)
 
                     login(userDetails, tokens);
                     navigate(`/${role}`);
