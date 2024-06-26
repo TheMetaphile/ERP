@@ -22,7 +22,7 @@ export default function AttendanceStatusGridTile({ data }) {
     const students = Object.values(data.output).filter(item => item.name);
 
     return (
-        <div className="flex mb-2">
+        <div className="w-full flex mb-2">
             <div className="flex w-full h-full overflow-x-auto mt-3 items-start">
                 {dateRange.map((date, index) => (
                     <div key={index} className="flex h-full items-start">

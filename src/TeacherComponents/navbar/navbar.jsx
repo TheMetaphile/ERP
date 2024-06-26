@@ -30,9 +30,9 @@ export default function TeacherNavbar({ onDrawerToggle, onEndDrawerToggle }) {
               :
               <div></div>
           }
-          <li className="mr-4">
+          {/* <li className="mr-4">
             <Link to="/Teacher-Dashboard/studentfee" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Fee</Link>
-          </li>
+          </li> */}
           {/* <li className="mr-4">
             <Link to="" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Salary</Link>
           </li> */}

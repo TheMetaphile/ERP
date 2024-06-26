@@ -9,7 +9,7 @@ function ClassActivity() {
         },
         {
             title: "Time Table",
-            route: "/Teacher-Dashboard/class_activity/timetable"
+            route: ""
         },
         {
             title: "Show Result",
@@ -18,6 +18,18 @@ function ClassActivity() {
         {
             title: "Upload Result",
             route: "/Teacher-Dashboard/class_activity/uploadResult"
+        },
+        {
+            title: "Fee Status",
+            route: "/Teacher-Dashboard/class_activity/studentfee"
+        },
+        {
+            title: "Student Attendance",
+            route: "/Teacher-Dashboard/class_activity/studentAttendence"
+        },
+        {
+            title: "Student Leave",
+            route: "/Teacher-Dashboard/class_activity/studentleave"
         },
 
     ];

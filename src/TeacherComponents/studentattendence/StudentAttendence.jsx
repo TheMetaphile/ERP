@@ -116,14 +116,14 @@ function StudentAttendance() {
     };
 
     return (
-        <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start  mb-3 no-scrollbar">
+        <div className="w-full flex flex-col  mobile:max-tablet:px-0 h-screen overflow-y-auto items-start  mb-3 no-scrollbar">
             <ToastContainer />
-            <div className="container mx-auto p-4">
+            <div className="container mx-auto py-3 px-2">
                 <div className=" flex justify-between items-center mb-4">
-                    <h1 className="text-2xl  ">Student Attendance</h1>
+                    <h1 className="text-2xl  font-medium">Student Attendance</h1>
                     <div className="">
                     <Link
-                        to="/Teacher-Dashboard/studentattendence/record"
+                        to="/Teacher-Dashboard/class_activity/studentattendence/record"
                         className="text-lg px-2 py-1 mr-2 bg-green-500 text-white rounded-md hover:cursor-pointer"
                     >
                         Previous Record

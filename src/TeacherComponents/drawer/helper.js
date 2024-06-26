@@ -24,20 +24,20 @@ const menuItems = [
     children: []
   },
 
-  {
-    image: studentAttendanceImage,
-    alt: "Attendance image",
-    title: "Student Attendence",
-    route: '/Teacher-Dashboard/studentattendence',
-    children: []
-  },
-  {
-    image: transportImage,
-    alt: "img",
-    title: "Student Leave",
-    route: '/Teacher-Dashboard/studentleave',
-    children: []
-  },
+  // {
+  //   image: studentAttendanceImage,
+  //   alt: "Attendance image",
+  //   title: "Student Attendence",
+  //   route: '/Teacher-Dashboard/studentattendence',
+  //   children: []
+  // },
+  // {
+  //   image: transportImage,
+  //   alt: "img",
+  //   title: "Student Leave",
+  //   route: '/Teacher-Dashboard/studentleave',
+  //   children: []
+  // },
   {
     image: transportImage,
     alt: "img",
@@ -102,20 +102,20 @@ const menuItems = [
     route: '/Teacher-Dashboard/timetable',
     children: []
   },
-  {
-    image: resultImage,
-    alt: "Result image",
-    title: "Report Card",
-    route: '/Teacher-Dashboard/reportcard',
-    children: []
-  },
-  {
-    image: studentFeesImage,
-    alt: "Fee Due image",
-    title: "Student Fees",
-    route: '/Teacher-Dashboard/studentfee',
-    children: []
-  },
+  // {
+  //   image: resultImage,
+  //   alt: "Result image",
+  //   title: "Report Card",
+  //   route: '/Teacher-Dashboard/reportcard',
+  //   children: []
+  // },
+  // {
+  //   image: studentFeesImage,
+  //   alt: "Fee Due image",
+  //   title: "Student Fees",
+  //   route: '/Teacher-Dashboard/studentfee',
+  //   children: []
+  // },
 
   {
     image: birthdayImage,

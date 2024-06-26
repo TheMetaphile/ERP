@@ -610,16 +610,8 @@ const router = createBrowserRouter([
         element: <HomeWorkTeacher/>,
         children:[]
       },
-      {
-        path: "/Teacher-Dashboard/studentAttendence",
-        element: <TeacherStudentAttendance/>,
-        children:[]
-      }, 
-      {
-        path: "/Teacher-Dashboard/studentattendence/record",
-        element: <StudentAttendanceRecord/>,
-        children:[]
-      },
+      
+      
       {
         path: "/Teacher-Dashboard/takeleave",
         element: <TakeLeave/>,
@@ -653,28 +645,7 @@ const router = createBrowserRouter([
           },
         ]
       },
-      {
-        path: "/Teacher-Dashboard/studentleave",
-        element: <StudentLeave />,
-        children: [
-          {
-            path: '/Teacher-Dashboard/studentleave/new',
-            element: <New />
-          },
-          {
-            path: '/Teacher-Dashboard/studentleave/approved',
-            element: <Approved />
-          },
-          {
-            path: '/Teacher-Dashboard/studentleave/rejected',
-            element: <Rejected />
-          },
-          {
-            path: '',
-            element: <New/>
-          },
-        ]
-      },
+      
       {
         path: "/Teacher-Dashboard/studentdoubts",
         element: <StudentDoubts />,
@@ -712,23 +683,52 @@ const router = createBrowserRouter([
               }
             ]
           },
-          {
-            path: "/Teacher-Dashboard/class_activity/timetable",
-            element: <TimeTableTeacher/>,
-            children:[]
-          },
+          
           {
             path: "/Teacher-Dashboard/class_activity/uploadResult",
             element: <UploadResult/>,
             children:[]
-          }
+          },
+          {
+            path: "/Teacher-Dashboard/class_activity/studentfee",
+            element: <StudentFee/>,
+            children:[]
+          },
+          {
+            path: "/Teacher-Dashboard/class_activity/studentAttendence",
+            element: <TeacherStudentAttendance/>,
+            children:[]
+          }, 
+          {
+            path: "/Teacher-Dashboard/class_activity/studentattendence/record",
+            element: <StudentAttendanceRecord/>,
+            children:[]
+          },
+          {
+            path: "studentleave",
+            element: <StudentLeave />,
+            children: [
+              {
+                path: 'new',
+                element: <New />
+              },
+              {
+                path: 'approved',
+                element: <Approved />
+              },
+              {
+                path: 'rejected',
+                element: <Rejected />
+              },
+              {
+                path: '',
+                element: <New/>
+              },
+            ]
+          },
         ]
       },
-      {
-        path: "/Teacher-Dashboard/studentfee",
-        element: <StudentFee/>,
-        children:[]
-      },
+      
       {
         path: "/Teacher-Dashboard/notebook",
         element: <NoteBook/>,

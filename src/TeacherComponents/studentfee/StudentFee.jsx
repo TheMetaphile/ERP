@@ -65,7 +65,7 @@ function StudentFee() {
             </div>
 
             <div className='  rounded-lg border shadow-md border-gray-300 w-full mb-2'>
-                <Header headings={['Sr. No.', 'Roll No.', 'Name', 'Total Fee', 'Fine', 'Discount', 'Paid', 'Payable', 'Pending']} />
+                <Header headings={[ 'Roll No.', 'Name', 'Total Fee', 'Fine', 'Discount', 'Paid', 'Payable', 'Pending']} />
 
                 {loading ? (
                     <Loading />
@@ -79,13 +79,11 @@ function StudentFee() {
                                     details.payableFee - details.paid == 0
                                         ?
                                         <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
-                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {index + 1}
-                                            </h1>
+                                            
                                             <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}
                                             </h1>
-                                            <div className="w-40 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
+                                            <div className="w-52 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
                                                 <img src={details.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
                                                 <h1 >
                                                     {details.name}
@@ -119,13 +117,11 @@ function StudentFee() {
                                         details.payableFee - details.paid > 0
                                             ?
                                             <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
-                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                    {index + 1}
-                                                </h1>
+                                                
                                                 <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.rollNumber}
                                                 </h1>
-                                                <div className="w-40 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
+                                                <div className="w-52 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
                                                     <img src={details.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
                                                     <h1 >
                                                         {details.name}
@@ -154,13 +150,11 @@ function StudentFee() {
                                             <div></div>
                                         :
                                         <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
-                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {index + 1}
-                                            </h1>
+                                            
                                             <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}
                                             </h1>
-                                            <div className="w-40 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
+                                            <div className="w-52 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
                                                 <img src={details.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
                                                 <h1 >
                                                     {details.name}

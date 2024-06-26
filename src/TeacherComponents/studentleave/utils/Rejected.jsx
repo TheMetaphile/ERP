@@ -53,7 +53,7 @@ export default  function Rejected() {
 
    
     return (
-        <div className='mr-3'>
+        <div className='w-full mr-3'>
             <RejectedTile data={data}/>   
         </div>
     )
