@@ -5,6 +5,7 @@ import Loading from './../../../LoadingScreen/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { BASE_URL_Login, BASE_URL_ClassTeacher } from '../../../Config';
+import { MdEdit, MdDeleteForever } from "react-icons/md";
 
 export default function AssignTeacherRow({ Class }) {
     const [expanded, setExpanded] = useState(false);
@@ -156,6 +157,27 @@ export default function AssignTeacherRow({ Class }) {
         }
     };
 
+    const handleDelete = async (index,section) => {
+        console.log('Deleting ', Class, 'section:', section);
+
+        try {
+            const response = await axios.delete(`${BASE_URL_ClassTeacher}/classTeacher/delete?class=${Class}&section=${section}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`,
+                }
+            });
+
+            if (response.status === 200) {
+                const updatedSecion = sectionsDetails.filter((_, i) => i !== index);
+                setSections(updatedSecion);
+                toast.success('Section Deleted Successfully');
+            }
+        } catch (error) {
+            console.error("Error deleting section:", error);
+            toast.error('Error deleting section');
+        }
+    };
+
     return (
         <div key={Class} className=" w-full mb-4 rounded-lg mt-2 shadow-md border" >
             <div className="flex justify-between items-center p-2  hover:cursor-pointer" onClick={handleClick}>
@@ -225,7 +247,11 @@ export default function AssignTeacherRow({ Class }) {
                                                 {editingRow === index ? (
                                                     <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleConfirmClick(index)}>Confirm</button>
                                                 ) : (
-                                                    <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdateClick(index)}>Update</button>
+                                                    <div className='flex items-center gap-1'>
+                                                    <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'  onClick={() => handleUpdateClick(index)}> <MdEdit /></button>
+
+                                                    <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index,details.section)}><MdDeleteForever /></button>
+                                                    </div>
                                                 )}
                                             </div>
                                         </div>
