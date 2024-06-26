@@ -116,6 +116,10 @@ import StudentDoubts from "./TeacherComponents/studentDoubt/StudentDoubts.jsx"
 import NewDoubt from "./TeacherComponents/studentDoubt/utils/NewDoubt.jsx"
 import Answered from "./TeacherComponents/studentDoubt/utils/Answered.jsx"
 import ClassActivity from "./TeacherComponents/ClassActivity/ClassActivity.jsx";
+import AllReportAdmin from "./AdminComponents/result/AllReportAdmin.jsx";
+import ReportCardAdmin from "./AdminComponents/result/ReportCardAdmin.jsx";
+import PerformanceProfileAdmin from "./AdminComponents/result/utils/performance/PerformanceProfileAdmin.jsx";
+import UploadResult from "./TeacherComponents/UploadResult/UploadResult.jsx";
 
 const router = createBrowserRouter([
   {
@@ -503,6 +507,20 @@ const router = createBrowserRouter([
         children:[]
       },
       {
+        path: "/Admin-Dashboard/Result",
+        element: <AllReportAdmin />,
+        children:[
+          {
+            path: '',
+            element: <ReportCardAdmin />
+          },
+          {
+            path: ':id',
+            element: <PerformanceProfileAdmin />
+          }
+        ]
+      },
+      {
         path: "/Admin-Dashboard/Message",
         element: <Message/>,
         children:[]
@@ -694,6 +712,16 @@ const router = createBrowserRouter([
               }
             ]
           },
+          {
+            path: "/Teacher-Dashboard/class_activity/timetable",
+            element: <TimeTableTeacher/>,
+            children:[]
+          },
+          {
+            path: "/Teacher-Dashboard/class_activity/uploadResult",
+            element: <UploadResult/>,
+            children:[]
+          }
         ]
       },
       {

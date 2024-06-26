@@ -153,6 +153,13 @@ const menuItems = [
     children: []
   },
   {
+    image: examImage,
+    alt: "img",
+    title: "Result",
+    route: "/Admin-Dashboard/Result",
+    children: []
+  },
+  {
     image: transportImage,
     alt: "img",
     title: "Transport",
