@@ -71,7 +71,7 @@ function ReportCard() {
                 <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2'>
                     <Header headings={['Roll No.', 'Name', 'Email']} />
                     {students.map((detail, index) => (
-                        <Link to={`/Teacher-Dashboard/reportcard/${detail.email}`} key={index}>
+                        <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`} key={index}>
                             <div key={index} className='flex justify-between border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
                                 <div className=' w-full text-center'>{detail.rollNumber}</div>
                                 <div className=' w-full text-center'>{detail.name}</div>

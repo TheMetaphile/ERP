@@ -115,6 +115,7 @@ import FeeDiscount from "./AdminComponents/fee/Discount/FeeDiscount.jsx"
 import StudentDoubts from "./TeacherComponents/studentDoubt/StudentDoubts.jsx"
 import NewDoubt from "./TeacherComponents/studentDoubt/utils/NewDoubt.jsx"
 import Answered from "./TeacherComponents/studentDoubt/utils/Answered.jsx"
+import ClassActivity from "./TeacherComponents/ClassActivity/ClassActivity.jsx";
 
 const router = createBrowserRouter([
   {
@@ -606,20 +607,7 @@ const router = createBrowserRouter([
         element: <TakeLeave/>,
         children:[]
       },
-      {
-        path: "/Teacher-Dashboard/reportcard",
-        element: <AllReport/>,
-        children:[
-          {
-            path: '',
-            element: <ReportCard />
-          },
-          {
-            path: ':id',
-            element: <Performance />
-          }
-        ]
-      },
+      
       {
         path: "/Teacher-Dashboard/timetable",
         element: <TimeTableTeacher/>,
@@ -684,6 +672,27 @@ const router = createBrowserRouter([
           {
             path: '',
             element: <NewDoubt/>
+          },
+        ]
+      },
+      {
+        path: "/Teacher-Dashboard/class_activity",
+        element: <ClassActivity />,
+        children: [
+          
+          {
+            path: "reportcard",
+            element: <AllReport/>,
+            children:[
+              {
+                path: '',
+                element: <ReportCard />
+              },
+              {
+                path: ':id',
+                element: <Performance />
+              }
+            ]
           },
         ]
       },

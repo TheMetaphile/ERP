@@ -45,6 +45,15 @@ const menuItems = [
     route: '/Teacher-Dashboard/studentdoubts',
     children: []
   },
+  {
+    image: transportImage,
+    alt: "img",
+    title: "Class Activity",
+    route: '/Teacher-Dashboard/class_activity',
+    children: [
+      
+    ]
+  },
   // {
   //   image: adminImage,
   //   alt: "Admin image",
