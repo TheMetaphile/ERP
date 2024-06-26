@@ -19,9 +19,9 @@ export default function InfoCard(props){
            <div className="border-t-2 border-text_blue my-3 tablet:mx-3 rounded-full "></div>
            <div className='flex w-full justify-evenly mobile:max-tablet:flex-col'>
                 <div className='flex flex-col text-center items-center'>
-                    <img src={props.profileImg} alt="img" className='tablet:h-24 tablet:w-24'/>
+                    <img src={props.profileImg} alt="img" className=' w-20 h-20 rounded-full'/>
                     <h1 className='mt-2 teblet:text-2xl mobile:max-tablet:text-xl font-medium '>{props.name}</h1>
-                    <h3 className='text-lg font-medium text-gray-400'>Class {props.class}</h3>
+                    <h3 className='text-lg font-medium text-gray-400'>Class {props.class} {props.section}</h3>
                 </div>
                 <div className='flex'>
                 <div className='text-lg font-medium tablet:w-60 mobile:max-tablet:w-48 my-2'>
@@ -38,7 +38,7 @@ export default function InfoCard(props){
                     <h1>{props.dob}</h1>
                     <h1>{props.bloodgroup}</h1>
                     <h1>{props.contactno}</h1>
-                    <h1>{props.class}</h1>
+                    <h1>{props.class} {props.section}</h1>
                     <h1>{props.father}</h1>
                     <h1>{props.mother}</h1>
                 </div>
