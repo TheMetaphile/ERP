@@ -14,6 +14,10 @@ import birthdayImage from "../../assets/birthday.png";
 import messageImage from "../../assets/message.png";
 import noticeImage from "../../assets/notice2.png";
 import notebookImage from "../../assets/notebook.png";
+import ClassActivity from "../../assets/lecture.png";
+import Doubts from "../../assets/doubts.png";
+
+
 
 const menuItems = [
   {
@@ -39,14 +43,14 @@ const menuItems = [
   //   children: []
   // },
   {
-    image: transportImage,
+    image: Doubts,
     alt: "img",
     title: "Student Doubts",
     route: '/Teacher-Dashboard/studentdoubts',
     children: []
   },
   {
-    image: transportImage,
+    image: ClassActivity,
     alt: "img",
     title: "Class Activity",
     route: '/Teacher-Dashboard/class_activity',
