@@ -65,8 +65,8 @@ function StudentFee() {
             </div>
 
             <div className='  rounded-lg border shadow-md border-gray-300 w-full mb-2'>
-                <Header headings={['Sr. No.', 'Roll No.', 'Name', 'Total Fee', 'Fine', 'Discount', 'Paid', 'Payable','Pending']} />
-                
+                <Header headings={['Sr. No.', 'Roll No.', 'Name', 'Total Fee', 'Fine', 'Discount', 'Paid', 'Payable', 'Pending']} />
+
                 {loading ? (
                     <Loading />
                 ) : (
@@ -85,9 +85,12 @@ function StudentFee() {
                                             <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}
                                             </h1>
-                                            <h1 className="w-40 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.name}
-                                            </h1>
+                                            <div className="w-40 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
+                                                <img src={details.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
+                                                <h1 >
+                                                    {details.name}
+                                                </h1>
+                                            </div>
                                             <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.totalfee}
                                             </h1>
@@ -122,9 +125,12 @@ function StudentFee() {
                                                 <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.rollNumber}
                                                 </h1>
-                                                <h1 className="w-40 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                    {details.name}
-                                                </h1>
+                                                <div className="w-40 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
+                                                    <img src={details.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
+                                                    <h1 >
+                                                        {details.name}
+                                                    </h1>
+                                                </div>
                                                 <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.totalfee}
                                                 </h1>
@@ -141,8 +147,8 @@ function StudentFee() {
                                                     {details.payableFee}
                                                 </h1>
                                                 <h1 className={`w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap ${(details.payableFee - details.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
-                                                {details.payableFee - details.paid}
-                                            </h1>
+                                                    {details.payableFee - details.paid}
+                                                </h1>
                                             </div>
                                             :
                                             <div></div>
@@ -154,9 +160,12 @@ function StudentFee() {
                                             <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}
                                             </h1>
-                                            <h1 className="w-40 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.name}
-                                            </h1>
+                                            <div className="w-40 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
+                                                <img src={details.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
+                                                <h1 >
+                                                    {details.name}
+                                                </h1>
+                                            </div>
                                             <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.totalfee}
                                             </h1>

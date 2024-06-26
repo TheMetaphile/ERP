@@ -1,7 +1,7 @@
 import useRazorpay from "react-razorpay";
 const [Razorpay] = useRazorpay();
 
-const handlePayment = async (params) => {
+export const handlePayment = async (params) => {
   const order = await createOrder(params); //  Create order on your backend
 
   const options = {
@@ -41,15 +41,18 @@ const handlePayment = async (params) => {
     alert(response.error.metadata.order_id);
     alert(response.error.metadata.payment_id);
   });
-  rzp1.on("payment.", function (response) {
-    alert(response.error.code);
-    alert(response.error.description);
-    alert(response.error.source);
-    alert(response.error.step);
-    alert(response.error.reason);
-    alert(response.error.metadata.order_id);
-    alert(response.error.metadata.payment_id);
-  });
 
   rzp1.open();
 };
+
+async function createOrder(params) {
+  // Replace this with your actual backend API call to create an order
+  return fetch('/api/createOrder', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(params),
+  }).then(response => response.json());
+}
+

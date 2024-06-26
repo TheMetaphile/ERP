@@ -16,7 +16,12 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
     const handleEditClick = () => {
         setEditMode(true);
     };
-console.log('ttt',Time)
+
+    const  handleCancelClick = () => {
+        setEditMode(false);
+    };
+    
+    console.log('ttt', Time)
     const formatTime = (date) => {
         let hours = date.getHours();
         const minutes = date.getMinutes();
@@ -49,7 +54,7 @@ console.log('ttt',Time)
         } catch (error) {
             toast.error(error)
             console.error('Error updating data:', error);
-        }finally{
+        } finally {
             setEditMode(false);
         }
     };
@@ -80,12 +85,20 @@ console.log('ttt',Time)
                     Upload
                 </Link>
                 {editMode ? (
+                    <>
                     <button
                         onClick={handleSaveClick}
                         className="px-4 py-2 rounded-md bg-green-200 text-gray-800 hover:bg-green-500 hover:text-white"
                     >
                         Save
                     </button>
+                    <button
+                    onClick={handleCancelClick}
+                    className="px-4 py-2 rounded-md bg-red-200 text-gray-800 hover:bg-red-500 hover:text-white"
+                >
+                    Cancel
+                </button>
+                </>
                 ) : (
                     <button
                         onClick={handleEditClick}
@@ -100,56 +113,59 @@ console.log('ttt',Time)
                 <div className='text-center'>No data available</div>
             ) :
                 (
-                    <div>
+                    <div className='shadow-md'>
                         {lectures.map((lecture, idx) => (
                             <React.Fragment key={lecture._id}>
-                                {numberOfLeacturesBeforeLunch === lecture.lectureNo-1  ? (
-                                    <div className="w-full h-8 bg-secondary text-xl text-center border">LUNCH</div>
+                                {numberOfLeacturesBeforeLunch === lecture.lectureNo - 1 ? (
+                                    <div className="w-full h-8 border-t border-gray-400 bg-secondary text-xl text-center">LUNCH</div>
                                 ) : null}
-                                <div className="flex w-full justify-between px-4 py-2 mb-2 mt-2">
-                                    <div className="w-full flex items-center justify-between">
-                                        <h1 className="w-1/4 ">
-                                            {editMode ? (
-                                                <input
-                                                    type="text"
-                                                    value={editedData[dayStudent]?.[lecture._id]?.lectureNo || lecture.lectureNo}
-                                                    onChange={(e) => handleInputChange(dayStudent, lecture._id, 'lectureNo', e.target.value)}
-                                                    className='border px-3 border-gray-300'
-                                                />
-                                            ) : (
-                                                lecture.lectureNo
-                                            )}
-                                        </h1>
-                                        <h1 className="w-1/4">{`${formatTime(Time[lecture.lectureNo-1].start)}-${formatTime(Time[lecture.lectureNo-1].end)}`}</h1>
+                                <div className="flex w-full justify-between  border-t border-gray-400">
 
-                                        <h1 className="w-1/4 ">
-                                            {editMode ? (
-                                                <input
-                                                    type="text"
-                                                    value={editedData[dayStudent]?.[lecture._id]?.subject || lecture.subject}
-                                                    onChange={(e) => handleInputChange(dayStudent, lecture._id, 'subject', e.target.value)}
-                                                    className='border border-gray-300 px-3'
-                                                />
-                                            ) : (
-                                                lecture.subject
-                                            )}
-                                        </h1>
-                                        <div className="w-1/4 flex items-center whitespace-nowrap">
-                                            {lecture.teacher?.profileLink && (
-                                                <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full" />
-                                            )}
-                                            {editMode ? (
-                                                <input
-                                                    type="text"
-                                                    value={editedData[dayStudent]?.[lecture._id]?.teacher || lecture.teacher?.name || ''}
-                                                    onChange={(e) => handleInputChange(dayStudent, lecture._id, 'teacher', e.target.value)}
-                                                    className='border border-gray-300 px-3'
-                                                />
-                                            ) : (
-                                                <p className="text-sm px-2">{lecture.teacher?.name || 'Teacher information not available'}</p>
-                                            )}
-                                        </div>
+                                    <h1 className="w-full border-r border-gray-400 px-4 py-2 text-center">
+                                        {editMode ? (
+                                            <input
+                                                type="text"
+                                                value={editedData[dayStudent]?.[lecture._id]?.lectureNo || lecture.lectureNo}
+                                                onChange={(e) => handleInputChange(dayStudent, lecture._id, 'lectureNo', e.target.value)}
+                                                className='border  border-gray-300'
+                                            />
+                                        ) : (
+                                            lecture.lectureNo
+                                        )}
+                                    </h1>
+                                    <h1 className="w-full border-r border-gray-400 px-4 py-2 text-center bg-green-200">{`${formatTime(Time[lecture.lectureNo - 1].start)}-${formatTime(Time[lecture.lectureNo - 1].end)}`}</h1>
+
+                                    <h1 className="w-full border-r border-gray-400 px-4 py-2 text-center bg-green-200">
+                                        {editMode ? (
+                                            <input
+                                                type="text"
+                                                value={editedData[dayStudent]?.[lecture._id]?.subject || lecture.subject}
+                                                onChange={(e) => handleInputChange(dayStudent, lecture._id, 'subject', e.target.value)}
+                                                className='border border-gray-300 '
+                                            />
+                                        ) : (
+                                            lecture.subject
+                                        )}
+                                    </h1>
+                                    <div className="w-full border-r border-gray-400 flex items-center whitespace-nowrap px-4 py-2 bg-blue-200">
+                                        {lecture.teacher?.profileLink && (
+                                            <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full" />
+                                        )}
+                                        {editMode ? (
+                                            <input
+                                                type="text"
+                                                value={editedData[dayStudent]?.[lecture._id]?.teacher || lecture.teacher?.name || ''}
+                                                onChange={(e) => handleInputChange(dayStudent, lecture._id, 'teacher', e.target.value)}
+                                                className='border border-gray-300 '
+                                            />
+                                        ) : (
+                                            <p className="text-sm px-2">{lecture.teacher?.name || 'Teacher information not available'}</p>
+                                        )}
                                     </div>
+                                    <div className='w-full border-r border-gray-400 px-4 py-2 text-center bg-blue-200'>
+
+                                    </div>
+
                                 </div>
                             </React.Fragment>
                         ))}

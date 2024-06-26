@@ -198,6 +198,7 @@ export default function TimeTable() {
 
                 </select>
             </div>
+            <div className='w-full rounded-lg border border-gray-400'>
             <TimeTableHeader />
             <div className=' w-full '>
                 {loading ? (
@@ -222,6 +223,7 @@ export default function TimeTable() {
                         })}
                     </div>
                 )}
+            </div>
             </div>
         </div>
     )
