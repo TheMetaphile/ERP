@@ -9,7 +9,7 @@ function ClassActivity() {
         },
         {
             title: "Time Table",
-            route: ""
+            route: "/Teacher-Dashboard/class_activity/timetablestudent"
         },
         {
             title: "Show Result",

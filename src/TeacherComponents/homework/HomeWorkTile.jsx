@@ -94,16 +94,18 @@ export default function HomeWorkTile({ details, Class }) {
                                     onChange={(e) => handleInputChange(index, 'chapter', e.target.value)}
                                 />
                                 <input
-                                    className="pl-2 font-medium"
-                                    value={detail.topic}
-                                    onChange={(e) => handleInputChange(index, 'topic', e.target.value)}
+                                    className="font-medium"
+                                    value={detail.date}
+                                    onChange={(e) => handleInputChange(index, 'date', e.target.value)}
                                 />
+
                             </>
                         ) : (
                             <>
                                 <div className="px-3 py-1 bg-bg_blue rounded-full w-fit">{detail.subject}</div>
                                 <div className="pl-2 font-medium">Chapter: {detail.chapter}</div>
-                                <div className="pl-2 font-medium">Topic: {detail.topic}</div>
+                                <h1 className="font-medium">Date: {detail.date}</h1>
+
                             </>
                         )}
                     </div>
@@ -111,20 +113,20 @@ export default function HomeWorkTile({ details, Class }) {
                         {editingRow === index ? (
                             <>
                                 <input
+                                    className="pl-2 font-medium"
+                                    value={detail.topic}
+                                    onChange={(e) => handleInputChange(index, 'topic', e.target.value)}
+                                />
+                                <input
                                     className="font-medium"
                                     value={detail.description}
                                     onChange={(e) => handleInputChange(index, 'description', e.target.value)}
                                 />
-                                <input
-                                    className="font-medium"
-                                    value={detail.date}
-                                    onChange={(e) => handleInputChange(index, 'date', e.target.value)}
-                                />
                             </>
                         ) : (
                             <>
+                                <div className="pl-2 font-medium">Topic: {detail.topic}</div>
                                 <h1 className="font-medium">Task: {detail.description}</h1>
-                                <h1 className="font-medium">Date: {detail.date}</h1>
                             </>
                         )}
                         <div className='flex items-center gap-1'>

@@ -120,6 +120,7 @@ import AllReportAdmin from "./AdminComponents/result/AllReportAdmin.jsx";
 import ReportCardAdmin from "./AdminComponents/result/ReportCardAdmin.jsx";
 import PerformanceProfileAdmin from "./AdminComponents/result/utils/performance/PerformanceProfileAdmin.jsx";
 import UploadResult from "./TeacherComponents/UploadResult/UploadResult.jsx";
+import TimeTableStudent from "./TeacherComponents/timeTableStudent/TimeTableStudent.jsx";
 
 const router = createBrowserRouter([
   {
@@ -668,7 +669,12 @@ const router = createBrowserRouter([
         path: "/Teacher-Dashboard/class_activity",
         element: <ClassActivity />,
         children: [
-          
+          {
+            path: "/Teacher-Dashboard/class_activity/timetablestudent",
+            element: <TimeTableStudent />,
+            children:[]
+          },
+
           {
             path: "reportcard",
             element: <AllReport/>,

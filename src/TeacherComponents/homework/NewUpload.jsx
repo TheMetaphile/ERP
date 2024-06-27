@@ -1,20 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FaRegCheckCircle, FaRegCircle } from 'react-icons/fa';
+import axios from 'axios'
+import AuthContext from '../../Context/AuthContext';
+import Loading from '../../LoadingScreen/Loading';
+import { BASE_URL_Homework } from '../../Config';
+import { toast } from 'react-toastify';
+
 
 function NewUpload({ onClose }) {
+    const { authState } = useContext(AuthContext);
     const [file, setFile] = useState(null);
     const [subject, setSubject] = useState('');
     const [classLevel, setClassLevel] = useState('');
+    const [section, setSection] = useState('');
     const [topic, setTopic] = useState('');
     const [question, setQuestion] = useState('');
+    const [chapter, setChapter] = useState('');
+    const [deadline, setDeadline] = useState('');
+    const [loading, setLoading] = useState(false)
+
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         // Implement save functionality here
-        console.log({ file, subject, classLevel, topic, question });
+        if(!subject || !classLevel || !section || !topic || !chapter || !deadline || !question){
+            alert('Fill all fields')
+            return;
+        }
+        console.log(subject, classLevel, section, topic, question, chapter, deadline, new Date().toISOString().slice(0, 10), authState.userDetails.email);
+        setLoading(true);
+        try {
+            const response = await axios.post(`${BASE_URL_Homework}/homework/upload`,
+                {
+                    email: authState.userDetails.email,
+                    date: new Date().toISOString().slice(0, 10),
+                    deadline: deadline,
+                    class: classLevel,
+                    section: section,
+                    subject: subject,
+                    chapter: chapter,
+                    topic: topic,
+                    description: question
+
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    }
+                }
+            );
+            if (response.status == 200) {
+                console.log('Homework Created')
+                toast.success('HomeWork Created')
+                onClose();
+            }
+        } catch (error) {
+            console.error("Error creating homework:", error);
+            toast.error(error.response.data.error);
+
+        }
+        finally{
+            setLoading(false)
+        }
     };
 
 
@@ -22,18 +72,14 @@ function NewUpload({ onClose }) {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
             <div className="bg-white rounded-lg p-4 shadow-lg ">
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">Upload File</label>
-                    <input
+                <div className='flex justify-between'>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700">Select Class</label>
+                        {/* <input
                         type="file"
                         onChange={handleFileChange}
                         className="w-full px-3 py-2 border rounded-md mt-2"
-                    />
-                </div>
-
-                <div className='flex justify-between'>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Select Class</label>
+                    /> */}
                         <select
                             value={classLevel}
                             onChange={(e) => setClassLevel(e.target.value)}
@@ -60,6 +106,27 @@ function NewUpload({ onClose }) {
                     </div>
 
                     <div>
+                        <label className="block text-sm font-medium text-gray-700">Select Section</label>
+                        <select
+                            value={section}
+                            onChange={(e) => setSection(e.target.value)}
+                            className="w-full px-3 py-2 border rounded-md mt-2"
+                        >
+                            <option value="">Select Section</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                        </select>
+                    </div>
+                </div>
+                <div className='flex justify-between'>
+                    <div>
                         <label className="block text-sm font-medium text-gray-700">Select Subject</label>
                         <select
                             value={subject}
@@ -69,20 +136,42 @@ function NewUpload({ onClose }) {
                             <option value="">Select Subject</option>
                             <option value="Hindi">Hindi</option>
                             <option value="English">English</option>
-                            <option value="Math">Math</option>
+                            <option value="Maths">Math</option>
                             <option value="Science">Science</option>
                         </select>
                     </div>
-                </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Chapter</label>
+                        <input
+                            type="text"
+                            value={chapter}
+                            onChange={(e) => setChapter(e.target.value)}
+                            className="mt-2 w-full px-3 py-2 border rounded-md"
+                        />
+                    </div>
 
-                <div className='mt-3'>
-                    <label className="block text-sm font-medium text-gray-700">Topic</label>
-                    <input
-                        type="text"
-                        value={topic}
-                        onChange={(e) => setTopic(e.target.value)}
-                        className="mt-2 w-full px-3 py-2 border rounded-md"
-                    />
+
+                </div>
+                <div className='flex justify-between'>
+                    <div className='mt-3'>
+                        <label className="block text-sm font-medium text-gray-700">Topic</label>
+                        <input
+                            type="text"
+                            value={topic}
+                            onChange={(e) => setTopic(e.target.value)}
+                            className="mt-2 w-full px-3 py-2 border rounded-md"
+                        />
+                    </div>
+
+                    <div className='mt-3'>
+                        <label className="block text-sm font-medium text-gray-700">Deadline</label>
+                        <input
+                            type="date"
+                            value={deadline}
+                            onChange={(e) => setDeadline(e.target.value)}
+                            className="mt-2 w-full px-3 py-2 border rounded-md"
+                        />
+                    </div>
                 </div>
 
                 <div className='mt-3'>
@@ -90,7 +179,7 @@ function NewUpload({ onClose }) {
                     <textarea
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
-                        className="mt-2 w-full px-3 py-2 border rounded-md" 
+                        className="mt-2 w-full px-3 py-2 border rounded-md"
                         rows="4"
                     ></textarea>
                 </div>
@@ -106,8 +195,9 @@ function NewUpload({ onClose }) {
                     <button
                         type="submit"
                         className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                        onClick={handleSave}
                     >
-                        Submit
+                        {loading ? <Loading /> : 'Submit'}
                     </button>
                 </div>
             </div>

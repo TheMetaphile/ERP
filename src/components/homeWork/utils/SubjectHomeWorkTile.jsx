@@ -5,9 +5,9 @@ import excla from './../../../assets/exclamation.png'
 export default function SubjectHomeWorkTile({ subject, details }) {
 
     return (
-        <div className={`mt-3 w-full p-3 flex justify-between rounded-lg shadow-md items-center border  `}>
+        <div className={`mt-2 w-full     `}>
             {details.map((detail, index) => (
-                <div key={index} className=' w-full ' >
+                <div key={index} className='mt-3 p-3 w-full flex-col rounded-lg shadow-md items-center border  border-gray-200' >
                     <div className="flex items-center justify-between  ">
                         <div className=" px-3 py-1 bg-bg_blue rounded-full w-fit">{subject}</div>
                         <div className="pl-2  font-medium">Chapter : {detail.chapter}</div>
