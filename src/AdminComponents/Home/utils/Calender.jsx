@@ -7,8 +7,8 @@ const Calendar = () => {
   const eventList = [currentDate.toLocaleDateString()];
   const eventTitle = {};
   const handleClick = (date) => {
-    console.log("\n eventtile"+ JSON.stringify(eventTitle));
-    console.log("\n eventtile"+ eventList[0]);
+    console.log("\n eventtile" + JSON.stringify(eventTitle));
+    console.log("\n eventtile" + eventList[0]);
     setSelectedDate(date);
   };
   const currentYear = currentDate.getFullYear();
@@ -35,7 +35,7 @@ const Calendar = () => {
   const finalDateRange = [...prevMonthRange.slice(negativeNum), ...currentMonthRange];
   console.log(`prev ${finalDateRange}`)
   return (
-    <div className="flex flex-col  border border-gray-300 w-full bg-white rounded-lg shadow-md my-2 px-2 mx-2">
+    <div className="flex flex-col  border border-gray-300 w-full bg-white rounded-lg shadow-md my-2 px-2">
       <div className="flex justify-between items-center mb-4 text-lg font-semibold">
         {monthName}
       </div>
@@ -50,10 +50,10 @@ const Calendar = () => {
             <div
               key={index}
               className={`items-center text-center py-2 rounded-full ${!isSameMonth(date, currentDate)
-                  ? 'text-gray-400'
-                  : (selectedDate.getTime() == date.getTime() && !isSunday(selectedDate)) ? "text-black bg-secondary" : isSunday(date)
-                    ? 'text-gray-400 hover:bg-gray-200 cursor-pointer'
-                    : 'text-gray-800 hover:bg-gray-200 cursor-pointer'
+                ? 'text-gray-400'
+                : (selectedDate.getTime() == date.getTime() && !isSunday(selectedDate)) ? "text-black bg-secondary" : isSunday(date)
+                  ? 'text-gray-400 hover:bg-gray-200 cursor-pointer'
+                  : 'text-gray-800 hover:bg-gray-200 cursor-pointer'
                 }`}
               onClick={() => handleClick(date)}
             >
