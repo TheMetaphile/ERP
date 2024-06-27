@@ -129,25 +129,46 @@ export default function AddmissionForm() {
         }
     }
 
+    // const handleMultiSignUp = async (data) => {
+    //     setLoading(true);
+    //     try {
+    //         for (let i = 0; i < data.length; i++) {
+    //             const userData = data[i];
+    //             userData.password = userData.aadhaarNumber;
+
+    //             await axios.post(`${BASE_URL_Login}/signup/student`, userData);
+    //         }
+    //         toast.success('All Students registered successfully');
+    //     }
+    //     catch (err) {
+    //         console.error(err);
+    //         const errorMessage = error.response?.data?.error || 'An error occurred';
+    //         toast.error(errorMessage);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
     const handleMultiSignUp = async (data) => {
         setLoading(true);
+        console.log("here");
         try {
-            for (let i = 0; i < data.length; i++) {
-                const userData = data[i];
+            const promises = data.map(userData => {
                 userData.password = userData.aadhaarNumber;
-
-                await axios.post(`${BASE_URL_Login}/signup/student`, userData);
-            }
-            toast.success('All Students registered successfully');
-        }
-        catch (err) {
+                console.log(userData);
+                return axios.post(`${BASE_URL_Login}/signup/student`, userData);
+            });
+    
+            await Promise.all(promises);
+            toast.success('All students registered successfully');
+        } catch (err) {
             console.error(err);
-            const errorMessage = error.response?.data?.error || 'An error occurred';
+            const errorMessage = err.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
         } finally {
             setLoading(false);
         }
     }
+    
 
     return (
         <div className="rounded-lg shadow-lg mx-4 mb-4 border-gray-100 px-4">
