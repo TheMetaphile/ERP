@@ -7,7 +7,7 @@ import NewReport from './utils/NewReport';
 import axios from 'axios';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
-import { BASE_URL_Attendence } from '../../Config';
+import { BASE_URL_Login } from '../../Config';
 
 function ReportCard() {
     const [students, setStudents] = useState([])
@@ -27,20 +27,19 @@ function ReportCard() {
         const fetchStudents = async () => {
             setLoading(true);
             try {
-                const today = new Date();
-                const formattedDate = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
-                const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/student/list?date=${formattedDate}`, {
-                    headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
-                    }
+                const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
+                    accessToken: authState.accessToken,
+                    currentClass: authState.ClassDetails.class,
+                    section: authState.ClassDetails.section
+
                 });
-                const studentsList = response.data.studentsList.map(student => ({
-                    ...student,
-                }));
-                setStudents(studentsList);
-                console.log('fetch', studentsList)
+                if (response.status == 200) {
+                    setStudents(response.data.Students);
+                    console.log(response.data.Students)
+                }
+
             } catch (error) {
-                console.error("Error fetching student attendance:", error);
+                console.error("Error fetching student:", error);
             }
             finally {
                 setLoading(false)
