@@ -18,7 +18,7 @@ export default function HomeWorkTile({ details, Class }) {
         console.log(Class)
         const detail = editedDetails[index];
         try {
-            const response = await axios.put(`${BASE_URL_Homework}/homework/update?class?${Class}&id=${detail._id}&date=${detail.date}`,
+            const response = await axios.put(`${BASE_URL_Homework}/homework/update?class=${Class}&id=${detail._id}&date=${detail.date}`,
                 {
                     update: {
                         subject: detail.subject,
@@ -51,7 +51,7 @@ export default function HomeWorkTile({ details, Class }) {
         console.log(Class)
         const detail = editedDetails[index];
         try {
-            const response = await axios.delete(`${BASE_URL_Homework}/homework/delete?class?${Class}&month=${new Date().getMonth() + 1}&year=2024&id=${detail._id}`,
+            const response = await axios.delete(`${BASE_URL_Homework}/homework/delete?class=${Class}&month=${new Date().getMonth() + 1}&year=2024&id=${detail._id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
