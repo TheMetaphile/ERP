@@ -7,7 +7,7 @@ import Homework from './homework.jsx';
 import Classwork from './classwork.jsx';
 export default function TeacherEnddrawer() {
   return (
-    <div className="overflow-y-auto w-full h-full px-2 no-scrollbar ">
+    <div className="overflow-y-auto w-full h-full px-2 rounded-lg border border-gray-300">
       <h6 className="flex justify-between text-sm mt-3">Upcoming Activities <span className="text-blue-500">See All</span></h6>
       <div className="dialyNotices w-full h-2/5 bg-blue-50 rounded-xl p-2 mt-3 mb-3 overflow-auto no-scrollbar">
         <div className='flex items-center '>
