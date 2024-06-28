@@ -5,6 +5,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/APIs/StudentsData/StudentApi.dart';
 import 'package:untitled/APIs/StudentsData/student.dart';
+import 'package:untitled/admin-module/StudentPannel/studentEdit.dart';
 
 class StudentDetail extends StatefulWidget {
 
@@ -42,7 +43,6 @@ class _StudentDetailState extends State<StudentDetail> {
     scrollController2.addListener(listener2);
     fetchTeacherData();
 
-
   }
   Map<String, dynamic>? studentData;
   final studentApiobj=StudentApi();
@@ -59,9 +59,11 @@ class _StudentDetailState extends State<StudentDetail> {
       });
     } catch (e) {
       print('Error: $e');
+    }finally{
+      assign();
     }
   }
-  List<List<String>>? studentDetail;
+  List<List<String>> studentDetail=[];
   void assign(){
    studentDetail = [
 
@@ -96,8 +98,6 @@ class _StudentDetailState extends State<StudentDetail> {
 }
   @override
   Widget build(BuildContext context) {
-    assign();
-    print(studentDetail);
     Size size=MediaQuery.of(context).size;
     if (studentData == null) {
       return  Scaffold(body:  Center(child: LoadingAnimationWidget.threeArchedCircle(
@@ -106,15 +106,15 @@ class _StudentDetailState extends State<StudentDetail> {
       )));
     }
     return Scaffold(
-      backgroundColor: Color(0xFF5A77BC),
+      backgroundColor: const Color(0xFF5A77BC),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: (){
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
         ),
         title:   Text("Student Details",style: GoogleFonts.openSans(fontSize:size.width*0.055,color:Colors.white,fontWeight:FontWeight.w600),),
 
@@ -125,7 +125,7 @@ class _StudentDetailState extends State<StudentDetail> {
           SingleChildScrollView(
             controller: scrollController2,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -150,21 +150,24 @@ class _StudentDetailState extends State<StudentDetail> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(studentData?["name"],style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w500),),
-                                  Text(studentData?["currentClass"],style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w400),),
-                                  Text(studentData?["rollNumber"],style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w400),),
+                                  Text(studentDetail![0][1],style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w500),),
+                                  Text(studentDetail![3][1],style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w400),),
+                                 Text(studentDetail![1][1] ,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey,fontWeight:FontWeight.w400),),
 
                                 ],
                               ),
                             ),
-                            Expanded(child: SizedBox()),
+                            const Expanded(child: SizedBox()),
                             TextButton(
-                                style: TextButton.styleFrom(side: BorderSide(width: 1,color: Colors.grey),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-                                onPressed: (){},
+                                style: TextButton.styleFrom(side: const BorderSide(width: 1,color: Colors.grey),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                                onPressed: (){
+                          //Navigator.push(context, MaterialPageRoute(builder: (context) =>  StudentEditDetails(name: studentDetail![0][1], dob: studentDetail![6][1], address: studentDetail![22][1], phoneNumber: studentDetail![0][1], email: null, fatherName: null, motherName: null, fatherOcupation: null, motherOcupation: null, fatherPhNo: null, motherPhNo: null, clas: null, section: null,),));
+                             Navigator.push(context, MaterialPageRoute(builder: (context) => StudentEdit(studentDetail: studentDetail,),));
+                                },
                                 child: Row(
                                   children: [
                                     Text("Edit ",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w500),),
-                                    Icon(Icons.edit,color: Colors.black,),
+                                    const Icon(Icons.edit,color: Colors.black,),
                                   ],
                                 )
                             )
@@ -190,7 +193,7 @@ class _StudentDetailState extends State<StudentDetail> {
                                   Container(
                                     height: size.width*0.25,
                                     width: size.width*0.25,
-                                    child: CircularProgressIndicator(
+                                    child: const CircularProgressIndicator(
                                       value: 0.5,
                                       color: Colors.green,
                                       strokeWidth: 10,
@@ -224,7 +227,7 @@ class _StudentDetailState extends State<StudentDetail> {
                                   Container(
                                     height: size.width*0.25,
                                     width: size.width*0.25,
-                                    child: CircularProgressIndicator(
+                                    child: const CircularProgressIndicator(
                                       value: 1,
                                       color: Colors.green,
                                       strokeWidth: 10,
@@ -285,97 +288,100 @@ class _StudentDetailState extends State<StudentDetail> {
                     ),
                   ),
                   SizedBox(height: size.height*0.02,),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: size.height*0.01,),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Card(
-                                margin: EdgeInsets.all(0),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                child: Column(
-                                  children: [
-                                    Container(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: size.height*0.01,),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Card(
+                              margin: const EdgeInsets.all(0),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              child: Column(
+                                children: [
+                                  Container(
 
-                                      height: size.height*0.05,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color:Color(0xFFE9F0FF),
-                                      ),
-                                      padding: EdgeInsets.symmetric(horizontal: 5),
+                                    height: size.height*0.05,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color:const Color(0xFFE9F0FF),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 5),
 
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(
-                                              width:size.width*0.44,
-                                              child: Text("All Details",textAlign:TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
-                                          TextButton(
-                                              style: TextButton.styleFrom(side: BorderSide(width: 2,color: Colors.black),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-                                              onPressed: (){},
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                            width:size.width*0.44,
+                                            child: Text("All  Details",textAlign:TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                        Card(
+                                          margin: const EdgeInsets.all(0),
+                                          child: TextButton(
+                                             // style: TextButton.styleFrom(side: BorderSide(width: 2,color: Colors.black),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                                              onPressed: (){
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => StudentEdit(studentDetail:studentDetail,),));
+                                              },
                                               child: Row(
                                                 children: [
                                                   Text("Edit ",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w500),),
-                                                  Icon(Icons.edit,color: Colors.black,),
+                                                  const Icon(Icons.edit,color: Colors.black,),
                                                 ],
                                               )
-                                          )
-
-
-                                        ],
-                                      ),
-                                    ),
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: studentDetail!.length,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context, index) {
-
-                                        return Container(
-                                          height: size.height*0.05,
-                                          padding: EdgeInsets.symmetric(horizontal: 5),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SizedBox(
-
-                                                  width:size.width*0.44,
-                                                  child: Text(studentDetail![index][0].toString(),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
-                                              SizedBox(
-
-                                                  width:size.width*0.4,
-                                                  child: Text(studentDetail![index][1].toString(),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
-
-                                            ],
                                           ),
-                                        );
+                                        )
 
-                                      },)
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+
+                                      ],
+                                    ),
+                                  ),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: studentDetail!.length,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, index) {
+
+                                      return Container(
+                                        height: size.height*0.05,
+                                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+
+                                                width:size.width*0.44,
+                                                child: Text(studentDetail![index][0].toString(),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                            SizedBox(
+
+                                                width:size.width*0.4,
+                                                child: Text(studentDetail![index][1].toString(),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w400),)),
+
+                                          ],
+                                        ),
+                                      );
+
+                                    },)
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                   SizedBox(height: size.height*0.02,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                        style: TextButton.styleFrom(backgroundColor: Color(0xFFF29D9D)),
+                        style: TextButton.styleFrom(backgroundColor: const Color(0xFFF29D9D)),
                         onPressed: (){}, child: Text("Remove Student ",style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w500),),),
                       Container(
                         width: size.width*0.3,
                         child: TextButton(
-                          style: TextButton.styleFrom(backgroundColor: Color(0xFF9DCEF2)),
+                          style: TextButton.styleFrom(backgroundColor: const Color(0xFF9DCEF2)),
                           onPressed: (){}, child: Text("Save ",style: GoogleFonts.openSans(fontSize:size.width*0.045,color:Colors.black,fontWeight:FontWeight.w500),),),
                       )
 

@@ -27,33 +27,7 @@ import '../teacher-module/techerClass.dart';
 //   }
 // }
 
-List navigation = [TeacherAttendanceCheckIn(),Timetable(),StudentReportCard(screen: 'Student Fees Status',),StudentReportCard(screen: 'Student Attendance',),StudentReportCard(screen: 'Report Card',),StudentReportCard(screen: 'Note Book Record',),TeacherLeave(),NoticeBoard()];
-List categoryName=['Check-in','Class','Student Fees Status','Student Attendance','Report Card','Note Book Record','Take Leave','Notice Board'];
-String getPic(String categoryName) {
-  switch (categoryName) {
-    case 'Check-in':
-      return "assets/Images/Vector.png";
 
-    case 'Class':
-      return "assets/Images/Classroom.png";
-
-    case 'Student Fees Status':
-      return "assets/Images/ic_fees_due.png";
-
-    case 'Student Attendance':
-      return "assets/Images/Checked User Male.png";
-    case 'Report Card':
-      return "assets/Images/Graduate.png";
-    case 'Note Book Record':
-      return "assets/Images/Spiral Bound Booklet.png";
-    case 'Take Leave':
-      return "assets/Images/GoodNotes.png";
-    case 'Notice Board':
-      return "assets/Images/Notice.png";
-    default:
-      return "null";
-  }
-}
 showRedSnackBar(String message,BuildContext context) {
     final snackBar=SnackBar(content: Text(message,style: TextStyle(color: Colors.white),),backgroundColor: Colors.red,);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

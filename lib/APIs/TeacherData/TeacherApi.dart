@@ -60,5 +60,62 @@ class TeacherApi{
       throw Exception('Network error: $e');
     }
   }
+  Future<bool> teacherEditData(String accessToken, Map<String,String> editFields) async{
+    final url=Uri.parse("https://loginapi-y0aa.onrender.com/edit/teacher");
+    Map<String,String> body={
+      "accessToken":accessToken,
+    };
+    body.addAll(editFields);
+    print(body);
+    try{
+      final response=await http.put(
+        url,
+        headers: {
+          'Content-Type':'application/json'
+        },
+        body: jsonEncode(body),
+      );
+      if(response.statusCode==200){
+        final data = jsonDecode(response.body);
+        return data['status'] ?? false;
+      }else{
+        throw Exception('Failed to edit a student (${response.statusCode})');
+      }
+
+    }catch(e){
+      throw Exception('Network error: $e');
+    }
+
+
+  }
+
+  Future<bool> assignRollNumber(String accessToken,String currentClass, String section,) async {
+    try {
+      final url = Uri.parse('https://loginapi-y0aa.onrender.com/assignRollNumber');
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'accessToken': accessToken,
+          'currentClass': currentClass,
+          'section': section,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final decodedResponse = jsonDecode(response.body);
+        return decodedResponse['status'] ?? false;
+      } else {
+        print('Failed to assign roll numbers. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('Error assigning roll numbers: $e');
+      return false;
+    }
+  }
 
 }

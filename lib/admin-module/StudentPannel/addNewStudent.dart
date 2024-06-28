@@ -12,7 +12,7 @@ class AddNewStudent extends StatefulWidget {
 
 class _AddNewStudentState extends State<AddNewStudent> {
   ScrollController scrollController1 = ScrollController();
-  ScrollController scrollController2 = ScrollController();
+  // ScrollController scrollController2 = ScrollController();
   var _flag1 = false;
   var _flag2 = false;
 

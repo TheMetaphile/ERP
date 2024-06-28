@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:untitled/APIs/StudentsData/student.dart';
 import 'package:http/http.dart' as http;
+import 'package:untitled/utils/utils.dart';
 class StudentApi{
   Future<List<Student>> fetchStudents(String accessToken) async {
 
@@ -62,4 +63,36 @@ class StudentApi{
       throw Exception('Network error: $e');
     }
   }
+
+  Future<bool> studentEditData(String accessToken, Map<String,String> editFields) async{
+    final url=Uri.parse("https://loginapi-y0aa.onrender.com/edit/student");
+    Map<String,String> body={
+      "accessToken":accessToken,
+    };
+    body.addAll(editFields);
+
+    try{
+      final response=await http.put(
+        url,
+        headers: {
+          'Content-Type':'application/json'
+        },
+        body: jsonEncode(body),
+      );
+      if(response.statusCode==200){
+         var data=jsonDecode(response.body);
+         return data['status'] ?? false;
+      }else{
+        throw Exception('Failed to edit a student (${response.statusCode})');
+      }
+
+    }catch(e){
+      throw Exception('Network error: $e');
+
+    }
+    
+
+  }
+
+
 }

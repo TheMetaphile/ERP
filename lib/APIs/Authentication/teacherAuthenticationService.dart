@@ -34,9 +34,13 @@ class TeacherAuthentication{
         final data = jsonDecode(response.body);
         final tokens = data['tokens'];
         final accessToken = tokens['accessToken'];
+        final email=data["userDetails"]["email"];
+
 
         SharedPreferences pref = await SharedPreferences.getInstance();
         await pref.setString("accessToken", accessToken);
+        await pref.setString("email", email);
+        print(pref.getString("email"));
         print(pref.getString("accessToken"));
 
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TeacherHome(),));

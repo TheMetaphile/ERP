@@ -158,6 +158,7 @@ class _TeacherHomeState extends State<TeacherHome> {
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
                       },
                       ),
+
                     ],
                   ),
                 ),

@@ -427,6 +427,7 @@ class _AllStudentsState extends State<AllStudents> {
                                           height: size.height*0.05,
                                           child: TextButton(
                                             onPressed: () {
+                                              print(student.email);
                                               Navigator.push(context, MaterialPageRoute(builder: (context) => StudentDetail( email: student.email,),));
                                             },
                                             child: Row(

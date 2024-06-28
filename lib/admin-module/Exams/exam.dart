@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/APIs/Exam/ExamApi.dart';
 import 'package:untitled/utils/utils.dart';
@@ -39,7 +40,27 @@ class _ExamsState extends State<Exams> {
     super.initState();
     scrollController1.addListener(listener1);
     scrollController2.addListener(listener2);
+    _fetchExams();
 
+  }
+  List<dynamic>?_exams;
+  final examApiobj=ExamApi();
+
+  Future<void> _fetchExams() async {
+    try {
+      SharedPreferences pref=await SharedPreferences.getInstance();
+      final accessToken = pref.getString("accessToken");
+      examApiobj.fetchExams(accessToken!).then((exams) {
+        setState(() {
+          _exams = exams;
+          print(_exams);
+        });
+      }).catchError((error) {
+        print('Error fetching exams: $error');
+      });
+    }catch(e){
+      print(e);
+    }
   }
   TextEditingController examName=TextEditingController();
   TextEditingController selectClass=TextEditingController();
@@ -91,7 +112,239 @@ class _ExamsState extends State<Exams> {
   ExamApi examApiObj=ExamApi();
 bool isLoading=false;
   bool isScheduled=false;
-  Future<void>schedulExamtPopup( BuildContext context ,Size size)async {
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    if(_exams==null){
+      return  Scaffold(body:  Center(child: LoadingAnimationWidget.threeArchedCircle(
+        color: Colors.blue,
+        size: 100,
+      )));
+    }
+    return Scaffold(
+      backgroundColor: Color(0xFF5A77BC),
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        leading: IconButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios),
+        ),
+        backgroundColor: Colors.transparent,
+        title: Text("Exam",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: size.width*0.06),),
+        actions: [
+          Container(
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(12)
+              ),
+              child: TextButton(onPressed: (){
+                schedulExamtPopup(context, size);
+              }, child: Text("Add new",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.white),)))
+        ],
+      ),
+      body: Stack(
+        children: [
+          secondStackLayer(size,context),
+          SingleChildScrollView(
+            controller: scrollController2,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 3),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: size.height*0.055,),
+                  Container(
+
+                    height: size.height*0.08,
+                    decoration: const BoxDecoration(
+                        color:Color(0xFFE9F0FF),
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))
+
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+
+                    child:Row(
+
+                      children: [
+                        SizedBox(
+
+                            width:size.width*0.55,
+                            child: Text("Date",textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
+                        SizedBox(
+
+                            width:size.width*0.35,
+                            child: Text("Subjects",textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
+                      ],
+                    ),
+                  ),
+                  Card(
+                      color: Colors.white,
+                      margin: const EdgeInsets.all(0),
+                      shape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white
+                        ),
+                      ),
+                      child: ListView.builder(
+                    itemCount: _exams?.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final exam = _exams?[index];
+                      return ExpansionTile(
+                        title: Text('Class: ${exam['class']}'),
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Stream: ${exam['stream']}'),
+                                Text('Term: ${exam['term']}'),
+                                const SizedBox(height: 8),
+                                const Text('Schedule:'),
+                                const SizedBox(height: 4),
+                                ...exam['schedule'].map((schedule) => Padding(
+                                  padding: const EdgeInsets.only(left: 16.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text('Subject: ${schedule['subject']}'),
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.edit),
+                                            onPressed: () {
+                                              print(exam);
+                                              _showUpdateExamDialog(
+                                                exam['class'],
+                                                exam['stream'],
+                                                schedule['_id'],
+                                                schedule['subject'],
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      Text('Date: ${schedule['date']}'),
+                                      Text('Time: ${schedule['time']}'),
+                                      Text('Duration: ${schedule['duration']}'),
+                                      const SizedBox(height: 8),
+                                    ],
+                                  ),
+                                )).toList(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+
+
+
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+
+    );
+  }
+
+  void _showUpdateExamDialog(String classValue, String? stream, String examId, String currentSubject,) {
+    final _subjectController = TextEditingController(text: currentSubject);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Update/Delete Exam'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _subjectController,
+                decoration: InputDecoration(
+                  labelText: 'Subject',
+                ),
+              ),
+
+
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () async {
+                SharedPreferences pref = await SharedPreferences.getInstance();
+                final accessToken = pref.getString("accessToken");
+
+                try {
+                  final deleteSuccess = await examApiObj.deleteExam(
+                    accessToken!,
+                    examId,
+                    classValue,
+                    stream,
+                  );
+
+                  if (deleteSuccess) {
+                    _fetchExams(); // Refresh the exam list
+                    showGreenSnackBar( 'Exam Deleted successfully',context,);
+                    Navigator.of(context).pop();
+                  } else {
+                    showRedSnackBar( 'Failed to Deleted exam',context,);
+                  }
+                } catch (e) {
+                  print( 'Error: $e');
+                }
+              },
+              child: Text('Delete Exam',style: TextStyle(color: Colors.red),),
+
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                SharedPreferences pref = await SharedPreferences.getInstance();
+                final accessToken = pref.getString("accessToken");
+                final update = {'subject': _subjectController.text};
+
+                try {
+                  final success = await examApiObj.updateExam(
+                    accessToken!,
+                    classValue,
+                    stream,
+                    examId,
+                    update,
+                  );
+
+                  if (success) {
+                    _fetchExams(); // Refresh the exam list
+                    showGreenSnackBar( 'Exam updated successfully',context,);
+                  } else {
+                    showRedSnackBar( 'Failed to update exam',context,);
+
+                  }
+                } catch (e) {
+                  print('Error: $e');
+                }
+
+                Navigator.of(context).pop();
+              },
+              child: Text('Update',style: TextStyle(color: Colors.green),),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void schedulExamtPopup( BuildContext context ,Size size)async {
     return showDialog(
       context: context,
       builder: (context) {
@@ -280,38 +533,41 @@ bool isLoading=false;
                                   width: size.width*0.3,
                                   child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        elevation: 0,
+                                          elevation: 0,
                                           backgroundColor:isLoading?Colors.transparent:Color(0XFF6FF87D),
                                           shape:isLoading?RoundedRectangleBorder(side: BorderSide.none):RoundedRectangleBorder(side: BorderSide(color: Colors.grey,width: 1),
                                               borderRadius: isLoading?BorderRadius.all(Radius.zero):BorderRadius.circular(8))
                                       ),
                                       onPressed: () async {
+                                        print("hell o");
                                         setState(() {
-                                         isLoading=true;
+                                          isLoading=true;
                                         });
-                                     try{
-                                       SharedPreferences pref=await SharedPreferences.getInstance();
-                                       final accessToken=pref.getString("accessToken");
-                                        isScheduled =
-                                       await examApiObj.scheduleExam(
-                                         accessToken: accessToken!,
-                                         classValue: _selectedClass!,
-                                         subject: examName.text,
-                                         date: selectedDate!,
-                                         time: _selectedTime!,
-                                         duration: _selecteduration!,
-                                       );
-                                     }catch(error){
-                                       print(error);
-                                     }finally{
-                                       setState(() {
-                                         isLoading=false;
-                                       });
-                                     }
-                                     if(isScheduled){
-                                       Navigator.pop(context);
-                                       showGreenSnackBar("Exam Scheduled", context);
-                                     }
+                                        try{
+                                          SharedPreferences pref=await SharedPreferences.getInstance();
+                                          final accessToken=pref.getString("accessToken");
+                                          print(accessToken);
+                                          isScheduled =
+                                          await examApiObj.scheduleExam(
+                                          accessToken!,
+                                             _selectedClass!,
+                                             examName.text,
+                                             selectedDate!,
+                                            _selectedTime!,
+                                             _selecteduration!,
+                                          );
+                                        }catch(error){
+                                          print(error);
+                                        }finally{
+                                          setState(() {
+                                            isLoading=false;
+                                            _fetchExams();
+                                          });
+                                        }
+                                        if(isScheduled){
+                                          Navigator.pop(context);
+                                          showGreenSnackBar("Exam Scheduled", context);
+                                        }
                                       },
                                       child: isLoading?CircularProgressIndicator():Text("Save",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.black),)),
                                 ),
@@ -333,138 +589,7 @@ bool isLoading=false;
       },);
 
   }
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: Color(0xFF5A77BC),
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        leading: IconButton(
-          onPressed: (){
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_ios),
-        ),
-        backgroundColor: Colors.transparent,
-        title: Text("Exam",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400,fontSize: size.width*0.06),),
-        actions: [
-          Container(
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(12)
-              ),
-              child: TextButton(onPressed: (){
-                schedulExamtPopup(context, size);
-              }, child: Text("Add new",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.white),)))
-        ],
-      ),
-      body: Stack(
-        children: [
-          secondStackLayer(size,context),
-          SingleChildScrollView(
-            controller: scrollController2,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 3),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: size.height*0.055,),
-                  Container(
 
-                    height: size.height*0.08,
-                    decoration: const BoxDecoration(
-                        color:Color(0xFFE9F0FF),
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))
-
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-
-                    child:Row(
-
-                      children: [
-                        SizedBox(
-
-                            width:size.width*0.55,
-                            child: Text("Date",textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
-                        SizedBox(
-
-                            width:size.width*0.35,
-                            child: Text("Subjects",textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
-                      ],
-                    ),
-                  ),
-                  Card(
-                      color: Colors.white,
-                      margin: const EdgeInsets.all(0),
-                      shape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.white
-                        ),
-                      ),
-                      child: ListView.builder(
-                        itemCount: 15,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return ExpansionTile(
-                            shape: const RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.transparent)
-                            ),
-                            title: SizedBox(
-                                width: size.width*0.4,
-                                child: Text("01/08/2024",textAlign: TextAlign.start,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey),)),
-                            trailing: SizedBox(
-                              width: size.width*0.3,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Hindi",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey),),
-                                  const Icon(Icons.arrow_drop_down,color: Colors.grey,)
-                                ],
-                              ),
-                            ),
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                      width: size.width*0.4,
-                                      child: Text("Exam",textAlign:TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black),)) ,
-                                  SizedBox(
-                                      width: size.width*0.4,
-                                      child: Text("Term I",textAlign:TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey),)) ,
-
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                      width: size.width*0.4,
-                                      child: Text("Time",textAlign:TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black),)) ,
-                                  SizedBox(
-                                      width: size.width*0.4,
-                                      child: Text("09:00am - 01:00pm",textAlign:TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.grey),)) ,
-
-                                ],
-                              ),
-                            ],
-                          );
-                        },)
-
-                  ),
-
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-
-    );
-  }
   Widget secondStackLayer(Size size,BuildContext context) {
 
     return SingleChildScrollView(

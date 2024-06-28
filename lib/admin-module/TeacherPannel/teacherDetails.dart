@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/admin-module/TeacherPannel/teacherEditScreen.dart';
 
 import '../../APIs/TeacherData/TeacherApi.dart';
 import '../../Charts/classActivity.dart';
@@ -61,7 +62,7 @@ class _TeacherDetailsState extends State<TeacherDetails> {
   print('Error: $e');
   }
 }
-  List<List<String>>?teacherDetails;
+  List<List<String>>teacherDetails=[];
 void assign(){
   teacherDetails=[
     ["Monthly Salary","Rs. 18000"],
@@ -69,13 +70,14 @@ void assign(){
     ["Phone No",'(+91) ${_userDetails?['phoneNumber'] ?? ''}'],
     ["Email",_userDetails?['email'] ?? ''],
     ["Address",_userDetails?['permanentAddress'] ?? ''],
+    ["Education",_userDetails?['education'] ?? ''],
   ];
 }
 
   @override
   Widget build(BuildContext context) {
     assign();
-    print(_userDetails);
+    print(teacherDetails);
     Size size=MediaQuery.of(context).size;
     if (_userDetails == null) {
       return  Scaffold(body:  Center(child: LoadingAnimationWidget.threeArchedCircle(
@@ -138,7 +140,9 @@ void assign(){
                             Expanded(child: SizedBox()),
                             TextButton(
                                 style: TextButton.styleFrom(side: BorderSide(width: 1,color: Colors.grey),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-                                onPressed: (){},
+                                onPressed: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherEditScreen(teacherDetails: teacherDetails),));
+                                },
                                 child: Row(
                                   children: [
                                     Text("Edit ",style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black,fontWeight:FontWeight.w500),),
@@ -155,7 +159,7 @@ void assign(){
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: teacherDetails?.length,
+                  itemCount: teacherDetails!.length-1,
                   itemBuilder: (context, index) {
                   return Card(
                     child: ListTile(

@@ -26,11 +26,13 @@ import '../Charts/BarChartExample.dart';
 import '../Charts/LineChart.dart';
 import '../Charts/eventCalender.dart';
 import '../teacher-module/TeacherHome.dart';
+import '../utils/theme.dart';
 import 'Exams/exam.dart';
 import 'Leave/allLeave.dart';
 import 'Notice/notice.dart';
 import 'StudentPannel/StudentResults.dart';
 import 'StudentPannel/allStudents.dart';
+import 'Time table/Time Table Structure/timeTableFetch.dart';
 import 'Transport Pannel/allTransportFile.dart';
 
 class AdminHome extends StatefulWidget {
@@ -120,22 +122,24 @@ class _AdminHomeState extends State<AdminHome> {
       }
     });
   }
+  CustomTheme themeObj=new CustomTheme();
   @override
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xFF5A77BC),
+      backgroundColor: themeObj.textWhite,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Colors.transparent,
+
+        iconTheme: IconThemeData(color: themeObj.textBlack),
+        backgroundColor:themeObj.primayColor,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
-            child: Icon(CupertinoIcons.profile_circled,size: size.height*0.06,),
+            child: Icon(CupertinoIcons.profile_circled,size: size.height*0.06,color: themeObj.textBlack,),
           ),
         ],
-        title: Text("Admin Dashboard",style: GoogleFonts.openSans(fontSize:size.width*0.055,color:Colors.white,fontWeight:FontWeight.w600),),
+        title: Text("Admin Dashboard",style: GoogleFonts.openSans(fontSize:size.width*0.055,color:themeObj.textBlack,fontWeight:FontWeight.w600),),
       ),
       drawer: Drawer(
           width: size.width*0.8,
@@ -408,48 +412,55 @@ class _AdminHomeState extends State<AdminHome> {
 
                         ],
                       ),
-                      ExpansionTile(
-                        key: GlobalKey(),
-                          initiallyExpanded: _openTileIndex == 6,
-                          onExpansionChanged: (isExpanded) {
-                            _handleTileTap(6);
-                          },
-
-                        shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
+                      ListTile(
                         leading:Icon(CupertinoIcons.doc,color: Colors.black,),
-                        title: Text("Leaves",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
-                        trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
-                        children: [
-                          ListTile(
-                            leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
-                            title:  Text("Leaves",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
-                                  onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => AllLeave(),));
-                                  },
-                          ),
-
-
-
-
-                        ],
+                        title:  Text("Leaves",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AllLeave(),));
+                        },
                       ),
+                      // ExpansionTile(
+                      //   key: GlobalKey(),
+                      //     initiallyExpanded: _openTileIndex == 6,
+                      //     onExpansionChanged: (isExpanded) {
+                      //       _handleTileTap(6);
+                      //     },
+                      //
+                      //   shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
+                      //   leading:Icon(CupertinoIcons.doc,color: Colors.black,),
+                      //   title: Text("Leaves",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+                      //   trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
+                      //   children: [
+                      //     ListTile(
+                      //       leading:Icon(CupertinoIcons.doc,color: Colors.black,),
+                      //       title:  Text("Leaves",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
+                      //             onTap: (){
+                      //         Navigator.push(context, MaterialPageRoute(builder: (context) => AllLeave(),));
+                      //             },
+                      //     ),
+                      //
+                      //
+                      //
+                      //
+                      //   ],
+                      // ),
                       // ExpansionTile(
                       //   key: GlobalKey(),
                       //   initiallyExpanded: _openTileIndex == 7,
                       //   onExpansionChanged: (isExpanded) {
                       //     _handleTileTap(7);
                       //   },
-                      //   shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
-                      //   leading:Icon(Icons.library_books_rounded,color: Colors.black,),
-                      //   title: Text("Classes",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
-                      //   trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
+                      //   shape: const OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
+                      //   leading:const Icon(Icons.more_time,color: Colors.black,),
+                      //   title: Text("Time Table",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+                      //   trailing: const Icon(CupertinoIcons.chevron_down,color: Colors.black,),
                       //   children: [
                       //     ListTile(
-                      //       leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
-                      //       title:  Text("All Classes",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
-                      //
+                      //       leading: const Icon(Icons.arrow_forward_ios,color: Colors.grey,),
+                      //       title:  Text("Time Table",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
+                      //       trailing: const Icon(CupertinoIcons.chevron_down,color: Colors.black,),
                       //       onTap: (){
-                      //         Navigator.push(context, MaterialPageRoute(builder: (context) => AllClasses(),)) ;
+                      //         Navigator.push(context, MaterialPageRoute(builder: (context) => TimeTableStructureScreen(),)) ;
                       //       },
                       //     ),
                       //
@@ -457,129 +468,176 @@ class _AdminHomeState extends State<AdminHome> {
                       //
                       //   ],
                       // ),
-                      ExpansionTile(
-                        key: GlobalKey(),
-                        initiallyExpanded: _openTileIndex == 8,
-                        onExpansionChanged: (isExpanded) {
-                          _handleTileTap(8);
+                      ListTile(
+                        title:  Text("Time Table",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+                        leading:const Icon(Icons.more_time,color: Colors.black,),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => TimeTableStructureScreen(),)) ;
                         },
-                        shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
-                        leading:Icon(Icons.book,color: Colors.black,),
-                        title: Text("Subjects",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
-                        trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
-                        children: [
-                          ListTile(
-                            leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
-                            title:  Text("All Subjects",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
-
-                            onTap: (){
-                             Navigator.push(context, MaterialPageRoute(builder: (context) => AllSubjects(),)) ;
-                            },
-                          ),
-
-
-
-                        ],
-                      ),
-                      ExpansionTile(
-                        key: GlobalKey(),
-                        initiallyExpanded: _openTileIndex == 9,
-                        onExpansionChanged: (isExpanded) {
-                          _handleTileTap(9);
-                        },
-                        shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
-                        leading:Icon(Icons.notification_add_outlined,color: Colors.black,),
-                        title: Text("Notice",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
-                        trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
-                        children: [
-                          ListTile(
-                            leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
-                            title:  Text("All Notices",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
-
-                            onTap: (){
-                             Navigator.push(context, MaterialPageRoute(builder: (context) => AdminNotice(),)) ;
-                            },
-                          ),
-
-
-
-                        ],
-                      ),
-                      ExpansionTile(
-                        key: GlobalKey(),
-                        initiallyExpanded: _openTileIndex == 10,
-                        onExpansionChanged: (isExpanded) {
-                          _handleTileTap(10);
-                        },
-                        shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
-                        leading:Icon(Icons.emoji_transportation,color: Colors.black,),
-                        title: Text("Transports",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
-                        trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
-                        children: [
-                          ListTile(
-                            leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
-                            title:  Text("All Transports",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
-
-                            onTap: (){
-                             Navigator.push(context, MaterialPageRoute(builder: (context) => AllTransportFile(),)) ;
-                            },
-                          ),
-
-
-
-                        ],
-                      ),
-                      ExpansionTile(
-                        key: GlobalKey(),
-                        initiallyExpanded: _openTileIndex == 11,
-                        onExpansionChanged: (isExpanded) {
-                          _handleTileTap(11);
-                        },
-                        shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
-                        leading:Icon(Icons.newspaper_rounded,color: Colors.black,),
-                        title: Text("Exams",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
-                        trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
-                        children: [
-                          ListTile(
-                            leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
-                            title:  Text("Exams",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
-
-                            onTap: (){
-                             Navigator.push(context, MaterialPageRoute(builder: (context) => Exams(),)) ;
-                            },
-                          ),
-
-
-
-                        ],
-                      ),
-                      ExpansionTile(
-                        key: GlobalKey(),
-                        initiallyExpanded: _openTileIndex == 12,
-                        onExpansionChanged: (isExpanded) {
-                          _handleTileTap(12);
-                        },
-                        shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
-                        leading:Icon(Icons.message,color: Colors.black,),
-                        title: Text("Message",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
-                        trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
-                        children: [
-                          ListTile(
-                            leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
-                            title:  Text("All Messages",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
-
-                            onTap: (){
-
-                            },
-                          ),
-
-
-
-                        ],
                       ),
                       ListTile(
+                        leading:const Icon(Icons.book,color: Colors.black,),
+                        title:  Text("All Subjects",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const AllSubjects(),)) ;
+                        },
+                      ),
+                      // ExpansionTile(
+                      //   key: GlobalKey(),
+                      //   initiallyExpanded: _openTileIndex == 8,
+                      //   onExpansionChanged: (isExpanded) {
+                      //     _handleTileTap(8);
+                      //   },
+                      //   shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
+                      //   leading:Icon(Icons.book,color: Colors.black,),
+                      //   title: Text("Subjects",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+                      //   trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
+                      //   children: [
+                      //     ListTile(
+                      //       leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
+                      //       title:  Text("All Subjects",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
+                      //
+                      //       onTap: (){
+                      //        Navigator.push(context, MaterialPageRoute(builder: (context) => AllSubjects(),)) ;
+                      //       },
+                      //     ),
+                      //
+                      //
+                      //
+                      //   ],
+                      // ),
+                      ListTile(
+
+                        title:  Text("All Notices",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+                        leading:Icon(Icons.notification_add_outlined,color: Colors.black,),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AdminNotice(),)) ;
+                        },
+                      ),
+                      // ExpansionTile(
+                      //   key: GlobalKey(),
+                      //   initiallyExpanded: _openTileIndex == 9,
+                      //   onExpansionChanged: (isExpanded) {
+                      //     _handleTileTap(9);
+                      //   },
+                      //   shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
+                      //   leading:Icon(Icons.notification_add_outlined,color: Colors.black,),
+                      //   title: Text("Notice",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+                      //   trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
+                      //   children: [
+                      //     ListTile(
+                      //       leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
+                      //       title:  Text("All Notices",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
+                      //
+                      //       onTap: (){
+                      //        Navigator.push(context, MaterialPageRoute(builder: (context) => AdminNotice(),)) ;
+                      //       },
+                      //     ),
+                      //
+                      //
+                      //
+                      //   ],
+                      // ),
+                      ListTile(
+                        leading:Icon(Icons.emoji_transportation,color: Colors.black,),
+                        title:  Text("Transports",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AllTransportFile(),)) ;
+                        },
+                      ),
+                      // ExpansionTile(
+                      //   key: GlobalKey(),
+                      //   initiallyExpanded: _openTileIndex == 10,
+                      //   onExpansionChanged: (isExpanded) {
+                      //     _handleTileTap(10);
+                      //   },
+                      //   shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
+                      //   leading:Icon(Icons.emoji_transportation,color: Colors.black,),
+                      //   title: Text("Transports",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+                      //   trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
+                      //   children: [
+                      //     ListTile(
+                      //       leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
+                      //       title:  Text("All Transports",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
+                      //
+                      //       onTap: (){
+                      //        Navigator.push(context, MaterialPageRoute(builder: (context) => AllTransportFile(),)) ;
+                      //       },
+                      //     ),
+                      //
+                      //
+                      //
+                      //   ],
+                      // ),
+                      ListTile(
+                        leading:Icon(Icons.newspaper_rounded,color: Colors.black,),
+                        title:  Text("Exams",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Exams(),)) ;
+                        },
+                      ),
+                      // ExpansionTile(
+                      //   key: GlobalKey(),
+                      //   initiallyExpanded: _openTileIndex == 11,
+                      //   onExpansionChanged: (isExpanded) {
+                      //     _handleTileTap(11);
+                      //   },
+                      //   shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
+                      //   leading:Icon(Icons.newspaper_rounded,color: Colors.black,),
+                      //   title: Text("Exams",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+                      //   trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
+                      //   children: [
+                      //     ListTile(
+                      //       leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
+                      //       title:  Text("Exams",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
+                      //
+                      //       onTap: (){
+                      //        Navigator.push(context, MaterialPageRoute(builder: (context) => Exams(),)) ;
+                      //       },
+                      //     ),
+                      //
+                      //
+                      //
+                      //   ],
+                      // ),
+                      ListTile(
+                        leading:Icon(Icons.message,color: Colors.black,),
+                        title:  Text("All Messages",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+
+                        onTap: (){
+
+                        },
+                      ),
+                      // ExpansionTile(
+                      //   key: GlobalKey(),
+                      //   initiallyExpanded: _openTileIndex == 12,
+                      //   onExpansionChanged: (isExpanded) {
+                      //     _handleTileTap(12);
+                      //   },
+                      //   shape: OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
+                      //   leading:Icon(Icons.message,color: Colors.black,),
+                      //   title: Text("Message",style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w500),),
+                      //   trailing: Icon(CupertinoIcons.chevron_down,color: Colors.black,),
+                      //   children: [
+                      //     ListTile(
+                      //       leading: Icon(Icons.arrow_forward_ios,color: Colors.grey,),
+                      //       title:  Text("All Messages",style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w500),),
+                      //
+                      //       onTap: (){
+                      //
+                      //       },
+                      //     ),
+                      //
+                      //
+                      //
+                      //   ],
+                      // ),
+                      ListTile(
                         leading: Icon(Icons.supervised_user_circle_rounded,color: Colors.black,size: size.width*0.1,),
-                        title: Text("Teacher Panel",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,fontWeight:FontWeight.w400),),
+                        title: Text("Teacher Panel",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.045,fontWeight:FontWeight.w400),),
                         onTap: (){
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TeacherHome(),));
                         },
@@ -598,136 +656,127 @@ class _AdminHomeState extends State<AdminHome> {
             ],
           )
       ),
-      body: Stack(
-        children:
-            [
-              secondStackLayer(size,context),
-              SingleChildScrollView(
-               controller: scrollController2,
-                child: Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: size.height*0.05,),
-                    Container(
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: 4,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount( childAspectRatio: 1.5,crossAxisCount: 2,crossAxisSpacing: size.width*0.02),
-                          itemBuilder: (context, index) {
-                          final cardCategory=cardType[index];
-                        return  Card(
-                          color:Color(0xFFB3FCF9),
-                          child: Container(
-                            child: TextButton(
-                              onPressed: (){},
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Image.asset(cardImage[index],height: size.height*0.06,fit: BoxFit.contain,color: Colors.black,),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(cardCategory["type"]!,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black),),
-                                      Text(cardCategory["number"]!,style: GoogleFonts.openSans(fontSize:size.width*0.055,color:Colors.black,fontWeight:FontWeight.w600),),
+      body:  SingleChildScrollView(
+        child: Container(
 
-                                    ],
-                                  )
-                                ],
-                              ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: size.height*0.01,),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: 2,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount( childAspectRatio: 1.5,crossAxisCount: 2,crossAxisSpacing: size.width*0.02),
+                itemBuilder: (context, index) {
+                  final cardCategory=cardType[index];
+                  return  Card(
+                    color:Color(0xFFB3FCF9),
+                    child: Container(
+                      child: TextButton(
+                        onPressed: (){},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Image.asset(cardImage[index],height: size.height*0.06,fit: BoxFit.contain,color: Colors.black,),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(cardCategory["type"]!,style: GoogleFonts.openSans(fontSize:size.width*0.04,color:Colors.black),),
+                                Text(cardCategory["number"]!,style: GoogleFonts.openSans(fontSize:size.width*0.055,color:Colors.black,fontWeight:FontWeight.w600),),
+
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },),
+              SizedBox(height: size.height*0.02,),
+              SchoolPerformanceChart(),
+              SizedBox(height: size.height*0.02,),
+              EventCalendarPage(),
+              SizedBox(height: size.height*0.02,),
+              ExpensesChart(),
+              SizedBox(height: size.height*0.02,),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Topper Students",style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w600),),
+                    SizedBox(height: size.height*0.02,),
+                    Card(
+                      margin: EdgeInsets.all(0),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      child: Column(
+                        children: [
+                          Container(
+
+                            height: size.height*0.05,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color:Color(0xFFE9F0FF),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                    width: size.width*0.35,
+                                    child: AutoSizeText("Name",textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                SizedBox(
+                                    width: size.width*0.35,
+
+                                    child: AutoSizeText("Class",textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                SizedBox(
+                                    child: AutoSizeText("Second",textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),))
+
+
+                              ],
                             ),
                           ),
-                        );
-                          },),
-                    ),
-                      SizedBox(height: size.height*0.02,),
-                      SchoolPerformanceChart(),
-                      SizedBox(height: size.height*0.02,),
-                      EventCalendarPage(),
-                      SizedBox(height: size.height*0.02,),
-                      ExpensesChart(),
-                      SizedBox(height: size.height*0.02,),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Topper Students",style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w600),),
-                            SizedBox(height: size.height*0.02,),
-                          Card(
-                           margin: EdgeInsets.all(0),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            child: Column(
-                              children: [
-                                Container(
-
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: topperStudents.length,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final toperStudent=topperStudents[index];
+                              return Container(
                                 height: size.height*0.05,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color:Color(0xFFE9F0FF),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 5),
-
+                                padding: EdgeInsets.symmetric(horizontal: 5),
                                 child: Row(
+
                                   children: [
                                     SizedBox(
                                         width: size.width*0.35,
-                                        child: AutoSizeText("Name",textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
+                                        child: AutoSizeText(toperStudent["name"]!,textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
+
                                     SizedBox(
                                         width: size.width*0.35,
+                                        child: AutoSizeText(toperStudent["class"]!,textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
 
-                                        child: AutoSizeText("Class",textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
                                     SizedBox(
-                                        child: AutoSizeText("Second",textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),))
+                                        child: AutoSizeText(toperStudent["rank"]!,textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),))
 
 
                                   ],
                                 ),
-                              ),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: topperStudents.length,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    final toperStudent=topperStudents[index];
-                                    return Container(
-                                      height: size.height*0.05,
-                                      padding: EdgeInsets.symmetric(horizontal: 5),
-                                      child: Row(
+                              );
 
-                                        children: [
-                                          SizedBox(
-                                            width: size.width*0.35,
-                                              child: AutoSizeText(toperStudent["name"]!,textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
-
-                                          SizedBox(
-                                              width: size.width*0.35,
-                                              child: AutoSizeText(toperStudent["class"]!,textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),)),
-
-                                          SizedBox(
-                                              child: AutoSizeText(toperStudent["rank"]!,textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.05,color:Colors.black,fontWeight:FontWeight.w400),))
-
-
-                                        ],
-                                      ),
-                                    );
-
-                                  },)
-                              ],
-                            ),
-                          )
-                          ],
-                        ),
+                            },)
+                        ],
                       ),
-                      SizedBox(height: size.height*0.02,),
-                    ],
-                  ),
+                    )
+                  ],
                 ),
+              ),
+              SizedBox(height: size.height*0.02,),
+            ],
+          ),
         ),
-      ],
-    ),
+      ),
 
     );
   }

@@ -12,6 +12,7 @@ import 'package:untitled/teacher-module/teacherLeave.dart';
 import 'package:untitled/teacher-module/teacherSalary.dart';
 
 import '../utils/utils.dart';
+import 'TimeTable(Class)/timeTable.dart';
 import 'TimeTable.dart';
 import 'noticeBoard.dart';
 
@@ -48,8 +49,33 @@ class _teacherDashboardState extends State<teacherDashboard> {
     scrollController1.addListener(listener1);
     scrollController2.addListener(listener2);
   }
+  List navigation = [TeacherAttendanceCheckIn(),TimeTable(),StudentReportCard(screen: 'Student Fees Status',),StudentReportCard(screen: 'Student Attendance',),StudentReportCard(screen: 'Report Card',),StudentReportCard(screen: 'Note Book Record',),TeacherLeave(),NoticeBoard()];
+  List categoryName=['Check-in','Class','Student Fees Status','Student Attendance','Report Card','Note Book Record','Take Leave','Notice Board'];
+  String getPic(String categoryName) {
+    switch (categoryName) {
+      case 'Check-in':
+        return "assets/Images/Vector.png";
 
-  List navigation = [TeacherAttendanceCheckIn(),Timetable(),StudentReportCard(screen: 'Student Fees Status',),StudentReportCard(screen: 'Student Attendance',),StudentReportCard(screen: 'Report Card',),StudentReportCard(screen: 'Note Book Record',),TeacherLeave(),NoticeBoard()];
+      case 'Class':
+        return "assets/Images/Classroom.png";
+
+      case 'Student Fees Status':
+        return "assets/Images/ic_fees_due.png";
+
+      case 'Student Attendance':
+        return "assets/Images/Checked User Male.png";
+      case 'Report Card':
+        return "assets/Images/Graduate.png";
+      case 'Note Book Record':
+        return "assets/Images/Spiral Bound Booklet.png";
+      case 'Take Leave':
+        return "assets/Images/GoodNotes.png";
+      case 'Notice Board':
+        return "assets/Images/Notice.png";
+      default:
+        return "null";
+    }
+  }
   @override
     Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
