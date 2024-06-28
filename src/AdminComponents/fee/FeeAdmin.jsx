@@ -12,7 +12,7 @@ function FeeAdmin() {
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0  overflow-auto items-start mt-2  mb-3 no-scrollbar mobile:max-tablet:mx-2.5">
 
             <div className=' border shadow-md mt-4 rounded-lg w-full border-gray-300'>
-                <div className=" flex   mt-4 ml-3 mr-3 items-center justify-between">
+                <div className=" flex mt-4 ml-3 mr-3 items-center justify-between">
                     <div className=" flex  gap-2 ">
                         <Link
                             to={'/Admin-Dashboard/StudentsFee/structure'}

@@ -14,7 +14,7 @@ export default function Event() {
   }
 
   return (
-    <div className=" flex flex-col w-full h-screen overflow-y-auto items-start px-2 py-3 no-scrollbar">
+    <div className=" flex flex-col w-full h-screen overflow-y-auto items-start px-2 py-3 no-scrollbar mobile:max-tablet:mt-6">
       <div className='flex justify-between items-center w-full'>
         <h1 className="text-xl font-medium">Events</h1>
         <h1 className="text-base font-medium rounded-lg bg-green-300 p-2 cursor-pointer" onClick={handleOpen}>Create</h1>
@@ -47,7 +47,7 @@ export default function Event() {
         <Allevents color="bg-green-300" img={first} text="School is going for vacation at March." date="10 March 2024" />
       </div>
 
-      {isDialogOpen && <NewEvent onClose={handleClose}/>}
+      {isDialogOpen && <NewEvent onClose={handleClose} />}
     </div>
 
   );

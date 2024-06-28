@@ -94,7 +94,7 @@ export default function AddmissionForm() {
             formData.password = formData.aadhaarNumber;
             const response = await axios.post(`${BASE_URL_Login}/signup/student`, formData);
             if (response.status === 200) {
-                toast.success('Student registered successfully!');           
+                toast.success('Student registered successfully!');
                 console.log(formData)
                 handleReset();
             }
@@ -157,7 +157,7 @@ export default function AddmissionForm() {
                 console.log(userData);
                 return axios.post(`${BASE_URL_Login}/signup/student`, userData);
             });
-    
+
             await Promise.all(promises);
             toast.success('All students registered successfully');
         } catch (err) {
@@ -168,12 +168,12 @@ export default function AddmissionForm() {
             setLoading(false);
         }
     }
-    
+
 
     return (
         <div className="rounded-lg shadow-lg mx-4 mb-4 border-gray-100 px-4">
             <ToastContainer />
-            <div className="mt-2"><h1 className="text-2xl font-semibold px-4 mt-4">Add New Student</h1></div>
+            <div className="mt-2"><h1 className="text-2xl font-semibold px-2 mt-4">Add New Student</h1></div>
             <form onSubmit={handleSubmit} className="flex flex-col w-full gap-8 px-2 mb-2">
                 {/* {error && <div className="bg-red-100 text-red-700 p-2 rounded">{error}</div>}
                 {success && <div className="bg-green-100 text-green-700 p-2 rounded">{success}</div>} */}
@@ -669,7 +669,7 @@ export default function AddmissionForm() {
                 <div className=" flex justify-center items-center mb-3">
                     <label className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded mt-2 w-1/4 mobile:max-tablet:w-1/2 tablet:w-1/2 flex justify-center items-center cursor-pointer whitespace-nowrap">
                         Upload CSV
-                        <input type="file" accept=".csv" className="hidden" onChange={handleUpload}/>
+                        <input type="file" accept=".csv" className="hidden" onChange={handleUpload} />
                         <FaCloudUploadAlt className="ml-2" />
                     </label>
                 </div>

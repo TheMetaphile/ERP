@@ -3,7 +3,7 @@ import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import { BASE_URL_Login } from '../../../Config';
 
-function SelectionTeacher({ onSearch, onEmailChange,onNameChange, onDayChange }) {
+function SelectionTeacher({ onSearch, onEmailChange, onNameChange, onDayChange }) {
     const { authState } = useContext(AuthContext);
     const [temp, setTemp] = useState();
     const [email, setEmail] = useState('');
@@ -15,20 +15,20 @@ function SelectionTeacher({ onSearch, onEmailChange,onNameChange, onDayChange })
 
     const handleClickOutside = (event) => {
         if (inputRef.current && !inputRef.current.contains(event.target) && suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
-          setShowSuggestions(false);
+            setShowSuggestions(false);
         }
-      };
-      const handleClickInside = () => {
+    };
+    const handleClickInside = () => {
         console.log("Clicked inside the input field");
         // Execute your function for inside click here
         setShowSuggestions(true);
-      };
-      useEffect(() => {
+    };
+    useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
-          document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("mousedown", handleClickOutside);
         };
-      }, []);
+    }, []);
     const handleEmailChange = (event) => {
         const value = event.target.value;
         setEmail(value);
@@ -37,7 +37,7 @@ function SelectionTeacher({ onSearch, onEmailChange,onNameChange, onDayChange })
     };
 
     const handleSuggestionClick = (suggestion) => {
-        console.log("suggestion:" ,suggestion);
+        console.log("suggestion:", suggestion);
         setEmail(suggestion.email);
         onEmailChange(suggestion.email);
         setShowSuggestions(false);
@@ -78,7 +78,7 @@ function SelectionTeacher({ onSearch, onEmailChange,onNameChange, onDayChange })
 
                         name: teacher.name,
 
-                        
+
                     }));
                     setSuggestions(teacherEmails);
 

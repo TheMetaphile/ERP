@@ -16,7 +16,7 @@ export default function AdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
         Admin Panel
       </h1>
       <nav>
-        <ul className="flex w-full items-center mobile:max-tablet:text-xxs">
+        <ul className="flex w-full items-center mobile:max-tablet:text-sm mobile:max-tablet:text-center">
           <li className="mr-4 ">
             <Link to="" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Home</Link>
           </li>
@@ -29,7 +29,7 @@ export default function AdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
           <li className="mr-4">
             <Link to="/Admin-Dashboard/Events" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Events</Link>
           </li>
-          <li>
+          <li >
             <Link to="/Admin-Dashboard/timetable" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Time Table</Link>
           </li>
           <li>
