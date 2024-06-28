@@ -1,15 +1,18 @@
-import React from 'react'
+import React, {  useContext } from 'react';
 import bg from '../../assets/background.png'
 import Progress from './utils/Progress'
 import Attendence from './utils/Attendence'
 import Total from './utils/Total'
 import Summary from '../checkin/utils/Summary'
+import AuthContext from '../../Context/AuthContext'
+
 function TeacherHome() {
+    const {authState} = useContext(AuthContext)
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
             <h1 className='text-3xl'>Dashboard</h1>
             <div className='flex items-center justify-between border shadow-md mt-4 rounded-lg  w-full bg-secondary'>
-                <h1 className='ml-3 font-medium text-2xl'>Welcome back, <span className='font-semibold text-3xl'>Shailesh</span></h1>
+                <h1 className='ml-3 font-medium text-2xl'>Welcome back, <span className='font-semibold text-3xl'>{authState.userDetails.name}</span></h1>
                 <img src={bg} alt="teacher-student" className='h-16'></img>
             </div>
 

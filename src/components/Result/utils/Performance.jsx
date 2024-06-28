@@ -10,7 +10,9 @@ import axios from "axios";
 
 export default function Performance(props) {
     const [loading, setLoading] = useState(false);
-    const [details, setDetails] = useState([]);
+    const [termOne, setTermOne] = useState([]);
+    const [termTwo, setTermTwo] = useState([]);
+    const [termFinal, setFinal] = useState([]);
     const { authState } = useContext(AuthContext);
 
     useEffect(() => {
@@ -24,8 +26,12 @@ export default function Performance(props) {
                     }
                 });
 
-                setDetails(response.data.term1);
-                console.log('fetch', response.data.term1)
+                if (response.status === 200) {
+                    console.log(response.data);
+                    setTermOne(response.data.term1 || []);
+                    setTermTwo(response.data.term2 || []);
+                    setFinal(response.data.termFinal || []);
+                }
             } catch (error) {
                 console.error("Error fetching student result:", error);
             }
@@ -45,67 +51,59 @@ export default function Performance(props) {
             <div className='flex flex-col w-full justify-between tablet:mx-2'>
 
                 <div className="w-full tablet:mx-2">
-                    <h1 className="text-xl font-medium mb-3">
-                        Term I
-                    </h1>
-                    <div className="rounded-lg shadow-md tablet:mr-5 border-2 border-gray-400">
-                        <PerformanceTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
-                        {loading ? (
-                            <Loading />
-                        ) : details.length === 0 ? (
-                            <>No student found</>
-                        ) : (
-                            <PerformanceMiddleTile details={details} />
-                           
-                        )
-                        }
-                        {/* <PerformanceMiddleTile value={["English", '74-B', "100"]} />
-                        <PerformanceMiddleTile value={["Hindi", '87-B', "100"]} />
-                        <PerformanceMiddleTile value={["Science", '74-B', "100"]} />
-                        <PerformanceMiddleTile value={["Maths", '78-B', "100"]} />
-                        <PerformanceMiddleTile value={["Social Study", '87-B', "100"]} />
-                        <PerformanceMiddleTile value={["Drawing", '74-B', "100"]} />
-                        <PerformanceMiddleTile value={["Computer", '96-A', "100"]} /> */}
-                        <PerformanceBottonTile value={["", 'GPA', "8.2"]} />
-                    </div>
+                    {loading ? (
+                        <Loading />
+                    ) : termOne.length === 0 && termTwo.length === 0 ? (
+                        <>No result found</>
+                    ) : (
+                        <div className="w-full tablet:mx-2">
+                            <div className="w-full tablet:mx-2">
+                                <h1 className="text-xl font-medium mb-3">
+                                    Term I
+                                </h1>
+                                <div className="rounded-lg shadow-md tablet:mr-5 border-2 border-gray-400">
+                                    <PerformanceTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
+                                    <PerformanceMiddleTile details={termOne} />
+                                    <PerformanceBottonTile value={["", 'GPA', "8.2"]} />
+                                </div>
+                            </div>
+
+                            {termTwo.length > 0 ? (
+                                <div className="w-full tablet:mx-2">
+                                    <h1 className="text-xl font-medium mb-3">
+                                        Term II
+                                    </h1>
+                                    <div className="rounded-lg shadow-md tablet:mr-5 border-2 border-gray-400">
+                                        <PerformanceTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
+                                        <PerformanceMiddleTile details={termTwo} />
+                                        <PerformanceBottonTile value={["", 'GPA', "8.2"]} />
+                                    </div>
+                                </div>
+                            ) : (
+                                <></>
+                            )}
+
+                            {termFinal.length > 0 ? (
+                                <div className="w-full tablet:mx-2">
+                                    <h1 className="text-xl font-medium mb-3">
+                                        Final
+                                    </h1>
+                                    <div className="rounded-lg shadow-md tablet:mr-5 border-2 border-gray-400">
+                                        <AcademicTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
+                                        <AcademicMiddleTile details={termFinal} />
+                                        <AcademicBottonTile value={["", 'GPA', "8.2"]} />
+                                    </div>
+                                </div>
+                            ) : (
+                                <></>
+                            )}
+                        </div>
+                    )
+                    }
+
                 </div>
 
-                {/* <div className="w-full tablet:mx-2 my-4">
-                    <h1 className="text-xl font-medium mb-3">
-                        Term II
-                    </h1>
 
-                    <div className="rounded-lg shadow-md tablet:mr-5 border-2 border-gray-400">
-                        <PerformanceTopTile heading={["Subjects", 'Obtained Marks', "Total Marks"]} />
-                        <PerformanceMiddleTile value={["English", '74-B', "100"]} />
-                        <PerformanceMiddleTile value={["Hindi", '87-B', "100"]} />
-                        <PerformanceMiddleTile value={["Science", '74-B', "100"]} />
-                        <PerformanceMiddleTile value={["Maths", '78-B', "100"]} />
-                        <PerformanceMiddleTile value={["Social Study", '87-B', "100"]} />
-                        <PerformanceMiddleTile value={["Drawing", '74-B', "100"]} />
-                        <PerformanceMiddleTile value={["Computer", '96-A', "100"]} />
-                        <PerformanceBottonTile value={["", 'GPA', "8.2"]} />
-                    </div>
-                </div>
-
-                <div className="w-full tablet:mx-2 my-3">
-                    <h1 className="text-xl font-medium mb-3">
-                        Final
-                    </h1>
-
-                    <div className="rounded-lg shadow-md tablet:mr-5 border-2 border-gray-400">
-                        <PerformanceTopTile heading={["Subjects", 'Obtained Marks', "Total Marks"]} />
-                        <PerformanceMiddleTile value={["English", '74-B', "100"]} />
-                        <PerformanceMiddleTile value={["Hindi", '87-B', "100"]} />
-                        <PerformanceMiddleTile value={["Science", '74-B', "100"]} />
-                        <PerformanceMiddleTile value={["Maths", '78-B', "100"]} />
-                        <PerformanceMiddleTile value={["Social Study", '87-B', "100"]} />
-                        <PerformanceMiddleTile value={["Drawing", '74-B', "100"]} />
-                        <PerformanceMiddleTile value={["Computer", '96-A', "100"]} />
-                        <PerformanceBottonTile value={["", 'GPA', "8.2"]} />
-
-                    </div>
-                </div> */}
             </div>
         </div>
     )
