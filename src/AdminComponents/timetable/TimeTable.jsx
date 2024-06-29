@@ -143,7 +143,7 @@ function TimeTable() {
             console.log(time)
             handleSearch();
         }
-    }, [fetchedTimeTableStructure, role,teacherEmail,day]);
+    }, [fetchedTimeTableStructure, role, teacherEmail, day]);
 
     const handleRoleChange = (event) => {
         setRole(event.target.value);
@@ -196,7 +196,7 @@ function TimeTable() {
             } catch (error) {
                 toast.error(error)
                 console.error('Error fetching dataaaa:', error);
-            }finally{
+            } finally {
                 setLoading(false);
             }
 
@@ -204,7 +204,7 @@ function TimeTable() {
     };
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-tablet:mt-6">
             {/* <ToastContainer /> */}
             <div className='flex justify-between items-center w-full'>
                 <h1 className='text-2xl'>Time Table</h1>

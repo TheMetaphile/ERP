@@ -3,10 +3,10 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
 
 
     return (
-        <div className="px-1 w-full mobile:max-tablet:w-fit overflow-x-auto">
-            <div className="flex w-full   justify-between items-center self-center h-fit rounded-xl shadow-md border px-2 py-2 mb-3 mx-auto">
+        <div className=" w-full mobile:max-tablet:w-fit overflow-x-auto">
+            <div className="flex w-full   justify-between items-center self-center h-fit rounded-xl shadow-md border px-2 py-2 mb-3 mx-auto ">
 
-                <div className="flex">
+                <div className="flex mobile:max-tablet:flex-col">
                     <input
                         type="+number"
                         id="rollNumber"
@@ -14,7 +14,7 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
                         value={rollNumber}
                         onChange={handleRollNumberChange}
                         placeholder="Search by ID"
-                        className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg"
+                        className="rounded-lg shadow-md mr-3 mobile:max-tablet:mr-0 px-3 py-1 border-2 border-gray-200 text-lg"
                     />
                     <input
                         type="text"
@@ -23,9 +23,9 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
                         value={name}
                         onChange={handleNameChange}
                         placeholder="Search by Name"
-                        className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg"
+                        className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg mr-3 mobile:max-tablet:mr-0"
                     />
-                    <select id="class" value={Class} onChange={handleClassChange} className="rounded-lg mr-3 shadow-md px-3 py-1 border-2 border-gray-200 text-lg">
+                    <select id="class" value={Class} onChange={handleClassChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg mr-3 mobile:max-tablet:mr-0">
                         <option value="">Search by Class</option>
                         <option value="Pre-Nursery">Pre-Nursery</option>
                         <option value="Nursery">Nursery</option>
@@ -45,7 +45,7 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
                         <option value="12th">12th</option>
                     </select>
 
-                    <select id="section" value={Section} onChange={handleSectionChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg">
+                    <select id="section" value={Section} onChange={handleSectionChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg mr-3 mobile:max-tablet:mr-0">
                         <option value="">Search by Section</option>
                         <option value="A">A</option>
                         <option value="B">B</option>

@@ -17,10 +17,10 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
         setEditMode(true);
     };
 
-    const  handleCancelClick = () => {
+    const handleCancelClick = () => {
         setEditMode(false);
     };
-    
+
     console.log('ttt', Time)
     const formatTime = (date) => {
         let hours = date.getHours();
@@ -86,19 +86,19 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                 </Link>
                 {editMode ? (
                     <>
-                    <button
-                        onClick={handleSaveClick}
-                        className="px-4 py-2 rounded-md bg-green-200 text-gray-800 hover:bg-green-500 hover:text-white"
-                    >
-                        Save
-                    </button>
-                    <button
-                    onClick={handleCancelClick}
-                    className="px-4 py-2 rounded-md bg-red-200 text-gray-800 hover:bg-red-500 hover:text-white"
-                >
-                    Cancel
-                </button>
-                </>
+                        <button
+                            onClick={handleSaveClick}
+                            className="px-4 py-2 rounded-md bg-green-200 text-gray-800 hover:bg-green-500 hover:text-white"
+                        >
+                            Save
+                        </button>
+                        <button
+                            onClick={handleCancelClick}
+                            className="px-4 py-2 rounded-md bg-red-200 text-gray-800 hover:bg-red-500 hover:text-white"
+                        >
+                            Cancel
+                        </button>
+                    </>
                 ) : (
                     <button
                         onClick={handleEditClick}

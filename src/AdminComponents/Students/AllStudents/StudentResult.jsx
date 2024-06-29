@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import SearchBar from "./utils/SearchBar";
 import ResultList from "./utils/ResultList";
 

@@ -96,6 +96,7 @@ export default function AddmissionForm() {
             const response = await axios.post(`${BASE_URL_Login}/signup/student`, formData);
             if (response.status === 200) {
                 toast.success('Student registered successfully!');
+                toast.success('Student registered successfully!');
                 console.log(formData)
                 handleReset();
             }
@@ -170,6 +171,7 @@ export default function AddmissionForm() {
                 });
             });
 
+
             await Promise.all(promises);
             handleReset();
         } catch (err) {
@@ -183,10 +185,11 @@ export default function AddmissionForm() {
     }
 
 
+
     return (
         <div className="rounded-lg shadow-lg mx-4 mb-4 border-gray-100 px-4">
             <ToastContainer />
-            <div className="mt-2"><h1 className="text-2xl font-semibold px-4 mt-4">Add New Student</h1></div>
+            <div className="mt-2"><h1 className="text-2xl font-semibold px-2 mt-4">Add New Student</h1></div>
             <form onSubmit={handleSubmit} className="flex flex-col w-full gap-8 px-2 mb-2">
                 {/* {error && <div className="bg-red-100 text-red-700 p-2 rounded">{error}</div>}
                 {success && <div className="bg-green-100 text-green-700 p-2 rounded">{success}</div>} */}
