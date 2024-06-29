@@ -37,7 +37,7 @@ function ClassActivity() {
     return (
         <div className=" flex flex-col px-3 border border-gray-300 items-center mobile:max-tablet:px-0 h-screen overflow-y-auto rounded-lg shadow-md py-2 ml-2 mr-3 no-scrollbar">
             <nav className='w-full'>
-                <ul className="flex w-full bg-blue-100 overflow-x-auto rounded-lg py-2 px-5 border border-gray-400 items-center mobile:max-tablet:text-sm">
+                <ul className="flex w-full bg-blue-100 overflow-x-auto rounded-lg py-2 px-5 border border-gray-400 items-center mobile:max-tablet:text-sm justify-center">
                     {
                         menuItems.map((item,index) => {
                             return (

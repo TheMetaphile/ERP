@@ -6,9 +6,10 @@ const BASE_URL_Student_Leave = 'https://studentleaveapi.onrender.com';
 const BASE_URL_Attendence = 'https://attendance-api-lako.onrender.com';
 const BASE_URL_Subject = 'https://assignsubjectapi.onrender.com';
 const BASE_URL_TimeTableStructure = 'https://timetablestructureapi.onrender.com';
-const BASE_URL_TimeTable= 'https://timetableapi-1wfp.onrender.com';
-const BASE_URL_AskDoubt= 'https://askdoubts.onrender.com';
-const BASE_URL_Result='https://studentresult-ztxk.onrender.com';
-const BASE_URL_Homework='https://homework-gzik.onrender.com';
+const BASE_URL_TimeTable = 'https://timetableapi-1wfp.onrender.com';
+const BASE_URL_AskDoubt = 'https://askdoubts.onrender.com';
+const BASE_URL_Result = 'https://studentresult-ztxk.onrender.com';
+const BASE_URL_Homework = 'https://homework-gzik.onrender.com';
+const BASE_URL_TeacherLeave = 'https://teachersleave.onrender.com';
 
-export { BASE_URL_Login, BASE_URL_ClassTeacher, BASE_URL_Exam, BASE_URL_Fee, BASE_URL_Student_Leave, BASE_URL_Attendence, BASE_URL_Subject, BASE_URL_TimeTableStructure, BASE_URL_TimeTable, BASE_URL_AskDoubt, BASE_URL_Result, BASE_URL_Homework};
+export { BASE_URL_Login, BASE_URL_ClassTeacher, BASE_URL_Exam, BASE_URL_Fee, BASE_URL_Student_Leave, BASE_URL_Attendence, BASE_URL_Subject, BASE_URL_TimeTableStructure, BASE_URL_TimeTable, BASE_URL_AskDoubt, BASE_URL_Result, BASE_URL_Homework, BASE_URL_TeacherLeave};

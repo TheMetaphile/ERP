@@ -54,7 +54,7 @@ export default function AttendanceStatusGridTile({ data }) {
                             <div className={`flex flex-col justify-center`}>
                                 {students.map((student, index2) => (
                                     <div key={index2} className={`flex justify-center font-normal text-lg w-12 h-12 whitespace-nowrap border px-2 pt-3 ${selectedDate === index ? "bg-blue-200" : ""} ${selectedStudent === index2 ? "bg-blue-200" : ""} ${selectedStudent === index2 && selectedDate === index ? "bg-blue-300" : ""}`}>
-                                        {format(date, 'EEE') !== 'Sun' && format(date, 'EEE') !== 'Sat' ? (
+                                        {
                                             student[format(date, 'dd/MM/yyyy')] === 'Present' || student[format(date, 'yyyy-MM-dd')] === 'Present' ? (
                                                 <FaCheck className={`${selectedDate !== index ? "text-green-400" : "text-green-600"} ${selectedStudent !== index2 ? "text-green-400" : "text-green-600"} ${selectedStudent === index2 && selectedDate === index ? "text-green-700" : ""}`} />
                                             ) :
@@ -66,9 +66,7 @@ export default function AttendanceStatusGridTile({ data }) {
                                                     ) : (
                                                         <div>_ _</div>
                                                     )
-                                        ) : (
-                                            <div>_ _</div>
-                                        )}
+                                        }
                                     </div>
                                 ))}
                             </div>

@@ -53,8 +53,8 @@ function UploadResult() {
       ) : students.length === 0 ? (
         <>No student found</>
       ) : (
-        <div className='rounded-lg shadow-md border border-gray-300 w-full mb-2'>
-          <Header headings={['Roll No.', 'Name', 'Email']} />
+        <div className='rounded-lg shadow-md border border-gray-300 w-full mb-2 h-screen overflow-auto'>
+          <Header headings={['Roll No.', 'Name']} />
           {students.map((detail, index) => (
             <UploadResultRow key={index} rollNumber={detail.rollNumber} name={detail.name} profileLink={detail.profileLink} email={detail.email}/>
           ))}

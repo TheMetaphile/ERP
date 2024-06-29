@@ -66,35 +66,35 @@ export default function AcademicMiddleTile({ details, email ,term}) {
                     {isEditing === index ? (
                         <>
                             <input
-                                className='w-1/3 text-lg text-center py-2'
+                                className='w-1/3 text-lg text-center py-2 bg-white border border-black'
                                 type="text"
                                 name="subject"
                                 value={editableDetail.subject}
                                 onChange={handleInputChange}
                             />
                             <input
-                                className='w-1/3 text-lg text-center py-2 bg-blue-200'
+                                className='w-1/3 text-lg text-center py-2 bg-white border border-black'
                                 type="number"
                                 name="obtainedPracticalMarks"
                                 value={editableDetail.obtainedPracticalMarks}
                                 onChange={handleInputChange}
                             />
                             <input
-                                className='w-1/3 text-lg text-center py-2 bg-green-200'
+                                className='w-1/3 text-lg text-center py-2 bg-white border border-black'
                                 type="number"
                                 name="totalPracticalMarks"
                                 value={editableDetail.totalPracticalMarks}
                                 onChange={handleInputChange}
                             />
                             <input
-                                className='w-1/3 text-lg text-center py-2 bg-blue-200'
+                                className='w-1/3 text-lg text-center py-2 bg-white border border-black'
                                 type="number"
                                 name="marksObtained"
                                 value={editableDetail.marksObtained}
                                 onChange={handleInputChange}
                             />
                             <input
-                                className='w-1/3 text-lg text-center py-2 bg-green-200'
+                                className='w-1/3 text-lg text-center py-2 bg-white border border-black'
                                 type="number"
                                 name="totalMarks"
                                 value={editableDetail.totalMarks}

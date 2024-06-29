@@ -59,17 +59,18 @@ function UploadResultRow({ rollNumber, name, profileLink, email }) {
     };
 
     return (
-        <div>
+        <div className='w-full'>
             <div
                 className='flex justify-evenly border border-gray-300 shadow-md items-center py-2 pl-2 w-full cursor-pointer'
                 onClick={handleClick}
             >
                 <div className='w-40 text-center'>{rollNumber}</div>
-                <div className='w-52 text-center'>{name}</div>
-                <div className='w-40 text-center flex items-center gap-1'>
+                <div className='w-52 text-center flex items-center gap-1 overflow-ellipsis'>
                     <img src={profileLink} alt="img" className='w-8 h-8 rounded-full' />
-                    <div>{email}</div>
+                    <div className='w-52 text-center'>{name}</div>
                 </div>
+                {/* <div>{email}</div> */}
+
                 {/* <div className="self-center">
                     {expanded ? <FaChevronUp /> : <FaChevronDown />}
                 </div> */}
@@ -82,7 +83,7 @@ function UploadResultRow({ rollNumber, name, profileLink, email }) {
                         <div className='flex items-center justify-between w-full tablet:px-2  py-1'>
                             <div>No result found</div>
                             <div className=''>
-                                <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={ togglePopUp}><FaCloudUploadAlt /></button>
+                                <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={togglePopUp}><FaCloudUploadAlt /></button>
                             </div>
                         </div>
                     ) : (
@@ -93,12 +94,12 @@ function UploadResultRow({ rollNumber, name, profileLink, email }) {
                                         Term I
                                     </h1>
                                     <div className=''>
-                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={ togglePopUp}><FaCloudUploadAlt /></button>
+                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={togglePopUp}><FaCloudUploadAlt /></button>
                                     </div>
                                 </div>
                                 <div className="rounded-lg shadow-md  border-2 border-gray-400">
                                     <AcademicTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks", "Action"]} />
-                                    <AcademicMiddleTile details={termOne} email={email} term={1}/>
+                                    <AcademicMiddleTile details={termOne} email={email} term={1} />
                                     <AcademicBottonTile value={["", 'GPA', "8.2"]} />
                                 </div>
                             </div>
@@ -106,16 +107,16 @@ function UploadResultRow({ rollNumber, name, profileLink, email }) {
                             {termTwo.length > 0 ? (
                                 <div className="w-full tablet:px-2">
                                     <div className='flex items-center justify-between '>
-                                    <h1 className="text-xl font-medium mb-3">
-                                        Term II
-                                    </h1>
-                                    <div className=''>
-                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={ togglePopUp}><FaCloudUploadAlt /></button>
+                                        <h1 className="text-xl font-medium mb-3">
+                                            Term II
+                                        </h1>
+                                        <div className=''>
+                                            <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={togglePopUp}><FaCloudUploadAlt /></button>
+                                        </div>
                                     </div>
-                                </div>
                                     <div className="rounded-lg shadow-md  border-2 border-gray-400">
                                         <AcademicTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
-                                        <AcademicMiddleTile details={termTwo} email={email} term={2}/>
+                                        <AcademicMiddleTile details={termTwo} email={email} term={2} />
                                         <AcademicBottonTile value={["", 'GPA', "8.2"]} />
                                     </div>
                                 </div>
@@ -126,16 +127,16 @@ function UploadResultRow({ rollNumber, name, profileLink, email }) {
                             {termFinal.length > 0 ? (
                                 <div className="w-full tablet:mx-2">
                                     <div className='flex items-center justify-between '>
-                                    <h1 className="text-xl font-medium mb-3">
-                                        Final
-                                    </h1>
-                                    <div className=''>
-                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={ togglePopUp}><FaCloudUploadAlt /></button>
+                                        <h1 className="text-xl font-medium mb-3">
+                                            Final
+                                        </h1>
+                                        <div className=''>
+                                            <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={togglePopUp}><FaCloudUploadAlt /></button>
+                                        </div>
                                     </div>
-                                </div>
                                     <div className="rounded-lg shadow-md  border-2 border-gray-400">
                                         <AcademicTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
-                                        <AcademicMiddleTile details={termFinal} email={email}/>
+                                        <AcademicMiddleTile details={termFinal} email={email} />
                                         <AcademicBottonTile value={["", 'GPA', "8.2"]} />
                                     </div>
                                 </div>
@@ -148,10 +149,10 @@ function UploadResultRow({ rollNumber, name, profileLink, email }) {
                 </>
             )}
             {
-                    popUp && (
-                        <NewResult onClose={togglePopUp} email={email} name={name}/>
-                    )
-                }
+                popUp && (
+                    <NewResult onClose={togglePopUp} email={email} name={name} />
+                )
+            }
         </div>
     )
 }
