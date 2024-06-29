@@ -4,6 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import axios from 'axios'
 import Papa from 'papaparse'
+import Loading from './../../../LoadingScreen/Loading';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Login } from "../../../Config";
@@ -94,7 +95,7 @@ export default function AddmissionForm() {
             formData.password = formData.aadhaarNumber;
             const response = await axios.post(`${BASE_URL_Login}/signup/student`, formData);
             if (response.status === 200) {
-                toast.success('Student registered successfully!');           
+                toast.success('Student registered successfully!');
                 console.log(formData)
                 handleReset();
             }
@@ -151,24 +152,36 @@ export default function AddmissionForm() {
     const handleMultiSignUp = async (data) => {
         setLoading(true);
         console.log("here");
+        const date = new Date();
+        const session = `${date.getFullYear()}-${(date.getFullYear() - 2000) + 1}`;
+
         try {
             const promises = data.map(userData => {
                 userData.password = userData.aadhaarNumber;
+                userData.session = session;
                 console.log(userData);
-                return axios.post(`${BASE_URL_Login}/signup/student`, userData);
+                if(!userData.name){
+                    return ;
+                }
+                return axios.post(`${BASE_URL_Login}/signup/student`, userData).catch((err) => {
+                    const error = JSON.parse(err.request.response);
+                    //console.log("aosdgh",error.error, );
+                    toast.error(error.error +" " + userData.name);
+                });
             });
-    
+
             await Promise.all(promises);
-            toast.success('All students registered successfully');
+            handleReset();
         } catch (err) {
-            console.error(err);
+            console.log("here",err,);
             const errorMessage = err.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
         } finally {
+            toast.success("Students account created Successfully");
             setLoading(false);
         }
     }
-    
+
 
     return (
         <div className="rounded-lg shadow-lg mx-4 mb-4 border-gray-100 px-4">
@@ -667,11 +680,18 @@ export default function AddmissionForm() {
                 </div>
 
                 <div className=" flex justify-center items-center mb-3">
-                    <label className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded mt-2 w-1/4 mobile:max-tablet:w-1/2 tablet:w-1/2 flex justify-center items-center cursor-pointer whitespace-nowrap">
-                        Upload CSV
-                        <input type="file" accept=".csv" className="hidden" onChange={handleUpload}/>
-                        <FaCloudUploadAlt className="ml-2" />
-                    </label>
+                    {
+                        loading
+                            ?
+                            <Loading />
+                            :
+                            <label className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded mt-2 w-1/4 mobile:max-tablet:w-1/2 tablet:w-1/2 flex justify-center items-center cursor-pointer whitespace-nowrap">
+                                Upload CSV
+                                <input type="file" accept=".csv" className="hidden" onChange={handleUpload} />
+                                <FaCloudUploadAlt className="ml-2" />
+                            </label>
+                    }
+
                 </div>
             </form>
         </div>

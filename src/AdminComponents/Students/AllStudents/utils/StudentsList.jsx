@@ -136,13 +136,17 @@ export default function StudentsList() {
             return;
         }
         try {
+            setLoading(true);
+            console.log("start");
             const response = await axios.post(`${BASE_URL_Login}/assignRollNumber`, {
                 accessToken: authState.accessToken,
                 currentClass: Class,
-                section: Section,
+                section: Section
             });
-
-            console.log(response.data);
+            setEnd(20);
+            setStart(0);
+            console.log("end");
+            // console.log(response.data);
             fetchUserData();
         } catch (err) {
             setError(err.message);
@@ -177,7 +181,17 @@ export default function StudentsList() {
                     handlebothEventsCalled={handlebothEventsCalled}
                 />
             </div>
+            {loading && userData.length > 0 ? <Loading /> : null}
+            {(showAddRollNumberButton && Class && Section && !loading) && (
+                <button
+                    className="rounded-lg shadow-md px-3 py-1 mr-2 border-2 border-r-gray-200 text-lg bg-secondary float-right mb-3"
+                    onClick={handleRollNumber}
+                >
+                    Add Roll Number
+                </button>
+            )}
             <div className="rounded-lg shadow-md border h-screen text-center border-black w-full  mobile:max-tablet:w-fit overflow-auto" ref={containerRef} onScroll={handleScroll}>
+
                 <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
                 {loading && userData.length < 1 ? (
                     <Loading />
@@ -188,15 +202,7 @@ export default function StudentsList() {
                 ) : (
                     <div>Unexpected data format</div>
                 )}
-                {loading && userData.length > 0 ? <Loading /> : null}
-                {showAddRollNumberButton && (
-                    <button
-                        className="rounded-lg shadow-md px-3 py-1 mr-2 border-2 border-r-gray-200 text-lg bg-secondary float-right mb-3"
-                        onClick={handleRollNumber}
-                    >
-                        Add Roll Number
-                    </button>
-                )}
+                {loadMore && userData.length > 0 ? <Loading /> : null}
             </div>
         </div>
     );
