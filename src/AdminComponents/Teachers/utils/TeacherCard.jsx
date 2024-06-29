@@ -8,7 +8,7 @@ export default function TeacherCard({ userData }) {
             {userData.map((user, index) => (
                 <div key={user._id || index} className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between border rounded-lg p-4 mb-2">
 
-                    <div className="flex w-72">
+                    <div className="flex w-72 mobile:max-tablet:w-auto">
                         <img src={user.profileLogo || userimg} alt="" className="h-16 w-16 mr-3 rounded-full" />
 
                         <div className="mt-2 flex flex-col items-start">
@@ -22,16 +22,16 @@ export default function TeacherCard({ userData }) {
                         ))}
                     </div>
                     <div className="flex mt-4 gap-2 mb-4">
-                    <Link to={{
-                                    pathname: "/Admin-Dashboard/Teachers/profile",
-                                    search: `?employeeId=${user.employeeId}&name=${user.name}&profileLogo=${user.profileLogo}`,
-                                    
-                                }}>
-                        <div className="flex gap-2 items-center bg-blue-300 mx-2 w-30 justify-evenly rounded-md px-4 ">
-                            
-                            <button className="text-white">
-                                Profile</button>
-                        </div>
+                        <Link to={{
+                            pathname: "/Admin-Dashboard/Teachers/profile",
+                            search: `?employeeId=${user.employeeId}&name=${user.name}&profileLogo=${user.profileLogo}`,
+
+                        }}>
+                            <div className="flex gap-2 items-center bg-blue-300 mx-2 w-30 justify-evenly rounded-md px-4 ">
+
+                                <button className="text-white">
+                                    Profile</button>
+                            </div>
                         </Link>
                         <div className="flex gap-2 items-center bg-blue-300 mx-2 w-20 justify-evenly rounded-md px-2 cursor-pointer">
                             <img src={user.chatLogo} alt="" style={{ height: 16 }} />

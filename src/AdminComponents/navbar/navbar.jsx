@@ -16,24 +16,24 @@ export default function AdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
         Admin Panel
       </h1>
       <nav>
-        <ul className="flex w-full items-center mobile:max-tablet:text-sm mobile:max-tablet:text-center">
-          <li className="mr-4 ">
+        <ul className="flex w-full items-center mobile:text-sm mobile:max-tablet:text-center mobile:max-tablet:px-4">
+          <li className="mr-4 mobile:max-tablet:mr-0.5">
             <Link to="" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Home</Link>
           </li>
-          <li className="mr-4">
-            <Link to="/Teacher-Dashboard" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Teacher Panel</Link>
+          <li className="mr-4 mobile:max-tablet:mr-0.5">
+            <Link to="/Teacher-Dashboard" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg mobile:flex">Teacher Panel</Link>
           </li>
-          <li className="mr-4">
+          <li className="mr-4 mobile:max-tablet:mr-0.5">
             <Link to="/Admin-Dashboard/StudentsFee" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Fee</Link>
           </li>
-          <li className="mr-4">
+          <li className="mr-4 mobile:max-tablet:mr-0.5">
             <Link to="/Admin-Dashboard/Events" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Events</Link>
           </li>
           <li >
-            <Link to="/Admin-Dashboard/timetable" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Time Table</Link>
+            <Link to="/Admin-Dashboard/timetable" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg mobile:flex">Time Table</Link>
           </li>
           <li>
-            <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-tablet:w-9 mobile:max-tablet:h-9 rounded-lg" />
+            <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-tablet:w-7 mobile:max-tablet:h-7 rounded-lg" />
           </li>
         </ul>
       </nav>

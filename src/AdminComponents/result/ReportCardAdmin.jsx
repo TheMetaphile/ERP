@@ -14,7 +14,7 @@ function ReportCardAdmin() {
     const [loading, setLoading] = useState(false)
 
 
-    
+
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -45,9 +45,9 @@ function ReportCardAdmin() {
 
 
     return (
-        <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar">
-            <div className='w-full flex items-center justify-between px-4 my-2'>
-                <h1 className="text-2xl font-medium mb-2">Report Card</h1>
+        <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar mobile:max-tablet:mt-2 ">
+            <div className='w-full flex items-center justify-between px-4 my-2 mobile:max-tablet:px-1'>
+                <h1 className="text-2xl font-medium mb-2 mobile:max-tablet:text-sm">Report Card</h1>
 
                 <span className='flex gap-2 w-fit'>
                     <Selection />
@@ -65,9 +65,9 @@ function ReportCardAdmin() {
                     {students.map((detail, index) => (
                         <Link to={`/Admin-Dashboard/Result/${detail.email}`} key={index}>
                             <div key={index} className='flex justify-between border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
-                                <div className=' w-full text-center'>{detail.rollNumber}</div>
-                                <div className=' w-full text-center'>{detail.name}</div>
-                                <div className=' w-full text-center flex items-center gap-1'>
+                                <div className=' w-full flex flex-1 justify-center'>{detail.rollNumber}</div>
+                                <div className=' w-full flex flex-1 justify-center'>{detail.name}</div>
+                                <div className=' w-full flex flex-1 justify-center gap-1 '>
                                     <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
                                     <div >{detail.email}</div>
                                 </div>
@@ -77,7 +77,7 @@ function ReportCardAdmin() {
                 </div>
             )
             }
-        
+
         </div>
 
     )

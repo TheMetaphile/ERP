@@ -3,7 +3,7 @@ import React from 'react'
 function Selection() {
   return (
     <div className="w-fit flex items-center gap-2">
-      <select id="class" className="w-full px-4 py-2 border rounded-md">
+      <select id="class" className="w-full px-4 py-2 border rounded-md mobile:max-tablet:text-xxs mobile:max-tablet:px-1 mobile:max-tablet:py-2">
         <option value="">Search by Class</option>
         <option value="Pre-Nursery">Pre-Nursery</option>
         <option value="Nursery">Nursery</option>
@@ -23,7 +23,7 @@ function Selection() {
         <option value="12th">12th</option>
       </select>
 
-      <select id="section" className="w-full px-4 py-2 border rounded-md">
+      <select id="section" className="w-full px-4 py-2 border rounded-md mobile:max-tablet:text-xxs mobile:max-tablet:px-1 mobile:max-tablet:py-2">
         <option value="">Search by Section</option>
         <option value="A">A</option>
         <option value="B">B</option>
@@ -36,7 +36,7 @@ function Selection() {
         <option value="I">I</option>
 
       </select>
-      <select className="w-full px-4 py-2 border rounded-md">
+      <select className="w-full px-4 py-2 border rounded-md mobile:max-tablet:text-xxs mobile:max-tablet:px-1 mobile:max-tablet:py-2">
         <option value="">Select Session</option>
         <option value="2023-24">2023-24</option>
         <option value="2024-25">2024-25</option>

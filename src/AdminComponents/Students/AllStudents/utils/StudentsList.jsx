@@ -166,7 +166,7 @@ export default function StudentsList() {
     };
 
     return (
-        <div className="h-fit w-full items-start mb-3 px-2">
+        <div className="h-fit w-full items-start mb-3 px-2 mobile:mt-4">
             <h1 className="text-2xl font-medium mb-2">All Students Data</h1>
             <div className="w-full">
                 <SearchBar

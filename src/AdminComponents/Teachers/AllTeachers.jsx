@@ -61,7 +61,7 @@ export default function AllTeachers() {
 
     return (
         <div className="flex flex-col mx-4">
-            <div className="mt-4 mobile:max-tablet:w-full mobile:max-tablet:mx-2 mobile:max-tablet:my-8">
+            <div className="mt-4 mobile:max-tablet:w-full mobile:max-tablet:mx-0 mobile:max-tablet:my-8">
                 <TeacherStats />
             </div>
             <div className="mt-8 text-xl font-semibold">

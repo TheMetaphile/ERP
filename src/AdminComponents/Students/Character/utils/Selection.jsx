@@ -1,12 +1,12 @@
 import React from 'react'
 
 function Selection() {
-  return (
-    <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0   items-start mt-4  mb-3 ">
+    return (
+        <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0   items-start mt-4  mb-3 ">
             <div className="container p-3  ">
-        
-        <div className="flex justify-between">
-                    <div className="w-1/4">
+
+                <div className="flex justify-between">
+                    <div className="w-1/4 mobile:max-tablet:w-auto mr-1">
                         <select className="w-full px-4 py-2 border rounded-md">
                             <option value="">Select Class</option>
                             <option value="Pre-Nursery">Pre-Nursery</option>
@@ -28,7 +28,7 @@ function Selection() {
                         </select>
                     </div>
 
-                    <div className="w-1/4">
+                    <div className="w-1/4 mobile:max-tablet:w-auto mr-1">
                         <select className="w-full px-4 py-2 border rounded-md">
                             <option value="">Select Academic Year</option>
                             <option value="2025">2025</option>
@@ -37,14 +37,14 @@ function Selection() {
                             <option value="2022">2022</option>
                         </select>
                     </div>
-                    <button className="px-4 py-2 bg-green-500 text-white rounded-md">
+                    <button className="px-4 py-2 bg-green-500 text-white rounded-md mobile:max-tablet:text-xs">
                         Search
                     </button>
                 </div>
-                </div>
+            </div>
 
-    </div>
-  )
+        </div>
+    )
 }
 
 export default Selection

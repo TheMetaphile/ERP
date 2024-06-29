@@ -16,21 +16,21 @@ function FeeAdmin() {
                     <div className=" flex  gap-2 ">
                         <Link
                             to={'/Admin-Dashboard/StudentsFee/structure'}
-                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Admin-Dashboard/StudentsFee/structure' ? 'bg-secondary ' : 'bg-gray-200'}`}
+                            className={`text-xl mobile:max-tablet:text-sm mobile:flex items-center font-medium px-2 rounded-lg py-1 ${selectedLink === '/Admin-Dashboard/StudentsFee/structure' ? 'bg-secondary ' : 'bg-gray-200'}`}
                             onClick={() => handleLinkSelect('/Admin-Dashboard/StudentsFee/structure')}
                         >
                             Fee Structure
                         </Link>
                         <Link
                             to={'/Admin-Dashboard/StudentsFee/details'}
-                            className={`text-xl font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Admin-Dashboard/StudentsFee/details' ? 'bg-secondary ' : 'bg-gray-200'}`}
+                            className={`text-xl mobile:max-tablet:text-sm mobile:flex items-center font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Admin-Dashboard/StudentsFee/details' ? 'bg-secondary ' : 'bg-gray-200'}`}
                             onClick={() => handleLinkSelect('/Admin-Dashboard/StudentsFee/details')}
                         >
                             Student's Fee Status
                         </Link>
                         <Link
                             to={'/Admin-Dashboard/StudentsFee/feediscount'}
-                            className={`text-xl font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Admin-Dashboard/StudentsFee/feediscount' ? 'bg-secondary ' : 'bg-gray-200'}`}
+                            className={`text-xl mobile:max-tablet:text-sm mobile:flex items-center font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Admin-Dashboard/StudentsFee/feediscount' ? 'bg-secondary ' : 'bg-gray-200'}`}
                             onClick={() => handleLinkSelect('/Admin-Dashboard/StudentsFee/feediscount')}
                         >
                             Fee Discount Details

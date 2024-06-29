@@ -80,9 +80,7 @@ export default function SearchBar({ handleClassChange, handleSessionChange, hand
                         <option value="I">I</option>
                     </select>
                 </div>
-                <button className="rounded-lg shadow-md px-3 py-1 ml-2 border-2 border-gray-200 text-lg bg-secondary">
-                    Search
-                </button>
+
             </div>
         </div>
     );
