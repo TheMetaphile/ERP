@@ -50,18 +50,18 @@ export default function Performance(props) {
             <div className="border-t-2 border-text_blue my-3 tablet:mx-2 rounded-full "></div>
             <div className='flex flex-col w-full justify-between tablet:mx-2'>
 
-                <div className="w-full tablet:mx-2">
+      
                     {loading ? (
                         <Loading />
                     ) : termOne.length === 0 && termTwo.length === 0 ? (
                         <>No result found</>
                     ) : (
-                        <div className="w-full tablet:mx-2">
-                            <div className="w-full tablet:mx-2">
+                        <div className="w-full">
+                            <div className="">
                                 <h1 className="text-xl font-medium mb-3">
                                     Term I
                                 </h1>
-                                <div className="rounded-lg shadow-md tablet:mr-5 border-2 border-gray-400">
+                                <div className="w-full rounded-lg shadow-md border-2 border-gray-400 overflow-auto">
                                     <PerformanceTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
                                     <PerformanceMiddleTile details={termOne} />
                                     <PerformanceBottonTile value={["", 'GPA', "8.2"]} />
@@ -73,7 +73,7 @@ export default function Performance(props) {
                                     <h1 className="text-xl font-medium mb-3">
                                         Term II
                                     </h1>
-                                    <div className="rounded-lg shadow-md tablet:mr-5 border-2 border-gray-400">
+                                    <div className="w-full rounded-lg shadow-md border-2 border-gray-400 overflow-auto">
                                         <PerformanceTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
                                         <PerformanceMiddleTile details={termTwo} />
                                         <PerformanceBottonTile value={["", 'GPA', "8.2"]} />
@@ -88,10 +88,10 @@ export default function Performance(props) {
                                     <h1 className="text-xl font-medium mb-3">
                                         Final
                                     </h1>
-                                    <div className="rounded-lg shadow-md tablet:mr-5 border-2 border-gray-400">
-                                        <AcademicTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
-                                        <AcademicMiddleTile details={termFinal} />
-                                        <AcademicBottonTile value={["", 'GPA', "8.2"]} />
+                                    <div className="w-full rounded-lg shadow-md border-2 border-gray-400 overflow-auto">
+                                        <PerformanceTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
+                                        <PerformanceMiddleTile details={termFinal} />
+                                        <PerformanceBottonTile value={["", 'GPA', "8.2"]} />
                                     </div>
                                 </div>
                             ) : (
@@ -100,9 +100,6 @@ export default function Performance(props) {
                         </div>
                     )
                     }
-
-                </div>
-
 
             </div>
         </div>

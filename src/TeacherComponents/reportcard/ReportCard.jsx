@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { MdEdit } from "react-icons/md";
 import Selection from './utils/Selection';
 import Header from '../../AdminComponents/Home/utils/TeachersDetails/LeftCard/Header'
 import { Link } from "react-router-dom";
@@ -16,9 +15,7 @@ function ReportCard() {
     const [loading, setLoading] = useState(false)
 
 
-    const handleOpen = () => {
-        setIsDialogOpen(true);
-    }
+
     const handleClose = () => {
         setIsDialogOpen(false);
     }
@@ -57,8 +54,6 @@ function ReportCard() {
 
                 <span className='flex gap-2 w-fit'>
                     <Selection />
-                    <h1 className='flex items-center text-sm bg-secondary p-2 rounded-lg shadow-md self-end'>Edit <MdEdit className='ml-1' /></h1>
-                    <h1 className='f text-sm bg-purple-200 p-2 rounded-lg shadow-md self-end cursor-pointer' onClick={handleOpen}>Add New Report Card</h1>
                 </span>
             </div>
 
@@ -68,18 +63,19 @@ function ReportCard() {
                 <>No student found</>
             ) : (
                 <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2'>
-                    <Header headings={['Roll No.', 'Name', 'Email']} />
+                    <Header headings={['Roll No.', 'Name']} />
                     {students.map((detail, index) => (
                         <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`} key={index}>
                             <div key={index} className='flex justify-evenly border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
                                 <div className=' w-40 text-center'>{detail.rollNumber}</div>
                                 <div className=' w-52 text-center flex justify-center'>
-                                <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full mr-2'></img>
-                                {detail.name}</div>
-                                <div className=' w-40 text-center flex items-center gap-1'>
-                                    
-                                    <div >{detail.email}</div>
+                                    <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full mr-2'></img>
+                                    <div className='w-52 text-center'>{detail.name}</div>
                                 </div>
+                                {/* <div className=' w-40 text-center flex items-center gap-1'>
+
+                                    <div >{detail.email}</div>
+                                </div> */}
                             </div>
                         </Link>
                     ))}
