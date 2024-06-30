@@ -161,13 +161,13 @@ export default function AddmissionForm() {
                 userData.password = userData.aadhaarNumber;
                 userData.session = session;
                 console.log(userData);
-                if(!userData.name){
-                    return ;
+                if (!userData.name) {
+                    return;
                 }
                 return axios.post(`${BASE_URL_Login}/signup/student`, userData).catch((err) => {
                     const error = JSON.parse(err.request.response);
                     //console.log("aosdgh",error.error, );
-                    toast.error(error.error +" " + userData.name);
+                    toast.error(error.error + " " + userData.name);
                 });
             });
 
@@ -175,7 +175,7 @@ export default function AddmissionForm() {
             await Promise.all(promises);
             handleReset();
         } catch (err) {
-            console.log("here",err,);
+            console.log("here", err,);
             const errorMessage = err.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
         } finally {
@@ -647,7 +647,7 @@ export default function AddmissionForm() {
                     </div>
 
                 </div>
-                <div className=" flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4">
+                <div className=" flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4 mobile:max-tablet:mb-0">
                     <div className="w-1/2 rounded-lg mobile:max-tablet:w-full text-lg whitespace-nowrap">
                         Add Google Drive Link for Photo
                         <label className="block text-lg mb-2">

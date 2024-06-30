@@ -151,13 +151,13 @@ export default function AssignTeacherRow({ Class }) {
                     setEmail('');
                     setEditingRow(null);
                 }
-            } 
+            }
         } catch (error) {
             toast.error('Error updating teacher');
         }
     };
 
-    const handleDelete = async (index,section) => {
+    const handleDelete = async (index, section) => {
         console.log('Deleting ', Class, 'section:', section);
 
         try {
@@ -248,9 +248,9 @@ export default function AssignTeacherRow({ Class }) {
                                                     <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleConfirmClick(index)}>Confirm</button>
                                                 ) : (
                                                     <div className='flex items-center gap-1'>
-                                                    <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'  onClick={() => handleUpdateClick(index)}> <MdEdit /></button>
+                                                        <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleUpdateClick(index)}> <MdEdit /></button>
 
-                                                    <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index,details.section)}><MdDeleteForever /></button>
+                                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index, details.section)}><MdDeleteForever /></button>
                                                     </div>
                                                 )}
                                             </div>
@@ -265,42 +265,44 @@ export default function AssignTeacherRow({ Class }) {
                             <Loading />
                         )}
                     {showNewRow ? (
-                        <div className={`flex justify-between w-full py-2 px-4  h-fit border border-black ${sectionsDetails.length > 0 ? "rounded-b-lg" : "rounded-lg"}`}>
-                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                                {newSection}
-                            </h1>
-                            <div className='relative'>
-                                <input
-                                    type="text"
-                                    className="w-36 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap"
-                                    placeholder="Teacher"
-                                    value={email}
-                                    onChange={handleEmailChange}
-                                    required
-                                />
-                                {showSuggestions && suggestions.length > 0 && (
-                                    <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
-                                        {suggestions.map((suggest, idx) => (
-                                            <li
-                                                key={idx}
-                                                className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
-                                                onClick={() => handleSuggestionClick(suggest)}
-                                            >
-                                                <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                                {suggest.email}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </div>
-                            <div>
-                                <button className=' px-4 text-green-400 hover:text-green-700 ' onClick={handleAddSection}>
-                                    Save
-                                </button>
-                                {" / "}
-                                <button className=' px-4  text-red-400 hover:text-red-700' onClick={() => { setShowNewRow(false) }}>
-                                    Cancel
-                                </button>
+                        <div className=' overflow-auto'>
+                            <div className={` flex justify-between w-full py-2 px-4  h-fit border border-black ${sectionsDetails.length > 0 ? "rounded-b-lg" : "rounded-lg"}`}>
+                                <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                                    {newSection}
+                                </h1>
+                                <div className='relative'>
+                                    <input
+                                        type="text"
+                                        className="w-36 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap"
+                                        placeholder="Teacher"
+                                        value={email}
+                                        onChange={handleEmailChange}
+                                        required
+                                    />
+                                    {showSuggestions && suggestions.length > 0 && (
+                                        <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                            {suggestions.map((suggest, idx) => (
+                                                <li
+                                                    key={idx}
+                                                    className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                                    onClick={() => handleSuggestionClick(suggest)}
+                                                >
+                                                    <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                                    {suggest.email}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                                <div className=' mobile:max-tablet:text-xs mobile:max-tablet:flex'>
+                                    <button className=' mobile:max-tablet:px-2 px-4 text-green-400 hover:text-green-700 ' onClick={handleAddSection}>
+                                        Save
+                                    </button>
+                                    {" / "}
+                                    <button className=' mobile:max-tablet:text-px-2 px-4  text-red-400 hover:text-red-700' onClick={() => { setShowNewRow(false) }}>
+                                        Cancel
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ) : (

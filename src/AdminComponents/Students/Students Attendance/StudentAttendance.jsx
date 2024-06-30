@@ -40,7 +40,7 @@ export default function StudentAttendance() {
 
     return (
         <div className="flex flex-col mx-2 mt-4">
-            <div className="text-3xl mx-2 px-4">Student's Attendance Details</div>
+            <div className="text-3xl mx-2 px-4 mobile:max-tablet:text-xl">Student's Attendance Details</div>
             <div className="mx-2 mt-4">
                 <SearchBar />
             </div>

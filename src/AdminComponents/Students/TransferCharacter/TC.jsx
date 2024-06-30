@@ -39,28 +39,28 @@ function TC() {
 
             <Selection />
 
+            <div className=' overflow-auto'>
+                <div className='  rounded-lg border border-black shadow-md mobile:max-tablet:w-fit w-full mb-2 overflow-auto'>
+                    <Header headings={['Sr. No.', 'TC No.', 'Admission No.', 'Name', 'Class', 'Action']} />
+                    {details.map((detail, index) => (
+                        <Link to={`/Admin-Dashboard/transfercertificate/${detail.name}`} key={index} className='text-center '>
+                            <div key={index} className='flex justify-between border border-gray-300 text-center rounded-lg shadow-md  items-center p-2   w-full' >
+                                <div className=' w-40'>{detail.serial}</div>
+                                <div className=' w-40'>{detail.tc}</div>
+                                <div className=' w-40'>{detail.admission}</div>
+                                <div className=' w-40'>{detail.name}</div>
+                                <div className=' w-40'>{detail.Class}</div>
+                                <div className=' w-40 text-red-600'>Delete</div>
 
-            <div className='  rounded-lg border border-black shadow-md mobile:max-tablet:w-fit w-full mb-2 overflow-auto'>
-                <Header headings={['Sr. No.', 'TC No.', 'Admission No.', 'Name', 'Class', 'Action']} />
-                {details.map((detail, index) => (
-                    <Link to={`/Admin-Dashboard/transfercertificate/${detail.name}`} key={index} className='text-center '>
-                        <div key={index} className='flex justify-between border border-gray-300 text-center rounded-lg shadow-md  items-center p-2   w-full' >
-                            <div className=' w-40'>{detail.serial}</div>
-                            <div className=' w-40'>{detail.tc}</div>
-                            <div className=' w-40'>{detail.admission}</div>
-                            <div className=' w-40'>{detail.name}</div>
-                            <div className=' w-40'>{detail.Class}</div>
-                            <div className=' w-40 text-red-600'>Delete</div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
 
-                        </div>
-                    </Link>
-                ))}
+                {isDialogOpen && <NewTransfer onClose={handleClose} />}
+
             </div>
-
-            {isDialogOpen && <NewTransfer onClose={handleClose} />}
-
         </div>
-
     )
 }
 

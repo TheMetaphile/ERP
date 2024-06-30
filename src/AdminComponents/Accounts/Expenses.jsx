@@ -8,33 +8,33 @@ import Activity from "./utils/Activity";
 
 export default function Expenses() {
     return (
-        <div className="flex flex-col">
-        <div className="flex gap-2 mobile:max-tablet:flex-col ">
-            <div className="flex flex-col mx-2  w-1/2 mobile:max-tablet:w-full ">
-                <div className="flex-1  shadow-lg rounded-lg border">
-                    <WeeklySpend />
+        <div className="flex flex-col mobile:max-tablet:mt-6">
+            <div className="flex gap-2 mobile:max-tablet:flex-col ">
+                <div className="flex flex-col mx-2  w-1/2 mobile:max-tablet:w-full ">
+                    <div className="flex-1  shadow-lg rounded-lg border">
+                        <WeeklySpend />
+                    </div>
+                    <div className="flex-1  shadow-lg rounded-lg mt-4 border">
+                        <InvoiceSection />
+                    </div>
                 </div>
-                <div className="flex-1  shadow-lg rounded-lg mt-4 border">
-                    <InvoiceSection />
+                <div className="w-1/2 mx-2 shadow-lg rounded-lg border mobile:max-tablet:w-full mobile:max-tablet:mx-0">
+                    <QuickActions />
                 </div>
             </div>
-            <div className="w-1/2 mx-2 shadow-lg rounded-lg border mobile:max-tablet:w-full mobile:max-tablet:mx-0">
-                <QuickActions />
+            <div className="flex gap-2 mobile:max-tablet:flex-col ">
+                <div className="w-1/2 mt-4  mx-2 mobile:max-tablet:w-full border shadow-md rounded-lg ">
+                    <Card />
+                </div>
+                <div className="w-1/2 mt-4 mx-2  mobile:max-tablet:w-full border rounded-lg shadow-md mobile:max-tablet:mx-0">
+                    <Budget />
+                </div>
             </div>
-        </div>
-        <div className="flex gap-2 mobile:max-tablet:flex-col ">
-            <div className="w-1/2 mt-4  mx-2 mobile:max-tablet:w-full border shadow-md rounded-lg ">
-            <Card/>
+            <div className="w-full mb-4 ">
+                <Activity />
             </div>
-            <div className="w-1/2 mt-4 mx-2  mobile:max-tablet:w-full border rounded-lg shadow-md mobile:max-tablet:mx-0">
-                <Budget/>
-            </div>
+
         </div>
-         <div className="w-full mb-4 ">
-            <Activity/>
-         </div>
-       
-        </div>
-      
+
     );
 }

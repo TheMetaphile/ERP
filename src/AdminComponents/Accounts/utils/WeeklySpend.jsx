@@ -5,10 +5,10 @@ import { bus, internet, paper } from "../images";
 
 export default function WeeklySpend() {
     return (
-        <div className="w-full flex flex-col px-2">
-            <div className="flex justify-between">
+        <div className="w-full flex flex-col px-2 ">
+            <div className="flex justify-between mobile:max-tablet:flex-col">
                 <div className="flex flex-col gap-4">
-                    <h1 className="text-2xl mt-2">This Week Spends</h1>
+                    <h1 className="text-2xl mt-2 mobile:max-tablet:text-xl">This Week Spends</h1>
                     <div className="flex gap-2">
                         <div className="flex flex-col items-center">
                             <img src={internet} alt="" className="w-10 h-10" />
@@ -22,7 +22,7 @@ export default function WeeklySpend() {
                             <img src={bus} alt="" className="w-10 h-10" />
                             <div className="w-10 h-1 mt-1 bg-[#ff5959]"></div>
                         </div>
-                   
+
                     </div>
                 </div>
                 <div className="">

@@ -190,19 +190,21 @@ export default function StudentsList() {
                     Add Roll Number
                 </button>
             )}
-            <div className="rounded-lg shadow-md border h-screen text-center border-black w-full  mobile:max-tablet:w-fit overflow-auto" ref={containerRef} onScroll={handleScroll}>
+            <div className=" mobile:max-tablet:overflow-y-auto">
+                <div className="rounded-lg shadow-md border h-screen text-center border-black w-full  mobile:max-tablet:w-fit overflow-auto" ref={containerRef} onScroll={handleScroll}>
 
-                <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
-                {loading && userData.length < 1 ? (
-                    <Loading />
-                ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
-                    <div>No students found</div>
-                ) : Array.isArray(filteredStudents) ? (
-                    <StudentDetailTile userData={filteredStudents} />
-                ) : (
-                    <div>Unexpected data format</div>
-                )}
-                {loadMore && userData.length > 0 ? <Loading /> : null}
+                    <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
+                    {loading && userData.length < 1 ? (
+                        <Loading />
+                    ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
+                        <div>No students found</div>
+                    ) : Array.isArray(filteredStudents) ? (
+                        <StudentDetailTile userData={filteredStudents} />
+                    ) : (
+                        <div>Unexpected data format</div>
+                    )}
+                    {loadMore && userData.length > 0 ? <Loading /> : null}
+                </div>
             </div>
         </div>
     );

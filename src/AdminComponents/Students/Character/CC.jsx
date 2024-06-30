@@ -38,27 +38,27 @@ function CC() {
 
             <Selection />
 
+            <div className=' overflow-auto'>
+                <div className='  rounded-lg border border-black shadow-md mobile:max-tablet:w-fit  mb-2 overflow-auto'>
+                    <Header headings={['Sr. No.', 'TC No.', 'Admission No.', 'Name', 'Class', 'Action']} />
+                    {details.map((detail, index) => (
+                        <Link to={`/Admin-Dashboard/charactercetificate/${detail.name}`} key={index}>
+                            <div key={index} className='flex justify-between text-center shadow-md border border-gray-300 items-center py-2 pl-2  ' >
+                                <div className=' w-40'>{detail.serial}</div>
+                                <div className=' w-40'>{detail.tc}</div>
+                                <div className=' w-40'>{detail.admission}</div>
+                                <div className=' w-40'>{detail.name}</div>
+                                <div className=' w-40'>{detail.Class}</div>
+                                <div className='text-red-600 w-40'>Delete</div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
 
-            <div className='  rounded-lg border border-black shadow-md mobile:max-tablet:w-fit  mb-2 overflow-auto'>
-                <Header headings={['Sr. No.', 'TC No.', 'Admission No.', 'Name', 'Class', 'Action']} />
-                {details.map((detail, index) => (
-                    <Link to={`/Admin-Dashboard/charactercetificate/${detail.name}`} key={index}>
-                        <div key={index} className='flex justify-between text-center shadow-md border border-gray-300 items-center py-2 pl-2  ' >
-                            <div className=' w-40'>{detail.serial}</div>
-                            <div className=' w-40'>{detail.tc}</div>
-                            <div className=' w-40'>{detail.admission}</div>
-                            <div className=' w-40'>{detail.name}</div>
-                            <div className=' w-40'>{detail.Class}</div>
-                            <div className='text-red-600 w-40'>Delete</div>
-                        </div>
-                    </Link>
-                ))}
+                {isDialogOpen && <NewCharacter onClose={handleClose} />}
+
             </div>
-
-            {isDialogOpen && <NewCharacter onClose={handleClose} />}
-
         </div>
-
     )
 }
 
