@@ -1,13 +1,18 @@
-import React, { useState } from 'react'
-import DigitalClock from './DigitalClock'
+import React, { useState } from 'react';
+import DigitalClock from './DigitalClock';
 import BreakTimer from './BreakTimer';
+import VideoStream from './VideoStream';
+
 function Mark() {
 
     const [checkIn, setCheckIn] = useState(false);
     const [onBreak, setOnBreak] = useState(false);
+    const [Stream, setStream] = useState(false);
+
 
     const handleCheckIn = () => {
         setCheckIn(true);
+        setStream(true);
         setOnBreak(false);
     }
 
@@ -19,6 +24,11 @@ function Mark() {
     const handleTakeBreak = () => {
         setOnBreak(!onBreak);
     }
+
+    const handleClose = ()=>{
+        setStream(false);
+    }
+
     return (
         <div className=''>
             <h1 className='px-3 py-2'>Mark your Attendance</h1>
@@ -48,7 +58,7 @@ function Mark() {
                                     onClick={handleTakeBreak}
                                     className="flex w-64 shadow-md rounded-2xl py-2 mb-2 mt-2 justify-center bg-purple-300"
                                 >
-                                    <h1 className="font-medium text-2xl text-white">{onBreak ? "Resume work" :"Take Break"}</h1>
+                                    <h1 className="font-medium text-2xl text-white">{onBreak ? "Resume work" : "Take Break"}</h1>
                                 </button></>
                         )
                         }
@@ -60,6 +70,7 @@ function Mark() {
                     Check In and get started on your successful day.
                 </div>
             </div>
+            {Stream && <VideoStream onClose={handleClose}/>}
         </div>
 
 
