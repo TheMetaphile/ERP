@@ -165,47 +165,79 @@ export default function StudentsList() {
         }
     };
 
-    return (
-        <div className="h-fit w-full items-start mb-3 px-2 mobile:mt-4">
-            <h1 className="text-2xl font-medium mb-2">All Students Data</h1>
-            <div className="w-full">
-                <SearchBar
-                    rollNumber={rollNumber}
-                    name={name}
-                    Class={Class}
-                    Section={Section}
-                    handleRollNumberChange={handleRollNumberChange}
-                    handleNameChange={handleNameChange}
-                    handleClassChange={handleClassChange}
-                    handleSectionChange={handleSectionChange}
-                    handlebothEventsCalled={handlebothEventsCalled}
-                />
-            </div>
-            {loading && userData.length > 0 ? <Loading /> : null}
-            {(showAddRollNumberButton && Class && Section && !loading) && (
-                <button
-                    className="rounded-lg shadow-md px-3 py-1 mr-2 border-2 border-r-gray-200 text-lg bg-secondary float-right mb-3"
-                    onClick={handleRollNumber}
-                >
-                    Add Roll Number
-                </button>
-            )}
-            <div className=" mobile:max-tablet:overflow-y-auto">
-                <div className="rounded-lg shadow-md border h-screen text-center border-black w-full  mobile:max-tablet:w-fit overflow-auto" ref={containerRef} onScroll={handleScroll}>
+    // State to control the dropdown visibility
+    const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-                    <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
-                    {loading && userData.length < 1 ? (
-                        <Loading />
-                    ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
-                        <div>No students found</div>
-                    ) : Array.isArray(filteredStudents) ? (
-                        <StudentDetailTile userData={filteredStudents} />
-                    ) : (
-                        <div>Unexpected data format</div>
+    return (
+        <>
+            <div className="flex justify-between items-center px-2 py-2 border-b border-gray-300 fixed top-34 left-0 right-0 bg-white z-10 mb-4">
+                <h1 className="text-2xl font-medium px-2">All Students Data</h1>
+                <div className="block desktop:hidden">
+                    <button
+                        className="p-2 border rounded"
+                        onClick={() => setDropdownVisible(!isDropdownVisible)}
+                    >
+                        Filter
+                    </button>
+                    {isDropdownVisible && (
+                        <div className="absolute bg-white shadow-lg pt-2 rounded mt-2 right-1 left-1 z-20 justify-center flex">
+                            <SearchBar
+                                rollNumber={rollNumber}
+                                name={name}
+                                Class={Class}
+                                Section={Section}
+                                handleRollNumberChange={handleRollNumberChange}
+                                handleNameChange={handleNameChange}
+                                handleClassChange={handleClassChange}
+                                handleSectionChange={handleSectionChange}
+                                handlebothEventsCalled={handlebothEventsCalled}
+                            />
+                        </div>
                     )}
-                    {loadMore && userData.length > 0 ? <Loading /> : null}
                 </div>
             </div>
-        </div>
+            <div className="h-fit w-full items-start mb-3 px-2 mobile:mt-14">
+                {/* Original SearchBar for non-mobile screens */}
+                <div className="w-full desktop:block hidden">
+                    <SearchBar
+                        rollNumber={rollNumber}
+                        name={name}
+                        Class={Class}
+                        Section={Section}
+                        handleRollNumberChange={handleRollNumberChange}
+                        handleNameChange={handleNameChange}
+                        handleClassChange={handleClassChange}
+                        handleSectionChange={handleSectionChange}
+                        handlebothEventsCalled={handlebothEventsCalled}
+                    />
+                </div>
+
+                {loading && userData.length > 0 ? <Loading /> : null}
+                {(showAddRollNumberButton && Class && Section && !loading) && (
+                    <button
+                        className="rounded-lg shadow-md px-3 py-1 mr-2 border-2 border-r-gray-200 text-lg bg-secondary float-right mb-3"
+                        onClick={handleRollNumber}
+                    >
+                        Add Roll Number
+                    </button>
+                )}
+                <div className="mobile:max-tablet:overflow-y-auto mobile:max-tablet:mt-20">
+                    <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap" ref={containerRef} onScroll={handleScroll}>
+
+                        <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
+                        {loading && userData.length < 1 ? (
+                            <Loading />
+                        ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
+                            <div>No students found</div>
+                        ) : Array.isArray(filteredStudents) ? (
+                            <StudentDetailTile userData={filteredStudents} />
+                        ) : (
+                            <div>Unexpected data format</div>
+                        )}
+                        {loadMore && userData.length > 0 ? <Loading /> : null}
+                    </div>
+                </div>
+            </div>
+        </>
     );
 }

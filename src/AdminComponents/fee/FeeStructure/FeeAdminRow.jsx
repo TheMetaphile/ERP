@@ -119,7 +119,7 @@ export default function FeeAdminRow({ Class, session }) {
         <div key={Class} className="w-full mb-4  border border-gray-300 px-4 pb-2 rounded-lg mt-2 shadow-md  overflow-auto">
             <div className="flex justify-between items-center p-2 hover:cursor-pointer" onClick={handleClick}>
                 <div className="w-1/4">
-                    <div className="px-4 py-2">
+                    <div className="px-3 py-2 whitespace-nowrap">
                         {Class}
                     </div>
                 </div>

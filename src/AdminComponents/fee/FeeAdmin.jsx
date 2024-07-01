@@ -13,7 +13,7 @@ function FeeAdmin() {
 
             <div className=' border shadow-md mt-4 rounded-lg w-full border-gray-300'>
                 <div className=" flex mt-4 ml-3 mr-3 items-center justify-between">
-                    <div className=" flex  gap-2 ">
+                    <div className=" flex  gap-2 mobile:max-tablet:flex-col mobile:max-tablet:w-full ">
                         <Link
                             to={'/Admin-Dashboard/StudentsFee/structure'}
                             className={`text-xl mobile:max-tablet:text-sm mobile:flex items-center font-medium px-2 rounded-lg py-1 ${selectedLink === '/Admin-Dashboard/StudentsFee/structure' ? 'bg-secondary ' : 'bg-gray-200'}`}

@@ -58,7 +58,7 @@ const Calendar = () => {
               onClick={() => handleClick(date)}
             >
               <div>{format(date, 'dd')}</div>
-              <div>
+              <div className=' mobile:max-tablet:text-xxs text-xs'>
                 {eventList.includes(date.toLocaleDateString()) ? 'Holiday' : ''}
               </div>
             </div>

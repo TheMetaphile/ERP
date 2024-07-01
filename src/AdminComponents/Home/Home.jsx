@@ -38,7 +38,7 @@ export default function AdminHome() {
                 </div>
             </div>
             <h1 className="text-2xl font-medium mt-3">Teachers Details</h1>
-            <div className="flex flex-row w-full mt-4 justify-center mobile:max-tablet:flex-col gap-4">
+            <div className="flex flex-row w-full mt-4 justify-center mobile:max-tablet:flex-col gap-4 overflow-auto">
                 <div className="w-full rounded-lg shadow-md border border-black overflow-x-auto">
                     <Header headings={['Name', 'Subject', 'Qualification', 'Sallery', 'Performance']} />
                     <Middle values={['Abhishek', 'Math', 'B.Tech', 'Rs. 10,000', 'Good']} />
