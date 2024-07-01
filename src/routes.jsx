@@ -264,7 +264,7 @@ const router = createBrowserRouter([
           },
           {
             path: '',
-            element: <AllDoubts />
+            element: <MyDoubts />
           }
         ]
       },
@@ -642,7 +642,7 @@ const router = createBrowserRouter([
           },
           {
             path: '',
-            element: <All />
+            element: <StudentBirthDay />
           },
         ]
       },

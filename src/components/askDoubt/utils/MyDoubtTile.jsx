@@ -69,15 +69,15 @@ export default function MyDoubtTile({ data }) {
     return (
         <div className=" w-full p-3 rounded-lg border border-gray-300 shadow-md mt-3">
             {data.map((item, index) => (
-                <div key={index} className="border py-2 px-3">
+                <div key={index} className="border border-gray-300 py-2 px-3 mt-3 rounded-lg shadow-md">
                     <div className="flex justify-between items-center mobile:max-tablet:flex-col">
                         <div className='flex items-center gap-2'>
                             {editMode === index ? (
-                                <input 
-                                    type="text" 
-                                    name="subject" 
-                                    value={editedData.subject} 
-                                    onChange={handleInputChange} 
+                                <input
+                                    type="text"
+                                    name="subject"
+                                    value={editedData.subject}
+                                    onChange={handleInputChange}
                                     className="px-3 py-1 bg-bg_blue rounded-lg border border-gray-300 w-fit"
                                 />
                             ) : (
@@ -96,20 +96,12 @@ export default function MyDoubtTile({ data }) {
                             {item.status === 'Pending' ? (
                                 <>
                                     {editMode === index ? (
-                                        <div className="text-green-500 hover:text-green-700 flex items-center" onClick={() => handleConfirmEdit(index, item._id)}>
-                                            <span>Confirm</span>
-                                            <MdCheck />
-                                        </div>
+                                        <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleConfirmEdit(index, item._id)}><MdCheck /></button>
+
                                     ) : (
-                                        <div className="text-green-500 hover:text-green-700 flex items-center" onClick={() => handleEditToggle(index, item)}>
-                                            <span>Edit</span>
-                                            <MdOutlineModeEdit />
-                                        </div>
+                                        <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditToggle(index, item)}> <MdOutlineModeEdit /></button>
                                     )}
-                                    <div className='flex items-center text-red-500 hover:text-red-700' onClick={() => handleDelete(index, item._id)}>
-                                        <span>Delete</span>
-                                        <MdDeleteForever />
-                                    </div>
+                                    <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index, item._id)}><MdDeleteForever /></button>
                                 </>
                             ) : (
                                 <></>
@@ -120,11 +112,11 @@ export default function MyDoubtTile({ data }) {
                     <div className="flex justify-between items-center mt-3 mobile:max-tablet:flex-col">
                         <div className="font-medium px-3">
                             {editMode === index ? (
-                                <input 
-                                    type="text" 
-                                    name="question" 
-                                    value={editedData.question} 
-                                    onChange={handleInputChange} 
+                                <input
+                                    type="text"
+                                    name="question"
+                                    value={editedData.question}
+                                    onChange={handleInputChange}
                                     className="w-full border border-gray-300 rounded-lg px-3 py-1"
                                 />
                             ) : (

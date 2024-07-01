@@ -135,7 +135,7 @@ export default function AttendenceTable() {
       ) : data === null ? (
         <div className='text-center w-full'>No data available</div>
       ) : (
-        <table className=' w-full justify-evenly text-center  rounded-lg'>
+        <table className=' w-full justify-evenly text-center  rounded-lg border border-black '>
           <thead>
             <tr className='rounded-t-lg  mt-3 text-base font-medium'>
               <th>Leave Type</th>
@@ -176,15 +176,15 @@ export default function AttendenceTable() {
                 <td className={`${leave.status === "Pending" ? "text-orange-300" :
                   leave.status === "Rejected" ? "text-red-400" :
                     "text-green-400"
-                  } font-medium`}>{leave.status}</td>
-                <td className='flex justify-center items-center'>
+                  } font-medium`}>{leave.status}
+                  </td>
+                <td className='flex justify-center items-center my-2 gap-1'>
                   {editRowIndex === index ? (
-                    <MdSave className='text-green-500 cursor-pointer' onClick={() => handleUpdate(index)} />
+                    <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdSave /></button>
                   ) : (
-                    <CiEdit className='text-green-500 cursor-pointer' onClick={() => handleEditClick(index)} />
+                    <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <CiEdit /></button>
                   )}
-                  &nbsp; / &nbsp;
-                  <MdDeleteForever className='text-red-500 cursor-pointer' onClick={() => handleDelete(index)} />
+                  <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
                 </td>
               </tr>
             ))}

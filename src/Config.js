@@ -11,5 +11,7 @@ const BASE_URL_AskDoubt = 'https://askdoubts.onrender.com';
 const BASE_URL_Result = 'https://studentresult-ztxk.onrender.com';
 const BASE_URL_Homework = 'https://homework-gzik.onrender.com';
 const BASE_URL_TeacherLeave = 'https://teachersleave.onrender.com';
+const BASE_URL_ClassWork = 'https://classwork-5zzd.onrender.com';
+const BASE_URL_Notice = 'https://notice-rn3j.onrender.com';
 
-export { BASE_URL_Login, BASE_URL_ClassTeacher, BASE_URL_Exam, BASE_URL_Fee, BASE_URL_Student_Leave, BASE_URL_Attendence, BASE_URL_Subject, BASE_URL_TimeTableStructure, BASE_URL_TimeTable, BASE_URL_AskDoubt, BASE_URL_Result, BASE_URL_Homework, BASE_URL_TeacherLeave};
+export { BASE_URL_Login, BASE_URL_ClassTeacher, BASE_URL_Exam, BASE_URL_Fee, BASE_URL_Student_Leave, BASE_URL_Attendence, BASE_URL_Subject, BASE_URL_TimeTableStructure, BASE_URL_TimeTable, BASE_URL_AskDoubt, BASE_URL_Result, BASE_URL_Homework, BASE_URL_TeacherLeave, BASE_URL_ClassWork, BASE_URL_Notice};

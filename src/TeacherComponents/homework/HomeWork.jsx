@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import HomeWorkTile from './HomeWorkTile';
-import { MdEdit } from "react-icons/md";
 import Upload from "../../assets/upload.png"
 import NewUpload from './NewUpload';
 import axios from 'axios';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Homework } from "../../Config";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function HomeWork() {
@@ -119,7 +118,7 @@ function HomeWork() {
             {loading ? (
                 <Loading />
             ) : details.length === 0 ? (
-                <div>No Homework found</div>
+                <div className="text-center w-full mt-2">No Homework found</div>
             ) : (
                 <div className='w-full mt-4 rounded-lg mb'>
                    <HomeWorkTile details={details} Class={selectedClass}/>

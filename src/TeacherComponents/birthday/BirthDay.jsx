@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, Outlet } from "react-router-dom";
 
 function BirthDay() {
-    const [selectedLink, setSelectedLink] = useState('/Teacher-Dashboard/birthday/all');
+    const [selectedLink, setSelectedLink] = useState('/Teacher-Dashboard/birthday/student');
 
     const handleLinkSelect = (link) => {
         setSelectedLink(link);
@@ -16,13 +16,13 @@ function BirthDay() {
             <div className='  mt-3  w-full'>
                 <div className=" flex items-center justify-between">
                     <div className=" flex  gap-2 ">
-                        <Link
+                        {/* <Link
                             to={'/Teacher-Dashboard/birthday/all'}
                             className={`text-xl font-medium px-2 border border-gray-300 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/birthday/all' ? 'bg-secondary ' : 'bg-gray-200'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/all')}
                         >
                             All
-                        </Link>
+                        </Link> */}
                         <Link
                             to={'/Teacher-Dashboard/birthday/teacher'}
                             className={`text-xl font-medium px-2 rounded-lg border border-gray-300 py-1 ${selectedLink === '/Teacher-Dashboard/birthday/teacher' ? 'bg-secondary ' : 'bg-gray-200'}`}

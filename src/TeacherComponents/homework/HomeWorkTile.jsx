@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { MdEdit, MdDeleteForever, MdCheck } from "react-icons/md";
 import AuthContext from '../../Context/AuthContext';
 import axios from 'axios';

@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { FaRegCheckCircle, FaRegCircle } from 'react-icons/fa';
-import axios from 'axios'
+import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
 import { BASE_URL_Homework } from '../../Config';
@@ -9,7 +8,6 @@ import { toast } from 'react-toastify';
 
 function NewUpload({ onClose }) {
     const { authState } = useContext(AuthContext);
-    const [file, setFile] = useState(null);
     const [subject, setSubject] = useState('');
     const [classLevel, setClassLevel] = useState('');
     const [section, setSection] = useState('');
@@ -20,12 +18,8 @@ function NewUpload({ onClose }) {
     const [loading, setLoading] = useState(false)
 
 
-    const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
-    };
 
     const handleSave = async () => {
-        // Implement save functionality here
         if(!subject || !classLevel || !section || !topic || !chapter || !deadline || !question){
             alert('Fill all fields')
             return;

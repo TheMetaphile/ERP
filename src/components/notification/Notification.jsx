@@ -11,9 +11,9 @@ export default function Notification() {
 
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+        <div className=" flex flex-col px-3  items-start mt-2">
             <h1 className='text-3xl'>Notifications</h1>
-            <div className=' border border-gray-300 mt-4 rounded-lg '>
+            <div className=' border border-gray-300 mt-4 rounded-lg w-full'>
                 <div className=" flex   mt-4 ml-3 mr-3 items-center justify-between">
                     <div className=" flex  gap-2 ">
                         <Link
