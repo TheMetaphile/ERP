@@ -1,114 +1,96 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import React, { useState, useEffect, useContext } from "react";
-import AcademicBottonTile from "./AcademicBottomTile";
-import AcademicMiddleTile from "./AcademicMiddleTile";
-import AcademicTopTile from "./AcademicTopTile";
-import { MdEdit } from "react-icons/md";
-import { BASE_URL_Result } from "../../../../Config";
-import AuthContext from "../../../../Context/AuthContext";
-import Loading from "../../../../LoadingScreen/Loading";
-import axios from "axios";
+import InfoCard from "../../../../components/Result/utils/InfoCard";
+import profile from '../../../../assets/Test Account.png';
+import Attendance from "./Attendence";
+import Academic from "./Academic";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
-export default function Academic(props) {
-    const { id } = useParams();
-    const { authState } = useContext(AuthContext);
-    const [termOne, setTermOne] = useState([]);
-    const [termTwo, setTermTwo] = useState([]);
-    const [termFinal, setFinal] = useState([]);
-    const [loading, setLoading] = useState(false);
+export default function PerformanceProfile() {
+  const { id } = useParams();
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    // Simulate fetching data
+    const fetchData = async () => {
+      // Fetch data from APIs
+      // For example:
+      // await fetchSomeData();
+      setLoading(false); // Set loading to false once data is fetched
+    };
 
-    useEffect(() => {
-        const fetchResult = async () => {
-            console.log({ id })
-            setLoading(true);
-            try {
-                const response = await axios.get(`${BASE_URL_Result}/result/fetch/teacher?email=${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
-                    }
-                });
+    fetchData();
+  }, []);
 
-                if (response.status === 200) {
-                    console.log(response.data);
-                    setTermOne(response.data.term1 || []);
-                    setTermTwo(response.data.term2 || []);
-                    setFinal(response.data.termFinal || []);
+  const printDocument = () => {
+    if (loading) {
+      // If still loading, don't generate PDF
+      console.log('Data is still loading...');
+      return;
+    }
 
-                }
+    const input = document.getElementById('divToPrint');
+    const clone = input.cloneNode(true);
+    
+    // Apply grayscale filter to the clone to remove colors
+    clone.style.filter = "grayscale(100%)";
+    clone.style.position = "absolute";
+    clone.style.top = "-9999px";
+    document.body.appendChild(clone);
 
-            } catch (error) {
-                console.error("Error fetching student result:", error);
-            }
-            finally {
-                setLoading(false)
-            }
-        };
+    html2canvas(clone, {
+      useCORS: true,
+      scale: 2,
+    }).then((canvas) => {
+      document.body.removeChild(clone); // Clean up the clone
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = 210;
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
 
-        fetchResult();
-    }, [authState.accessToken]);
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
 
-    return (
-        <div className="w-full shadow-md border border-gray-300 rounded-lg tablet:p-4 mobile:max-tablet:px-2 mt-4 ">
-            <div className="border-t-2 border-text_blue my-3 tablet:mx-2 rounded-full "></div>
-            <div className='w-full flex items-center justify-between px-3'>
-                <h1 className='tablet:text-3xl mobile:max-tablet:text-xl font-medium text-text_blue text-center'>Academic Performance</h1>
-                <h1 className='flex items-center text-sm bg-secondary p-2 rounded-lg shadow-md self-end'>Edit <MdEdit className='ml-1' /></h1>
-            </div>
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
 
-            <div className="border-t-2 border-text_blue my-3 tablet:mx-2 rounded-full "></div>
-            <div className='flex flex-col w-full justify-between tablet:mx-2'>
-                {loading ? (
-                    <Loading />
-                ) : termOne.length === 0 && termTwo.length === 0 ? (
-                    <>No result found</>
-                ) : (
-                    <div className="w-full ">
-                        <div className="">
-                            <h1 className="text-xl font-medium mb-3">
-                                Term I
-                            </h1>
-                            <div className="w-full rounded-lg shadow-md border-2 border-gray-400 overflow-auto">
-                                <AcademicTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
-                                <AcademicMiddleTile details={termOne} />
-                                <AcademicBottonTile value={["", 'GPA', "8.2"]} />
-                            </div>
-                        </div>
+      pdf.save('result.pdf');
+    });
+  }
 
-                        {termTwo.length > 0 ? (
-                            <div className="w-full tablet:mx-2">
-                                <h1 className="text-xl font-medium mb-3">
-                                    Term II
-                                </h1>
-                                <div className="w-full rounded-lg shadow-md border-2 border-gray-400 overflow-auto">
-                                    <AcademicTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
-                                    <AcademicMiddleTile details={termTwo} />
-                                    <AcademicBottonTile value={["", 'GPA', "8.2"]} />
-                                </div>
-                            </div>
-                        ) : (
-                            <></>
-                        )}
-
-                        {termFinal.length > 0 ? (
-                            <div className="w-full tablet:mx-2">
-                                <h1 className="text-xl font-medium mb-3">
-                                    Final
-                                </h1>
-                                <div className="w-full rounded-lg shadow-md border-2 border-gray-400 overflow-auto">
-                                    <AcademicTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
-                                    <AcademicMiddleTile details={termFinal} />
-                                    <AcademicBottonTile value={["", 'GPA', "8.2"]} />
-                                </div>
-                            </div>
-                        ) : (
-                            <></>
-                        )}
-                    </div>
-                )
-                }
-
-            </div>
-        </div>
-    )
+  return (
+    <div className="flex flex-col w-full h-screen overflow-y-auto items-start mt-2 px-2 no-scrollbar" id="divToPrint">
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <h3 className="text-xl font-medium">Performance Profile</h3>
+          <InfoCard 
+            class="2nd A" 
+            name={id} 
+            profileImg={profile}
+            rollnumber="2001270100028"
+            dob="27 Dec 1995"
+            bloodgroup="B+"
+            contactno="+91 8979020025"
+            father="Mr. Raj kumar Tyagi"
+            mother="Mrs. Manju Tyagi"
+          />
+          <Attendance term={[{ total: "249", attendance: "235" }]} />
+          <Academic />
+          <div className="text-xl font-medium my-3 bg-secondary text-black self-center rounded-lg shadow-md py-1 px-3 mt-3 hover:bg-blue-400 cursor-pointer hover:text-white" onClick={printDocument}>
+            Download
+          </div>
+        </>
+      )}
+    </div>
+  );
 }

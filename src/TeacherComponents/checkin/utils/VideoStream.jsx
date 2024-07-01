@@ -9,7 +9,7 @@ function VideoStream({ onClose }) {
 
   useEffect(() => {
     const loadModels = async () => {
-      await faceapi.nets.tinyFaceDetector.loadFromWeightMap('src/weights/tiny_face_detector_model-shard1'); // Path to models folder
+       faceapi.nets.tinyFaceDetector.loadFromWeightMap('src/weights/tiny_face_detector_model-shard1'); // Path to models folder
       // await faceapi.nets.faceLandmark68Net.loadFromUri('./../../../weights');
       // await faceapi.nets.faceRecognitionNet.loadFromUri('./../../../weights');
     };
