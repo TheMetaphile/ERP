@@ -37,6 +37,7 @@ export default function StudentAttendanceRecord() {
     }, [authState.accessToken,month]);
 
     const handleMonthChange = (month)=>{
+        console.log('cc',month)
         setMonth(month);
     }
 
@@ -63,10 +64,10 @@ export default function StudentAttendanceRecord() {
             ) : (
                 <div className="flex flex-col w-full shadow-md rounded-lg border border-gray-400 mb-4 ">
                     <div className="mx-2 text-xl px-2 mt-2">
-                        Attendance Sheet Of Class {data.output.class} {data.output.section} April, 2024
+                        Attendance Sheet Of Class {data.output.class} {data.output.section} {month  ==1 ?'January' : month ==2 ? 'February' : month ==3 ? 'March' :month ==4 ? 'April' :month ==5 ? 'May' :month ==6 ? 'June' :month ==7 ? 'July' :month ==8 ? 'August' :month ==9 ? 'September' :month ==10 ? 'October' :month ==11 ? 'November' : 'December' }, 2024
                     </div>
                     <div className="px-3 w-full overflow-x-auto ">
-                        <AttendanceStatusGridTile data={data} />
+                        <AttendanceStatusGridTile data={data} month={month}/>
                     </div>
                 </div>
             )}

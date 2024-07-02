@@ -8,13 +8,15 @@ import AuthContext from "../../Context/AuthContext.jsx";
 import Loading from "../../LoadingScreen/Loading.jsx"
 import { BASE_URL_Login } from "../../Config.js";
 import { Octokit } from "@octokit/rest";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const octokit = new Octokit({
     auth: ''
 });
 
-const owner = 'Shailesh12396'; 
-const repo = 'Face-Prediction'; 
+const owner = 'BhuvneshwarTyagi';
+const repo = 'Face-Prediction';
 
 export default function AllTeachers() {
     const [name, setName] = useState('');
@@ -26,7 +28,6 @@ export default function AllTeachers() {
     const [kerasFile, setKerasFile] = useState(null);
     const [pklFile, setPklFile] = useState(null);
 
-
     const handleNameChange = (event) => {
         setName(event.target.value);
     };
@@ -34,26 +35,9 @@ export default function AllTeachers() {
     const handleModal = () => {
         setIsModalOpen(true);
     };
+
     const handleCloseModal = () => {
         setIsModalOpen(false);
-    };
-
-
-    const handleSubmit = async () => {
-        if (kerasFile && pklFile) {
-            try {
-                const commitMessage = `Add ${kerasFile.name} and ${pklFile.name}`;
-                await uploadFileToGitHub(kerasFile, commitMessage);
-                await uploadFileToGitHub(pklFile, commitMessage);
-                alert('Files committed and pushed to GitHub successfully!');
-                handleCloseModal();
-            } catch (error) {
-                console.error('Error uploading files to GitHub:', error);
-                alert('Failed to upload files to GitHub');
-            }
-        } else {
-            alert('Please select both .keras and .pkl files.');
-        }
     };
 
     const handleKerasChange = (e) => {
@@ -76,25 +60,76 @@ export default function AllTeachers() {
         }
     };
 
-    const uploadFileToGitHub = async (file, commitMessage) => {
-        const arrayBuffer = await file.arrayBuffer();
-        const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-        const path = file.name;
-
-        try {
-            const response = await octokit.repos.createOrUpdateFileContents({
-                owner,
-                repo,
-                path,
-                message: commitMessage,
-                content: base64String,
-            });
-            return response;
-        } catch (error) {
-            console.error('Error uploading file to GitHub:', error);
-            throw error;
+    const handleSubmit = async () => {
+        if (kerasFile && pklFile) {
+            try {
+                const commitMessage = `Add ${kerasFile.name} and ${pklFile.name}`;
+                await uploadFileToGitHub(kerasFile, commitMessage);
+                await uploadFileToGitHub(pklFile, commitMessage);
+                toast.success('Files committed and pushed to GitHub successfully!');
+                handleCloseModal();
+            } catch (error) {
+                console.error('Error uploading files to GitHub:', error);
+                toast.error('Failed to upload files to GitHub');
+            }
+        } else {
+            toast.error('Please select both .keras and .pkl files.');
         }
     };
+
+
+    const uploadFileToGitHub = async (file, commitMessage) => {
+        const reader = new FileReader();
+
+        return new Promise((resolve, reject) => {
+            reader.onload = async () => {
+                try {
+                    const base64String = reader.result.split(',')[1]; 
+                    const path = file.name;
+
+                    let sha = null;
+                    try {
+                        const existingFile = await octokit.repos.getContent({
+                            owner,
+                            repo,
+                            path,
+                        });
+                        sha = existingFile.data.sha;
+                    } catch (error) {
+                        if (error.status !== 404) {
+                            toast.error('Error checking file existence on GitHub:', error);
+                            reject(new Error('Failed to upload file to GitHub'));
+                            return;
+                        }
+                    }
+
+
+                    const response = await octokit.repos.createOrUpdateFileContents({
+                        owner,
+                        repo,
+                        path,
+                        message: commitMessage,
+                        content: base64String,
+                        sha,
+                    });
+
+                    resolve(response);
+                } catch (error) {
+                    toast.error('Error uploading file to GitHub:', error);
+                    reject(new Error('Failed to upload file to GitHub'));
+                }
+            };
+
+            reader.onerror = (error) => {
+                toast.error('FileReader error:', error);
+                reject(new Error('Failed to read file'));
+            };
+
+            reader.readAsDataURL(file); 
+        });
+    };
+
+
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -103,7 +138,6 @@ export default function AllTeachers() {
                     accessToken: authState.accessToken
                 });
                 console.log("API response:", response.data);
-
 
                 if (Array.isArray(response.data.Teachers)) {
                     const users = response.data.Teachers.map(user => ({
@@ -138,6 +172,7 @@ export default function AllTeachers() {
 
     return (
         <div className="flex flex-col mx-4">
+            <ToastContainer />
             <div className="mt-4 mobile:max-tablet:w-full mobile:max-tablet:mx-0 mobile:max-tablet:my-8">
                 <TeacherStats />
             </div>
@@ -173,7 +208,7 @@ export default function AllTeachers() {
                             <input type="file" accept=".keras" className="" onChange={handleKerasChange} />
                         </div>
                         <div className="flex mobile:max-tablet:w-full gap-2 items-center mt-3">
-                            <label className="text-lg font-normal">Upload Pyl :</label>
+                            <label className="text-lg font-normal">Upload Pkl :</label>
                             <input type="file" accept=".pkl" className="" onChange={handlePylChange} />
                         </div>
                         <div className="flex justify-end">
@@ -183,7 +218,6 @@ export default function AllTeachers() {
                     </div>
                 </div>
             )}
-
         </div>
     );
 }
