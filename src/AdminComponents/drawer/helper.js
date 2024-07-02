@@ -12,6 +12,8 @@ import transportImage from '../../assets/transport.png';
 import noticeImage from '../../assets/notice.png';
 import messageImage from '../../assets/message.png';
 import leaveImage from '../../assets/leave_icon.png';
+import timetable from '../../assets/Dashboard_time_table.png';
+import events from '../../assets/Dashboard_events.png'
 
 const menuItems = [
   {
@@ -28,6 +30,13 @@ const menuItems = [
   //   route: '/Teacher-Dashboard',
   //   children: []
   // },
+  {
+    image: timetable,
+    alt: "Timetable image",
+    title: "Timetable",
+    route: '/Admin-Dashboard/timetable',
+    children: []
+  },
   {
     image: studentImage,
     alt: "img",
@@ -119,15 +128,22 @@ const menuItems = [
   //   },
   //   ]
   // },
+  // {
+  //   image: libraryImage,
+  //   alt: "img",
+  //   title: "Library",
+  //   children: [{
+  //     text: 'All Books',
+  //     route: '/Admin-Dashboard/Library/AllBooks'
+  //   },
+  //   ]
+  // },
   {
-    image: libraryImage,
+    image: events,
     alt: "img",
-    title: "Library",
-    children: [{
-      text: 'All Books',
-      route: '/Admin-Dashboard/Library/AllBooks'
-    },
-    ]
+    title: "Events",
+    route: "/Admin-Dashboard/Events",
+    children: []
   },
   {
     image: accountImage,

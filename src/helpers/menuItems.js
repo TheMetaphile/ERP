@@ -47,18 +47,18 @@ const menuItems = [
     text: "Events",
     route: '/Student-Dashboard/events'
   },
-  {
-    image: dashboardQuiz,
-    alt: "Play Quiz image",
-    text: "Play Quiz",
-    route: "/Student-Dashboard/quiz"
-  },
-  {
-    image: dashboardAssignment,
-    alt: "Assignment image",
-    text: "Assignment",
-    route: '/Student-Dashboard/assignment'
-  },
+  // {
+  //   image: dashboardQuiz,
+  //   alt: "Play Quiz image",
+  //   text: "Play Quiz",
+  //   route: "/Student-Dashboard/quiz"
+  // },
+  // {
+  //   image: dashboardAssignment,
+  //   alt: "Assignment image",
+  //   text: "Assignment",
+  //   route: '/Student-Dashboard/assignment'
+  // },
   {
     image: dashboardTimeTable,
     alt: "Time table image",
@@ -92,7 +92,7 @@ const menuItems = [
   {
     image: notification,
     alt: "notification image",
-    text: "Notification",
+    text: "Notice",
     route: '/Student-Dashboard/notification'
   },
   // {
