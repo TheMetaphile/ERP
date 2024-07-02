@@ -67,7 +67,7 @@ export default function MyDoubtTile({ data }) {
     };
 
     return (
-        <div className=" w-full p-3 rounded-lg border border-gray-300 shadow-md mt-3">
+        <div>
             {data.map((item, index) => (
                 <div key={index} className="border border-gray-300 py-2 px-3 mt-3 rounded-lg shadow-md">
                     <div className="flex justify-between items-center mobile:max-tablet:flex-col">
@@ -84,33 +84,35 @@ export default function MyDoubtTile({ data }) {
                                 <h1 className="px-3 py-1 bg-bg_blue rounded-lg border border-gray-300 w-fit"> {item.subject}</h1>
                             )}
                             <div className="text-gray-400 px-3">Question No. {index + 1}</div>
+
                         </div>
 
-                        <div className={`${item.status === "Pending" ? "text-orange-300" :
+                        <div className={` flex ${item.status === "Pending" ? "text-orange-300" :
                             item.status === "Rejected" ? "text-red-400" :
                                 "text-green-400"
-                            } font-medium`}> {item.status}
+                            } font-medium gap-2`}><div className='flex items-center gap-2'>
+                                {item.status === 'Pending' ? (
+                                    <>
+                                        {editMode === index ? (
+                                            <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleConfirmEdit(index, item._id)}><MdCheck /></button>
+
+                                        ) : (
+                                            <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditToggle(index, item)}> <MdOutlineModeEdit /></button>
+                                        )}
+                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index, item._id)}><MdDeleteForever /></button>
+                                    </>
+                                ) : (
+                                    <></>
+                                )}
+                            </div> {item.status}
+
                         </div>
 
-                        <div className='flex items-center gap-2'>
-                            {item.status === 'Pending' ? (
-                                <>
-                                    {editMode === index ? (
-                                        <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleConfirmEdit(index, item._id)}><MdCheck /></button>
 
-                                    ) : (
-                                        <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditToggle(index, item)}> <MdOutlineModeEdit /></button>
-                                    )}
-                                    <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index, item._id)}><MdDeleteForever /></button>
-                                </>
-                            ) : (
-                                <></>
-                            )}
-                        </div>
                     </div>
 
                     <div className="flex justify-between items-center mt-3 mobile:max-tablet:flex-col">
-                        <div className="font-medium px-3">
+                        <div className="font-normal px-2">
                             {editMode === index ? (
                                 <input
                                     type="text"
@@ -123,15 +125,16 @@ export default function MyDoubtTile({ data }) {
                                 item.question
                             )}
                         </div>
-                        <div className="font-medium">Date {item.date}</div>
+                        
                     </div>
-                    <div className='mt-3 px-3'>
+                    <div className='mt-3 px-3 font-normal'>
                         {item.status === 'Resolved' && (
                             <div>
                                 <span className='text-lg font-medium'>Answer</span> : {item.solution}
                             </div>
                         )}
                     </div>
+                    <div className="font-medium text-right text-gray-400">Date {item.date}</div>
                 </div>
             ))}
         </div>

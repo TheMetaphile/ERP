@@ -8,8 +8,8 @@ export default function SelectSubject({ onSelect }) {
 
     return (
         <div className="  w-30">
-            <h1 className="w-fit mt-3 px-2">Select Subject</h1>     
-            <div className="flex justify-center  items-center mt-3 text-sm font-medium">
+            
+            <div className="flex justify-center  items-center text-sm font-medium">
                 <select
                     className=" shadow-md border border-grey-300 rounded-lg p-2 w-full ml-2 mr-2  mb-2"
                     onChange={handleSubjectSelect}

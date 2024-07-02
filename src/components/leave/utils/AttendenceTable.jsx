@@ -135,27 +135,27 @@ export default function AttendenceTable() {
       ) : data === null ? (
         <div className='text-center w-full'>No data available</div>
       ) : (
-        <table className=' w-full justify-evenly text-center  rounded-lg border border-black '>
+        <table className=' w-full justify-evenly text-center  rounded-lg border border-gray-300 '>
           <thead>
             <tr className='rounded-t-lg  mt-3 text-base font-medium'>
-              <th>Leave Type</th>
-              <th className='bg-blue-200'>Start Date</th>
-              <th className='bg-green-200'>End Date</th>
-              <th>Status</th>
+              <th className='border-r border-gray-400'>Reason</th>
+              <th className='bg-blue-200 border-r border-gray-400'>Start Date</th>
+              <th className='bg-green-200 border-r border-gray-400'>End Date</th>
+              <th className='border-r border-gray-400'>Status</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {data.map((leave, index) => (
               <tr key={index} className='border-t border-gray-400 '>
-                <td className="font-normal">
+                <td className="font-normal border-r px-4 py-1 text-justify w-96 border-gray-400">
                   {editRowIndex === index ? (
                     <input type="text" name="reason" value={editData.reason} onChange={handleInputChange} />
                   ) : (leave.reason)
                   }
                 </td>
 
-                <td className="font-normal bg-blue-200">
+                <td className="font-normal bg-blue-200 border-r border-gray-400">
                   {editRowIndex === index ? (
                     <input
                       type="text" name='startDate' value={editData.startDate} onChange={handleInputChange} />
@@ -164,7 +164,7 @@ export default function AttendenceTable() {
                   }
                 </td>
 
-                <td className="font-normal bg-green-200">
+                <td className="font-normal bg-green-200 border-r border-gray-400">
                   {editRowIndex === index ?
                     (
                       <input type="text" name='endDate' value={editData.endDate} onChange={handleInputChange} />
@@ -176,15 +176,18 @@ export default function AttendenceTable() {
                 <td className={`${leave.status === "Pending" ? "text-orange-300" :
                   leave.status === "Rejected" ? "text-red-400" :
                     "text-green-400"
-                  } font-medium`}>{leave.status}
+                  } font-medium border-r border-gray-400`}>{leave.status}
                   </td>
-                <td className='flex justify-center items-center my-2 gap-1'>
-                  {editRowIndex === index ? (
+                <td >
+                  { leave.status==='Pending' ? (
+                   <div className='flex justify-center items-center my-2 gap-1'>
                     <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdSave /></button>
+                    <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
+                    </div>
                   ) : (
-                    <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <CiEdit /></button>
+                   <div className='text-orange-600'>You can't performe any action on approved or rejected leaves</div>
                   )}
-                  <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
+                  
                 </td>
               </tr>
             ))}

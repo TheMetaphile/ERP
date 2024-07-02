@@ -58,11 +58,11 @@ export default function ApplyLeave() {
                     <div className='flex items-center w-full justify-between gap-3'>
                         <div className='w-full'>
                             <label className="text-sm font-medium">From Date</label>
-                            <input type="date" className="mt-2 border border-black rounded-lg w-full md:w-auto" value={startDate} onChange={((e) => setStartDate(e.target.value))} />
+                            <input type="date" className="mt-2 px-3 py-1 border border-gray-300 shadow-md rounded-lg w-full md:w-auto" value={startDate} onChange={((e) => setStartDate(e.target.value))} />
                         </div>
                         <div className='w-full'>
                             <label className="text-sm font-medium">To Date</label>
-                            <input type="date" className="mt-2 border border-black rounded-lg w-full md:w-auto" value={endDate} onChange={((e) => setEndDate(e.target.value))} />
+                            <input type="date" className="mt-2 px-3 py-1 shadow-md border border-gray-300 rounded-lg w-full md:w-auto" value={endDate} onChange={((e) => setEndDate(e.target.value))} />
                         </div>
 
                     </div>
@@ -70,7 +70,7 @@ export default function ApplyLeave() {
                 </div>
                 <div className=" text-sm font-medium mt-3">
                     <label className="block">Reason</label>
-                    <textarea className="mt-2 border border-black rounded-lg w-full" rows={4} value={reason} onChange={((e) => setReason(e.target.value))}></textarea>
+                    <textarea className="mt-2 border px-3 py-1 border-gray-300 shadow-md rounded-lg w-full" rows={6} value={reason} onChange={((e) => setReason(e.target.value))}></textarea>
                 </div>
 
 

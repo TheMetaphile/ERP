@@ -1,28 +1,27 @@
-import check from './../../../assets/Checkmark.png'
-import cross from './../../../assets/Circled X.png'
-import excla from './../../../assets/exclamation.png'
-
 export default function SubjectHomeWorkTile({ subject, details }) {
-
     return (
-        <div className={`mt-2 w-full     `}>
+        <div className='mt-2 w-full'>
             {details.map((detail, index) => (
-                <div key={index} className='mt-3 p-3 w-full flex-col rounded-lg shadow-md items-center border  border-gray-200' >
+                <div key={index} className='mt-1 p-3 w-full flex-col rounded-lg shadow-md items-center border  border-gray-300' >
                     <div className="flex items-center justify-between  ">
+
+                        <div className="w-80 pl-2  font-medium">Chapter : <span className="font-normal">{detail.chapter}</span></div>
+
                         <div className=" px-3 py-1 bg-bg_blue rounded-full w-fit">{subject}</div>
-                        <div className="pl-2  font-medium">Chapter : {detail.chapter}</div>
-                        <h1 className="font-medium">Date: {detail.date}</h1>
 
                     </div>
+                    <div className="pl-2  font-medium">Topic : <span className="font-normal">{detail.topic}</span></div>
 
-                    <div className="flex items-center justify-between mt-3">
-                        {/* <img src={icon} alt="Icon" className="mr-2" /> */}
-                        <div className="pl-2  font-medium">Topic : {detail.topic}</div>
-                        <h1 className="font-medium">Task: {detail.description}</h1>
-                        <div className='flex items-center gap-1'>
-                            <img src={detail.by.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
-                            <div className="font-medium">{detail.by.name}</div>
-                        </div>
+
+
+                    <h1 className="font-medium pl-2">Description: <span className="font-normal">{detail.description}</span></h1>
+
+                    <div className='flex pl-2 justify-end gap-1  text-gray-500'>
+
+                        <h1 className=" text-gray-500">Classwork on <span className="font-medium text-black">{detail.date}</span></h1>
+                        by
+                        <img src={detail.by.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
+                        <div className="font-medium text-black">{detail.by.name}</div>
                     </div>
                 </div>
             ))}
