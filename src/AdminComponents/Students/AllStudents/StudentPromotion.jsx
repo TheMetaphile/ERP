@@ -52,9 +52,9 @@ export default function StudentPromotion() {
     return (
         <>
             {/* Container for heading and filter button */}
-            <div className="flex justify-between items-center px-2 py-4 border-b border-gray-300 fixed top-34 left-0 right-0 bg-white z-10 mb-4">
+            <div className="flex mobile:max-tablet:my-2 justify-between items-center mobile:max-tablet:items-baseline mobile:max-tablet:pl-1 mobile:max-tablet:py-4 px-2  mobile:max-tablet:fixed top-34 left-0 right-0 bg-white mb-4">
                 <h1 className="text-2xl font-medium px-2">All Students Data</h1>
-                <div className="mobile:max-tablet:block desktop:hidden">
+                <div className="block desktop:hidden">
                     <button
                         className="p-2 border rounded"
                         onClick={() => setDropdownVisible(!isDropdownVisible)}
@@ -62,7 +62,7 @@ export default function StudentPromotion() {
                         Filter
                     </button>
                     {isDropdownVisible && (
-                        <div className="absolute bg-white shadow-lg pt-2 rounded mt-2 right-1 left-1 z-20 justify-center flex">
+                        <div className="absolute bg-white shadow-lg py-2 rounded right-1 left-1 z-20 justify-center flex">
                             <SearchBar
                                 rollNumber={rollNumber}
                                 name={name}
@@ -77,11 +77,11 @@ export default function StudentPromotion() {
                     )}
                 </div>
             </div>
-            <div className="h-fit w-full items-start mb-3 px-2 mobile:mt-16">
+            <div className="h-fit w-full items-start mb-3 px-2">
 
 
                 {/* Original SearchBar for non-mobile screens */}
-                <div className="w-full desktop:block hidden mt-4">
+                <div className="w-full desktop:block hidden">
                     <SearchBar
                         rollNumber={rollNumber}
                         name={name}
@@ -94,7 +94,7 @@ export default function StudentPromotion() {
                     />
                 </div>
 
-                <div className="mx-2 mt-4">
+                <div className="mx-2 mt-20">
                     {filteredStudents.length === 0 ? (
                         <PromotedStudentsDetails students={students} />
                     ) : (

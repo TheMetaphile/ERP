@@ -68,9 +68,9 @@ export default function TransportList() {
     return (
         <>
             <div className="flex flex-col">
-                <div className="flex justify-between mt-2">
-                    <div><h1 className="text-3xl mx-8 mt-4 mobile:max-tablet:text-sm whitespace-nowrap ">All Transport List</h1></div>
-                    <div><button className="text-xl px-4 mx-8 mt-4 mobile:max-tablet:text-sm mobile:max-tablet:px-3 whitespace-nowrap rounded-lg bg-blue-400 hover:bg-blue-200" onClick={handleClick}>Add New Transport</button></div>
+                <div className="flex justify-between mt-2 mobile:max-tablet:flex-col">
+                    <div><h1 className="text-3xl mobile:max-tablet:mx-4 mx-8 mt-4 mobile:max-tablet:text-xl whitespace-nowrap ">All Transport List</h1></div>
+                    <div><button className="text-2xl px-4 mobile:max-tablet:mx-4 mx-8 mt-4 mobile:max-tablet:text-xl rounded-lg bg-blue-400 hover:bg-blue-200" onClick={handleClick}>Add New Transport</button></div>
                 </div>
                 <div className="mt-2 mx-2">
                     <SearchBar handleRouteNumberChange={handleRouteNumberChange} handleVehicleNumberChange={handleVehicleNumberChange} routeNumber={route} vehicleNumber={vehicleNumber} />

@@ -51,13 +51,13 @@ export default function AdminDrawer({ isOpen }) {
           ))}
         </div>
       </div>
-      <div className="flex h-fit justify-center">
+      <div className="flex h-fit justify-center my-2">
         <button
           onClick={handleLogout}
           className="bg-teal-300 border border-transparent rounded-xl px-4 py-2 flex items-center shadow-md"
         >
+          <img src={logout1} alt="logout" className="w-6 mr-2" />
           <span className="text-black">Log out</span>
-          <img src={logout1} alt="logout" className="w-6 ml-2" />
         </button>
       </div>
     </div>

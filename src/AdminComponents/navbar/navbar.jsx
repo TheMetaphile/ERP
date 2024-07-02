@@ -6,7 +6,7 @@ import { FaBell } from 'react-icons/fa';
 export default function AdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
 
   return (
-    <div className="flex flex-grow mobile:max-tablet:flex-col h-full mt-1 px-2 py-3 mb-2 items-center justify-between bg-teal-300 rounded-lg shadow-md">
+    <div className="flex flex-grow mobile:max-tablet:flex-col h-full mt-1 px-2 py-3 mb-2 mobile:max-tablet:mb-0 items-center justify-between bg-teal-300 rounded-lg shadow-md">
       <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-3">
         <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-secondary shadow-lg' />
         <img src={logo} alt="Metaphile Public School" className="w-10" />
@@ -18,12 +18,12 @@ export default function AdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
       <h1 className='text-2xl font-medium mobile:max-tablet:text-xl'>
         Admin Panel
       </h1>
-      <nav>
-        <ul className="flex w-full items-center mobile:text-sm mobile:max-tablet:text-center mobile:max-tablet:px-4">
-          <li className="mr-4 mobile:max-tablet:mr-0.5">
+      <nav className=' mobile:max-tablet:w-full'>
+        <ul className="flex w-full items-center mobile:max-tablet:text-sm mobile:max-tablet:text-center mobile:max-tablet:px-4">
+          <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1">
             <Link to="" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Home</Link>
           </li>
-          <li className="mr-4 mobile:max-tablet:mr-0.5">
+          <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1">
             <Link to="/Admin-Dashboard/StudentsFee" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Fee</Link>
           </li>
           <li className="mr-4 mobile:max-tablet:mr-0.5">

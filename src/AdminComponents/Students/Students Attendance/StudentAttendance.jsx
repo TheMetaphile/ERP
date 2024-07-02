@@ -40,10 +40,10 @@ export default function StudentAttendance() {
     }, [authState.accessToken]);
 
     return (
-        <div className="flex flex-col mx-2 mt-4">
+        <div className="flex flex-col mx-2">
             {/* Container for heading and filter button */}
-            <div className="flex justify-between items-center px-2 py-2 border-b border-gray-300 fixed top-32 mt-8 left-0 right-0 bg-white z-10 mb-4">
-                <div className="text-3xl mx-2 px-4 mobile:max-tablet:text-sm mobile:max-tablet:px-2">Student's Attendance Details</div>
+            <div className="flex justify-between items-center px-2 py-2 border-b border-gray-300 fixed top-32 left-0 right-0 bg-white mb-4">
+                <div className="text-3xl mx-2 px-4 mobile:max-tablet:text-xl mobile:max-tablet:px-2 mobile:max-tablet:mx-0">Student's Attendance Details</div>
                 <div className="mobile:max-tablet:block hidden">  {/* Ensure this is hidden on medium and larger screens */}
                     <button
                         className="p-2 border rounded"
@@ -76,7 +76,7 @@ export default function StudentAttendance() {
                     </div>
                 </div>
             ) : (
-                <div className="flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 mobile:max-tablet:mt-10">
+                <div className="flex flex-col shadow-lg rounded-lg border-gray-200 mb-4">
                     <div className=" text-xl px-4 mt-4 mobile:max-tablet:text-sm ">
                         Attendance Sheet Of Class {data.output.class} {data.output.section} April, 2024
                     </div>

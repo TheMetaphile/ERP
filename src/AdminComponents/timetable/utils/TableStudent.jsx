@@ -77,7 +77,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
     return (
         <div className="w-full rounded-lg border shadow-md">
             {/* <ToastContainer /> */}
-            <div className="flex p-3 mb-4 justify-between w-full">
+            <div className="flex p-3 mb-4 justify-between w-full mobile:max-tablet:mb-0">
                 <Link
                     to="/Admin-Dashboard/timetablestructure"
                     className="px-4 py-2 rounded-md mr-2 bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white"
@@ -108,21 +108,21 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                     </button>
                 )}
             </div>
-            <div className=' overflow-auto w-full'>
+            <div className='overflow-auto w-full'>
                 <TimetableHeader />
                 {lectures.length === 0 ? (
                     <div className='text-center'>No data available</div>
                 ) :
                     (
-                        <div className='shadow-md'>
+                        <div className='shadow-md whitespace-nowrap'>
                             {lectures.map((lecture, idx) => (
                                 <React.Fragment key={lecture._id}>
                                     {numberOfLeacturesBeforeLunch === lecture.lectureNo - 1 ? (
-                                        <div className="w-full h-8 border-t border-gray-400 bg-secondary text-xl text-center">LUNCH</div>
+                                        <div className="w-full h-8 border-t border-gray-400 bg-secondary text-xl text-center">  LUNCH</div>
                                     ) : null}
-                                    <div className="flex w-full justify-between  border-t border-gray-400">
+                                    <div className="flex mobile:max-tablet:w-fit justify-between  border-t border-gray-400 ">
 
-                                        <h1 className="w-full border-r border-gray-400 px-4 py-2 text-center">
+                                        <h1 className="w-full mobile:max-tablet:w-40 border-r border-gray-400 px-4 py-2 text-center">
                                             {editMode ? (
                                                 <input
                                                     type="text"
@@ -134,9 +134,9 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                                 lecture.lectureNo
                                             )}
                                         </h1>
-                                        <h1 className="w-full border-r border-gray-400 px-4 py-2 text-center bg-green-200">{`${formatTime(Time[lecture.lectureNo - 1].start)}-${formatTime(Time[lecture.lectureNo - 1].end)}`}</h1>
+                                        <h1 className="w-full mobile:max-tablet:w-40 border-r border-gray-400 px-4 py-2 text-center bg-green-200">{`${formatTime(Time[lecture.lectureNo - 1].start)}-${formatTime(Time[lecture.lectureNo - 1].end)}`}</h1>
 
-                                        <h1 className="w-full border-r border-gray-400 px-4 py-2 text-center bg-green-200">
+                                        <h1 className="w-full mobile:max-tablet:w-40 border-r border-gray-400 px-4 py-2 text-center bg-green-200">
                                             {editMode ? (
                                                 <input
                                                     type="text"
@@ -148,7 +148,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                                 lecture.subject
                                             )}
                                         </h1>
-                                        <div className="w-full border-r border-gray-400 flex items-center whitespace-nowrap px-4 py-2 bg-blue-200">
+                                        <div className="w-full mobile:max-tablet:w-40 border-r border-gray-400 flex items-center whitespace-nowrap px-4 py-2 bg-blue-200">
                                             {lecture.teacher?.profileLink && (
                                                 <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full" />
                                             )}
@@ -163,7 +163,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                                 <p className="text-sm px-2">{lecture.teacher?.name || 'Teacher information not available'}</p>
                                             )}
                                         </div>
-                                        <div className='w-full border-r border-gray-400 px-4 py-2 text-center bg-blue-200'>
+                                        <div className='w-full mobile:max-tablet:w-40 border-r border-gray-400 px-4 py-2 text-center bg-blue-200'>
 
                                         </div>
 

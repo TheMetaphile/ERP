@@ -14,8 +14,8 @@ function Selection({ selectClass, selectedSection, onClassChange, onSectionChang
         <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0  overflow-y-auto items-start mt-2  mb-3 no-scrollbar">
             <div className="container p-3  ">
 
-                <div className="flex justify-between ">
-                    <div className="w-1/4">
+                <div className="flex justify-between mobile:max-tablet:flex-col">
+                    <div className="w-1/4 mobile:max-tablet:w-auto mobile:max-tablet:mb-2">
                         <select className="w-full px-4 py-2 border rounded-md" value={selectClass} onChange={(e) => onClassChange(e.target.value)}>
                             <option value="">Select Class</option>
                             <option value="Pre-Nursery">Pre-Nursery</option>
@@ -36,7 +36,7 @@ function Selection({ selectClass, selectedSection, onClassChange, onSectionChang
                             <option value="12th">12th</option>
                         </select>
                     </div>
-                    <div className="w-1/4">
+                    <div className="w-1/4 mobile:max-tablet:w-auto mobile:max-tablet:mb-2">
                         <select className="w-full px-4 py-2 border rounded-md" value={selectedSection} onChange={(e) => onSectionChange(e.target.value)}>
                             <option value="">Select Section</option>
                             <option value="A">A</option>
@@ -50,7 +50,7 @@ function Selection({ selectClass, selectedSection, onClassChange, onSectionChang
                             <option value="I">I</option>
                         </select>
                     </div>
-                    <div className="w-1/4">
+                    <div className="w-1/4 mobile:max-tablet:w-auto mobile:max-tablet:mb-2">
                         <select
                             type="text"
                             className="w-full px-4 py-2 border rounded-md"

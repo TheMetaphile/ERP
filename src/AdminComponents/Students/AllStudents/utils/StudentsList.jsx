@@ -170,8 +170,8 @@ export default function StudentsList() {
 
     return (
         <>
-            <div className="flex my-2 justify-between items-center px-2 py-2 border-b border-gray-300 fixed top-34 left-0 right-0 bg-white z-10 mb-4">
-                <h1 className="text-2xl font-medium px-2">All Students Data</h1>
+            <div className="flex mobile:max-tablet:my-3 justify-between items-center mobile:max-tablet:items-baseline mobile:max-tablet:pl-1 mobile:max-tablet:py-2 px-2  mobile:max-tablet:fixed top-34 left-0 right-0 bg-white mb-4">
+                <h1 className="text-2xl font-medium px-2 ">All Students Data</h1>
                 <div className="block desktop:hidden">
                     <button
                         className="p-2 border rounded"
@@ -196,9 +196,9 @@ export default function StudentsList() {
                     )}
                 </div>
             </div>
-            <div className="h-fit w-full items-start mb-3 px-2 mobile:mt-14">
+            <div className="h-fit w-full items-start mb-3 px-2">
                 {/* Original SearchBar for non-mobile screens */}
-                <div className="w-full desktop:block hidden">
+                <div className="w-full desktop:block hidden my-2">
                     <SearchBar
                         rollNumber={rollNumber}
                         name={name}
@@ -221,8 +221,8 @@ export default function StudentsList() {
                         Add Roll Number
                     </button>
                 )}
-                <div className="mobile:max-tablet:overflow-y-auto mobile:max-tablet:mt-20">
-                    <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap" ref={containerRef} onScroll={handleScroll}>
+                <div className="mobile:max-tablet:overflow-y-auto">
+                    <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap mobile:max-tablet:mt-20" ref={containerRef} onScroll={handleScroll}>
 
                         <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
                         {loading && userData.length < 1 ? (

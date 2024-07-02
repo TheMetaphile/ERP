@@ -25,8 +25,8 @@ const NoticeUser = () => {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md w-full flex flex-col">
-      <div className="flex justify-between">
-        <div className="flex gap-10  mobile:max-tablet:gap-0">
+      <div className="flex justify-between mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
+        <div className="flex gap-10  mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
           <button className={`text-xl px-4 border border-gray-300 ${selectedRole === 'all' ? 'bg-blue-400' : 'bg-gray-300'} rounded-lg`}
             onClick={() => selectRole('all')}>All</button>
           <button className={`text-xl border border-gray-300 ${selectedRole === 'student' ? 'bg-blue-400' : 'bg-gray-300'} rounded-lg px-4`}

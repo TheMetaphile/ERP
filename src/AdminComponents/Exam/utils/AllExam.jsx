@@ -144,10 +144,10 @@ export default function AllExam() {
     const filteredExams = selectedClass ? exams.filter(exam => exam.class === selectedClass) : exams;
 
     return (
-        <div className="flex flex-col mb-4">
+        <div className="flex flex-col mb-4 mobile:max-tablet:mt-4">
             <ToastContainer />
 
-            <div>
+            <div className="">
                 <h1 className="text-3xl mx-4 mobile:max-tablet:text-xl mobile:max-tablet:mb-2 mobile:max-tablet:mx-1">All Exam Schedule</h1>
             </div>
             <div className="flex justify-between mobile:max-tablet:gap-2">

@@ -25,7 +25,7 @@ export default function AdminDashboard() {
         <div className={`mobile:max-tablet:absolute z-20 flex-shrink-0 transition-all duration-300 mobile:max-tablet:mt-8 ${isDrawerOpen ? 'w-60 h-full' : 'w-0'} overflow-y-auto no-scrollbar`}>
           <AdminDrawer isOpen={isDrawerOpen} />
         </div>
-        <div className="flex-grow  overflow-y-auto no-scrollbar mobile:max-tablet:mt-6">
+        <div className="flex-grow  overflow-y-auto no-scrollbar mobile:max-tablet:">
           <Outlet />
         </div>
         <div className={`mobile:max-tablet:absolute mobile:max-tablet:right-0 rounded-lg shadow-md flex-shrink-0 bg-white transition-all duration-300 mobile:max-tablet:${isEndDrawerOpen ? 'w-60 h-full' : 'w-0 h-0'} tablet:w-60 tablet:h-full overflow-y-auto no-scrollbar`}>

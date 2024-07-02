@@ -7,7 +7,7 @@ export default function PromotedStudentsDetails({ students }) {
     };
     return (
         <div className="rounded-xl shadow-lg mb-4">
-            <div className="overflow-x-auto w-full mt-4 mobile:max-tablet:mt-12 rounded-lg">
+            <div className="overflow-x-auto w-full mt-4 rounded-lg">
                 <table className="min-w-full divide-y divide-gray-600">
                     <thead className="">
                         <tr>

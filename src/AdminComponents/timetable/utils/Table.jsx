@@ -16,7 +16,7 @@ function Table({ teacherEmail, data, Time, numberOfLeacturesBeforeLunch }) {
     return (
         <div className="w-full overflow-auto mobile:max-tablet:w-auto mt-4 rounded-lg border border-gray-400 shadow-md">
             <div className="">
-                <table className="w-full mobile:max-tablet:w-auto items-center rounded-lg">
+                <table className="w-full mobile:max-tablet:w-auto items-center rounded-lg whitespace-nowrap">
                     <thead className="bg-secondary ">
                         <tr>
                             <th className="px-4 py-2 font-medium border-r border-gray-400">Lecture</th>
