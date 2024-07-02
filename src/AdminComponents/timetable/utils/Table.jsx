@@ -14,7 +14,7 @@ function Table({ teacherEmail, data, Time, numberOfLeacturesBeforeLunch }) {
 
     const timetable = data?.timetable || [];
     return (
-        <div className="w-full mobile:max-tablet:w-auto mt-4 rounded-lg border border-gray-400 shadow-md">
+        <div className="w-full overflow-auto mobile:max-tablet:w-auto mt-4 rounded-lg border border-gray-400 shadow-md">
             <div className="">
                 <table className="w-full mobile:max-tablet:w-auto items-center rounded-lg">
                     <thead className="bg-secondary ">

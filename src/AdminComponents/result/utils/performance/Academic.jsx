@@ -49,9 +49,9 @@ export default function Academic(props) {
             </div>
 
             <div className="border-t-2 border-text_blue my-3 tablet:mx-2 rounded-full "></div>
-            <div className='flex flex-col w-full justify-between tablet:mx-2'>
+            <div className='flex flex-col w-full justify-between tablet:mx-2 mobile:max-tablet:overflow-auto '>
 
-                <div className="w-full tablet:mx-2">
+                <div className="w-full mobile:max-tablet:w-fit tablet:mx-2">
                     <h1 className="text-xl font-medium mb-3">
                         Term I
                     </h1>

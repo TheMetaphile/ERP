@@ -21,11 +21,11 @@ export default function Dashboard() {
         <Navbar onDrawerToggle={toggleDrawer} onEndDrawerToggle={toggleEndDrawer} />
       </div>
 
-      <div className="flex flex-grow h-screen pt-20 mobile:max-tablet:pt-32">
+      <div className="flex flex-grow h-screen pt-20 mobile:max-tablet:pt-32 ">
         <div className={`mobile:max-tablet:absolute z-50 flex-shrink-0 transition-all duration-300 ${isDrawerOpen ? 'w-60 h-full' : 'w-0'} overflow-y-auto no-scrollbar`}>
           <Drawer isOpen={isDrawerOpen} />
         </div>
-        <div className="flex-grow  overflow-y-auto no-scrollbar  ">
+        <div className="flex-grow  overflow-y-auto no-scrollbar ">
           <Outlet />
         </div>
         <div className={`mobile:max-tablet:absolute mobile:max-tablet:right-0 rounded-lg shadow-md flex-shrink-0 bg-white transition-all duration-300 mobile:max-tablet:${isEndDrawerOpen ? 'w-60 h-full' : 'w-0 h-0'} tablet:w-60 tablet:h-full overflow-y-auto no-scrollbar`}>

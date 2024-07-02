@@ -146,11 +146,11 @@ function FeeDetails() {
                         details.length > 0 ? (
                             <div>
                                 {details.map((details, index) => (
-                                    <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border gap-x-4'>
+                                    <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center'>
                                         <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.rollNumber}
                                         </h1>
-                                        <h1 className="w-44 text-lg flex text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        <h1 className="w-44 text-lg flex items-center text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             <span className='mr-2'>
                                                 <img src={details.profileLink} alt="profile pic" className='w-10 h-10 rounded-full ' />
                                             </span>

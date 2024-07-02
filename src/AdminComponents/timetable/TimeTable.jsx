@@ -204,10 +204,10 @@ function TimeTable() {
     };
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-tablet:mt-6">
+        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
             {/* <ToastContainer /> */}
             <div className='flex justify-between items-center w-full'>
-                <h1 className='text-2xl'>Time Table</h1>
+                <h1 className='text-2xl mobile:max-tablet:text-xl whitespace-nowrap'>Time Table</h1>
                 <div className="flex gap-4 px-3 py-2  mt-2 text-lg justify-between">
                     <label className="text-lg font-medium text-center">
                         <input
@@ -273,7 +273,7 @@ function TimeTable() {
 
                                             </span>
                                             <img src={Teacher.profileLink} alt="profilepic" className='ml-2 w-10 h-10 rounded-full mr-2' />
-                                            <div className='flex-1'>
+                                            <div className='flex-1 mobile:max-tablet:text-sm'>
                                                 <span>
                                                     {Teacher.name}
                                                 </span>

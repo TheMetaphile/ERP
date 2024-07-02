@@ -2,7 +2,9 @@
 export default function TimetableHeader() {
 
     return (
-        <div className="bg-secondary  flex w-full  border-t border-gray-400 rounded-t-lg text-xl">
+
+
+        <div className="bg-secondary  flex w-full  border-t border-gray-400 rounded-t-lg text-xl mobile:max-tablet:w-fit">
             <h1 className="w-full px-4 py-2 text-center border-r border-gray-400">
                 Lecture
             </h1>
@@ -19,5 +21,7 @@ export default function TimetableHeader() {
                 Remark
             </h1>
         </div>
+
+
     )
 }

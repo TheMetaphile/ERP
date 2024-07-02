@@ -148,7 +148,7 @@ export default function AllExam() {
             <ToastContainer />
 
             <div>
-                <h1 className="text-3xl mx-4 mobile:max-tablet:text-xl mobile:max-tablet:mb-2">All Exam Schedule</h1>
+                <h1 className="text-3xl mx-4 mobile:max-tablet:text-xl mobile:max-tablet:mb-2 mobile:max-tablet:mx-1">All Exam Schedule</h1>
             </div>
             <div className="flex justify-between mobile:max-tablet:gap-2">
                 <div>
@@ -180,7 +180,7 @@ export default function AllExam() {
 
                     </select>
                 </div>
-                <div><button className=" mobile:max-tablet:text-sm  rounded-lg border bg-blue-400 px-4 text-xl hover:bg-blue-200" onClick={togglePopUp}>Schedule New Exam</button></div>
+                <div><button className="py-2 mobile:max-tablet:text-sm  rounded-lg border bg-blue-400 px-4 text-xl hover:bg-blue-200" onClick={togglePopUp}>Schedule New Exam</button></div>
             </div>
             <div className="rounded-xl shadow-lg mb-4">
                 <div className="overflow-x-auto w-full mt-4 rounded-lg">

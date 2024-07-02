@@ -6,10 +6,10 @@ export default function TeacherCard({ userData }) {
     return (
         <div className="mx-3">
             {userData.map((user, index) => (
-                <div key={user._id || index} className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between border rounded-lg p-4 mb-2">
+                <div key={user._id || index} className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between border rounded-lg p-4 mb-2 mobile:max-tablet:items-start">
 
                     <div className="flex w-72 mobile:max-tablet:w-auto">
-                        <img src={user.profileLogo || userimg} alt="" className="h-16 w-16 mr-3 rounded-full" />
+                        <img src={user.profileLogo || userimg} alt="" className="h-16 w-16 mr-3 rounded-full " />
 
                         <div className="mt-2 flex flex-col items-start">
                             <h1 className="text-xl font-semibold">{user.name}</h1>

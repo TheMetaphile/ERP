@@ -52,7 +52,7 @@ export default function StudentPromotion() {
     return (
         <>
             {/* Container for heading and filter button */}
-            <div className="flex justify-between items-center px-2 py-2 border-b border-gray-300 fixed top-34 left-0 right-0 bg-white z-10 mb-4">
+            <div className="flex justify-between items-center px-2 py-4 border-b border-gray-300 fixed top-34 left-0 right-0 bg-white z-10 mb-4">
                 <h1 className="text-2xl font-medium px-2">All Students Data</h1>
                 <div className="mobile:max-tablet:block desktop:hidden">
                     <button

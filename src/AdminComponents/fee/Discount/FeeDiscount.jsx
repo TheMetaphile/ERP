@@ -82,15 +82,15 @@ function FeeDiscount() {
     return (
         <div className="flex flex-col px-3 mobile:max-tablet:px-0  overflow-auto items-start mt-2  mb-3 ">
             <ToastContainer />
-            <div className='flex justify-between w-full items-center px-2'>
-                <h1 className="text-2xl p-2 whitespace-nowrap">Student Fee Discount</h1>
-                <div className='flex w-full justify-end gap-1 items-center'>
+            <div className='flex justify-between w-full items-center px-2 mobile:max-tablet:flex-col'>
+                <h1 className="text-2xl p-2 whitespace-nowrap mobile:max-tablet:text-xl mobile:max-tablet:w-full">Student Fee Discount</h1>
+                <div className='flex w-full justify-end gap-1 items-center mobile:max-tablet:flex-col'>
 
                     <select
                         id="sessionSelector"
                         value={selectedSession}
                         onChange={handleChange}
-                        className="mx-4 border rounded-md w-fit py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                        className="mx-4 border rounded-md w-fit py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2 mobile:max-tablet:w-full"
                     >
                         {sessions.map((session, index) => (
                             <option key={index} value={session}>
@@ -100,7 +100,7 @@ function FeeDiscount() {
                     </select>
 
                     <select
-                        className="mx-4 border rounded-md w-fit py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                        className="mx-4 border rounded-md w-fit py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2 mobile:max-tablet:w-full"
                         id="Class"
                         name="Class"
                         value={selectedClass}
@@ -126,7 +126,7 @@ function FeeDiscount() {
                         <option value="12th">12th</option>
                     </select>
                     <h1
-                        className="text-lg h-fit py-1 px-2 text-center bg-purple-200 rounded-lg hover:cursor-pointer"
+                        className="text-lg h-fit py-1 px-2 text-center bg-purple-200 rounded-lg hover:cursor-pointer mobile:max-tablet:mt-2"
                         onClick={() => setShowDiscountStructure(!showDiscountStructure)}
                     >
                         {showDiscountStructure ? 'Cancel' : 'Add'}
@@ -179,11 +179,11 @@ function FeeDiscount() {
                         details.length > 0 ? (
                             <div>
                                 {details.map((details, index) => (
-                                    <div key={index} className='flex w-fit text-center justify-between  py-2 pl-2 h-fit border '>
+                                    <div key={index} className='flex w-fit text-center justify-between items-center py-2 pl-2 h-fit border '>
                                         <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.to.rollNumber}
                                         </h1>
-                                        <h1 className="w-44 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm flex whitespace-nowrap">
+                                        <h1 className="w-44 text-lg items-center  mobile:max-tablet:text-sm mobile:max-tablet:font-sm flex whitespace-nowrap">
                                             <img src={details.to.profileLink} alt="profileLink" className='h-10 w-10 rounded-full mr-3' />
                                             {details.to.name}
                                         </h1>
