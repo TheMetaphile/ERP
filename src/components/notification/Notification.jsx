@@ -23,7 +23,7 @@ export default function Notification() {
                         >
                             All
                         </Link>
-                        <Link
+                        {/* <Link
                             to={'/Student-Dashboard/notification/inbox'}
                             className={`text-xl font-medium px-2 rounded-lg py-1 shadow-md ${selectedLink === '/Student-Dashboard/notification/inbox' ? 'bg-secondary ' : 'bg-gray-200'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/notification/inbox')}
@@ -36,7 +36,7 @@ export default function Notification() {
                             onClick={() => handleLinkSelect('/Student-Dashboard/notification/archived')}
                         >
                             Archived
-                        </Link>
+                        </Link> */}
                     </div>
 
                     <h1 className=' border border-grey-300 rounded-lg shadow-md items-center px-4 py-2 cursor-pointer'>Mark all as read</h1>

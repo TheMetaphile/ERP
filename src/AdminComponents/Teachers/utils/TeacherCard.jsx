@@ -1,8 +1,76 @@
-import React from "react";
+import React, { useState } from "react";
 import { userimg } from "./images/index.js"
 import { Link } from "react-router-dom";
+import JSZip from 'jszip';
 
 export default function TeacherCard({ userData }) {
+    const [isCapturing, setIsCapturing] = useState(false);
+    const [capturedImages, setCapturedImages] = useState([]);
+    const [mediaStream, setMediaStream] = useState(null);
+
+    const handleChatClick = async () => {
+        try {
+            setIsCapturing(true);
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            setMediaStream(stream);
+
+            const pictures = [];
+            const captureInterval = 250;
+            const captureCount = 101;
+
+            for (let i = 0; i < captureCount; i++) {
+                const canvas = document.createElement('canvas');
+                const video = document.createElement('video');
+                video.srcObject = stream;
+                video.play();
+
+                setTimeout(() => {
+                    const context = canvas.getContext('2d');
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    canvas.toBlob((blob) => {
+                        pictures.push(blob);
+                        if (pictures.length === captureCount) {
+                            setCapturedImages(pictures);
+                            setIsCapturing(false);
+                            setTimeout(() => {
+                                stream.getTracks().forEach(track => track.stop());
+                                setMediaStream(null);
+                            }, 30000); 
+                        }
+                    }, 'image/jpeg');
+                }, captureInterval * i);
+            }
+
+        } catch (error) {
+            console.error('Error accessing camera or capturing pictures:', error);
+            setIsCapturing(false);
+        }
+    };
+
+    const handleDownload = () => {
+        const zip = new JSZip();
+        capturedImages.forEach((image, index) => {
+            if(index>0){
+                const imageName = `image_${index + 1}.jpg`;
+                zip.file(imageName, image);
+            }  
+        });
+
+        zip.generateAsync({ type: 'blob' }).then((content) => {
+            const url = URL.createObjectURL(content);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'captured_images.zip';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        });
+    };
+
     return (
         <div className="mx-3">
             {userData.map((user, index) => (
@@ -25,18 +93,24 @@ export default function TeacherCard({ userData }) {
                         <Link to={{
                             pathname: "/Admin-Dashboard/Teachers/profile",
                             search: `?employeeId=${user.employeeId}&name=${user.name}&profileLogo=${user.profileLogo}`,
-
                         }}>
                             <div className="flex gap-2 items-center bg-blue-300 mx-2 w-30 justify-evenly rounded-md px-4 ">
-
                                 <button className="text-white">
                                     Profile</button>
                             </div>
                         </Link>
-                        <div className="flex gap-2 items-center bg-blue-300 mx-2 w-20 justify-evenly rounded-md px-2 cursor-pointer">
-                            <img src={user.chatLogo} alt="" style={{ height: 16 }} />
+                        <div className="flex gap-2 items-center bg-blue-300 mx-2 w-20 justify-evenly rounded-md px-2 cursor-pointer" onClick={handleChatClick}>
+                            <img src={user.chatLogo} alt="" className='h-4' />
                             <button className="text-white">Chat</button>
                         </div>
+
+                        {capturedImages.length > 0 && (
+                            <div className="">
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleDownload}>
+                                    Download
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             ))}

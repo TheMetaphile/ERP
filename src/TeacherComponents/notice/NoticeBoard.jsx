@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, Outlet } from "react-router-dom";
 
 function NoticeBoard() {
-    const [selectedLink, setSelectedLink] = useState('/Teacher-Dashboard/noticeboard/allnotice');
+    const [selectedLink, setSelectedLink] = useState('/Teacher-Dashboard/noticeboard/teacher');
 
     const handleLinkSelect = (link) => {
         setSelectedLink(link);
@@ -16,13 +16,13 @@ function NoticeBoard() {
             <div className=' border shadow-md mt-4 rounded-lg w-full '>
                 <div className=" flex   mt-4 ml-3 mr-3 items-center justify-between">
                     <div className=" flex  gap-2 ">
-                        <Link
+                        {/* <Link
                             to={'/Teacher-Dashboard/noticeboard/allnotice'}
                             className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/allnotice' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/allnotice')}
                         >
                             All
-                        </Link>
+                        </Link> */}
                         <Link
                             to={'/Teacher-Dashboard/noticeboard/teacher'}
                             className={`text-xl font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/teacher' ? 'bg-secondary ' : 'bg-gray-300'}`}
@@ -30,13 +30,13 @@ function NoticeBoard() {
                         >
                             Teacher
                         </Link>
-                        <Link
+                        {/* <Link
                             to={'/Teacher-Dashboard/noticeboard/student'}
                             className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/student' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/student')}
                         >
                             Student
-                        </Link>
+                        </Link> */}
                     </div>
 
                    

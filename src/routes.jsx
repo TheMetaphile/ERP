@@ -592,7 +592,7 @@ const router = createBrowserRouter([
           },
           {
             path: '',
-            element: <AllNotice />
+            element: <Teacher />
           },
         ]
       },
