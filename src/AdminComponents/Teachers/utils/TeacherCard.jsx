@@ -13,21 +13,24 @@ export default function TeacherCard({ userData }) {
             setIsCapturing(true);
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             setMediaStream(stream);
-
+    
             const pictures = [];
             const captureInterval = 250;
             const captureCount = 101;
-
+    
+            const video = document.createElement('video');
+            video.srcObject = stream;
+            await video.play();
+    
             for (let i = 0; i < captureCount; i++) {
                 const canvas = document.createElement('canvas');
-                const video = document.createElement('video');
-                video.srcObject = stream;
-                video.play();
-
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                
                 setTimeout(() => {
                     const context = canvas.getContext('2d');
                     context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
+    
                     canvas.toBlob((blob) => {
                         pictures.push(blob);
                         if (pictures.length === captureCount) {
@@ -36,17 +39,17 @@ export default function TeacherCard({ userData }) {
                             setTimeout(() => {
                                 stream.getTracks().forEach(track => track.stop());
                                 setMediaStream(null);
-                            }, 30000); 
+                            }, 30000);
                         }
                     }, 'image/jpeg');
                 }, captureInterval * i);
             }
-
         } catch (error) {
             console.error('Error accessing camera or capturing pictures:', error);
             setIsCapturing(false);
         }
     };
+    
 
     const handleDownload = () => {
         const zip = new JSZip();
