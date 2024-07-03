@@ -97,6 +97,51 @@ export default function HistoryTile({ details }) {
             <ToastContainer />
             {data.map((item, index) => (
                 <div key={index} className="mb-2 border border-gray-200 shadow-md rounded-lg p-3">
+
+
+                    <div className='flex justify-between font-medium'>
+                        Type: {editRowIndex === index ? (
+                            <input
+                                type="text"
+                                value={editData.type}
+                                onChange={(e) => handleInputChange(e, 'type')}
+                                className='border border-black'
+                            />
+                        ) : (
+                            item.type
+                        )}
+                        <div className="flex items-center mt-2">
+                            {item.by.length > 0 && item.status !== 'Pending' ? (
+                                <>
+                                    <img src={item.by[0].profileLink} alt="img" className="w-8 h-8 rounded-full" />
+                                    <h5 className="ml-2">{item.by[0].name}</h5>
+                                </>
+                            ) : (
+                                <div className="flex justify-center items-center gap-1">
+                                    {editRowIndex === index ? (
+                                        <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdCheck /></button>
+                                    ) : (
+                                        <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <MdEdit /></button>
+                                    )}
+                                    <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
+                                    <div className={`font-normal text-sm px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-200 text-orange-700' : item.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>{item.status}</div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <div className='font-medium text-justify'>
+                        Reason: {editRowIndex === index ? (
+                            <input
+                                type="text"
+                                value={editData.reason}
+                                onChange={(e) => handleInputChange(e, 'reason')}
+                                className='border border-black'
+                            />
+                        ) : (
+                            <span className='font-normal'>{item.reason}</span>
+                        )}
+                    </div>
+
                     <div className='w-full flex items-center justify-between'>
                         <div>
                             Start Date: {editRowIndex === index ? (
@@ -122,50 +167,7 @@ export default function HistoryTile({ details }) {
                                 item.endDate
                             )}
                         </div>
-                        <div className={`font-normal text-xs p-2 rounded-lg ${item.status === 'Pending' ? 'bg-orange-200 text-orange-700' : item.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>{item.status}</div>
-                    </div>
-                    <div className='w-full flex items-center justify-between'>
-                        <div>
-                            Type: {editRowIndex === index ? (
-                                <input
-                                    type="text"
-                                    value={editData.type}
-                                    onChange={(e) => handleInputChange(e, 'type')}
-                                    className='border border-black'
-                                />
-                            ) : (
-                                item.type
-                            )}
-                        </div>
-                        <div>
-                            Reason: {editRowIndex === index ? (
-                                <input
-                                    type="text"
-                                    value={editData.reason}
-                                    onChange={(e) => handleInputChange(e, 'reason')}
-                                    className='border border-black'
-                                />
-                            ) : (
-                                item.reason
-                            )}
-                        </div>
-                        <div className="flex items-center mt-2">
-                            {item.by.length > 0 && item.status !== 'Pending' ? (
-                                <>
-                                    <img src={item.by[0].profileLink} alt="img" className="w-8 h-8 rounded-full" />
-                                    <h5 className="ml-2">{item.by[0].name}</h5>
-                                </>
-                            ) : (
-                                <div className="flex justify-center items-center gap-1">
-                                    {editRowIndex === index ? (
-                                        <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdCheck /></button>
-                                    ) : (
-                                        <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <MdEdit /></button>
-                                    )}
-                                    <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
-                                </div>
-                            )}
-                        </div>
+
                     </div>
                 </div>
             ))}

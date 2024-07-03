@@ -121,9 +121,9 @@ export default function AcademicMiddleTile({ details, email ,term}) {
                             <div className='w-1/3 text-lg text-center py-2 bg-green-200'>{detail.totalPracticalMarks}</div>
                             <div className='w-1/3 text-lg text-center py-2 bg-blue-200'>{detail.marksObtained}</div>
                             <div className='w-1/3 text-lg text-center py-2 bg-green-200'>{detail.totalMarks}</div>
-                            <div className='w-1/3 text-lg text-center py-2 bg-green-200'>
+                            <div className='w-1/3 text-lg  py-2 bg-green-200 text-center'>
                                 <button
-                                    className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                    className='bg-red-400 hover:bg-red-700  text-white px-3 rounded-lg shadow-md '
                                     onClick={() => handleEditClick(index, detail)}
                                 >
                                     <MdEdit />

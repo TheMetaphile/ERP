@@ -42,7 +42,7 @@ export default function StudentAttendance() {
     return (
         <div className="flex flex-col mx-2">
             {/* Container for heading and filter button */}
-            <div className="flex justify-between items-center px-2 py-2 border-b border-gray-300 fixed top-32 left-0 right-0 bg-white mb-4">
+            <div className="flex justify-between items-center px-2 py-2 border-b border-gray-300 mobile:max-tablet:fixed mobile:max-tablet:top-32 left-0 right-0 bg-white mb-4">
                 <div className="text-3xl mx-2 px-4 mobile:max-tablet:text-xl mobile:max-tablet:px-2 mobile:max-tablet:mx-0">Student's Attendance Details</div>
                 <div className="mobile:max-tablet:block hidden">  {/* Ensure this is hidden on medium and larger screens */}
                     <button
@@ -62,7 +62,7 @@ export default function StudentAttendance() {
             </div>
 
             {/* Original SearchBar for non-mobile screens */}
-            <div className="w-full desktop:block hidden mt-14">
+            <div className="w-full desktop:block hidden mobile:max-tablet:mt-14">
                 <SearchBar
                 />
             </div>

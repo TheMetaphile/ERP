@@ -16,16 +16,16 @@ export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, Time
                 {lectures.map((lecture) => (
                     lecture.lectureNo === index + 1 ? (
                         <div key={lecture._id} className="w-full flex">
-                            <h1 className="w-full px-4 py-2 text-center border-r border-gray-400 bg-green-200">{lecture.lectureNo}</h1>
-                            <h1 className="w-full px-4 py-2 text-center border-r border-gray-400 bg-green-200">{lecture.subject}</h1>
+                            <h1 className="w-32 px-4 py-2 text-center border-r border-gray-400 bg-green-200">{lecture.lectureNo}</h1>
+                            <h1 className="w-60 px-4 py-2 text-center border-r border-gray-400 bg-green-200">{lecture.subject}</h1>
 
 
-                            <div className="w-full px-4 py-2 text-center border-r flex items-center border-gray-400 bg-blue-200">
+                            <div className="w-60 pl-12 py-2   border-r flex items-center border-gray-400 bg-blue-200">
                                 <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full" />
                                 <p className="text-sm px-2">{lecture.teacher.name}</p>
                             </div>
 
-                            <h1 className="w-full px-4 py-2 text-center border-r border-gray-400 bg-blue-200">{Time}</h1>
+                            <h1 className="w-60 px-4 py-2 text-center border-r border-gray-400 bg-blue-200">{Time}</h1>
 
                         </div>
                     ) : null

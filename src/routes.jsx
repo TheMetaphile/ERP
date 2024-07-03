@@ -670,6 +670,10 @@ const router = createBrowserRouter([
         element: <ClassActivity />,
         children: [
           {
+            path: "",
+            element: <TimeTableStudent />
+          },
+          {
             path: "/Teacher-Dashboard/class_activity/timetablestudent",
             element: <TimeTableStudent />,
             children:[]

@@ -10,7 +10,7 @@ import AcademicBottonTile from './utils/AcademicBottomTile';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import NewResult from './NewResult';
 
-function UploadResultRow({ rollNumber, name, profileLink, email }) {
+function UploadResultRow({ rollNumber, name, profileLink, email, Class, section }) {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [expanded, setExpanded] = useState(false);
@@ -37,9 +37,17 @@ function UploadResultRow({ rollNumber, name, profileLink, email }) {
 
 
     const fetchResult = async () => {
-        console.log(authState.ClassDetails.class, email)
+       
+        const date = new Date();
+        var session = '';
+        if(date.getMonth()+1<6){
+            session = `${date.getFullYear()-1}-${date.getFullYear().toString().substring(2,4)}`
+        }else{
+            session = `${date.getFullYear()}-${`${date.getFullYear()+1}`.substring(2,4)}`
+        }
+        console.log(authState.ClassDetails.class, email, Class, session)
         try {
-            const response = await axios.get(`${BASE_URL_Result}/result/fetch/teacher?email=${email}`, {
+            const response = await axios.get(`${BASE_URL_Result}/result/fetch/teacher?email=${email}&class=${Class}&session=${session}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -70,10 +78,13 @@ function UploadResultRow({ rollNumber, name, profileLink, email }) {
                     <div className='w-52 text-center'>{name}</div>
                 </div>
                 {/* <div>{email}</div> */}
+                <div className='w-40 text-center'>{Class}</div>
 
-                {/* <div className="self-center">
-                    {expanded ? <FaChevronUp /> : <FaChevronDown />}
-                </div> */}
+
+                <div className='w-40 text-center'>{section}</div>
+                <div className='w-10'>
+                {expanded ? <FaChevronUp /> : <FaChevronDown />}
+                </div>
             </div>
             {expanded && (
                 <>
@@ -115,7 +126,7 @@ function UploadResultRow({ rollNumber, name, profileLink, email }) {
                                         </div>
                                     </div>
                                     <div className="rounded-lg shadow-md  border-2 border-gray-400">
-                                        <AcademicTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks"]} />
+                                        <AcademicTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks","Action"]} />
                                         <AcademicMiddleTile details={termTwo} email={email} term={2} />
                                         <AcademicBottonTile value={["", 'GPA', "8.2"]} />
                                     </div>

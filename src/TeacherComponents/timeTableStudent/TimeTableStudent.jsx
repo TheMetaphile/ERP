@@ -171,8 +171,6 @@ export default function TimeTableStudent() {
                 </h1>
                
             </div>
-   
-            <br></br>
             <div className="flex justify-between w-full items-center p-3">
                 <h1 className="text-xl font-medium">
                     Day-wise Lectures

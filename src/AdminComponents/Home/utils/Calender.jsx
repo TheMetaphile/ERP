@@ -18,22 +18,45 @@ const Calendar = () => {
   const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
   const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
   // Create a new Date object for the first day of the previous month
-  const prevMonthDate = new Date(prevMonthYear, prevMonth, 1);
+  const prevMonthDate = new Date(`${prevMonthYear}-${prevMonth}-1`);
 
   const getDateRange = (date) => {
-    console.log(date);
     const startDate = startOfMonth(date);
     const endDate = endOfMonth(date);
     return eachDayOfInterval({ start: startDate, end: endDate });
   }
+
   const currentMonthRange = getDateRange(currentDate);
   const prevMonthRange = getDateRange(prevMonthDate);
   const startDateDay = currentMonthRange[0].getDay();
-  const monthName = format(currentDate, 'MMM yyyy');
+  console.log('startDateDAy',startDateDay)
+  const monthName = format(currentDate, 'MMMM yyyy');
   const weekdayShortNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const negativeNum = -(weekdayShortNames.indexOf(weekdayShortNames[startDateDay]) - 1);
-  const finalDateRange = [...prevMonthRange.slice(negativeNum), ...currentMonthRange];
-  console.log(`prev ${finalDateRange}`)
+  var negativeNum;
+  switch (startDateDay){
+    case 0:
+      negativeNum=-6;
+      break;
+    case 1:
+      negativeNum=0;
+      break;
+      case 2:
+      negativeNum=-1;
+      break;
+      case 3:
+      negativeNum=-2;
+      break;
+      case 4:
+      negativeNum=-3;
+      break;
+      case 5:
+      negativeNum=-4;
+      break;
+      case 6:
+      negativeNum=-5;
+      break;
+  }
+  const finalDateRange = negativeNum==0 ? currentMonthRange : [...prevMonthRange.slice(negativeNum), ...currentMonthRange];
   return (
     <div className="flex flex-col  border border-gray-300 w-full bg-white rounded-lg shadow-md my-2 px-2">
       <div className="flex justify-between items-center mb-4 text-lg font-semibold">

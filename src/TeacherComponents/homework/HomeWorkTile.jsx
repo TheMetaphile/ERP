@@ -4,6 +4,7 @@ import AuthContext from '../../Context/AuthContext';
 import axios from 'axios';
 import { BASE_URL_Homework } from '../../Config';
 import { toast } from 'react-toastify';
+import { FaTimes } from 'react-icons/fa';
 
 export default function HomeWorkTile({ details, Class }) {
     const { authState } = useContext(AuthContext);
@@ -83,76 +84,105 @@ export default function HomeWorkTile({ details, Class }) {
                     <div className="flex items-center justify-between">
                         {editingRow === index ? (
                             <>
+
                                 <input
-                                    className="px-3 py-1 bg-bg_blue rounded-full w-fit"
-                                    value={detail.subject}
-                                    onChange={(e) => handleInputChange(index, 'subject', e.target.value)}
-                                />
-                                <input
-                                    className="pl-2 font-medium"
+                                    className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
                                     value={detail.chapter}
                                     onChange={(e) => handleInputChange(index, 'chapter', e.target.value)}
                                 />
-                                <input
-                                    className="font-medium"
-                                    value={detail.date}
-                                    onChange={(e) => handleInputChange(index, 'date', e.target.value)}
-                                />
+
+                                <div className='flex gap-2 justify-end'>
+                                    <button
+                                        className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                        onClick={() => handleConfirmClick(index)}
+                                    >
+                                        <MdCheck />
+                                    </button>
+                                    <button
+                                        className='bg-red-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                        onClick={() => handleUpdateClick(-1)}
+                                    >
+                                        <FaTimes />
+                                    </button>
+                                    <input
+                                        className="font-normal  border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
+                                        value={detail.subject}
+                                        onChange={(e) => handleInputChange(index, 'subject', e.target.value)}
+                                    />
+                                </div>
+
 
                             </>
                         ) : (
                             <>
-                                <div className="px-3 py-1 bg-bg_blue rounded-full w-fit">{detail.subject}</div>
-                                <div className="pl-2 font-medium">Chapter: {detail.chapter}</div>
-                                <h1 className="font-medium">Date: {detail.date}</h1>
+
+                                <div className="pl-2 font-medium">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
+                                <div className='flex items-center gap-1'>
+
+                                    <button
+                                        className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                        onClick={() => handleUpdateClick(index)}
+                                    >
+                                        <MdEdit />
+                                    </button>
+
+                                    <button
+                                        className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                        onClick={() => handleDelete(index)}
+                                    >
+                                        <MdDeleteForever />
+                                    </button>
+                                    <div className="px-3 py-1 bg-bg_blue rounded-full w-fit">
+
+                                        {detail.subject}
+
+                                    </div>
+                                </div>
+
+
 
                             </>
                         )}
+
                     </div>
-                    <div className="flex items-center justify-between mt-3">
+                    <div>
                         {editingRow === index ? (
-                            <>
+                            <div className="flex flex-col">
                                 <input
-                                    className="pl-2 font-medium"
+                                    className="font-normal my-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
                                     value={detail.topic}
                                     onChange={(e) => handleInputChange(index, 'topic', e.target.value)}
                                 />
-                                <input
-                                    className="font-medium"
+                                <textarea
+                                    rows={6}
+                                    className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
                                     value={detail.description}
                                     onChange={(e) => handleInputChange(index, 'description', e.target.value)}
                                 />
-                            </>
+                            </div>
                         ) : (
-                            <>
-                                <div className="pl-2 font-medium">Topic: {detail.topic}</div>
-                                <h1 className="font-medium">Task: {detail.description}</h1>
-                            </>
+                            <div>
+                                <div className="pl-2 font-medium text-justify">Topic: <span className='font-normal'>{detail.topic}</span></div>
+                                <h1 className="pl-2 font-medium text-justify">Task: <span className='font-normal'>{detail.description}</span></h1>
+                            </div>
                         )}
-                        <div className='flex items-center gap-1'>
-                            {editingRow === index ? (
-                                <button
-                                    className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                    onClick={() => handleConfirmClick(index)}
-                                >
-                                    <MdCheck />
-                                </button>
-                            ) : (
-                                <button
-                                    className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                    onClick={() => handleUpdateClick(index)}
-                                >
-                                    <MdEdit />
-                                </button>
-                            )}
-                            <button
-                                className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                onClick={() => handleDelete(index)}
-                            >
-                                <MdDeleteForever />
-                            </button>
-                        </div>
+
                     </div>
+                    <div className='text-right'>
+                        {editingRow === index ? (
+
+
+                            <input
+                                className="font-normal mt-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
+                                value={detail.date}
+                                onChange={(e) => handleInputChange(index, 'date', e.target.value)}
+                            />
+
+                        ) : (
+                            <h1 className="font-medium">Date: {detail.date}</h1>
+                        )}
+                    </div>
+
                 </div>
             ))}
 

@@ -47,16 +47,18 @@ function NoteBook() {
 
             <div className='  rounded-lg border shadow-md  w-full mb-2'>
             <Header headings={['Sr. No.', 'Name', 'Checked', 'UnChecked']} />
+            <div className='flex-1 justify-evenly items-center    h-fit  border-black w-auto text-center'>
             {details.map((detail, index) => (
                
-                    <div key={index} className='border flex justify-between items-center py-2 pl-2  w-full' >
-                        <div className=' w-40'>{detail.serial}</div>
-                        <div className=' w-40'>{detail.name}</div>
-                        <div className=' w-40'>{detail.checked === 'true' ? <FaRegCircleCheck className="text-green-500" /> : null}</div>
-                        <div className=' w-40'>{detail.checked === 'false' ? <FaRegCircleXmark className="text-red-500" /> : null}</div>
-                    </div>
-                     
-                ))}
+               <div key={index} className='border flex justify-evenly items-center py-2 pl-1 w-full' >
+                   <div className=' w-48 '>{detail.serial}</div>
+                   <div className=' w-48'>{detail.name}</div>
+                   <div className=' w-48'>{detail.checked === 'true' ? <FaRegCircleCheck className="text-green-500 inline-block" /> : null}</div>
+                   <div className=' w-48'>{detail.checked === 'false' ? <FaRegCircleXmark className="text-red-500 inline-block" /> : null}</div>
+               </div>
+                
+           ))}
+            </div>
             </div>
 
                 {isDialogOpen && <NewRecord onClose={handleClose}/>}

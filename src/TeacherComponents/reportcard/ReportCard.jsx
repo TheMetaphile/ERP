@@ -63,7 +63,7 @@ function ReportCard() {
                 <>No student found</>
             ) : (
                 <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2'>
-                    <Header headings={['Roll No.', 'Name']} />
+                    <Header headings={['Roll No.', 'Name',"Class","Section"]} />
                     {students.map((detail, index) => (
                         <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`} key={index}>
                             <div key={index} className='flex justify-evenly border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
@@ -72,10 +72,9 @@ function ReportCard() {
                                     <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full mr-2'></img>
                                     <div className='w-52 text-center'>{detail.name}</div>
                                 </div>
-                                {/* <div className=' w-40 text-center flex items-center gap-1'>
+                                <div className=' w-40 text-center'>{authState.ClassDetails.class}</div>
+                                <div className=' w-40 text-center'>{authState.ClassDetails.section}</div>
 
-                                    <div >{detail.email}</div>
-                                </div> */}
                             </div>
                         </Link>
                     ))}

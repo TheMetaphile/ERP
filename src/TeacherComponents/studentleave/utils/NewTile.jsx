@@ -26,10 +26,10 @@ export default function NewTile({ data }) {
         console.log('id', leaveId, 'status', status, 'email', email)
         setLoading(true);
         try {
-            const response = await axios.put(`${BASE_URL_Student_Leave}/leave/update`,{
-                    status: status,
-                    leaveId: leaveId
-                },
+            const response = await axios.put(`${BASE_URL_Student_Leave}/leave/update`, {
+                status: status,
+                leaveId: leaveId
+            },
                 {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
@@ -50,21 +50,25 @@ export default function NewTile({ data }) {
         <div className="w-full">
             {leaves.length > 0 ? (
                 leaves.filter(student => student.status === "Pending").map((student, studentIndex) => (
-                    <div key={studentIndex} className="border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
-                        <div className='flex items-center'>
-                            <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full' />
-                            <div>
-                                <div className='font-medium text-base ml-2'>
+                    <div key={studentIndex} className=" border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center " onClick={() => handleClick(`${studentIndex}`)}>
+                        <div className='w-full'>
+                                <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
+                                    <div className='flex items-center'>
+                                    <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
                                     <span className='text-red-500 whitespace-nowrap'>{student.name}</span> from class &nbsp;
                                     <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span> wants a Leave Request from &nbsp;
                                     <span className='text-red-500 whitespace-nowrap'>{student.startDate}</span> to &nbsp;
                                     <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
+                                    </div>
+                                    <div className='items-center px-3 cursor-pointer'>
+                                        {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}
+                                    </div>
                                 </div>
                                 {expanded === `${studentIndex}` && (
                                     <div className='font-medium text-base ml-2 mt-2'>
                                         <span className='text-gray-400 text-xl'>Reason</span>
-                                        <div className='mt-2'>
-                                            <span className='text-gray-700'>{student.reason}</span>
+                                        <div className='mt-2 text-gray-700 font-normal text-justify'>
+                                            {student.reason}
                                         </div>
                                     </div>
                                 )}
@@ -87,10 +91,7 @@ export default function NewTile({ data }) {
                                     </>
                                 </div>
                             </div>
-                        </div>
-                        <div className='items-center px-3 cursor-pointer' onClick={() => handleClick(`${studentIndex}`)}>
-                            {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}
-                        </div>
+
                     </div>
                 ))
             ) : (

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import { toast } from "react-toastify";
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL_Login,BASE_URL_TimeTable } from "../../../Config";
 
 export default function TimetableRow({
   index,
@@ -94,7 +94,7 @@ export default function TimetableRow({
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_TimeTbale}/timetable/fetch/checkAvailability`,
+        url: `${BASE_URL_TimeTable}/timetable/fetch/checkAvailability`,
         params: {
           lecture,
           day,

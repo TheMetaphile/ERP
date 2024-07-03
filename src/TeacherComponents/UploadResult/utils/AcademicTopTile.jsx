@@ -13,10 +13,10 @@ export default function AcademicTopTile(props){
             <div className="w-1/3 text-lg font-medium bg-blue-200 text-center py-2 ">
                 {props.heading[3]}
             </div>
-            <div className="w-1/3 text-lg font-medium bg-green-200 text-center py-2 rounded-t-lg">
+            <div className="w-1/3 text-lg font-medium bg-green-200 text-center py-2 ">
                 {props.heading[4]}
             </div>
-            <div className="w-1/3 text-lg font-medium bg-green-200 text-center py-2 rounded-t-lg">
+            <div className="w-1/3 text-lg font-medium bg-green-200 text-center py-2 rounded-tr-lg">
                 {props.heading[5]}
             </div>
         </div>
