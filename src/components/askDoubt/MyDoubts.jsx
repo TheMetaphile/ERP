@@ -20,6 +20,7 @@ export default function MyDoubts() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [date, setDate] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [loading, setLoading]=useState(false);
     const [data, setData] = useState([]);
 
     const [doubtDescription, setDoubtDescription] = useState('');
@@ -71,7 +72,7 @@ export default function MyDoubts() {
             toast.error('Please fill all fields');
             return;
         }
-        setIsLoading(true)
+        setLoading(true)
         try {
             const response = await axios.post(`${BASE_URL_AskDoubt}/doubts/create`, {
                 question: doubtDescription,
@@ -93,7 +94,7 @@ export default function MyDoubts() {
         } catch (error) {
             toast.error(error.message);
         }
-        setIsLoading(false)
+        setLoading(false)
     };
 
     return (
@@ -150,7 +151,7 @@ export default function MyDoubts() {
                         <IoCameraOutline className='w-6 h-6 ' />
                         <div className="flex justify-end">
                             <button className="bg-gray-300 rounded-lg px-4 py-2 mr-2" onClick={handleCloseModal}>Cancel</button>
-                            <button className="bg-blue-600 text-white rounded-lg px-4 py-2" onClick={handleSubmitDoubt}>{isLoading ? <Loading /> : 'Submit'}</button>
+                            <button className="bg-blue-600 text-white rounded-lg px-4 py-2" onClick={handleSubmitDoubt}>{loading ? <Loading /> : 'Submit'}</button>
                         </div>
                     </div>
                 </div>

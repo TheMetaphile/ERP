@@ -10,9 +10,9 @@ function Answered() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [Class, setClass] = useState('9th');
-    const [Section, setSection] = useState('A');
-    const [Subject, setSubject] = useState('Maths');
+    const [Class, setClass] = useState('');
+    const [Section, setSection] = useState('');
+    const [Subject, setSubject] = useState('');
 
     const fetchUserData = async () => {
         setLoading(true);
@@ -37,7 +37,7 @@ function Answered() {
     };
     useEffect(() => {
 
-        if (authState.accessToken) {
+        if (authState.accessToken && Class && Section && Subject) {
             fetchUserData();
         } else {
             setError('No access token available');
@@ -62,55 +62,34 @@ function Answered() {
     }
 
 
+    const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
+
+    const uniqueSections = Array.from(new Set(authState.subject.map(subj => subj.section)));
+
+    const uniqueSubjects = Array.from(new Set(authState.subject.map(subj => subj.subject)));
 
     return (
         <div className=' mr-3'>
             <div className='flex justify-between'>
                 <select id="class" value={Class} onChange={handleClassChange} className="rounded-lg mr-3 shadow-md px-3 py-1 border-2 border-gray-200 text-lg">
                     <option value="">Search by Class</option>
-                    <option value="Pre-Nursery">Pre-Nursery</option>
-                    <option value="Nursery">Nursery</option>
-                    <option value="L.K.J">L.K.J</option>
-                    <option value="U.K.J">U.K.J</option>
-                    <option value="1st">1st</option>
-                    <option value="2nd">2nd</option>
-                    <option value="3rd">3rd</option>
-                    <option value="4th">4th</option>
-                    <option value="5th">5th</option>
-                    <option value="6th">6th</option>
-                    <option value="7th">7th</option>
-                    <option value="8th">8th</option>
-                    <option value="9th">9th</option>
-                    <option value="10th">10th</option>
-                    <option value="11th">11th</option>
-                    <option value="12th">12th</option>
+                    {uniqueClasses.map((classOption, index) => (
+                        <option key={index} value={classOption}>{classOption}</option>
+                    ))}
                 </select>
 
                 <select id="section" value={Section} onChange={handleSectionChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg">
                     <option value="">Search by Section</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="F">F</option>
-                    <option value="G">G</option>
-                    <option value="H">H</option>
-                    <option value="I">I</option>
+                    {uniqueSections.map((sectionOption, index) => (
+                        <option key={index} value={sectionOption}>{sectionOption}</option>
+                    ))}
                 </select>
 
                 <select id="subject" value={Subject} onChange={handleSubjectChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg">
                     <option value="">Search by Subject</option>
-                    <option value="Hindi">Hindi</option>
-                    <option value="Maths">Maths</option>
-                    <option value="Science">Science</option>
-                    <option value="English">English</option>
-                    <option value="History">History</option>
-                    <option value="Geography">Geography</option>
-                    <option value="Physics">Physics</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Biology">Biology</option>
-                    <option value="Computer">Computer</option>
+                    {uniqueSubjects.map((subjectOption, index) => (
+                        <option key={index} value={subjectOption}>{subjectOption}</option>
+                    ))}
                 </select>
             </div>
             <AnsweredTile data={data} />

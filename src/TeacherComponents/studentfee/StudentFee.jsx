@@ -15,7 +15,12 @@ function StudentFee() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(14);
     const [loadMore, setLoadMore] = useState(false);
+    const [clickedIndex, setClickedIndex] = useState(null);
 
+    const handleClick = (index) => {
+        setClickedIndex(index);
+    };
+    
     useEffect(() => {
         fetchDetails();
     }, [start]);
@@ -80,7 +85,7 @@ function StudentFee() {
                                     ?
                                     details.payableFee - details.paid == 0
                                         ?
-                                        <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
+                                        <div key={index} className={`flex justify-evenly  py-2 pl-2 h-fit border ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
 
                                             <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}
@@ -118,7 +123,7 @@ function StudentFee() {
                                         ?
                                         details.payableFee - details.paid > 0
                                             ?
-                                            <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border '>
+                                            <div key={index} className={`flex justify-evenly  py-2 pl-2 h-fit border ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
 
                                                 <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.rollNumber}
@@ -151,7 +156,7 @@ function StudentFee() {
                                             :
                                             <div></div>
                                         :
-                                        <div key={index} className='flex justify-evenly  py-2 pl-2 t border '>
+                                        <div key={index} className={`flex justify-evenly  py-2 pl-2 h-fit border ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
 
                                             <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}

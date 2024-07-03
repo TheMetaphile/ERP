@@ -20,9 +20,23 @@ function History() {
         }
     }, [authState.accessToken]);
 
-    const fetchLeaves= async () => {
+    function getCurrentSession() {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+
+        if (currentMonth >= 3) {
+            return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
+        } else {
+            return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
+        }
+    }
+
+    const fetchLeaves = async () => {
+        const session = getCurrentSession();
+
         try {
-            const response = await axios.get(`${BASE_URL_TeacherLeave}/leave/fetch/teacher?start=0&end=10&session=2024-25`, {
+            const response = await axios.get(`${BASE_URL_TeacherLeave}/leave/fetch/teacher?start=0&end=10&session=${session}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }
@@ -43,12 +57,12 @@ function History() {
             <h1 className='text-2xl'>Leave History</h1>
             {loading ? (
                 <Loading />
-            ): details.length === 0 ? (
+            ) : details.length === 0 ? (
                 <>No data available</>
-            ):
-            (
-            <HistoryTile details={details} />
-            )}
+            ) :
+                (
+                    <HistoryTile details={details} />
+                )}
         </div>
     )
 }

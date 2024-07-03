@@ -16,7 +16,7 @@ export default function SubjectHomeWorkTile({ subject, details }) {
 
                     <h1 className="font-medium pl-2">Description: <span className="font-normal">{detail.description}</span></h1>
 
-                    <div className='flex pl-2 justify-end gap-1  text-gray-500'>
+                    <div className='flex pl-2 justify-end gap-1  text-gray-500 mt-2'>
 
                         <h1 className=" text-gray-500">Classwork on <span className="font-medium text-black">{detail.date}</span></h1>
                         by

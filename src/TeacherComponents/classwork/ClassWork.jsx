@@ -14,9 +14,9 @@ function ClassWork() {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [selectedClass, setSelectedClass] = useState("9th");
-    const [selectedSection, setSelectedSection] = useState("A");
-    const [selectedSubject, setSelectedSubject] = useState("Science");
+    const [selectedClass, setSelectedClass] = useState("");
+    const [selectedSection, setSelectedSection] = useState("");
+    const [selectedSubject, setSelectedSubject] = useState("");
 
     const handleOpen = () => {
         setIsDialogOpen(true);
@@ -61,6 +61,12 @@ function ClassWork() {
         }
     }, [authState.accessToken, selectedSubject, selectedSection, selectedClass]);
 
+    const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
+
+    const uniqueSections = Array.from(new Set(authState.subject.map(subj => subj.section)));
+
+    const uniqueSubjects = Array.from(new Set(authState.subject.map(subj => subj.subject)));
+
     return (
         <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
             <ToastContainer />
@@ -69,57 +75,37 @@ function ClassWork() {
                 <div className='flex items-center gap-2'>
                     <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange} >
                         <option value=""> Class</option>
-                        <option value="Pre-Nursery">Pre-Nursery</option>
-                        <option value="Nursery">Nursery</option>
-                        <option value="L.K.J">L.K.J</option>
-                        <option value="U.K.J">U.K.J</option>
-                        <option value="1st">1st</option>
-                        <option value="2nd">2nd</option>
-                        <option value="3rd">3rd</option>
-                        <option value="4th">4th</option>
-                        <option value="5th">5th</option>
-                        <option value="6th">6th</option>
-                        <option value="7th">7th</option>
-                        <option value="8th">8th</option>
-                        <option value="9th">9th</option>
-                        <option value="10th">10th</option>
-                        <option value="11th">11th</option>
-                        <option value="12th">12th</option>
+                        {uniqueClasses.map((classOption, index) => (
+                            <option key={index} value={classOption}>{classOption}</option>
+                        ))}
                     </select>
 
 
 
                     <select id="section" className="w-full px-4 py-2 border rounded-md" onChange={handleSectionChange}>
                         <option value=""> Section</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                        <option value="F">F</option>
-                        <option value="G">G</option>
-                        <option value="H">H</option>
-                        <option value="I">I</option>
+                        {uniqueSections.map((sectionOption, index) => (
+                            <option key={index} value={sectionOption}>{sectionOption}</option>
+                        ))}
                     </select>
 
-                    <select id="section" className="w-full px-4 py-2 border rounded-md" onChange={handleSubjectChange}>
-                        <option value=""> Subject</option>
-                        <option value="Maths">Maths</option>
-                        <option value="Science">Science</option>
-                        <option value="Physics">Physics</option>
-
+                    <select id="subject" className="w-full px-4 py-2 border rounded-md" onChange={handleSubjectChange}>
+                    <option value=""> Subject</option>
+                        {uniqueSubjects.map((subjectOption, index) => (
+                            <option key={index} value={subjectOption}>{subjectOption}</option>
+                        ))}
                     </select>
                 </div>
-               
+
             </div>
 
             {loading ? (
                 <Loading />
             ) : details.length === 0 ? (
-                <div className="text-center w-full mt-2">No Classwork found</div>
+                <div className="text-center w-full mt-6">No Classwork found</div>
             ) : (
                 <div className='w-full mt-4 rounded-lg mb'>
-                   <ClassWorkTile details={details} Class={selectedClass}/>
+                    <ClassWorkTile details={details} Class={selectedClass} />
                 </div>
             )}
 

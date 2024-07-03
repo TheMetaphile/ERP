@@ -1,52 +1,98 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Webcam from 'react-webcam';
 import * as faceapi from 'face-api.js';
+import axios from 'axios';
+import Loading from '../../../LoadingScreen/Loading';
 
-
-function VideoStream({ onClose }) {
+function VideoStream({ onClose, onCapture }) {
   const webcamRef = useRef(null);
   const [facePosition, setFacePosition] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const loadModels = async () => {
-       faceapi.nets.tinyFaceDetector.loadFromWeightMap('src/weights/tiny_face_detector_model-shard1'); // Path to models folder
-      // await faceapi.nets.faceLandmark68Net.loadFromUri('./../../../weights');
-      // await faceapi.nets.faceRecognitionNet.loadFromUri('./../../../weights');
-    };
+  //   useEffect(() => {
+  //       const loadModels = async () => {
+  //           try {
+  //               await faceapi.nets.tinyFaceDetector.loadFromUri('/src/weights');
+  //               console.log('Models loaded successfully');
+  //           } catch (error) {
+  //               console.error('Error loading models:', error);
+  //           }
+  //       };
 
-    loadModels();
-  }, []);
+  //       loadModels();
+  //   }, []);
 
-  const detectFace = async () => {
-    const videoEl = webcamRef.current.video;
-    const detections = await faceapi.detectSingleFace(videoEl, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
+  //   const detectFace = async () => {
+  //     try {
+  //         const videoEl = webcamRef.current.video;
+  //         const detections = await faceapi.detectSingleFace(videoEl, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
 
-    if (detections) {
-      const { x, y, width, height } = detections.detection.box;
-      const faceCenterX = x + width / 2;
-      const faceCenterY = y + height / 2;
+  //         if (detections) {
+  //             const { x, y, width, height } = detections.detection.box;
+  //             const faceCenterX = x + width / 2;
+  //             const faceCenterY = y + height / 2;
 
-      setFacePosition({ x: faceCenterX, y: faceCenterY, size: width });
+  //             setFacePosition({ x: faceCenterX, y: faceCenterY, size: width });
+  //         } else {
+  //             setFacePosition(null);
+  //         }
+  //     } catch (error) {
+  //         console.error('Error detecting face:', error);
+  //         setFacePosition(null);
+  //     }
+  // };
+
+
+  //   useEffect(() => {
+  //       const intervalId = setInterval(() => {
+  //           detectFace();
+  //       }, 100);
+
+  //       return () => clearInterval(intervalId);
+  //   }, []);
+
+  const handleCapture = async () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+
+    if (imageSrc) {
+      setLoading(true);
+      try {
+        const base64Response = await fetch(imageSrc);
+        const blob = await base64Response.blob();
+        const formData = new FormData();
+        formData.append('file', blob, 'image.jpg');
+
+        const response = await axios.post('https://face-prediction.onrender.com/predict', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        if (response.status === 200) {
+          console.log('API response:', response.data);
+          onClose();
+        }
+      } catch (error) {
+        console.error('Error sending image to API:', error);
+      } finally {
+        setLoading(false);
+      }
     } else {
-      setFacePosition(null);
+      console.error('Failed to capture image from webcam');
     }
   };
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      detectFace();
-    }, 100); // Adjust interval for face detection frequency
+  const handleCancel = () => {
+    onClose();
+  };
 
-    return () => clearInterval(intervalId);
-  }, []);
-  console.log(facePosition);
   return (
     <div className="fixed inset-0 flex justify-center self-center bg-gray-900 bg-opacity-50 h-full w-full">
       <Webcam
         audio={false}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
-        className=" m-4 rounded-full"
+        className="m-4 rounded-full"
       />
       {facePosition && (
         <div
@@ -59,6 +105,14 @@ function VideoStream({ onClose }) {
           }}
         />
       )}
+      <div className="absolute bottom-10 flex gap-4">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded" onClick={handleCapture}>
+          {loading ? <Loading /> : 'Capture'}
+        </button>
+        <button className="bg-red-500 hover:bg-red-700 text-white font-bold p-2 rounded" onClick={handleCancel}>
+          Cancel
+        </button>
+      </div>
     </div>
   );
 }

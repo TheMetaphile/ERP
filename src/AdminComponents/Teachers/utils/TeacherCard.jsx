@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { userimg } from "./images/index.js"
+import { userimg } from "./images/index.js";
 import { IoCameraOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import JSZip from 'jszip';
@@ -13,54 +13,66 @@ export default function TeacherCard({ userData }) {
 
     const handleChatClick = async (index) => {
         setActiveUser(index);
+        setIsCapturing(true);
+
         try {
-            setIsCapturing(true);
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             setMediaStream(stream);
 
             const video = videoRef.current;
             video.srcObject = stream;
             await video.play();
-
-            const pictures = [];
-            const captureInterval = 250;
-            const captureCount = 101;
-
-            for (let i = 0; i < captureCount; i++) {
-                setTimeout(() => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-
-                    const context = canvas.getContext('2d');
-                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                    canvas.toBlob((blob) => {
-                        pictures.push(blob);
-                        if (pictures.length === captureCount) {
-                            setCapturedImages(pictures);
-                            setIsCapturing(false);
-                            setTimeout(() => {
-                                stream.getTracks().forEach(track => track.stop());
-                                setMediaStream(null);
-                            }, 30000);
-                        }
-                    }, 'image/jpeg');
-                }, captureInterval * i);
-            }
         } catch (error) {
-            console.error('Error accessing camera or capturing pictures:', error);
-            setIsCapturing(false);
+            console.error('Error accessing camera:', error);
         }
+    };
+
+    const handleCapture = () => {
+        console.log('start')
+        const video = videoRef.current;
+        const pictures = [];
+        const captureInterval = 150;
+        const captureCount = 101;
+
+        for (let i = 0; i < captureCount; i++) {
+            setTimeout(() => {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                canvas.toBlob((blob) => {
+                    pictures.push(blob);
+                    if (pictures.length === captureCount) {
+                        setCapturedImages(pictures);
+                        setIsCapturing(false);
+                        if (mediaStream) {
+                            mediaStream.getTracks().forEach(track => track.stop());
+                        }
+                        setMediaStream(null);
+                    }
+                }, 'image/jpeg');
+            }, captureInterval * i);
+        }
+    };
+
+    const handleCancel = () => {
+        console.log('cancel')
+        if (mediaStream) {
+            mediaStream.getTracks().forEach(track => track.stop());
+        }
+        setIsCapturing(false);
+        setActiveUser(null);
+        setCapturedImages([]);
     };
 
     const handleDownload = (name) => {
         const zip = new JSZip();
         capturedImages.forEach((image, index) => {
-            if (index > 0) {
-                const imageName = `image_${index + 1}.jpg`;
-                zip.file(imageName, image);
-            }
+            const imageName = `image_${index + 1}.jpg`;
+            zip.file(imageName, image);
         });
 
         zip.generateAsync({ type: 'blob' }).then((content) => {
@@ -77,11 +89,10 @@ export default function TeacherCard({ userData }) {
         });
     };
 
-
     return (
         <div className="mx-3">
             {userData.map((user, index) => (
-                <div key={user._id || index} className="flex mobile:max-tablet:flex-col  items-center justify-between border rounded-lg p-4 mb-2 mobile:max-tablet:items-start">
+                <div key={user._id || index} className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between border rounded-lg p-4 mb-2 mobile:max-tablet:items-start">
                     <div className="flex w-72 mobile:max-tablet:w-auto">
                         <img src={user.profileLogo || userimg} alt="" className="h-16 w-16 mr-3 rounded-full " />
                         <div className="mt-2 flex flex-col items-start">
@@ -108,9 +119,9 @@ export default function TeacherCard({ userData }) {
                             <button className="text-white">Camera</button>
                         </div>
 
-                        {activeUser === index && capturedImages.length > 100 && (
+                        {activeUser === index && capturedImages.length >= 100 && (
                             <div className="">
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-1 rounded" onClick={handleDownload(user.name)}>
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-1 rounded" onClick={() => handleDownload(user.name)}>
                                     Download
                                 </button>
                             </div>
@@ -120,9 +131,19 @@ export default function TeacherCard({ userData }) {
             ))}
             {isCapturing && (
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-                    <video ref={videoRef} className="rounded-lg" autoPlay />
+                    <div className="bg-white p-4 rounded-lg flex flex-col items-center">
+                        <video ref={videoRef} className="rounded-lg w-80" autoPlay />
+                        <div className="flex gap-2 mt-4">
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded" onClick={handleCapture}>
+                                Capture
+                            </button>
+                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold p-2 rounded" onClick={handleCancel}>
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
-    )
+    );
 }

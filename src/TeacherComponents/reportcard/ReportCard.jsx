@@ -52,9 +52,9 @@ function ReportCard() {
             <div className='w-full flex items-center justify-between  my-2'>
                 <h1 className="text-2xl font-medium mb-2">Search Report Card</h1>
 
-                <span className='flex gap-2 w-fit'>
+                {/* <span className='flex gap-2 w-fit'>
                     <Selection />
-                </span>
+                </span> */}
             </div>
 
             {loading ? (
