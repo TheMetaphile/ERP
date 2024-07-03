@@ -1,6 +1,6 @@
 export default function Middle(props) {
     return (
-        <div className="flex w-full justify-between py-2 pl-2  h-fit rounded-t-lg border-b-2 border-gray-300 gap-5">
+        <div className="flex w-full justify-evenly py-2 pl-2  h-fit rounded-t-lg border-b-2 border-gray-300 gap-5 mobile:max-tablet:w-fit">
             {props.values.map((value, index) => (
                 index === props.values.length - 1
                     ?

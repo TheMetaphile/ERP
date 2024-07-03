@@ -19,11 +19,11 @@ export default function QuickActions() {
                 <div>
                     <h1 className="text-2xl mt-4">Quick Actions</h1>
                 </div>
-             
-                    <button className=" text-blue-500 w-10 h-10 rounded-full  text-4xl  items-center">
-                        <FaCirclePlus />
-                    </button>
-                
+
+                <button className=" text-blue-500 w-10 h-10 rounded-full  text-4xl  items-center">
+                    <FaCirclePlus />
+                </button>
+
 
             </div>
             <div className="w-full px-2 h-1 mx-auto border-b-2 mb-2"></div>

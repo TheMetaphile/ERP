@@ -60,7 +60,7 @@ function ReportCardAdmin() {
             ) : students.length === 0 ? (
                 <>No student found</>
             ) : (
-                <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2'>
+                <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 mobile:max-tablet:overflow-auto'>
                     <Header headings={['Roll No.', 'Name', 'Email']} />
                     {students.map((detail, index) => (
                         <Link to={`/Admin-Dashboard/Result/${detail.email}`} key={index}>

@@ -10,7 +10,7 @@ export default function Expenses() {
     return (
         <div className="flex flex-col mobile:max-tablet:mt-6">
             <div className="flex gap-2 mobile:max-tablet:flex-col ">
-                <div className="flex flex-col mx-2  w-1/2 mobile:max-tablet:w-full ">
+                <div className="flex flex-col mx-2  w-1/2 mobile:max-tablet:w-full mobile:max-tablet:mx-0 mobile:max-tablet:px-2.5 ">
                     <div className="flex-1  shadow-lg rounded-lg border">
                         <WeeklySpend />
                     </div>
