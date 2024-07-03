@@ -11,7 +11,6 @@ export default function StudentAttendance() {
     const [data, setData] = useState(null);
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
-
     // State to control the dropdown visibility
     const [isDropdownVisible, setDropdownVisible] = useState(false);
 
@@ -42,9 +41,10 @@ export default function StudentAttendance() {
     return (
         <div className="flex flex-col mx-2">
             {/* Container for heading and filter button */}
-            <div className="flex justify-between items-center px-2 py-2 border-b border-gray-300 mobile:max-tablet:fixed mobile:max-tablet:top-32 left-0 right-0 bg-white mb-4">
-                <div className="text-3xl mx-2 px-4 mobile:max-tablet:text-xl mobile:max-tablet:px-2 mobile:max-tablet:mx-0">Student's Attendance Details</div>
-                <div className="mobile:max-tablet:block hidden">  {/* Ensure this is hidden on medium and larger screens */}
+            <div className="flex justify-between items-center px-2 py-2 mobile:max-tablet:border-b border-gray-300 mobile:max-tablet:fixed mobile:max-tablet:top-32 left-0 right-0 bg-white mb-4 mobile:max-tablet:mb-0 mobile:max-tablet:py-4">
+                <div className="text-3xl mx-2 px-4 mobile:max-tablet:text-xl mobile:max-tablet:px-2 mobile:max-tablet:">Student's Attendance Details</div>
+                <div className="mobile:max-tablet:block hidden">
+                    {/* Ensure this is hidden on medium and larger screens */}
                     <button
                         className="p-2 border rounded"
                         onClick={() => setDropdownVisible(!isDropdownVisible)}
@@ -52,9 +52,8 @@ export default function StudentAttendance() {
                         Filter
                     </button>
                     {isDropdownVisible && (
-                        <div className="absolute bg-white shadow-lg p-4 rounded mt-2 right-2 z-20">
+                        <div className="absolute bg-white shadow-lg py-2 mobile:max-tablet:my-3 rounded right-1 left-1 z-20 justify-center flex">
                             <SearchBar
-                            // Pass necessary props here if required
                             />
                         </div>
                     )}
@@ -70,13 +69,13 @@ export default function StudentAttendance() {
             {loading ? (
                 <Loading />
             ) : !data ? (
-                <div className="flex flex-col shadow-lg rounded-lg border-gray-200 mb-4">
+                <div className=" flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 ">
                     <div className="mx-4 text-xl px-4 mt-4">
                         No data available
                     </div>
                 </div>
             ) : (
-                <div className="flex flex-col shadow-lg rounded-lg border-gray-200 mb-4">
+                <div className="flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 mobile:max-tablet:mt-20">
                     <div className=" text-xl px-4 mt-4 mobile:max-tablet:text-sm ">
                         Attendance Sheet Of Class {data.output.class} {data.output.section} April, 2024
                     </div>

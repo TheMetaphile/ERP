@@ -1,16 +1,10 @@
 export default function Middle(props) {
     return (
-        <div className="flex w-full justify-evenly py-2 pl-2  h-fit rounded-t-lg border-b-2 border-gray-300 gap-5 mobile:max-tablet:w-fit">
+        <div className="flex justify-evenly items-center py-2 pl-2  h-fit  border border-gray-300 text-center w-fit laptop:w-full  gap-2">
             {props.values.map((value, index) => (
-                index === props.values.length - 1
-                    ?
-                    <h1 key={index} className={`w-40 text-center ${value === 'Good' ? 'text-green-400' : value === 'Average' ? 'text-orange-400' : 'text-red-400'}`}>
-                        {value}
-                    </h1>
-                    :
-                    <h1 key={index} className="w-40 text-center">
-                        {value}
-                    </h1>
+                <h1 key={index} className={`${index === 0 ? "w-40 mobile:max-tablet:w-20 " : "mobile:max-tablet:w-20 w-32 "} text-lg  font-normal mobile:max-tablet:text-sm mobile:max-tablet:font-sm ${index === props.values.length - 1 ? `${value === 'Good' ? 'text-green-400' : value === 'Average' ? 'text-orange-400' : 'text-red-400'}` : ""}`}>
+                    {value}
+                </h1>
             ))}
         </div>
     )

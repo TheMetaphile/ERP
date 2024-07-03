@@ -81,7 +81,7 @@ export default function TeacherCard({ userData }) {
     return (
         <div className="mx-3">
             {userData.map((user, index) => (
-                <div key={user._id || index} className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 items-center justify-between border rounded-lg p-4 mb-2 mobile:max-tablet:items-start">
+                <div key={user._id || index} className="flex mobile:max-tablet:flex-col  items-center justify-between border rounded-lg p-4 mb-2 mobile:max-tablet:items-start">
                     <div className="flex w-72 mobile:max-tablet:w-auto">
                         <img src={user.profileLogo || userimg} alt="" className="h-16 w-16 mr-3 rounded-full " />
                         <div className="mt-2 flex flex-col items-start">
@@ -104,7 +104,7 @@ export default function TeacherCard({ userData }) {
                             </div>
                         </Link>
                         <div className="flex gap-2 items-center bg-blue-300 mx-2 w-28 justify-evenly rounded-md px-2 cursor-pointer" onClick={() => handleChatClick(index)}>
-                            <IoCameraOutline className="text-white"/>
+                            <IoCameraOutline className="text-white" />
                             <button className="text-white">Camera</button>
                         </div>
 

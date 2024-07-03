@@ -1,8 +1,8 @@
 export default function Header(props) {
     return (
-        <div className="flex justify-evenly items-center py-2 pl-2 bg-bg_blue h-fit rounded-t-lg border-b-2 border-black w-auto text-center mobile:max-tablet:w-fit">
+        <div className="flex justify-evenly items-center py-2 pl-2 bg-bg_blue h-fit rounded-t-lg border-b-2 border-black text-center w-fit laptop:w-full  gap-2">
             {props.headings.map((heading, index) => (
-                <h1 key={index} className={`${heading === 'Name' ? "w-52 mobile:max-tablet:w-40" : heading === 'Roll Number' ? "w-32" : heading === "" ? "w-10" : "w-48"} text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm`}>
+                <h1 key={index} className={`${heading === 'Name' ? "w-40 mobile:max-tablet:w-20 " : heading === 'Roll Number' ? "w-32 mobile:max-tablet:w-20 " : heading === "" ? "laptop:w-10" : "mobile:max-tablet:w-20 w-32 "} text-lg  font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm`}>
                     {heading}
                 </h1>
             ))}

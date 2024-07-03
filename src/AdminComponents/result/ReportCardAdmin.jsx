@@ -12,7 +12,8 @@ function ReportCardAdmin() {
     const [students, setStudents] = useState([])
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false)
-
+    // State to control the dropdown visibility
+    const [isDropdownVisible, setDropdownVisible] = useState(false);
 
 
 
@@ -45,41 +46,53 @@ function ReportCardAdmin() {
 
 
     return (
-        <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar mobile:max-tablet:mt-2 ">
-            <div className='w-full flex items-center justify-between px-4 my-2 mobile:max-tablet:px-1'>
+        <>
+            <div className='w-full flex items-center justify-between px-4 my-2 mobile:max-tablet:mt-4 mobile:max-tablet:px-4'>
                 <h1 className="text-2xl font-medium mb-2 mobile:max-tablet:text-sm">Report Card</h1>
-
-                <span className='flex gap-2 w-fit'>
+                <div className="block desktop:hidden">
+                    <button
+                        className="p-2 border rounded"
+                        onClick={() => setDropdownVisible(!isDropdownVisible)}
+                    >
+                        Filter
+                    </button>
+                    {isDropdownVisible && (
+                        <div className="absolute bg-white shadow-lg py-2 rounded right-1 left-1 z-20 justify-center flex flex-col">
+                            <Selection />
+                        </div>
+                    )}
+                </div>
+                <span className='flex gap-2 w-fit mobile:max-tablet:hidden'>
                     <Selection />
 
                 </span>
             </div>
-
-            {loading ? (
-                <Loading />
-            ) : students.length === 0 ? (
-                <>No student found</>
-            ) : (
-                <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 mobile:max-tablet:overflow-auto'>
-                    <Header headings={['Roll No.', 'Name', 'Email']} />
-                    {students.map((detail, index) => (
-                        <Link to={`/Admin-Dashboard/Result/${detail.email}`} key={index}>
-                            <div key={index} className='flex justify-between border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
-                                <div className=' w-full flex flex-1 justify-center'>{detail.rollNumber}</div>
-                                <div className=' w-full flex flex-1 justify-center'>{detail.name}</div>
-                                <div className=' w-full flex flex-1 justify-center gap-1 '>
-                                    <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
-                                    <div >{detail.email}</div>
+            <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar mobile:max-tablet:mt-2 ">
+                {loading ? (
+                    <Loading />
+                ) : students.length === 0 ? (
+                    <>No student found</>
+                ) : (
+                    <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 mobile:max-tablet:overflow-auto'>
+                        <Header headings={['Roll No.', 'Name', 'Email']} />
+                        {students.map((detail, index) => (
+                            <Link to={`/Admin-Dashboard/Result/${detail.email}`} key={index}>
+                                <div key={index} className='flex justify-between border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
+                                    <div className=' w-full flex flex-1 justify-center'>{detail.rollNumber}</div>
+                                    <div className=' w-full flex flex-1 justify-center'>{detail.name}</div>
+                                    <div className=' w-full flex flex-1 justify-center gap-1 '>
+                                        <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
+                                        <div >{detail.email}</div>
+                                    </div>
                                 </div>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-            )
-            }
+                            </Link>
+                        ))}
+                    </div>
+                )
+                }
 
-        </div>
-
+            </div>
+        </>
     )
 }
 
