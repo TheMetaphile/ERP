@@ -4,6 +4,8 @@ import axios from "axios"
 import AuthContext from "../../../Context/AuthContext"
 import Loading from "../../../LoadingScreen/Loading"
 import { BASE_URL_TeacherLeave } from "../../../Config"
+import Doughnut from "../../../components/Home/utils/AttendanceCard/PieChart";
+import DoughnutSecond from "./DoughnutSecond";
 
 export default function Progress() {
     const { authState } = useContext(AuthContext);
@@ -15,14 +17,64 @@ export default function Progress() {
         const currentYear = now.getFullYear();
         const currentMonth = now.getMonth();
 
-        if (currentMonth >= 3) { 
+        if (currentMonth >= 3) {
             return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
         } else {
             return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
         }
     }
 
-    
+    const chartData = {
+        labels: [
+            'Accepted',
+            'Rejected',
+            'Pending'
+        ],
+        datasets: [{
+            label: 'Attendance',
+            data: [details.accepted, details.rejected, details.pending],
+            backgroundColor: [
+                '#EB3232',
+                '#7BD850',
+                '#F8EE00'
+            ],
+            bg: ['text-red-600', 'text-green-600', 'text-yellow-400'],
+            hoverOffset: 4,
+            cutout: "80%",
+            borderRadius: 60,
+            borderColor: "transparent",
+        }]
+    };
+
+    const chartData2 = {
+        labels: [
+            'Casual',
+            'Complimentry',
+            'Duty',
+            'Earned',
+            'Maternity',
+            'Medical',
+            'Restricted'
+        ],
+        datasets: [{
+            label: 'Attendance',
+            data: [details.casual, details.complimentary, details.duty, details.earned, details.maternity, details.medical, details.restricted],
+            backgroundColor: [
+                '#EB3232',
+                '#7BD850',
+                '#F8EE00',
+                '#ffce8a',
+                '#76c6f5',
+                '#de98fa',
+                '#fc8beb'
+            ],
+            bg: ['text-red-600', 'text-green-600', 'text-yellow-400', 'text-orange-300', 'text-blue-400','text-purple-400', 'text-pink-400'],
+            hoverOffset: 4,
+            cutout: "80%",
+            borderRadius: 60,
+            borderColor: "transparent",
+        }]
+    };
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -47,12 +99,21 @@ export default function Progress() {
     }, [authState.accessToken]);
 
     return (
-        <div className=" flex flex-col px-3  overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+        <div className=" flex flex-col px-3  overflow-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
             {loading ? (
                 <Loading />
             ) : (
-                <div className=" flex flex-col tablet:flex-row items-center gap-3 w-full py-2">
-                    <ProgressCard
+                <div className=" flex flex-col tablet:flex-row items-center gap-3 w-full py-2 overflow-auto justify-start">
+                    <div className="tablet:w-1/3 h-72  mobile:max-tablet:w-full ">
+                        <DoughnutSecond chartData={chartData} title='Leave Status' />
+                    </div>
+
+                    <div className="tablet:w-1/3 h-72  w-full ">
+                        <DoughnutSecond chartData={chartData2} title='Leave Status' />
+                    </div>
+
+
+                    {/* <ProgressCard
                         title={`Leave Balance`}
                         percent='40'
                         centerText='05'
@@ -86,7 +147,7 @@ export default function Progress() {
                         centerText='0'
                         trailColor='#c8ccc9'
                         strokeColor='#9100ec'
-                    />
+                    /> */}
 
                 </div>
             )}
