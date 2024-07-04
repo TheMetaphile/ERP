@@ -16,14 +16,14 @@ export default function AdminHome() {
             {/* <FetchDataComponent /> */}
             <Summary />
             <div className="flex flex-grow justify-between tablet:h-96 mb-3 mt-4">
-                <div className="flex w-full gap-2 h-full mobile:max-tablet:flex-col">
-                    <div className="w-3/12 mobile:max-tablet:w-full">
+                <div className="flex w-full gap-2 h-full mobile:max-tablet:flex-col tablet:max-laptop:flex-col tablet:max-laptop:w-full">
+                    <div className="w-3/12 mobile:max-laptop:w-full ">
                         <TotalStudentTile />
                     </div>
-                    <div className="tablet:w-5/12  py-2 mobile:max-tablet:w-full mobile:max-tablet:h-80">
+                    <div className="tablet:w-5/12  mobile:max-laptop:w-full mobile:max-tablet:h-80">
                         <SchoolPerformanceChart />
                     </div>
-                    <div className="tablet:w-4/12 py-2 mobile:max-tablet:w-full mobile:max-tablet:h-80">
+                    <div className="tablet:w-4/12  mobile:max-tablet:w-full mobile:max-tablet:h-80">
                         <ExpensesChart />
                     </div>
                 </div>

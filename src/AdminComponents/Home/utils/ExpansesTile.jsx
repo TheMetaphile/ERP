@@ -34,7 +34,7 @@ const ExpensesChart = () => {
     };
 
     const options = {
-        maintainAspectRatio: false,
+      maintainAspectRatio: false,
       scales: {
         y: {
           beginAtZero: true,
@@ -44,7 +44,7 @@ const ExpensesChart = () => {
             },
           },
         },
-        
+
       },
       plugins: {
         tooltip: {
@@ -76,8 +76,8 @@ const ExpensesChart = () => {
   }, []);
 
   return <div className='flex-grow h-full'>
-    
-    <canvas ref={chartRef} className='w-full  border border-gray-300 rounded-lg shadow-lg tablet:mx-3 px-3 py-2'/></div>;
+
+    <canvas ref={chartRef} className='w-full  border border-gray-300 rounded-lg shadow-lg  px-3 py-2' /></div>;
 };
 
 export default ExpensesChart;

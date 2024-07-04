@@ -49,7 +49,7 @@ function ReportCardAdmin() {
         <>
             <div className='w-full flex items-center justify-between px-4 my-2 mobile:max-tablet:mt-4 mobile:max-tablet:px-4'>
                 <h1 className="text-2xl font-medium mb-2 mobile:max-tablet:text-sm">Report Card</h1>
-                <div className="block desktop:hidden">
+                <div className="block tablet:max-desktop:hidden">
                     <button
                         className="p-2 border rounded"
                         onClick={() => setDropdownVisible(!isDropdownVisible)}

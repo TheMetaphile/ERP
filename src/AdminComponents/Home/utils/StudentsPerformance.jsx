@@ -53,7 +53,7 @@ const SchoolPerformanceChart = () => {
     };
   }, []);
 
-  return <div className='h-full py-2 text-center rounded-lg shadow-md  border border-gray-300'>School Income and Expenses Analysis<canvas ref={chartRef}  className=' mb-6  tablet:ml-5 ' /></div>;
+  return <div className='h-full tablet:max-laptop:h-auto py-2 text-center rounded-lg shadow-md  border border-gray-300'>School Income and Expenses Analysis<canvas ref={chartRef} className=' mb-6  tablet:ml-5 ' /></div>;
 };
 
 export default SchoolPerformanceChart;

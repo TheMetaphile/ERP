@@ -118,8 +118,8 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                             {lectures.map((lecture, idx) => (
                                 <React.Fragment key={lecture._id}>
                                     {numberOfLeacturesBeforeLunch === lecture.lectureNo - 1 ? (
-                                        <div className="w-full mobile:max-tablet:w-auto h-8 border-t border-gray-400 bg-secondary text-xl text-center">
-                                            <div>LUNCH</div>  </div>
+                                        <div className="w-full mobile:max-tablet:w-fit h-8 border-t border-gray-400 bg-secondary text-xl text-center">
+                                            LUNCH  </div>
                                     ) : null}
                                     <div className="flex mobile:max-tablet:w-fit justify-between  border-t border-gray-400 ">
 

@@ -29,6 +29,7 @@ function TimeTable() {
     const [error, setError] = useState(null);
     var ClassRange = null;
     const Class = selectClass;
+    const [isDropdownVisible, setDropdownVisible] = useState(false);
 
     useEffect(() => {
         if (Class === 'Pre-Nursery' || Class === 'L.K.G' || Class === 'U.K.G' || Class === 'U.K.J') {
@@ -204,11 +205,35 @@ function TimeTable() {
     };
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-tablet:mt-4">
             {/* <ToastContainer /> */}
-            <div className='flex justify-between items-center w-full'>
-                <h1 className='text-2xl mobile:max-tablet:text-xl whitespace-nowrap'>Time Table</h1>
-                <div className="flex gap-4 px-3 py-2  mt-2 text-lg justify-between">
+            <div className='flex justify-between items-center w-full mobile:max-tablet:flex-col mobile:max-tablet:items-baseline'>
+                <div className="flex justify-between mobile:max-tablet:w-full">
+                    <h1 className='text-2xl whitespace-nowrap'>Time Table</h1>
+                    <div className="block tablet:hidden">
+                        <button
+                            className="p-2 border rounded"
+                            onClick={() => setDropdownVisible(!isDropdownVisible)}
+                        >
+                            Filter
+                        </button>
+                        {isDropdownVisible && (
+                            <div className="absolute bg-white shadow-lg pt-2 rounded mt-2 right-1 left-1 justify-center flex">
+                                <Selection
+                                    selectClass={selectClass}
+                                    selectedSection={selectedSection}
+                                    dayStudent={dayStudent}
+                                    onClassChange={handleClass}
+                                    onSectionChange={handleSection}
+                                    onStudentDayChange={handleStudentDayChange}
+                                    onSearch={handleSearch}
+                                />
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <div className="flex gap-4 px-3 py-2  mt-2 text-lg justify-between mobile:max-tablet:pl-0">
                     <label className="text-lg font-medium text-center">
                         <input
                             type="radio"
@@ -234,11 +259,12 @@ function TimeTable() {
                         />
                         Student
                     </label>
+
                 </div>
 
             </div>
 
-            <div className=' mt-4  w-full'>
+            <div className=' mt-4  w-full mobile:max-tablet:hidden'>
                 {role === 'Teacher' ? (
                     <SelectionTeacher
                         onSearch={handleSearch}

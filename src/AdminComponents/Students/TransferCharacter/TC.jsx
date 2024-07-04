@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { MdEdit } from "react-icons/md";
 import Selection from './utils/Selection';
-import Header from '../../Home/utils/TeachersDetails/LeftCard/Header'
+import Header from './utils/Header'
 import { Link } from "react-router-dom";
 import NewTransfer from './utils/NewTransfer';
 

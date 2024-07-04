@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { MdEdit } from "react-icons/md";
 import Selection from './utils/Selection';
-import Header from '../../Home/utils/TeachersDetails/LeftCard/Header'
+// import Header from '../../Home/utils/TeachersDetails/LeftCard/Header'
+import Header from './utils/Header';
 import { Link } from "react-router-dom";
 import NewCharacter from './utils/NewCharacter';
 
@@ -40,7 +41,7 @@ function CC() {
 
             <div className=' overflow-auto'>
                 <div className='  rounded-lg border border-black shadow-md mobile:max-tablet:w-fit  mb-2 overflow-auto'>
-                    <Header headings={['Sr. No.', 'TC No.', 'Admission No.', 'Name', 'Class', 'Action']} />
+                    <Header headings={['Sr. No.', 'CC No.', 'Admission No.', 'Name', 'Class', 'Action']} />
                     {details.map((detail, index) => (
                         <Link to={`/Admin-Dashboard/charactercetificate/${detail.name}`} key={index}>
                             <div key={index} className='flex justify-between text-center shadow-md border border-gray-300 items-center py-2 pl-2  ' >
