@@ -6,17 +6,9 @@ import { chatLogo, profilelogo } from "./utils/images/index.js";
 import axios from 'axios';
 import AuthContext from "../../Context/AuthContext.jsx";
 import Loading from "../../LoadingScreen/Loading.jsx"
-import { BASE_URL_Login } from "../../Config.js";
-import { Octokit } from "@octokit/rest";
+import { BASE_URL_Login, BASE_URL_Git } from "../../Config.js";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const octokit = new Octokit({
-    auth: ''
-});
-
-const owner = 'BhuvneshwarTyagi';
-const repo = 'Face-Prediction';
 
 export default function AllTeachers() {
     const [name, setName] = useState('');
@@ -27,6 +19,7 @@ export default function AllTeachers() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [kerasFile, setKerasFile] = useState(null);
     const [pklFile, setPklFile] = useState(null);
+    const [fileLoading, setFileLoading] = useState(false);
 
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -62,73 +55,31 @@ export default function AllTeachers() {
 
     const handleSubmit = async () => {
         if (kerasFile && pklFile) {
+            setFileLoading(true);
+            const formData = new FormData();
+            formData.append('model', kerasFile);
+            formData.append('label', pklFile);
+
             try {
-                const commitMessage = `Add ${kerasFile.name} and ${pklFile.name}`;
-                await uploadFileToGitHub(kerasFile, commitMessage);
-                await uploadFileToGitHub(pklFile, commitMessage);
-                toast.success('Files committed and pushed to GitHub successfully!');
+                const response = await axios.post(`${BASE_URL_Git}/upload`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    maxBodyLength: Infinity
+                });
+                toast.success('Files uploaded successfully!');
+                console.log(response.data);
+                setFileLoading(false);
                 handleCloseModal();
             } catch (error) {
-                console.error('Error uploading files to GitHub:', error);
-                toast.error('Failed to upload files to GitHub');
+                console.error('Error uploading files:', error);
+                setFileLoading(false);
+                toast.error('Failed to upload files');
             }
         } else {
             toast.error('Please select both .keras and .pkl files.');
         }
     };
-
-
-    const uploadFileToGitHub = async (file, commitMessage) => {
-        const reader = new FileReader();
-
-        return new Promise((resolve, reject) => {
-            reader.onload = async () => {
-                try {
-                    const base64String = reader.result.split(',')[1]; 
-                    const path = file.name;
-
-                    let sha = null;
-                    try {
-                        const existingFile = await octokit.repos.getContent({
-                            owner,
-                            repo,
-                            path,
-                        });
-                        sha = existingFile.data.sha;
-                    } catch (error) {
-                        if (error.status !== 404) {
-                            toast.error('Error checking file existence on GitHub:', error);
-                            reject(new Error('Failed to upload file to GitHub'));
-                            return;
-                        }
-                    }
-
-
-                    const response = await octokit.repos.createOrUpdateFileContents({
-                        owner,
-                        repo,
-                        path,
-                        message: commitMessage,
-                        content: base64String,
-                        sha,
-                    });
-
-                    resolve(response);
-                } catch (error) {
-                    toast.error('Error uploading file to GitHub:', error);
-                    reject(new Error('Failed to upload file to GitHub'));
-                }
-            };
-
-            reader.onerror = (error) => {
-                toast.error('FileReader error:', error);
-                reject(new Error('Failed to read file'));
-            };
-
-            reader.readAsDataURL(file); 
-        });
-    };
-
 
 
     useEffect(() => {
@@ -213,7 +164,7 @@ export default function AllTeachers() {
                         </div>
                         <div className="flex justify-end">
                             <button className="bg-gray-300 rounded-lg px-4 py-2 mr-2" onClick={handleCloseModal}>Cancel</button>
-                            <button className="bg-blue-600 text-white rounded-lg px-4 py-2" onClick={handleSubmit}>Submit</button>
+                            <button className="bg-blue-600 text-white rounded-lg px-4 py-2" onClick={handleSubmit}>{fileLoading ? <Loading /> : 'Submit'}</button>
                         </div>
                     </div>
                 </div>

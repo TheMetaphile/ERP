@@ -23,6 +23,7 @@ export default {
         aquamarine: "#7FFFD4",
         wheat: "#F5DEB3",
         secondary: "#AEEEED",
+        secondarysecond: "#38f2c1",
         bg_blue: "#E8EFFD",
         text_blue: "#032E66",
         login: "#DAFDFF",

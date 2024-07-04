@@ -4,8 +4,9 @@ import axios from "axios";
 import AuthContext from "../../../Context/AuthContext.jsx";
 import Loading from "../../../LoadingScreen/Loading.jsx";
 import { BASE_URL_TeacherLeave } from "../../../Config.js";
-import {toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import TeacherLeavesTile from "./TeacherLeavesTile.jsx";
 
 export default function TeacherLeaves() {
   const [selectedLeave, setSelectedLeave] = useState(null);
@@ -84,13 +85,7 @@ export default function TeacherLeaves() {
   };
 
 
-  const handleViewDetails = (leave) => {
-    setSelectedLeave(leave);
-  };
-
-  const handleClosePopup = () => {
-    setSelectedLeave(null);
-  };
+ 
 
   return (
     <div className="flex flex-col space-y-4 mb-4">
@@ -99,65 +94,8 @@ export default function TeacherLeaves() {
       ) : data === null ? (
         <div>No data available</div>
       ) : (
-        data.map((leave, index) => (
-          <div key={index} className={`rounded-md border p-4 flex flex-col w-full`}>
-            <div className="flex justify-between">
-              <div className="flex">
-                {leave.by && leave.by[0] && (
-                  <>
-                    <img src={leave.by[0].profileLink} alt="" className="h-12 w-12 mobile:max-tablet:hidden rounded-full" />
-                    <p className="text-xl mb-2 mt-2 px-2 mobile:max-tablet:text-lg"> {leave.by[0].name}</p>
-                  </>
-                )}
-              </div>
-              <div>
-                <h1 className={` px-2 py-1 rounded-lg ${leave.status === 'Pending' ? 'bg-orange-200 text-orange-700' : leave.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>
-                  {leave.status}
-                </h1>
-              </div>
-              <div className="mt-2">
-                <button
-                  className="rounded-lg bg-blue-400 px-4 mobile:max-tablet:px-2"
-                  onClick={() => handleViewDetails(leave)}
-                >
-                  View Details
-                </button>
-              </div>
-            </div>
-            <div className="flex justify-between text-gray-900 mobile:max-tablet:flex-col">
-              <span className="text-lg">Leave Taken on: {leave.startDate}</span>
-              <span className="text-lg">Expected Arrival: {leave.endDate}</span>
-            </div>
-          </div>
-        ))
-      )}
-
-      {selectedLeave && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
-          <div className="bg-white rounded-lg p-6">
-            <h2 className="text-2xl mb-4 text-center">Confirm Leave</h2>
-            <p className="text-xl">Type: {selectedLeave.type}</p>
-            <p className="text-xl">Reason: {selectedLeave.reason}</p>
-            <div className="mt-4 flex justify-center">
-              <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-2" onClick={handleClosePopup}>
-                Cancel
-              </button>
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded-md"
-                onClick={() => handleAction("Approved")}
-              >
-                Approve
-              </button>
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded-md ml-2"
-                onClick={() => handleAction("Rejected")}
-              >
-                Reject
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <TeacherLeavesTile data={data}/>
+    )}
     </div>
   );
 }

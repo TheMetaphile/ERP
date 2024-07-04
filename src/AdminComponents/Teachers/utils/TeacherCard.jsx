@@ -10,10 +10,12 @@ export default function TeacherCard({ userData }) {
     const [mediaStream, setMediaStream] = useState(null);
     const [activeUser, setActiveUser] = useState(null);
     const videoRef = useRef(null);
+    const [progress, setProgress] = useState(0);
 
     const handleChatClick = async (index) => {
         setActiveUser(index);
         setIsCapturing(true);
+        setProgress(0);
 
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -45,6 +47,7 @@ export default function TeacherCard({ userData }) {
 
                 canvas.toBlob((blob) => {
                     pictures.push(blob);
+                    setProgress(((pictures.length / captureCount) * 100).toFixed(2));
                     if (pictures.length === captureCount) {
                         setCapturedImages(pictures);
                         setIsCapturing(false);
@@ -66,6 +69,7 @@ export default function TeacherCard({ userData }) {
         setIsCapturing(false);
         setActiveUser(null);
         setCapturedImages([]);
+        setProgress(0);
     };
 
     const handleDownload = (name) => {
@@ -92,7 +96,7 @@ export default function TeacherCard({ userData }) {
     return (
         <div className="mx-3">
             {userData.map((user, index) => (
-                <div key={user._id || index} className="flex mobile:max-tablet:flex-col mobile:max-tablet: items-center justify-between border rounded-lg p-4 mb-2 mobile:max-tablet:items-start">
+                <div key={user._id || index} className="flex mobile:max-tablet:flex-col  items-center justify-between border rounded-lg p-4 mb-2 mobile:max-tablet:items-start">
                     <div className="flex w-72 mobile:max-tablet:w-auto">
                         <img src={user.profileLogo || userimg} alt="" className="h-16 w-16 mr-3 rounded-full " />
                         <div className="mt-2 flex flex-col items-start">
@@ -131,8 +135,16 @@ export default function TeacherCard({ userData }) {
             ))}
             {isCapturing && (
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-                    <div className="bg-white p-4 rounded-lg flex flex-col items-center">
-                        <video ref={videoRef} className="rounded-lg w-80" autoPlay />
+                    <div className="bg-gray-600 px-8 py-4 rounded-lg flex flex-col items-center">
+                        <span className="text-lg font-medium text-white">Face Detection</span>
+                        <span className="text-base font-normal text-white">Please sit in front of your webcam in a way such that your face is clearly visible.</span>
+
+                        <div className="relative w-96 mt-4">
+                            <video ref={videoRef} className="rounded-lg w-full" autoPlay />
+                            <div className="absolute top-0 left-0 h-full bg-secondarysecond bg-opacity-30" style={{ width: `${progress}%` }}></div>
+                        </div>
+
+                        <span className="text-gray-600 mt-2">{progress}% Captured</span>
                         <div className="flex gap-2 mt-4">
                             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded" onClick={handleCapture}>
                                 Capture
@@ -144,6 +156,9 @@ export default function TeacherCard({ userData }) {
                     </div>
                 </div>
             )}
+
         </div>
     );
 }
+
+
