@@ -4,7 +4,7 @@ import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../../Config";
 
-const AnnouncementList = () => {
+const TeacherNotice = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const { authState } = useContext(AuthContext);
@@ -12,7 +12,7 @@ const AnnouncementList = () => {
   useEffect(() => {
     if (authState.accessToken) {
       setLoading(true);
-      fetchAllNotices();
+      fetchTeacherNotices();
     } else {
       setError('No access token available');
       setLoading(false);
@@ -32,7 +32,7 @@ const AnnouncementList = () => {
     }
   }
 
-  const fetchAllNotices = async () => {
+  const fetchTeacherNotices = async () => {
     const session = getCurrentSession();
 
     try {
@@ -52,14 +52,14 @@ const AnnouncementList = () => {
 
   return (
     <div className="mt-4 mx-2">
-      <div className="">
-        <div className="flex flex-col space-y-4 mb-4">
-          {loading ? (
-            <Loading />
-          ) : data === null || data.length === 0 ? (
-            <div>No notices available</div>
-          ) : (
-            data.map((notice, index) => (
+      <div className="flex flex-col space-y-4 mb-4">
+        {loading ? (
+          <Loading />
+        ) : data === null || data.length === 0 ? (
+          <div>No notices available</div>
+        ) : (
+          data.map((notice, index) => (
+            (notice.type === 'For Teachers' || notice.type === 'Particular Teachers') && (
               <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2">
                 <h3 className="text-lg font-bold mb-2">Title : {notice.title}</h3>
                 <p className="text-sm text-gray-500 mb-2">Description : {notice.description}</p>
@@ -68,30 +68,14 @@ const AnnouncementList = () => {
                 <div className="flex items-center">
                   By :
                   <div className="flex items-center gap-1 px-1">
-                    <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full"></img>
-                    <p className="text-sm text-gray-500 ">{notice.from.name}</p>
+                    <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full" />
+                    <p className="text-sm text-gray-500">{notice.from.name}</p>
                   </div>
                 </div>
-                {notice.type === "For All" && (
-                  <p className="text-sm text-gray-500 mb-2">For all users</p>
-                )}
-                {notice.type === "For Students" && (
-                  <p className="text-sm text-gray-500 mb-2">For students</p>
-                )}
                 {notice.type === "For Teachers" && (
                   <p className="text-sm text-gray-500 mb-2">For teachers</p>
                 )}
-                {notice.type === "Particular Students" && (
-                  <div>
-                    <p className="text-sm text-gray-500 mb-2">For particular students:</p>
-                    <ul className="list-disc ml-4">
-                      {notice.forId.map((student, idx) => (
-                        <li key={idx}>{student.name} - Class: {student.currentClass}, Section: {student.section}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {notice.type === "Particular Teacher" && (
+                {notice.type === "Particular Teachers" && (
                   <div>
                     <p className="text-sm text-gray-500 mb-2">For particular teacher:</p>
                     <ul className="list-disc ml-4">
@@ -101,25 +85,13 @@ const AnnouncementList = () => {
                     </ul>
                   </div>
                 )}
-                {notice.type === "Particular Class" && (
-                  <div>
-                    <p className="text-sm text-gray-500 mb-2">For particular class:</p>
-                    <ul className="list-disc ml-4">
-                      {notice.forClasses.map((classDetail, idx) => (
-                        <li key={idx}>{classDetail.Class} - Section: {classDetail.sections.join(', ')}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-
               </div>
-            ))
-          )}
-        </div>
+            )
+          ))
+        )}
       </div>
     </div>
   );
 };
 
-export default AnnouncementList;
+export default TeacherNotice;

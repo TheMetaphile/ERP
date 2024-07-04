@@ -14,24 +14,15 @@ import { Link } from 'react-router-dom';
 export default function MyDoubts() {
 
     const { authState } = useContext(AuthContext);
-
     const [selectedSubject, setSelectedSubject] = useState(null);
-    const [selectedTeacher, setSelectedTeacher] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [date, setDate] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [loading, setLoading]=useState(false);
     const [data, setData] = useState([]);
-
     const [doubtDescription, setDoubtDescription] = useState('');
-
-
 
     const handleSubjectSelect = (selectedSubject) => {
         setSelectedSubject(selectedSubject);
-    };
-    const handleSubjectTeacher = (selectedTeacher) => {
-        setSelectedTeacher(selectedTeacher);
     };
 
     const handleAskDoubt = () => {
@@ -67,16 +58,26 @@ export default function MyDoubts() {
         }
     };
 
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); 
+        const day = String(today.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    };
+
     const handleSubmitDoubt = async () => {
-        if (!date || !selectedSubject || !doubtDescription) {
+        if ( !selectedSubject || !doubtDescription) {
             toast.error('Please fill all fields');
             return;
         }
         setLoading(true)
+        const datee=getCurrentDate();
         try {
             const response = await axios.post(`${BASE_URL_AskDoubt}/doubts/create`, {
                 question: doubtDescription,
-                date: date,
+                date: datee,
                 subject: selectedSubject
             },
                 {
@@ -90,6 +91,7 @@ export default function MyDoubts() {
                 toast.success('Doubt Send successfully!');
                 setDoubtDescription('');
                 setIsModalOpen(false);
+                fetchDoubt();
             }
         } catch (error) {
             toast.error(error.message);
@@ -97,6 +99,8 @@ export default function MyDoubts() {
         setLoading(false)
     };
 
+    const filteredData = selectedSubject ? data.filter(item => item.subject === selectedSubject) : data;
+    
     return (
         <div className="flex flex-col mobile:max-laptop:flex-col-reverse w-full">
             <ToastContainer />
@@ -121,7 +125,7 @@ export default function MyDoubts() {
                 ) : data === null ? (
                     <div className='text-center w-full'>No data available</div>
                 ) : (
-                    <MyDoubtTile data={data} selectedSubject={selectedSubject} selectedTeacher={selectedTeacher} />
+                    <MyDoubtTile data={filteredData} />
 
                 )}
 
@@ -134,10 +138,6 @@ export default function MyDoubts() {
                         <h2 className="text-base font-medium mb-4">To Ask a doubt please select class and subject and write your Question? You can also attached photos for references.</h2>
 
                         <div className="flex flex-col tablet:flex-row justify-between items-center gap-3 w-full ">
-                            <div className="flex justify-center  items-center text-sm font-medium">
-                                <input type="date" className="shadow-md border border-grey-300 rounded-lg p-2 w-full ml-2 mr-2  mb-2" value={date} onChange={((e) => setDate(e.target.value))} />
-
-                            </div>
                             <div className="flex-1 mobile:max-tablet:w-full">
                                 <SelectSubject onSelect={handleSubjectSelect} />
                             </div>
