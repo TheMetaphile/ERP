@@ -193,14 +193,14 @@ export default function AssignTeacherRow({ Class }) {
 
             {expanded && (
                 <div className='mx-3 border border-black rounded-lg mb-2 overflow-auto'>
-                    <div className="flex justify-between w-full py-2 pl-2 bg-bg_blue h-fit mobile:max-tablet:w-fit  ">
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                    <div className="flex justify-between w-full py-2 pl-2 bg-bg_blue h-fit  ">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm mobile:max-tablet:flex-1">
                             Section
                         </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm mobile:max-tablet:flex-1">
                             Class Teacher
                         </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm mobile:max-tablet:flex-1 mobile:max-tablet:text-center">
                             Action
                         </h1>
                     </div>
@@ -209,7 +209,7 @@ export default function AssignTeacherRow({ Class }) {
                             (
                                 <div className=''>
                                     {sectionsDetails.map((details, index) => (
-                                        <div key={index} className={`flex justify-between w-full py-2 pl-2  h-fit border mobile:max-tablet:w-fit  ${index === sectionsDetails.length - 1 && !showNewRow ? "rounded-b-lg" : ""}`}>
+                                        <div key={index} className={`flex justify-between w-full py-2 pl-2  h-fit border ${index === sectionsDetails.length - 1 && !showNewRow ? "rounded-b-lg" : ""}`}>
                                             <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                                                 {details.section}
                                             </h1>

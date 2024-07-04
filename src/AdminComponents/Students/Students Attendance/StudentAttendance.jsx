@@ -52,7 +52,7 @@ export default function StudentAttendance() {
                         Filter
                     </button>
                     {isDropdownVisible && (
-                        <div className="absolute bg-white shadow-lg py-2 mobile:max-tablet:my-3 rounded right-1 left-1 z-20 justify-center flex">
+                        <div className="absolute bg-white  py-2 mobile:max-tablet:my-3 rounded right-1 left-1 z-20 justify-center flex">
                             <SearchBar
                             />
                         </div>

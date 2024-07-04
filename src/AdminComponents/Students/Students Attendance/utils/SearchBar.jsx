@@ -3,7 +3,7 @@ import React from "react";
 export default function SearchBar({ handleClassChange, handleSessionChange, handleMonthChange, handleSectionChange, classValue, session, month, section }) {
     return (
 
-        <div className="flex mobile:max-tablet:flex-col mobile:max-tablet:w-full mobile:max-tablet:gap-2 mobile:max-tablet:p-2">
+        <div className="flex mobile:max-tablet:flex-col w-full mobile:max-tablet:w-full mobile:max-tablet:gap-2 mobile:max-tablet:p-2">
             <select
                 id="class"
                 name="class"

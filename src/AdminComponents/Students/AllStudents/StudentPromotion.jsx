@@ -94,7 +94,7 @@ export default function StudentPromotion() {
                     />
                 </div>
 
-                <div className="mx-2 mt-20">
+                <div className="mx-2 mobile:max-tablet:mt-20">
                     {filteredStudents.length === 0 ? (
                         <PromotedStudentsDetails students={students} />
                     ) : (

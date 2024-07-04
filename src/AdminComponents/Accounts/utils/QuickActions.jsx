@@ -14,7 +14,7 @@ export default function QuickActions() {
 
     ]
     return (
-        <div className="flex flex-col px-2 rounded-lg mobile:max-tablet:mx-auto">
+        <div className="flex flex-col px-2 rounded-lg mobile:max-tablet:px-0 ">
             <div className="flex justify-between items-center">
                 <div>
                     <h1 className="text-2xl mt-4">Quick Actions</h1>
@@ -27,12 +27,12 @@ export default function QuickActions() {
 
             </div>
             <div className="w-full px-2 h-1 mx-auto border-b-2 mb-2"></div>
-            <div className="flex flex-wrap justify-center items-center">
+            <div className="flex flex-wrap justify-center items-center mobile:max-tablet:flex-col">
                 {cards.map((card, index) => (
-                    <div key={index} className="max-w-xs rounded-lg overflow-hidden border m-4 flex flex-col items-center bg-gray-100 hover:cursor-pointer">
+                    <div key={index} className="max-w-xs rounded-lg overflow-hidden border m-4 flex flex-col items-center bg-gray-100 hover:cursor-pointer w-36	">
                         <img className="w-12 h-12 mt-4" src={card.icon} alt={card.title} />
                         <div className="px-6 py-2">
-                            <div className="text-lg mb-2">{card.title}</div>
+                            <div className="text-lg mb-2 whitespace-nowrap">{card.title}</div>
                         </div>
                     </div>
                 ))}

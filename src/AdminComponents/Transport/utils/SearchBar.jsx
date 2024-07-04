@@ -4,9 +4,9 @@ export default function SearchBar({ handleVehicleNumberChange, vehicleNumber, ro
 
     return (
         <div className="mx-2">
-            <div className="flex w-full overflow-x-auto no-scrollbar justify-between items-center self-center h-fit rounded-xl shadow-md border-2 px-2 py-2 mb-3">
+            <div className="flex w-full overflow-x-auto no-scrollbar justify-between items-center self-center h-fit rounded-xl px-2 py-2 mb-3  mobile:max-tablet:px-0 ">
 
-                <div className="flex">
+                <div className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
                     <input
                         type="text"
                         id="name"
@@ -26,9 +26,9 @@ export default function SearchBar({ handleVehicleNumberChange, vehicleNumber, ro
                         className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 w-full border-gray-200 text-lg flex-1"
                     />
                 </div>
-                <button className="rounded-lg shadow-md px-3 mobile:max-tablet:px-1 py-1 ml-2 border-2 border-gray-200 text-lg w-1/4 bg-secondary">
+                {/* <button className="rounded-lg shadow-md px-3 mobile:max-tablet:px-1 py-1 ml-2 border-2 border-gray-200 text-lg w-1/4 bg-secondary">
                     Search
-                </button>
+                </button> */}
             </div>
         </div>
     )

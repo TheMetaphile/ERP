@@ -18,12 +18,12 @@ export default function Expenses() {
                         <InvoiceSection />
                     </div>
                 </div>
-                <div className="w-1/2 mx-2 shadow-lg rounded-lg border mobile:max-tablet:w-full mobile:max-tablet:mx-0">
+                <div className="w-1/2 mx-2 shadow-lg rounded-lg border mobile:max-tablet:w-full mobile:max-tablet:mx-0 mobile:max-tablet:px-2">
                     <QuickActions />
                 </div>
             </div>
             <div className="flex gap-2 mobile:max-tablet:flex-col ">
-                <div className="w-1/2 mt-4  mx-2 mobile:max-tablet:w-full border shadow-md rounded-lg ">
+                <div className="w-1/2 mt-4  mx-2 mobile:max-tablet:w-full border shadow-md rounded-lg mobile:max-tablet:mx-0  ">
                     <Card />
                 </div>
                 <div className="w-1/2 mt-4 mx-2  mobile:max-tablet:w-full border rounded-lg shadow-md mobile:max-tablet:mx-0">

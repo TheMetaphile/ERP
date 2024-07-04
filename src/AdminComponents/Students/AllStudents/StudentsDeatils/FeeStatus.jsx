@@ -49,7 +49,7 @@ export default function FeeStatus() {
             </div>
             <div className='flex h-24 tablet:ml-auto relative'>
 
-                <div className='flex-1 self-center  text-lg font-medium whitespace-nowrap'>
+                <div className='flex-1 self-center  text-lg font-medium whitespace-nowrap mobile:max-tablet:text-sm'>
                     <h1>
                         Total Fees :-
                     </h1>
@@ -60,7 +60,7 @@ export default function FeeStatus() {
                         Pending Fees :-
                     </h1>
                 </div>
-                <div className='flex-1 self-center ml-2 mr-4 text-lg font-medium'>
+                <div className='flex-1 self-center ml-2 mr-4 text-lg font-medium whitespace-nowrap mobile:max-tablet:text-sm'>
                     <h1 className=' text-blue-400'>
                         Rs. 14,000
                     </h1 >
