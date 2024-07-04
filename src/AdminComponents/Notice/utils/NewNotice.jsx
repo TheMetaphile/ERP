@@ -127,11 +127,11 @@ function NewNotice({ setShowModal }) {
                         onChange={handleOptionChange}
                     >
                         <option value="For All">For All</option>
-                        <option value="For Student">For Student</option>
-                        <option value="For Teacher">For Teacher</option>
+                        <option value="For Students">For Students</option>
+                        <option value="For Teachers">For Teachers</option>
                         <option value="Particular Students">Particular Students</option>
-                        <option value="Particular Class">Particular Class</option>
-                        <option value="Particular Teacher">Particular Teacher</option>
+                        <option value="Particular Teachers">Particular Teacher</option>
+                        <option value="Particular Classes">Particular Classes</option>
                     </select>
                 </div>
 

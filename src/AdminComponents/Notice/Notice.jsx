@@ -1,5 +1,4 @@
 import React from "react";
-import AnnouncementList from "./utils/NoticeList.jsx";
 import NoticeUser from "./utils/NoticeUser.jsx";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
