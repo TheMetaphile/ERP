@@ -3,9 +3,9 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
 
 
     return (
-        <div className=" w-full  overflow-x-auto">
+        <div className=" w-full">
 
-            <div className="flex mobile:max-laptop:flex-col w-full mobile:max-tablet:gap-2 mobile:max-tablet:p-2 tablet:w-3/4 tablet:z-0">
+            <div className="flex mobile:max-laptop:flex-col w-full mobile:max-tablet:gap-2 mobile:max-tablet:p-2 tablet:w-full tablet:max-laptop:mx-2 tablet:max-laptop:gap-2 tablet:z-0">
                 <input
                     type="+number"
                     id="rollNumber"

@@ -193,10 +193,10 @@ export default function AddmissionForm() {
             <form onSubmit={handleSubmit} className="flex flex-col w-full gap-8 px-2 mb-2">
                 {/* {error && <div className="bg-red-100 text-red-700 p-2 rounded">{error}</div>}
                 {success && <div className="bg-green-100 text-green-700 p-2 rounded">{success}</div>} */}
-                <div className="flex w-full gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2">
-                    <div className="flex flex-col mt-8">
+                <div className="flex w-full gap-4 mobile:max-tablet:flex-col mobile:max-laptop:gap-2">
+                    <div className="flex flex-col mt-8 tablet:max-laptop:w-4/12">
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="name">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="name">
                                 Name
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
@@ -212,8 +212,9 @@ export default function AddmissionForm() {
                         </div>
 
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="permanentAddress">
-                                Permanent Address
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="permanentAddress">
+                                <div className=" whitespace-nowrap">Permanent Address</div>
+
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="permanentAddress"
@@ -227,7 +228,7 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="gender">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="gender">
                                 Gender
                                 <select
                                     className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
@@ -245,7 +246,7 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="currentClass">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="currentClass">
                                 Current Class
                                 <select
                                     className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
@@ -278,8 +279,9 @@ export default function AddmissionForm() {
                         </div>
 
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="oldAdmissionNumber">
-                                Old Admission Number
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="oldAdmissionNumber">
+                                <div className="whitespace-nowrap">Old Admission Number
+                                </div>
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="oldAdmissionNumber"
@@ -292,7 +294,7 @@ export default function AddmissionForm() {
                         </div>
 
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="fatherName">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="fatherName">
                                 Father Name
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
@@ -307,7 +309,7 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="fatherEmailId">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="fatherEmailId">
                                 Father Email
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
@@ -322,7 +324,7 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="fathersOccupation">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="fathersOccupation">
                                 Father Occupation
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
@@ -338,7 +340,7 @@ export default function AddmissionForm() {
                         </div>
 
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="fatherPhoneNumber">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="fatherPhoneNumber">
                                 Father Phone Number
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
@@ -354,9 +356,9 @@ export default function AddmissionForm() {
                         </div>
 
                     </div>
-                    <div className="flex flex-col mt-8">
+                    <div className="flex flex-col mt-8 tablet:max-laptop:w-4/12">
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="email">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="email">
                                 Email
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
@@ -370,8 +372,9 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="aadhaarNumber">
-                                Aadhaar Number
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="aadhaarNumber">
+                                <div className=" whitespace-nowrap">Aadhaar Number</div>
+
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="aadhaarNumber"
@@ -385,7 +388,7 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="religion">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="religion">
                                 Religion
                                 <select
                                     className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
@@ -406,7 +409,7 @@ export default function AddmissionForm() {
                         </div>
 
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="admissionClass">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="admissionClass">
                                 Admission Class
                                 <select
                                     className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
@@ -439,7 +442,7 @@ export default function AddmissionForm() {
                         </div>
 
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="admissionDate">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="admissionDate">
                                 Addmission Date
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
@@ -454,7 +457,7 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="motherName">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="motherName">
                                 Mother Name
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
@@ -469,7 +472,7 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="motherEmailId">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="motherEmailId">
                                 Mother Email
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
@@ -484,8 +487,8 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="motherOccupation">
-                                Mother Occupation
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="motherOccupation">
+                                <div className=" whitespace-nowrap">Mother Occupation</div>
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="motherOccupation"
@@ -499,8 +502,8 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="motherPhoneNumber">
-                                Mother Phone Number
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="motherPhoneNumber">
+                                <div className=" whitespace-nowrap">Mother Phone Number</div>
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="motherPhoneNumber"
@@ -517,13 +520,14 @@ export default function AddmissionForm() {
 
                     </div>
 
-                    <div className="flex flex-col mt-8">
+                    <div className="flex flex-col mt-8 tablet:max-laptop:w-4/12">
 
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
 
 
-                            <label className="block text-lg mb-2" htmlFor="DOB">
-                                Date Of Birth
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="DOB">
+                                <div className=" whitespace-nowrap">Date Of Birth</div>
+
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="DOB"
@@ -537,7 +541,7 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="bloodGroup">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="bloodGroup">
                                 Blood Group
                                 <select
                                     className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
@@ -560,7 +564,7 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="section">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="section">
                                 Section
                                 <select
                                     className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
@@ -585,8 +589,10 @@ export default function AddmissionForm() {
                         </div>
 
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="guardiansName">
-                                Guardian Name
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="guardiansName">
+
+                                <div className=" whitespace-nowrap">  Guardian Name</div>
+
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="guardiansName"
@@ -600,8 +606,8 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="guardiansOccupation">
-                                Guardian Occupation
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="guardiansOccupation">
+                                <div className=" whitespace-nowrap"> Guardian Occupation</div>
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="guardiansOccupation"
@@ -616,8 +622,8 @@ export default function AddmissionForm() {
                         </div>
 
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="guardiansPhoneNumber">
-                                Guardian Phone Number
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="guardiansPhoneNumber">
+                                <div className="">Guardian Phone Number</div>
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="guardiansPhoneNumber"
@@ -631,8 +637,8 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2" htmlFor="emergencyContactNumber">
-                                Emergency Contact Number
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="emergencyContactNumber">
+                                <div className="">Emergency Contact Number</div>
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="emergencyContactNumber"
@@ -650,7 +656,7 @@ export default function AddmissionForm() {
                 <div className=" flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4 mobile:max-tablet:mb-0">
                     <div className="w-1/2 rounded-lg mobile:max-tablet:w-full text-lg whitespace-nowrap">
                         Add Google Drive Link for Photo
-                        <label className="block text-lg mb-2">
+                        <label className="block text-lg mb-2 mobile:max-laptop:text-sm">
                             {/* Add Google Drive Link for Photo */}
                             <input
                                 className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-1"

@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import Header from "../../../Home/utils/TeachersDetails/LeftCard/Header";
+import Header from './Header';
 import SearchBar from "../utils/SearchBar";
 import StudentDetailTile from "../utils/StudentDetailTile";
 import axios from 'axios';

@@ -5,6 +5,7 @@ export default {
     screens: {
       mobile: "320px",
 
+      mobilemedium: "425px",
       tablet: "640px",
       // => @media (min-width: 640px) { ... }
 

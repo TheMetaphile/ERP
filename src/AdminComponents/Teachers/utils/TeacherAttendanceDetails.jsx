@@ -3,7 +3,7 @@ import { userimg } from "./images";
 export default function TeacherAttendanceDetails({ userData }) {
     return (
         <div className="flex flex-col overflow-auto border rounded-lg shadow-md border-gray-300">
-            <div className="flex mobile:max-tablet:gap-4 items-center justify-between p-2 mb-2 mobile:max-tablet:w-fit w-full ">
+            <div className="flex mobile:max-tablet:gap-4 items-center justify-between p-2 mb-2 mobile:max-laptop:w-fit w-full tablet:max-laptop:gap-8">
                 <div className="flex w-40 ">
                     <h1 className="text-2xl mobile:max-tablet:text-sm  mobile:max-tablet:font-semibold mx-auto ">Teacher</h1>
                 </div>
@@ -22,7 +22,7 @@ export default function TeacherAttendanceDetails({ userData }) {
             </div>
 
             {userData.map((user, index) => (
-                <div key={index} className="flex mobile:max-tablet:w-fit w-full mobile:max-tablet:gap-4 items-center justify-between border border-gray-200 rounded-lg p-2  gap-8 shadow-md">
+                <div key={index} className="flex mobile:max-tablet:w-fit w-full mobile:max-tablet:gap-4 items-center justify-between border border-gray-200 rounded-lg p-2  gap-8 shadow-md tablet:max-laptop:w-fit">
 
                     <div className="flex w-40 mobile:max-tablet:mb-2 items-center">
                         <img src={userimg} alt="" className="h-8 w-8 mr-3 rounded-full" />

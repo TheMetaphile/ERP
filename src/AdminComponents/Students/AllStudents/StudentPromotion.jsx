@@ -62,7 +62,7 @@ export default function StudentPromotion() {
                         Filter
                     </button>
                     {isDropdownVisible && (
-                        <div className="absolute bg-white shadow-lg py-2 rounded right-1 left-1 z-20 justify-center flex">
+                        <div className="absolute bg-white shadow-lg py-2 rounded right-1 left-1 z-20 justify-center flex tablet:max-laptop:w-4/6 ">
                             <SearchBar
                                 rollNumber={rollNumber}
                                 name={name}

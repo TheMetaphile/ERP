@@ -18,7 +18,7 @@ export default function Expenses() {
                         <InvoiceSection />
                     </div>
                 </div>
-                <div className="w-1/2 mx-2 shadow-lg rounded-lg border mobile:max-tablet:w-full mobile:max-tablet:mx-0 mobile:max-tablet:px-2">
+                <div className="w-1/2 mx-2 shadow-lg rounded-lg border mobile:max-tablet:w-full mobile:max-tablet:mx-0 mobile:max-tablet:px-2.5">
                     <QuickActions />
                 </div>
             </div>
