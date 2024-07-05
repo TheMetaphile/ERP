@@ -17,6 +17,7 @@ function StudentAttendance() {
     const [studentClone, setStudentClone] = useState([]);
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
+    const [markLoading, setMarkLoading] = useState(false);
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -54,13 +55,13 @@ function StudentAttendance() {
 
     const handleScroll = () => {
         const container = containerRef.current;
-        if (container && container.scrollHeight - container.scrollTop <= container.clientHeight ) {
+        if (container && container.scrollHeight - container.scrollTop <= container.clientHeight) {
             console.log("fetching");
             setLoadMore(true);
-            if(students.length === end + start || students.length==0 ){
-                setStart(end+start);
+            if (students.length === end + start || students.length == 0) {
+                setStart(end + start);
                 setEnd(5);
-            }   
+            }
         }
         console.log('iiiiii')
     };
@@ -113,7 +114,7 @@ function StudentAttendance() {
             studentAttendance
         };
         console.log(requestData);
-
+        setMarkLoading(true);
         try {
             const response = await axios.post(`${BASE_URL_Attendence}/studentAttendance/mark`, requestData);
             if (response.status === 200) {
@@ -126,9 +127,12 @@ function StudentAttendance() {
                     leave: false
                 }));
                 setStudentClone(resetStudents);
+                setMarkLoading(false);
+
             }
         } catch (error) {
             toast.error('Error', error);
+            setMarkLoading(false);
             console.error("Error marking attendance:", error);
         }
     };
@@ -147,13 +151,13 @@ function StudentAttendance() {
                             Previous Record
                         </Link>
                         <button className="px-2 py-1 bg-green-500 text-white rounded-md hover:cursor-pointer" onClick={handleMark}>
-                            Mark Attendance
+                            {markLoading ? <Loading /> : 'Mark Attendance'}
                         </button>
                     </div>
                 </div>
 
                 <div className="border rounded-lg shadow-md mt-2 overflow-auto h-screen" onScroll={handleScroll} ref={containerRef}>
-                    {loading && students.length ==0 ? (
+                    {loading && students.length == 0 ? (
                         <Loading />
                     ) : (
                         <>

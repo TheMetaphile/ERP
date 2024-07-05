@@ -11,11 +11,14 @@ export default function TeacherCard({ userData }) {
     const [activeUser, setActiveUser] = useState(null);
     const videoRef = useRef(null);
     const [progress, setProgress] = useState(0);
+    const [showPercentage, setShowPercentage] = useState(false);
 
     const handleChatClick = async (index) => {
         setActiveUser(index);
         setIsCapturing(true);
         setProgress(0);
+        setCapturedImages([]);
+        setShowPercentage(false);
 
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -30,7 +33,7 @@ export default function TeacherCard({ userData }) {
     };
 
     const handleCapture = () => {
-        console.log('start')
+        setShowPercentage(true);
         const video = videoRef.current;
         const pictures = [];
         const captureInterval = 150;
@@ -50,6 +53,7 @@ export default function TeacherCard({ userData }) {
                     setProgress(((pictures.length / captureCount) * 100).toFixed(2));
                     if (pictures.length === captureCount) {
                         setCapturedImages(pictures);
+                        setShowPercentage(false);
                         setIsCapturing(false);
                         if (mediaStream) {
                             mediaStream.getTracks().forEach(track => track.stop());
@@ -62,7 +66,6 @@ export default function TeacherCard({ userData }) {
     };
 
     const handleCancel = () => {
-        console.log('cancel')
         if (mediaStream) {
             mediaStream.getTracks().forEach(track => track.stop());
         }
@@ -70,6 +73,7 @@ export default function TeacherCard({ userData }) {
         setActiveUser(null);
         setCapturedImages([]);
         setProgress(0);
+        setShowPercentage(false);
     };
 
     const handleDownload = (name) => {
@@ -96,7 +100,7 @@ export default function TeacherCard({ userData }) {
     return (
         <div className="mx-3">
             {userData.map((user, index) => (
-                <div key={user._id || index} className="flex mobile:max-tablet:flex-col  items-center justify-between border rounded-lg p-4 mb-2 mobile:max-tablet:items-start">
+                <div key={user._id || index} className="flex mobile:max-tablet:flex-col items-center justify-between border rounded-lg p-4 mb-2 mobile:max-tablet:items-start">
                     <div className="flex w-72 mobile:max-tablet:w-auto">
                         <img src={user.profileLogo || userimg} alt="" className="h-16 w-16 mr-3 rounded-full " />
                         <div className="mt-2 flex flex-col items-start">
@@ -135,16 +139,19 @@ export default function TeacherCard({ userData }) {
             ))}
             {isCapturing && (
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-                    <div className="bg-gray-600 px-8 py-4 rounded-lg flex flex-col items-center">
-                        <span className="text-lg font-medium text-white">Face Detection</span>
-                        <span className="text-base font-normal text-white">Please sit in front of your webcam in a way such that your face is clearly visible.</span>
+                    <div className="bg-white px-8 py-4 rounded-lg flex flex-col items-center">
+                        <span className="text-lg font-medium ">Face Detection</span>
+                        <span className="text-base font-normal">Please sit in front of your webcam in a way such that your face is clearly visible.</span>
 
-                        <div className="relative w-96 mt-4">
-                            <video ref={videoRef} className="rounded-lg w-full" autoPlay />
-                            <div className="absolute top-0 left-0 h-full bg-secondarysecond bg-opacity-30" style={{ width: `${progress}%` }}></div>
+                        <div className="w-80 h-80 rounded-full mt-4 relative overflow-hidden flex items-center justify-center">
+                            <video ref={videoRef} className="absolute top-0 left-0 w-full h-full object-cover" autoPlay />
+                            {showPercentage ?
+                                <><span className="text-aquamarine mt-2 z-10">{progress}%</span>
+                                    <div className="absolute top-0 left-0 h-full bg-secondarysecond bg-opacity-30" style={{ width: `${progress}%` }}></div>
+                                </> : ''}
                         </div>
+                        {showPercentage ? <span className="text-base font-medium text-secondarysecond">Please wait we are capturing</span> : ''}
 
-                        <span className="text-gray-600 mt-2">{progress}% Captured</span>
                         <div className="flex gap-2 mt-4">
                             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded" onClick={handleCapture}>
                                 Capture
@@ -156,9 +163,6 @@ export default function TeacherCard({ userData }) {
                     </div>
                 </div>
             )}
-
         </div>
     );
 }
-
-

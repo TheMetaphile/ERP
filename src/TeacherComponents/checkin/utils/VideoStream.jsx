@@ -3,12 +3,14 @@ import Webcam from 'react-webcam';
 import * as faceapi from 'face-api.js';
 import axios from 'axios';
 import Loading from '../../../LoadingScreen/Loading';
+import { BASE_URL_FaceDetection } from '../../../Config';
+import image from '../../../assets/Shailesh.jpg';
 
 function VideoStream({ onClose, onCapture }) {
   const webcamRef = useRef(null);
   const [facePosition, setFacePosition] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [userMatch, setUserMatch] = useState(false);
   //   useEffect(() => {
   //       const loadModels = async () => {
   //           try {
@@ -62,14 +64,14 @@ function VideoStream({ onClose, onCapture }) {
         const formData = new FormData();
         formData.append('file', blob, 'image.jpg');
 
-        const response = await axios.post('https://face-prediction.onrender.com/predict', formData, {
+        const response = await axios.post(`${BASE_URL_FaceDetection}/predict`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
 
         if (response.status === 200) {
-          console.log('API response:', response.data);
+          console.log('API response:', response.data.predicted_class);
           onClose();
         }
       } catch (error) {
@@ -89,14 +91,14 @@ function VideoStream({ onClose, onCapture }) {
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
 
-      <div className="bg-gray-600 px-8 py-4 rounded-lg flex flex-col items-center">
-        <span className="text-lg font-medium text-white">Face Detection</span>
-        <span className="text-base font-normal text-white">Please sit in front of your webcam in a way such that your face is clearly visible.</span>
-        <div className=" w-96 mt-4">
+      <div className="bg-white px-8 py-4 rounded-lg flex flex-col items-center">
+        <span className="text-lg font-medium">Face Detection</span>
+        <span className="text-base font-normal">Please sit in front of your webcam in a way such that your face is clearly visible.</span>
+        <div className="w-80 h-80 rounded-full mt-4 relative overflow-hidden">
           <Webcam
             ref={webcamRef}
             screenshotFormat="image/jpeg"
-            className="rounded-lg w-full"
+            className="absolute top-0 left-0 w-full h-full object-cover"
           />
         </div>
 

@@ -14,9 +14,9 @@ function ClassWork() {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [selectedClass, setSelectedClass] = useState("");
-    const [selectedSection, setSelectedSection] = useState("");
-    const [selectedSubject, setSelectedSubject] = useState("");
+    const [selectedClass, setSelectedClass] = useState("9th");
+    const [selectedSection, setSelectedSection] = useState("A");
+    const [selectedSubject, setSelectedSubject] = useState("Maths");
 
     const handleOpen = () => {
         setIsDialogOpen(true);

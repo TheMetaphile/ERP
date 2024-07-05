@@ -3,6 +3,7 @@ import AllNotice from "./AllNotice";
 import NewNotice from "./NewNotice";
 import StudentNotice from "./StudentNotice";
 import TeacherNotice from "./TeacherNotice";
+import ClassNotice from "./ClassNotice";
 
 const NoticeUser = () => {
   const [selectedRole, setSelectedRole] = useState('all');
@@ -11,13 +12,13 @@ const NoticeUser = () => {
   const selectRole = (role) => {
     setSelectedRole(role);
   };
- 
+
 
   const handleOpenModal = () => {
     setShowModal(true);
   };
 
-  
+
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md w-full flex flex-col">
@@ -29,7 +30,8 @@ const NoticeUser = () => {
             onClick={() => selectRole('student')}>Student</button>
           <button className={`text-xl border border-gray-300 ${selectedRole === 'teacher' ? 'bg-blue-400' : 'bg-gray-300'} rounded-lg px-4`}
             onClick={() => selectRole('teacher')}>Teacher</button>
-
+          <button className={`text-xl border border-gray-300 ${selectedRole === 'class' ? 'bg-blue-400' : 'bg-gray-300'} rounded-lg px-4`}
+            onClick={() => selectRole('class')}>Class</button>
         </div>
         <div className="flex justify-between mobile:max-tablet:gap-2">
           <div><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mobile:max-tablet:py-0 mobile:max-tablet:px-2" onClick={handleOpenModal}>Write Notice</button></div>
@@ -43,7 +45,11 @@ const NoticeUser = () => {
           </div>
         )}
 
-
+        {selectedRole === 'class' && (
+          <div className="">
+            <ClassNotice />
+          </div>
+        )}
         {selectedRole === 'student' && (
           <div className="">
             <StudentNotice />
@@ -55,7 +61,7 @@ const NoticeUser = () => {
           </div>
         )}
       </div>
-      {showModal ? <NewNotice setShowModal={setShowModal}/> : <></>}
+      {showModal ? <NewNotice setShowModal={setShowModal} /> : <></>}
     </div>
   );
 };

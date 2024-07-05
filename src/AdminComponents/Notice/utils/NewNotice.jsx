@@ -1,8 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import Loading from './../../../LoadingScreen/Loading';
-import { BASE_URL_Notice } from '../../../Config';
+import { BASE_URL_Notice, BASE_URL_ClassTeacher } from '../../../Config';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -12,8 +12,18 @@ function NewNotice({ setShowModal }) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [emailIds, setEmailIds] = useState('');
-    const [classes, setClasses] = useState('');
+    const [classOptions] = useState(['Pre-Nursery', 'Nursery', 'KG', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']);
+    const [selectedClass, setSelectedClass] = useState('');
+    const [sectionOptions, setSectionOptions] = useState([]);
+    const [selectedSection, setSelectedSection] = useState('');
+    const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (selectedClass) {
+            fetchSections();
+        }
+    }, [selectedClass]);
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
@@ -54,10 +64,10 @@ function NewNotice({ setShowModal }) {
             date: today,
         };
 
-        if (selectedOption === 'Particular Students' || selectedOption === 'Particular Teacher') {
+        if (selectedOption === 'Particular Students' || selectedOption === 'Particular Teachers') {
             payload.emailIds = emailIds.split(',').map(email => email.trim());
-        } else if (selectedOption === 'Particular Class') {
-            payload.classes = [{ Class: classes.split(',')[0].trim(), sections: classes.split(',').slice(1).map(section => section.trim()) }];
+        } else if (selectedOption === 'Particular Classes') {
+            payload.Classes = classes;
         }
 
         console.log('payload', payload);
@@ -73,23 +83,54 @@ function NewNotice({ setShowModal }) {
                 }
             );
             if (response.status === 200) {
-                toast.success('Successully Posted');
+                toast.success('Successfully Posted');
                 console.log('fetch', response.data);
             }
         } catch (error) {
-            toast.error(error);
+            toast.error(error.message);
             console.error("Error in posting notice:", error);
+        } finally {
+            setLoading(false);
         }
-        finally {
-            setLoading(false)
-        }
+    };
 
+    const fetchSections = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/fetch/sections`, {
+                accessToken: authState.accessToken,
+                class: selectedClass,
+            });
+            if (response.status == 200) {
+                console.log('section fetched');
+                const sectionsdetail = response.data.sections.map(section => section.section);
+                setSectionOptions(sectionsdetail);
+            }
+
+        } catch (error) {
+            console.error("Error fetching sections:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleAddClass = () => {
+        const existingClass = classes.find(cls => cls.Class === selectedClass);
+        if (existingClass) {
+            existingClass.sections.push(selectedSection);
+            setClasses([...classes]);
+        } else {
+            setClasses([...classes, { Class: selectedClass, sections: [selectedSection] }]);
+        }
+        setSelectedClass('');
+        setSelectedSection('');
+        setSectionOptions([]);
     };
 
     const renderSpecificOptions = () => {
         switch (selectedOption) {
             case 'Particular Students':
-            case 'Particular Teacher':
+            case 'Particular Teachers':
                 return (
                     <div>
                         <textarea
@@ -100,14 +141,44 @@ function NewNotice({ setShowModal }) {
                         />
                     </div>
                 );
-            case 'Particular Class':
+            case 'Particular Classes':
                 return (
                     <div>
+                        <div className="flex mb-4 space-x-4">
+                            <select
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                                value={selectedClass}
+                                onChange={(e) => setSelectedClass(e.target.value)}
+                            >
+                                <option value="">Select Class</option>
+                                {classOptions.map(cls => (
+                                    <option key={cls} value={cls}>{cls}</option>
+                                ))}
+                            </select>
+                            <select
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                                value={selectedSection}
+                                onChange={(e) => setSelectedSection(e.target.value)}
+                                disabled={!selectedClass}
+                            >
+                                <option value="">Select Section</option>
+                                {sectionOptions.map(section => (
+                                    <option key={section} value={section}>{section}</option>
+                                ))}
+                            </select>
+                            <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                onClick={handleAddClass}
+                                disabled={!selectedClass || !selectedSection}
+                            >
+                                Add
+                            </button>
+                        </div>
                         <textarea
                             className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2"
-                            placeholder="Enter class and sections (e.g., 9th,A,B)"
-                            value={classes}
-                            onChange={(e) => setClasses(e.target.value)}
+                            placeholder="Classes and sections will be listed here"
+                            value={classes.map(cls => `${cls.Class}: ${cls.sections.join(', ')}`).join('\n')}
+                            readOnly
                         />
                     </div>
                 );
@@ -130,7 +201,7 @@ function NewNotice({ setShowModal }) {
                         <option value="For Students">For Students</option>
                         <option value="For Teachers">For Teachers</option>
                         <option value="Particular Students">Particular Students</option>
-                        <option value="Particular Teachers">Particular Teacher</option>
+                        <option value="Particular Teachers">Particular Teachers</option>
                         <option value="Particular Classes">Particular Classes</option>
                     </select>
                 </div>
@@ -167,6 +238,7 @@ function NewNotice({ setShowModal }) {
                     </button>
                 </div>
             </div>
+            {loading && <Loading />}
         </div>
     );
 }
