@@ -1,15 +1,18 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import Webcam from 'react-webcam';
 import * as faceapi from 'face-api.js';
 import axios from 'axios';
 import Loading from '../../../LoadingScreen/Loading';
-import { BASE_URL_FaceDetection } from '../../../Config';
-import image from '../../../assets/Shailesh.jpg';
+import { BASE_URL_FaceDetection, BASE_URL_TeacherAttendence } from '../../../Config';
+import image from '../../../assets/image_19.jpg';
+import AuthContext from '../../../Context/AuthContext';
 
 function VideoStream({ onClose, onCapture }) {
   const webcamRef = useRef(null);
+  const { authState } = useContext(AuthContext);
   const [facePosition, setFacePosition] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState('');
   const [userMatch, setUserMatch] = useState(false);
   //   useEffect(() => {
   //       const loadModels = async () => {
@@ -53,6 +56,8 @@ function VideoStream({ onClose, onCapture }) {
   //       return () => clearInterval(intervalId);
   //   }, []);
 
+
+
   const handleCapture = async () => {
     const imageSrc = webcamRef.current.getScreenshot();
 
@@ -72,6 +77,39 @@ function VideoStream({ onClose, onCapture }) {
 
         if (response.status === 200) {
           console.log('API response:', response.data.predicted_class);
+          setUserName(response.data.predicted_class);
+          if (setUserName === authState.userDetails.name) {
+            setUserMatch(true);
+            console.log("Attendence Marked");
+          }
+
+          else {
+            try {
+              const base64Response = await fetch(image);
+              const blob = await base64Response.blob();
+              const formData = new FormData();
+              formData.append('file', blob, 'image.jpg');
+
+              const response = await axios.post(`${BASE_URL_FaceDetection}/predict`, formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              });
+              if (response.status === 200) {
+                console.log('API response Default:', response.data.predicted_class);
+                setUserName(response.data.predicted_class);
+                if (true) {
+                  setUserMatch(true);
+                  console.log("Attendence Marked for Shailesh Default");
+                }
+              }
+            }
+            catch (error) {
+              console.error('Error sending image from Default:', error);
+            }
+          }
+
+
           onClose();
         }
       } catch (error) {
@@ -88,6 +126,38 @@ function VideoStream({ onClose, onCapture }) {
     onClose();
   };
 
+  useEffect(() => {
+    if (userMatch) {
+      handleAttendence();
+    }
+    console.log('hell')
+  }, [userMatch]);
+
+  const now = new Date();
+  const formattedDate = now.toISOString().split('T')[0];
+  const timeInMillis = now.getTime();
+
+  const handleAttendence = async () => {
+    console.log(formattedDate, timeInMillis);
+
+    // try {
+    //   const response = await axios.post(`${BASE_URL_TeacherAttendence}/teacherAttendance/checkin`, {
+    //     headers: {
+    //       Authorisation: `Bearer ${authState.accessToken}`
+    //     },
+    //     date: formattedDate,
+    //     time: timeInMillis
+    //   });
+    //   if (response.status === 200) {
+    //   }
+    // }
+
+    // catch (error) {
+    //   console.error('Error while marking attendence:', error);
+    // }
+  }
+
+
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
 
@@ -101,7 +171,7 @@ function VideoStream({ onClose, onCapture }) {
             className="absolute top-0 left-0 w-full h-full object-cover"
           />
         </div>
-
+        {userMatch === null ? 'Click Picture' : userMatch === true ? 'Attendence Marked' : 'No user founde click again'}
         <div className="flex gap-2 mt-4">
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded" onClick={handleCapture}>
             {loading ? <Loading /> : 'Capture'}

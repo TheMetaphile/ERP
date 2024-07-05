@@ -46,10 +46,10 @@ export default function Notice() {
 
               <div className='px-2 w-11/12'>
                 <div className='flex justify-between'>
-                  <div className="font-medium text-base">Title : {detail.title}</div>
+                  <div className="font-medium text-base"> {detail.title}</div>
                 </div>
 
-                <div className="text-gray-500 text-left text-sm "><span className='font-normal'>{detail.description}</span></div>
+                <div className="text-gray-500  text-sm text-justify"><span className='font-normal'>{detail.description}</span></div>
                 {/* <div className="text-gray-500 text-left text-sm overflow-hidden overflow-ellipsis h-11 whitespace-nowrap">
                   <span className='font-normal'>{detail.description}</span>
                 </div> */}
