@@ -17,7 +17,7 @@ export default function Teacher() {
         const currentYear = now.getFullYear();
         const currentMonth = now.getMonth();
 
-        if (currentMonth >= 3) {
+        if (currentMonth > 3) {
             return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
         } else {
             return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;

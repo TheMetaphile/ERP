@@ -10,9 +10,9 @@ function NewDoubt() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [Class, setClass] = useState('');
-    const [Section, setSection] = useState('');
-    const [Subject, setSubject] = useState('');
+    const [Class, setClass] = useState('9th');
+    const [Section, setSection] = useState('A');
+    const [Subject, setSubject] = useState('Maths');
 
     const fetchUserData = async () => {
         setLoading(true);

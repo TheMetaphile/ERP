@@ -69,7 +69,7 @@ function UploadResultRow({ rollNumber, name, profileLink, email, Class, section 
     return (
         <div className='w-full'>
             <div
-                className='flex justify-evenly border border-gray-300 shadow-md items-center py-2 pl-2 w-full cursor-pointer'
+                className='flex justify-between items-center py-2 pl-2  h-fit  border border-gray-300 text-center w-fit mobilemedium:w-full laptop:w-full  gap-2 hover:cursor-pointer'
                 onClick={handleClick}
             >
                 <div className='w-40 text-center'>{rollNumber}</div>

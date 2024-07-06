@@ -17,7 +17,7 @@ export default function Notices() {
         const currentYear = now.getFullYear();
         const currentMonth = now.getMonth();
 
-        if (currentMonth >= 3) {
+        if (currentMonth > 3) {
             return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
         } else {
             return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
@@ -54,19 +54,10 @@ export default function Notices() {
             ) : (
                 <>
                     {details.map((detail, index) => (
-                        <div key={index} className=" w-full p-2  rounded-lg border border-gray-300 shadow-md mt-3 flex items-center">
-
-                            <div className='px-2 w-11/12'>
-                                <div className='flex justify-between'>
-                                    <div className="font-medium text-base">Title : {detail.title}</div>
-                                </div>
-
-                                <div className="text-gray-500 text-left text-sm "><span className='font-normal'>{detail.description}</span></div>
-                                <div className="pl-2 mt-1 text-sm text-right text-gray-500">{detail.date}</div>
-                            </div>
-
-
-                        </div>
+                        <div key={index} className="mt-3 mb-30 ">
+                        <h4 className="font-normal text-sm">{detail.title}</h4>
+                        <p className="text-gray-500 text-left text-xs">{detail.description}</p>
+                      </div>
                     ))
                     }
                 </>

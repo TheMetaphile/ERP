@@ -66,7 +66,7 @@ function ReportCard() {
                     <Header headings={['Roll No.', 'Name',"Class","Section"]} />
                     {students.map((detail, index) => (
                         <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`} key={index}>
-                            <div key={index} className='flex justify-evenly border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
+                            <div key={index} className='flex justify-between items-center py-2 pl-2  h-fit  border border-gray-300 text-center w-fit mobilemedium:w-full laptop:w-full  gap-2' >
                                 <div className=' w-40 text-center'>{detail.rollNumber}</div>
                                 <div className=' w-52 text-center flex justify-center'>
                                     <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full mr-2'></img>
