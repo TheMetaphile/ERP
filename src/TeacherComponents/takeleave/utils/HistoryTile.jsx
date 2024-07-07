@@ -1,10 +1,10 @@
 import React, { useState, useContext,useEffect } from 'react';
 import axios from 'axios';
 import { MdEdit, MdDeleteForever, MdCheck, MdCancel} from 'react-icons/md';
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Student_Leave, BASE_URL_TeacherLeave } from '../../../Config';
+import {  BASE_URL_TeacherLeave } from '../../../Config';
 
 export default function HistoryTile({ details }) {
     const [data, setData] = useState([]);
@@ -15,7 +15,7 @@ export default function HistoryTile({ details }) {
     useEffect(() => {
         if (details ) {
             console.log('before',details)
-            setData(prevData => [...details, ...prevData]);
+            setData(details);
             console.log('after',details)
 
         }

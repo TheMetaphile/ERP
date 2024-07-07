@@ -13,14 +13,17 @@ function History({ additionalData }) {
 
     useEffect(() => {
         if (authState.accessToken) {
-            setLoading(true);
-            fetchLeaves();
+            setDetails(prevState => [...additionalData,...prevState]);
         } else {
             toast.error('No access token available');
         }
     }, [authState.accessToken,additionalData]);
 
- 
+
+    useEffect(()=>{
+        setLoading(true);
+        fetchLeaves();
+    },[authState.accessToken]);
 
     function getCurrentSession() {
         const now = new Date();
