@@ -11,7 +11,9 @@ function NewNotice({ setShowModal }) {
     const [selectedOption, setSelectedOption] = useState('For All');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [emailIds, setEmailIds] = useState('');
+    const [emailIds, setEmailIds] = useState([]);
+    const [searchInput, setSearchInput] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
     const [classOptions] = useState(['Pre-Nursery', 'Nursery', 'KG', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']);
     const [selectedClass, setSelectedClass] = useState('');
     const [sectionOptions, setSectionOptions] = useState([]);
@@ -38,7 +40,7 @@ function NewNotice({ setShowModal }) {
         const currentYear = now.getFullYear();
         const currentMonth = now.getMonth();
 
-        if (currentMonth >= 3) {
+        if (currentMonth > 3) {
             return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
         } else {
             return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
@@ -65,7 +67,7 @@ function NewNotice({ setShowModal }) {
         };
 
         if (selectedOption === 'Particular Students' || selectedOption === 'Particular Teachers') {
-            payload.emailIds = emailIds.split(',').map(email => email.trim());
+            payload.emailIds = emailIds;
         } else if (selectedOption === 'Particular Classes') {
             payload.Classes = classes;
         }
@@ -101,7 +103,7 @@ function NewNotice({ setShowModal }) {
                 accessToken: authState.accessToken,
                 class: selectedClass,
             });
-            if (response.status == 200) {
+            if (response.status === 200) {
                 console.log('section fetched');
                 const sectionsdetail = response.data.sections.map(section => section.section);
                 setSectionOptions(sectionsdetail);
@@ -127,18 +129,73 @@ function NewNotice({ setShowModal }) {
         setSectionOptions([]);
     };
 
+    const handleSearchChange = (e) => {
+        setSearchInput(e.target.value);
+        if (e.target.value.length > 2) {
+            searchUsers(e.target.value);
+        } else {
+            setSearchResults([]);
+        }
+    };
+
+    const searchUsers = async (query) => {
+        try {
+            const response = await axios.post('https://loginapi-y0aa.onrender.com/search/teacher', {
+                accessToken: authState.accessToken,
+                searchString: query,
+                start: 0,
+                end: 10,
+            });
+            console.log('search', response.data);
+            setSearchResults(response.data.Teachers);
+        } catch (error) {
+            console.error("Error searching users:", error);
+        }
+    };
+
+    const addEmailId = (email) => {
+        if (!emailIds.includes(email)) {
+            setEmailIds([...emailIds, email]);
+        }
+    };
+
     const renderSpecificOptions = () => {
         switch (selectedOption) {
             case 'Particular Students':
             case 'Particular Teachers':
                 return (
                     <div>
+                     
+
+                            <input
+                                type="text"
+                                className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2"
+                                placeholder="Search for users"
+                                value={searchInput}
+                                onChange={handleSearchChange}
+                            />
+                            <div className="w-full bg-slate-400 mb-4 border border-gray-300 rounded-lg px-3 py-2 max-h-40 overflow-y-scroll">
+                                {searchResults.map(user => (
+                                    <div key={user.email} className="flex justify-between items-center mb-2">
+                                        <span>{user.name} ({user.email})</span>
+                                        <button
+                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                                            onClick={() => addEmailId(user.email)}
+                                        >
+                                            Add
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                   
+
                         <textarea
                             className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2"
                             placeholder="Enter email IDs separated by commas"
-                            value={emailIds}
-                            onChange={(e) => setEmailIds(e.target.value)}
+                            value={emailIds.join(', ')}
+                            readOnly
                         />
+
                     </div>
                 );
             case 'Particular Classes':
@@ -198,17 +255,16 @@ function NewNotice({ setShowModal }) {
                         onChange={handleOptionChange}
                     >
                         <option value="For All">For All</option>
-                        <option value="For Students">For Students</option>
-                        <option value="For Teachers">For Teachers</option>
+                        <option value="For Student">For Student</option>
+                        <option value="For Teacher">For Teacher</option>
                         <option value="Particular Students">Particular Students</option>
-                        <option value="Particular Teachers">Particular Teachers</option>
                         <option value="Particular Classes">Particular Classes</option>
+                        <option value="Particular Teachers">Particular Teachers</option>
                     </select>
                 </div>
-
                 <input
-                    type="text"
                     className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2"
+                    type="text"
                     placeholder="Title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
@@ -216,29 +272,26 @@ function NewNotice({ setShowModal }) {
                 <textarea
                     className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2"
                     placeholder="Description"
-                    rows={4}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
-
                 {renderSpecificOptions()}
-
                 <div className="flex justify-end">
                     <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         onClick={handleSubmit}
+                        disabled={loading}
                     >
-                        Send
+                        {loading ? <Loading /> : "Submit"}
                     </button>
                     <button
-                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+                        className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2"
                         onClick={handleCloseModal}
                     >
                         Cancel
                     </button>
                 </div>
             </div>
-            {loading && <Loading />}
         </div>
     );
 }

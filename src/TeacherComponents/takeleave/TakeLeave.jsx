@@ -7,6 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function TakeLeave() {
     const [isDialogOpen, setIsDialogOpen]=useState(false);
+    const [additionalData, setAdditionalData] = useState([]);
+
 
     const handleOpen=()=>{
         setIsDialogOpen(true);
@@ -14,6 +16,12 @@ function TakeLeave() {
     const handleClose=()=>{
         setIsDialogOpen(false);
     }
+
+    const handleNewLeave = (newLeave) => {
+        console.log('take.jsx',newLeave)
+        setAdditionalData([newLeave]);
+    };
+
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
             <ToastContainer />
@@ -25,9 +33,10 @@ function TakeLeave() {
                 <Progress />
             </div>
             <div className='mt-4  w-full'>
-                <History />
+                <History additionalData={additionalData}/>
             </div>
-            {isDialogOpen && <NewLeave onClose={handleClose}/>}
+            {isDialogOpen && <NewLeave onClose={handleClose} onNewLeave={handleNewLeave}/>}
+
         </div>
 
     )

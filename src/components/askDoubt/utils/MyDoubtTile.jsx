@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { MdDeleteForever, MdOutlineModeEdit, MdCheck } from "react-icons/md";
+import React, { useContext, useEffect, useState } from 'react';
+import { MdDeleteForever, MdOutlineModeEdit, MdCheck, MdCancel } from "react-icons/md";
 import AuthContext from '../../../Context/AuthContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -9,6 +9,11 @@ export default function MyDoubtTile({ data }) {
     const { authState } = useContext(AuthContext);
     const [editMode, setEditMode] = useState(null);
     const [editedData, setEditedData] = useState({});
+    const [doubts, setDoubts] = useState(data);
+
+    useEffect(() => {
+        setDoubts(data);
+    }, [data]);
 
     const handleDelete = async (index, id) => {
         console.log(id, authState.userDetails.currentClass)
@@ -21,6 +26,8 @@ export default function MyDoubtTile({ data }) {
 
             if (response.status === 200) {
                 toast.success('Doubt Deleted Successfully');
+                // Remove the deleted doubt from the state
+                setDoubts(prevDoubts => prevDoubts.filter((_, i) => i !== index));
             }
         } catch (error) {
             console.error("Error deleting Doubt:", error);
@@ -49,7 +56,8 @@ export default function MyDoubtTile({ data }) {
         try {
             const response = await axios.put(`${BASE_URL_AskDoubt}/doubts/update/student?id=${id}`, {
                 class: authState.userDetails.currentClass,
-                question: editedData.question
+                question: editedData.question,
+                subject: editedData.subject
             }, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
@@ -59,6 +67,7 @@ export default function MyDoubtTile({ data }) {
             if (response.status === 200) {
                 toast.success('Doubt Edited Successfully');
                 setEditMode(null);
+                setDoubts(prevDoubts => prevDoubts.map((item, i) => i === index ? { ...item, question: editedData.question, subject: editedData.subject } : item));
             }
         } catch (error) {
             console.error("Error editing Doubt:", error);
@@ -66,9 +75,14 @@ export default function MyDoubtTile({ data }) {
         }
     };
 
+    const handleCancelEdit = () => {
+        setEditMode(null);
+        setEditedData({});
+    };
+
     return (
         <div>
-            {data.map((item, index) => (
+            {doubts.map((item, index) => (
                 <div key={index} className="border border-gray-300 py-2 px-3 mt-3 rounded-lg shadow-md">
                     <div className="flex justify-between items-center mobile:max-tablet:flex-col">
                         <div className='flex items-center gap-2'>
@@ -94,12 +108,16 @@ export default function MyDoubtTile({ data }) {
                                 {item.status === 'Pending' ? (
                                     <>
                                         {editMode === index ? (
-                                            <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleConfirmEdit(index, item._id)}><MdCheck /></button>
-
+                                            <>
+                                                <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleConfirmEdit(index, item._id)}><MdCheck /></button>
+                                                <button className='bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
+                                            </>
                                         ) : (
-                                            <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditToggle(index, item)}> <MdOutlineModeEdit /></button>
+                                            <>
+                                                <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditToggle(index, item)}> <MdOutlineModeEdit /></button>
+                                                <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index, item._id)}><MdDeleteForever /></button>
+                                            </>
                                         )}
-                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index, item._id)}><MdDeleteForever /></button>
                                     </>
                                 ) : (
                                     <></>
@@ -125,7 +143,7 @@ export default function MyDoubtTile({ data }) {
                                 item.question
                             )}
                         </div>
-                        
+
                     </div>
                     <div className='mt-3 px-3 font-normal'>
                         {item.status === 'Resolved' && (
@@ -134,10 +152,18 @@ export default function MyDoubtTile({ data }) {
                             </div>
                         )}
                     </div>
-                    <div className="font-medium text-right text-gray-400">Date {item.date}</div>
+                    <div className='px-3 flex items-center justify-between mt-2 '>
+                        {(item.status === 'Resolved' || item.status === 'Rejected') && (
+                            <div className='flex items-center gap-2'>
+                                <img src={item.teacher[0].profileLink} alt="" className='w--8 h-8 rounded-full'></img>
+                                <div>{item.teacher[0].name}</div>
+                            </div>
+                        )}
+                        <div className="font-medium  text-gray-400">Date {item.date}</div>
+
+                    </div>
                 </div>
             ))}
         </div>
     )
 }
-

@@ -5,7 +5,7 @@ import axios from 'axios';
 import Loading from '../../../LoadingScreen/Loading'
 import { toast } from 'react-toastify';
 
-function NewLeave({ onClose }) {
+function NewLeave({ onClose, onNewLeave }) {
   const { authState } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [fromDate, setFromDate] = useState('');
@@ -41,10 +41,20 @@ function NewLeave({ onClose }) {
     }
   }
 
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); 
+    const day = String(today.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+};
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const session=getCurrentSession();
-    console.log({ fromDate, toDate, leaveType, reason, session });
+    const datee=getCurrentDate();
+    console.log({ fromDate, toDate, leaveType, reason, session , datee});
     setLoading(true);
     try {
       const response = await axios.post(`${BASE_URL_TeacherLeave}/leave/apply`,
@@ -53,7 +63,8 @@ function NewLeave({ onClose }) {
           endDate: toDate,
           reason: reason,
           type: leaveType,
-          session: session
+          session: session,
+          applyOn: datee
         },
         {
           headers: {
@@ -64,6 +75,7 @@ function NewLeave({ onClose }) {
       if (response.status === 200) {
         console.log(response.data);
         toast.success('Leave Applied Successfully!');
+        onNewLeave(response.data);
         onClose();
 
       }

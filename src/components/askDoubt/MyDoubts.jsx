@@ -14,12 +14,13 @@ import { Link } from 'react-router-dom';
 export default function MyDoubts() {
 
     const { authState } = useContext(AuthContext);
-    const [selectedSubject, setSelectedSubject] = useState(null);
+    const [selectedSubject, setSelectedSubject] = useState('Subject');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [loading, setLoading]=useState(false);
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [doubtDescription, setDoubtDescription] = useState('');
+    const [modalSubject, setModalSubject] = useState(null);
 
     const handleSubjectSelect = (selectedSubject) => {
         setSelectedSubject(selectedSubject);
@@ -33,52 +34,31 @@ export default function MyDoubts() {
         setIsModalOpen(false);
     };
 
-    useEffect(() => {
-        if (authState.accessToken) {
-            setIsLoading(true);
-            fetchDoubt();
-        } else {
-            toast.error('No access token available');
-            setIsLoading(false);
-        }
-    }, [authState.accessToken]);
-
-    const fetchDoubt = async () => {
-        try {
-            const response = await axios.get(`${BASE_URL_AskDoubt}/doubts/fetch/student`, {
-                headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
-                }
-            });
-            console.log("API response:", response.data);
-            setData(response.data.doubts);
-            setIsLoading(false);
-        } catch (err) {
-            toast.error(err.message);
-        }
+    const handleModalSubject = (event) => {
+        setModalSubject(event.target.value);
     };
 
     const getCurrentDate = () => {
         const today = new Date();
         const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); 
+        const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
 
         return `${year}-${month}-${day}`;
     };
 
     const handleSubmitDoubt = async () => {
-        if ( !selectedSubject || !doubtDescription) {
+        if (!modalSubject || !doubtDescription) {
             toast.error('Please fill all fields');
             return;
         }
         setLoading(true)
-        const datee=getCurrentDate();
+        const datee = getCurrentDate();
         try {
             const response = await axios.post(`${BASE_URL_AskDoubt}/doubts/create`, {
                 question: doubtDescription,
                 date: datee,
-                subject: selectedSubject
+                subject: modalSubject
             },
                 {
                     headers: {
@@ -88,10 +68,16 @@ export default function MyDoubts() {
             );
             if (response.status === 200) {
                 console.log(response.data);
+                if (modalSubject === selectedSubject || selectedSubject === 'Subject') {
+                    console.log('before', data);
+                    setData(prevData => [response.data, ...prevData]);
+                    console.log('after', data);
+
+                }
                 toast.success('Doubt Send successfully!');
                 setDoubtDescription('');
                 setIsModalOpen(false);
-                fetchDoubt();
+
             }
         } catch (error) {
             toast.error(error.message);
@@ -99,8 +85,40 @@ export default function MyDoubts() {
         setLoading(false)
     };
 
-    const filteredData = selectedSubject ? data.filter(item => item.subject === selectedSubject) : data;
-    
+
+
+    useEffect(() => {
+
+        setIsLoading(true);
+        fetchDoubt();
+
+    }, [selectedSubject]);
+
+    const fetchDoubt = async () => {
+        try {
+            var params = '';
+            if(selectedSubject != 'Subject'){
+                console.log('pp')
+                params=`subject=${selectedSubject}`
+            }
+            const response = await axios.get(`${BASE_URL_AskDoubt}/doubts/fetch/student?${params}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
+                }
+            });
+            console.log("API response:", response.data);
+            setData(response.data.doubts);
+            console.log("API responserrrrrr:", data);
+
+            setIsLoading(false);
+        } catch (err) {
+            toast.error(err.message);
+        }
+    };
+
+
+
+
     return (
         <div className="flex flex-col mobile:max-laptop:flex-col-reverse w-full">
             <ToastContainer />
@@ -122,10 +140,10 @@ export default function MyDoubts() {
             <div className="flex flex-col laptop:mr-3 mt-1 mb-3 no-scrollbar w-full">
                 {isLoading ? (
                     <Loading />
-                ) : data === null ? (
-                    <div className='text-center w-full'>No data available</div>
+                ) : data.length === 0 ? (
+                    <div className='text-center w-full'>No doubts asked</div>
                 ) : (
-                    <MyDoubtTile data={filteredData} />
+                    <MyDoubtTile data={data} />
 
                 )}
 
@@ -139,7 +157,18 @@ export default function MyDoubts() {
 
                         <div className="flex flex-col tablet:flex-row justify-between items-center gap-3 w-full ">
                             <div className="flex-1 mobile:max-tablet:w-full">
-                                <SelectSubject onSelect={handleSubjectSelect} />
+                                <select
+                                    className=" shadow-md border border-grey-300 rounded-lg p-2 w-full ml-2 mr-2  mb-2"
+                                    onChange={handleModalSubject}
+                                >
+                                    {['Hindi', 'Maths', 'English', 'Computer', 'Science', 'Chemistry', 'Physics', 'Sanskrit'].map(
+                                        (subject, index) => (
+                                            <option key={index} value={subject}>
+                                                {subject}
+                                            </option>
+                                        )
+                                    )}
+                                </select>
                             </div>
                         </div>
 

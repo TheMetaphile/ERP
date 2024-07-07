@@ -14,6 +14,7 @@ export default function leave() {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
+    const [additionalData, setAdditionalData] = useState([]);
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -35,6 +36,12 @@ export default function leave() {
         };
         fetchStats();
     }, [authState.accessToken]);
+
+    
+    const handleNewLeave = (newLeave) => {
+        console.log('leave.jsx')
+        setAdditionalData([newLeave]);
+    };
 
     const options = {
         maintainAspectRatio: false,
@@ -100,13 +107,13 @@ export default function leave() {
 
             <div className="gap-2 overflow-x-auto flex w-full tablet:justify-evenly my-4 mobile:max-tablet:flex-col items-center">
                 <div className=" tablet:w-fit  py-3 mobile:max-tablet:w-full flex-grow">
-                    <ApplyLeave />
+                    <ApplyLeave onNewLeave={handleNewLeave}/>
                 </div>
             </div>
 
             <h1 className="text-xl font-medium">Old Leave</h1>
 
-            <AttendenceTable />
+            <AttendenceTable additionalData={additionalData}/>
 
         </div>
     )

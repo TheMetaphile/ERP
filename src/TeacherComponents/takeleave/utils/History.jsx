@@ -6,7 +6,7 @@ import Loading from '../../../LoadingScreen/Loading'
 import { toast } from 'react-toastify';
 import HistoryTile from './HistoryTile';
 
-function History() {
+function History({ additionalData }) {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
@@ -18,7 +18,9 @@ function History() {
         } else {
             toast.error('No access token available');
         }
-    }, [authState.accessToken]);
+    }, [authState.accessToken,additionalData]);
+
+ 
 
     function getCurrentSession() {
         const now = new Date();
@@ -51,6 +53,7 @@ function History() {
             setLoading(false)
         }
     }
+
 
     return (
         <div className=''>

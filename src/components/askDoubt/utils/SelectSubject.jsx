@@ -14,7 +14,7 @@ export default function SelectSubject({ onSelect }) {
                     className=" shadow-md border border-grey-300 rounded-lg p-2 w-full ml-2 mr-2  mb-2"
                     onChange={handleSubjectSelect}
                 >
-                    {['Hindi', 'Maths', 'English', 'Computer', 'Science', 'Chemistry', 'Physics', 'Sanskrit'].map(
+                    {['Subject','Hindi', 'Maths', 'English', 'Computer', 'Science', 'Chemistry', 'Physics', 'Sanskrit'].map(
                         (subject, index) => (
                             <option key={index} value={subject}>
                                 {subject}

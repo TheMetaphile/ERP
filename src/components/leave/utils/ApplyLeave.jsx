@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../LoadingScreen/Loading';
 import { BASE_URL_Student_Leave } from '../../../Config';
 
-export default function ApplyLeave() {
+export default function ApplyLeave({ onNewLeave }) {
     const { authState } = useContext(AuthContext);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -34,6 +34,8 @@ export default function ApplyLeave() {
             );
             if (response.status === 200) {
                 toast.success('Leave applied successfully!');
+                onNewLeave(response.data);
+                console.log(response.data)
                 setStartDate('');
                 setEndDate('');
                 setReason('');

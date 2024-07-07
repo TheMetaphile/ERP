@@ -1,17 +1,26 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext,useEffect } from 'react';
 import axios from 'axios';
-import { MdEdit, MdDeleteForever, MdCheck } from 'react-icons/md';
+import { MdEdit, MdDeleteForever, MdCheck, MdCancel} from 'react-icons/md';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Student_Leave, BASE_URL_TeacherLeave } from '../../../Config';
 
 export default function HistoryTile({ details }) {
-    const [data, setData] = useState(details);
+    const [data, setData] = useState([]);
     const [editRowIndex, setEditRowIndex] = useState(null);
     const { authState } = useContext(AuthContext);
     const [editData, setEditData] = useState({});
 
+    useEffect(() => {
+        if (details ) {
+            console.log('before',details)
+            setData(prevData => [...details, ...prevData]);
+            console.log('after',details)
+
+        }
+    }, [details]);
+    
     const handleDelete = async (index) => {
         const id = data[index]._id;
         const session = getCurrentSession();
@@ -90,11 +99,13 @@ export default function HistoryTile({ details }) {
         }
     };
 
-
+    const handleCancelEdit = () => {
+        setEditRowIndex(null);
+        setEditData([]);
+    };
 
     return (
         <div className="relative w-full p-2 border rounded-lg border-gray-300 shadow-md mt-3 items-center">
-            <ToastContainer />
             {data.map((item, index) => (
                 <div key={index} className="mb-2 border border-gray-200 shadow-md rounded-lg p-3">
 
@@ -111,7 +122,7 @@ export default function HistoryTile({ details }) {
                             item.type
                         )}
                         <div className="flex items-center mt-2">
-                            {item.by.length > 0 && item.status !== 'Pending' ? (
+                            {item.by && item.status !== 'Pending' ? (
                                 <>
                                     <img src={item.by[0].profileLink} alt="img" className="w-8 h-8 rounded-full" />
                                     <h5 className="ml-2">{item.by[0].name}</h5>
@@ -119,11 +130,16 @@ export default function HistoryTile({ details }) {
                             ) : (
                                 <div className="flex justify-center items-center gap-1">
                                     {editRowIndex === index ? (
-                                        <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdCheck /></button>
-                                    ) : (
-                                        <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <MdEdit /></button>
-                                    )}
-                                    <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
+                                            <>
+                                                <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdCheck /></button>
+                                                <button className='bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <MdEdit /></button>
+                                                <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'  onClick={() => handleDelete(index)}><MdDeleteForever /></button>
+                                            </>
+                                        )}
                                     <div className={`font-normal text-sm px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-200 text-orange-700' : item.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>{item.status}</div>
                                 </div>
                             )}

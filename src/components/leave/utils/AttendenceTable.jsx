@@ -3,18 +3,20 @@ import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
 import Loading from '../../../LoadingScreen/Loading';
 import { CiEdit } from "react-icons/ci";
-import { MdDeleteForever, MdSave } from "react-icons/md";
+import { MdDeleteForever, MdCheck, MdCancel } from "react-icons/md";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Student_Leave } from '../../../Config';
 
-export default function AttendenceTable() {
+export default function AttendenceTable({ additionalData }) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState('');
   const [error, setError] = useState('');
   const [editRowIndex, setEditRowIndex] = useState(null);
   const [editData, setEditData] = useState({});
+  const [originalData, setOriginalData] = useState({});
   const { authState } = useContext(AuthContext);
+  const [expanded, setExpanded] = useState(null);
 
 
   const fetchUserData = async () => {
@@ -32,6 +34,10 @@ export default function AttendenceTable() {
     }
   };
 
+  const handleClick = (index) => {
+    setExpanded(expanded === index ? null : index);
+  }
+
   useEffect(() => {
 
     if (authState.accessToken) {
@@ -43,9 +49,20 @@ export default function AttendenceTable() {
     }
   }, [authState.accessToken]);
 
-  const handleEditClick = (index) => {
+  useEffect(() => {
+    if (additionalData) {
+      console.log('bef',data)
+      setData(prevData => [...additionalData, ...prevData]);
+      console.log('afte', data)
+
+    }
+  }, [additionalData]);
+
+  const handleEditClick = (index,event) => {
+    event.stopPropagation();
     setEditRowIndex(index);
     setEditData(data[index]);
+    setOriginalData(data[index]);
   };
 
 
@@ -57,35 +74,45 @@ export default function AttendenceTable() {
     });
   };
 
-  const handleUpdate = async (index) => {
-    const updatedLeave = {
-      ...editData,
-      leaveId: data[index]._id
-    };
-    console.log(updatedLeave)
+  const handleUpdate = async (index,event) => {
+    event.stopPropagation();
+    if (editData.status !== "Pending") {
+      toast.error('Cannot update leave that is not pending');
+      return;
+    }
+
+    const updatedFields = {};
+    for (let key in editData) {
+      if (editData[key] !== originalData[key]) {
+        updatedFields[key] = editData[key];
+      }
+    }
+
+    if (Object.keys(updatedFields).length === 0) {
+      toast.info('No changes detected');
+      return;
+    }
+
     try {
+      const response = await axios.put(`${BASE_URL_Student_Leave}/leave/update`, {
+        ...updatedFields,
+        leaveId: data[index]._id
+      }, {
+        headers: {
+          Authorization: `Bearer ${authState.accessToken}`,
+        }
+      });
 
-      const response = await axios.put(`${BASE_URL_Student_Leave}/leave/update`,
-        {
-          updatedLeave
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
-          }
-        },
-
-      );
-      const updatedData = [...data];
-      updatedData[index] = editData;
-      setData(updatedData);
-      setEditRowIndex(null);
       if (response.status === 200) {
+        const updatedData = [...data];
+        updatedData[index] = { ...updatedData[index], ...updatedFields };
+        setData(updatedData);
+        setEditRowIndex(null);
         toast.success('Leave Updated');
       }
     } catch (err) {
       setError(err.message);
-      toast.error(err)
+      toast.error(err.message);
     }
   };
 
@@ -93,8 +120,8 @@ export default function AttendenceTable() {
 
   // console.log(data[index]._id)
 
-  const handleDelete = async (index) => {
-
+  const handleDelete = async (index,event) => {
+    event.stopPropagation();
     const id = (data[index]._id);
     console.log(id)
     console.log('stat', (data[index].status))
@@ -124,7 +151,10 @@ export default function AttendenceTable() {
     }
   };
 
-
+  const handleCancelEdit = () => {
+    setEditRowIndex(null);
+    setEditData({});
+  };
 
 
   return (
@@ -135,71 +165,72 @@ export default function AttendenceTable() {
       ) : data === null ? (
         <div className='text-center w-full'>No data available</div>
       ) : (
-        <table className=' w-full justify-evenly text-center  rounded-lg border border-gray-300 '>
-          <thead>
-            <tr className='rounded-t-lg  mt-3 text-base font-medium'>
-              <th className='border-r border-gray-400'>Reason</th>
-              <th className='bg-blue-200 border-r border-gray-400'>Start Date</th>
-              <th className='bg-green-200 border-r border-gray-400'>End Date</th>
-              <th className='border-r border-gray-400'>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((leave, index) => (
-              <tr key={index} className='border-t border-gray-400 '>
-                <td className="font-normal border-r px-4 py-1 text-justify w-96 border-gray-400">
-                  {editRowIndex === index ? (
-                    <input type="text" name="reason" value={editData.reason} onChange={handleInputChange} />
-                  ) : (leave.reason)
-                  }
-                </td>
-
-                <td className="font-normal bg-blue-200 border-r border-gray-400">
-                  {editRowIndex === index ? (
-                    <input
-                      type="text" name='startDate' value={editData.startDate} onChange={handleInputChange} />
-                  ) :
-                    (leave.startDate)
-                  }
-                </td>
-
-                <td className="font-normal bg-green-200 border-r border-gray-400">
-                  {editRowIndex === index ?
-                    (
-                      <input type="text" name='endDate' value={editData.endDate} onChange={handleInputChange} />
-                    ) :
-                    (leave.endDate)
-                  }
-                </td>
-
-                <td className={`${leave.status === "Pending" ? "text-orange-300" :
-                  leave.status === "Rejected" ? "text-red-400" :
-                    "text-green-400"
-                  } font-medium border-r border-gray-400`}>{leave.status}
-                  </td>
-                <td >
-                  { leave.status==='Pending' ? (
-                   <div className='flex justify-center items-center my-2 gap-1'>
-                    <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdSave /></button>
-                    <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
+        <div className='px-4'>
+          {data.map((leave, index) => (
+            <div key={index} className='border border-gray-400 cursor-pointer rounded-lg shadow-md mt-2 mb-2' onClick={editRowIndex === index ? '' : () => handleClick(`${index}`)}>
+              <div className="font-normal px-4 py-1 text-justify ">
+                <div className='flex items-center justify-between py-2'>
+                  <div className='flex items-center'>
+                    <img src={authState.userDetails.profileLink} alt="" className='w-10 h-10 rounded-full'></img>
+                    <div className="font-medium ">
+                      <span className='px-2 font-normal'>Leave request from</span>{editRowIndex === index ? (
+                        <input
+                          type="date" name='startDate' value={editData.startDate} onChange={handleInputChange} className='border' />
+                      ) :
+                        (leave.startDate)
+                      }
                     </div>
-                  ) : (
-                   <div className='text-orange-600'>You can't performe any action on approved or rejected leaves</div>
-                  )}
-                  
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+                    <div className="font-medium">
+                      <span className='font-norma'>&nbsp;to </span>{editRowIndex === index ?
+                        (
+                          <input type="date" name='endDate' value={editData.endDate} onChange={handleInputChange} className='border' />
+                        ) :
+                        (leave.endDate)
+                      }
+                    </div>
+
+                    <div className={`${leave.status === "Pending" ? "text-orange-300" :
+                      leave.status === "Rejected" ? "text-red-400" :
+                        "text-green-400"
+                      } font-medium `}>&nbsp; {leave.status}
+                    </div>
+                  </div>
+                  <div>
+                    {editRowIndex === index ? (
+                      <div className='flex justify-center items-center my-2 gap-1'>
+                        <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={(event) => handleUpdate(index,event)}><MdCheck /></button>
+                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
+                      </div>
+                    ) : (
+                      leave.status === 'Pending' ? (
+                        <div className='flex justify-center items-center my-2 gap-1'>
+                          <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={(event) => handleEditClick(index, event)}><CiEdit /></button>
+                          <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={(event) => handleDelete(index, event)}><MdDeleteForever /></button>
+                        </div>
+                      ) : (
+                        <div></div>
+                      )
+                    )}
+                  </div>
+                </div>
+                {expanded === `${index}` && (
+                  <div >
+                    <span className='font-medium'>Reason</span>
+                    <div >
+                      {editRowIndex === index ? (
+                        <input type="text" name="reason" value={editData.reason} onChange={handleInputChange} className='border' />
+                      ) : (leave.reason)
+                      }
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            </div>
+          ))}
+        </div>
       )}
-
-
-
-
     </div>
-
-
   )
 }
