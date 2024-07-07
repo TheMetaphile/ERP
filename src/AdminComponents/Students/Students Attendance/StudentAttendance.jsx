@@ -42,7 +42,7 @@ export default function StudentAttendance() {
         <div className="flex flex-col mx-2">
             {/* Container for heading and filter button */}
             <div className="flex justify-between items-center px-2 py-2 mobile:max-tablet:border-b border-gray-300 mobile:max-tablet:fixed mobile:max-tablet:top-32 left-0 right-0 bg-white mb-4 mobile:max-tablet:mb-0 mobile:max-tablet:py-4">
-                <div className="text-3xl mx-2 px-4 mobile:max-tablet:text-xl mobile:max-tablet:px-2 mobile:max-tablet:">Student's Attendance Details</div>
+                <div className="text-3xl mobile:max-tablet:text-xl mobile:max-tablet:px-2 mobile:max-tablet:">Student's Attendance Details</div>
                 <div className="mobile:max-tablet:block hidden">
                     {/* Ensure this is hidden on medium and larger screens */}
                     <button

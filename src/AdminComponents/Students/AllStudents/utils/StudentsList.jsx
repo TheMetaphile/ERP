@@ -165,7 +165,7 @@ export default function StudentsList() {
     return (
         <>
             <div className="flex mobile:max-tablet:my-3 justify-between items-center mobile:max-tablet:items-baseline mobile:max-tablet:pl-1 mobile:max-tablet:py-2 px-2  mobile:max-tablet:fixed top-34 left-0 right-0 bg-white mb-4">
-                <h1 className="text-2xl font-medium px-2 ">All Students Data</h1>
+                <h1 className="text-3xl font-medium px-2 ">All Students Data</h1>
                 <div className="block desktop:hidden">
                     <button
                         className="p-2 border rounded"
@@ -174,7 +174,7 @@ export default function StudentsList() {
                         Filter
                     </button>
                     {isDropdownVisible && (
-                        <div className="absolute bg-white shadow-lg pt-2 rounded mt-2 right-1 left-1 z-20 justify-center flex">
+                        <div className="absolute bg-white shadow-lg px-2 rounded mt-2 right-2 left-2 z-20 justify-center flex w-4/6 py-2">
                             <SearchBar
                                 rollNumber={rollNumber}
                                 name={name}

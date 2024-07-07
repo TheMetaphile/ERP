@@ -3,13 +3,13 @@ import React from "react";
 export default function SearchBar({ handleClassChange, handleSessionChange, handleMonthChange, handleSectionChange, classValue, session, month, section }) {
     return (
 
-        <div className="flex mobile:max-tablet:flex-col w-full mobile:max-tablet:w-full mobile:max-tablet:gap-2 mobile:max-tablet:p-2">
+        <div className="flex mobile:max-tablet:flex-col w-full mobile:max-tablet:w-full mobile:max-tablet:gap-2 mobile:max-tablet:p-2 my-2">
             <select
                 id="class"
                 name="class"
                 value={classValue}
                 onChange={handleClassChange}
-                className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg overflow-auto mobile:max-tablet:mr-0 "
+                className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg overflow-auto mobile:max-tablet:mr-0 flex-1 "
             >
                 <option value="">Select Class</option>
                 <option value="Pre-Nursery">Pre-Nursery</option>
@@ -34,7 +34,7 @@ export default function SearchBar({ handleClassChange, handleSessionChange, hand
                 name="session"
                 value={session}
                 onChange={handleSessionChange}
-                className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg mobile:max-tablet:mr-0"
+                className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg mobile:max-tablet:mr-0 flex-1"
             >
                 <option value="">Select Term</option>
                 <option value="Term1">Term 1</option>
@@ -45,7 +45,7 @@ export default function SearchBar({ handleClassChange, handleSessionChange, hand
                 name="month"
                 value={month}
                 onChange={handleMonthChange}
-                className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg mobile:max-tablet:mr-0"
+                className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg mobile:max-tablet:mr-0 flex-1"
             >
                 <option value="">Select Month</option>
                 <option value="January">January</option>
@@ -66,7 +66,7 @@ export default function SearchBar({ handleClassChange, handleSessionChange, hand
                 name="section"
                 value={section}
                 onChange={handleSectionChange}
-                className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg mobile:max-tablet:mr-0"
+                className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg mobile:max-tablet:mr-0 flex-1"
             >
                 <option value="">Select Section</option>
                 <option value="A">A</option>

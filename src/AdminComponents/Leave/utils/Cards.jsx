@@ -129,14 +129,14 @@ const Stats = () => {
 
   return (
     <div className="flex gap-4 mobile:max-tablet:gap-2 px-4 w-full  mobile:max-tablet:flex-wrap">
-      <div className="flex flex-col items-center text-center rounded-lg shadow p-4 w-60 border bg-white">
+      <div className="flex flex-col items-center text-center rounded-lg shadow p-4 w-60 border bg-white mobile:max-tablet:w-full">
         <div className="w-20 h-20">
           <Doughnut data={data} options={options} />
         </div>
         <p className="text-3xl mt-3">6200</p>
         <p className="text-xl font-medium text-gray-800 mt-1">Total</p>
       </div>
-      <div className="flex flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border">
+      <div className="flex flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border mobile:max-tablet:w-full">
         <div className="w-20 h-20">
           <Doughnut
             data={{
@@ -157,7 +157,7 @@ const Stats = () => {
         <p className="text-3xl mt-3">5540</p>
         <p className="text-xl font-medium text-gray-800 mt-1">Total Students</p>
       </div>
-      <div className="flex flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border">
+      <div className="flex flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border mobile:max-tablet:w-full">
         <div className="w-20 h-20">
           <Doughnut
             data={{
@@ -178,7 +178,7 @@ const Stats = () => {
         <p className="text-3xl mt-3">500</p>
         <p className="text-xl font-medium text-gray-800 mt-1">Total Teachers</p>
       </div>
-      <div className="flex flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border">
+      <div className="flex flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border mobile:max-tablet:w-full">
         <div className="w-20 h-20">
           <Doughnut
             data={{

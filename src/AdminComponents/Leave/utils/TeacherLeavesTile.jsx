@@ -122,14 +122,14 @@ export default function TeacherLeavesTile({ data }) {
                                     <>
                                         <button
                                             className='p-1 rounded-lg border border-gray-300 text-black px-2 bg-green-300'
-                                            onClick={() => handleAction("Approved",teacher._id)}
+                                            onClick={() => handleAction("Approved", teacher._id)}
                                             disabled={loading}
                                         >
                                             Approve
                                         </button>
                                         <button
                                             className='p-1 rounded-lg text-black border border-gray-300 px-2 bg-red-300'
-                                            onClick={() => handleAction("Rejected",teacher._id)}
+                                            onClick={() => handleAction("Rejected", teacher._id)}
                                             disabled={loading}
                                         >
                                             Reject

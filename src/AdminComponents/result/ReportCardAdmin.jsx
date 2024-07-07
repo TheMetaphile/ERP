@@ -49,7 +49,7 @@ function ReportCardAdmin() {
         <>
             <div className='w-full flex items-center justify-between px-4 my-2 mobile:max-tablet:mt-4 mobile:max-tablet:px-4'>
                 <h1 className="text-2xl font-medium mb-2 mobile:max-tablet:text-sm">Report Card</h1>
-                <div className="block tablet:max-desktop:hidden">
+                <div className="block laptop:hidden">
                     <button
                         className="p-2 border rounded"
                         onClick={() => setDropdownVisible(!isDropdownVisible)}
@@ -62,7 +62,7 @@ function ReportCardAdmin() {
                         </div>
                     )}
                 </div>
-                <span className='flex gap-2 w-fit mobile:max-tablet:hidden'>
+                <span className='flex gap-2 w-fit mobile:max-laptop:hidden'>
                     <Selection />
 
                 </span>
