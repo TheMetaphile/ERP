@@ -21,14 +21,12 @@ export default function StudentsList() {
 
     const handleRollNumberChange = (event) => {
         setStart(0);
-        setEnd(20);
         setUserData([]);
         setRollNumber(event.target.value);
     };
 
     const handleNameChange = (event) => {
         setStart(0);
-        setEnd(20);
         setUserData([]);
         setName(event.target.value);
     };
@@ -36,7 +34,6 @@ export default function StudentsList() {
     const [Class, setClass] = useState('');
     const handleClassChange = (event) => {
         setStart(0);
-        setEnd(20);
         setUserData([]);
         setClass(event.target.value);
     };
@@ -44,7 +41,6 @@ export default function StudentsList() {
     const [Section, setSection] = useState('');
     const handleSectionChange = (event) => {
         setStart(0);
-        setEnd(20);
         setUserData([]);
         setSection(event.target.value);
     };
@@ -143,7 +139,6 @@ export default function StudentsList() {
                 currentClass: Class,
                 section: Section
             });
-            setEnd(20);
             setStart(0);
             console.log("end");
             // console.log(response.data);
@@ -156,11 +151,10 @@ export default function StudentsList() {
     const handleScroll = () => {
         const container = containerRef.current;
         if (container && container.scrollHeight - container.scrollTop <= container.clientHeight + 50) {
-            if (end === userData.length) {
+            if (start + end === userData.length) {
                 console.log("fetching");
                 setLoadMore(true);
                 setStart(prevStart => prevStart + 20);
-                setEnd(prevEnd => prevEnd + 20);
             }
         }
     };
