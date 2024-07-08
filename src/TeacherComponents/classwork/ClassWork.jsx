@@ -17,6 +17,7 @@ function ClassWork() {
     const [selectedClass, setSelectedClass] = useState("9th");
     const [selectedSection, setSelectedSection] = useState("A");
     const [selectedSubject, setSelectedSubject] = useState("Maths");
+    const [additionalData, setAdditionalData] = useState([]);
 
     const handleOpen = () => {
         setIsDialogOpen(true);
@@ -35,8 +36,13 @@ function ClassWork() {
         setSelectedSubject(event.target.value);
     }
 
+    const handleNewWork = (newWork) => {
+        console.log('class.jsx')
+        setAdditionalData([newWork]);
+    };
+
     useEffect(() => {
-        const fetchHomework = async () => {
+        const fetchClassWork = async () => {
             console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
             setLoading(true);
             try {
@@ -57,7 +63,7 @@ function ClassWork() {
         };
 
         if (selectedSubject) {
-            fetchHomework();
+            fetchClassWork();
         }
     }, [authState.accessToken, selectedSubject, selectedSection, selectedClass]);
 
@@ -95,6 +101,9 @@ function ClassWork() {
                             <option key={index} value={subjectOption}>{subjectOption}</option>
                         ))}
                     </select>
+                    <div>
+                        <h1 className="bg-purple-300 px-4 py-2 rounded-md cursor-pointer" onClick={handleOpen}>Upload</h1>
+                    </div>
                 </div>
 
             </div>
@@ -105,15 +114,11 @@ function ClassWork() {
                 <div className="text-center w-full mt-6">No Classwork found</div>
             ) : (
                 <div className='w-full mt-4 rounded-lg mb'>
-                    <ClassWorkTile details={details} Class={selectedClass} />
+                    <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData}/>
                 </div>
             )}
 
-            <div className='flex items-center cursor-pointer self-end'>
-                <h1>(Upload)</h1>
-                <img src={Upload} alt="Upload icon" className='cursor-pointer' onClick={handleOpen}></img>
-            </div>
-            {isDialogOpen && <NewUpload onClose={handleClose} />}
+            {isDialogOpen && <NewUpload onClose={handleClose} onNewWork={handleNewWork}/>}
         </div>
 
     )

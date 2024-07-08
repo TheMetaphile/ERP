@@ -1,6 +1,6 @@
 export default function SubjectClassWorkTile({ subject, details }) {
     return (
-        <div className='mt-2 w-full'>
+        <div className='mt-2 w-full px-3'>
             {details.map((detail, index) => (
                 <div key={index} className='mt-1 p-3 w-full flex-col rounded-lg shadow-md items-center border  border-gray-300' >
                     <div className="flex items-center justify-between  ">

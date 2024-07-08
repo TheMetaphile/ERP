@@ -24,14 +24,19 @@ function NoticeBoard() {
     };
 
     const handleSubmit = async () => {
-       console.log()
+        console.log()
     };
 
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0  items-start mt-2 mb-3">
-            <h1 className='text-3xl'>Notice Board</h1>
+            <div className="flex justify-between items-center w-full">
+                <h1 className='text-3xl'>Notice Board</h1>
+                <div className=" text-base font-normal text-white bg-purple-300 rounded-lg shadow-md p-2 cursor-pointer" onClick={handleModal}>
+                    Publish
+                </div>
+            </div>
             <div className=' border shadow-md mt-4 rounded-lg w-full '>
-                <div className=" flex   mt-4 ml-3 mr-3 items-center justify-between">
+                <div className=" flex   ml-3 mr-3 items-center justify-between">
                     <div className=" flex  gap-2 ">
                         {/* <Link
                             to={'/Teacher-Dashboard/noticeboard/allnotice'}
@@ -40,13 +45,13 @@ function NoticeBoard() {
                         >
                             All
                         </Link> */}
-                        <Link
+                        {/* <Link
                             to={'/Teacher-Dashboard/noticeboard/teacher'}
                             className={`text-xl font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/teacher' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/teacher')}
                         >
                             Teacher
-                        </Link>
+                        </Link> */}
                         {/* <Link
                             to={'/Teacher-Dashboard/noticeboard/student'}
                             className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/student' ? 'bg-secondary ' : 'bg-gray-300'}`}
@@ -55,9 +60,7 @@ function NoticeBoard() {
                             Student
                         </Link> */}
                     </div>
-                    <div className=" text-base font-normal text-white bg-purple-300 rounded-lg shadow-md p-2 cursor-pointer" onClick={handleModal}>
-                        Publish
-                    </div>
+
 
                 </div>
                 {isModalOpen && (
@@ -65,7 +68,7 @@ function NoticeBoard() {
                         <div className="bg-white rounded-lg p-6 shadow-lg w-1/2">
                             <div className="flex mobile:max-tablet:w-full gap-2 items-center">
                                 <label className="text-lg font-normal">Title :</label>
-                                <input type="text"  className="border"  />
+                                <input type="text" className="border" />
                             </div>
                             <div className="flex justify-end">
                                 <button className="bg-gray-300 rounded-lg px-4 py-2 mr-2" onClick={handleCloseModal}>Cancel</button>
@@ -74,7 +77,7 @@ function NoticeBoard() {
                         </div>
                     </div>
                 )}
-                <hr className='border-t-2 bg-slate-500 mt-2 mb-3 ml-3 mr-3' />
+                
                 <Outlet />
                 <br></br>
             </div>

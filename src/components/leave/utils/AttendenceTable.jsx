@@ -17,26 +17,8 @@ export default function AttendenceTable({ additionalData }) {
   const [originalData, setOriginalData] = useState({});
   const { authState } = useContext(AuthContext);
   const [expanded, setExpanded] = useState(null);
-
-
-  const fetchUserData = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/particularStudent?start=${0}&end=${20}`, {
-        headers: {
-          Authorization: `Bearer ${authState.accessToken}`
-        }
-      });
-      console.log("API response:", response.data);
-      setData(response.data.Leaves);
-      setLoading(false);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const handleClick = (index) => {
-    setExpanded(expanded === index ? null : index);
-  }
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(4);
 
   useEffect(() => {
 
@@ -49,16 +31,52 @@ export default function AttendenceTable({ additionalData }) {
     }
   }, [authState.accessToken]);
 
+  const handleViewMore = () => {
+    if (data.length === start + end) {
+      console.log('start', start)
+      console.log('end', end)
+      setStart(end);
+    }
+  };
+
+  useEffect(() => {
+    if (data.length !== 0) {
+      fetchUserData();
+
+    }
+  }, [start]);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/particularStudent?start=${start}&end=${end}`, {
+        headers: {
+          Authorization: `Bearer ${authState.accessToken}`
+        }
+      });
+      console.log("API response:", response.data);
+      setData(prevData => [...prevData, ...response.data.Leaves]);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleClick = (index) => {
+    setExpanded(expanded === index ? null : index);
+  }
+
+  
+
   useEffect(() => {
     if (additionalData) {
-      console.log('bef',data)
+      console.log('bef', data)
       setData(prevData => [...additionalData, ...prevData]);
       console.log('afte', data)
 
     }
   }, [additionalData]);
 
-  const handleEditClick = (index,event) => {
+  const handleEditClick = (index, event) => {
     event.stopPropagation();
     setEditRowIndex(index);
     setEditData(data[index]);
@@ -74,7 +92,7 @@ export default function AttendenceTable({ additionalData }) {
     });
   };
 
-  const handleUpdate = async (index,event) => {
+  const handleUpdate = async (index, event) => {
     event.stopPropagation();
     if (editData.status !== "Pending") {
       toast.error('Cannot update leave that is not pending');
@@ -120,7 +138,7 @@ export default function AttendenceTable({ additionalData }) {
 
   // console.log(data[index]._id)
 
-  const handleDelete = async (index,event) => {
+  const handleDelete = async (index, event) => {
     event.stopPropagation();
     const id = (data[index]._id);
     console.log(id)
@@ -199,7 +217,7 @@ export default function AttendenceTable({ additionalData }) {
                   <div>
                     {editRowIndex === index ? (
                       <div className='flex justify-center items-center my-2 gap-1'>
-                        <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={(event) => handleUpdate(index,event)}><MdCheck /></button>
+                        <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={(event) => handleUpdate(index, event)}><MdCheck /></button>
                         <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
                       </div>
                     ) : (
@@ -227,8 +245,11 @@ export default function AttendenceTable({ additionalData }) {
                 )}
 
               </div>
+
             </div>
           ))}
+              <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+
         </div>
       )}
     </div>

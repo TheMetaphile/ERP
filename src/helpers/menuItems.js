@@ -41,12 +41,12 @@ const menuItems = [
     text: "Home Work",
     route: '/Student-Dashboard/homework'
   },
-  {
-    image: dashboardEvents,
-    alt: "Events image",
-    text: "Events",
-    route: '/Student-Dashboard/events'
-  },
+  // {
+  //   image: dashboardEvents,
+  //   alt: "Events image",
+  //   text: "Events",
+  //   route: '/Student-Dashboard/events'
+  // },
   // {
   //   image: dashboardQuiz,
   //   alt: "Play Quiz image",
@@ -71,12 +71,12 @@ const menuItems = [
     text: "Result",
     route: '/Student-Dashboard/result'
   },
-  {
-    image: dashboardGallery,
-    alt: "School gallery image",
-    text: "School Gallery",
-    route: '/Student-Dashboard/gallery'
-  },
+  // {
+  //   image: dashboardGallery,
+  //   alt: "School gallery image",
+  //   text: "School Gallery",
+  //   route: '/Student-Dashboard/gallery'
+  // },
   {
     image: dashboardLeave,
     alt: "Leave application image",
@@ -107,12 +107,12 @@ const menuItems = [
     text: "Date Sheet",
     route: "/Student-Dashboard/datesheet"
   },
-  {
-    image: lifestyle,
-    alt: "lifestyle image",
-    text: "Activities",
-    route: "/Student-Dashboard/activities"
-  },
+  // {
+  //   image: lifestyle,
+  //   alt: "lifestyle image",
+  //   text: "Activities",
+  //   route: "/Student-Dashboard/activities"
+  // },
   // {
   //   image: live,
   //   alt: "live image",

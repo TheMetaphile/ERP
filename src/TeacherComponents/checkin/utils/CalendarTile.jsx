@@ -102,7 +102,7 @@ const CalendarTile = ( {month,year}) => {
   return (
     <div className="flex flex-col w-full h-full flex-grow px-3 py-4 bg-white border border-gray-300 rounded-lg shadow-md ">
       <div className="flex justify-between items-center mb-4 text-lg font-semibold">
-        {monthName}
+        {/* {monthName} */}
       </div>
       <div className="grid grid-cols-7 gap-2">
         {weekdayShortNames.map((day, index) => (

@@ -121,6 +121,7 @@ import ReportCardAdmin from "./AdminComponents/result/ReportCardAdmin.jsx";
 import PerformanceProfileAdmin from "./AdminComponents/result/utils/performance/PerformanceProfileAdmin.jsx";
 import UploadResult from "./TeacherComponents/UploadResult/UploadResult.jsx";
 import TimeTableStudent from "./TeacherComponents/timeTableStudent/TimeTableStudent.jsx";
+import TodayHomeWork from "./components/homeWork/TodayHomeWork.jsx";
 
 const router = createBrowserRouter([
   {
@@ -229,10 +230,10 @@ const router = createBrowserRouter([
             element: <TodayClassWork />
           },
           
-          {
-            path: ':name',
-            element: <SubjectClassWork />
-          }
+          // {
+          //   path: ':name',
+          //   element: <SubjectClassWork />
+          // }
         ]
       },
       {
@@ -241,13 +242,13 @@ const router = createBrowserRouter([
         children: [
           {
             path: '',
-            element: <HomeWork />
+            element: <TodayHomeWork />
           },
           
-          {
-            path: ':name',
-            element: <SubjectHomeWork />
-          }
+          // {
+          //   path: ':name',
+          //   element: <SubjectHomeWork />
+          // }
         ]
       },
       {

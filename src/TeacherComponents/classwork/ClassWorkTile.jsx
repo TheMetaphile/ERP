@@ -1,4 +1,4 @@
-import React, {useState, useContext } from 'react';
+import React, {useState, useContext, useEffect } from 'react';
 import { MdEdit, MdDeleteForever, MdCheck } from "react-icons/md";
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { FaTimes } from 'react-icons/fa';
 
 
-export default function ClassWorkTile({ details, Class }) {
+export default function ClassWorkTile({ details, Class, additionalData }) {
     const { authState } = useContext(AuthContext);
     const [editingRow, setEditingRow] = useState(null);
     const [editedDetails, setEditedDetails] = useState(details);
@@ -15,6 +15,15 @@ export default function ClassWorkTile({ details, Class }) {
     const handleUpdateClick = (index) => {
         setEditingRow(index);
     };
+
+    useEffect(() => {
+        if (additionalData) {
+          console.log('bef',editedDetails)
+          setEditedDetails(prevData => [...additionalData, ...prevData]);
+          console.log('afte', editedDetails)
+    
+        }
+      }, [additionalData]);
 
     const handleConfirmClick = async (index) => {
         console.log(Class)
@@ -79,7 +88,7 @@ export default function ClassWorkTile({ details, Class }) {
     };
 
     return (
-        <div className="  mb-4   rounded-lg shadow-md mt-3 items-center justify-between">
+        <div className="mb-4 mt-3 items-center justify-between">
             {editedDetails.map((detail, index) => (
                 <div key={index} className='w-full  flex-col border border-gray-200 p-2 rounded-lg shadow-md mt-3'>
                     <div className="flex items-center justify-between">

@@ -21,6 +21,8 @@ export default function MyDoubts() {
     const [data, setData] = useState([]);
     const [doubtDescription, setDoubtDescription] = useState('');
     const [modalSubject, setModalSubject] = useState(null);
+    const [start, setStart] = useState(0);
+    const [end, setEnd] = useState(4);
 
     const handleSubjectSelect = (selectedSubject) => {
         setSelectedSubject(selectedSubject);
@@ -88,18 +90,16 @@ export default function MyDoubts() {
 
 
     useEffect(() => {
-
         setIsLoading(true);
         fetchDoubt();
-
     }, [selectedSubject]);
 
     const fetchDoubt = async () => {
         try {
-            var params = '';
+            var params = `start=${start}&end=${end}`;
             if(selectedSubject != 'Subject'){
                 console.log('pp')
-                params=`subject=${selectedSubject}`
+                params += `&subject=${selectedSubject}`;
             }
             const response = await axios.get(`${BASE_URL_AskDoubt}/doubts/fetch/student?${params}`, {
                 headers: {
@@ -107,7 +107,7 @@ export default function MyDoubts() {
                 }
             });
             console.log("API response:", response.data);
-            setData(response.data.doubts);
+            setData(prevData => [...prevData, ...response.data.doubts]);
             console.log("API responserrrrrr:", data);
 
             setIsLoading(false);
@@ -117,7 +117,20 @@ export default function MyDoubts() {
     };
 
 
+    const handleViewMore = () => {
+        if (data.length===start+end) {
+            console.log('start',start)
+            console.log('end',end)
+            setStart(end);
+        }
+    };
 
+    useEffect(() => {
+        if(data.length!==0){
+            fetchDoubt();
+
+        }
+    }, [start]);
 
     return (
         <div className="flex flex-col mobile:max-laptop:flex-col-reverse w-full">
@@ -143,8 +156,10 @@ export default function MyDoubts() {
                 ) : data.length === 0 ? (
                     <div className='text-center w-full'>No doubts asked</div>
                 ) : (
+                    <div className=''>
                     <MyDoubtTile data={data} />
-
+                    <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                    </div>
                 )}
 
 

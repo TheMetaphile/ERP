@@ -170,11 +170,11 @@ export default function TimeTable() {
                 <h1 className="text-2xl font-medium">
                     Time Table
                 </h1>
-                <h3 className="text-base">
+                {/* <h3 className="text-base">
                     &lt; November 2024 &gt;
-                </h3>
+                </h3> */}
             </div>
-            <Calendar />
+            {/* <Calendar /> */}
             <br></br>
             <div className="flex justify-between w-full items-center p-3">
                 <h1 className="text-xl font-medium">

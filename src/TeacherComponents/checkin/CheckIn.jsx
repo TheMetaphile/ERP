@@ -11,9 +11,9 @@ function CheckIn() {
             <div className=' border shadow-md mt-4 rounded-lg  w-full'>
                 <Mark />
             </div>
-            <div className=' border shadow-md mt-4 rounded-lg  w-full'>
+            {/* <div className=' border shadow-md mt-4 rounded-lg  w-full'>
                 <Summary />
-            </div>
+            </div> */}
 
             <div className='mt-4 w-full flex items-center'>
 

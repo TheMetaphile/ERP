@@ -19,7 +19,7 @@ export default function TeacherTile({ details }) {
                             </div>
                         </div>
                     </div>
-                    <div className="w-5 h-5 bg-red-800 rounded-full"></div>
+                    {/* <div className="w-5 h-5 bg-red-800 rounded-full"></div> */}
                 </div>
             ))}
 

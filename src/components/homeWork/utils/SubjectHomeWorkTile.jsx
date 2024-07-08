@@ -1,6 +1,6 @@
 export default function SubjectHomeWorkTile({ subject, details }) {
     return (
-        <div className='mt-2 w-full'>
+        <div className='mt-2 w-full px-3'>
             {details.map((detail, index) => (
                 <div key={index} className='mt-1 p-3 w-full flex-col rounded-lg shadow-md items-center border  border-gray-300' >
                     <div className="flex items-center justify-between  ">
@@ -18,7 +18,7 @@ export default function SubjectHomeWorkTile({ subject, details }) {
 
                     <div className='flex pl-2 justify-end gap-1  text-gray-500 mt-2'>
 
-                        <h1 className=" text-gray-500">Classwork on <span className="font-medium text-black">{detail.date}</span></h1>
+                        <h1 className=" text-gray-500">Homework on <span className="font-medium text-black">{detail.date}</span></h1>
                         by
                         <img src={detail.by.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
                         <div className="font-medium text-black">{detail.by.name}</div>

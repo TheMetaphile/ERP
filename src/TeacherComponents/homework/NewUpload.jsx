@@ -6,7 +6,7 @@ import { BASE_URL_Homework } from '../../Config';
 import { toast } from 'react-toastify';
 
 
-function NewUpload({ onClose }) {
+function NewUpload({ onClose, onNewWork }) {
     const { authState } = useContext(AuthContext);
     const [subject, setSubject] = useState('');
     const [classLevel, setClassLevel] = useState('');
@@ -47,7 +47,8 @@ function NewUpload({ onClose }) {
                 }
             );
             if (response.status == 200) {
-                console.log('Homework Created')
+                console.log('Homework Created',response.data)
+                onNewWork(response.data)
                 toast.success('HomeWork Created')
                 onClose();
             }
@@ -131,7 +132,7 @@ function NewUpload({ onClose }) {
 
 
                 </div>
-                <div className='flex justify-between'>
+                <div className='flex justify-between gap-2'>
                     <div className='mt-3'>
                         <label className="block text-sm font-medium text-gray-700">Topic</label>
                         <input

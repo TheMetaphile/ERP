@@ -5,7 +5,7 @@ import Loading from '../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
 import { BASE_URL_ClassWork } from '../../Config';
 
-function NewUpload({ onClose }) {
+function NewUpload({ onClose, onNewWork }) {
     const { authState } = useContext(AuthContext);
     const [subject, setSubject] = useState('');
     const [classLevel, setClassLevel] = useState('');
@@ -44,6 +44,7 @@ function NewUpload({ onClose }) {
             );
             if (response.status == 200) {
                 console.log('Classwork Created')
+                onNewWork(response.data)
                 toast.success('Classwork Created')
                 onClose();
             }
@@ -96,7 +97,7 @@ function NewUpload({ onClose }) {
                         </select>
                     </div>
                 </div>
-                <div className='flex justify-between'>
+                <div className='flex justify-between gap-2'>
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Select Subject</label>
                         <select
