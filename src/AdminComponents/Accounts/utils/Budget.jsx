@@ -10,7 +10,7 @@ const Budget = () => {
   };
 
   return (
-    <div className="flex flex-col p-4 rounded-lg bg-white shadow-md">
+    <div className="flex flex-col p-4 rounded-lg bg-white shadow-md tablet:max-laptop:h-full mobile:max-laptop:justify-center">
       <div className="flex flex-col lg:flex-row items-center ">
         <div className="mx-2 w-20 h-20 flex items-center justify-center mr-4 rounded-full border border-gray-600 text-lg font-bold text-center">
           No Budget
@@ -34,7 +34,7 @@ const Budget = () => {
         </div>
       </div>
 
-      <div className='flex items-center justify-between mobile:max-tablet:flex-col mobile:max-tablet:items-baseline'>
+      <div className='flex items-center justify-between mobile:max-laptop:flex-col mobile:max-laptop:items-baseline'>
         <div className="flex mb-2 items-center text-sm lg:text-base">
           <div className="text-lg">Total Budget:&nbsp;</div>
           <div className="text-lg">

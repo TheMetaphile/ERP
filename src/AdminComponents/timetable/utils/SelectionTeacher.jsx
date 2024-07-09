@@ -125,7 +125,7 @@ function SelectionTeacher({ onSearch, onEmailChange, onNameChange, onDayChange }
                     <div className="w-1/4">
                         <select
                             type="text"
-                            className="w-full px-4 py-2 border rounded-md"
+                            className="w-full px-4 py-2.5 border rounded-md"
                             placeholder="Day"
                             value={day}
                             onChange={handleDayChange}

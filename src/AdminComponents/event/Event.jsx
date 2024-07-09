@@ -37,7 +37,7 @@ export default function Event() {
 
       <h1 className="pl-1 mt-3 text-xl font-medium">All Events</h1>
 
-      <div className="w-full bg-white shadow-lg rounded-lg border border-gray-300 mt-2  grid grid-cols-2 whitespace-nowrap mobile:max-tablet:grid-cols-1">
+      <div className="w-full bg-white shadow-lg rounded-lg border border-gray-300 mt-2  grid grid-cols-2 mobile:max-tablet:grid-cols-1">
 
         <Allevents color="bg-green-300" img={first} text="School is going for vacation at March." date="10 March 2024" />
         <Allevents color="bg-green-300" img={first} text="School is going for vacation at March." date="10 March 2024" />

@@ -66,33 +66,33 @@ const AllNotice = () => {
           data.map((notice, index) => (
             (notice.type === 'For All') && (
               <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2 text-base cursor-pointer" onClick={() => handleClick(`${index}`)}>
-                <div className="w-full flex items-center justify-between  mb-2">
-                  <h3 className="">Title : {notice.title}</h3>
+                <div className="w-full flex mobile:max-tablet:flex-col mobile:max-tablet:items-baseline items-center justify-between  mb-2">
+                  <h3 className=" font-medium">Title : {notice.title}</h3>
                   <p className=" ">Type: {notice.type}</p>
                 </div>
                 {expanded === `${index}` && (
                   <>
-                  <div className='text-base  mt-2'>
-                    <p className=" ">Description : {notice.description}</p>
-                  </div>
+                    <div className='text-base  mt-2'>
+                      <p className=" ">Description : {notice.description}</p>
+                    </div>
                     {/* <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' ><MdCheck /></button>
           
                     <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'> <MdEdit /></button> */}
-                    </>
+                  </>
                 )}
 
-                <div className="w-full flex items-center justify-between mt-2">
+                <div className="w-full flex items-center justify-between mt-2 mobile:max-tablet:flex-col mobile:max-tablet:items-baseline">
                   <p className=" ">Date: {notice.date}</p>
                   <div className="flex items-center">
                     By :
                     <div className="flex items-center gap-1 px-1">
-                      <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full" />
+                      <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full mobile:max-tablet:hidden" />
                       <p className=" ">{notice.from.name}</p>
                     </div>
                   </div>
                 </div>
 
-                
+
               </div>
             )
           ))

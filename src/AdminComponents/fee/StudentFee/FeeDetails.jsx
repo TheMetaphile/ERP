@@ -67,7 +67,7 @@ function FeeDetails() {
                         id="sessionSelector"
                         value={selectedSession}
                         onChange={handleChange}
-                        className="mx-4 border rounded-md w-fit mobile:max-tablet:px-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
+                        className="mobile:max-tablet:mx-4 border rounded-md w-fit mobile:max-tablet:px-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
                     >
                         {sessions.map((session, index) => (
                             <option key={index} value={session}>
@@ -76,7 +76,7 @@ function FeeDetails() {
                         ))}
                     </select>
                     <select
-                        className="mx-4 border rounded-md w-fit  px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
+                        className="mobile:max-tablet:mx-4 border rounded-md w-fit  px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
                         id="Class"
                         name="Class"
                         value={selectedClass}

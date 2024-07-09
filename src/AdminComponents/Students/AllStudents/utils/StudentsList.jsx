@@ -164,9 +164,9 @@ export default function StudentsList() {
 
     return (
         <>
-            <div className="flex mobile:max-tablet:my-3 justify-between items-center mobile:max-tablet:items-baseline mobile:max-tablet:pl-1 mobile:max-tablet:py-2 px-2  mobile:max-tablet:fixed top-34 left-0 right-0 bg-white mb-4">
-                <h1 className="text-3xl font-medium px-2 ">All Students Data</h1>
-                <div className="block desktop:hidden">
+            <div className="flex  mobile:max-tablet:my-3 justify-between items-center mobile:max-tablet:items-baseline mobile:max-tablet:pl-1 mobile:max-tablet:py-2 px-2  mobile:max-tablet:fixed top-34 left-0 right-0 bg-white mb-4">
+                <h1 className="text-2xl font-medium px-2 mobile:max-tablet:text-lg ">All Students Data</h1>
+                <div className="block tablet:hidden">
                     <button
                         className="p-2 border rounded"
                         onClick={() => setDropdownVisible(!isDropdownVisible)}
@@ -174,7 +174,7 @@ export default function StudentsList() {
                         Filter
                     </button>
                     {isDropdownVisible && (
-                        <div className="absolute bg-white shadow-lg px-2 rounded mt-2 right-2 left-2 z-20 justify-center flex w-4/6 py-2">
+                        <div className="absolute bg-white shadow-lg px-2 rounded mt-2 right-2 left-2 z-20 justify-center flex tablet:w-4/6 py-2">
                             <SearchBar
                                 rollNumber={rollNumber}
                                 name={name}
@@ -192,7 +192,7 @@ export default function StudentsList() {
             </div>
             <div className="h-fit w-full items-start mb-3 px-2">
                 {/* Original SearchBar for non-mobile screens */}
-                <div className="w-full desktop:block hidden my-2">
+                <div className="w-full tablet:block hidden my-2">
                     <SearchBar
                         rollNumber={rollNumber}
                         name={name}
@@ -217,8 +217,9 @@ export default function StudentsList() {
                 )}
                 <div className="mobile:max-tablet:overflow-y-auto">
                     <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap mobile:max-tablet:mt-20" ref={containerRef} onScroll={handleScroll}>
-
-                        <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
+                        <div className="stutable">
+                            <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
+                        </div>
                         {loading && userData.length < 1 ? (
                             <Loading />
                         ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (

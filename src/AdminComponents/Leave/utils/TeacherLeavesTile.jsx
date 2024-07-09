@@ -77,7 +77,7 @@ export default function TeacherLeavesTile({ data }) {
                     <div key={teacherIndex} className=" border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center " onClick={() => handleClick(`${teacherIndex}`)}>
                         <div className='w-full'>
                             <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
-                                <div className='flex items-center'>
+                                <div className='flex mobile:max-tablet:flex-wrap '>
                                     <div className="flex items-center">
                                         {teacher.by && teacher.by[0] && (
                                             <>
@@ -88,8 +88,11 @@ export default function TeacherLeavesTile({ data }) {
                                     </div>
                                     wants a &nbsp;
                                     <span className='text-red-500 whitespace-nowrap'>{teacher.type}&nbsp;</span>from &nbsp;
-                                    <span className='text-red-500 whitespace-nowrap'>{teacher.startDate}&nbsp;</span> to &nbsp;
-                                    <span className='text-red-500 whitespace-nowrap'>{teacher.endDate}</span>
+                                    <div className=' flex'>
+                                        <span className='text-red-500 whitespace-nowrap'>{teacher.startDate}&nbsp;</span> to &nbsp;
+                                        <span className='text-red-500 whitespace-nowrap'>{teacher.endDate}</span>
+                                    </div>
+
                                 </div>
                                 <div className='items-center px-3 cursor-pointer'>
                                     {expanded === `${teacherIndex}` ? <FaChevronUp /> : <FaChevronDown />}

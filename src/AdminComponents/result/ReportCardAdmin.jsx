@@ -73,15 +73,15 @@ function ReportCardAdmin() {
                 ) : students.length === 0 ? (
                     <>No student found</>
                 ) : (
-                    <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 mobile:max-tablet:overflow-auto'>
+                    <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 mobile:max-tablet:overflow-auto report-header'>
                         <Header headings={['Roll No.', 'Name', 'Email']} />
                         {students.map((detail, index) => (
                             <Link to={`/Admin-Dashboard/Result/${detail.email}`} key={index}>
                                 <div key={index} className='flex justify-between border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
-                                    <div className=' w-full flex flex-1 justify-center'>{detail.rollNumber}</div>
-                                    <div className=' w-full flex flex-1 justify-center'>{detail.name}</div>
-                                    <div className=' w-full flex flex-1 justify-center gap-1 '>
-                                        <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
+                                    <div className=' W-3/12 flex flex-1 justify-center'>{detail.rollNumber}</div>
+                                    <div className=' w-3/12 flex flex-1 justify-center'>{detail.name}</div>
+                                    <div className=' w-3/5 flex flex-1 justify-center gap-1 '>
+                                        <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full mobile:max-tablet:hidden'></img>
                                         <div >{detail.email}</div>
                                     </div>
                                 </div>
