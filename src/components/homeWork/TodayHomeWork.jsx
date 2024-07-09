@@ -15,25 +15,42 @@ export default function TodayHomeWork() {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const { authState } = useContext(AuthContext);
+    const [start, setStart] = useState(0);
+    const [end, setEnd] = useState(4);
+    const [allDataFetched, setAllDataFetched] = useState(false);
 
     const handleSubjectChange = (e) => {
         const selectedSubject = e.target.value;
         setSubject(selectedSubject);
     };
 
+    const handleViewMore = () => {
+        setStart(prevStart => prevStart + end);
+    };
+
+    useEffect(() => {
+        if (start !== 0) {
+            fetchHomework();
+        }
+    }, [start]);
+
     useEffect(() => {
         const fetchHomework = async () => {
             console.log(authState.userDetails.currentClass, new Date().getMonth() + 1, authState.userDetails.academicYear, authState.userDetails.section, subject)
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/student?class=${authState.userDetails.currentClass}&month=${new Date().getMonth() + 1}&year=${authState.userDetails.academicYear}&section=${authState.userDetails.section}&subject=${subject}`, {
+                const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/student?class=${authState.userDetails.currentClass}&month=${new Date().getMonth() + 1}&year=${authState.userDetails.academicYear}&section=${authState.userDetails.section}&subject=${subject}&start=${start}&end=${end}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }
                 });
-
-                setDetails(response.data.homework);
+                const work = response.data.homework;
                 console.log('fetch', response.data)
+                setDetails(prevData => [...prevData, ...response.data.homework]);
+                if (work.length < end) {
+                    console.log('All data fetched')
+                    setAllDataFetched(true);
+                }
             } catch (error) {
                 console.error("Error fetching student homework:", error);
             }
@@ -69,8 +86,12 @@ export default function TodayHomeWork() {
             ) : details.length === 0 ? (
                 <div className="w-full text-center mt-2">No homework found</div>
             ) : (
-                <SubjectHomeWorkTile subject={subject} details={details} />
-
+                <>
+                    <SubjectHomeWorkTile subject={subject} details={details} />
+                    {!allDataFetched && (
+                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                    )}
+                </>
             )
             }
             {/* <HomeSubjectGrid /> */}

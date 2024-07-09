@@ -1,15 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Logo from '../../../assets/Test Account.png'
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
-import axios from 'axios'
-import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Student_Leave } from '../../../Config';
+
+
 
 export default function AnsweredTile({ data }) {
     const [expanded, setExpanded] = useState(null);
-    const { authState } = useContext(AuthContext);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
     const [answers, setAnswers] = useState({});
 
     useEffect(() => {

@@ -46,7 +46,7 @@ const menuItems = [
     image: Doubts,
     alt: "img",
     title: "Student Doubts",
-    route: '/Teacher-Dashboard/studentdoubts',
+    route: '/Teacher-Dashboard/studentdoubts/new',
     children: []
   },
   {

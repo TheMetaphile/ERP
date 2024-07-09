@@ -29,6 +29,7 @@ function NoticeBoard() {
 
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0  items-start mt-2 mb-3">
+            <ToastContainer />
             <div className="flex justify-between items-center w-full">
                 <h1 className='text-3xl'>Notice Board</h1>
                 <div className=" text-base font-normal text-white bg-purple-300 rounded-lg shadow-md p-2 cursor-pointer" onClick={handleModal}>

@@ -91,9 +91,21 @@ export default function MyDoubts() {
 
 
     useEffect(() => {
+        setStart(0);
+        setData([]);
+        setAllDataFetched(false);
+    }, [selectedSubject]);
+
+    useEffect(() => {
         setIsLoading(true);
         fetchDoubt();
-    }, [selectedSubject]);
+    }, [start, selectedSubject]);
+
+    const handleViewMore = () => {
+        setStart(prevStart => prevStart + end);
+    };
+
+   
 
     const fetchDoubt = async () => {
         try {
@@ -102,6 +114,7 @@ export default function MyDoubts() {
                 console.log('pp')
                 params += `&subject=${selectedSubject}`;
             }
+            console.log('kkk',selectedSubject,params)
             const response = await axios.get(`${BASE_URL_AskDoubt}/doubts/fetch/student?${params}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
@@ -123,15 +136,7 @@ export default function MyDoubts() {
     };
 
 
-    const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
-    };
-
-    useEffect(() => {
-        if (start !== 0) {
-            fetchDoubt();
-        }
-    }, [start]);
+   
 
     return (
         <div className="flex flex-col mobile:max-laptop:flex-col-reverse w-full">
