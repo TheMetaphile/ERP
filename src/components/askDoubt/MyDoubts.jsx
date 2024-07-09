@@ -23,6 +23,7 @@ export default function MyDoubts() {
     const [modalSubject, setModalSubject] = useState(null);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
+    const [allDataFetched, setAllDataFetched] = useState(false);
 
     const handleSubjectSelect = (selectedSubject) => {
         setSelectedSubject(selectedSubject);
@@ -97,7 +98,7 @@ export default function MyDoubts() {
     const fetchDoubt = async () => {
         try {
             var params = `start=${start}&end=${end}`;
-            if(selectedSubject != 'Subject'){
+            if (selectedSubject != 'Subject') {
                 console.log('pp')
                 params += `&subject=${selectedSubject}`;
             }
@@ -106,10 +107,15 @@ export default function MyDoubts() {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
             });
+            const doubts = response.data.doubts;
             console.log("API response:", response.data);
             setData(prevData => [...prevData, ...response.data.doubts]);
             console.log("API responserrrrrr:", data);
-
+            if (doubts.length < (end)) {
+                toast.success('All data fetched');
+                console.log('All data fetched')
+                setAllDataFetched(true);
+            }
             setIsLoading(false);
         } catch (err) {
             toast.error(err.message);
@@ -118,17 +124,12 @@ export default function MyDoubts() {
 
 
     const handleViewMore = () => {
-        if (data.length===start+end) {
-            console.log('start',start)
-            console.log('end',end)
-            setStart(end);
-        }
+        setStart(prevStart => prevStart + end);
     };
 
     useEffect(() => {
-        if(data.length!==0){
+        if (start !== 0) {
             fetchDoubt();
-
         }
     }, [start]);
 
@@ -157,8 +158,10 @@ export default function MyDoubts() {
                     <div className='text-center w-full'>No doubts asked</div>
                 ) : (
                     <div className=''>
-                    <MyDoubtTile data={data} />
-                    <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                        <MyDoubtTile data={data} />
+                        {!allDataFetched && (
+                            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                        )}
                     </div>
                 )}
 

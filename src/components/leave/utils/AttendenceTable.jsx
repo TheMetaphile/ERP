@@ -19,6 +19,7 @@ export default function AttendenceTable({ additionalData }) {
   const [expanded, setExpanded] = useState(null);
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(4);
+  const [allDataFetched, setAllDataFetched] = useState(false);
 
   useEffect(() => {
 
@@ -32,15 +33,11 @@ export default function AttendenceTable({ additionalData }) {
   }, [authState.accessToken]);
 
   const handleViewMore = () => {
-    if (data.length === start + end) {
-      console.log('start', start)
-      console.log('end', end)
-      setStart(end);
-    }
+    setStart(prevStart => prevStart + end);
   };
 
   useEffect(() => {
-    if (data.length !== 0) {
+    if (start !== 0) {
       fetchUserData();
 
     }
@@ -53,8 +50,15 @@ export default function AttendenceTable({ additionalData }) {
           Authorization: `Bearer ${authState.accessToken}`
         }
       });
+      const leaves = response.data.Leaves;
       console.log("API response:", response.data);
       setData(prevData => [...prevData, ...response.data.Leaves]);
+      console.log("API responserrrrrr:", data);
+      if (leaves.length < end) {
+        toast.success('All data fetched');
+        console.log('All data fetched')
+        setAllDataFetched(true);
+      }
       setLoading(false);
     } catch (err) {
       setError(err.message);
@@ -65,7 +69,7 @@ export default function AttendenceTable({ additionalData }) {
     setExpanded(expanded === index ? null : index);
   }
 
-  
+
 
   useEffect(() => {
     if (additionalData) {
@@ -248,7 +252,9 @@ export default function AttendenceTable({ additionalData }) {
 
             </div>
           ))}
-              <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+          {!allDataFetched && (
+            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+          )}
 
         </div>
       )}
