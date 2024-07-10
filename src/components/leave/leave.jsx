@@ -15,6 +15,7 @@ export default function leave() {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [additionalData, setAdditionalData] = useState([]);
+    const [status, setStatus] = useState('Pending');
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -37,7 +38,7 @@ export default function leave() {
         fetchStats();
     }, [authState.accessToken]);
 
-    
+
     const handleNewLeave = (newLeave) => {
         console.log('leave.jsx')
         setAdditionalData([newLeave]);
@@ -68,6 +69,11 @@ export default function leave() {
             borderColor: "transparent"
         }]
     };
+
+    const handleStatusChange = (e) => {
+        setStatus(e.target.value);
+    };
+
     return (
         <div className=" flex flex-col px-3 overflow-y-auto items-start mt-2 ml-2 mr-3 pb-4 no-scrollbar">
             <h1 className='text-xl font-medium'>Your Leave</h1>
@@ -107,13 +113,22 @@ export default function leave() {
 
             <div className="gap-2 overflow-x-auto flex w-full tablet:justify-evenly my-4 mobile:max-tablet:flex-col items-center">
                 <div className=" tablet:w-fit  py-3 mobile:max-tablet:w-full flex-grow">
-                    <ApplyLeave onNewLeave={handleNewLeave}/>
+                    <ApplyLeave onNewLeave={handleNewLeave} />
                 </div>
             </div>
-
-            <h1 className="text-xl font-medium">Old Leave</h1>
-
-            <AttendenceTable additionalData={additionalData}/>
+            <div className="flex items-center justify-between w-full">
+                <h1 className="text-xl font-medium">Old Leave</h1>
+                <select
+                    value={status}
+                    onChange={handleStatusChange}
+                    className="border border-gray-300 rounded-lg px-2 py-1"
+                >
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+            </div>
+            <AttendenceTable additionalData={additionalData} status={status}/>
 
         </div>
     )

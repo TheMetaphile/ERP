@@ -16,7 +16,7 @@ import noticeImage from "../../assets/notice2.png";
 import notebookImage from "../../assets/notebook.png";
 import ClassActivity from "../../assets/lecture.png";
 import Doubts from "../../assets/doubts.png";
-
+import Appraisal from "../../assets/appraisal.png";
 
 
 const menuItems = [
@@ -136,10 +136,17 @@ const menuItems = [
   //   children: []
   // },
   {
+    image: Appraisal,
+    alt: "Appraisal Image",
+    title: "Appraisal",
+    route: '/Teacher-Dashboard/appraisal',
+    children: []
+  },
+  {
     image: noticeImage,
     alt: "Notice Image",
     title: "Notice Board",
-    route: '/Teacher-Dashboard/noticeboard',
+    route: '/Teacher-Dashboard/noticeboard/teacher',
     children: []
   },
   {

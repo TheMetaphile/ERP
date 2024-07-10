@@ -7,6 +7,8 @@ import HomeSubjectGrid from "./utils/HomeSubjectGrid";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL_Homework } from "../../Config";
 import SubjectHomeWorkTile from "./utils/SubjectHomeWorkTile";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function TodayHomeWork() {
     const [subject, setSubject] = useState('Maths');
@@ -24,6 +26,13 @@ export default function TodayHomeWork() {
         setSubject(selectedSubject);
     };
 
+    useEffect(() => {
+        setStart(0);
+        setDetails([]);
+        setAllDataFetched(false);
+        fetchHomework();
+    }, [authState.accessToken, subject]);
+
     const handleViewMore = () => {
         setStart(prevStart => prevStart + end);
     };
@@ -32,39 +41,40 @@ export default function TodayHomeWork() {
         if (start !== 0) {
             fetchHomework();
         }
-    }, [start]);
+    }, [start, subject]);
 
-    useEffect(() => {
-        const fetchHomework = async () => {
-            console.log(authState.userDetails.currentClass, new Date().getMonth() + 1, authState.userDetails.academicYear, authState.userDetails.section, subject)
-            setLoading(true);
-            try {
-                const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/student?class=${authState.userDetails.currentClass}&month=${new Date().getMonth() + 1}&year=${authState.userDetails.academicYear}&section=${authState.userDetails.section}&subject=${subject}&start=${start}&end=${end}`, {
-                    headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
-                    }
-                });
-                const work = response.data.homework;
-                console.log('fetch', response.data)
-                setDetails(prevData => [...prevData, ...response.data.homework]);
-                if (work.length < end) {
-                    console.log('All data fetched')
-                    setAllDataFetched(true);
+    const fetchHomework = async () => {
+        console.log(authState.userDetails.currentClass, new Date().getMonth() + 1, authState.userDetails.academicYear, authState.userDetails.section, subject)
+        setLoading(true);
+        try {
+            const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/student?class=${authState.userDetails.currentClass}&month=${new Date().getMonth() + 1}&year=${authState.userDetails.academicYear}&section=${authState.userDetails.section}&subject=${subject}&start=${start}&end=${end}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`,
                 }
-            } catch (error) {
-                console.error("Error fetching student homework:", error);
-            }
-            finally {
-                setLoading(false)
-            }
-        };
+            });
 
-        fetchHomework();
-    }, [authState.accessToken, subject]);
+            const work = response.data.homework.length;
+            console.log("API response:", response.data.homework);
+            if (work < end) {
+                toast.success('All data fetched');
+                console.log('All data fetched')
+                setAllDataFetched(true);
+            }
+            setDetails(prevData => [...prevData, ...response.data.homework]);
+            console.log('fetch', response.data)
+        } catch (error) {
+            console.error("Error fetching student homework:", error);
+        }
+        finally {
+            setLoading(false)
+        }
+    };
+
     return (
         <div className="flex flex-col">
             {/* <h1 className="text-lg font-medium px-2">Today HomeWork</h1>
             <HomeWorkGrid /> */}
+            <ToastContainer />
             <div className="flex justify-between items-center px-3">
                 <h1 className="text-lg font-medium mt-4 px-2">Homework</h1>
                 <select

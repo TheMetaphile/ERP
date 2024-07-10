@@ -24,6 +24,7 @@ export default function MyDoubts() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const [status, setStatus] = useState('Pending');
 
     const handleSubjectSelect = (selectedSubject) => {
         setSelectedSubject(selectedSubject);
@@ -94,27 +95,27 @@ export default function MyDoubts() {
         setStart(0);
         setData([]);
         setAllDataFetched(false);
-    }, [selectedSubject]);
+    }, [selectedSubject, status]);
 
     useEffect(() => {
         setIsLoading(true);
         fetchDoubt();
-    }, [start, selectedSubject]);
+    }, [start, selectedSubject, status]);
 
     const handleViewMore = () => {
         setStart(prevStart => prevStart + end);
     };
 
-   
+
 
     const fetchDoubt = async () => {
         try {
-            var params = `start=${start}&end=${end}`;
+            var params = `start=${start}&end=${end}&status=${status}`;
             if (selectedSubject != 'Subject') {
                 console.log('pp')
                 params += `&subject=${selectedSubject}`;
             }
-            console.log('kkk',selectedSubject,params)
+            console.log('kkk', selectedSubject, params)
             const response = await axios.get(`${BASE_URL_AskDoubt}/doubts/fetch/student?${params}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
@@ -135,8 +136,10 @@ export default function MyDoubts() {
         }
     };
 
+    const handleStatusChange = (e) => {
+        setStatus(e.target.value);
+    };
 
-   
 
     return (
         <div className="flex flex-col mobile:max-laptop:flex-col-reverse w-full">
@@ -149,8 +152,17 @@ export default function MyDoubts() {
                 >
                     My Doubts
                 </Link>
-                <div className="flex md:order-2 md:w-full lg:w-fit md:ml-2 ">
+                <div className="flex md:order-2 md:w-full lg:w-fit md:ml-2 gap-2 ">
                     <SelectSubject onSelect={handleSubjectSelect} />
+                    <select
+                        value={status}
+                        onChange={handleStatusChange}
+                        className="border border-gray-300 rounded-lg shadow-md px-2 mb-2"
+                    >
+                        <option value="Pending">Pending</option>
+                        <option value="Resolved">Resolved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
                     <div className="ml-auto md:hidden">
                         <button className='bg-purple-400 rounded-lg shadow-md px-3 py-2 text-white' onClick={handleAskDoubt}>+ Ask A Doubt</button>
                     </div>

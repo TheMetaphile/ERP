@@ -8,9 +8,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Student_Leave } from '../../../Config';
 
-export default function AttendenceTable({ additionalData }) {
+export default function AttendenceTable({ additionalData, status }) {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState('');
+  const [data, setData] = useState([]);
   const [error, setError] = useState('');
   const [editRowIndex, setEditRowIndex] = useState(null);
   const [editData, setEditData] = useState({});
@@ -22,15 +22,12 @@ export default function AttendenceTable({ additionalData }) {
   const [allDataFetched, setAllDataFetched] = useState(false);
 
   useEffect(() => {
+    setStart(0);
+    setData([])
+    setLoading(true);
+    fetchUserData();
 
-    if (authState.accessToken) {
-      setLoading(true);
-      fetchUserData();
-    } else {
-      setError('No access token available');
-      setLoading(false);
-    }
-  }, [authState.accessToken]);
+  }, [authState.accessToken, status]);
 
   const handleViewMore = () => {
     setStart(prevStart => prevStart + end);
@@ -44,21 +41,22 @@ export default function AttendenceTable({ additionalData }) {
   }, [start]);
 
   const fetchUserData = async () => {
+    console.log('stat', status)
     try {
-      const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/particularStudent?start=${start}&end=${end}`, {
+      const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/particularStudent?start=${start}&end=${end}&status=${status}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }
       });
       const leaves = response.data.Leaves;
       console.log("API response:", response.data);
-      setData(prevData => [...prevData, ...response.data.Leaves]);
-      console.log("API responserrrrrr:", data);
       if (leaves.length < end) {
         toast.success('All data fetched');
         console.log('All data fetched')
         setAllDataFetched(true);
       }
+      setData(prevData => [...prevData, ...response.data.Leaves]);
+
       setLoading(false);
     } catch (err) {
       setError(err.message);
@@ -72,7 +70,7 @@ export default function AttendenceTable({ additionalData }) {
 
 
   useEffect(() => {
-    if (additionalData) {
+    if (additionalData && status==='Pending') {
       console.log('bef', data)
       setData(prevData => [...additionalData, ...prevData]);
       console.log('afte', data)
@@ -184,7 +182,7 @@ export default function AttendenceTable({ additionalData }) {
       <ToastContainer />
       {loading ? (
         <Loading />
-      ) : data === null ? (
+      ) : data.length === 0 ? (
         <div className='text-center w-full'>No data available</div>
       ) : (
         <div className='px-4'>

@@ -28,7 +28,7 @@ export default function Notices() {
         const fetchNotice = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/teacher?start=${start}&limit=${end}&session=${getCurrentSession()}`, {
+                const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/teacher?start=${start}&limit=${end}&session=${getCurrentSession()}&type=${'by'}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

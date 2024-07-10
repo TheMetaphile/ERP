@@ -11,7 +11,7 @@ export default function SelectSubject({ onSelect }) {
             
             <div className="flex justify-center  items-center text-sm font-medium">
                 <select
-                    className=" shadow-md border border-grey-300 rounded-lg p-2 w-full ml-2 mr-2  mb-2"
+                    className=" shadow-md border border-grey-300 rounded-lg p-2 w-full mb-2"
                     onChange={handleSubjectSelect}
                 >
                     {['Subject','Hindi', 'Maths', 'English', 'Computer', 'Science', 'Chemistry', 'Physics', 'Sanskrit'].map(

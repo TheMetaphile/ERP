@@ -52,52 +52,110 @@ export default function NewTile({ data }) {
                 leaves.filter(student => student.status === "Pending").map((student, studentIndex) => (
                     <div key={studentIndex} className=" border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center " onClick={() => handleClick(`${studentIndex}`)}>
                         <div className='w-full'>
-                                <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
-                                    <div className='flex items-center'>
+                            <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
+                                <div className='flex items-center'>
                                     <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
                                     <span className='text-red-500 whitespace-nowrap'>{student.name}</span> from class &nbsp;
                                     <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span> wants a Leave Request from &nbsp;
                                     <span className='text-red-500 whitespace-nowrap'>{student.startDate}</span> to &nbsp;
                                     <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
-                                    </div>
-                                    <div className='items-center px-3 cursor-pointer'>
-                                        {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}
-                                    </div>
                                 </div>
-                                {expanded === `${studentIndex}` && (
-                                    <div className='font-medium text-base ml-2 mt-2'>
-                                        <span className='text-gray-400 text-xl'>Reason</span>
-                                        <div className='mt-2 text-gray-700 font-normal text-justify'>
-                                            {student.reason}
-                                        </div>
-                                    </div>
-                                )}
-                                <div className='flex gap-2 font-medium text-base ml-2 mt-2'>
-                                    <>
-                                        <button
-                                            className='p-1 rounded-lg border border-gray-300 text-black px-2 bg-green-300'
-                                            onClick={() => handleStatusUpdate(student._id, 'Approved', student.email)}
-                                            disabled={loading}
-                                        >
-                                            Approve
-                                        </button>
-                                        <button
-                                            className='p-1 rounded-lg text-black border border-gray-300 px-2 bg-red-300'
-                                            onClick={() => handleStatusUpdate(student._id, 'Rejected', student.email)}
-                                            disabled={loading}
-                                        >
-                                            Reject
-                                        </button>
-                                    </>
+                                <div className='items-center px-3 cursor-pointer'>
+                                    {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}
                                 </div>
                             </div>
+                            {expanded === `${studentIndex}` && (
+                                <div className='font-medium text-base ml-2 mt-2'>
+                                    <span className='text-gray-400 text-xl'>Reason</span>
+                                    <div className='mt-2 text-gray-700 font-normal text-justify'>
+                                        {student.reason}
+                                    </div>
+                                </div>
+                            )}
+                            <div className='flex gap-2 font-medium text-base ml-2 mt-2'>
+                                <>
+                                    <button
+                                        className='p-1 rounded-lg border border-gray-300 text-black px-2 bg-green-300'
+                                        onClick={() => handleStatusUpdate(student._id, 'Approved', student.email)}
+                                        disabled={loading}
+                                    >
+                                        Approve
+                                    </button>
+                                    <button
+                                        className='p-1 rounded-lg text-black border border-gray-300 px-2 bg-red-300'
+                                        onClick={() => handleStatusUpdate(student._id, 'Rejected', student.email)}
+                                        disabled={loading}
+                                    >
+                                        Reject
+                                    </button>
+                                </>
+                            </div>
+                        </div>
 
                     </div>
                 ))
             ) : (
                 <div>No new leave</div>
             )}
+            {data.StudentsLeaves.filter(student => student.status === 'Approved').map((student, studentIndex) => (
+                <div key={student._id} className="border border-gray-300 p-2 justify-between rounded-lg shadow-md mt-3  items-center" onClick={() => handleClick(studentIndex)}>
 
+                    <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
+                        <div className='flex items-center'>
+                            <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
+                            <span className='text-red-500 whitespace-nowrap'>{student.name}</span> from class &nbsp;
+                            <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span> wants a Leave Request from &nbsp;
+                            <span className='text-red-500 whitespace-nowrap'>{student.startDate}</span> to &nbsp;
+                            <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
+                        </div>
+                        <div className='items-center px-3 cursor-pointer'>
+                            {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}
+                        </div>
+                    </div>
+                    {expanded === studentIndex && (
+                        <div className='font-medium text-base ml-2 mt-2'>
+                            <span className='text-gray-400 text-xl'>Reason</span>
+                            <div className='border rounded-lg shadow-md p-3'>
+                                <span className='text-gray-700'>{student.reason}</span>
+                            </div>
+                        </div>
+                    )}
+                    <div className='flex gap-2 font-medium text-base ml-2 mt-2'>
+                        <span className='p-1 rounded-lg text-green-500 '>{student.status}</span>
+                    </div>
+
+
+
+                </div>
+            ))}
+
+            {data.StudentsLeaves.filter(student => student.status === 'Rejected').map((student, studentIndex) => (
+                <div key={student._id} className="border border-gray-300 p-2 justify-between rounded-lg shadow-md mt-3 items-center" onClick={() => handleClick(studentIndex)}>
+                    <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
+                        <div className='flex items-center'>
+                            <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
+                            <span className='text-red-500 whitespace-nowrap'>{student.name}</span> from class &nbsp;
+                            <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span> wants a Leave Request from &nbsp;
+                            <span className='text-red-500 whitespace-nowrap'>{student.startDate}</span> to &nbsp;
+                            <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
+                        </div>
+                        <div className='items-center px-3 cursor-pointer'>
+                            {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}
+                        </div>
+                    </div>
+                    {expanded === studentIndex && (
+                        <div className='font-medium text-base ml-2 mt-2'>
+                            <span className='text-gray-400 text-xl'>Reason</span>
+                            <div className='border rounded-lg shadow-md p-3'>
+                                <span className='text-gray-700'>{student.reason}</span>
+                            </div>
+                        </div>
+                    )}
+                    <div className='flex gap-2 font-medium text-base ml-2 mt-2'>
+                        <span className='p-1 rounded-lg text-red-500 '>{student.status}</span>
+                    </div>
+                </div>
+            ))}
         </div>
 
     )

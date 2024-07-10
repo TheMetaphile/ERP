@@ -17,12 +17,12 @@ export default function HomeWorkTile({ details, Class, additionalData }) {
 
     useEffect(() => {
         if (additionalData) {
-          console.log('bef',editedDetails)
-          setEditedDetails(prevData => [...additionalData, ...prevData]);
-          console.log('afte', editedDetails)
-    
+            console.log('bef', editedDetails)
+            setEditedDetails(prevData => [...additionalData, ...prevData]);
+            console.log('afte', editedDetails)
+
         }
-      }, [additionalData]);
+    }, [additionalData]);
 
     const handleConfirmClick = async (index) => {
         console.log(Class)
@@ -35,7 +35,8 @@ export default function HomeWorkTile({ details, Class, additionalData }) {
                         chapter: detail.chapter,
                         topic: detail.topic,
                         description: detail.description,
-                        date: detail.date
+                        date: detail.date,
+                        deadline: detail.deadline
                     }
                 },
                 {
@@ -58,10 +59,11 @@ export default function HomeWorkTile({ details, Class, additionalData }) {
     };
 
     const handleDelete = async (index) => {
-        console.log(Class)
+        const currentYear = new Date().getFullYear();
+        console.log(Class, currentYear)
         const detail = editedDetails[index];
         try {
-            const response = await axios.delete(`${BASE_URL_Homework}/homework/delete?class=${Class}&month=${new Date().getMonth() + 1}&year=2024&id=${detail._id}`,
+            const response = await axios.delete(`${BASE_URL_Homework}/homework/delete?class=${Class}&month=${new Date().getMonth() + 1}&year=${currentYear}&id=${detail._id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
@@ -177,21 +179,36 @@ export default function HomeWorkTile({ details, Class, additionalData }) {
                         )}
 
                     </div>
-                    <div className='text-right'>
-                        {editingRow === index ? (
+                    <div className='flex justify-between px-2'>
+                        <div className='text-right'>
+                            {editingRow === index ? (
 
 
-                            <input
-                                className="font-normal mt-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                value={detail.date}
-                                onChange={(e) => handleInputChange(index, 'date', e.target.value)}
-                            />
+                                <input
+                                    className="font-normal mt-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
+                                    value={detail.date}
+                                    onChange={(e) => handleInputChange(index, 'date', e.target.value)}
+                                />
 
-                        ) : (
-                            <h1 className="font-medium">Date: {detail.date}</h1>
-                        )}
+                            ) : (
+                                <h1 className="font-medium">Date: {detail.date}</h1>
+                            )}
+                        </div>
+                        <div className='text-left'>
+                            {editingRow === index ? (
+
+
+                                <input
+                                    className="font-normal mt-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
+                                    value={detail.deadline}
+                                    onChange={(e) => handleInputChange(index, 'deadline', e.target.value)}
+                                />
+
+                            ) : (
+                                <h1 className="font-medium">Deadline: {detail.deadline}</h1>
+                            )}
+                        </div>
                     </div>
-
                 </div>
             ))}
 

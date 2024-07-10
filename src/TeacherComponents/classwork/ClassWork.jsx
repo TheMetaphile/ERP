@@ -6,7 +6,7 @@ import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL_ClassWork } from "../../Config";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function ClassWork() {
@@ -18,6 +18,9 @@ function ClassWork() {
     const [selectedSection, setSelectedSection] = useState("A");
     const [selectedSubject, setSelectedSubject] = useState("Maths");
     const [additionalData, setAdditionalData] = useState([]);
+    const [start, setStart] = useState(0);
+    const [end, setEnd] = useState(4);
+    const [allDataFetched, setAllDataFetched] = useState(false);
 
     const handleOpen = () => {
         setIsDialogOpen(true);
@@ -42,30 +45,51 @@ function ClassWork() {
     };
 
     useEffect(() => {
-        const fetchClassWork = async () => {
-            console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
-            setLoading(true);
-            try {
-                const response = await axios.get(`${BASE_URL_ClassWork}/classwork/fetch/teacher?class=${selectedClass}&month=${new Date().getMonth() + 1}&year=2024&section=${selectedSection}&subject=${selectedSubject}`, {
-                    headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
-                    }
-                });
-
-                setDetails(response.data.classwork);
-                console.log('fetch', response.data)
-            } catch (error) {
-                console.error("Error fetching student classwork:", error);
-            }
-            finally {
-                setLoading(false)
-            }
-        };
-
         if (selectedSubject) {
+            setStart(0);
+            setDetails([]);
+            setAllDataFetched(false);
             fetchClassWork();
         }
     }, [authState.accessToken, selectedSubject, selectedSection, selectedClass]);
+
+    const handleViewMore = () => {
+        setStart(prevStart => prevStart + end);
+    };
+
+    useEffect(() => {
+        if (start !== 0) {
+            fetchClassWork();
+        }
+    }, [start, selectedSubject, selectedSection, selectedClass]);
+
+
+    const fetchClassWork = async () => {
+        console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
+        setLoading(true);
+        try {
+            const response = await axios.get(`${BASE_URL_ClassWork}/classwork/fetch/teacher?class=${selectedClass}&month=${new Date().getMonth() + 1}&year=2024&section=${selectedSection}&subject=${selectedSubject}&start=${start}&end=${end}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`,
+                }
+            });
+            const work = response.data.classwork.length;
+            console.log("API response:", response.data.classwork);
+            if (work < end) {
+                toast.success('All data fetched');
+                console.log('All data fetched')
+                setAllDataFetched(true);
+            }
+            setDetails(prevData => [...prevData, ...response.data.classwork]);
+            console.log('fetch', response.data)
+        } catch (error) {
+            console.error("Error fetching student classwork:", error);
+        }
+        finally {
+            setLoading(false)
+        }
+    };
+
 
     const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
 
@@ -96,7 +120,7 @@ function ClassWork() {
                     </select>
 
                     <select id="subject" className="w-full px-4 py-2 border rounded-md" onChange={handleSubjectChange}>
-                    <option value=""> Subject</option>
+                        <option value=""> Subject</option>
                         {uniqueSubjects.map((subjectOption, index) => (
                             <option key={index} value={subjectOption}>{subjectOption}</option>
                         ))}
@@ -114,11 +138,14 @@ function ClassWork() {
                 <div className="text-center w-full mt-6">No Classwork found</div>
             ) : (
                 <div className='w-full mt-4 rounded-lg mb'>
-                    <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData}/>
+                    <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} />
+                    {!allDataFetched && (
+                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                    )}
                 </div>
             )}
 
-            {isDialogOpen && <NewUpload onClose={handleClose} onNewWork={handleNewWork}/>}
+            {isDialogOpen && <NewUpload onClose={handleClose} onNewWork={handleNewWork} />}
         </div>
 
     )

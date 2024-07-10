@@ -16,12 +16,14 @@ export default function SubjectHomeWorkTile({ subject, details }) {
 
                     <h1 className="font-medium pl-2">Description: <span className="font-normal">{detail.description}</span></h1>
 
-                    <div className='flex pl-2 justify-end gap-1  text-gray-500 mt-2'>
-
-                        <h1 className=" text-gray-500">Homework on <span className="font-medium text-black">{detail.date}</span></h1>
-                        by
-                        <img src={detail.by.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
-                        <div className="font-medium text-black">{detail.by.name}</div>
+                    <div className='flex pl-2 justify-between items-center text-gray-500 '>
+                        <h1 className=" text-gray-500">Deadline <span className="font-medium text-black">{detail.deadline}</span></h1>
+                        <div className="flex items-center gap-2">
+                            <h1 className=" text-gray-500">Date <span className="font-medium text-black">{detail.date}</span></h1>
+                            by
+                            <img src={detail.by.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
+                            <div className="font-medium text-black">{detail.by.name}</div>
+                        </div>
                     </div>
                 </div>
             ))}

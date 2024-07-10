@@ -122,6 +122,8 @@ import PerformanceProfileAdmin from "./AdminComponents/result/utils/performance/
 import UploadResult from "./TeacherComponents/UploadResult/UploadResult.jsx";
 import TimeTableStudent from "./TeacherComponents/timeTableStudent/TimeTableStudent.jsx";
 import TodayHomeWork from "./components/homeWork/TodayHomeWork.jsx";
+import Appraisal from "./TeacherComponents/appraisal/Appraisal.jsx";
+import UploadNotice from "./TeacherComponents/notice/utils/Upload.jsx";
 
 const router = createBrowserRouter([
   {
@@ -592,6 +594,10 @@ const router = createBrowserRouter([
             element: <Student />
           },
           {
+            path: '/Teacher-Dashboard/noticeboard/upload',
+            element: <UploadNotice />
+          },
+          {
             path: '',
             element: <Teacher />
           },
@@ -647,7 +653,11 @@ const router = createBrowserRouter([
           },
         ]
       },
-      
+      {
+        path: "/Teacher-Dashboard/appraisal",
+        element: <Appraisal />,
+        children: []
+      },
       {
         path: "/Teacher-Dashboard/studentdoubts",
         element: <StudentDoubts />,
@@ -716,26 +726,9 @@ const router = createBrowserRouter([
             children:[]
           },
           {
-            path: "studentleave",
+            path: "/Teacher-Dashboard/class_activity/studentleave",
             element: <StudentLeave />,
-            children: [
-              {
-                path: 'new',
-                element: <New />
-              },
-              {
-                path: 'approved',
-                element: <Approved />
-              },
-              {
-                path: 'rejected',
-                element: <Rejected />
-              },
-              {
-                path: '',
-                element: <New/>
-              },
-            ]
+            children: []
           },
         ]
       },

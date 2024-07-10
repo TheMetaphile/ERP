@@ -6,7 +6,7 @@ import axios from 'axios';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Homework } from "../../Config";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function HomeWork() {
@@ -18,7 +18,9 @@ function HomeWork() {
     const [selectedSection, setSelectedSection] = useState("A");
     const [selectedSubject, setSelectedSubject] = useState("Maths");
     const [additionalData, setAdditionalData] = useState([]);
-
+    const [start, setStart] = useState(0);
+    const [end, setEnd] = useState(4);
+    const [allDataFetched, setAllDataFetched] = useState(false);
 
     const handleOpen = () => {
         setIsDialogOpen(true);
@@ -43,30 +45,52 @@ function HomeWork() {
     };
 
     useEffect(() => {
-        const fetchHomework = async () => {
-            console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
-            setLoading(true);
-            try {
-                const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/teacher?class=${selectedClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${selectedSection}&subject=${selectedSubject}`, {
-                    headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
-                    }
-                });
-
-                setDetails(response.data.homework);
-                console.log('fetch', response.data)
-            } catch (error) {
-                console.error("Error fetching student homework:", error);
-            }
-            finally {
-                setLoading(false)
-            }
-        };
-
         if (selectedSubject) {
+            setStart(0);
+            setDetails([]);
+            setAllDataFetched(false);
             fetchHomework();
+
         }
     }, [authState.accessToken, selectedSubject, selectedSection, selectedClass]);
+
+    const handleViewMore = () => {
+        setStart(prevStart => prevStart + end);
+    };
+
+    useEffect(() => {
+        if (start !== 0) {
+            fetchHomework();
+        }
+    }, [start, selectedSubject, selectedSection, selectedClass]);
+
+
+    const fetchHomework = async () => {
+        console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
+        setLoading(true);
+        try {
+            const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/teacher?class=${selectedClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${selectedSection}&subject=${selectedSubject}&start=${start}&end=${end}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`,
+                }
+            });
+            const work = response.data.homework.length;
+            console.log("API response:", response.data.homework);
+            if (work < end) {
+                toast.success('All data fetched');
+                console.log('All data fetched')
+                setAllDataFetched(true);
+            }
+            setDetails(prevData => [...prevData, ...response.data.homework]);
+            console.log('fetch', response.data)
+        } catch (error) {
+            console.error("Error fetching student homework:", error);
+        }
+        finally {
+            setLoading(false)
+        }
+    };
+
 
     const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
 
@@ -117,12 +141,15 @@ function HomeWork() {
                 <div className="text-center w-full mt-6">No Homework found</div>
             ) : (
                 <div className='w-full mt-4 rounded-lg mb'>
-                    <HomeWorkTile details={details} Class={selectedClass} additionalData={additionalData}/>
+                    <HomeWorkTile details={details} Class={selectedClass} additionalData={additionalData} />
+                    {!allDataFetched && (
+                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                    )}
                 </div>
             )}
 
 
-            {isDialogOpen && <NewUpload onClose={handleClose} onNewWork={handleNewWork}/>}
+            {isDialogOpen && <NewUpload onClose={handleClose} onNewWork={handleNewWork} />}
         </div>
 
 

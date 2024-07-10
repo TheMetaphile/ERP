@@ -5,7 +5,7 @@ import Loading from "../../../LoadingScreen/Loading.jsx";
 import Header from './feestructureheader.jsx';
 import FeeStructureField from './feeStructureField.jsx';
 import FeeStructureFooter from './feeStructureFooter';
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Fee } from "../../../Config.js";
 
@@ -24,10 +24,13 @@ export default function FeeStructure() {
     }
   }, [authState.accessToken]);
 
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
+
   const fetchFees = async () => {
     console.log(authState.userDetails.currentClass, 'Class')
     try {
-      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student`, {
+      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student?date=${formattedDate}`, {
         headers: {
           'Authorization': `Bearer ${authState.accessToken}`
         }

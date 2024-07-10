@@ -24,6 +24,17 @@ function Answered() {
     };
 
     useEffect(() => {
+        if (authState.accessToken && Class && Section && Subject) {
+            setStart(0);
+            setData([]);
+            fetchUserData();
+        } else {
+            setError('No access token available');
+            setLoading(false);
+        }
+    }, [authState.accessToken, Class, Section, Subject]);
+
+    useEffect(() => {
         if (start !== 0) {
             fetchUserData();
         }
@@ -33,7 +44,7 @@ function Answered() {
         setLoading(true);
 
         try {
-            const response = await axios.get(`${BASE_URL_AskDoubt}/doubts/fetch/teacher?class=${Class}&section=${Section}&subject=${Subject}`, {
+            const response = await axios.get(`${BASE_URL_AskDoubt}/doubts/fetch/teacher?class=${Class}&section=${Section}&subject=${Subject}&status=${'Resolved'}&start=${start}&end=${end}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -56,15 +67,7 @@ function Answered() {
 
         }
     };
-    useEffect(() => {
 
-        if (authState.accessToken && Class && Section && Subject) {
-            fetchUserData();
-        } else {
-            setError('No access token available');
-            setLoading(false);
-        }
-    }, [authState.accessToken, Class, Section, Subject]);
 
     const handleClassChange = (e) => {
         setClass(e.target.value);
