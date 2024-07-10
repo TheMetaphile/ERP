@@ -27,6 +27,8 @@ function Answered() {
         if (authState.accessToken && Class && Section && Subject) {
             setStart(0);
             setData([]);
+            setAllDataFetched(false);
+
             fetchUserData();
         } else {
             setError('No access token available');

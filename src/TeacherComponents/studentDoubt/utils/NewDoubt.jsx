@@ -6,6 +6,7 @@ import AuthContext from '../../../Context/AuthContext'
 import { BASE_URL_AskDoubt } from '../../../Config'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { set } from 'date-fns/fp/set'
 
 function NewDoubt() {
     const { authState } = useContext(AuthContext);
@@ -23,6 +24,7 @@ function NewDoubt() {
         setStart(0);
         setData([]);
         setLoading(true);
+        setAllDataFetched(false);
         fetchUserData();
     }, [Class, Section, Subject]);
 

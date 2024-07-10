@@ -11,60 +11,60 @@ export default function PerformanceProfile() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Simulate fetching data
-    const fetchData = async () => {
-      // Fetch data from APIs
-      // For example:
-      // await fetchSomeData();
-      setLoading(false); // Set loading to false once data is fetched
-    };
+  // useEffect(() => {
+  //   // Simulate fetching data
+  //   const fetchData = async () => {
+  //     // Fetch data from APIs
+  //     // For example:
+  //     // await fetchSomeData();
+  //     setLoading(false); // Set loading to false once data is fetched
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
-  const printDocument = () => {
-    if (loading) {
-      // If still loading, don't generate PDF
-      console.log('Data is still loading...');
-      return;
-    }
+  // const printDocument = () => {
+  //   if (loading) {
+  //     // If still loading, don't generate PDF
+  //     console.log('Data is still loading...');
+  //     return;
+  //   }
 
-    const input = document.getElementById('divToPrint');
-    const clone = input.cloneNode(true);
+  //   const input = document.getElementById('divToPrint');
+  //   const clone = input.cloneNode(true);
     
-    // Apply grayscale filter to the clone to remove colors
-    clone.style.filter = "grayscale(100%)";
-    clone.style.position = "absolute";
-    clone.style.top = "-9999px";
-    document.body.appendChild(clone);
+  //   // Apply grayscale filter to the clone to remove colors
+  //   clone.style.filter = "grayscale(100%)";
+  //   clone.style.position = "absolute";
+  //   clone.style.top = "-9999px";
+  //   document.body.appendChild(clone);
 
-    html2canvas(clone, {
-      useCORS: true,
-      scale: 2,
-    }).then((canvas) => {
-      document.body.removeChild(clone); // Clean up the clone
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgWidth = 210;
-      const pageHeight = 295;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
+  //   html2canvas(clone, {
+  //     useCORS: true,
+  //     scale: 2,
+  //   }).then((canvas) => {
+  //     document.body.removeChild(clone); // Clean up the clone
+  //     const imgData = canvas.toDataURL('image/png');
+  //     const pdf = new jsPDF('p', 'mm', 'a4');
+  //     const imgWidth = 210;
+  //     const pageHeight = 295;
+  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  //     let heightLeft = imgHeight;
+  //     let position = 0;
 
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+  //     pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+  //     heightLeft -= pageHeight;
 
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
+  //     while (heightLeft >= 0) {
+  //       position = heightLeft - imgHeight;
+  //       pdf.addPage();
+  //       pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+  //       heightLeft -= pageHeight;
+  //     }
 
-      pdf.save('result.pdf');
-    });
-  }
+  //     pdf.save('result.pdf');
+  //   });
+  // }
 
   return (
     <div className="flex flex-col w-full h-screen overflow-y-auto items-start mt-2 px-2 no-scrollbar" id="divToPrint">
