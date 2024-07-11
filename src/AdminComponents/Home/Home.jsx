@@ -61,7 +61,7 @@ export default function AdminHome() {
 
             <h1 className="text-2xl font-medium mt-8">Topper Students</h1>
             <div className="flex flex-row w-full mt-4 justify-center mobile:max-tablet:flex-col gap-4">
-                <div className="w-full rounded-lg overflow-x-auto shadow-md border border-black">
+                <div className="w-full rounded-lg overflow-x-auto shadow-md border border-black Home-table">
                     <Header headings={['Name', 'ID', 'Class', 'Rank']} />
                     <TopperMiddle values={['Abhishek', '87482', 'VII-A', 'First']} />
                     <TopperMiddle values={['Bhanu', '87482', 'VII-A', 'First']} />

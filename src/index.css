@@ -60,3 +60,9 @@ code {
 .report-header>Div {
   width: 100%;
 }
+
+.stutable>div {}
+
+.Home-table>div {
+  width: auto;
+}

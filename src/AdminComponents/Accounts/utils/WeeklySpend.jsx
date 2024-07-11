@@ -27,7 +27,7 @@ export default function WeeklySpend() {
                 </div>
                 <div className="">
                     <div className="mt-4">
-                        <select id="months" className="block w-full bg-white border text-xl border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-xl shadow leading-tight focus:outline-none focus:shadow-outline">
+                        <select id="months" className="block w-full bg-white border text-xl border-gray-400 hover:border-gray-500 px-4 py-2 mobile:max-laptop:text-sm rounded-xl shadow leading-tight focus:outline-none focus:shadow-outline">
                             <option value="01">January</option>
                             <option value="02">February</option>
                             <option value="03">March</option>
@@ -42,8 +42,8 @@ export default function WeeklySpend() {
                             <option value="12">December</option>
                         </select>
                     </div>
-                    <h1 className="text-2xl px-2 font-semibold mt-4">Rs.54000</h1>
-                    <span className="text-base text-gray-600 px-2 mt-8">Total Spend</span>
+                    <h1 className="text-2xl px-2 font-semibold mt-4 mobile:max-laptop:text-lg">Rs.54000</h1>
+                    <span className="text-base text-gray-600 px-2 mt-8 whitespace-nowrap">Total Spend</span>
                 </div>
             </div>
             <div className="w-full px-2 h-1 mx-auto border-b-2 border-gray-300 mt-4 mb-4"></div>

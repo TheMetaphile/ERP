@@ -27,12 +27,12 @@ export default function QuickActions() {
 
             </div>
             <div className="w-full px-2 h-1 mx-auto border-b-2 mb-2"></div>
-            <div className="flex flex-wrap justify-center items-center mobile:max-tablet:grid mobile:max-tablet:grid-rows-4 mobile:max-tablet:grid-flow-col">
+            <div className="flex flex-wrap justify-center items-center mobile:max-laptop:grid mobile:max-laptop:grid-rows-4 mobile:max-laptop:grid-flow-col">
                 {cards.map((card, index) => (
-                    <div key={index} className="max-w-xs rounded-lg overflow-hidden border m-4 flex flex-col items-center bg-gray-100 hover:cursor-pointer w-36 mobile:max-tablet:w-28	">
+                    <div key={index} className="max-w-xs rounded-lg overflow-hidden border m-4 tablet:max-laptop:m-2 flex flex-col items-center bg-gray-100 hover:cursor-pointer w-36 mobile:max-tablet:w-28 tablet:max-laptop:w-20 tablet:max-laptop:h-24">
                         <img className="w-12 h-12 mt-4" src={card.icon} alt={card.title} />
                         <div className="px-6 py-2">
-                            <div className="text-lg mb-2 whitespace-nowrap mobile:max-tablet:text-sm">{card.title}</div>
+                            <div className="text-lg mb-2 whitespace-nowrap mobile:max-laptop:text-sm">{card.title}</div>
                         </div>
                     </div>
                 ))}

@@ -9,7 +9,7 @@ export default function Certificate() {
         window.print();
     };
     return (
-        <div className="  px-2  rounded-lg shadow-md mb-2 mx-3">
+        <div className=" mobile:max-tablet:mt-4 px-2  rounded-lg shadow-md mb-2 mx-3">
 
             <div className="flex justify-center  w-full ">
                 <img src={logo} alt="img" className='mobile:max-tablet:w-20' />

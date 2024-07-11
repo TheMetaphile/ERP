@@ -78,9 +78,9 @@ function ReportCardAdmin() {
                         {students.map((detail, index) => (
                             <Link to={`/Admin-Dashboard/Result/${detail.email}`} key={index}>
                                 <div key={index} className='flex justify-between border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
-                                    <div className=' W-3/12 flex flex-1 justify-center'>{detail.rollNumber}</div>
-                                    <div className=' w-3/12 flex flex-1 justify-center'>{detail.name}</div>
-                                    <div className=' w-3/5 flex flex-1 justify-center gap-1 '>
+                                    <div className=' flex flex-1 justify-center'>{detail.rollNumber}</div>
+                                    <div className='  flex flex-1 justify-center whitespace-nowrap  mobile:max-tablet:text-sm'>{detail.name}</div>
+                                    <div className=' flex flex-1 justify-center gap-1 mobile:max-tablet:text-sm '>
                                         <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full mobile:max-tablet:hidden'></img>
                                         <div >{detail.email}</div>
                                     </div>

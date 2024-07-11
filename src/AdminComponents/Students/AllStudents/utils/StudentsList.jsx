@@ -215,7 +215,7 @@ export default function StudentsList() {
                         Add Roll Number
                     </button>
                 )}
-                <div className="mobile:max-tablet:overflow-y-auto">
+                <div className="mobile:max-laptop:overflow-y-auto">
                     <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap mobile:max-tablet:mt-20" ref={containerRef} onScroll={handleScroll}>
                         <div className="stutable">
                             <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
