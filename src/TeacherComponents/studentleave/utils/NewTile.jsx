@@ -48,16 +48,16 @@ export default function NewTile({ data }) {
 
     return (
         <div className="w-full">
-            {leaves.length > 0 ? (
-                leaves.filter(student => student.status === "Pending").map((student, studentIndex) => (
+            {data.length > 0 ? (
+                data.filter(student => student.status === "Pending").map((student, studentIndex) => (
                     <div key={studentIndex} className=" border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center " onClick={() => handleClick(`${studentIndex}`)}>
                         <div className='w-full'>
                             <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
                                 <div className='flex items-center'>
                                     <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
-                                    <span className='text-red-500 whitespace-nowrap'>{student.name}</span> from class &nbsp;
-                                    <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span> wants a Leave Request from &nbsp;
-                                    <span className='text-red-500 whitespace-nowrap'>{student.startDate}</span> to &nbsp;
+                                    <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span> from class &nbsp;
+                                    <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}&nbsp;</span> wants a Leave Request from &nbsp;
+                                    <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span> to &nbsp;
                                     <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
                                 </div>
                                 <div className='items-center px-3 cursor-pointer'>
@@ -97,15 +97,15 @@ export default function NewTile({ data }) {
             ) : (
                 <div>No new leave</div>
             )}
-            {data.StudentsLeaves.filter(student => student.status === 'Approved').map((student, studentIndex) => (
+            {data.filter(student => student.status === 'Approved').map((student, studentIndex) => (
                 <div key={student._id} className="border border-gray-300 p-2 justify-between rounded-lg shadow-md mt-3  items-center" onClick={() => handleClick(studentIndex)}>
 
                     <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
                         <div className='flex items-center'>
                             <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
-                            <span className='text-red-500 whitespace-nowrap'>{student.name}</span> from class &nbsp;
+                            <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span> from class &nbsp;
                             <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span> wants a Leave Request from &nbsp;
-                            <span className='text-red-500 whitespace-nowrap'>{student.startDate}</span> to &nbsp;
+                            <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span> to &nbsp;
                             <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
                         </div>
                         <div className='items-center px-3 cursor-pointer'>
@@ -129,14 +129,14 @@ export default function NewTile({ data }) {
                 </div>
             ))}
 
-            {data.StudentsLeaves.filter(student => student.status === 'Rejected').map((student, studentIndex) => (
+            {data.filter(student => student.status === 'Rejected').map((student, studentIndex) => (
                 <div key={student._id} className="border border-gray-300 p-2 justify-between rounded-lg shadow-md mt-3 items-center" onClick={() => handleClick(studentIndex)}>
                     <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
                         <div className='flex items-center'>
                             <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
-                            <span className='text-red-500 whitespace-nowrap'>{student.name}</span> from class &nbsp;
+                            <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span> from class &nbsp;
                             <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span> wants a Leave Request from &nbsp;
-                            <span className='text-red-500 whitespace-nowrap'>{student.startDate}</span> to &nbsp;
+                            <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span> to &nbsp;
                             <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
                         </div>
                         <div className='items-center px-3 cursor-pointer'>

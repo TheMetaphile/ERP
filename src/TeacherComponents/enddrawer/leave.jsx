@@ -2,15 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
-import { BASE_URL_Notice } from "../../Config";
+import { BASE_URL_TeacherLeave } from "../../Config";
+import { FaCircle } from "react-icons/fa";
 
-export default function Notices() {
+export default function Leave() {
 
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
-    const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(3);
 
     function getCurrentSession() {
         const now = new Date();
@@ -25,42 +24,41 @@ export default function Notices() {
     }
 
     useEffect(() => {
-        const fetchNotice = async () => {
+        const fetchStats = async () => {
+            console.log(getCurrentSession());
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/teacher?start=${start}&limit=${end}&session=${getCurrentSession()}&type=${'for'}`, {
+                const response = await axios.get(`${BASE_URL_TeacherLeave}/leave/fetch/stats?session=${getCurrentSession()}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }
                 });
-                setDetails(response.data.notices);
-                console.log('fetch', response.data);
+                setDetails(response.data);
+                console.log('fetch', response.data)
             } catch (error) {
-                console.error("Error fetching notice:", error);
+                console.error("Error fetching teacher stats:", error);
             }
             finally {
                 setLoading(false)
             }
         };
-        fetchNotice();
+        fetchStats();
     }, [authState.accessToken]);
 
     return (
-        <div className="mt-3 mb-30">
+        <div className="mt-3">
             {loading ? (
                 <Loading />
             ) : details.length === 0 ? (
                 <div className="w-full text-center">No notices available</div>
             ) : (
                 <>
-                    {details.map((detail, index) => (
-                        <div key={index} className="mt-3 mb-2 ">
-                            <h4 className="font-medium text-sm overflow-hidden ">{detail.title}</h4>
-                            <p className="text-gray-500 text-xs overflow-hidden text-justify line-clamp-4 text-ellipsis py-1">{detail.description}</p>
-                            <h4 className="font-normal text-right text-xs overflow-hidden ">Date : {detail.date}</h4>
+                    <div className="mt-3 mb-3 ">
+                        <h4 className="font-medium text-sm overflow-hidden text-green-500 flex items-center gap-2"><FaCircle /> Accepted Leaves : {details.accepted}</h4>
+                        <h4 className="font-medium text-sm overflow-hidden text-red-500 flex items-center gap-2 mt-1"><FaCircle />Rejected Leaves : {details.rejected}</h4>
+                        <h4 className="font-medium text-sm overflow-hidden text-yellow-500 flex items-center gap-2 mt-1"><FaCircle />Pending Leaves : {details.pending}</h4>
+                    </div>
 
-                        </div>
-                    ))}
 
                 </>
             )}

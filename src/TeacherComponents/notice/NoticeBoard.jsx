@@ -35,14 +35,14 @@ function NoticeBoard() {
                             className={`text-xl font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/teacher' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/teacher')}
                         >
-                            Teacher
+                            For You
                         </Link>
                         <Link
                             to={'/Teacher-Dashboard/noticeboard/upload'}
                             className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/upload' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/upload')}
                         >
-                            Upload
+                            By You
                         </Link>
                     </div>
                 </div>

@@ -138,7 +138,7 @@ function ClassWork() {
                 <div className="text-center w-full mt-6">No Classwork found</div>
             ) : (
                 <div className='w-full mt-4 rounded-lg mb'>
-                    <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} />
+                    <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject}/>
                     {!allDataFetched && (
                         <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
                     )}

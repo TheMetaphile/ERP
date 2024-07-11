@@ -7,7 +7,6 @@ export default function Attendance(props) {
             <div className="border-t-2 border-text_blue my-3 tablet:mx-2 rounded-full "></div>
             <div className='w-full flex items-center justify-between px-3'>
                 <h1 className='tablet:text-3xl mobile:max-tablet:text-xl font-medium text-text_blue text-center'>Attendance</h1>
-                <h1 className='flex items-center text-sm bg-secondary p-2 rounded-lg shadow-md self-end'>Edit <MdEdit className='ml-1' /></h1>
             </div>
 
             <div className="border-t-2 border-text_blue my-3 tablet:mx-2 rounded-full "></div>

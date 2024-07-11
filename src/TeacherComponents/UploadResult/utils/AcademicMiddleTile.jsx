@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { MdEdit, MdDeleteForever, MdCheck } from "react-icons/md";
+import { MdEdit, MdDeleteForever, MdCheck, MdCancel } from "react-icons/md";
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import Loading from '../../../LoadingScreen/Loading';
@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Result } from '../../../Config';
 
-export default function AcademicMiddleTile({ details, email ,term}) {
+export default function AcademicMiddleTile({ details, email, term }) {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false)
     const [isEditing, setIsEditing] = useState(null);
@@ -17,6 +17,12 @@ export default function AcademicMiddleTile({ details, email ,term}) {
         setIsEditing(index);
         setEditableDetail({ ...detail });
     };
+
+    const handleCancelEdit = () => {
+        setIsEditing(null);
+        setEditableDetail({});
+    };
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -104,12 +110,16 @@ export default function AcademicMiddleTile({ details, email ,term}) {
                                 {loading ? (
                                     <Loading />
                                 ) : (
-                                    <button
-                                        className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                        onClick={() => handleConfirmClick(index)}
-                                    >
-                                        <MdCheck />
-                                    </button>
+                                    <div className='flex items-center justify-center gap-2'>
+                                        <button
+                                            className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                            onClick={() => handleConfirmClick(index)}
+                                        >
+                                            <MdCheck />
+                                        </button>
+                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
+
+                                    </div>
                                 )}
 
                             </div>
@@ -123,7 +133,7 @@ export default function AcademicMiddleTile({ details, email ,term}) {
                             <div className='w-1/3 text-lg text-center py-2 bg-green-200'>{detail.totalMarks}</div>
                             <div className='w-1/3 text-lg  py-2 bg-green-200 text-center'>
                                 <button
-                                    className='bg-red-400 hover:bg-red-700  text-white px-3 rounded-lg shadow-md '
+                                    className='bg-red-400 hover:bg-red-700  text-white px-3 py-1 rounded-lg shadow-md '
                                     onClick={() => handleEditClick(index, detail)}
                                 >
                                     <MdEdit />

@@ -37,13 +37,13 @@ function UploadResultRow({ rollNumber, name, profileLink, email, Class, section 
 
 
     const fetchResult = async () => {
-       
+
         const date = new Date();
         var session = '';
-        if(date.getMonth()+1<6){
-            session = `${date.getFullYear()-1}-${date.getFullYear().toString().substring(2,4)}`
-        }else{
-            session = `${date.getFullYear()}-${`${date.getFullYear()+1}`.substring(2,4)}`
+        if (date.getMonth() + 1 < 6) {
+            session = `${date.getFullYear() - 1}-${date.getFullYear().toString().substring(2, 4)}`
+        } else {
+            session = `${date.getFullYear()}-${`${date.getFullYear() + 1}`.substring(2, 4)}`
         }
         console.log(authState.ClassDetails.class, email, Class, session)
         try {
@@ -67,9 +67,9 @@ function UploadResultRow({ rollNumber, name, profileLink, email, Class, section 
     };
 
     return (
-        <div className='w-full'>
+        <div className='w-full rounded-lg shadow-md border'>
             <div
-                className='flex justify-between items-center py-2 pl-2  h-fit  border border-gray-300 text-center w-fit mobilemedium:w-full laptop:w-full  gap-2 hover:cursor-pointer'
+                className='flex justify-between items-center py-2 pl-2  h-fit  text-center w-fit  laptop:w-full  gap-2 hover:cursor-pointer'
                 onClick={handleClick}
             >
                 <div className='w-40 text-center'>{rollNumber}</div>
@@ -83,22 +83,23 @@ function UploadResultRow({ rollNumber, name, profileLink, email, Class, section 
 
                 <div className='w-40 text-center'>{section}</div>
                 <div className='w-10'>
-                {expanded ? <FaChevronUp /> : <FaChevronDown />}
+                    {expanded ? <FaChevronUp /> : <FaChevronDown />}
                 </div>
             </div>
             {expanded && (
-                <>
+                <div className=' mx-3'>
                     {loading ? (
                         <Loading />
                     ) : termOne.length === 0 && termTwo.length === 0 ? (
-                        <div className='flex items-center justify-between w-full tablet:px-2  py-1'>
-                            <div>No result found</div>
+                        <div className='flex items-center justify-between w-full  py-1'>
+                            <div></div>
+                            <div className='text-center text-red-500'>No result found</div>
                             <div className=''>
                                 <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={togglePopUp}><FaCloudUploadAlt /></button>
                             </div>
                         </div>
                     ) : (
-                        <div className="w-full tablet:px-2 ">
+                        <div className="w-full">
                             <div className="">
                                 <div className='flex items-center justify-between '>
                                     <h1 className="text-xl font-medium mb-3">
@@ -126,7 +127,7 @@ function UploadResultRow({ rollNumber, name, profileLink, email, Class, section 
                                         </div>
                                     </div>
                                     <div className="rounded-lg shadow-md  border-2 border-gray-400">
-                                        <AcademicTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks","Action"]} />
+                                        <AcademicTopTile heading={["Subject", 'Obtained Practical Marks', 'Total Practical Marks', 'Obtained Marks', "Total Marks", "Action"]} />
                                         <AcademicMiddleTile details={termTwo} email={email} term={2} />
                                         <AcademicBottonTile value={["", 'GPA', "8.2"]} />
                                     </div>
@@ -157,7 +158,7 @@ function UploadResultRow({ rollNumber, name, profileLink, email, Class, section 
                         </div>
                     )
                     }
-                </>
+                </div>
             )}
             {
                 popUp && (

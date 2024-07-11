@@ -1,29 +1,43 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios'
 import Selection from './utils/Selection';
 import Header from '../../AdminComponents/Home/utils/TeachersDetails/LeftCard/Header'
 import { BASE_URL_Fee } from '../../Config';
+import { ToastContainer, toast } from 'react-toastify';
 
 function StudentFee() {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const { authState } = useContext(AuthContext);
     const [filter, setFilter] = useState('');
-    const containerRef = useRef(null);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(14);
-    const [loadMore, setLoadMore] = useState(false);
+    const [end, setEnd] = useState(10);
+    const [allDataFetched, setAllDataFetched] = useState(false);
     const [clickedIndex, setClickedIndex] = useState(null);
 
     const handleClick = (index) => {
         setClickedIndex(index);
     };
-    
+
     useEffect(() => {
+        setStart(0);
+        setDetails([]);
+        setLoading(true);
         fetchDetails();
-    }, [start]);
+    }, [authState.accessToken, filter]);
+
+    const handleViewMore = () => {
+        setStart(prevStart => prevStart + end);
+    };
+
+    useEffect(() => {
+        if (start !== 0) {
+            fetchDetails();
+        }
+    }, [start, filter]);
+
 
     const fetchDetails = async () => {
         setLoading(true);
@@ -35,8 +49,13 @@ function StudentFee() {
                 }
             });
             if (response.status === 200) {
-                console.log("API response:", response.data);
-
+                const output = response.data.output;
+                console.log("API response:", response.data.output);
+                if (output < end) {
+                    toast.success('All data fetched');
+                    console.log('All data fetched')
+                    setAllDataFetched(true);
+                }
                 setDetails(prevStudents => [...prevStudents, ...response.data.output]);
             }
 
@@ -49,29 +68,18 @@ function StudentFee() {
         }
     }
 
-    const handleScroll = () => {
-        const container = containerRef.current;
-        if (container && container.scrollHeight - container.scrollTop <= container.clientHeight + 50) {
-            console.log("fetching");
-            if (start + end === details.length) {
-                setLoadMore(true);
-                setStart(prevStart => prevStart + end);
-                setEnd(5);
-            }
 
-        }
-        console.log('iiiiii')
-    };
 
     return (
         <div className=" w-full items-start  px-2 ">
+            <ToastContainer />
             <div className=' my-3 flex  w-full justify-between'>
                 <h1 className="text-2xl font-medium mb-2">Student Fee</h1>
 
                 <Selection setFilter={setFilter} />
             </div>
 
-            <div className='  rounded-lg border shadow-md border-gray-300 h-screen  w-full  overflow-auto' ref={containerRef} onScroll={handleScroll} >
+            <div className='  rounded-lg border shadow-md border-gray-300 h-screen  w-full  overflow-auto'  >
                 <Header headings={['Roll No.', 'Name', 'Total Fee', 'Fine', 'Discount', 'Paid', 'Payable', 'Pending']} />
 
                 {loading && details.length == 0 ? (
@@ -192,6 +200,9 @@ function StudentFee() {
                     ) : (
                         <div className='text-center mt-2'>No Fee Details available</div>
                     )
+                )}
+                {!allDataFetched && (
+                    <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
                 )}
             </div>
 

@@ -6,7 +6,7 @@ import { BASE_URL_Homework } from '../../Config';
 import { toast } from 'react-toastify';
 import { FaTimes } from 'react-icons/fa';
 
-export default function HomeWorkTile({ details, Class, additionalData }) {
+export default function HomeWorkTile({ details, Class, additionalData, selectedSubject }) {
     const { authState } = useContext(AuthContext);
     const [editingRow, setEditingRow] = useState(null);
     const [editedDetails, setEditedDetails] = useState(details);
@@ -16,13 +16,15 @@ export default function HomeWorkTile({ details, Class, additionalData }) {
     };
 
     useEffect(() => {
-        if (additionalData) {
+        // const subject=additionalData[0].subject;
+        if (additionalData.length !== 0 && additionalData[0].subject === selectedSubject) {
+            console.log('adddito', additionalData, additionalData[0].subject)
             console.log('bef', editedDetails)
             setEditedDetails(prevData => [...additionalData, ...prevData]);
             console.log('afte', editedDetails)
 
         }
-    }, [additionalData]);
+    }, [additionalData, selectedSubject]);
 
     const handleConfirmClick = async (index) => {
         console.log(Class)
@@ -95,7 +97,7 @@ export default function HomeWorkTile({ details, Class, additionalData }) {
                     <div className="flex items-center justify-between">
                         {editingRow === index ? (
                             <>
-
+                                <div className="pl-2 font-medium">Chapter: </div>
                                 <input
                                     className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
                                     value={detail.chapter}
@@ -159,11 +161,15 @@ export default function HomeWorkTile({ details, Class, additionalData }) {
                     <div>
                         {editingRow === index ? (
                             <div className="flex flex-col">
+                                <div className="pl-2 font-medium">Topic: </div>
+                                
                                 <input
                                     className="font-normal my-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
                                     value={detail.topic}
                                     onChange={(e) => handleInputChange(index, 'topic', e.target.value)}
                                 />
+                                <div className="pl-2 font-medium">Task: </div>
+
                                 <textarea
                                     rows={6}
                                     className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
@@ -181,29 +187,19 @@ export default function HomeWorkTile({ details, Class, additionalData }) {
                     </div>
                     <div className='flex justify-between px-2'>
                         <div className='text-right'>
-                            {editingRow === index ? (
-
-
-                                <input
-                                    className="font-normal mt-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                    value={detail.date}
-                                    onChange={(e) => handleInputChange(index, 'date', e.target.value)}
-                                />
-
-                            ) : (
-                                <h1 className="font-medium">Date: {detail.date}</h1>
-                            )}
+                            <h1 className="font-medium">Date: {detail.date}</h1>
                         </div>
                         <div className='text-left'>
                             {editingRow === index ? (
-
+<>
+                                <div className="pl-2 font-medium">Deadline: </div>
 
                                 <input
                                     className="font-normal mt-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
                                     value={detail.deadline}
                                     onChange={(e) => handleInputChange(index, 'deadline', e.target.value)}
                                 />
-
+</>
                             ) : (
                                 <h1 className="font-medium">Deadline: {detail.deadline}</h1>
                             )}

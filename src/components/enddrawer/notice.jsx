@@ -46,9 +46,9 @@ export default function Notice(props) {
       ) : (
         <>
           {details.map((detail, index) => (
-            <div className="mt-3 mb-30 " key={index}>
-              <h4 className="font-normal text-sm">{detail.title}</h4>
-              <p className="text-gray-500 text-left text-xs">{detail.description}</p>
+            <div className="mt-3 mb-2 " key={index}>
+              <h4 className="font-medium text-sm">{detail.title}</h4>
+              <p className="text-gray-500 text-xs overflow-hidden text-justify line-clamp-4 text-ellipsis py-1">{detail.description}</p>
             </div>
           ))
           }

@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { MdEdit, MdDeleteForever, MdCheck } from "react-icons/md";
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { FaTimes } from 'react-icons/fa';
 
 
-export default function ClassWorkTile({ details, Class, additionalData }) {
+export default function ClassWorkTile({ details, Class, additionalData, selectedSubject }) {
     const { authState } = useContext(AuthContext);
     const [editingRow, setEditingRow] = useState(null);
     const [editedDetails, setEditedDetails] = useState(details);
@@ -17,13 +17,13 @@ export default function ClassWorkTile({ details, Class, additionalData }) {
     };
 
     useEffect(() => {
-        if (additionalData) {
-          console.log('bef',editedDetails)
-          setEditedDetails(prevData => [...additionalData, ...prevData]);
-          console.log('afte', editedDetails)
-    
+        if (additionalData.length !== 0 && additionalData[0].subject === selectedSubject) {
+            console.log('bef', additionalData, additionalData[0].subject)
+            setEditedDetails(prevData => [...additionalData, ...prevData]);
+            console.log('afte', editedDetails)
+
         }
-      }, [additionalData]);
+    }, [additionalData, selectedSubject]);
 
     const handleConfirmClick = async (index) => {
         console.log(Class)
@@ -94,6 +94,7 @@ export default function ClassWorkTile({ details, Class, additionalData }) {
                     <div className="flex items-center justify-between">
                         {editingRow === index ? (
                             <>
+                                <div className="pl-2 font-medium">Chapter: </div>
 
                                 <input
                                     className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
@@ -158,11 +159,15 @@ export default function ClassWorkTile({ details, Class, additionalData }) {
                     <div>
                         {editingRow === index ? (
                             <div className="flex flex-col">
+                                <div className="pl-2 font-medium">Topic: </div>
+
                                 <input
                                     className="font-normal my-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
                                     value={detail.topic}
                                     onChange={(e) => handleInputChange(index, 'topic', e.target.value)}
                                 />
+                                <div className="pl-2 font-medium">Task: </div>
+
                                 <textarea
                                     rows={6}
                                     className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
@@ -179,18 +184,7 @@ export default function ClassWorkTile({ details, Class, additionalData }) {
 
                     </div>
                     <div className='text-right'>
-                        {editingRow === index ? (
-
-
-                            <input
-                                className="font-normal mt-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                value={detail.date}
-                                onChange={(e) => handleInputChange(index, 'date', e.target.value)}
-                            />
-
-                        ) : (
-                            <h1 className="font-medium">Date: {detail.date}</h1>
-                        )}
+                        <h1 className="font-medium">Date: {detail.date}</h1>
                     </div>
 
                 </div>

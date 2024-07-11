@@ -126,6 +126,8 @@ export default function HistoryTile({ details }) {
                                 <>
                                     <img src={item.by[0].profileLink} alt="img" className="w-8 h-8 rounded-full" />
                                     <h5 className="ml-2">{item.by[0].name}</h5>
+                                    <div className={`ml-2 font-normal text-sm px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-200 text-orange-700' : item.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>{item.status}</div>
+
                                 </>
                             ) : (
                                 <div className="flex justify-center items-center gap-1">

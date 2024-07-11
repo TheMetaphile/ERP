@@ -124,6 +124,8 @@ import TimeTableStudent from "./TeacherComponents/timeTableStudent/TimeTableStud
 import TodayHomeWork from "./components/homeWork/TodayHomeWork.jsx";
 import Appraisal from "./TeacherComponents/appraisal/Appraisal.jsx";
 import UploadNotice from "./TeacherComponents/notice/utils/Upload.jsx";
+import Apply from "./TeacherComponents/appraisal/utils/Apply.jsx";
+import Applied from "./TeacherComponents/appraisal/utils/Applied.jsx";
 
 const router = createBrowserRouter([
   {
@@ -656,7 +658,20 @@ const router = createBrowserRouter([
       {
         path: "/Teacher-Dashboard/appraisal",
         element: <Appraisal />,
-        children: []
+        children: [
+          {
+            path: '/Teacher-Dashboard/appraisal/apply',
+            element: <Apply />
+          },
+          {
+            path: '/Teacher-Dashboard/appraisal/applied',
+            element: <Applied />
+          },   
+          {
+            path: '',
+            element: <Apply />
+          },
+        ]
       },
       {
         path: "/Teacher-Dashboard/studentdoubts",

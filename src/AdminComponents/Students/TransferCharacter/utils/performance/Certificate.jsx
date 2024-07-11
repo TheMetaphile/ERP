@@ -9,7 +9,7 @@ export default function Certificate() {
         window.print();
     };
     return (
-        <div className=" mobile:max-tablet:mt-4 px-2  rounded-lg shadow-md mb-2 mx-3">
+        <div className="px-2 mobile:max-tablet:mt-4  rounded-lg shadow-md mb-2 mx-3">
 
             <div className="flex justify-center  w-full ">
                 <img src={logo} alt="img" className='mobile:max-tablet:w-20' />
@@ -24,31 +24,57 @@ export default function Certificate() {
             </div>
             <div className="w-full">
                 <div className="border-t-2 border-text_blue my-2 tablet:mx-3 rounded-full "></div>
-                <h1 className='tablet:text-3xl mobile:max-tablet:text-xl font-medium text-text_blue text-center'>Transfer Certficate</h1>
+                <h1 className='tablet:text-3xl mobile:max-tablet:text-xl font-medium text-text_blue text-center'>Transfer Certificate</h1>
                 <div className="border-t-2 border-text_blue my-3 tablet:mx-3 rounded-full "></div>
             </div>
             {/* name={id} */}
 
-            <div className=" w-full px-4">
+            <div className=" justify-between flex px-4 mt-3">
+                <div className='font-medium'>
+                    T.C No. :
+                </div>
+                <div className='font-medium'>
+                    Affiliation No. :
+                </div>
+                <div className='font-medium'>
+                    School code
+                </div>
+            </div>
+
+            <div className=" justify-between flex px-4 mt-3">
+                <div className='font-medium'>
+                    Registration No. :
+                </div>
+                <div className='font-medium'>
+                    Adm. No. :
+                </div>
+            </div>
+            <div className='font-medium px-4 text-sm'>
+                (In case of IX to XII)
+            </div>
+
+            <div className=" w-full px-4 mt-2">
                 {[
-                    { label: 'Student Name' },
-                    { label: 'Admission ID' },
-                    { label: 'Class' },
-                    { label: 'TC No.' },
-                    { label: 'TC Reason.' },
-                    { label: 'Roll Number' },
-                    { label: 'Date of Birth' },
+                    { label: 'Name of the Student' },
                     { label: 'Mother\'s Name' },
-                    { label: 'Father\'s Name' },
-                    { label: 'Total Attendance' },
-                    { label: 'Present Attendance' },
-                    { label: 'Result' },
-                    { label: 'Fee Due' },
-                    { label: 'Category' },
-                    { label: 'Gender' },
-                    { label: 'NCC Candidate' },
-                    { label: 'Stream' },
-                    { label: 'Date of Issue' },
+                    { label: 'Father\'s Name/ Guardian\'s Name' },
+                    { label: 'Date of Birth' },
+                    { label: 'Nationality' },
+                    { label: 'Whether the Candidate belongs to (SC, ST, OBC, GEN, EWS)' },
+                    { label: 'Date of first Admission in school with class' },
+                    { label: 'Class in which the Student last studied' },
+                    { label: 'School/ Boar Annual Examination last taken with results' },
+                    { label: 'Main Subject studied' },
+                    { label: 'Whether qualified for promotion' },
+                    { label: 'Month up to which the pupil has paid School dues' },
+                    { label: 'Total number of Working days in the Academic Session' },
+                    { label: 'Total number of Working days Pupil Present' },
+                    { label: 'Extra Co-curricular activities in which the pupil participated' },
+                    { label: 'General Conduct' },
+                    { label: 'Date of application for certificate' },
+                    { label: 'Date of certificate issued' },
+                    { label: 'Reason for leaving the school' },
+                    { label: 'Any other remarks' },
 
                 ].map((field, idx) => (
                     <div key={idx} className="flex  border-b-2 py-3 text-base px-4">
@@ -62,13 +88,19 @@ export default function Certificate() {
                 <div className='flex items-center justify-center font-medium'>
                     <h1>
                         <img src={signature} alt="" />
-                        Principal
+                        Prepared By
                     </h1>
                 </div>
                 <div className='flex items-center justify-center font-medium'>
                     <h1>
                         <img src={signature} alt="" />
-                        Stamp
+                        Checked By
+                    </h1>
+                </div>
+                <div className='flex items-center justify-center font-medium'>
+                    <h1>
+                        <img src={signature} alt="" />
+                        Principal
                     </h1>
                 </div>
             </div>

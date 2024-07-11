@@ -139,7 +139,7 @@ const menuItems = [
     image: Appraisal,
     alt: "Appraisal Image",
     title: "Appraisal",
-    route: '/Teacher-Dashboard/appraisal',
+    route: '/Teacher-Dashboard/appraisal/apply',
     children: []
   },
   {
