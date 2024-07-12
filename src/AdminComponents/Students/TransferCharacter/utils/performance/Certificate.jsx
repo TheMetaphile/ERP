@@ -29,7 +29,7 @@ export default function Certificate() {
             </div>
             {/* name={id} */}
 
-            <div className=" justify-between flex px-4 mt-3">
+            <div className=" justify-between flex px-4 mt-3 mobile:max-tablet:flex-col mobile:max-tablet:gap-1">
                 <div className='font-medium'>
                     T.C No. :
                 </div>
@@ -37,7 +37,7 @@ export default function Certificate() {
                     Affiliation No. :
                 </div>
                 <div className='font-medium'>
-                    School code
+                    School code:
                 </div>
             </div>
 

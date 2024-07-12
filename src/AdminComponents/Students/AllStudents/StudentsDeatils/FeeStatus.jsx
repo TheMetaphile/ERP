@@ -38,16 +38,16 @@ export default function FeeStatus() {
     const classs = query.get('classs');
     const rollNumber = query.get('rollNumber');
     return (
-        <div className="flex mobile:max-tablet:flex-col mobile:max-tablet:items-center w-full mb-1 shadow-md rounded-lg bg-white p-2 h-fit">
+        <div className="flex mobile:max-laptop:flex-col mobile:max-laptop:items-center w-full mb-1 shadow-md rounded-lg bg-white p-2 h-fit">
             <img src={ProfileIcon} alt="ProfileIcon" className="w-20 h-20" />
-            <div className='ml-3 mobile:max-tablet:flex-col mobile:max-tablet:text-center'>
-                <h3 className="mb-1 mobile:max-tablet:mt-2">{name}</h3>
+            <div className='ml-3 mobile:max-laptop:flex-col mobile:max-laptop:text-center'>
+                <h3 className="mb-1 mobile:max-laptop:mt-2">{name}</h3>
                 <h5 className="mb-1">Class {classs} | Roll No. {rollNumber}</h5>
-                <div className='flex mobile:max-tablet:justify-center w-full '>
+                <div className='flex mobile:max-laptop:justify-center w-full '>
                     <p className='px-2 py-1 rounded-md bg-teal-100 w-fit shadow-md'></p>
                 </div>
             </div>
-            <div className='flex h-24 tablet:ml-auto relative'>
+            <div className='flex h-24 laptop:ml-auto relative'>
 
                 <div className='flex-1 self-center  text-lg font-medium whitespace-nowrap mobile:max-tablet:text-sm'>
                     <h1>

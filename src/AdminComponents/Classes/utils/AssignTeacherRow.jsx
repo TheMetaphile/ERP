@@ -139,8 +139,8 @@ export default function AssignTeacherRow({ Class }) {
     const handleCancelEdit = () => {
         setEditingRow(null);
         setEmail('');
-      };
-      
+    };
+
     const handleConfirmClick = async (index) => {
         try {
             if (email) {
@@ -214,7 +214,7 @@ export default function AssignTeacherRow({ Class }) {
                             (
                                 <div className=''>
                                     {sectionsDetails.map((details, index) => (
-                                        <div key={index} className={`flex justify-between w-full py-2 pl-2  h-fit border ${index === sectionsDetails.length - 1 && !showNewRow ? "rounded-b-lg" : ""}`}>
+                                        <div key={index} className={`flex justify-between w-full py-2 px-2  h-fit border ${index === sectionsDetails.length - 1 && !showNewRow ? "rounded-b-lg" : ""}`}>
                                             <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                                                 {details.section}
                                             </h1>
@@ -250,11 +250,11 @@ export default function AssignTeacherRow({ Class }) {
                                             </div>
                                             <div className='w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
                                                 {editingRow === index ? (
-                                                     <div className='flex items-center gap-1'>
-                                                     <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleConfirmClick(index)}><MdCheck /></button>
-                                                     <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
-             
-                                                 </div>
+                                                    <div className='flex items-center gap-1'>
+                                                        <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleConfirmClick(index)}><MdCheck /></button>
+                                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
+
+                                                    </div>
                                                 ) : (
                                                     <div className='flex items-center gap-1'>
                                                         <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleUpdateClick(index)}> <MdEdit /></button>

@@ -9,7 +9,7 @@ export default function CharacterCertificate() {
         window.print();
     };
     return (
-        <div className="  px-2  rounded-lg shadow-md mb-2 mx-3">
+        <div className="mobile:max-tablet:mt-5  px-2  rounded-lg shadow-md mb-2 mx-3">
 
             <div className="flex justify-center  w-full ">
                 <img src={logo} alt="img" className='mobile:max-tablet:w-20' />
@@ -29,12 +29,12 @@ export default function CharacterCertificate() {
             </div>
             {/* name={id} */}
 
-            <span className=" px-4 text-xl">
-                No. ......<br></br>
+            <span className=" px-4 text-xl mobile:max-tablet:text-lg mobile:max-tablet:px-2">
+                Cerificate No. ......<br></br>
 
             </span>
-            <div className=" w-full px-4 text-xl mt-4">
-                <span className=" font-medium ">
+            <div className=" w-full px-4 text-xl mt-4 mobile:max-tablet:text-lg mobile:max-tablet:px-2">
+                <span className=" font-medium mobile:max-tablet:font-normal ">
                     This is to certify that Mr/Ms {id} S/D/o ............. is a bonafide student of this School from ........... to ........... and bears a good moral character. His/Her behaviour was good with teachers and students. He/She has neither displayed persidtent violent of or aggresive behaviour nor any desire to harm others.
                 </span>
             </div>

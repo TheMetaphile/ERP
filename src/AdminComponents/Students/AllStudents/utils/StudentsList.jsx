@@ -164,7 +164,7 @@ export default function StudentsList() {
 
     return (
         <>
-            <div className="flex  mobile:max-tablet:my-3 justify-between items-center mobile:max-tablet:items-baseline mobile:max-tablet:pl-1 mobile:max-tablet:py-2 px-2  mobile:max-tablet:fixed top-34 left-0 right-0 bg-white mb-4">
+            <div className="flex tablet:max-laptop:mt-5  mobile:max-tablet:my-3 justify-between items-center mobile:max-tablet:items-baseline mobile:max-tablet:pl-1 mobile:max-tablet:py-2 px-2  mobile:max-tablet:fixed top-34 left-0 right-0 bg-white mb-4">
                 <h1 className="text-2xl font-medium px-2 mobile:max-tablet:text-lg ">All Students Data</h1>
                 <div className="block tablet:hidden">
                     <button
@@ -209,7 +209,7 @@ export default function StudentsList() {
                 {loading && userData.length > 0 ? <Loading /> : null}
                 {(showAddRollNumberButton && Class && Section && !loading) && (
                     <button
-                        className="rounded-lg shadow-md px-3 py-1 mr-2 border-2 border-r-gray-200 text-lg bg-secondary float-right mb-3"
+                        className=" rounded-lg shadow-md px-3 py-1 mr-2 border-2 border-r-gray-200 text-lg bg-secondary float-right mb-3"
                         onClick={handleRollNumber}
                     >
                         Add Roll Number
