@@ -93,15 +93,14 @@ export default function Attendance() {
   }, [authState.accessToken, selectedMonth, selectedYear]);
   return (
     <div className=" flex flex-col w-full overflow-y-auto items-start px-2 mb-1 pb-4 no-scrollbar">
-      <div className="flex justify-between w-full">
+      <div className="flex mobile:max-tablet:flex-col justify-between w-full mb-2 gap-2">
         <h1 className="text-2xl font-medium">Attendance</h1>
-        <div>
-
+        <div className=" mobile:max-tablet:flex gap-2">
           <select
             id="month-selector"
             value={selectedMonth}
             onChange={(e) => handleMonthChange(e.target.value)}
-            className="border rounded p-2 mx-2"
+            className="border rounded p-2 mobile:max-tablet:mx-0 mx-2 flex-1"
           >
             <option value="" disabled>Select a month</option>
             {months.map((month, index) => (
@@ -114,7 +113,7 @@ export default function Attendance() {
             id="year-selector"
             value={selectedYear}
             onChange={(e) => handleYearChange(e.target.value)}
-            className="border rounded p-2 mx-2"
+            className="border rounded p-2 mx-2 mobile:max-tablet:mx-0 flex-1"
           >
             <option value="" disabled>Select a year</option>
             {years.map((year) => (
@@ -131,17 +130,17 @@ export default function Attendance() {
         </div>
       ) : (
         <>
-          <div className=" flex w-full justify-start mobile:max-tablet:grid mobile:max-tablet:grid-cols-2">
+          <div className=" flex w-full justify-start mobile:max-tablet:flex-col gap-2">
             <TotalAttendance TotalAttendance={data.present + data.leave + data.absent} />
             <PresentAttendanceTile Present={data.present} image={Present} text="Present" />
             <PresentAttendanceTile Present={data.absent} image={Absent} text="Absent" />
             <PresentAttendanceTile Present={data.leave} image={Leave} text="Leave" />
           </div>
-          <div className=" flex w-full h-80 tablet:justify-evenly mobile:max-tablet:flex-col items-center mb-4 mt-10 ">
-            <div className="tablet:w-2/3 tablet:pr-6 mobile:max-tablet:w-full mobile:max-tablet:mb-5 ">
+          <div className=" flex w-full h-80 tablet:justify-evenly mobile:max-laptop:flex-col items-center mt-4 mb-4 gap-2 ">
+            <div className=" mobile:max-laptop:w-full ">
               <Calendar month={selectedMonth} year={selectedYear} />
             </div>
-            <div className="tablet:w-1/3 h-96  mobile:max-tablet:w-full ">
+            <div className=" h-96  mobile:max-laptop:w-full ">
               <Doughnut chartData={chartData} title='Attendance Status' />
             </div>
           </div>

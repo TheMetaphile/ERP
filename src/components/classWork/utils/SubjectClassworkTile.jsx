@@ -10,18 +10,17 @@ export default function SubjectClassWorkTile({ subject, details }) {
                         <div className=" px-3 py-1 bg-bg_blue rounded-full w-fit">{subject}</div>
 
                     </div>
-                    <div className="pl-2  font-medium">Topic : <span className="font-normal">{detail.topic}</span></div>
-
-
-
+                    <div className="pl-2 mb-1  font-medium">Topic : <span className="font-normal">{detail.topic}</span></div>
                     <h1 className="font-medium pl-2">Description: <span className="font-normal">{detail.description}</span></h1>
 
-                    <div className='flex pl-2 justify-end gap-1  text-gray-500'>
-
+                    <div className='flex pl-2 justify-end gap-1  text-gray-500 mobile:max-tablet:flex-col'>
                         <h1 className=" text-gray-500">Classwork on <span className="font-medium text-black">{detail.date}</span></h1>
-                        by
-                        <img src={detail.by.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
-                        <div className="font-medium text-black">{detail.by.name}</div>
+                        <div className="flex gap-2">
+                            <p>By -</p>
+                            <img src={detail.by.profileLink} alt="img" className='w-8 h-8 rounded-full mobile:max-laptop:h-6 mobile:max-laptop:w-6'></img>
+                            <div className="font-medium text-black">{detail.by.name}</div>
+                        </div>
+
                     </div>
                 </div>
             ))}

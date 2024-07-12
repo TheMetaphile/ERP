@@ -69,14 +69,14 @@ export default function Home() {
       <h1 className='text-2xl font-medium text-black mt-3 mb-2 ml-2'>Fee Status</h1>
       <FeeStatus />
       <h1 className='text-2xl font-medium text-black mt-3 mb-2 ml-2'>Subject's Progress</h1>
-      <div className='flex mobile:max-tablet:flex-col-reverse w-full mt-2 '>
+      <div className='flex mobile:max-laptop:flex-col-reverse w-full mt-2 '>
         <div className='flex-grow px-2 tablet:h-80 tablet:pb-3 mobile:max-tablet:mb-5'>
           <AllSubjectProgress />
         </div>
         {loading ? (
           <Loading />
         ) : (
-          <div className='tablet:h-full pb-3 mobile:max-tablet:w-full  mobile:max-tablet:mb-4 px-2 tablet:w-80 '>
+          <div className='tablet:h-full pb-3 mobile:max-tablet:w-full  mobile:max-tablet:mb-4 px-2  '>
             <Doughnut chartData={chartData} title='Attendance Status' />
           </div>
         )}

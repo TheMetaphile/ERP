@@ -41,31 +41,31 @@ export default function FeeStatusRow() {
     }
 
     return (
-        <div className="flex h-fit pb-4 mobile:max-tablet:grid mobile:max-tablet:grid-cols-1 mobile:max-tablet:w-full mobile:max-tablet:gap-4">
+        <div className="flex h-fit pb-4 mobile:max-tablet:grid mobile:max-tablet:grid-cols-1 mobile:max-tablet:w-full w-full gap-2 whitespace-nowrap">
             {loading ? (
                 <Loading />
             ) : details === null ? (
                 <div>No data available</div>
             ) : (
                 <>
-                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md rounded-lg border border-gray-400 mr-3 flex flex-col items-center justify-center bg-yellow-200`}>
-                        <h1 className="text-2xl font-semibold">Rs. {details.totalfee}</h1>
+                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md rounded-lg border border-gray-400  flex flex-col items-center justify-center bg-yellow-200 flex-1`}>
+                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.totalfee}</h1>
                         <p className="text-lg font-medium text-gray-600">Total Fees</p>
                     </div>
-                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md border border-gray-400 rounded-lg mr-3 flex flex-col items-center justify-center bg-green-200`}>
-                        <h1 className="text-2xl font-semibold">Rs. {details.discountAmount}</h1>
+                    <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md border border-gray-400 rounded-lg  flex flex-col items-center justify-center bg-green-200 flex-1`}>
+                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.discountAmount}</h1>
                         <p className="text-lg font-medium text-gray-600">Discount</p>
                     </div>
-                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md border border-gray-400 rounded-lg mr-3 flex flex-col items-center justify-center bg-red-200`}>
-                        <h1 className="text-2xl font-semibold">Rs. {details.fine}</h1>
+                    <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md border border-gray-400 rounded-lg  flex flex-col items-center justify-center bg-red-200 flex-1`}>
+                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.fine}</h1>
                         <p className="text-lg font-medium text-gray-600">Fine</p>
                     </div>
-                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md rounded-lg mr-3 flex flex-col items-center justify-center border border-gray-400 bg-green-200`}>
-                        <h1 className="text-2xl font-semibold">Rs. {details.paid}</h1>
+                    <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md rounded-lg  flex flex-col items-center justify-center border border-gray-400 bg-green-200 flex-1`}>
+                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.paid}</h1>
                         <p className="text-lg font-medium text-gray-500">Paid</p>
                     </div>
-                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 shadow-md rounded-lg mr-3 flex flex-col items-center justify-center border border-gray-400 bg-orange-200`}>
-                        <h1 className="text-2xl font-semibold">Rs. {details.payableFee}</h1>
+                    <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md rounded-lg  flex flex-col items-center justify-center border border-gray-400 bg-orange-200 flex-1`}>
+                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.payableFee}</h1>
                         <p className="text-lg font-medium text-gray-500">Payable</p>
                     </div>
                 </>

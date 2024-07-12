@@ -10,49 +10,49 @@ import { BASE_URL_Fee } from '../../../../Config.js';
 
 export default function FeeStatus() {
 
-  const { authState } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
-  const [details, setDetails] = useState();
+    const { authState } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+    const [details, setDetails] = useState();
 
-  useEffect(() => {
-      if (authState.accessToken) {
-          setLoading(true);
-          fetchStatus();
-      } else {
-          toast.error('No access token available');
-      }
-  }, [authState.accessToken]);
+    useEffect(() => {
+        if (authState.accessToken) {
+            setLoading(true);
+            fetchStatus();
+        } else {
+            toast.error('No access token available');
+        }
+    }, [authState.accessToken]);
 
-  const fetchStatus = async () => {
-      console.log(authState.userDetails.currentClass, 'Class')
-      try {
-          const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/stats?end=20&start=0&class=${authState.userDetails.currentClass}`, {
-              headers: {
-                  'Authorization': `Bearer ${authState.accessToken}`
-              }
-          });
+    const fetchStatus = async () => {
+        console.log(authState.userDetails.currentClass, 'Class')
+        try {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/stats?end=20&start=0&class=${authState.userDetails.currentClass}`, {
+                headers: {
+                    'Authorization': `Bearer ${authState.accessToken}`
+                }
+            });
 
-          console.log("API response status:", response.data);
-          setDetails(response.data);
-          setLoading(false);
+            console.log("API response status:", response.data);
+            setDetails(response.data);
+            setLoading(false);
 
-      }
-      catch (error) {
-          console.log(error)
-      }
-      finally {
-          setLoading(false)
-      }
-  }
+        }
+        catch (error) {
+            console.log(error)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
 
-  return (
-    details ?
-    <div className='flex w-full justify-between border border-gray-300 shadow-md rounded-lg bg-teal-100 tablet:p-4 mobile:max-tablet:py-3'>
-      <FeeCard img={Payable} amount={details.payableFee} title='Total Payable' />
-      <FeeCard img={Paid} amount={details.paid} title='Total Paid' />
-      <FeeCard img={Pending} amount={details.payableFee - details.paid} title='Pending' />
-    </div>
-    :
-    <Loading />
-  );
+    return (
+        details ?
+            <div className='flex w-full justify-between border border-gray-300 shadow-md rounded-lg bg-teal-100 tablet:p-4 mobile:max-tablet:py-3  mobile:max-tablet:px-2  mobile:max-tablet:gap-1 '>
+                <FeeCard img={Payable} amount={details.payableFee} title='Total Payable' />
+                <FeeCard img={Paid} amount={details.paid} title='Total Paid' />
+                <FeeCard img={Pending} amount={details.payableFee - details.paid} title='Pending' />
+            </div>
+            :
+            <Loading />
+    );
 }

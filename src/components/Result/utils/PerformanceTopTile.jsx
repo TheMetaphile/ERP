@@ -1,6 +1,6 @@
 export default function PerformanceTopTile(props) {
     return (
-        <div className="mobile:max-tablet:w-fit w-full flex rounded-t-lg border-b-2 border-gray-400 justify-between">
+        <div className="mobile:max-laptop:w-fit w-full flex rounded-t-lg border-b-2 border-gray-400 justify-between">
             <div className="w-52 text-lg font-medium text-center py-2 whitespace-nowrap rounded-t-lg ">
                 {props.heading[0]}
             </div>
@@ -18,4 +18,4 @@ export default function PerformanceTopTile(props) {
             </div>
         </div>
     )
-}
+} 

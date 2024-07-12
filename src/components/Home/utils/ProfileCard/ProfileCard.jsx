@@ -33,13 +33,13 @@ export default function ProfileCard(props) {
   }
 
   return (
-    <div className="flex w-full mb-1 shadow-md rounded-lg bg-white p-2 h-fit">
-      <img src={authState.userDetails.profileLink || ProfileIcon} alt="ProfileIcon" className="w-24 h-24 rounded-full" />
+    <div className="flex w-full mb-1 shadow-md rounded-lg bg-white p-2 h-fit mobile:max-tablet:mt-2">
+      <img src={authState.userDetails.profileLink || ProfileIcon} alt="ProfileIcon" className="w-24 h-24 mobile:max-tablet:w-20 mobile:max-tablet:h-20 rounded-full" />
       <div className='ml-3'>
-        <h3 className="mb-1 font-medium">Hi, <span className="mb-1 font-normal">{authState.userDetails.name}</span></h3>
-        <h5 className="mb-1 font-medium">Class: <span className="mb-1 font-normal"> {authState.userDetails.currentClass}-{authState.userDetails.section}</span> | Roll No. <span className="mb-1 font-normal">{authState.userDetails.rollNumber}</span></h5>
-        <h3 className="mb-1 font-medium">Class Teacher : <span className="mb-1 font-normal">{teacher || "Not found"}</span></h3>
-        <p className='px-2 py-1 rounded-md bg-teal-100 w-fit border border-gray-300 shadow-md '>{authState.userDetails.session}</p>
+        <h3 className="mb-1 font-medium mobile:max-tablet:font-normal mobile:max-tablet:text-sm">Hi, <span className="mb-1 font-normal">{authState.userDetails.name}</span></h3>
+        <h5 className="mb-1 font-medium mobile:max-tablet:font-normal mobile:max-tablet:text-sm">Class: <span className="mb-1 font-normal"> {authState.userDetails.currentClass}-{authState.userDetails.section}</span> | Roll No. <span className="mb-1 font-normal">{authState.userDetails.rollNumber}</span></h5>
+        <h3 className="mb-1 font-medium mobile:max-tablet:font-normal mobile:max-tablet:text-sm">Class Teacher : <span className="mb-1 font-normal">{teacher || "Not found"}</span></h3>
+        <p className='px-2 py-1 rounded-md bg-teal-100 w-fit border border-gray-300 shadow-md mobile:max-tablet:text-sm '>{authState.userDetails.session}</p>
       </div>
       <div className='ml-auto relative text-center'>
         <Badge badgeContent={4}
