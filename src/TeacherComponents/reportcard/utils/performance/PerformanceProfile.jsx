@@ -12,9 +12,11 @@ import './Print.css';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-const PrintableComponent = React.forwardRef((props, ref) => {
+const PrintableComponent = React.forwardRef((props, ref,) => {
   return (
-    <div ref={ref} className="your-component px-3">
+
+
+    <div ref={ref} className="print:your-component px-3">
       <h3 className="text-xl font-medium">Performance Profile</h3>
       <div className="w-full border border-gray-300 shadow-md rounded-lg p-4 mt-4">
         <div className="flex justify-center">
@@ -60,10 +62,22 @@ const PrintableComponent = React.forwardRef((props, ref) => {
         </div>
       </div>
       <Attendance term={[{ total: "249", attendance: "235" }]} />
-      <AcademicMiddleTile details={props.details} />
-      <div className="page-break"></div>
+      <AcademicMiddleTile term={props.details.term1} count={1} />
 
     </div>
+
+
+
+
+  );
+});
+
+const PrintableComponent2 = React.forwardRef((props, ref) => {
+  return (
+    <div ref={ref} className='print:your-component px-3'>
+      <AcademicMiddleTile term={props.details.term2} count={2} />
+    </div>
+
   );
 });
 
@@ -71,10 +85,11 @@ const PerformanceProfile = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const { authState } = useContext(AuthContext);
-  const [details, setDetails] = useState([]);
-  const [profile, setProfile] = useState([]);
+  const [details, setDetails] = useState({ term1: [], term2: [] });
+  const [profile, setProfile] = useState({});
   const [profileLoading, setProfileLoading] = useState(true);
-  const componentRef = useRef();
+  const ref1 = useRef();
+  const ref2 = useRef();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -120,36 +135,58 @@ const PerformanceProfile = () => {
   }
 
   const handlePrint = async () => {
-    const input = componentRef.current;
+    const page1 = ref1.current;
+    const page2 = ref2.current;
   
-    const canvas = await html2canvas(input, {
-      useCORS: true, // Enable cross-origin images
-      logging: true,
-      allowTaint: false,
-    });
-    const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    const pageWidth = pdf.internal.pageSize.width;
+    const pageHeight = pdf.internal.pageSize.height;
+    const marginTop = pageHeight * 0.15;
+    const marginLeft = 10;
   
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    
-    // Save the PDF with a specified name
-    const pdfBlob = pdf.output('blob');
-    const pdfUrl = URL.createObjectURL(pdfBlob);
-    const iframe = document.createElement('iframe');
-    iframe.style.position = 'absolute';
-    iframe.style.width = '0';
-    iframe.style.height = '0';
-    iframe.src = pdfUrl;
-    document.body.appendChild(iframe);
+    const addPageContent = async (element) => {
+      try {
+        await Promise.all(Array.from(element.getElementsByTagName('img')).map(img => {
+          if (img.complete) return Promise.resolve();
+          return new Promise(resolve => { img.onload = resolve; });
+        }));
   
-    iframe.onload = () => {
-      iframe.contentWindow.print();
+        const canvas = await html2canvas(element, {
+          scale: 4,
+          useCORS: true,
+          logging: true,
+          allowTaint: true,
+        });
+  
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = pageWidth - 2 * marginLeft;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  
+        let position = marginTop;
+  
+        if (position + imgHeight + marginTop > pageHeight) {
+          console.warn('Content does not fit on one page. Consider adjusting dimensions.');
+          return;
+        }
+  
+        pdf.addImage(imgData, 'PNG', marginLeft, position, imgWidth, imgHeight);
+      } catch (error) {
+        console.error('Error capturing element with html2canvas:', error);
+      }
     };
   
-
+    try {
+      await addPageContent(page1);
+      pdf.addPage(); // Add a new page for the second component
+      await addPageContent(page2);
+  
+      const pdfBlob = pdf.output('blob');
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl, '_blank');
+  
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
   };
   
 
@@ -161,7 +198,9 @@ const PerformanceProfile = () => {
       >
         Download
       </button>
-      <PrintableComponent ref={componentRef} profile={profile} details={details} />
+      <PrintableComponent ref={ref1} profile={profile} details={details} />
+      <PrintableComponent2 details={details} ref={ref2} />
+
     </div>
   );
 };
