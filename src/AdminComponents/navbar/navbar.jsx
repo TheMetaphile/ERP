@@ -10,7 +10,7 @@ export default function AdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
       <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-3 mobile:max-tablet:justify-center">
         <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-secondary shadow-lg' />
         <img src={logo} alt="Metaphile Public School" className="w-10" />
-        <span className="tablet:text-xl font-medium text-text_blue mobile:text-sm mr-2">etaphile Public School</span>
+        <span className="tablet:text-lg font-medium text-text_blue mobile:text-sm mr-2">etaphile Public School</span>
         <div>
           <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-tablet:w-7 mobile:max-tablet:h-7 rounded-lg" />
         </div>

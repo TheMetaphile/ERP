@@ -164,7 +164,7 @@ export default function StudentsList() {
 
     return (
         <>
-            <div className="flex tablet:max-laptop:mt-5  mobile:max-tablet:my-3 justify-between items-center mobile:max-tablet:items-baseline mobile:max-tablet:pl-1 mobile:max-tablet:py-2 px-2  mobile:max-tablet:fixed top-34 left-0 right-0 bg-white mb-4">
+            <div className="flex tablet:max-tablet:mt-5  mobile:max-tablet:my-3 justify-between items-center mobile:max-tablet:items-baseline mobile:max-tablet:pl-1 mobile:max-tablet:py-2 px-2  mobile:max-tablet:fixed top-34 left-0 right-0 bg-white mb-4">
                 <h1 className="text-2xl font-medium px-2 mobile:max-tablet:text-lg ">All Students Data</h1>
                 <div className="block tablet:hidden">
                     <button

@@ -14,7 +14,7 @@ export default function StudentDetailScreen() {
 
 
     return (
-        <div className="overflow-y-auto items-start mb-2 px-2  no-scrollbar mobile:max-laptop:mt-4">
+        <div className="overflow-y-auto items-start mb-2 px-2  no-scrollbar mobile:max-tablet:mt-4">
             <h1 className="text-xl font-medium mb-3">
                 {name}'s Fees Status
             </h1>
