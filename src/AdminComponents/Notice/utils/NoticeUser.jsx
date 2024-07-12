@@ -4,6 +4,7 @@ import NewNotice from "./NewNotice";
 import StudentNotice from "./StudentNotice";
 import TeacherNotice from "./TeacherNotice";
 import ClassNotice from "./ClassNotice";
+import { ToastContainer } from "react-toastify";
 
 const NoticeUser = () => {
   const [selectedRole, setSelectedRole] = useState('all');
@@ -22,6 +23,7 @@ const NoticeUser = () => {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md w-full flex flex-col">
+      <ToastContainer />
       <div className="flex justify-between mobile:max-tablet:flex-col mobile:max-laptop:gap-2">
         <div className="flex gap-10  mobile:max-tablet:flex-col mobile:max-laptop:gap-2">
           <button className={`text-xl mobile:max-laptop:text-xl mobile:max-laptop:py-0 mobile:max-laptop:px-2 px-4 border border-gray-300 ${selectedRole === 'all' ? 'bg-blue-400' : 'bg-gray-300'} rounded-lg`}

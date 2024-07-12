@@ -9,12 +9,10 @@ import { FaRegTimesCircle } from "react-icons/fa";
 
 function NewNotice({ setShowModal }) {
     const { authState } = useContext(AuthContext);
-    const [selectedOption, setSelectedOption] = useState('For All');
+    const [selectedOption, setSelectedOption] = useState('Particular Students');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [emailIds, setEmailIds] = useState([]);
-    const [searchInput, setSearchInput] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
     const [searchInputStudent, setSearchInputStudent] = useState('');
     const [searchResultsStudent, setSearchResultsStudent] = useState([]);
     const [classOptions] = useState(['Pre-Nursery', 'Nursery', 'KG', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']);
@@ -73,7 +71,7 @@ function NewNotice({ setShowModal }) {
                 date: today,
             };
 
-            if (selectedOption === 'Particular Students' || selectedOption === 'Particular Teachers') {
+            if (selectedOption === 'Particular Students') {
                 payload.emailIds = emailIds;
             } else if (selectedOption === 'Particular Classes') {
                 payload.Classes = classes;
@@ -83,7 +81,7 @@ function NewNotice({ setShowModal }) {
             setLoading(true);
 
             try {
-                const response = await axios.post(`${BASE_URL_Notice}/notice/upload/admin`,
+                const response = await axios.post(`${BASE_URL_Notice}/notice/upload/teacher`,
                     payload,
                     {
                         headers: {
@@ -160,14 +158,7 @@ function NewNotice({ setShowModal }) {
         setEmailIds(emailIds.filter(id => id !== email));
     };
 
-    const handleSearchChange = (e) => {
-        setSearchInput(e.target.value);
-        if (e.target.value.length > 2) {
-            searchUsers(e.target.value);
-        } else {
-            setSearchResults([]);
-        }
-    };
+
 
     const handleSearchChangeStudent = (e) => {
         setSearchInputStudent(e.target.value);
@@ -194,20 +185,7 @@ function NewNotice({ setShowModal }) {
         }
     };
 
-    const searchUsers = async (query) => {
-        try {
-            const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
-                accessToken: authState.accessToken,
-                searchString: query,
-                start: 0,
-                end: 10,
-            });
-            console.log('search', response.data);
-            setSearchResults(response.data.Teachers);
-        } catch (error) {
-            console.error("Error searching users:", error);
-        }
-    };
+
 
     const addEmailId = (email) => {
         if (!emailIds.includes(email)) {
@@ -256,45 +234,7 @@ function NewNotice({ setShowModal }) {
                         </div>
                     </div>
                 );
-            case 'Particular Teachers':
-                return (
-                    <div>
-                        <input
-                            type="text"
-                            className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2"
-                            placeholder="Search for users"
-                            value={searchInput}
-                            onChange={handleSearchChange}
-                            
-                        />
-                        <div className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2 max-h-40 overflow-y-scroll">
-                            {searchResults.map(user => (
-                                <div key={user.email} className="flex justify-between items-center mb-2">
-                                    <span>{user.name} ({user.email})</span>
-                                    <button
-                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                                        onClick={() => addEmailId(user.email)}
-                                    >
-                                        Add
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2">
-                            {emailIds.length > 0 ? (
-                                emailIds.map(email => (
-                                    <div key={email} className="flex justify-between border mt-2 border-gray-300 shadow-md rounded-full px-2 items-center py-1">
-                                        <span>{email}</span>
-                                        <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => removeEmailId(email)} />
-                                    </div>
-                                ))
-                            ) : (
-                                <span>No email IDs added.</span>
-                            )}
-                        </div>
-                    </div>
-                );
+          
             case 'Particular Classes':
                 return (
                     <div>
@@ -363,12 +303,8 @@ function NewNotice({ setShowModal }) {
                         value={selectedOption}
                         onChange={handleOptionChange}
                     >
-                        <option value="For All">For All</option>
-                        <option value="For Students">For Student</option>
-                        <option value="For Teachers">For Teacher</option>
                         <option value="Particular Students">Particular Students</option>
                         <option value="Particular Classes">Particular Classes</option>
-                        <option value="Particular Teachers">Particular Teachers</option>
                     </select>
                 </div>
                 <input

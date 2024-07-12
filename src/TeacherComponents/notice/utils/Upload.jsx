@@ -14,20 +14,7 @@ export default function Upload() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(2);
     const [allDataFetched, setAllDataFetched] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleSubmit = async () => {
-        console.log()
-    };
-
+  
     function getCurrentSession() {
         const now = new Date();
         const currentYear = now.getFullYear();
@@ -86,35 +73,14 @@ export default function Upload() {
 
     return (
         <div className='mx-3'>
-            <div className="flex justify-end mt-2">
-                <div className="w-fit text-base font-normal text-white bg-purple-300 rounded-lg shadow-md p-2 cursor-pointer" onClick={handleModal}>
-                    Publish
-                </div>
-            </div>
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-                    <div className="bg-white rounded-lg p-6 shadow-lg w-1/2">
-                        <div className="flex mobile:max-tablet:w-full gap-2 items-center">
-                            <label className="text-lg font-normal">Title :</label>
-                            <input type="text" className="border" />
-                        </div>
-                        <div className="flex justify-end">
-                            <button className="bg-gray-300 rounded-lg px-4 py-2 mr-2" onClick={handleCloseModal}>Cancel</button>
-                            <button className="bg-blue-600 text-white rounded-lg px-4 py-2" onClick={handleSubmit}>Submit</button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            
             {loading ? (
                 <Loading />
             ) : details.length === 0 ? (
                 <div className="w-full text-center">No data available</div>
             ) : (
                 <>
-
                     <UploadTile details={details} />
-
-
                     {!allDataFetched && (
                         <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
                     )}
