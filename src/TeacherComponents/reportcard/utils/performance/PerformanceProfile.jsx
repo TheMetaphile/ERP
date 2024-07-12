@@ -138,11 +138,11 @@ const PerformanceProfile = () => {
     const page1 = ref1.current;
     const page2 = ref2.current;
   
-    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pdf = new jsPDF('p', 'mm', 'a4', true,);
     const pageWidth = pdf.internal.pageSize.width;
     const pageHeight = pdf.internal.pageSize.height;
     const marginTop = pageHeight * 0.15;
-    const marginLeft = 10;
+    const marginLeft = 5;
   
     const addPageContent = async (element) => {
       try {
@@ -152,7 +152,7 @@ const PerformanceProfile = () => {
         }));
   
         const canvas = await html2canvas(element, {
-          scale: 4,
+          scale: 2,
           useCORS: true,
           logging: true,
           allowTaint: true,
