@@ -1,0 +1,39 @@
+/* Print.css */
+@page {
+    size: A4;
+    margin: 20mm;
+  }
+  
+  @media print {
+    body {
+      -webkit-print-color-adjust: exact;
+      width: 210mm; /* A4 width */
+      height: 297mm; /* A4 height */
+      margin: 0; /* Remove default margin */
+    }
+  
+    .your-component {
+      width: 100%; /* Ensure it takes full width */
+      page-break-inside: avoid;
+      page-break-after: always;
+    }
+  
+    .page-break {
+      display: block;
+      page-break-before: always;
+    }
+  
+    .no-scrollbar {
+      overflow: visible;
+    }
+  
+    /* Ensure no overflow issues */
+    .flex {
+      display: block;
+    }
+  
+    .term-section {
+      page-break-inside: avoid;
+    }
+  }
+  
