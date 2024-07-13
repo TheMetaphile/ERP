@@ -3,7 +3,8 @@ import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../../Config";
-import { MdEdit, MdCheck, MdCancel } from 'react-icons/md';
+import { MdEdit, MdCheck, MdCancel, MdDeleteForever } from 'react-icons/md';
+import { toast } from "react-toastify";
 
 const TeacherNotice = () => {
   const [loading, setLoading] = useState(true);
@@ -77,9 +78,24 @@ const TeacherNotice = () => {
       console.log("API response after update:", response.data);
       setData(data.map((notice, i) => i === index ? editedNotice : notice));
       setEditingIndex(null);
-      setExpanded(index); 
+      setExpanded(index);
     } catch (err) {
       setError(err.message);
+    }
+  };
+
+  const handleDelete = async (index) => {
+    try {
+      await axios.delete(`${BASE_URL_Notice}/notice/delete?id=${data[index]._id}&session=${session}`, {
+        headers: {
+          Authorization: `Bearer ${authState.accessToken}`
+        }
+      });
+      toast.success('Deleted Successfully');
+      const newDetail = data.filter((_, i) => i !== index);
+      setData(newDetail);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -107,8 +123,8 @@ const TeacherNotice = () => {
         ) : (
           data.map((notice, index) => (
             (notice.type === 'For Teachers' || notice.type === 'Particular Teachers') && (
-              <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2 text-base cursor-pointer" onClick={() => handleClick(index)}>
-                <div className="w-full flex items-center justify-between mb-2">
+              <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2 text-base">
+                <div className="w-full flex items-center justify-between mb-2 cursor-pointer" onClick={() => handleClick(index)}>
                   <h3>
                     Title: {editingIndex === index ? (
                       <input
@@ -124,7 +140,8 @@ const TeacherNotice = () => {
                     )}
                   </h3>
                   <p>
-                    Type: {editingIndex === index ? (
+                    Type: &nbsp;
+                    {/* {editingIndex === index ? (
                       <select
                         name="type"
                         value={editedNotice.type}
@@ -139,9 +156,9 @@ const TeacherNotice = () => {
                         <option value="Particular Teachers">Particular Teachers</option>
                         <option value="Particular Classes">Particular Classes</option>
                       </select>
-                    ) : (
-                      notice.type
-                    )}
+                    ) : ( */}
+                      {notice.type}
+                    {/* )} */}
                     {editingIndex === index ? (
                       <>
                         <button
@@ -158,12 +175,20 @@ const TeacherNotice = () => {
                         </button>
                       </>
                     ) : (
-                      <button
-                        className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                        onClick={() => handleEdit(index)}
-                      >
-                        <MdEdit />
-                      </button>
+                      <>
+                        <button
+                          className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                          onClick={() => handleEdit(index)}
+                        >
+                          <MdEdit />
+                        </button>
+                        <button
+                          className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                          onClick={() => handleDelete(index)}
+                        >
+                          <MdDeleteForever />
+                        </button>
+                      </>
                     )}
                   </p>
                 </div>

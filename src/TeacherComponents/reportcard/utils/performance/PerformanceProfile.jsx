@@ -137,69 +137,91 @@ const PerformanceProfile = () => {
   const handlePrint = async () => {
     const page1 = ref1.current;
     const page2 = ref2.current;
-  
+
     const pdf = new jsPDF('p', 'mm', 'a4', true,);
     const pageWidth = pdf.internal.pageSize.width;
     const pageHeight = pdf.internal.pageSize.height;
     const marginTop = pageHeight * 0.15;
     const marginLeft = 5;
-  
+
     const addPageContent = async (element) => {
       try {
         await Promise.all(Array.from(element.getElementsByTagName('img')).map(img => {
           if (img.complete) return Promise.resolve();
           return new Promise(resolve => { img.onload = resolve; });
         }));
-  
+
         const canvas = await html2canvas(element, {
           scale: 2,
           useCORS: true,
           logging: true,
           allowTaint: true,
         });
-  
+
         const imgData = canvas.toDataURL('image/png');
         const imgWidth = pageWidth - 2 * marginLeft;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  
+
         let position = marginTop;
-  
+
         if (position + imgHeight + marginTop > pageHeight) {
           console.warn('Content does not fit on one page. Consider adjusting dimensions.');
           return;
         }
-  
+
         pdf.addImage(imgData, 'PNG', marginLeft, position, imgWidth, imgHeight);
       } catch (error) {
         console.error('Error capturing element with html2canvas:', error);
       }
     };
-  
+
     try {
       await addPageContent(page1);
       pdf.addPage(); // Add a new page for the second component
       await addPageContent(page2);
-  
+
       const pdfBlob = pdf.output('blob');
       const pdfUrl = URL.createObjectURL(pdfBlob);
       window.open(pdfUrl, '_blank');
-  
+
     } catch (error) {
       console.error('Error generating PDF:', error);
     }
   };
-  
+
 
   return (
     <div className="mt-4 w-full">
-      <button
-        className="text-xl font-medium bg-secondary text-black rounded-lg shadow-md py-1 px-3 hover:bg-blue-400 cursor-pointer hover:text-white"
-        onClick={handlePrint}
-      >
-        Download
-      </button>
-      <PrintableComponent ref={ref1} profile={profile} details={details} />
-      <PrintableComponent2 details={details} ref={ref2} />
+      {details === null ? (
+        <>
+          <h3 className="text-xl font-medium">Performance Profile</h3>
+          <InfoCard
+            class={profile.currentClass}
+            name={profile.name}
+            profileImg={profile.profileLink}
+            section={profile.section}
+            rollnumber={profile.rollNumber}
+            dob={profile.DOB}
+            bloodgroup={profile.bloodGroup}
+            contactno={profile.fatherPhoneNumber}
+            father={profile.fatherName}
+            mother={profile.motherName}
+          />
+          <Attendance term={[{ total: "249", attendance: "235" }]} />
+          <div className='text-center text-lg text-red-500 font-medium w-full mt-2'>No Result available</div>
+        </>
+      ) : (
+        <>
+          <button
+            className="text-xl font-medium bg-secondary text-black rounded-lg shadow-md py-1 px-3 hover:bg-blue-400 cursor-pointer hover:text-white"
+            onClick={handlePrint}
+          >
+            Download
+          </button>
+          <PrintableComponent ref={ref1} profile={profile} details={details} />
+          <PrintableComponent2 details={details} ref={ref2} /></>
+      )}
+
 
     </div>
   );

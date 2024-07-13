@@ -5,7 +5,7 @@ import './Print.css'
 export default function AcademicMiddleTile({ term, count }) {
     console.log(term)
   return (
-    <div className=" print:your-component border-b-2 mobile:max-tablet:w-fit w-full px-3">
+    <div className=" print:your-component  mobile:max-tablet:w-fit w-full px-3">
       {term.length > 0 && (
         <div className="print:term-section mt-2">
           <h2 className="font-medium text-lg px-3 mb-3">Term {count}</h2>

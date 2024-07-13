@@ -12,7 +12,7 @@ export default function Upload() {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(2);
+    const [end, setEnd] = useState(5);
     const [allDataFetched, setAllDataFetched] = useState(false);
   
     function getCurrentSession() {

@@ -61,7 +61,7 @@ function NewNotice({ setShowModal }) {
     const today = getCurrentDate();
 
     const handleSubmit = async () => {
-        if (!description || !title ) {
+        if (!description || !title) {
             alert('Please fill all fields')
         }
         else {
@@ -184,8 +184,6 @@ function NewNotice({ setShowModal }) {
             const response = await axios.post(`${BASE_URL_Login}/search/student`, {
                 accessToken: authState.accessToken,
                 searchString: query,
-                start: 0,
-                end: 10,
             });
             console.log('search', response.data);
             setSearchResultsStudent(response.data.Teachers);
@@ -199,8 +197,6 @@ function NewNotice({ setShowModal }) {
             const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
                 accessToken: authState.accessToken,
                 searchString: query,
-                start: 0,
-                end: 10,
             });
             console.log('search', response.data);
             setSearchResults(response.data.Teachers);
@@ -226,21 +222,26 @@ function NewNotice({ setShowModal }) {
                             placeholder="Search for users"
                             value={searchInputStudent}
                             onChange={handleSearchChangeStudent}
-                            
+
                         />
-                        <div className="w-full bg-slate-400 mb-4 border border-gray-300 rounded-lg px-3 py-2 max-h-40 overflow-y-scroll">
-                            {searchResultsStudent.map(user => (
-                                <div key={user.email} className="flex justify-between items-center mb-2">
-                                    <span>{user.name} ({user.email})</span>
-                                    <button
-                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                                        onClick={() => addEmailId(user.email)}
-                                    >
-                                        Add
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
+                        {searchResultsStudent.length > 0 ? (
+                            <div className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2 max-h-40 overflow-y-scroll">
+                                {searchResultsStudent.map(user => (
+                                    <div key={user.email} className="flex justify-between items-center mb-2">
+                                        <span className="flex items-center gap-2">
+                                            <img src={user.profileLink} alt="" className="w-6 h-6 rounded-full"></img>{user.name} </span>
+                                        <button
+                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                                            onClick={() => addEmailId(user.email)}
+                                        >
+                                            Add
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <></>
+                        )}
 
                         <div className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2">
                             {emailIds.length > 0 ? (
@@ -265,21 +266,27 @@ function NewNotice({ setShowModal }) {
                             placeholder="Search for users"
                             value={searchInput}
                             onChange={handleSearchChange}
-                            
+
                         />
-                        <div className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2 max-h-40 overflow-y-scroll">
-                            {searchResults.map(user => (
-                                <div key={user.email} className="flex justify-between items-center mb-2">
-                                    <span>{user.name} ({user.email})</span>
-                                    <button
-                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                                        onClick={() => addEmailId(user.email)}
-                                    >
-                                        Add
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
+                         {searchResults.length > 0 ? (
+                            <div className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2 max-h-40 overflow-y-scroll">
+                                {searchResults.map(user => (
+                                    <div key={user.email} className="flex justify-between items-center mb-2">
+                                        <span className="flex items-center gap-2">
+                                            <img src={user.profileLink} alt="" className="w-6 h-6 rounded-full"></img>{user.name} </span>
+                                        <button
+                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                                            onClick={() => addEmailId(user.email)}
+                                        >
+                                            Add
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+
 
                         <div className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2">
                             {emailIds.length > 0 ? (
@@ -328,7 +335,8 @@ function NewNotice({ setShowModal }) {
                                 Add
                             </button>
                         </div>
-                        <ul className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2">
+                        {classes.length > 0 ? (
+                            <ul className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2">
                             {classes.map(cls => (
                                 <li key={cls.Class} className="mb-2">
                                     <div className="flex justify-between mt-2 border border-gray-300 shadow-md rounded-full px-2 items-center py-1">
@@ -346,6 +354,9 @@ function NewNotice({ setShowModal }) {
                                 </li>
                             ))}
                         </ul>
+                        ): (
+                            <></>
+                        )}
                     </div>
                 );
             default:

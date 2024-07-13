@@ -3,7 +3,7 @@ import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../../Config";
-import { MdEdit, MdCheck, MdCancel } from 'react-icons/md';
+import { MdEdit, MdCheck, MdCancel, MdDeleteForever } from 'react-icons/md';
 import { toast } from "react-toastify";
 
 const AllNotice = () => {
@@ -40,7 +40,7 @@ const AllNotice = () => {
       return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
     }
   }
-  const session=getCurrentSession();
+  const session = getCurrentSession();
 
   const fetchAllNotices = async () => {
     const session = getCurrentSession();
@@ -65,7 +65,7 @@ const AllNotice = () => {
   };
 
   const handleSave = async (index) => {
-    console.log(data[index]._id,editedNotice,session)
+    console.log(data[index]._id, editedNotice, session)
     try {
       const response = await axios.put(`${BASE_URL_Notice}/notice/update?noticeId=${data[index]._id}&session=${session}`, editedNotice, {
         headers: {
@@ -81,6 +81,21 @@ const AllNotice = () => {
     }
   };
 
+  const handleDelete = async (index) => {
+    try {
+      await axios.delete(`${BASE_URL_Notice}/notice/delete?id=${data[index]._id}&session=${session}`, {
+        headers: {
+          Authorization: `Bearer ${authState.accessToken}`
+        }
+      });
+      toast.success('Deleted Successfully');
+      const newDetail = data.filter((_, i) => i !== index);
+      setData(newDetail);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleCancel = () => {
     setEditingIndex(null);
   };
@@ -91,7 +106,7 @@ const AllNotice = () => {
   };
 
   const handleFieldClick = (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
   };
 
   return (
@@ -104,8 +119,8 @@ const AllNotice = () => {
         ) : (
           data.map((notice, index) => (
             (notice.type === 'For All') && (
-              <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2 text-base cursor-pointer" onClick={() => handleClick(index)}>
-                <div className="w-full flex mobile:max-tablet:flex-col mobile:max-tablet:items-baseline items-center justify-between mb-2">
+              <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2 text-base " >
+                <div className="w-full flex mobile:max-tablet:flex-col mobile:max-tablet:items-baseline items-center justify-between mb-2 cursor-pointer" onClick={() => handleClick(index)}>
                   <h3 className="font-medium">
                     Title: {editingIndex === index ? (
                       <input
@@ -132,9 +147,6 @@ const AllNotice = () => {
                         <option value="For All">For All</option>
                         <option value="For Student">For Student</option>
                         <option value="For Teacher">For Teacher</option>
-                        <option value="Particular Students">Particular Students</option>
-                        <option value="Particular Teachers">Particular Teachers</option>
-                        <option value="Particular Classes">Particular Classes</option>
                       </select>
                     ) : (
                       notice.type
@@ -156,12 +168,20 @@ const AllNotice = () => {
                           </button>
                         </>
                       ) : (
-                        <button
-                          className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                          onClick={() => handleEdit(index)}
-                        >
-                          <MdEdit />
-                        </button>
+                        <>
+                          <button
+                            className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                            onClick={() => handleEdit(index)}
+                          >
+                            <MdEdit />
+                          </button>
+                          <button
+                            className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                            onClick={() => handleDelete(index)}
+                          >
+                            <MdDeleteForever />
+                          </button>
+                        </>
                       )
                     }
                   </p>

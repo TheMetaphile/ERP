@@ -27,7 +27,7 @@ const NoticeUser = () => {
       <div className="flex justify-between mobile:max-tablet:flex-col mobile:max-laptop:gap-2">
         <div className="flex gap-10  mobile:max-tablet:flex-col mobile:max-laptop:gap-2">
           <button className={`text-xl mobile:max-laptop:text-xl mobile:max-laptop:py-0 mobile:max-laptop:px-2 px-4 border border-gray-300 ${selectedRole === 'all' ? 'bg-blue-400' : 'bg-gray-300'} rounded-lg`}
-            onClick={() => selectRole('all')}>All</button>
+            onClick={() => selectRole('all')}>For All</button>
           <button className={`text-xl mobile:max-laptop:text-xl mobile:max-laptop:py-0 mobile:max-laptop:px-2 border border-gray-300 ${selectedRole === 'student' ? 'bg-blue-400' : 'bg-gray-300'} rounded-lg px-4`}
             onClick={() => selectRole('student')}>Student</button>
           <button className={`text-xl mobile:max-laptop:text-xl mobile:max-laptop:py-0 mobile:max-laptop:px-2 border border-gray-300 ${selectedRole === 'teacher' ? 'bg-blue-400' : 'bg-gray-300'} rounded-lg px-4`}

@@ -1,27 +1,21 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
-import Loading from '../../LoadingScreen/Loading';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NewNotice from "./utils/NewNotice";
 
 function NoticeBoard() {
-    const { authState } = useContext(AuthContext);
     const [selectedLink, setSelectedLink] = useState('/Teacher-Dashboard/noticeboard/teacher');
     const [showModal, setShowModal] = useState(false);
-
 
     const handleOpenModal = () => {
         setShowModal(true);
     };
 
-
     const handleLinkSelect = (link) => {
         setSelectedLink(link);
     };
-
 
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0  items-start mt-2 mb-3">
