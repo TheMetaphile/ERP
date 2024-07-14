@@ -1,0 +1,93 @@
+import React from 'react';
+import { FaUser, FaGraduationCap, FaSchool, FaPhone, FaEnvelope, FaBirthdayCake, FaTint } from 'react-icons/fa';
+
+function Details({ nextStep, handleChange }) {
+    return (
+        <div className="rounded-lg w-full px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3">
+            <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md space-y-4 border">
+                <h1 className="text-2xl font-medium p-2 mobile:max-tablet:text-xl">Add Employee</h1>
+
+                <div className="flex items-center space-x-2">
+                    <FaUser />
+                    <input
+                        type="text"
+                        placeholder="Enter name"
+                        className="w-full p-2 border rounded"
+                        onChange={handleChange('name')}
+                    />
+                </div>
+                <div className="flex items-center space-x-2">
+                    <FaGraduationCap />
+                    <input
+                        type="text"
+                        placeholder="Highest qualification"
+                        className="w-full p-2 border rounded"
+                        onChange={handleChange('qualification')}
+                    />
+                </div>
+                <div className="flex items-center space-x-2">
+                    <FaSchool />
+                    <input
+                        type="text"
+                        placeholder="Name of institute"
+                        className="w-full p-2 border rounded"
+                        onChange={handleChange('instituteName')}
+                    />
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center space-x-2">
+                        <FaPhone />
+                        <input
+                            type="text"
+                            placeholder="Phone number"
+                            className="w-full p-2 border rounded"
+                            onChange={handleChange('phoneNumber')}
+                        />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <FaPhone />
+                        <input
+                            type="text"
+                            placeholder="Emergency contact number"
+                            className="w-full p-2 border rounded"
+                            onChange={handleChange('emergencyContact')}
+                        />
+                    </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <FaEnvelope />
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        className="w-full p-2 border rounded"
+                        onChange={handleChange('email')}
+                    />
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center space-x-2">
+                        <FaBirthdayCake />
+                        <input
+                            type="date"
+                            className="w-full p-2 border rounded"
+                            onChange={handleChange('dob')}
+                        />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <FaTint />
+                        <input
+                            type="text"
+                            placeholder="Blood Group"
+                            className="w-full p-2 border rounded"
+                            onChange={handleChange('bloodGroup')}
+                        />
+                    </div>
+                </div>
+                <button onClick={nextStep} className="w-full bg-blue-500 text-white p-2 rounded">
+                    Proceed
+                </button>
+            </div>
+        </div>
+    );
+}
+
+export default Details;

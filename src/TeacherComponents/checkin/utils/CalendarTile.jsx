@@ -119,7 +119,7 @@ const CalendarTile = ( {month,year}) => {
           return (
             <div
               key={index}
-              className={`flex justify-center text-center py-2 rounded-full relative ${!isCurrentMonth
+              className={`flex justify-center text-center py-2 rounded-full  ${!isCurrentMonth
                 ? 'text-gray-400'
                 : isSelectedDate
                   ? 'text-black bg-blue-100'
@@ -132,7 +132,7 @@ const CalendarTile = ( {month,year}) => {
               <div className={`${isCurrentMonth ? dotColor : "bg-white text-gray-400"}  rounded-full w-8 h-8 text-center `}>{format(date, 'dd')}</div>
               {dotColor && (
                 <span
-                  className={`absolute bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 rounded-full ${dotColor}`}
+                  className={`absolute bottom-1 left-1/2 transform  w-2 h-2 rounded-full ${dotColor}`}
                 ></span>
               )}
             </div>

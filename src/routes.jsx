@@ -126,6 +126,7 @@ import Appraisal from "./TeacherComponents/appraisal/Appraisal.jsx";
 import UploadNotice from "./TeacherComponents/notice/utils/Upload.jsx";
 import Apply from "./TeacherComponents/appraisal/utils/Apply.jsx";
 import Applied from "./TeacherComponents/appraisal/utils/Applied.jsx";
+import Employee from "./AdminComponents/Employee/Employee.jsx";
 
 const router = createBrowserRouter([
   {
@@ -549,6 +550,11 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/Account/TeacherStudents",
         element: <TeacherStudent/>,
+        children:[]
+      },
+      {
+        path: "/Admin-Dashboard/Employee",
+        element: <Employee />,
         children:[]
       },
       {

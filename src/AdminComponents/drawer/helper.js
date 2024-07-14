@@ -196,6 +196,13 @@ const menuItems = [
     route: "/Admin-Dashboard/Leave",
     children: []
   },
+  {
+    image: leaveImage,
+    alt: "img",
+    title: "Employee",
+    route: "/Admin-Dashboard/Employee",
+    children: []
+  },
 ];
 
 
