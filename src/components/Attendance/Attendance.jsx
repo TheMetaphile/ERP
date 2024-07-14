@@ -136,11 +136,11 @@ export default function Attendance() {
             <PresentAttendanceTile Present={data.absent} image={Absent} text="Absent" />
             <PresentAttendanceTile Present={data.leave} image={Leave} text="Leave" />
           </div>
-          <div className=" flex w-full h-80 tablet:justify-evenly mobile:max-laptop:flex-col items-center mt-4 mb-4 gap-2 ">
-            <div className=" mobile:max-laptop:w-full ">
+          <div className=" flex w-full  mobile:max-laptop:h-80 tablet:max-laptop:justify-evenly mobile:max-laptop:flex-col items-center mt-4 mb-4 gap-2 ">
+            <div className=" mobile:max-laptop:w-full flex-1 ">
               <Calendar month={selectedMonth} year={selectedYear} />
             </div>
-            <div className=" h-96  mobile:max-laptop:w-full ">
+            <div className=" h-96  mobile:max-laptop:w-full flex-1 ">
               <Doughnut chartData={chartData} title='Attendance Status' />
             </div>
           </div>

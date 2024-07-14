@@ -84,7 +84,7 @@ export default function MyDoubtTile({ data }) {
         <div>
             {doubts.map((item, index) => (
                 <div key={index} className="border border-gray-300 py-2 px-3 mt-3 rounded-lg shadow-md">
-                    <div className="flex justify-between items-center mobile:max-tablet:flex-col">
+                    <div className="flex justify-between items-center">
                         <div className='flex items-center gap-2'>
                             {editMode === index ? (
                                 <input
@@ -104,7 +104,7 @@ export default function MyDoubtTile({ data }) {
                         <div className={` flex ${item.status === "Pending" ? "text-orange-300" :
                             item.status === "Rejected" ? "text-red-400" :
                                 "text-green-400"
-                            } font-medium gap-2`}><div className='flex items-center gap-2'>
+                            } font-medium gap-2 mobile:flex-wrap`}><div className='flex items-center gap-2'>
                                 {item.status === 'Pending' ? (
                                     <>
                                         {editMode === index ? (

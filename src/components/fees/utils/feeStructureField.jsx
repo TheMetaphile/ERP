@@ -24,10 +24,10 @@ export default function FeeStructureField({ fees }) {
                 'email': 'bhanu68tyagi@gmail.com'
             },
             handler: function (response) {
-                const datee = new Date().toISOString().split('T')[0]; 
+                const datee = new Date().toISOString().split('T')[0];
                 const email = authState.userDetails.email;
                 const installmentId = `${datee}-${email}`;
-                console.log(response, 'resssssssss',datee, email, installmentId)
+                console.log(response, 'resssssssss', datee, email, installmentId)
 
                 postPaymentDetails({
                     email: email, // or the user's email
@@ -40,7 +40,7 @@ export default function FeeStructureField({ fees }) {
                     payment_id: response.razorpay_payment_id,
                     signature: "NA"
                 });
-                
+
             },
 
         };
@@ -48,10 +48,10 @@ export default function FeeStructureField({ fees }) {
         const rzp1 = new Razorpay(options);
 
         rzp1.on("payment.failed", function (response) {
-            const datee = new Date().toISOString().split('T')[0]; 
+            const datee = new Date().toISOString().split('T')[0];
             const email = authState.userDetails.email;
             const installmentId = `${datee}-${email}`;
-            console.log(response,'fffffffffff',datee, email, installmentId);
+            console.log(response, 'fffffffffff', datee, email, installmentId);
 
             postPaymentDetails({
                 email: email, // or the user's email
@@ -76,7 +76,7 @@ export default function FeeStructureField({ fees }) {
                 paymentDetails,
                 {
                     headers: {
-                       'Authorization': `Bearer ${authState.accessToken}`
+                        'Authorization': `Bearer ${authState.accessToken}`
                     }
                 }
             );
@@ -91,10 +91,10 @@ export default function FeeStructureField({ fees }) {
         <div className=" w-full  justify-between rounded-t-lg  whitespace-nowrap">
             {fees.map((data, index) => (
                 <div key={index} className="whitespace-nowrap flex items-center border-b border-gray-300 justify-between w-full ">
-                    <h5 className="text-gray-500 font-normal border-r border-gray-300 h-full py-2 w-28 text-center">{index + 1}</h5>
+                    <h5 className="text-gray-500 font-normal border-r border-gray-300 h-full py-2 w-20 text-center">{index + 1}</h5>
                     <h5 className="text-gray-500 font-normal border-r border-gray-300 h-full py-2 w-32 text-center">{data.title}</h5>
                     <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-28 text-center">{data.amount}</h5>
-                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-28 text-center">{data.discount}</h5>
+                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-20 text-center">{data.discount}</h5>
                     <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-32 text-center">{data.payableAmount}</h5>
                     <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-28 text-center">{data.deadline}</h5>
                     <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-28 text-center">{data.status}</h5>

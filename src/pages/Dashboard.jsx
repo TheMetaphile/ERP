@@ -28,7 +28,7 @@ export default function Dashboard() {
         <div className="flex-grow  overflow-y-auto no-scrollbar ">
           <Outlet />
         </div>
-        <div className={`mobile:max-tablet:absolute mobile:max-tablet:right-0 rounded-lg shadow-md flex-shrink-0 bg-white transition-all duration-300 mobile:max-tablet:${isEndDrawerOpen ? 'w-60 h-full' : 'w-0 h-0'} tablet:w-60 tablet:h-full overflow-y-auto no-scrollbar`}>
+        <div className={`mobile:max-laptop:absolute mobile:max-laptop:right-0 rounded-lg shadow-md flex-shrink-0 bg-white transition-all duration-300 mobile:max-laptop:${isEndDrawerOpen ? 'w-60 h-full' : 'w-0 h-0'} laptop:w-60 laptop:h-full overflow-y-auto no-scrollbar`}>
           <Enddrawer />
         </div>
       </div>

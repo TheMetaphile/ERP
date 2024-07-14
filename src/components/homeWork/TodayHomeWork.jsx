@@ -75,8 +75,8 @@ export default function TodayHomeWork() {
             {/* <h1 className="text-lg font-medium px-2">Today HomeWork</h1>
             <HomeWorkGrid /> */}
             <ToastContainer />
-            <div className="flex justify-between items-center px-3">
-                <h1 className="text-lg font-medium mt-4 px-2">Homework</h1>
+            <div className="flex justify-between items-center px-3 mobile:max-tablet:mt-4">
+                <h1 className="text-3xl mobile:max-laptop:text-lg font-medium px-2">Homework</h1>
                 <select
                     id="subject"
                     value={subject}

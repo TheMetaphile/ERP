@@ -71,7 +71,7 @@ export default function TodayClassWork() {
 
 
     return (
-        <div className="flex flex-col  ">
+        <div className="flex flex-col mobile:max-tablet:mt-4  ">
             {/* <h1 className="text-xl font-medium mb-2">Todays ClassWork</h1>
             <ClassWorkGrid /> */}
             <ToastContainer />

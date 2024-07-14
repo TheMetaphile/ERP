@@ -12,9 +12,7 @@ export default function Navbar({ onDrawerToggle, onEndDrawerToggle }) {
         <div className='flex items-center'>
           <img src={logo} alt="Metaphile Public School" className="w-10" />
           <span className=" mobile:max-tablet:text-sm font-medium text-text_blue mobile:text-xl">etaphile Public School</span>
-          <div>
-            <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-tablet:w-9 mobile:max-tablet:h-9 rounded-lg" />
-          </div>
+
         </div>
       </div>
       <nav>
@@ -24,6 +22,9 @@ export default function Navbar({ onDrawerToggle, onEndDrawerToggle }) {
           </li>
           <li className="mr-4">
             <Link to="/Student-Dashboard/fee-due" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Fee</Link>
+          </li>
+          <li>
+            <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-laptop:w-9 mobile:max-laptop:h-9 rounded-lg ml-auto" />
           </li>
           {/* <li className="mr-4">
             <Link to="/Student-Dashboard/events" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Events</Link>

@@ -80,8 +80,8 @@ export default function leave() {
             {loading ? (
                 <Loading />
             ) : (
-                <div className='flex mobile:max-tablet:flex-col border  border-gray-300 items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg justify-between shadow-lg'>
-                    <div className='flex flex-col w-44  border border-gray-300 mobile:max-tablet:w-full h-60 justify-evenly rounded-lg shadow-lg  text-center font-medium text-lg '>
+                <div className='flex mobile:max-tablet:flex-col border  border-gray-300 items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg'>
+                    <div className='flex  flex-col w-44  border border-gray-300 mobile:max-tablet:w-full h-60  rounded-lg shadow-lg  text-center font-medium text-lg '>
                         <div className='mx-2  '>
                             <Doughnut data={chartData} options={options} className='w-44 h-44' />
                         </div>
@@ -93,6 +93,7 @@ export default function leave() {
                         centerText={details.approved}
                         trailColor='#c8ebc9'
                         strokeColor='#4caf50'
+
                     />
                     <ProgressCard
                         title='Pending'
@@ -100,6 +101,7 @@ export default function leave() {
                         centerText={details.pending}
                         trailColor='#FFD8B2'
                         strokeColor='#FE8D01'
+
                     />
                     <ProgressCard
                         title='Rejected'
@@ -107,6 +109,7 @@ export default function leave() {
                         centerText={details.rejected}
                         trailColor='#ffd6d6'
                         strokeColor='#ff0000'
+
                     />
                 </div>
             )}
@@ -128,7 +131,7 @@ export default function leave() {
                     <option value="Rejected">Rejected</option>
                 </select>
             </div>
-            <AttendenceTable additionalData={additionalData} status={status}/>
+            <AttendenceTable additionalData={additionalData} status={status} />
 
         </div>
     )

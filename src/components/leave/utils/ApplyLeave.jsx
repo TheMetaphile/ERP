@@ -57,8 +57,8 @@ export default function ApplyLeave({ onNewLeave }) {
 
 
                 <div className="flex flex-row mobile:max-laptop:flex-col  mt-2  ">
-                    <div className='flex items-center w-full justify-between gap-3'>
-                        <div className='w-full'>
+                    <div className='flex items-center w-full justify-between tablet:gap-3 mobile:max-tablet:flex-col'>
+                        <div className='w-full '>
                             <label className="text-sm font-medium">From Date</label>
                             <input type="date" className="mt-2 px-3 py-1 border border-gray-300 shadow-md rounded-lg w-full md:w-auto" value={startDate} onChange={((e) => setStartDate(e.target.value))} />
                         </div>
