@@ -8,7 +8,7 @@ import Profile from "./components/profile/profile.jsx";
 import Quiz from "./components/quiz/quiz.jsx";
 import Receipt from "./components/receipt/receipt.jsx";
 import Result from "./components/Result/Result.jsx";
-import DateSheet  from "./components/DateSheet/datesheet.jsx";
+import DateSheet from "./components/DateSheet/datesheet.jsx";
 // import Palyquiz from "./components/playquiz/firstquizs.jsx";
 import Attendance from "./components/Attendance/Attendance.jsx";
 import TimeTable from "./components/TimeTable/Timetable.jsx";
@@ -127,6 +127,10 @@ import UploadNotice from "./TeacherComponents/notice/utils/Upload.jsx";
 import Apply from "./TeacherComponents/appraisal/utils/Apply.jsx";
 import Applied from "./TeacherComponents/appraisal/utils/Applied.jsx";
 import Employee from "./AdminComponents/Employee/Employee.jsx";
+import Allcertificate from "./AdminComponents/Certificates/Allcertificate.jsx";
+import Certificates from "./AdminComponents/Certificates/Certificates.jsx";
+import Transfer from "./AdminComponents/Certificates/utils/Transfer"
+import Character from "./AdminComponents/Certificates/utils/Character"
 
 const router = createBrowserRouter([
   {
@@ -179,7 +183,7 @@ const router = createBrowserRouter([
       // },
       {
         path: "/Student-Dashboard/receipt",
-        element: <Receipt/>,
+        element: <Receipt />,
       },
       {
         path: "/Student-Dashboard/quiz",
@@ -189,7 +193,7 @@ const router = createBrowserRouter([
             path: '',
             element: <Panel />
           },
-          
+
           {
             path: ':subject',
             element: <Quiz />
@@ -234,7 +238,7 @@ const router = createBrowserRouter([
             path: '',
             element: <TodayClassWork />
           },
-          
+
           // {
           //   path: ':name',
           //   element: <SubjectClassWork />
@@ -249,7 +253,7 @@ const router = createBrowserRouter([
             path: '',
             element: <TodayHomeWork />
           },
-          
+
           // {
           //   path: ':name',
           //   element: <SubjectHomeWork />
@@ -288,7 +292,7 @@ const router = createBrowserRouter([
           },
           {
             path: '/Student-Dashboard/notification/archived',
-            element: <Archived/>
+            element: <Archived />
           },
           {
             path: '',
@@ -328,7 +332,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/Student-Dashboard/medical",
-        element: <Mediacal/>,
+        element: <Mediacal />,
       },
       {
         path: "/Student-Dashboard/homework",
@@ -339,11 +343,11 @@ const router = createBrowserRouter([
   {
     path: "/Admin-Dashboard",
     element: (
-    <PrivateRoute>
-    <AdminDashboard />
-    </PrivateRoute>
+      <PrivateRoute>
+        <AdminDashboard />
+      </PrivateRoute>
     ),
-    children:[
+    children: [
       {
         path: "",
         element: <AdminHome />,
@@ -351,7 +355,7 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/Students",
         element: <AllStudents />,
-        children:[
+        children: [
           {
             path: '',
             element: <StudentsList />
@@ -364,12 +368,12 @@ const router = createBrowserRouter([
       },
       {
         path: "/Admin-Dashboard/StudentsAddmissionForm",
-        element: <AddmissionForm/>,
-        children:[]
+        element: <AddmissionForm />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/StudentsFee",
-        element: <FeeAdmin/>,
+        element: <FeeAdmin />,
         children: [
           {
             path: '/Admin-Dashboard/StudentsFee/details',
@@ -391,18 +395,18 @@ const router = createBrowserRouter([
       },
       {
         path: "/Admin-Dashboard/StudentAttendance",
-        element: <StudentAttendance/>,
-        children:[]
+        element: <StudentAttendance />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/StudentPromotion",
-        element: <StudentPromotion/>,
-        children:[]
+        element: <StudentPromotion />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Result",
         element: <AllReportAdmin />,
-        children:[
+        children: [
           {
             path: '',
             element: <ReportCardAdmin />
@@ -421,28 +425,46 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/transfercertificate",
         element: <AllTC />,
-        children:[
+        children: [
           {
             path: '',
             element: <TC />
           },
           {
             path: ':id',
-            element: <Certificate/>
+            element: <Certificate />
           }
         ]
       },
       {
         path: "/Admin-Dashboard/charactercetificate",
         element: <AllCC />,
-        children:[
+        children: [
           {
             path: '',
             element: <CC />
           },
           {
             path: ':id',
-            element: <CharacterCertificate/>
+            element: <CharacterCertificate />
+          }
+        ]
+      },
+      {
+        path: "/Admin-Dashboard/Certificates",
+        element: <Allcertificate />,
+        children: [
+          {
+            path: '',
+            element: <Certificates />
+          },
+          {
+            path: ':tc',
+            element: <Transfer />
+          },
+          {
+            path: ':id',
+            element: <Character />
           }
         ]
       },
@@ -450,137 +472,137 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/Teachers",
         element: <AllTeachers />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/Teachers/Profile",
         element: <TeacherProfile />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/AddTeachers",
         element: <AddTeacher />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/TeachersAttendance",
         element: <TeacherAttendance />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/TeachersSalary",
         element: <TeachersSalary />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/Parents/AllParents",
         element: <AllParents />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/Parents/AllParents/Details",
         element: <ParentsDetails />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/Library/AllBooks",
         element: <AllBooks />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/StudentResult/Details",
-        element: <ResultLayout/>,
-        children:[]
+        element: <ResultLayout />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Transport",
-        element: <Transport/>,
-        children:[]
+        element: <Transport />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Notice",
-        element: <Notice/>,
-        children:[]
+        element: <Notice />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Leave",
-        element: <Leaves/>,
-        children:[]
+        element: <Leaves />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Classes",
-        element: <Class/>,
-        children:[]
+        element: <Class />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Classteacher",
-        element: <ClassTeacher/>,
-        children:[]
+        element: <ClassTeacher />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Assignteacher",
-        element: <AssignTeacher/>,
-        children:[]
+        element: <AssignTeacher />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Exam",
-        element: <Exam/>,
-        children:[]
+        element: <Exam />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Message",
-        element: <Message/>,
-        children:[]
+        element: <Message />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Subjects",
-        element: <Subject/>,
-        children:[]
+        element: <Subject />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Assignsubject",
-        element: <AssignSubject/>,
-        children:[]
+        element: <AssignSubject />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Account/Expenses",
-        element: <Expenses/>,
-        children:[]
+        element: <Expenses />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Account/TeacherStudents",
-        element: <TeacherStudent/>,
-        children:[]
+        element: <TeacherStudent />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Employee",
         element: <Employee />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/timetable",
-        element: <TimeTableAdmin/>,
-        children:[ 
+        element: <TimeTableAdmin />,
+        children: [
         ]
       },
       {
         path: '/Admin-Dashboard/timetablestructure',
-            element: <Upload />
+        element: <Upload />
       },
       {
         path: '/Admin-Dashboard/Events',
-            element: <Event />
+        element: <Event />
       },
     ]
   },
   {
     path: "/Teacher-Dashboard",
     element: (
-   
-    <TeacherDashboard />
-   
+
+      <TeacherDashboard />
+
     ),
-    children:[
+    children: [
       {
         path: "",
         element: <TeacherHome />,
@@ -613,31 +635,31 @@ const router = createBrowserRouter([
       },
       {
         path: "/Teacher-Dashboard/checkin",
-        element: <CheckIn/>,
-        children:[]
+        element: <CheckIn />,
+        children: []
       },
       {
         path: "/Teacher-Dashboard/classwork",
-        element: <ClassWorkTeacher/>,
-        children:[]
+        element: <ClassWorkTeacher />,
+        children: []
       },
       {
         path: "/Teacher-Dashboard/homework",
-        element: <HomeWorkTeacher/>,
-        children:[]
+        element: <HomeWorkTeacher />,
+        children: []
       },
-      
-      
+
+
       {
         path: "/Teacher-Dashboard/takeleave",
-        element: <TakeLeave/>,
-        children:[]
+        element: <TakeLeave />,
+        children: []
       },
-      
+
       {
         path: "/Teacher-Dashboard/timetable",
-        element: <TimeTableTeacher/>,
-        children:[]
+        element: <TimeTableTeacher />,
+        children: []
       },
       {
         path: "/Teacher-Dashboard/birthday",
@@ -672,7 +694,7 @@ const router = createBrowserRouter([
           {
             path: '/Teacher-Dashboard/appraisal/applied',
             element: <Applied />
-          },   
+          },
           {
             path: '',
             element: <Apply />
@@ -693,7 +715,7 @@ const router = createBrowserRouter([
           },
           {
             path: '',
-            element: <NewDoubt/>
+            element: <NewDoubt />
           },
         ]
       },
@@ -708,13 +730,13 @@ const router = createBrowserRouter([
           {
             path: "/Teacher-Dashboard/class_activity/timetablestudent",
             element: <TimeTableStudent />,
-            children:[]
+            children: []
           },
 
           {
             path: "reportcard",
-            element: <AllReport/>,
-            children:[
+            element: <AllReport />,
+            children: [
               {
                 path: '',
                 element: <ReportCard />
@@ -725,26 +747,26 @@ const router = createBrowserRouter([
               }
             ]
           },
-          
+
           {
             path: "/Teacher-Dashboard/class_activity/uploadResult",
-            element: <UploadResult/>,
-            children:[]
+            element: <UploadResult />,
+            children: []
           },
           {
             path: "/Teacher-Dashboard/class_activity/studentfee",
-            element: <StudentFee/>,
-            children:[]
+            element: <StudentFee />,
+            children: []
           },
           {
             path: "/Teacher-Dashboard/class_activity/studentAttendence",
-            element: <TeacherStudentAttendance/>,
-            children:[]
-          }, 
+            element: <TeacherStudentAttendance />,
+            children: []
+          },
           {
             path: "/Teacher-Dashboard/class_activity/studentattendence/record",
-            element: <StudentAttendanceRecord/>,
-            children:[]
+            element: <StudentAttendanceRecord />,
+            children: []
           },
           {
             path: "/Teacher-Dashboard/class_activity/studentleave",
@@ -753,20 +775,20 @@ const router = createBrowserRouter([
           },
         ]
       },
-      
+
       {
         path: "/Teacher-Dashboard/notebook",
-        element: <NoteBook/>,
-        children:[]
+        element: <NoteBook />,
+        children: []
       },
       {
         path: "/Teacher-Dashboard/message",
-        element: <TeacherMessage/>,
-        children:[]
+        element: <TeacherMessage />,
+        children: []
       },
     ]
   }
- 
+
 ]);
 
 export default router;

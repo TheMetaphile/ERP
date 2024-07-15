@@ -80,7 +80,7 @@ export default function leave() {
             {loading ? (
                 <Loading />
             ) : (
-                <div className='flex mobile:max-tablet:flex-col border  border-gray-300 items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg'>
+                <div className='flex mobile:max-tablet:grid mobile:max-tablet:grid-rows-2 border  border-gray-300 items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg'>
                     <div className='flex  flex-col w-44  border border-gray-300 mobile:max-tablet:w-full h-60  rounded-lg shadow-lg  text-center font-medium text-lg '>
                         <div className='mx-2  '>
                             <Doughnut data={chartData} options={options} className='w-44 h-44' />

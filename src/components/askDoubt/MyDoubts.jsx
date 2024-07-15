@@ -142,13 +142,13 @@ export default function MyDoubts() {
 
 
     return (
-        <div className="flex flex-col mobile:max-laptop:flex-col-reverse w-full">
+        <div className="flex flex-col w-full">
             <ToastContainer />
             <div className='flex justify-between bg-v'>
                 <Link
-                    to={'/Student-Dashboard/askdoubt/mydoubts'}
+                    // to={'/Student-Dashboard/askdoubt/mydoubts'}
                     className={`text-2xl font-medium w-fit rounded-lg `}
-                    onClick={() => handleLinkSelect('/Student-Dashboard/askdoubt/mydoubts')}
+                // onClick={() => handleLinkSelect('/Student-Dashboard/askdoubt/mydoubts')}
                 >
                     My Doubts
                 </Link>

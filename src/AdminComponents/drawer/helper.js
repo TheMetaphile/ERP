@@ -1,27 +1,27 @@
-import homeImage from '../../assets/home.png';
-import teacherImage from '../../assets/teacher2.png';
-import studentImage from '../../assets/student.png';
-import teacherAltImage from '../../assets/teacher.png';
-import classImage from '../../assets/class.png';
-import subjectImage from '../../assets/subject.png';
-import parentImage from '../../assets/parent.png';
-import libraryImage from '../../assets/library.png';
-import accountImage from '../../assets/account.png';
-import examImage from '../../assets/exam.png';
-import transportImage from '../../assets/transport.png';
-import noticeImage from '../../assets/notice.png';
-import messageImage from '../../assets/message.png';
-import leaveImage from '../../assets/leave_icon.png';
-import timetable from '../../assets/Dashboard_time_table.png';
-import events from '../../assets/Dashboard_events.png'
+import homeImage from "../../assets/home.png";
+import teacherImage from "../../assets/teacher2.png";
+import studentImage from "../../assets/student.png";
+import teacherAltImage from "../../assets/teacher.png";
+import classImage from "../../assets/class.png";
+import subjectImage from "../../assets/subject.png";
+import parentImage from "../../assets/parent.png";
+import libraryImage from "../../assets/library.png";
+import accountImage from "../../assets/account.png";
+import examImage from "../../assets/exam.png";
+import transportImage from "../../assets/transport.png";
+import noticeImage from "../../assets/notice.png";
+import messageImage from "../../assets/message.png";
+import leaveImage from "../../assets/leave_icon.png";
+import timetable from "../../assets/Dashboard_time_table.png";
+import events from "../../assets/Dashboard_events.png";
 
 const menuItems = [
   {
     image: homeImage,
     alt: "Attendance image",
     title: "Dashboard",
-    route: '/Admin-Dashboard',
-    children: []
+    route: "/Admin-Dashboard",
+    children: [],
   },
   // {
   //   image: teacherImage,
@@ -34,8 +34,8 @@ const menuItems = [
     image: timetable,
     alt: "Timetable image",
     title: "Timetable",
-    route: '/Admin-Dashboard/timetable',
-    children: []
+    route: "/Admin-Dashboard/timetable",
+    children: [],
   },
   {
     image: studentImage,
@@ -43,34 +43,34 @@ const menuItems = [
     title: "Students",
     children: [
       {
-        text: 'All Students',
-        route: '/Admin-Dashboard/Students'
+        text: "All Students",
+        route: "/Admin-Dashboard/Students",
       },
       {
-        text: 'Admission Form',
-        route: '/Admin-Dashboard/StudentsAddmissionForm'
+        text: "Admission Form",
+        route: "/Admin-Dashboard/StudentsAddmissionForm",
       },
       {
-        text: 'Students Promotion',
-        route: '/Admin-Dashboard/StudentPromotion'
+        text: "Students Promotion",
+        route: "/Admin-Dashboard/StudentPromotion",
       },
       {
-        text: 'Students Attendance',
-        route: '/Admin-Dashboard/StudentAttendance'
+        text: "Students Attendance",
+        route: "/Admin-Dashboard/StudentAttendance",
       },
       {
-        text: 'Students Result',
-        route: '/Admin-Dashboard/Result',
+        text: "Students Result",
+        route: "/Admin-Dashboard/Result",
       },
       {
-        text: 'Transfer Certificate',
-        route: '/Admin-Dashboard/transfercertificate'
+        text: "Transfer Certificate",
+        route: "/Admin-Dashboard/transfercertificate",
       },
       {
-        text: 'Character Certificate',
-        route: '/Admin-Dashboard/charactercetificate'
+        text: "Character Certificate",
+        route: "/Admin-Dashboard/charactercetificate",
       },
-    ]
+    ],
   },
   {
     image: teacherAltImage,
@@ -78,28 +78,28 @@ const menuItems = [
     title: "Teachers",
     children: [
       {
-        text: 'All Teachers',
-        route: '/Admin-Dashboard/Teachers'
+        text: "All Teachers",
+        route: "/Admin-Dashboard/Teachers",
       },
       {
-        text: 'Add New Teacher',
-        route: '/Admin-Dashboard/AddTeachers'
+        text: "Add New Teacher",
+        route: "/Admin-Dashboard/AddTeachers",
       },
       {
-        text: 'Teachers Sallery',
-        route: '/Admin-Dashboard/TeachersSalary'
+        text: "Teachers Sallery",
+        route: "/Admin-Dashboard/TeachersSalary",
       },
       {
-        text: 'Teachers Attendance',
-        route: '/Admin-Dashboard/TeachersAttendance'
+        text: "Teachers Attendance",
+        route: "/Admin-Dashboard/TeachersAttendance",
       },
-    ]
+    ],
   },
   {
     image: classImage,
     alt: "img",
     title: "Assign Class Teacher",
-    route: '/Admin-Dashboard/Assignteacher',
+    route: "/Admin-Dashboard/Assignteacher",
     children: [
       // {
       //   text: 'Class Teachers',
@@ -109,14 +109,14 @@ const menuItems = [
       //   text: 'Assign Class Teacher',
       //   route: '/Admin-Dashboard/Assignteacher'
       // },
-    ]
+    ],
   },
   {
     image: subjectImage,
     alt: "img",
     title: "Subject Teacher",
-    route: '/Admin-Dashboard/Assignsubject',
-    children: []
+    route: "/Admin-Dashboard/Assignsubject",
+    children: [],
   },
   // {
   //   image: parentImage,
@@ -143,44 +143,44 @@ const menuItems = [
     alt: "img",
     title: "Events",
     route: "/Admin-Dashboard/Events",
-    children: []
+    children: [],
   },
   {
     image: accountImage,
     alt: "img",
     title: "Expenses",
-    route: '/Admin-Dashboard/Account/Expenses',
+    route: "/Admin-Dashboard/Account/Expenses",
     children: [
-    //   {
-    //   text: 'Teacher/Students',
-    //   route: '/Admin-Dashboard/Account/TeacherStudents'
-    // // },
-    // {
-    //   text: 'Expenses',
-    //   route: '/Admin-Dashboard/Account/Expenses'
-    // },
-    ]
+      //   {
+      //   text: 'Teacher/Students',
+      //   route: '/Admin-Dashboard/Account/TeacherStudents'
+      // // },
+      // {
+      //   text: 'Expenses',
+      //   route: '/Admin-Dashboard/Account/Expenses'
+      // },
+    ],
   },
   {
     image: examImage,
     alt: "img",
     title: "Exam",
     route: "/Admin-Dashboard/Exam",
-    children: []
+    children: [],
   },
   {
     image: transportImage,
     alt: "img",
     title: "Transport",
     route: "/Admin-Dashboard/Transport",
-    children: []
+    children: [],
   },
   {
     image: noticeImage,
     alt: "img",
     title: "Notice",
     route: "/Admin-Dashboard/Notice",
-    children: []
+    children: [],
   },
   // {
   //   image: messageImage,
@@ -194,17 +194,22 @@ const menuItems = [
     alt: "img",
     title: "Leave",
     route: "/Admin-Dashboard/Leave",
-    children: []
+    children: [],
   },
   {
     image: leaveImage,
     alt: "img",
     title: "Employee",
     route: "/Admin-Dashboard/Employee",
-    children: []
+    children: [],
+  },
+  {
+    image: leaveImage,
+    alt: "img",
+    title: "Certificate",
+    route: "/Admin-Dashboard/Certificates",
+    children: [],
   },
 ];
-
-
 
 export default menuItems;
