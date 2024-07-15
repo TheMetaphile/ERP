@@ -11,18 +11,19 @@ export default function Notification() {
 
     return (
         <div className=" flex flex-col px-3  items-start mt-2">
-            <h1 className='text-3xl'>Notice</h1>
-            
-                <div className=" flex   mt-4 ml-3 mr-3 items-center justify-between">
-                    <div className=" flex  gap-2 ">
-                        {/* <Link
+
+            <div className=" flex  ml-3 mr-3 items-center justify-between">
+                <h1 className='text-3xl'>Notice</h1>
+
+                <div className=" flex  gap-2 ">
+                    {/* <Link
                             to={'/Student-Dashboard/notification/allnotification'}
                             className={`text-xl font-medium px-2 rounded-lg py-1 shadow-md ${selectedLink === '/Student-Dashboard/notification/allnotification' ? 'bg-secondary ' : 'bg-gray-200'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/notification/allnotification')}
                         >
                             All
                         </Link> */}
-                        {/* <Link
+                    {/* <Link
                             to={'/Student-Dashboard/notification/inbox'}
                             className={`text-xl font-medium px-2 rounded-lg py-1 shadow-md ${selectedLink === '/Student-Dashboard/notification/inbox' ? 'bg-secondary ' : 'bg-gray-200'}`}
                             onClick={() => handleLinkSelect('/Student-Dashboard/notification/inbox')}
@@ -36,13 +37,13 @@ export default function Notification() {
                         >
                             Archived
                         </Link> */}
-                    </div>
-
                 </div>
-                <hr className='border-t-2 bg-slate-500 mt-2 mb-3 ml-3 mr-3' />
-                <Outlet />
-                <br></br>
-        
+
+            </div>
+            <hr className='border-t-2 bg-slate-500 mt-2 mb-3 ml-3 mr-3' />
+            <Outlet />
+            <br></br>
+
         </div>
 
     )

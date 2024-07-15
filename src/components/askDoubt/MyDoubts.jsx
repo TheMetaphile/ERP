@@ -142,29 +142,29 @@ export default function MyDoubts() {
 
 
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full mobile:max-tablet:mt-4">
             <ToastContainer />
-            <div className='flex justify-between bg-v'>
+            <div className='flex justify-between bg-v mobile:max-tablet:flex-col'>
                 <Link
                     // to={'/Student-Dashboard/askdoubt/mydoubts'}
                     className={`text-2xl font-medium w-fit rounded-lg `}
                 // onClick={() => handleLinkSelect('/Student-Dashboard/askdoubt/mydoubts')}
                 >
-                    My Doubts
+                    <p className=' mobile:max-laptop:text-lg whitespace-nowrap'>My Doubts</p>
                 </Link>
-                <div className="flex md:order-2 md:w-full lg:w-fit md:ml-2 gap-2 ">
+                <div className="flex md:order-2 md:w-full lg:w-fit md:ml-2 gap-2  ">
                     <SelectSubject onSelect={handleSubjectSelect} />
                     <select
                         value={status}
                         onChange={handleStatusChange}
-                        className="border border-gray-300 rounded-lg shadow-md px-2 mb-2"
+                        className="border border-gray-300 rounded-lg shadow-md px-2 mb-2 mobile:max-tablet:px-0 mobile:max-tablet:text-xs"
                     >
                         <option value="Pending">Pending</option>
                         <option value="Resolved">Resolved</option>
                         <option value="rejected">Rejected</option>
                     </select>
                     <div className="ml-auto md:hidden">
-                        <button className='bg-purple-400 rounded-lg shadow-md px-3 py-2 text-white' onClick={handleAskDoubt}>+ Ask A Doubt</button>
+                        <button className='bg-purple-400 mobile:max-tablet:text-xs whitespace-nowrap rounded-lg shadow-md px-3 py-2 text-white' onClick={handleAskDoubt}>+ Ask A Doubt</button>
                     </div>
                 </div>
             </div>

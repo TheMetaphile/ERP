@@ -88,18 +88,18 @@ export default function FeeStructureField({ fees }) {
 
 
     return (
-        <div className=" w-full  justify-between rounded-t-lg  whitespace-nowrap">
+        <div className=" w-full  rounded-t-lg  whitespace-nowrap">
             {fees.map((data, index) => (
-                <div key={index} className="whitespace-nowrap flex items-center border-b border-gray-300 justify-between w-full ">
-                    <h5 className="text-gray-500 font-normal border-r border-gray-300 h-full py-2 w-20 text-center">{index + 1}</h5>
-                    <h5 className="text-gray-500 font-normal border-r border-gray-300 h-full py-2 w-32 text-center">{data.title}</h5>
-                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-28 text-center">{data.amount}</h5>
-                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-20 text-center">{data.discount}</h5>
-                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-32 text-center">{data.payableAmount}</h5>
-                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-28 text-center">{data.deadline}</h5>
-                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-28 text-center">{data.status}</h5>
+                <div key={index} className="whitespace-nowrap flex items-center border-b border-gray-300 justify-center w-full ">
+                    <h5 className="text-gray-500 font-normal border-r border-gray-300 h-full py-2 w-full text-center">{index + 1}</h5>
+                    <h5 className="text-gray-500 font-normal border-r border-gray-300 h-full py-2 w-full text-center">{data.title}</h5>
+                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-full text-center">{data.amount}</h5>
+                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-full text-center">{data.discount}</h5>
+                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-full text-center">{data.payableAmount}</h5>
+                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-full text-center">{data.deadline}</h5>
+                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-full text-center">{data.status}</h5>
                     {/* <h5 className="text-gray-500 py-2 font-normal w-28 text-center">Pay</h5> */}
-                    <h5 className="w-32 my-2 text-lg rounded-full bg-secondary px-2 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer"
+                    <h5 className="w-18 my-2 mx-2 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer"
                         onClick={() => handlePayment({ amount: data.payableAmount, order_id: data.id, title: data.title, deadline: data.deadline })}
                     >
                         Pay

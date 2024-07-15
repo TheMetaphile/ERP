@@ -54,14 +54,14 @@ export default function FeeStructure() {
 
 
   return (
-    <div className="w-full h-fit mb-4  rounded-lg shadow-md overflow-x-auto border border-gray-300">
+    <div className="w-full h-fit mb-4  rounded-lg shadow-md overflow-auto border border-gray-300">
       <Header />
       {loading ? (
         <Loading />
       ) : fees === null ? (
         <div>No data available</div>
       ) : (
-        <div>
+        <div className="">
           <FeeStructureField fees={fees} />
           <FeeStructureFooter totalAmount={totalAmount} />
         </div>

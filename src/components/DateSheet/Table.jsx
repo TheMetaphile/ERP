@@ -11,10 +11,10 @@ export default function Table() {
   const { authState } = useContext(AuthContext);
   const [exams, setExams] = useState([]);
 
- 
+
 
   const fetchDateSheet = async () => {
-   
+
     try {
       const response = await axios.post(`${BASE_URL_Exam}/fetchDateSheet`, {
         accessToken: authState.accessToken,
@@ -48,9 +48,9 @@ export default function Table() {
 
   return (
     <div className=' flex justify-evenly '>
-            <ToastContainer />
+      <ToastContainer />
 
-      <table className=' mt-7  w-full justify-evenly items-center ml-5 mr-5 shadow-md my-2 px-2 border border-gray-300 rounded-lg mb-3'>
+      <table className=' mt-7  w-full justify-evenly items-center ml-5 mr-5 shadow-md my-2 px-2 border-2 border-gray-300 rounded-lg mb-3'>
         <thead>
           <tr className='rounded-t-lg border-b-2 border-gray-400 mt-3  no-underline text-xl'>
             <th className='no-underline text-xl py-3'>Date </th>
