@@ -134,6 +134,9 @@ import Character from "./SubAdminComponent/Certificates/utils/Character.jsx";
 import SubAdminDashboard from "./SubAdminComponent/Dashboard.jsx";
 import AllStudentsList from "./SubAdminComponent/AllStudents/AllStudentsList.jsx";
 import AllStudentSubAdmin from "./SubAdminComponent/AllStudents/AllStudentSubAdmin.jsx";
+import AllReportSubAdmin from "./SubAdminComponent/result/AllReportSubAdmin.jsx";
+import ReportCardSubAdmin from "./SubAdminComponent/result/ReportCardSubAdmin.jsx";
+import PerformanceProfileSubAdmin from "./SubAdminComponent/result/utils/performance/PerformanceProfileSubAdmin.jsx";
 
 const router = createBrowserRouter([
   {
@@ -807,11 +810,11 @@ const router = createBrowserRouter([
               element: <Certificates />
             },
             {
-              path: 'transfer/:tc',
+              path: 'transfer/:tc/:class/:section/:session',
               element: <Transfer />
             },
             {
-              path: 'character/:id',
+              path: 'character/:tc/:class/:section/:session',
               element: <Character />
             }
           ]
@@ -828,6 +831,20 @@ const router = createBrowserRouter([
             //   path: '/Sub-Admin/Students/studentdetails',
             //   element: <StudentDetailScreen />
             // },
+          ]
+        },
+        {
+          path: "/Sub-Admin/Result",
+          element: <AllReportSubAdmin />,
+          children: [
+            {
+              path: '',
+              element: <ReportCardSubAdmin/>
+            },
+            {
+              path: ':id',
+              element: <PerformanceProfileSubAdmin/>
+            }
           ]
         },
     ]

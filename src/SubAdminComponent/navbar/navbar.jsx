@@ -24,7 +24,9 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
           <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1">
             <Link to="/Sub-Admin/Certificates" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Certificate</Link>
           </li>
-          
+          <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1">
+            <Link to="/Sub-Admin/Result" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Result</Link>
+          </li>
         </ul>
       </nav>
     </div>

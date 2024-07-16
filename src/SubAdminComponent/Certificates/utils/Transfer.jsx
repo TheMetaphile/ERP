@@ -10,9 +10,12 @@ import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Login } from '../../../Config';
 
 const PrintableComponent = React.forwardRef((props, ref) => {
+    const { subject } = props;
+    const formattedSubjects = subject.join(', ');
+    console.log(formattedSubjects)
     return (
         <div ref={ref} className="print:your-component px-3 pb-4">
-            
+
             <div className="w-full">
                 <u><h1 className='tablet:text-xl mobile:max-tablet:text-xl font-medium text-text_blue text-center'>Transfer Certificate</h1></u>
             </div>
@@ -44,20 +47,20 @@ const PrintableComponent = React.forwardRef((props, ref) => {
 
             <div className=" w-full px-4 mt-2">
                 {[
-                    { label: 'Name of the Student' },
-                    { label: 'Mother\'s Name' },
-                    { label: 'Father\'s Name/ Guardian\'s Name' },
-                    { label: 'Date of Birth' },
-                    { label: 'Nationality' },
-                    { label: 'Whether the Candidate belongs to (SC, ST, OBC, GEN, EWS)' },
-                    { label: 'Date of first Admission in school with class' },
-                    { label: 'Class in which the Student last studied' },
-                    { label: 'School/ Board Annual Examination last taken with results' },
-                    { label: 'Main Subject studied' },
-                    { label: 'Whether qualified for promotion' },
+                    { label: 'Name of the Student', detail: props.data.name },
+                    { label: 'Mother\'s Name', detail: props.data.motherName },
+                    { label: 'Father\'s Name/ Guardian\'s Name', detail: props.data.fatherName },
+                    { label: 'Date of Birth', detail: props.data.DOB },
+                    { label: 'Nationality', },
+                    { label: 'Whether the Candidate belongs to (SC, ST, OBC, GEN, EWS)', },
+                    { label: 'Date of first Admission in school with class', detail: props.data.admissionDate, detail2: props.data.admissionClass },
+                    { label: 'Class in which the Student last studied', detail: props.data.currentClass },
+                    { label: 'School/ Board Annual Examination last taken with results', detail: props.result },
+                    { label: 'Main Subject studied', detail: formattedSubjects },
+                    { label: 'Whether qualified for promotion', detail: props.result === 'Pass' ? 'Yes' : 'No' },
                     { label: 'Month up to which the pupil has paid School dues' },
-                    { label: 'Total number of Working days in the Academic Session' },
-                    { label: 'Total number of Working days Pupil Present' },
+                    { label: 'Total number of Working days in the Academic Session', detail: props.attendence.total },
+                    { label: 'Total number of Working days Pupil Present', detail: props.attendence.present },
                     { label: 'Extra Co-curricular activities in which the pupil participated' },
                     { label: 'General Conduct' },
                     { label: 'Date of application for certificate' },
@@ -68,7 +71,7 @@ const PrintableComponent = React.forwardRef((props, ref) => {
                 ].map((field, idx) => (
                     <div key={idx} className="flex  border-b-2 py-3 text-base px-4">
                         <label className="block  font-medium text-gray-700">{idx + 1}.</label>
-                        <label className="block  font-medium text-gray-700">&nbsp;&nbsp;{field.label}&nbsp; :</label>
+                        <label className="block  font-medium text-gray-700">&nbsp;&nbsp;{field.label}&nbsp; :    <span className="  font-normal text-gray-500">  {field.detail}&nbsp; {field.detail2}</span></label>
 
                     </div>
                 ))}
@@ -97,13 +100,20 @@ const PrintableComponent = React.forwardRef((props, ref) => {
     )
 })
 const Transfer = () => {
-    const { tc } = useParams();
+    const { tc, class: className, section: secttions, session: sessions } = useParams();
     const ref1 = useRef();
     const [data, setData] = useState([]);
     const { authState } = useContext(AuthContext);
+    const [subject, setSubject] = useState([]);
+    const [result, setResult] = useState('');
+    const [attendence, setAttendence] = useState('');
+    const [editing, setEditing] = useState(false);
 
     useEffect(() => {
         fetchUserTc();
+        fetchSubjects();
+        fetchResult();
+        fetchAttendence();
     }, []);
 
     const handlePrint = async () => {
@@ -160,9 +170,9 @@ const Transfer = () => {
     };
 
     const fetchUserTc = async () => {
-        console.log('hit', authState.accessToken, tc)
+        console.log('hit', authState.accessToken, tc, className, secttions)
         try {
-            const response = await axios.get(`${BASE_URL_Login}/terminate/terminatedSingle?session=2023-24&id=${tc}`, {
+            const response = await axios.get(`${BASE_URL_Login}/terminate/terminatedSingle?session=${sessions}&id=${tc}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -178,18 +188,109 @@ const Transfer = () => {
             console.log(err);
 
         }
+    };
+
+    const fetchSubjects = async () => {
+        console.log('hit', authState.accessToken, tc, className, secttions)
+        try {
+            const response = await axios.get(`${BASE_URL_Login}/fetch/subjects?class=${className}&section=${secttions}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
+                }
+            });
+            if (response.status === 200) {
+                console.log("API response subject:", response.data.subjects);
+                setSubject(response.data.subjects);
+            }
+
+
+        } catch (err) {
+            console.log(err);
+
+        }
 
     };
 
+    const fetchResult = async () => {
+        console.log('hit', authState.accessToken, tc, className, secttions)
+        try {
+            const response = await axios.get(`${BASE_URL_Login}/result/fetch/status?id=${tc}&session=${sessions}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
+                }
+            });
+            if (response.status === 200) {
+                console.log("API response result:", response.data);
+                setResult(response.data.status);
+            }
+
+
+        } catch (err) {
+            console.log(err);
+
+        }
+
+    };
+
+    const fetchAttendence = async () => {
+        console.log('hittt', authState.accessToken, tc, className)
+        try {
+            const response = await axios.get(`${BASE_URL_Login}/studentAttendance/fetch/completeStats?id=${tc}&class=${className}&year=2024`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
+                }
+            });
+            if (response.status === 200) {
+                console.log("API response attendence:", response.data);
+                setAttendence(response.data);
+            }
+        } catch (err) {
+            console.log(err);
+
+        }
+
+    };
+
+    const handleEdit = () => {
+        setEditing(true);
+    };
+
+    const handleCancel = () => {
+        setEditing(false);
+    }
+
+    const handleSave = async () => {
+
+
+        setEditing(false);
+    };
+
     return (
-        <div className=" mobile:max-tablet:mt-4  rounded-lg shadow-md mb-2 mx-3 py-20 px-60">
+        <div className=" mobile:max-tablet:mt-4  rounded-lg shadow-md mb-2 mx-3 py-20 px-52">
 
 
             <div className=" w-full  justify-center">
-                <div className="text-xl font-medium mb-4 justify-center w-fit rounded-lg shadow-md py-1 px-3 mt-3 bg-secondary text-black hover:bg-blue-400 cursor-pointer hover:text-white" onClick={handlePrint}>
-                    Download
+                <div className='flex justify-between items-center'>
+
+                    <div className="text-xl font-medium mb-4 justify-center w-fit rounded-lg shadow-md py-1 px-3 mt-3 bg-secondary text-black hover:bg-blue-400 cursor-pointer hover:text-white" onClick={handlePrint}>
+                        Download
+                    </div>
+                    {editing ? (
+                        <>
+                            <div className="text-xl font-medium mb-4 justify-center w-fit rounded-lg shadow-md py-1 px-3 mt-3 bg-secondary text-black hover:bg-blue-400 cursor-pointer hover:text-white" onClick={handleSave}>
+                                Save
+                            </div>
+                            <div className="text-xl font-medium mb-4 justify-center w-fit rounded-lg shadow-md py-1 px-3 mt-3 bg-secondary text-black hover:bg-blue-400 cursor-pointer hover:text-white" onClick={handleCancel}>
+                                Cancel
+                            </div>
+                        </>
+                    ) : (
+                        <div className="text-xl font-medium mb-4 justify-center w-fit rounded-lg shadow-md py-1 px-3 mt-3 bg-secondary text-black hover:bg-blue-400 cursor-pointer hover:text-white" onClick={handleEdit}>
+                            Edit
+                        </div>
+                    )}
                 </div>
-                <PrintableComponent ref={ref1} data={data}/>
+                <PrintableComponent ref={ref1} data={data} subject={subject} result={result} attendence={attendence} />
 
             </div>
 

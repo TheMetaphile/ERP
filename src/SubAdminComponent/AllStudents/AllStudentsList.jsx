@@ -6,6 +6,7 @@ import axios from 'axios';
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL_Login } from "../../Config";
+import { ToastContainer } from "react-toastify";
 
 export default function AllStudentsList() {
     const [name, setName] = useState('');
@@ -166,8 +167,9 @@ export default function AllStudentsList() {
 
     return (
         <>
-            <div className="flex tablet:max-tablet:mt-5 pt-20 mobile:max-tablet:my-3 justify-between items-center mobile:max-tablet:items-baseline mobile:max-tablet:pl-1 mobile:max-tablet:py-2 px-2  mobile:max-tablet:fixed top-34 left-0 right-0 bg-white mb-4">
-                <h1 className="text-2xl font-medium px-2 mobile:max-tablet:text-lg ">All Students Data</h1>
+            <div className="flex  pt-20  items-center  bg-white mb-4">
+                <ToastContainer />
+                <h1 className="text-2xl font-medium px-2 ">All Students Data</h1>
                 <div className="block tablet:hidden">
                     <button
                         className="p-2 border rounded"
@@ -209,18 +211,18 @@ export default function AllStudentsList() {
                 </div>
 
                 {loading && userData.length > 0 ? <Loading /> : null}
-                {(showAddRollNumberButton && Class && Section && !loading) && (
+                {/* {(showAddRollNumberButton && Class && Section && !loading) && (
                     <button
                         className=" rounded-lg shadow-md px-3 py-1 mr-2 border-2 border-r-gray-200 text-lg bg-secondary float-right mb-3"
                         onClick={handleRollNumber}
                     >
                         Add Roll Number
                     </button>
-                )}
+                )} */}
                 <div className="mobile:max-laptop:overflow-y-auto">
                     <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap mobile:max-tablet:mt-20" ref={containerRef} onScroll={handleScroll}>
                         <div className="stutable">
-                            <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
+                            <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail', 'Action']} />
                         </div>
                         {loading && userData.length < 1 ? (
                             <Loading />
