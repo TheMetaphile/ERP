@@ -13,7 +13,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 const PrintableComponent = React.forwardRef((props, ref,) => {
-  console.log(props)
+  console.log(props.details.term1, "abcd")
   return (
 
 
@@ -63,7 +63,7 @@ const PrintableComponent = React.forwardRef((props, ref,) => {
         </div>
       </div>
       <Attendance term={[{ total: "249", attendance: "235" }]} />
-      <AcademicMiddleTile term={props.details.term1} count={1} />
+      {props.details.term1.lenght >0 ? <AcademicMiddleTile details={props.details.term1} count={1} /> : <div className='text-center text-lg text-red-500 font-medium w-full mt-2'>Term 1 Result not found</div>}
 
     </div>
 
@@ -76,14 +76,16 @@ const PrintableComponent = React.forwardRef((props, ref,) => {
 const PrintableComponent2 = React.forwardRef((props, ref) => {
   return (
     <div ref={ref} className='print:your-component px-3'>
-      <AcademicMiddleTile term={props.details.term2} count={2} />
+      {props.details.term1.lenght >0 ?<AcademicMiddleTile details={props.details.term2} count={2} /> : <div className='text-center text-lg text-red-500 font-medium w-full mt-2'>Term 2 Result not found</div>}
     </div>
 
   );
 });
 
 const PerformanceProfileSubAdmin = () => {
-  const { id } = useParams();
+  const { id,session } = useParams();
+  console.log(session);
+
   const [loading, setLoading] = useState(true);
   const { authState } = useContext(AuthContext);
   const [details, setDetails] = useState({ term1: [], term2: [] });

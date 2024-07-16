@@ -37,17 +37,14 @@ function ReportCardSubAdmin() {
     };
 
     const handleSessionChange = (session) => {
-        setStart(0);
-        setUserData([]);
-        console.log('session',session)
         setSelectedSession(session);
     };
 
 
-    console.log('ll', Class, Section,selectedSession)
+    console.log('ll', Class, Section, selectedSession)
     useEffect(() => {
         fetchStudents();
-    }, [authState.accessToken, Class, Section,start]);
+    }, [authState.accessToken, Class, Section, start]);
 
     const fetchStudents = async () => {
 
@@ -145,9 +142,9 @@ function ReportCardSubAdmin() {
                     <>No student found</>
                 ) : (
                     <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 h-screen overflow-auto report-header' ref={containerRef} onScroll={handleScroll}>
-                        <Header headings={[ 'Name','Class', 'Section', 'Email']} />
+                        <Header headings={['Name', 'Class', 'Section', 'Email']} />
                         {userData.map((detail, index) => (
-                            <Link to={`/Sub-Admin/Result/${detail.email}`} key={index}>
+                            <Link to={`/Sub-Admin/Result/${detail.email}?session=${selectedSession}`} key={index}>
                                 <div key={index} className='flex justify-between border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
                                     <div className='  flex flex-1 justify-center whitespace-nowrap  mobile:max-tablet:text-sm'>{detail.name}</div>
                                     <div className='  flex flex-1 justify-center whitespace-nowrap  mobile:max-tablet:text-sm'>{detail.currentClass}</div>
