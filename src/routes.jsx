@@ -127,10 +127,13 @@ import UploadNotice from "./TeacherComponents/notice/utils/Upload.jsx";
 import Apply from "./TeacherComponents/appraisal/utils/Apply.jsx";
 import Applied from "./TeacherComponents/appraisal/utils/Applied.jsx";
 import Employee from "./AdminComponents/Employee/Employee.jsx";
-import Allcertificate from "./AdminComponents/Certificates/Allcertificate.jsx";
-import Certificates from "./AdminComponents/Certificates/Certificates.jsx";
-import Transfer from "./AdminComponents/Certificates/utils/Transfer"
-import Character from "./AdminComponents/Certificates/utils/Character"
+import Allcertificate from "./SubAdminComponent/Certificates/Allcertificate.jsx";
+import Certificates from "./SubAdminComponent/Certificates/Certificates.jsx";
+import Transfer from "./SubAdminComponent/Certificates/utils/Transfer.jsx";
+import Character from "./SubAdminComponent/Certificates/utils/Character.jsx";
+import SubAdminDashboard from "./SubAdminComponent/Dashboard.jsx";
+import AllStudentsList from "./SubAdminComponent/AllStudents/AllStudentsList.jsx";
+import AllStudentSubAdmin from "./SubAdminComponent/AllStudents/AllStudentSubAdmin.jsx";
 
 const router = createBrowserRouter([
   {
@@ -450,24 +453,24 @@ const router = createBrowserRouter([
           }
         ]
       },
-      {
-        path: "/Admin-Dashboard/Certificates",
-        element: <Allcertificate />,
-        children: [
-          {
-            path: '',
-            element: <Certificates />
-          },
-          {
-            path: ':tc',
-            element: <Transfer />
-          },
-          {
-            path: ':id',
-            element: <Character />
-          }
-        ]
-      },
+      // {
+      //   path: "/Admin-Dashboard/Certificates",
+      //   element: <Allcertificate />,
+      //   children: [
+      //     {
+      //       path: '',
+      //       element: <Certificates />
+      //     },
+      //     {
+      //       path: ':tc',
+      //       element: <Transfer />
+      //     },
+      //     {
+      //       path: ':id',
+      //       element: <Character />
+      //     }
+      //   ]
+      // },
 
       {
         path: "/Admin-Dashboard/Teachers",
@@ -786,6 +789,47 @@ const router = createBrowserRouter([
         element: <TeacherMessage />,
         children: []
       },
+    ]
+  },
+  {
+    path: "/Sub-Admin",
+    element: (
+    <SubAdminDashboard/> 
+    ),
+    children:[
+
+      {
+          path: "/Sub-Admin/Certificates",
+          element: <Allcertificate />,
+          children: [
+            {
+              path: '',
+              element: <Certificates />
+            },
+            {
+              path: 'transfer/:tc',
+              element: <Transfer />
+            },
+            {
+              path: 'character/:id',
+              element: <Character />
+            }
+          ]
+        },
+        {
+          path: "/Sub-Admin/Students",
+          element: <AllStudentSubAdmin />,
+          children: [
+            {
+              path: '',
+              element: <AllStudentsList />
+            },
+            // {
+            //   path: '/Sub-Admin/Students/studentdetails',
+            //   element: <StudentDetailScreen />
+            // },
+          ]
+        },
     ]
   }
 

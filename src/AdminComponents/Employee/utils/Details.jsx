@@ -1,11 +1,11 @@
 import React from 'react';
-import { FaUser, FaGraduationCap, FaSchool, FaPhone, FaEnvelope, FaBirthdayCake, FaTint } from 'react-icons/fa';
+import { FaUser, FaGraduationCap, FaSchool, FaPhone, FaEnvelope, FaBirthdayCake, FaTint, FaRegIdCard  } from 'react-icons/fa';
 
 function Details({ nextStep, handleChange }) {
     return (
         <div className="rounded-lg w-full px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3">
             <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md space-y-4 border">
-                <h1 className="text-2xl font-medium p-2 mobile:max-tablet:text-xl">Add Employee</h1>
+                <h1 className="text-2xl font-normal p-2 mobile:max-tablet:text-xl">Add Employee</h1>
 
                 <div className="flex items-center space-x-2">
                     <FaUser />
@@ -31,7 +31,7 @@ function Details({ nextStep, handleChange }) {
                         type="text"
                         placeholder="Name of institute"
                         className="w-full p-2 border rounded"
-                        onChange={handleChange('instituteName')}
+                        onChange={handleChange('institute')}
                     />
                 </div>
                 <div className="flex items-center gap-2">
@@ -50,7 +50,7 @@ function Details({ nextStep, handleChange }) {
                             type="text"
                             placeholder="Emergency contact number"
                             className="w-full p-2 border rounded"
-                            onChange={handleChange('emergencyContact')}
+                            onChange={handleChange('emergencyContactNumber')}
                         />
                     </div>
                 </div>
@@ -81,6 +81,15 @@ function Details({ nextStep, handleChange }) {
                             onChange={handleChange('bloodGroup')}
                         />
                     </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <FaRegIdCard  />
+                    <input
+                        type="text"
+                        placeholder="Aadhar Number"
+                        className="w-full p-2 border rounded"
+                        onChange={handleChange('aadhaarNumber')}
+                    />
                 </div>
                 <button onClick={nextStep} className="w-full bg-blue-500 text-white p-2 rounded">
                     Proceed

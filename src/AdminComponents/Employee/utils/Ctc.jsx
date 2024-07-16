@@ -31,7 +31,7 @@ const Ctc = ({ nextStep, prevStep }) => {
             <span>Enter In hand salary</span>
             <input type="text" placeholder="Enter In hand salary" className="w-full p-2 border rounded mt-1" />
           </label>
-          <label className="flex items-center gap-2">
+          {/* <label className="flex items-center gap-2">
             <span>Enter instrumental</span>
             <div className="flex items-center gap-2">
               <button onClick={() => setShowModal(true)} className="bg-blue-400 text-white px-2 py-1 rounded">+</button>
@@ -52,7 +52,7 @@ const Ctc = ({ nextStep, prevStep }) => {
                 </button>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
 
         <div className="flex justify-between">
@@ -65,10 +65,10 @@ const Ctc = ({ nextStep, prevStep }) => {
         </div>
       </div>
 
-      {showModal && (
+      {/* {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg space-y-4">
-            <h3 className="text-xl font-medium">Add Instrument</h3>
+            <h3 className="text-xl font-normal">Add Instrument</h3>
             <label className="block">
               <span>Enter title of instrument</span>
               <input
@@ -105,7 +105,7 @@ const Ctc = ({ nextStep, prevStep }) => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

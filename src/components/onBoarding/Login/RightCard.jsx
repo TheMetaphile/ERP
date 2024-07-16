@@ -35,17 +35,17 @@ export default function RightCard() {
     const handleSubmit = async () => {
         setIsSubmitting(true);
         try {
-            const endpoint = role === "Teacher-Dashboard" ? "/login/teacher" : "/login/student";
+            const endpoint = role === "Teacher-Dashboard" ? "/login/teacher" : role=== "Sub-Admin" ? "/login/SubAdmin" : "/login/student";
             await axios.post(`${BASE_URL_Login}${endpoint}`, {
                 email,
                 password
             }).then((response) => {
                 if (response.status == 200) {
-                    const { userDetails, tokens,subject, ClassDetails } = response.data;
+                    const { userDetails, tokens, subject, ClassDetails } = response.data;
                     console.log(userDetails, tokens);
-      
 
-                    login(userDetails, tokens,subject, ClassDetails);
+
+                    login(userDetails, tokens, subject, ClassDetails);
                     navigate(`/${role}`);
                 }
             });
@@ -108,32 +108,21 @@ export default function RightCard() {
                 <h1 className=" text-lg text-blue-600">Forgot Password?</h1>
             </Link>
 
-            <div className="flex w-60 px-3 py-2  mt-2 text-lg justify-between">
-                <label className="text-lg font-medium text-center">
-                    <input
-                        type="radio"
+            <div className="flex w-full   mt-2 text-lg justify-between">
+                    <select
                         name="role"
-                        value="Teacher-Dashboard"
-                        checked={role === "Teacher-Dashboard"}
+                        value={role}
                         onChange={handleRoleChange}
-                        className="mr-3 w-4 h-4"
+                        className="w-full p-2 border rounded"
                         disabled={isSubmitting}
-                    />
-                    Teacher
-                </label>
+                    >
+                        <option value="">Select Role</option>
+                        <option value="Teacher-Dashboard">Teacher</option>
+                        <option value="Student-Dashboard">Student</option>
+                        <option value="Sub-Admin">Sub Admin</option>
 
-                <label className="text-lg font-medium text-center">
-                    <input
-                        type="radio"
-                        name="role"
-                        value="Student-Dashboard"
-                        checked={role === "Student-Dashboard"}
-                        onChange={handleRoleChange}
-                        className="mr-3 w-4 h-4"
-                        disabled={isSubmitting}
-                    />
-                    Student
-                </label>
+                    </select>
+
             </div>
 
 

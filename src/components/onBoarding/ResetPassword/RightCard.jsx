@@ -102,32 +102,20 @@ export default function RightCard() {
                     Send OTP
                 </button>
             </div>
-            <div className="flex w-60 px-3 py-2  mt-2 text-lg justify-between">
-                <label className="text-lg font-medium text-center">
-                    <input
-                        type="radio"
-                        name="role"
-                        value="teacher"
-                        checked={role === "teacher"}
-                        onChange={handleRoleChange}
-                        className="mr-3 w-4 h-4"
-                        disabled={isSubmitting}
-                    />
-                    Teacher
-                </label>
+            <div className="flex w-full  py-2  mt-2 text-lg justify-between">
+                <select
+                    name="role"
+                    value={role}
+                    onChange={handleRoleChange}
+                    className="w-full p-2 border rounded"
+                    disabled={isSubmitting}
+                >
+                    <option value="">Select Role</option>
+                    <option value="Teacher-Dashboard">Teacher</option>
+                    <option value="Student-Dashboard">Student</option>
+                    <option value="Sub-Admin">Sub Admin</option>
 
-                <label className="text-lg font-medium text-center">
-                    <input
-                        type="radio"
-                        name="role"
-                        value="student"
-                        checked={role === "student"}
-                        onChange={handleRoleChange}
-                        className="mr-3 w-4 h-4"
-                        disabled={isSubmitting}
-                    />
-                    Student
-                </label>
+                </select>
             </div>
             <h1 className="text-xl font-bold mt-5 ">Verify OTP</h1>
             <OTPInput
@@ -144,7 +132,7 @@ export default function RightCard() {
 
             <button className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8" onClick={verifyOTP} disabled={isSubmitting}>
 
-            {isSubmitting ? <Loading /> : <h1 className="font-medium text-2xl text-white">Submit</h1>}
+                {isSubmitting ? <Loading /> : <h1 className="font-medium text-2xl text-white">Submit</h1>}
             </button>
         </div>
     )

@@ -4,7 +4,7 @@ const Access = ({ nextStep, prevStep, handleChange }) => {
   return (
     <div className="rounded-lg w-full px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3">
       <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md space-y-4 border">
-        <h2 className="text-2xl font-medium p-2 mobile:max-tablet:text-xl">Access Control Details</h2>
+        <h2 className="text-2xl font-normal p-2 mobile:max-tablet:text-xl">Access Control Details</h2>
         
         <div className="space-y-4">
           <label className="block">
@@ -14,8 +14,7 @@ const Access = ({ nextStep, prevStep, handleChange }) => {
               onChange={handleChange('department')}
             >
               <option value="">Select Department</option>
-              <option value="department1">Department 1</option>
-              <option value="department2">Department 2</option>
+              <option value="Finance">Finance </option>
             </select>
           </label>
           <label className="block">
@@ -25,8 +24,7 @@ const Access = ({ nextStep, prevStep, handleChange }) => {
               onChange={handleChange('role')}
             >
               <option value="">Select Role</option>
-              <option value="role1">Role 1</option>
-              <option value="role2">Role 2</option>
+              <option value="Accountant">Accountant</option>
             </select>
           </label>
         </div>

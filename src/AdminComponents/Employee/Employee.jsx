@@ -13,16 +13,26 @@ function Employee() {
     const [formData, setFormData] = useState({
         name: '',
         qualification: '',
-        instituteName: '',
+        institute: '',
         phoneNumber: '',
-        emergencyContact: '',
+        emergencyContactNumber: '',
         email: '',
         dob: '',
         bloodGroup: '',
+        aadhaarNumber : '',
+        permanentAddress : '',
+        permanentState : '',
+        permanentDistrict : '',
+        permanentPincode : '',
+        residentialAddress : '',
+        residentialState : '',
+        residentialDistrict : '',
+        residentialPincode : '',
         department: '',
         role: '',
-        inHandSalary: '',
-        instruments: [],
+        // inHandSalary: '',
+        // instruments: [],
+
     });
 
     const nextStep = () => setStep((prev) => Math.min(prev + 1, 6));
