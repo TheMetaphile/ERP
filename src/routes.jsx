@@ -137,6 +137,8 @@ import AllStudentSubAdmin from "./SubAdminComponent/AllStudents/AllStudentSubAdm
 import AllReportSubAdmin from "./SubAdminComponent/result/AllReportSubAdmin.jsx";
 import ReportCardSubAdmin from "./SubAdminComponent/result/ReportCardSubAdmin.jsx";
 import PerformanceProfileSubAdmin from "./SubAdminComponent/result/utils/performance/PerformanceProfileSubAdmin.jsx";
+import Salary from "./SubAdminComponent/Salary/Salary.jsx";
+import AllSalary from "./SubAdminComponent/Salary/AllSalary.jsx";
 
 const router = createBrowserRouter([
   {
@@ -797,56 +799,70 @@ const router = createBrowserRouter([
   {
     path: "/Sub-Admin",
     element: (
-    <SubAdminDashboard/> 
+      <SubAdminDashboard />
     ),
-    children:[
+    children: [
 
       {
-          path: "/Sub-Admin/Certificates",
-          element: <Allcertificate />,
-          children: [
-            {
-              path: '',
-              element: <Certificates />
-            },
-            {
-              path: 'transfer/:tc/:class/:section/:session',
-              element: <Transfer />
-            },
-            {
-              path: 'character/:tc/:class/:section/:session',
-              element: <Character />
-            }
-          ]
-        },
-        {
-          path: "/Sub-Admin/Students",
-          element: <AllStudentSubAdmin />,
-          children: [
-            {
-              path: '',
-              element: <AllStudentsList />
-            },
-            // {
-            //   path: '/Sub-Admin/Students/studentdetails',
-            //   element: <StudentDetailScreen />
-            // },
-          ]
-        },
-        {
-          path: "/Sub-Admin/Result",
-          element: <AllReportSubAdmin />,
-          children: [
-            {
-              path: '',
-              element: <ReportCardSubAdmin/>
-            },
-            {
-              path: ':id',
-              element: <PerformanceProfileSubAdmin/>
-            }
-          ]
-        },
+        path: "/Sub-Admin/Certificates",
+        element: <Allcertificate />,
+        children: [
+          {
+            path: '',
+            element: <Certificates />
+          },
+          {
+            path: 'transfer/:tc/:class/:section/:session',
+            element: <Transfer />
+          },
+          {
+            path: 'character/:tc/:class/:section/:session',
+            element: <Character />
+          }
+        ]
+      },
+      {
+        path: "/Sub-Admin/Students",
+        element: <AllStudentSubAdmin />,
+        children: [
+          {
+            path: '',
+            element: <AllStudentsList />
+          },
+          // {
+          //   path: '/Sub-Admin/Students/studentdetails',
+          //   element: <StudentDetailScreen />
+          // },
+        ]
+      },
+      {
+        path: "/Sub-Admin/Result",
+        element: <AllReportSubAdmin />,
+        children: [
+          {
+            path: '',
+            element: <ReportCardSubAdmin />
+          },
+          {
+            path: ':id',
+            element: <PerformanceProfileSubAdmin />
+          }
+        ]
+      },
+      {
+        path: "/Sub-Admin/Salary",
+        element: <AllSalary />,
+        children: [
+          {
+            path: '',
+            element: <Salary />
+          },
+          // {
+          //   path: ':id',
+          //   element: <PerformanceProfileSubAdmin />
+          // }
+        ]
+      },
     ]
   }
 
