@@ -21,25 +21,25 @@ const menuItems = [
     image: dashboardAssignment,
     alt: "Attendance image",
     text: "Attendance",
-    route: '/Student-Dashboard/attendance'
+    route: "/Student-Dashboard/attendance",
   },
   {
     image: dashboardFee,
     alt: "Fee Due image",
     text: "Fee Due",
-    route: '/Student-Dashboard/fee-due'
+    route: "/Student-Dashboard/fee-due",
   },
   {
     image: presentation,
     alt: "presentation image",
     text: "Class Work",
-    route: '/Student-Dashboard/classwork'
+    route: "/Student-Dashboard/classwork",
   },
   {
     image: freelance,
     alt: "freelance image",
     text: "Home Work",
-    route: '/Student-Dashboard/homework'
+    route: "/Student-Dashboard/homework",
   },
   // {
   //   image: dashboardEvents,
@@ -63,13 +63,13 @@ const menuItems = [
     image: dashboardTimeTable,
     alt: "Time table image",
     text: "Time Table",
-    route: '/Student-Dashboard/timetable'
+    route: "/Student-Dashboard/timetable",
   },
   {
     image: dashboardResult,
     alt: "Result image",
     text: "Result",
-    route: '/Student-Dashboard/result'
+    route: "/Student-Dashboard/result",
   },
   // {
   //   image: dashboardGallery,
@@ -81,19 +81,19 @@ const menuItems = [
     image: dashboardLeave,
     alt: "Leave application image",
     text: "Leave Application",
-    route: '/Student-Dashboard/leave'
+    route: "/Student-Dashboard/leave",
   },
   {
     image: dashboardDoubt,
     alt: "Ask doubt image",
     text: "Ask Doubt",
-    route: '/Student-Dashboard/askdoubt'
+    route: "/Student-Dashboard/askdoubt",
   },
   {
     image: notification,
     alt: "notification image",
     text: "Notice",
-    route: '/Student-Dashboard/notification'
+    route: "/Student-Dashboard/notification",
   },
   // {
   //   image: medical,
@@ -105,7 +105,7 @@ const menuItems = [
     image: datesheet,
     alt: "Date sheet image",
     text: "Date Sheet",
-    route: "/Student-Dashboard/datesheet"
+    route: "/Student-Dashboard/datesheet",
   },
   // {
   //   image: lifestyle,
@@ -123,6 +123,12 @@ const menuItems = [
     image: changePassword,
     alt: "Change password image",
     text: "Change Password",
+  },
+  {
+    image: dashboardResult,
+    alt: "Result image",
+    text: "SubResult",
+    route: "/Student-Dashboard/SubResult",
   },
 ];
 
