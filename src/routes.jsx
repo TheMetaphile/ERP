@@ -139,6 +139,8 @@ import ReportCardSubAdmin from "./SubAdminComponent/result/ReportCardSubAdmin.js
 import PerformanceProfileSubAdmin from "./SubAdminComponent/result/utils/performance/PerformanceProfileSubAdmin.jsx";
 import Salary from "./SubAdminComponent/Salary/Salary.jsx";
 import AllSalary from "./SubAdminComponent/Salary/AllSalary.jsx";
+import StudentRegister from "./SubAdminComponent/Student/StudentRegister.jsx";
+import TeacherRegister from "./SubAdminComponent/Teacher/TeacherRegister.jsx";
 
 const router = createBrowserRouter([
   {
@@ -862,6 +864,16 @@ const router = createBrowserRouter([
           //   element: <PerformanceProfileSubAdmin />
           // }
         ]
+      },
+      {
+        path: "/Sub-Admin/registerTeacher",
+        element: <TeacherRegister />,
+        children: []
+      },
+      {
+        path: "/Sub-Admin/registerStudent",
+        element: <StudentRegister />,
+        children: []
       },
     ]
   }

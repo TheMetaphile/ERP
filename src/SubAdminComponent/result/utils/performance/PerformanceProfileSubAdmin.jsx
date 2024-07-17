@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import InfoCard from "../../../../components/Result/utils/InfoCard";
 import Attendance from "./Attendence";
 import AcademicMiddleTile from "./AcademicMiddleTile";
@@ -13,7 +13,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 const PrintableComponent = React.forwardRef((props, ref,) => {
-  console.log(props.details.term1, "abcd")
+  console.log(props.details.term1, "abcd",props.details.term1.length)
   return (
 
 
@@ -63,7 +63,7 @@ const PrintableComponent = React.forwardRef((props, ref,) => {
         </div>
       </div>
       <Attendance term={[{ total: "249", attendance: "235" }]} />
-      {props.details.term1.lenght >0 ? <AcademicMiddleTile details={props.details.term1} count={1} /> : <div className='text-center text-lg text-red-500 font-medium w-full mt-2'>Term 1 Result not found</div>}
+      {props.details.term1.length > 0 ? <AcademicMiddleTile term={props.details.term1} count={1} /> : <div className='text-center text-lg text-red-500 font-medium w-full mt-2'>Term 1 Result not found</div>}
 
     </div>
 
@@ -74,17 +74,18 @@ const PrintableComponent = React.forwardRef((props, ref,) => {
 });
 
 const PrintableComponent2 = React.forwardRef((props, ref) => {
+  console.log(props.details.term2, "abcd")
+
   return (
     <div ref={ref} className='print:your-component px-3'>
-      {props.details.term1.lenght >0 ?<AcademicMiddleTile details={props.details.term2} count={2} /> : <div className='text-center text-lg text-red-500 font-medium w-full mt-2'>Term 2 Result not found</div>}
+      {props.details.term1.length > 0 ? <AcademicMiddleTile term={props.details.term2} count={2} /> : <div className='text-center text-lg text-red-500 font-medium w-full mt-2'>Term 2 Result not found</div>}
     </div>
 
   );
 });
 
 const PerformanceProfileSubAdmin = () => {
-  const { id,session } = useParams();
-  console.log(session);
+  const { id } = useParams();
 
   const [loading, setLoading] = useState(true);
   const { authState } = useContext(AuthContext);
@@ -93,9 +94,19 @@ const PerformanceProfileSubAdmin = () => {
   const [profileLoading, setProfileLoading] = useState(true);
   const ref1 = useRef();
   const ref2 = useRef();
+  const location = useLocation();
+
+  const useQuery = () => {
+    return new URLSearchParams(location.search);
+  }
+
+  const query = useQuery();
+  const session = query.get('session');
+  const Class = query.get('Class');
+
 
   useEffect(() => {
-    console.log(authState.accessToken,id)
+    console.log(authState.accessToken, id)
     const fetchProfile = async () => {
       setProfileLoading(true);
       try {
@@ -115,15 +126,16 @@ const PerformanceProfileSubAdmin = () => {
     };
 
     const fetchResult = async () => {
-      console.log(profile)
+      console.log(session, id, Class)
       setLoading(true);
       try {
-        const response = await axios.get(`${BASE_URL_Result}/result/fetch/teacher?email=${id}`, {
+        const response = await axios.get(`${BASE_URL_Result}/result/fetch/admin?email=${id}&class=${Class}&session=${session}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
           }
         });
         if (response.status === 200) {
+          console.log(response.data);
           setDetails(response.data);
         }
       } catch (error) {

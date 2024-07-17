@@ -16,6 +16,20 @@ const menuItems = [
     route: "/Sub-Admin/Salary",
     children: [],
   },
+  {
+    image: history,
+    alt: "History image",
+    title: "Register Teacher",
+    route: "/Sub-Admin/registerTeacher",
+    children: [],
+  },
+  {
+    image: history,
+    alt: "History image",
+    title: "Register Student",
+    route: "/Sub-Admin/registerStudent",
+    children: [],
+  },
 ];
 
 export default menuItems;

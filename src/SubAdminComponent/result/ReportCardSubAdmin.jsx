@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { MdEdit } from "react-icons/md";
 import Selection from './utils/Selection';
 import Header from '../../AdminComponents/Home/utils/TeachersDetails/LeftCard/Header';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
-import { BASE_URL_Attendence, BASE_URL_Login } from '../../Config';
+import { BASE_URL_Login } from '../../Config';
+import { ToastContainer, toast } from 'react-toastify';
 
 function ReportCardSubAdmin() {
-    const [students, setStudents] = useState([])
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false)
     // State to control the dropdown visibility
@@ -22,17 +21,19 @@ function ReportCardSubAdmin() {
     const [userData, setUserData] = useState([]);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(20);
-    const [loadMore, setLoadMore] = useState(false);
+    const [allDataFetched, setAllDataFetched] = useState(false);
 
     const handleClassChange = (event) => {
         setStart(0);
         setUserData([]);
+        setAllDataFetched(false);
         setClass(event.target.value);
     };
 
     const handleSectionChange = (event) => {
         setStart(0);
         setUserData([]);
+        setAllDataFetched(false);
         setSection(event.target.value);
     };
 
@@ -40,6 +41,15 @@ function ReportCardSubAdmin() {
         setSelectedSession(session);
     };
 
+    const handleViewMore = () => {
+        setStart(prevStart => prevStart + end);
+    };
+
+    useEffect(() => {
+        if (start !== 0) {
+            fetchStudents();
+        }
+    }, [start]);
 
     console.log('ll', Class, Section, selectedSession)
     useEffect(() => {
@@ -47,7 +57,6 @@ function ReportCardSubAdmin() {
     }, [authState.accessToken, Class, Section, start]);
 
     const fetchStudents = async () => {
-
         setLoading(true);
         try {
             console.log(start, "-", end);
@@ -58,7 +67,7 @@ function ReportCardSubAdmin() {
                 end: end,
                 start: start
             });
-            console.log("API response:", response.data);
+            console.log("API response:", response.data, response.data.Students.length);
 
             if (response.data.Students) {
                 const users = response.data.Students.map(user => ({
@@ -66,14 +75,14 @@ function ReportCardSubAdmin() {
                     profileLogo: user.profileLink || profilelogo,
                 }));
 
-                if (loadMore) {
-                    console.log(userData.length + users.length, "length");
-                    setUserData(prevUsers => [...prevUsers, ...users]);
-                    setLoadMore(false);
-                } else {
-                    setUserData(users);
-                    console.log(users.length, "length");
+                const list = response.data.Students.length;
+                if (list < end) {
+                    toast.success('All data fetched');
+                    console.log('All data fetched')
+                    setAllDataFetched(true);
                 }
+                setUserData(prevUsers => [...prevUsers, ...response.data.Students]);
+
 
             } else {
                 setError('Unexpected response format');
@@ -95,20 +104,10 @@ function ReportCardSubAdmin() {
 
 
 
-    const handleScroll = () => {
-        const container = containerRef.current;
-        if (container && container.scrollHeight - container.scrollTop <= container.clientHeight + 50) {
-            if (start + end === userData.length) {
-                console.log("fetching");
-                setLoadMore(true);
-                setStart(prevStart => prevStart + 20);
-            }
-        }
-    };
-
     return (
         <>
             <div className='w-full flex items-center pt-20 justify-between px-4 my-2 mobile:max-tablet:mt-4 mobile:max-tablet:px-4'>
+                <ToastContainer />
                 <h1 className="text-2xl font-medium mb-2 mobile:max-tablet:text-sm">Report Card</h1>
                 <div className="block laptop:hidden">
                     <button
@@ -141,10 +140,10 @@ function ReportCardSubAdmin() {
                 ) : userData.length === 0 ? (
                     <>No student found</>
                 ) : (
-                    <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 h-screen overflow-auto report-header' ref={containerRef} onScroll={handleScroll}>
+                    <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 h-screen overflow-auto report-header' ref={containerRef} >
                         <Header headings={['Name', 'Class', 'Section', 'Email']} />
                         {userData.map((detail, index) => (
-                            <Link to={`/Sub-Admin/Result/${detail.email}?session=${selectedSession}`} key={index}>
+                            <Link to={`/Sub-Admin/Result/${detail.email}?session=${selectedSession}&Class=${Class}`} key={index}>
                                 <div key={index} className='flex justify-between border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
                                     <div className='  flex flex-1 justify-center whitespace-nowrap  mobile:max-tablet:text-sm'>{detail.name}</div>
                                     <div className='  flex flex-1 justify-center whitespace-nowrap  mobile:max-tablet:text-sm'>{detail.currentClass}</div>
@@ -156,6 +155,13 @@ function ReportCardSubAdmin() {
                                 </div>
                             </Link>
                         ))}
+                        {!allDataFetched && (
+
+                            <div colSpan="4" className="text-center">
+                                <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer' onClick={handleViewMore}>View More</h1>
+                            </div>
+
+                        )}
                     </div>
                 )
                 }
