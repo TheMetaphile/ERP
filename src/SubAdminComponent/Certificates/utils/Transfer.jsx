@@ -15,15 +15,15 @@ const PrintableComponent = React.forwardRef((props, ref) => {
     return (
         <div ref={ref} className={`print:your-component px-3 pb-4 ${props.editing ? "rounded-lg border border-gray-300" : ""}`}>
 
-            <div className="text-center mb-3">
+            <div className="text-center mb-2">
                 <div className="inline-block">
-                    <h2 className={`font-medium text-center ${props.editing ? "text-xl" : "text-3xl"}`}>Transfer Certificate</h2>
+                    <h2 className={`font-medium text-center ${props.editing ? "text-lg" : "text-xl"}`}>Transfer Certificate</h2>
                     <hr className="border-t-2 border-black mt-4" />
                 </div>
             </div>
             {/* name={id} */}
 
-            <div className= {`justify-between flex px-4 mt-3 mobile:max-tablet:flex-col mobile:max-tablet:gap-1 ${props.editing ? "text-lg" : "text-xl"}`}>
+            <div className= {`justify-between flex px-4 mt-2 mobile:max-tablet:flex-col mobile:max-tablet:gap-1 ${props.editing ? "text-lg" : "text-xl"}`}>
                 <div className='font-medium'>
                     T.C No. : 123456
                 </div>
@@ -69,7 +69,7 @@ const PrintableComponent = React.forwardRef((props, ref) => {
                 <TCRow no={19} label='Reason for leaving the school' detail={props.data.reason} field1={"reason"} handleChange={props.handleChange} editing={props.editing} />
                 <TCRow no={20} label='Any other remarks' detail={props.data.remark} field1={"remark"} handleChange={props.handleChange} editing={props.editing} />
             </div>
-            <div className={`justify-between flex px-4 mt-auto ${props.editing ? "text-xl" : "text-2xl"} font-medium`}>
+            <div className={`justify-between  flex px-4  ${props.editing ? "text-lg mt-20" : "text-xl mt-36"} font-medium`}>
                 
                     <h1 className='mt-16'>
                         

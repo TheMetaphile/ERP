@@ -4,7 +4,7 @@ export default function TCRow({ no, detail, detail2 ,label, field1,field2, handl
         handleChange(field,value);
     }
     return (
-        <div className={`flex w-full border-b-2 py-3 px-4 ${ editing ? "text-xl" : "text-2xl"}`}>
+        <div className={`flex w-full  py-1 px-4 ${ editing ? "text-lg" : "text-xl"}`}>
             <label className="w-2/3 font-medium text-gray-700">{no}.&nbsp;&nbsp;{label}&nbsp;</label>
             :&nbsp;{
                 editing
