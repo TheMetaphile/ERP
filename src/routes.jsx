@@ -141,6 +141,8 @@ import Salary from "./SubAdminComponent/Salary/Salary.jsx";
 import AllSalary from "./SubAdminComponent/Salary/AllSalary.jsx";
 import StudentRegister from "./SubAdminComponent/Student/StudentRegister.jsx";
 import TeacherRegister from "./SubAdminComponent/Teacher/TeacherRegister.jsx";
+import Allsubresult from "./components/Subresult/Allsubresult.jsx";
+import Subresult from "./components/Subresult/Subresult.jsx";
 
 const router = createBrowserRouter([
   {
@@ -222,6 +224,20 @@ const router = createBrowserRouter([
             path: ':subject',
             element: <Quiz />
           }
+        ]
+      },
+      {
+        path: "/Student-Dashboard/SubResult",
+        element: <Allsubresult />,
+        children: [
+          {
+            path: '',
+            element: <Subresult />
+          },
+          // {
+          //   path: ':subject',
+          //   element: <Quiz />
+          // }
         ]
       },
       {
