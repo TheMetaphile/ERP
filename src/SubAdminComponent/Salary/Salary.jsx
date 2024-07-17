@@ -23,6 +23,39 @@ const data = {
         { id: 3, name: "Abhishek Kumar", date: "03 April 2023", transactionId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
         { id: 3, name: "Ajay Kumar", date: "03 April 2023", transactionId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
     ],
+    Credit: [
+        { id: 1, name: "Credit Kumar", date: "03 April 2023", CreditId: "1491255800", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 2, name: "Abhishek Kumar", date: "03 April 2023", CreditId: "1491255801", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Alok Kumar", date: "03 April 2023", CreditId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Shivam Kumar", date: "03 April 2023", CreditId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Abhishek Kumar", date: "03 April 2023", CreditId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Abhay Kumar", date: "03 April 2023", CreditId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Atul Kumar", date: "03 April 2023", CreditId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Abhishek Kumar", date: "03 April 2023", CreditId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Ajay Kumar", date: "03 April 2023", CreditId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+    ],
+    Debit: [
+        { id: 1, name: "Debit Kumar", date: "03 April 2023", DebitId: "1491255800", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 2, name: "Abhishek Kumar", date: "03 April 2023", DebitId: "1491255801", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Alok Kumar", date: "03 April 2023", DebitId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Shivam Kumar", date: "03 April 2023", DebitId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Abhishek Kumar", date: "03 April 2023", DebitId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Abhay Kumar", date: "03 April 2023", DebitId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Atul Kumar", date: "03 April 2023", DebitId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Abhishek Kumar", date: "03 April 2023", DebitId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Ajay Kumar", date: "03 April 2023", DebitId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+    ], Due: [
+        { id: 1, name: "Due Kumar", date: "03 April 2023", DueId: "1491255800", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 2, name: "Abhishek Kumar", date: "03 April 2023", DueId: "1491255801", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Alok Kumar", date: "03 April 2023", DueId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Shivam Kumar", date: "03 April 2023", DueId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Abhishek Kumar", date: "03 April 2023", DueId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Abhay Kumar", date: "03 April 2023", DueId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Atul Kumar", date: "03 April 2023", DueId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Abhishek Kumar", date: "03 April 2023", DueId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+        { id: 3, name: "Ajay Kumar", date: "03 April 2023", DueId: "1491255802", amount: "₹ 80,000", phoneNumber: "+919024743491", paymentMethod: "UPI", status: "Success" },
+    ],
+
 
 };
 

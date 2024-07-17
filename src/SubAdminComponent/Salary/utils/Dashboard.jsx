@@ -1,7 +1,8 @@
 import React from "react";
-// import Credit from "./Credit";
+import Credit from "./Credit";
+import Debit from "./Debit";
 import Transactions from './Transactions'
-
+import Due from "./Due";
 
 const Dashboard = ({ selectedTab, data }) => {
     return (
@@ -28,15 +29,14 @@ const Dashboard = ({ selectedTab, data }) => {
                 <Transactions transactions={data.transactions} />
             )}
             {selectedTab === "Credit" && (
-                <Transactions transactions={data.transactions} />
+                <Credit Credit={data.Credit} />
             )}
             {selectedTab === "Debit" && (
-                <Transactions transactions={data.transactions} />
+                <Debit Debit={data.Debit} />
             )}
             {selectedTab === "Due" && (
-                <Transactions transactions={data.transactions} />
+                <Due Due={data.Due} />
             )}
-            {/* Add similar blocks for other tabs */}
         </div>
     );
 };
