@@ -61,12 +61,7 @@ const data = {
         { date: '23 Jul', amount: 20 },
         { date: '24 Jul', amount: 30 },
     ],
-    collectionReport: {
-        totalExpectedAmount: 520000,
-        totalCollectedAmount: 220000,
-        totalRemainingAmount: 300000,
-        growthPerformance: '+8.9%'
-    },
+
 
 };
 

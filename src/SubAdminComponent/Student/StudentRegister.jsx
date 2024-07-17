@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import axios from 'axios'
@@ -7,12 +7,14 @@ import Loading from '../../LoadingScreen/Loading';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Login } from "../../Config";
+import AuthContext from "../../Context/AuthContext";
 
 export default function StudentRegister() {
+    const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     // const [success, setSuccess] = useState('');
-    const currentYear = new Date().getFullYear();
+    const currentYear = (new Date().getFullYear()).toString();
 
     const [formData, setFormData] = useState(
         {
@@ -44,8 +46,10 @@ export default function StudentRegister() {
             guardiansPhoneNumber: '',
             gender: '',
             religion: '',
-            category : '',
-            nationality : '',
+            category: '',
+            nationality: '',
+            stream: '',
+            accessToken : authState.accessToken
         }
     );
     const handleChange = (e) => {
@@ -85,8 +89,9 @@ export default function StudentRegister() {
             guardiansPhoneNumber: '',
             gender: '',
             religion: '',
-            category : '',
-            nationality : '',
+            category: '',
+            nationality: '',
+            stream: ''
         });
     };
 
@@ -94,19 +99,18 @@ export default function StudentRegister() {
         e.preventDefault();
         setLoading(true);
 
-
+        console.log(formData);
         try {
             formData.password = formData.aadhaarNumber;
             const response = await axios.post(`${BASE_URL_Login}/signup/student`, formData);
             if (response.status === 200) {
-                toast.success('Student registered successfully!');
                 toast.success('Student registered successfully!');
                 console.log(formData)
                 handleReset();
             }
 
         } catch (err) {
-            console.error(error);
+            console.error(err);
             const errorMessage = error.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
         }
@@ -152,7 +156,6 @@ export default function StudentRegister() {
                 }
                 return axios.post(`${BASE_URL_Login}/signup/student`, userData).catch((err) => {
                     const error = JSON.parse(err.request.response);
-                    //console.log("aosdgh",error.error, );
                     toast.error(error.error + " " + userData.name);
                 });
             });
@@ -339,6 +342,30 @@ export default function StudentRegister() {
                             </label>
                         </div>
 
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="stream">
+                                Stream
+                                <select
+                                    className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
+                                    id="stream"
+                                    type="text"
+                                    name="stream"
+                                    value={formData.stream}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">Select Stream</option>
+                                    <option value="General">General</option>
+                                    <option value="PCM">PCM</option>
+                                    <option value="PCB">PCM</option>
+                                    <option value="PCMB">PCMB</option>
+                                    <option value="Commerce">Commerce</option>
+                                    <option value="Arts">Arts</option>
+
+                                </select>
+                            </label>
+                        </div>
+
                     </div>
                     <div className="flex flex-col mt-8 tablet:max-laptop:w-4/12">
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
@@ -427,11 +454,11 @@ export default function StudentRegister() {
 
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="admissionDate">
-                                Addmission Date
+                                Admission Date
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="admissionDate"
-                                    type="text"
+                                    type="date"
                                     name="admissionDate"
                                     value={formData.admissionDate}
                                     onChange={handleChange}
@@ -515,7 +542,7 @@ export default function StudentRegister() {
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="DOB"
-                                    type="text"
+                                    type="date"
                                     name="DOB"
                                     value={formData.DOB}
                                     onChange={handleChange}

@@ -54,7 +54,7 @@ function History({ additionalData }) {
         const session = getCurrentSession();
         console.log('start', start, 'end', end)
         try {
-            const response = await axios.get(`${BASE_URL_TeacherLeave}/leave/fetch/teacher?start=${start}&end=${end}&session=${session}`, {
+            const response = await axios.get(`${BASE_URL_TeacherLeave}/teacherleave/fetch/teacher?start=${start}&end=${end}&session=${session}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }

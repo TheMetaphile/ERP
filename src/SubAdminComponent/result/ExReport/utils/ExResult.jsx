@@ -13,7 +13,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 const PrintableComponent = React.forwardRef((props, ref,) => {
-  console.log(props.details.term1, "abcd",props.details.term1.length)
+  console.log(props.details.term1, "abcd", props.details.term1.length)
   return (
 
 
@@ -84,14 +84,14 @@ const PrintableComponent2 = React.forwardRef((props, ref) => {
   );
 });
 
-const PerformanceProfileSubAdmin = () => {
+const ExResult = () => {
   const { id } = useParams();
 
   const [loading, setLoading] = useState(true);
   const { authState } = useContext(AuthContext);
   const [details, setDetails] = useState({ term1: [], term2: [] });
+  const [data,setData] = useState([]);
   const [profile, setProfile] = useState({});
-  const [profileLoading, setProfileLoading] = useState(true);
   const ref1 = useRef();
   const ref2 = useRef();
   const location = useLocation();
@@ -104,53 +104,91 @@ const PerformanceProfileSubAdmin = () => {
   const session = query.get('session');
   const Class = query.get('Class');
 
-
   useEffect(() => {
-    console.log(authState.accessToken, id)
-    const fetchProfile = async () => {
-      setProfileLoading(true);
-      try {
-        const response = await axios.post(`${BASE_URL_Login}/fetchSingle/student`, {
-          accessToken: authState.accessToken,
-          email: id
-        });
-        if (response.status === 200) {
-          fetchResult();
-          console.log(response.data)
-          setProfile(response.data.StudentDetails[0]);
+    fetchUser();
+    fetchResult();
+  }, []);
+
+  const fetchUser = async () => {
+    console.log(session,id)
+    try {
+      const response = await axios.get(`${BASE_URL_Login}/terminate/terminatedSingle?session=${session}&id=${id}`, {
+        headers: {
+          Authorization: `Bearer ${authState.accessToken}`
         }
-      } catch (error) {
-        console.error('Error fetching profile:', error);
+      });
+      if (response.status === 200) {
+        console.log(response.data);
+        setData(response.data);
       }
-      setProfileLoading(false);
-    };
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    const fetchResult = async () => {
-      console.log(session, id, Class)
-      setLoading(true);
-      try {
-        const response = await axios.get(`${BASE_URL_Result}/result/fetch/admin?email=${id}&class=${Class}&session=${session}`, {
-          headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
-          }
-        });
-        if (response.status === 200) {
-          console.log(response.data);
-          setDetails(response.data);
+  const fetchResult = async () => {
+    console.log(session,id)
+    try {
+      const response = await axios.get(`${BASE_URL_Login}/result/fetch/ex-student?session=${session}&id=${id}`, {
+        headers: {
+          Authorization: `Bearer ${authState.accessToken}`
         }
-      } catch (error) {
-        console.error("Error fetching student result:", error);
-      } finally {
-        setLoading(false);
+      });
+      if (response.status === 200) {
+        console.log(response.data);
+        setDetails(response.data);
       }
-    };
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    fetchProfile();
-  }, [id, authState.accessToken]);
+  // useEffect(() => {
+  //   console.log(authState.accessToken, id)
+  //   const fetchProfile = async () => {
+  //     setProfileLoading(true);
+  //     try {
+  //       const response = await axios.post(`${BASE_URL_Login}/fetchSingle/student`, {
+  //         accessToken: authState.accessToken,
+  //         email: id
+  //       });
+  //       if (response.status === 200) {
+  //         fetchResult();
+  //         console.log(response.data)
+  //         setProfile(response.data.StudentDetails[0]);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching profile:', error);
+  //     }
+  //     setProfileLoading(false);
+  //   };
 
-  if (loading || profileLoading) {
-    return <Loading />;
-  }
+  //   const fetchResult = async () => {
+  //     console.log(session, id, Class)
+  //     setLoading(true);
+  //     try {
+  //       const response = await axios.get(`${BASE_URL_Result}/result/fetch/admin?email=${id}&class=${Class}&session=${session}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${authState.accessToken}`,
+  //         }
+  //       });
+  //       if (response.status === 200) {
+  //         console.log(response.data);
+  //         setDetails(response.data);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching student result:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchProfile();
+  // }, [id, authState.accessToken]);
+
+  // if (loading || profileLoading) {
+  //   return <Loading />;
+  // }
 
   const handlePrint = async () => {
     const page1 = ref1.current;
@@ -245,4 +283,4 @@ const PerformanceProfileSubAdmin = () => {
   );
 };
 
-export default PerformanceProfileSubAdmin;
+export default ExResult;

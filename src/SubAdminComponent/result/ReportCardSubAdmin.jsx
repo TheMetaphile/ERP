@@ -106,33 +106,29 @@ function ReportCardSubAdmin() {
 
     return (
         <>
-            <div className='w-full flex items-center pt-20 justify-between px-4 my-2 mobile:max-tablet:mt-4 mobile:max-tablet:px-4'>
+            <div className='   '>
                 <ToastContainer />
-                <h1 className="text-2xl font-medium mb-2 mobile:max-tablet:text-sm">Report Card</h1>
-                <div className="block laptop:hidden">
-                    <button
-                        className="p-2 border rounded"
-                        onClick={() => setDropdownVisible(!isDropdownVisible)}
-                    >
-                        Filter
-                    </button>
-                    {isDropdownVisible && (
-                        <div className="absolute bg-white shadow-lg py-2 rounded right-1 left-1 z-20 justify-center flex flex-col">
-                            <Selection />
-                        </div>
-                    )}
-                </div>
-                <span className='flex gap-2 w-fit mobile:max-laptop:hidden'>
-                    <Selection
-                        Class={Class}
-                        Section={Section}
-                        Session={selectedSession}
-                        handleClassChange={handleClassChange}
-                        handleSectionChange={handleSectionChange}
-                        handleSessionChange={handleSessionChange}
-                    />
+                <div className="flex items-center justify-between px-3 py-2">
 
-                </span>
+                    <h1 className="text-xl font-medium mb-2 ">Report Card</h1>
+
+
+                    <span className='w-fit flex items-center gap-2 mobile:max-laptop:hidden'>
+                        {/* <Link to={`/Sub-Admin/exStudent`}>
+                        <h1 className="p-2 rounded-lg bg-purple-300 hover:bg-purple-500 ">Ex Student</h1>
+                    </Link> */}
+                        <Selection
+                            Class={Class}
+                            Section={Section}
+                            Session={selectedSession}
+                            handleClassChange={handleClassChange}
+                            handleSectionChange={handleSectionChange}
+                            handleSessionChange={handleSessionChange}
+                        />
+
+                    </span>
+                </div>
+
             </div>
             <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar mobile:max-tablet:mt-2 ">
                 {loading ? (
