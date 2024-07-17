@@ -1,6 +1,6 @@
 import React from "react";
 
-const Credit = ({ Credit }) => {
+const Credit = ({ Credit, onRowClick }) => {
     return (
         <div>
             <div className="flex justify-between items-center mb-4">
@@ -15,8 +15,8 @@ const Credit = ({ Credit }) => {
                 <table className="w-full border-collapse whitespace-nowrap">
                     <thead>
                         <tr className="">
-                            <th className=" border-y p-2">S.No.</th>
-                            <th className=" border-y p-2">Name</th>
+                            <th className=" border-y p-2 text-start">S.No.</th>
+                            <th className=" border-y p-2 text-start">Name</th>
                             <th className=" border-y p-2">Date & Time</th>
                             <th className=" border-y p-2">Transaction ID</th>
                             <th className=" border-y p-2">Amount</th>
@@ -27,15 +27,15 @@ const Credit = ({ Credit }) => {
                     </thead>
                     <tbody className="text-center">
                         {Credit.map((Credit, index) => (
-                            <tr key={Credit.id}>
-                                <td className=" border-y p-2">{index + 1}</td>
-                                <td className=" border-y p-2">{Credit.name}</td>
+                            <tr key={Credit.id} onClick={() => onRowClick(Credit)} className="cursor-pointer">
+                                <td className=" border-y p-2 text-start">{index + 1}</td>
+                                <td className=" border-y p-2 text-start">{Credit.name}</td>
                                 <td className=" border-y p-2">{Credit.date}</td>
                                 <td className=" border-y p-2">{Credit.CreditId}</td>
-                                <td className={` border-y p-2 ${Credit.amount.startsWith('-') ? 'text-red-500' : 'text-green-500'}`}>{Credit.amount}</td>
+                                <td className="border-y p-2 text-green-500" >{Credit.amount}</td>
                                 <td className=" border-y p-2">{Credit.phoneNumber}</td>
                                 <td className=" border-y p-2">{Credit.paymentMethod}</td>
-                                <td className={` border-y p-2 ${Credit.status === 'Success' ? 'text-green-500' : 'text-red-500'}`}>{Credit.status}</td>
+                                <td className=" border-y p-2 text-green-500">{Credit.status}</td>
                             </tr>
                         ))}
                     </tbody>

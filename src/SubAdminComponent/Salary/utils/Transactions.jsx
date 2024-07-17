@@ -15,8 +15,8 @@ const Transactions = ({ transactions }) => {
                 <table className="w-full border-collapse whitespace-nowrap">
                     <thead>
                         <tr className="">
-                            <th className=" border-y p-2">S.No.</th>
-                            <th className=" border-y p-2">Name</th>
+                            <th className=" border-y p-2 text-start">S.No.</th>
+                            <th className=" border-y p-2 text-start">Name</th>
                             <th className=" border-y p-2">Date & Time</th>
                             <th className=" border-y p-2">Transaction ID</th>
                             <th className=" border-y p-2">Amount</th>
@@ -28,14 +28,14 @@ const Transactions = ({ transactions }) => {
                     <tbody className="text-center">
                         {transactions.map((transaction, index) => (
                             <tr key={transaction.id}>
-                                <td className=" border-y p-2">{index + 1}</td>
-                                <td className=" border-y p-2">{transaction.name}</td>
+                                <td className=" border-y p-2 text-start">{index + 1}</td>
+                                <td className=" border-y p-2 text-start">{transaction.name}</td>
                                 <td className=" border-y p-2">{transaction.date}</td>
                                 <td className=" border-y p-2">{transaction.transactionId}</td>
-                                <td className={` border-y p-2 ${transaction.amount.startsWith('-') ? 'text-red-500' : 'text-green-500'}`}>{transaction.amount}</td>
+                                <td className="border-y p-2 text-red-500 ">{transaction.amount}</td>
                                 <td className=" border-y p-2">{transaction.phoneNumber}</td>
-                                <td className=" border-y p-2">{transaction.paymentMethod}</td>
-                                <td className={` border-y p-2 ${transaction.status === 'Success' ? 'text-green-500' : 'text-red-500'}`}>{transaction.status}</td>
+                                <td className=" border-y p-2 ">{transaction.paymentMethod}</td>
+                                <td className="border-y p-2 text-green-500" >{transaction.status}</td>
                             </tr>
                         ))}
                     </tbody>

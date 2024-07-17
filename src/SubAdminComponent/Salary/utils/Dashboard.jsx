@@ -1,38 +1,39 @@
-import React from "react";
+import { useState } from "react";
 import Credit from "./Credit";
 import Debit from "./Debit";
 import Transactions from './Transactions'
 import Due from "./Due";
+import DetailDialog from "./DetailDialog";
+import ChartComponent from "./ChartComponent";
 
 const Dashboard = ({ selectedTab, data }) => {
+    const [selectedTransaction, setSelectedTransaction] = useState(null);
+
+    const handleRowClick = (Credit) => {
+        setSelectedTransaction(Credit);
+    };
+
+    const handleCloseDialog = () => {
+        setSelectedTransaction(null);
+    };
+
     return (
         <div className="p-4">
             {selectedTab === "Reports" && (
-                <div>
-                    <div className="flex justify-between">
-                        <div>
-                            <h2 className="text-xl">Collection Report</h2>
-                            <p>Total Expected Amount: {data.collectionReport.totalExpectedAmount}</p>
-                            <p>Total Collected Amount: {data.collectionReport.totalCollectedAmount}</p>
-                            <p>Total Remaining Amount: {data.collectionReport.totalRemainingAmount}</p>
-                            <p>Growth Performance: {data.collectionReport.growthPerformance}</p>
-                        </div>
-                    </div>
-                    <div className="mt-4">
-                        <div className="bg-gray-100 p-4 rounded shadow">
-                            <div className="h-64">Chart</div>
-                        </div>
-                    </div>
-                </div>
+                <ChartComponent
+                    chartData={data.chartData}
+                    collectionReport={data.collectionReport}
+                />
             )}
             {selectedTab === "Transactions" && (
                 <Transactions transactions={data.transactions} />
             )}
             {selectedTab === "Credit" && (
-                <Credit Credit={data.Credit} />
+                <Credit Credit={data.Credit} onRowClick={handleRowClick} />
             )}
+            <DetailDialog Credit={selectedTransaction} onClose={handleCloseDialog} />
             {selectedTab === "Debit" && (
-                <Debit Debit={data.Debit} />
+                <Debit Debit={data.Debit} onRowClick={handleRowClick} />
             )}
             {selectedTab === "Due" && (
                 <Due Due={data.Due} />
