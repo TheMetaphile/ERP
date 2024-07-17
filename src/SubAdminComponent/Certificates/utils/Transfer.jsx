@@ -296,7 +296,9 @@ const Transfer = () => {
     const fetchAttendence = async () => {
         console.log('hittt', authState.accessToken, tc, className)
         try {
-            const response = await axios.get(`${BASE_URL_Login}/studentAttendance/fetch/completeStats?id=${tc}&class=${className}&year=2024`, {
+            const year = sessions.split('-')[0];
+            console.log(year);
+            const response = await axios.get(`${BASE_URL_Login}/studentAttendance/fetch/completeStats?id=${tc}&class=${className}&year=${year}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

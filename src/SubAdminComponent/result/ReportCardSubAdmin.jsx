@@ -24,17 +24,18 @@ function ReportCardSubAdmin() {
     const [allDataFetched, setAllDataFetched] = useState(false);
 
     const handleClassChange = (event) => {
-        setStart(0);
         setUserData([]);
         setAllDataFetched(false);
         setClass(event.target.value);
+        setStart(0);
     };
 
     const handleSectionChange = (event) => {
-        setStart(0);
+
         setUserData([]);
         setAllDataFetched(false);
         setSection(event.target.value);
+        setStart(0);
     };
 
     const handleSessionChange = (session) => {
@@ -46,7 +47,7 @@ function ReportCardSubAdmin() {
     };
 
     useEffect(() => {
-        if (start !== 0) {
+        if(start!==0){
             fetchStudents();
         }
     }, [start]);
@@ -54,7 +55,7 @@ function ReportCardSubAdmin() {
     console.log('ll', Class, Section, selectedSession)
     useEffect(() => {
         fetchStudents();
-    }, [authState.accessToken, Class, Section, start]);
+    }, [authState.accessToken, Class, Section]);
 
     const fetchStudents = async () => {
         setLoading(true);
@@ -70,10 +71,10 @@ function ReportCardSubAdmin() {
             console.log("API response:", response.data, response.data.Students.length);
 
             if (response.data.Students) {
-                const users = response.data.Students.map(user => ({
-                    ...user,
-                    profileLogo: user.profileLink || profilelogo,
-                }));
+                // const users = response.data.Students.map(user => ({
+                //     ...user,
+                //     profileLogo: user.profileLink || profilelogo,
+                // }));
 
                 const list = response.data.Students.length;
                 if (list < end) {
@@ -134,13 +135,13 @@ function ReportCardSubAdmin() {
 
                 </span>
             </div>
-            <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar mobile:max-tablet:mt-2 ">
-                {loading ? (
+            <div className=" w-full items-start overflow-y-auto  px-2 no-scrollbar mobile:max-tablet:mt-2 ">
+                {loading && start == 0 ? (
                     <Loading />
                 ) : userData.length === 0 ? (
                     <>No student found</>
                 ) : (
-                    <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 h-screen overflow-auto report-header' ref={containerRef} >
+                    <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 h-fit  report-header' ref={containerRef} >
                         <Header headings={['Name', 'Class', 'Section', 'Email']} />
                         {userData.map((detail, index) => (
                             <Link to={`/Sub-Admin/Result/${detail.email}?session=${selectedSession}&Class=${Class}`} key={index}>
