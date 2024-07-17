@@ -6,25 +6,25 @@ import { MdCreditScore } from "react-icons/md";
 const ChartComponent = ({ chartData, collectionReport }) => {
     return (
         <>
-            <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center mobile:max-tablet:flex-col mobile:max-tablet:items-baseline">
+            <div className="flex justify-between items-center mb-4 ">
+                <div className="flex items-center mobile:max-laptop:flex-col mobile:max-tablet:items-baseline">
                     <label className="mr-2">From</label>
                     <input type="date" className="mr-2 p-1 border rounded" />
                     <label className="mr-2">To</label>
                     <input type="date" className="p-1 border rounded" />
                 </div>
             </div>
-            <div className=' flex gap-6'>
-                <div className=' w-4/5'>
+            <div className=' flex gap-6 mobile:max-tablet:flex-col'>
+                <div className=' laptop:w-4/5'>
                     <div className="buttons flex justify-center py-4 shadow-md mb-2 rounded">
                         <div className=' border-r flex-1 justify-center flex'>
-                            <button className=' text-green-500 flex gap-4 items-center'><span><MdCreditScore className='h-8 w-8 cursor-pointer' /></span> Credit  <span><FaExternalLinkAlt className=' text-green-500 h-4 w-4 cursor-pointer' /></span></button>
+                            <button className=' text-green-500 flex gap-4 items-center mobile:max-tablet:text-sm'><span><MdCreditScore className='h-8 w-8 cursor-pointer mobile:max-tablet:hidden' /></span> Credit  <span><FaExternalLinkAlt className=' text-green-500 h-4 w-4 cursor-pointer' /></span></button>
                         </div>
                         <div className=' border-r flex-1 justify-center flex'>
-                            <button className=' text-red-500 flex gap-4 items-center'><span><MdCreditScore className='h-8 w-8 cursor-pointer' /></span> Debit <span><FaExternalLinkAlt className=' text-red-500 h-4 w-4 cursor-pointer' /></span></button>
+                            <button className=' text-red-500 flex gap-4 items-center mobile:max-tablet:text-sm'><span><MdCreditScore className='h-8 w-8 cursor-pointer mobile:max-tablet:hidden' /></span> Debit <span><FaExternalLinkAlt className=' text-red-500 h-4 w-4 cursor-pointer' /></span></button>
                         </div>
-                        <div className='  flex-1 justify-center flex' >
-                            <button className=' text-yellow-500 flex gap-4 items-center'><span><MdCreditScore className='h-8 w-8 cursor-pointer' /></span>Pending  <span><FaExternalLinkAlt className=' text-yellow-500 h-4 w-4 cursor-pointer' /></span></button>
+                        <div className='  flex-1 justify-center flex mobile:max-tablet:mr-2' >
+                            <button className=' text-yellow-500 flex gap-4 items-center mobile:max-tablet:text-sm'><span><MdCreditScore className='h-8 w-8 cursor-pointer mobile:max-tablet:hidden' /></span>Pending  <span><FaExternalLinkAlt className=' text-yellow-500 h-4 w-4 cursor-pointer' /></span></button>
                         </div>
                     </div>
                     <div className="bg-gray-100 p-4 rounded shadow">
@@ -41,7 +41,7 @@ const ChartComponent = ({ chartData, collectionReport }) => {
                         </ResponsiveContainer>
                     </div>
                 </div>
-                <div className="mb-4 w-1/5">
+                <div className="mb-4 laptop:w-1/5">
                     <div className=' shadow-md w-full p-4 gap-5 flex flex-col'>
                         <h2 className="text-xl font-semibold">Collection Report</h2>
                         <div className=' border-b'>

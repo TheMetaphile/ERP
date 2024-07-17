@@ -79,30 +79,30 @@ function Salary() {
 
     return (
         <div className="pt-20">
-            <header className="p-4 flex justify-between items-center">
+            <header className="p-4 mobile:max-tablet:p-2 flex justify-between items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start">
                 <div>
-                    <h1 className="text-3xl font-semibold mb-2 mobile:max-tablet:text-lg whitespace-nowrap">Welcome Abhishek</h1>
+                    <h1 className="text-3xl font-semibold mb-2 mobile:max-laptop:text-lg whitespace-nowrap">Welcome Abhishek</h1>
                     <p className="text-sm">Senior Admin</p>
                 </div>
-                <div className=" flex items-center">
+                <div className=" flex tablet:items-center">
                     <div className="">
 
                         <input
                             type="text"
                             placeholder="Search Accounts"
-                            className="px-12 py-2 rounded-md border mx-10"
+                            className="tablet:max-laptop:px-8 desktop:px-12 mobile:max-tablet:py-1 mt-2 tablet-py-2 rounded-md border tablet:mx-10"
                         />
                     </div>
-                    <div className="icons flex items-center gap-4">
-                        <div className="bell"><GoBell className=" h-9 w-9 cursor-pointer" /></div>
-                        <div className="message"><IoChatbubbleOutline className=" h-9 w-9 cursor-pointer" /></div>
+                    <div className="icons flex items-center gap-4 mobile:max-tablet:hidden">
+                        <div className="bell"><GoBell className=" h-9 w-9 mobile:max-tablet:h-4 mobile:max-laptop:w-4 cursor-pointer" /></div>
+                        <div className="message"><IoChatbubbleOutline className=" h-9 w-9 mobile:max-tablet:h-4 mobile:max-laptop:w-4 cursor-pointer" /></div>
                     </div>
-                    <div className="flex items-center ml-4">
+                    <div className="flex items-center ml-4 mobile:max-tablet:hidden">
                         <div>
                             <img src={profile} alt="profile.jpg" className=" h-10 w-10 rounded mr-2" />
                         </div>
                         <div className=" flex items- flex-col">
-                            <p className=" text-lg"> Abhishek Kumar</p>
+                            <p className=" text-lg mobile:max-laptop:text-sm whitespace-nowrap"> Abhishek Kumar</p>
                             <p className=" text-sm text-gray-500">Senior Admin</p>
                         </div>
                     </div>

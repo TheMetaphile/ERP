@@ -24,8 +24,8 @@ const DetailDialog = ({ Credit, onClose }) => {
         document.body.removeChild(link);
     };
     return (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center" >
-            <div className="bg-white p-6 rounded shadow-lg w-1/2">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 " >
+            <div className="bg-white p-6 rounded shadow-lg tablet:w-1/2 mobile:max-tablet:mx-4">
                 <button onClick={onClose} className=" text-black mb-4 -m-3 h-5 w-2 font-bold">X</button>
                 <h2 className="text-xl mb-4">Invoice no.: #{Credit.CreditId}</h2>
                 <button onClick={handleDownloadReceipt} className="bg-white-300 border border-black p-2 hover:bg-purple-300 hover:text-white hover:border-white  rounded mb-4 flex items-center gap-1"><span><MdOutlineFileDownload className=" h-6 w-6" />
@@ -36,7 +36,7 @@ const DetailDialog = ({ Credit, onClose }) => {
                     <p><strong>Date Of Payment:</strong> {Credit.date}</p>
                     <p><strong>Mode Of Payment:</strong> {Credit.paymentMethod}</p>
                 </div>
-                <table className="w-full border-collapse mt-4 rounded-sm">
+                <table className="w-full border-collapse mt-4 rounded-sm mobile:max-tablet:overflow-auto">
                     <thead>
                         <tr className=" bg-purple-200 rounded-sm">
                             <th className="border-y p-2 text-start">S.No</th>
@@ -47,18 +47,13 @@ const DetailDialog = ({ Credit, onClose }) => {
                     <tbody>
                         <tr>
                             <td className="border-y p-2 text-start">1.</td>
-                            <td className="border-y p-2 text-start">Admission Fees</td>
-                            <td className="border-y p-2 text-start">{Credit.amount}</td>
-                        </tr>
-                        <tr>
-                            <td className="border-y p-2 text-start">1.</td>
-                            <td className="border-y p-2 text-start">Tuition Fees</td>
-                            <td className="border-y p-2 text-start">{Credit.amount}</td>
+                            <td className="border-y p-2 text-start whitespace-nowrap">Admission Fees</td>
+                            <td className="border-y p-2 text-start whitespace-nowrap">{Credit.amount}</td>
                         </tr>
                     </tbody>
                 </table>
-                <div className="mt-4 flex items-center justify-between">
-                    <p className=" shadow-md p-4 text-center"><strong>Grand Total:</strong> {Credit.amount}</p>
+                <div className="mt-4 flex items-center justify-between gap-2">
+                    <p className=" shadow-md p-4 mobile:max-tablet:p-1 text-center"><strong>Grand Total:</strong> {Credit.amount}</p>
                     <button onClick={onClose} className="bg-purple-500 px-10 text-white hover:bg-white hover:text-purple-500 border-purple-300 border py-2 rounded mt-4">Back</button>
 
                 </div>
