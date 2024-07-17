@@ -108,16 +108,21 @@ const Dashboard = () => {
                         <p><strong>Present:</strong> {data.attendance.present}</p>
                         <p><strong>Percentage:</strong> {data.attendance.percentage}%</p>
                     </div>
-                    <div className="mb-4 flex items-center gap-2">
+                    <div className="mb-4 flex items-center gap-2 p-2">
                         <h2 className="text-xl font-semibold">Remarks:</h2>
                         <p>{data.remarks}</p>
+                    </div>
+                    <div className="sign flex items-baseline py-3 justify-evenly">
+                        <p>Class Teacher</p>
+                        <p>Coordinator</p>
+                        <p>Principal</p>
                     </div>
                 </div>
 
                 <div className=' flex gap-2'>
                     <div className="flex-1">
                         <h1 className=' text-center text-xl'>SCHOLASTIC</h1>
-                        <table className="min-w-full bg-white border border-gray-200">
+                        <table className="w-full bg-white border border-gray-200">
                             <thead className=' bg-teal-200'>
                                 <tr>
                                     <th className="px-4 py-2 border">MARKS RANGE</th>
@@ -125,29 +130,29 @@ const Dashboard = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.coScholasticAreas.map((area, index) => (
-                                    <tr key={index}>
-                                        <td className="px-4 py-2 border">{area.area}</td>
-                                        <td className="px-4 py-2 border">{area.grade}</td>
+                                {data.scholastic.map((item, index) => (
+                                    <tr className=' text-center' key={index}>
+                                        <td className="px-2 py-2 border w-1/2">{item.range}</td>
+                                        <td className="px-4 py-2 border w-1/2">{item.grade}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 h-full">
                         <h1 className=' text-center text-xl'>CO-SCHOLASTIC AND DISCIPLINE</h1>
-                        <table className="min-w-full bg-white border border-gray-200">
+                        <table className="w-full bg-white border border-gray-200">
                             <thead className=' bg-teal-200'>
                                 <tr>
-                                    <th className="px-4 py-2 border">PERFOMANCE INDICATORS</th>
+                                    <th className="px-4 py-2 border whitespace-nowrap">PERFOMANCE INDICATORS</th>
                                     <th className="px-4 py-2 border">GRADE</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.coScholasticAreas.map((area, index) => (
-                                    <tr key={index}>
-                                        <td className="px-4 py-2 border">{area.area}</td>
-                                        <td className="px-4 py-2 border">{area.grade}</td>
+                                {data.coscholastic.map((item, index) => (
+                                    <tr className='text-start' key={index}>
+                                        <td className="px-4 py-10 border w-1/2">{item.range}</td>
+                                        <td className="px-4 py-10 border w-1/2 text-center">{item.grade}</td>
                                     </tr>
                                 ))}
                             </tbody>

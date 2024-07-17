@@ -21,6 +21,24 @@ export const reportData = {
         ],
         attendance: { total: 138, present: 109, percentage: 79 },
         remarks: "Good!",
+        scholastic: [
+            { range: "91-100", grade: "A1" },
+            { range: "81-90", grade: "A2" },
+            { range: "71-80", grade: "B1" },
+            { range: "61-70", grade: "B2" },
+            { range: "51-60", grade: "C1" },
+            { range: "41-50", grade: "C2" },
+            { range: "33-40", grade: "D" },
+            { range: "32 & below", grade: "E" },
+        ],
+        coscholastic: [
+            { range: "OUTSTANDING", grade: "A" },
+            { range: "VERY GOOD", grade: "B" },
+            { range: "FAIR", grade: "C" },
+        ],
+        marks: [
+
+        ]
     },
     term2: {
         title: "Term-2 : 2023-24",
@@ -32,7 +50,7 @@ export const reportData = {
         dob: "31-08-2017",
         scholasticAreas: [
             { subject: "English", noteBook: 5, sEnrichment: 5, marksObt: 27, total: 43.75, percentage: 72.92, grade: "B1" },
-            { subject: "Hindi", noteBook: 5, sEnrichment: 5, marksObt: 34, total: 60.01, percentage: 85.73, grade: "A2" },
+            { subject: "Hindi", noteBook: 5, sEnrichment: 5, marksObt: 34, total: 59, percentage: 85.73, grade: "A2" },
             { subject: "Mathematics", noteBook: 5, sEnrichment: 5, marksObt: 29, total: 44.75, percentage: 74.58, grade: "B1" },
         ],
         coScholasticAreas: [
@@ -44,6 +62,20 @@ export const reportData = {
         ],
         attendance: { total: 205, present: 164, percentage: 80 },
         remarks: "Passed and promoted to II-A",
+        scholastic: [
+            { range: "91-100", grade: "A1" },
+            { range: "81-90", grade: "A2" },
+            { range: "71-80", grade: "B1" },
+            { range: "61-70", grade: "B2" },
+            { range: "51-60", grade: "C1" },
+            { range: "41-50", grade: "C2" },
+            { range: "33-40", grade: "D" },
+            { range: "32 & below", grade: "E" },
+        ], coscholastic: [
+            { range: "OUTSTANDING", grade: "A" },
+            { range: "VERY GOOD", grade: "B" },
+            { range: "FAIR", grade: "C" },
+        ]
     },
     academic: {
         title: "Academic Session : 2023-24",
@@ -55,7 +87,7 @@ export const reportData = {
         dob: "31-08-2017",
         scholasticAreas: [
             { subject: "English", term1: "Medical", term2: 7.25, noteBook: 4.5, sEnrichment: 5, marksObt: 27, total: 43.75, percentage: 72.92, grade: "B1" },
-            { subject: "Hindi", term1: 8.38, term2: 7.63, noteBook: 5, sEnrichment: 5, marksObt: 34, total: 60.01, percentage: 85.73, grade: "A2" },
+            { subject: "Hindi", term1: 8.38, term2: 7.63, noteBook: 5, sEnrichment: 5, marksObt: 34, total: 59.01, percentage: 85.73, grade: "A2" },
             { subject: "Mathematics", term1: "Medical", term2: 5.75, noteBook: 5, sEnrichment: 5, marksObt: 29, total: 44.75, percentage: 74.58, grade: "B1" },
         ],
         coScholasticAreas: [
@@ -67,8 +99,6 @@ export const reportData = {
         ],
         attendance: { total: 205, present: 164, percentage: 80 },
         remarks: "Passed and promoted to II-A",
-    },
-    scolrange: {
         scholastic: [
             { range: "91-100", grade: "A1" },
             { range: "81-90", grade: "A2" },
@@ -78,6 +108,11 @@ export const reportData = {
             { range: "41-50", grade: "C2" },
             { range: "33-40", grade: "D" },
             { range: "32 & below", grade: "E" },
+        ],
+        coscholastic: [
+            { range: "OUTSTANDING", grade: "A" },
+            { range: "VERY GOOD", grade: "B" },
+            { range: "FAIR", grade: "C" },
         ]
-    }
+    },
 };

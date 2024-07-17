@@ -143,6 +143,9 @@ import StudentRegister from "./SubAdminComponent/Student/StudentRegister.jsx";
 import TeacherRegister from "./SubAdminComponent/Teacher/TeacherRegister.jsx";
 import Allsubresult from "./components/Subresult/Allsubresult.jsx";
 import Subresult from "./components/Subresult/Subresult.jsx";
+import AllExReport from "./SubAdminComponent/result/ExReport/AllExReport.jsx";
+import List from "./SubAdminComponent/result/ExReport/List.jsx";
+import ExResult from "./SubAdminComponent/result/ExReport/utils/ExResult.jsx";
 
 const router = createBrowserRouter([
   {
@@ -864,9 +867,38 @@ const router = createBrowserRouter([
           {
             path: ':id',
             element: <PerformanceProfileSubAdmin />
-          }
+          },
+          {
+            path: "exStudent",
+            element: <AllExReport />,
+            children: [
+              {
+                path: '',
+                element: <List />
+              },
+              {
+                path: ':id',
+                element: <ExResult />
+              }
+            ]
+          },
         ]
       },
+      // {
+      //   path: "/Sub-Admin/exStudent",
+      //   element: <AllExReport />,
+      //   children: [
+      //     {
+      //       path: '',
+      //       element: <List />
+      //     },
+      //     {
+      //       path: ':id',
+      //       element: <ExResult />
+      //     }
+      //   ]
+      // },
+
       {
         path: "/Sub-Admin/Salary",
         element: <AllSalary />,

@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import axios from 'axios';
 import Papa from 'papaparse'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Login } from "../../Config";
+import AuthContext from '../../Context/AuthContext';
 
 export default function TeacherRegister() {
-
+    const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -30,6 +31,7 @@ export default function TeacherRegister() {
             admin: false,
             DOB: '',
             permanentAddress: '',
+            accessToken: authState.accessToken
         }
     );
     const handleChange = (e) => {
@@ -66,10 +68,11 @@ export default function TeacherRegister() {
         e.preventDefault();
         setLoading(true);
 
-
+        console.log(formData, authState.accessToken)
         try {
             formData.password = formData.aadhaarNumber;
-            const response = await axios.post(`${BASE_URL_Login}/signup/teacher`, formData);
+            const response = await axios.post(`${BASE_URL_Login}/signup/teacher`, formData,
+              );
             if (response.status === 200) {
                 toast.success('Teacher registered successfully!');
                 console.log(formData)
@@ -77,7 +80,7 @@ export default function TeacherRegister() {
             }
 
         } catch (err) {
-            console.error(error);
+            console.log(err);
             const errorMessage = error.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
         }
@@ -299,7 +302,7 @@ export default function TeacherRegister() {
                                     <input
                                         className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                         id="DOB"
-                                        type="text"
+                                        type="date"
                                         name="DOB"
                                         value={formData.DOB}
                                         onChange={handleChange}
