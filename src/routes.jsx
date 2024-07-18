@@ -146,6 +146,9 @@ import Subresult from "./components/Subresult/Subresult.jsx";
 import AllExReport from "./SubAdminComponent/result/ExReport/AllExReport.jsx";
 import List from "./SubAdminComponent/result/ExReport/List.jsx";
 import ExResult from "./SubAdminComponent/result/ExReport/utils/ExResult.jsx";
+import AllNoteBookRecord from "./TeacherComponents/notebook/utils/AllNotebookRecord.jsx";
+import NewNoteBookRecord from "./TeacherComponents/notebook/utils/NewNotebookRecord.jsx";
+import RecordDetails from "./TeacherComponents/notebook/utils/Details.jsx";
 
 const router = createBrowserRouter([
   {
@@ -808,6 +811,25 @@ const router = createBrowserRouter([
       {
         path: "/Teacher-Dashboard/notebook",
         element: <NoteBook />,
+        children: [
+          {
+            path: "",
+            element: <AllNoteBookRecord />
+          },
+          {
+            path: "All",
+            element: <AllNoteBookRecord />
+          },
+          {
+            path: "New",
+            element: <NewNoteBookRecord />
+          },
+          
+        ]
+      },
+      {
+        path: "/Teacher-Dashboard/notebook/details/:id",
+        element: <RecordDetails />,
         children: []
       },
       {
