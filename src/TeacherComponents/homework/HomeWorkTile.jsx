@@ -10,7 +10,12 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
     const { authState } = useContext(AuthContext);
     const [editingRow, setEditingRow] = useState(null);
     const [editedDetails, setEditedDetails] = useState(details);
+    const [expanded, setExpanded] = useState(null);
 
+    const handleClick = (index) => {
+        setExpanded(expanded === index ? null : index);
+    }
+    
     const handleUpdateClick = (index) => {
         setEditingRow(index);
     };
@@ -94,7 +99,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
         <div className="mb-4 mt-3 items-center justify-between">
             {editedDetails.map((detail, index) => (
                 <div key={index} className='w-full  flex-col border border-gray-200 p-2 rounded-lg shadow-md mt-3'>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
                         {editingRow === index ? (
                             <>
                                 <div className="pl-2 font-medium">Chapter: </div>
@@ -180,7 +185,9 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                         ) : (
                             <div>
                                 <div className="pl-2 font-medium text-justify">Topic: <span className='font-normal'>{detail.topic}</span></div>
+                            {expanded === index && (
                                 <h1 className="pl-2 font-medium text-justify">Task: <span className='font-normal'>{detail.description}</span></h1>
+                            )}
                             </div>
                         )}
 

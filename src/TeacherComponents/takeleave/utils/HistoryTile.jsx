@@ -1,26 +1,31 @@
-import React, { useState, useContext,useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import { MdEdit, MdDeleteForever, MdCheck, MdCancel} from 'react-icons/md';
-import {  toast } from 'react-toastify';
+import { MdEdit, MdDeleteForever, MdCheck, MdCancel } from 'react-icons/md';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../../Context/AuthContext';
-import {  BASE_URL_TeacherLeave } from '../../../Config';
+import { BASE_URL_TeacherLeave } from '../../../Config';
 
 export default function HistoryTile({ details }) {
     const [data, setData] = useState([]);
     const [editRowIndex, setEditRowIndex] = useState(null);
     const { authState } = useContext(AuthContext);
     const [editData, setEditData] = useState({});
+    const [expanded, setExpanded] = useState(null);
+
+    const handleClick = (index) => {
+        setExpanded(expanded === index ? null : index);
+    }
 
     useEffect(() => {
-        if (details ) {
-            console.log('before',details)
+        if (details) {
+            console.log('before', details)
             setData(details);
-            console.log('after',details)
+            console.log('after', details)
 
         }
     }, [details]);
-    
+
     const handleDelete = async (index) => {
         const id = data[index]._id;
         const session = getCurrentSession();
@@ -110,13 +115,13 @@ export default function HistoryTile({ details }) {
                 <div key={index} className="mb-2 border border-gray-200 shadow-md rounded-lg p-3">
 
 
-                    <div className='flex justify-between font-medium'>
+                    <div className='flex justify-between items-center font-medium cursor-pointer' onClick={() => handleClick(index)}>
                         Type: {editRowIndex === index ? (
                             <input
                                 type="text"
                                 value={editData.type}
                                 onChange={(e) => handleInputChange(e, 'type')}
-                                className='border border-black'
+                                className='border'
                             />
                         ) : (
                             item.type
@@ -132,16 +137,16 @@ export default function HistoryTile({ details }) {
                             ) : (
                                 <div className="flex justify-center items-center gap-1">
                                     {editRowIndex === index ? (
-                                            <>
-                                                <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdCheck /></button>
-                                                <button className='bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <MdEdit /></button>
-                                                <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'  onClick={() => handleDelete(index)}><MdDeleteForever /></button>
-                                            </>
-                                        )}
+                                        <>
+                                            <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdCheck /></button>
+                                            <button className='bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <MdEdit /></button>
+                                            <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
+                                        </>
+                                    )}
                                     <div className={`font-normal text-sm px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-200 text-orange-700' : item.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>{item.status}</div>
                                 </div>
                             )}
@@ -149,14 +154,19 @@ export default function HistoryTile({ details }) {
                     </div>
                     <div className='font-medium text-justify'>
                         Reason: {editRowIndex === index ? (
-                            <input
+                            <textarea
+                                rows={6}
                                 type="text"
                                 value={editData.reason}
                                 onChange={(e) => handleInputChange(e, 'reason')}
-                                className='border border-black'
+                                className='border  w-full'
                             />
                         ) : (
-                            <span className='font-normal'>{item.reason}</span>
+                            <>
+                                {expanded === index && (
+                                    <span className='font-normal'>{item.reason}</span>
+                                )}
+                            </>
                         )}
                     </div>
 
@@ -167,7 +177,7 @@ export default function HistoryTile({ details }) {
                                     type="date"
                                     value={editData.startDate}
                                     onChange={(e) => handleInputChange(e, 'startDate')}
-                                    className='border border-black'
+                                    className='border '
                                 />
                             ) : (
                                 item.startDate
@@ -179,7 +189,7 @@ export default function HistoryTile({ details }) {
                                     type="date"
                                     value={editData.endDate}
                                     onChange={(e) => handleInputChange(e, 'endDate')}
-                                    className='border border-black'
+                                    className='border'
                                 />
                             ) : (
                                 item.endDate

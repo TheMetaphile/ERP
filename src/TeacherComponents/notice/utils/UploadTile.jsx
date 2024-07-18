@@ -11,6 +11,11 @@ export default function UploadTile({ details }) {
     const [newDetails, setDetails] = useState(details);
     const [editingIndex, setEditingIndex] = useState(null);
     const [editedNotice, setEditedNotice] = useState({});
+    const [expanded, setExpanded] = useState(null);
+
+    const handleClick = (index) => {
+        setExpanded(expanded === index ? null : index);
+    }
 
     const handleEdit = (index) => {
         setEditingIndex(index);
@@ -76,7 +81,7 @@ export default function UploadTile({ details }) {
                     <div className='flex items-center w-full'>
                         <img src={Logo} alt="" className='h-12' />
                         <div className='px-2 w-full'>
-                            <div className="flex items-center w-full justify-between">
+                            <div className="flex items-center w-full justify-between cursor-pointer" onClick={() => handleClick(index)}>
                                 <div className="pl-2 mt-1 font-normal text-sm">
                                     <span className='font-medium'>Title :</span>
                                     {editingIndex === index ? (
@@ -127,19 +132,23 @@ export default function UploadTile({ details }) {
                                     )}
                                 </div>
                             </div>
-                            <div className="pl-2 mt-1 font-normal text-sm w-full h-full">
-                                <span className='font-medium'>Description :</span>
-                                {editingIndex === index ? (
-                                    <textarea
-                                        type="text"
-                                        value={editedNotice.description}
-                                        onChange={(e) => handleInputChange(e, 'description')}
-                                        className="border rounded p-1 w-full h-full"
-                                    />
-                                ) : (
-                                    detail.description
-                                )}
-                            </div>
+                            {expanded === index && (
+                                <div className="pl-2 mt-1 font-normal text-sm w-full h-full">
+                                    <span className='font-medium'>Description :</span>
+                                    {editingIndex === index ? (
+                                        <textarea
+                                            rows={6}
+                                            type="text"
+                                            value={editedNotice.description}
+                                            onChange={(e) => handleInputChange(e, 'description')}
+                                            className="border rounded p-1 w-full h-full"
+                                        />
+                                    ) : (
+                                        detail.description
+                                    )}
+                                </div>
+                            )}
+
 
                             <div className='flex items-center justify-between w-full'>
                                 <div className="pl-2 mt-1 font-light text-xs text-gray-600 flex gap-1 items-center">
