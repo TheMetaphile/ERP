@@ -28,7 +28,7 @@ const DetailDialog = ({ Credit, onClose }) => {
             <div className="bg-white p-6 rounded shadow-lg tablet:w-1/2 mobile:max-tablet:mx-4">
                 <button onClick={onClose} className=" text-black mb-4 -m-3 h-5 w-2 font-bold">X</button>
                 <h2 className="text-xl mb-4">Invoice no.: #{Credit.CreditId}</h2>
-                <button onClick={handleDownloadReceipt} className="bg-white-300 border border-black p-2 hover:bg-purple-300 hover:text-white hover:border-white  rounded mb-4 flex items-center gap-1"><span><MdOutlineFileDownload className=" h-6 w-6" />
+                <button onClick={handleDownloadReceipt} className="bg-white-300 border border-black p-2 hover:bg-purple-500 hover:text-white hover:border-white  rounded mb-4 flex items-center gap-1"><span><MdOutlineFileDownload className=" h-6 w-6" />
                 </span> Download Receipt</button>
                 <div className=" leading-loose">
                     <p><strong>Name of Student:</strong> {Credit.name}</p>
@@ -54,7 +54,7 @@ const DetailDialog = ({ Credit, onClose }) => {
                 </table>
                 <div className="mt-4 flex items-center justify-between gap-2">
                     <p className=" shadow-md p-4 mobile:max-tablet:p-1 text-center"><strong>Grand Total:</strong> {Credit.amount}</p>
-                    <button onClick={onClose} className="bg-purple-500 px-10 text-white hover:bg-white hover:text-purple-500 border-purple-300 border py-2 rounded mt-4">Back</button>
+                    <button onClick={onClose} className="bg-white px-10 hover:bg-purple-500 hover:text-white border-black hover:border-white border py-2 rounded mt-4">Back</button>
 
                 </div>
             </div>

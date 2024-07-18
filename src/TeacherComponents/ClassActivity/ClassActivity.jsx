@@ -33,21 +33,21 @@ function ClassActivity() {
         },
 
     ];
-    const [idx,setidx]= useState(0)
+    const [idx, setidx] = useState(0)
     return (
         <div className=" flex flex-col px-3 border border-gray-300 items-center mobile:max-tablet:px-0 h-screen overflow-y-auto rounded-lg shadow-md py-2 ml-2 mr-3 no-scrollbar">
             <nav className='w-full'>
-                <ul className="flex w-full bg-blue-100 overflow-x-auto rounded-lg py-2 px-5 border border-gray-400 items-center mobile:max-tablet:text-sm justify-center">
+                <ul className="flex w-full overflow-x-auto  py-2 px-5 border-b pb-0 items-center mobile:max-tablet:text-sm justify-center">
                     {
-                        menuItems.map((item,index) => {
+                        menuItems.map((item, index) => {
                             return (
-                                <li className="mr-4 w-fit whitespace-nowrap" key={index}>
-                                    <Link to={item.route} className={`text-black ${idx===index? "bg-secondary" : ""} font-medium hover:bg-blue-300 hover:text-white px-2 py-1 rounded-lg`} onClick={()=>{setidx(index)}}>{item.title}</Link>
+                                <li className="mr-4 w-fit whitespace-nowrap p-2" key={index}>
+                                    <Link to={item.route} className={`text-black  ${idx === index ? " text-purple-600 border-b-2 border-purple-600" : ""} font-medium  p-2`} onClick={() => { setidx(index) }}>{item.title}</Link>
                                 </li>
                             )
                         })
                     }
-                   
+
                 </ul>
             </nav>
             <Outlet />
