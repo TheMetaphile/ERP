@@ -3,13 +3,16 @@ import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
 import { useRef } from 'react';
 import { BASE_URL_Fee } from '../../../Config';
+import { toast } from 'react-toastify';
 
-function CreateDiscount() {
+function CreateDiscount({ addDiscount }) {
     const { authState } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [percentage, setPercentage] = useState('');
     const [session, setSession] = useState('');
     const [field, setField] = useState('');
+    const [rollnumber, setRollNumber] = useState('');
+    const [profile, setProfile] = useState('');
     const [temp, setTemp] = useState();
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -17,22 +20,22 @@ function CreateDiscount() {
 
     const handleClickOutside = (event) => {
         if (inputRef.current && !inputRef.current.contains(event.target)) {
-          console.log("Clicked outside the input field");
-          setShowSuggestions(false);
-          // Execute your function here
+            console.log("Clicked outside the input field");
+            setShowSuggestions(false);
+            // Execute your function here
         }
-      };
-      const handleClickInside = () => {
+    };
+    const handleClickInside = () => {
         console.log("Clicked inside the input field");
         // Execute your function for inside click here
         setShowSuggestions(true);
-      };
-      useEffect(() => {
+    };
+    useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
-          document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("mousedown", handleClickOutside);
         };
-      }, []);
+    }, []);
     const handleEmailChange = (event) => {
         const value = event.target.value;
         setEmail(value);
@@ -41,6 +44,8 @@ function CreateDiscount() {
 
     const handleSuggestionClick = (suggestion) => {
         setEmail(suggestion.name);
+        setProfile(suggestion.profileLink);
+        setRollNumber(suggestion.rollNumber);
         setShowSuggestions(false);
     };
 
@@ -65,7 +70,8 @@ function CreateDiscount() {
                     console.log(response.data)
                     const StudentEmails = response.data.Students.map(Student => ({
                         name: Student.name,
-                        profileLink: Student.profileLink
+                        profileLink: Student.profileLink,
+                        rollNumber : Student.rollNumber
                     }));
                     setSuggestions(StudentEmails);
 
@@ -98,7 +104,15 @@ function CreateDiscount() {
                 );
 
                 if (response.status === 200) {
+                    toast.success('Discount created successfully');
                     console.log('Discount created successfully');
+                    addDiscount({
+                        to: { name: email, profileLink: profile, rollNumber: rollnumber }, 
+                        percentage: Number(percentage),
+                        session: session,
+                        field: field,
+                        by: { name: authState.userDetails.name, employeeId: authState.userDetails.employeeId }, 
+                    });
                     setEmail('');
                     setPercentage('');
                     setSession('');
@@ -106,6 +120,7 @@ function CreateDiscount() {
                 }
 
             } catch (error) {
+                toast.error(error);
                 console.error('Error:', error);
             }
         }

@@ -69,6 +69,11 @@ export default function TeacherRegister() {
         setLoading(true);
 
         console.log(formData, authState.accessToken)
+        const [year, month, day] = formData.DOB.split('-');
+        const formattedDate = `${day}-${month}-${year}`;
+        formData.DOB=formattedDate
+        console.log(formData, authState.accessToken)
+
         try {
             formData.password = formData.aadhaarNumber;
             const response = await axios.post(`${BASE_URL_Login}/signup/teacher`, formData,

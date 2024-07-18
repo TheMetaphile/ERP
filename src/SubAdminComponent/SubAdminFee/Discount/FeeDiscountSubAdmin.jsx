@@ -8,49 +8,79 @@ import CreateDiscount from './CreateDiscount';
 import { MdDeleteForever } from "react-icons/md";
 import { BASE_URL_Fee } from '../../../Config';
 
-function FeeDiscount() {
+function FeeDiscountSubAdmin() {
     const [selectedClass, setSelectedClass] = useState("9th");
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const { authState } = useContext(AuthContext);
     const [showDiscountStructure, setShowDiscountStructure] = useState(false);
+    const [sessions, setSessions] = useState([]);
+    const [selectedSession, setSelectedSession] = useState(sessions[1]);
+    const [start, setStart] = useState(0);
+    const [end, setEnd] = useState(20);
+    const [allDataFetched, setAllDataFetched] = useState(false);
+
+    useEffect(() => {
+        const currentYear = new Date().getFullYear();
+        const newSessions = [];
+
+        for (let i = 0; i < 5; i++) {
+            const startYear = currentYear - i;
+            const endYear = startYear + 1;
+            newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
+        }
+
+        setSessions(newSessions);
+    }, []);
 
     const handleClassChange = (e) => {
+        setDetails([]);
+        setAllDataFetched(false);
         setSelectedClass(e.target.value);
         setShowDiscountStructure(false);
-    };
-    const sessions = [
-        '2020-21',
-        '2021-22',
-        '2022-23',
-        '2023-24',
-        '2024-25',
-    ];
+        setStart(0);
 
-    // State to store the selected session
-    const [selectedSession, setSelectedSession] = useState(sessions[3]);
+    };
+
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
     };
+
+    const handleViewMore = () => {
+        setStart(prevStart => prevStart + end);
+    };
+
     useEffect(() => {
-        if (selectedClass !== "") {
+        if (start !== 0) {
             fetchDiscount();
         }
-    }, [selectedClass]);
+    }, [start]);
+
+    useEffect(() => {
+        fetchDiscount();
+    }, [authState.accessToken,selectedClass]);
 
     const fetchDiscount = async () => {
         console.log(selectedClass);
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/discount?end=20&start=0&class=${selectedClass}`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/discount?end=${end}&start=${start}&class=${selectedClass}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
             });
             if (response.status === 200) {
                 console.log("API response:", response.data);
-                setDetails(response.data || []);
+
+                const list = response.data.length;
+                if (list < end) {
+                    toast.success('All data fetched');
+                    console.log('All data fetched')
+                    setAllDataFetched(true);
+                }
+                setDetails(prevUsers => [...prevUsers, ...response.data]);
                 setLoading(false);
+
             }
         } catch (err) {
             console.log(err);
@@ -77,6 +107,15 @@ function FeeDiscount() {
             console.error("Error deleting Discount:", error);
             toast.error('Error deleting Discount');
         }
+    };
+
+    const addDiscount = (newDiscount) => {
+        // console.log(newDiscount)
+        // setDetails(prevDetails => [newDiscount, ...prevDetails]);
+        // setShowDiscountStructure(false);
+        setStart(0);
+        setDetails([]);
+        fetchDiscount();
     };
 
     return (
@@ -138,12 +177,12 @@ function FeeDiscount() {
 
             <div className='w-full'>
                 {showDiscountStructure
-                    ? <CreateDiscount />
+                    ? <CreateDiscount addDiscount={addDiscount} />
                     : <div></div>
                 }
 
                 <div className=' mt-4 w-full overflow-auto  border border-black rounded-lg'>
-                    <div className="px-2 flex justify-between w-fit py-2 text-center  bg-bg_blue  rounded-t-lg border border-b-2  whitespace-nowrap ">
+                    <div className="px-2 flex justify-between  py-2 text-center  bg-bg_blue  rounded-t-lg border border-b-2  whitespace-nowrap ">
                         <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             RollNo.
                         </h1>
@@ -179,7 +218,7 @@ function FeeDiscount() {
                         details.length > 0 ? (
                             <div>
                                 {details.map((details, index) => (
-                                    <div key={index} className='flex w-fit text-center justify-between items-center py-2 pl-2 h-fit border '>
+                                    <div key={index} className='flex  text-center justify-between items-center py-2 pl-2 h-fit border '>
                                         <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.to.rollNumber}
                                         </h1>
@@ -206,7 +245,6 @@ function FeeDiscount() {
                                             {details.by.employeeId}
                                         </h1>
                                         <div className='w-36 text-lg flex items-center justify-center hover:cursor-pointer text-red-500 font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
-                                            <span>Delete</span>
                                             <MdDeleteForever
                                                 className="text-red-500 hover:text-red-700 ml-2"
                                                 onClick={() => handleDelete(index, details._id)}
@@ -215,6 +253,11 @@ function FeeDiscount() {
 
                                     </div>
                                 ))}
+                                {!allDataFetched && (
+                                    <div colSpan="4" className="text-center">
+                                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer' onClick={handleViewMore}>View More</h1>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <div className='text-center mt-2'>No Fee Discount available</div>
@@ -226,4 +269,4 @@ function FeeDiscount() {
     );
 }
 
-export default FeeDiscount;
+export default FeeDiscountSubAdmin;

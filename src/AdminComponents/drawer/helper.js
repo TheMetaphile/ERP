@@ -203,13 +203,13 @@ const menuItems = [
     route: "/Admin-Dashboard/Employee",
     children: [],
   },
-  {
-    image: leaveImage,
-    alt: "img",
-    title: "Certificate",
-    route: "/Admin-Dashboard/Certificates",
-    children: [],
-  },
+  // {
+  //   image: leaveImage,
+  //   alt: "img",
+  //   title: "Certificate",
+  //   route: "/Admin-Dashboard/Certificates",
+  //   children: [],
+  // },
 ];
 
 export default menuItems;

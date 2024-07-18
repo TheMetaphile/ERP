@@ -88,18 +88,18 @@ export default function FeeAdminRow({ Class, session }) {
 
 
     const handleDelete = async (index, id) => {
-        console.log(Class)
+        console.log(Class,authState.accessToken)
         console.log(id)
         try {
             const response = await axios.delete(`${BASE_URL_Fee}/fee/delete/structure`,
                 {
-                    class: Class,
-                    session: session,
-                    structureId: id
-                },
-                {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
+                    },
+                    data: {
+                        class: Class,
+                        session: session,
+                        structureId: id
                     }
                 }
             );

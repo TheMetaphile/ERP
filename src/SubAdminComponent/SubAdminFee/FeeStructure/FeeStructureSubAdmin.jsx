@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FeeAdminRow from './FeeAdminRow';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function FeeStructure() {
-    const sessions = [
-        '2020-21',
-        '2021-22',
-        '2022-23',
-        '2023-24',
-        '2024-25',
-    ];
+function FeeStructureSubAdmin() {
+    const [sessions, setSessions] = useState([]);
+    const [selectedSession, setSelectedSession] = useState(sessions[1]);
 
-    // State to store the selected session
-    const [selectedSession, setSelectedSession] = useState(sessions[3]);
+    useEffect(() => {
+        const currentYear = new Date().getFullYear();
+        const newSessions = [];
+
+        for (let i = 0; i < 5; i++) {
+            const startYear = currentYear - i;
+            const endYear = startYear + 1;
+            newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
+        }
+
+        setSessions(newSessions);
+    }, []);
+
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
     };
@@ -64,5 +70,5 @@ function FeeStructure() {
     );
 }
 
-export default FeeStructure;
+export default FeeStructureSubAdmin;
 

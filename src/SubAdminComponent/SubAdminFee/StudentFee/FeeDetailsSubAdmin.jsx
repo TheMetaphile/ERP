@@ -1,52 +1,87 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Fee } from '../../../Config';
 
-function FeeDetails() {
+function FeeDetailsSubAdmin() {
     const [selectedClass, setSelectedClass] = useState("9th");
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([])
     const { authState } = useContext(AuthContext);
+    const [sessions, setSessions] = useState([]);
+    const [selectedSession, setSelectedSession] = useState(sessions[1]);
+    const [start, setStart] = useState(0);
+    const [end, setEnd] = useState(5);
+    const [allDataFetched, setAllDataFetched] = useState(false);
+    const [mode, setMode] = useState('');
 
     const handleClassChange = (e) => {
+        setDetails([]);
+        setAllDataFetched(false);
         setSelectedClass(e.target.value);
+        setStart(0);
     };
-    const sessions = [
-        '2020-21',
-        '2021-22',
-        '2022-23',
-        '2023-24',
-        '2024-25',
-    ];
 
-    // State to store the selected session
-    const [selectedSession, setSelectedSession] = useState(sessions[3]);
+    const handleModeChange = (e) => {
+        setMode(e.target.value);
+    };
+
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
     };
+
+    useEffect(() => {
+        const currentYear = new Date().getFullYear();
+        const newSessions = [];
+
+        for (let i = 0; i < 5; i++) {
+            const startYear = currentYear - i;
+            const endYear = startYear + 1;
+            newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
+        }
+
+        setSessions(newSessions);
+    }, []);
+
     useEffect(() => {
         if (selectedClass !== "") {
             fetchDetails();
         }
     }, [selectedClass]);
 
+    const handleViewMore = () => {
+        setStart(prevStart => prevStart + end);
+    };
+
+    useEffect(() => {
+        if (start !== 0) {
+            fetchDetails();
+        }
+    }, [start]);
+
     const fetchDetails = async () => {
         console.log(selectedClass)
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/admin?class=${selectedClass}&start=0&end20`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/admin?class=${selectedClass}&start=${start}&end=${end}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
             });
             if (response.status === 200) {
-                console.log("API response:", response.data);
-                setDetails(response.data.output || []);
+
+                const list = response.data.output.length;
+                if (list < end) {
+                    toast.success('All data fetched');
+                    console.log('All data fetched')
+                    setAllDataFetched(true);
+                }
+                setDetails(prevUsers => [...prevUsers, ...response.data.output]);
                 setLoading(false);
+
             }
 
         } catch (err) {
@@ -107,7 +142,7 @@ function FeeDetails() {
             </div>
 
             <div className='overflow-auto w-full'>
-                <div className=' mt-2 w-fit border border-black rounded-lg'>
+                <div className=' mt-2  border border-black rounded-lg'>
                     <div className="flex justify-between  py-2  bg-bg_blue  rounded-t-lg border border-b-2  whitespace-nowrap">
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Roll No.
@@ -137,7 +172,7 @@ function FeeDetails() {
                             Payable
                         </h1>
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Action
+                            Mode
                         </h1>
                     </div>
                     {loading ? (
@@ -177,11 +212,29 @@ function FeeDetails() {
                                         <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.payableFee}
                                         </h1>
-                                        <h1 className="w-32 text-lg rounded-full bg-secondary px-2 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer">
-                                            Pay
+                                        <h1 className="w-32 text-lg rounded-full bg-secondary border border-gray-300 text-center whitespace-nowrap hover:cursor-pointer">
+                                            <select
+                                                className="w-full h-full rounded-full bg-secondary "
+                                                id="mode"
+                                                name="mode"
+                                                value={mode}
+                                                onChange={handleModeChange}
+                                                required
+                                            >
+                                                <option value="Cash">Cash</option>
+                                                <option value="Online">Online</option>
+                                                <option value="RTGS">RTGS</option>
+                                                <option value="Cheque">Cheque</option>
+                                                <option value="Draft">Draft</option>
+                                            </select>
                                         </h1>
                                     </div>
                                 ))}
+                                {!allDataFetched && (
+                                    <div colSpan="4" className="text-center">
+                                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer' onClick={handleViewMore}>View More</h1>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <div className='text-center mt-2'>No Fee Details available</div>
@@ -193,5 +246,5 @@ function FeeDetails() {
     );
 }
 
-export default FeeDetails;
+export default FeeDetailsSubAdmin;
 

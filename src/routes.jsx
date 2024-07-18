@@ -149,6 +149,10 @@ import ExResult from "./SubAdminComponent/result/ExReport/utils/ExResult.jsx";
 import AllNoteBookRecord from "./TeacherComponents/notebook/utils/AllNotebookRecord.jsx";
 import NewNoteBookRecord from "./TeacherComponents/notebook/utils/NewNotebookRecord.jsx";
 import RecordDetails from "./TeacherComponents/notebook/utils/Details.jsx";
+import FeeSubAdmin from "./SubAdminComponent/SubAdminFee/FeeSubAdmin.jsx";
+import FeeDetailsSubAdmin from "./SubAdminComponent/SubAdminFee/StudentFee/FeeDetailsSubAdmin.jsx";
+import FeeStructureSubAdmin from "./SubAdminComponent/SubAdminFee/FeeStructure/FeeStructureSubAdmin.jsx";
+import FeeDiscountSubAdmin from "./SubAdminComponent/SubAdminFee/Discount/FeeDiscountSubAdmin.jsx";
 
 const router = createBrowserRouter([
   {
@@ -944,6 +948,28 @@ const router = createBrowserRouter([
         path: "/Sub-Admin/registerStudent",
         element: <StudentRegister />,
         children: []
+      },
+      {
+        path: "/Sub-Admin/StudentsFee",
+        element: <FeeSubAdmin />,
+        children: [
+          {
+            path: '/Sub-Admin/StudentsFee/details',
+            element: <FeeDetailsSubAdmin />
+          },
+          {
+            path: '/Sub-Admin/StudentsFee/structure',
+            element: <FeeStructureSubAdmin />
+          },
+          {
+            path: '/Sub-Admin/StudentsFee/feediscount',
+            element: <FeeDiscountSubAdmin />
+          },
+          {
+            path: '',
+            element: <FeeDetailsSubAdmin />
+          },
+        ]
       },
     ]
   }

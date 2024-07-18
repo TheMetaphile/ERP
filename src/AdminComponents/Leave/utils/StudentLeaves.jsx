@@ -9,6 +9,7 @@ export default function StudentLeaves() {
 
   const [selectedLeave, setSelectedLeave] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error,setError] =useState(null);
   const [data, setData] = useState('');
   const { authState } = useContext(AuthContext);
 

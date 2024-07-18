@@ -16,6 +16,11 @@ function SubjectDetails({ Class, section }) {
     const [temp, setTemp] = useState();
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [role, setRole] = useState('Scholistics');
+
+    const handleRoleChange = (event) => {
+        setRole(event.target.value);
+    };
 
     useEffect(() => {
         if (section != null && section != null) {
@@ -151,100 +156,212 @@ function SubjectDetails({ Class, section }) {
     return (
         <div className='px-5 mt-2 mb-2 py-2 overflow-auto w-full border border-gray-300' >
             <ToastContainer />
-            <div className="border border-black rounded-lg mobile:max-laptop:w-fit w-full">
-                <div className="flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border bg-blue-200">
-                    <h1 className="w-48 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm">
-                        Teacher
-                    </h1>
-                    <h1 className="w-36 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
-                        Subject
-                    </h1>
-                    <h1 className="w-48 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
-                        Email
-                    </h1>
-                    <h1 className="w-36 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
-                        Action
-                    </h1>
-                </div>
-                {!subjectLoading ?
-                    subjectDetails.length > 0 ?
-                        (
-                            subjectDetails.map((detail, index) => (
-                                <div key={index} className="pl-2 mobile:max-laptop:w-fit w-full flex justify-between  py-2  h-fit border items-center">
-                                    <div className='flex w-48 whitespace-nowrap items-center'>
-                                        <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
-                                        <h1 className="ml-2 text-lg  mobile:max-laptop:text-sm mobile:max-laptop:font-sm ">
-                                            {detail.name}
-                                        </h1>
-                                    </div>
-                                    <h1 className="w-36 text-lg  mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
-                                        {detail.subject}
-                                    </h1>
-                                    <h1 className="w-48 text-lg  mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
-                                        {detail.email}
-                                    </h1>
-                                    <div className='w-36 text-lg  mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap'>
-                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
-                                    </div>
+            <div className="flex gap-4 px-3 py-2  mt-2 text-lg justify-between mobile:max-tablet:pl-0">
+                <label className="text-lg font-medium text-center">
+                    <input
+                        type="radio"
+                        name="role"
+                        value="Scholistics"
+                        checked={role === "Scholistics"}
+                        onChange={handleRoleChange}
+                        className="mr-3 w-4 h-4"
 
-                                </div>
-                            ))
-                        )
-                        :
-                        <div className='text-center'>No subject added</div>
-                    :
-                    (
-                        <Loading />
-                    )}
-                {showNewRow ? (
-                    <div className="px-2 flex justify-between  py-2 pl-2 h-fit border  gap-4">
-                        <div className='w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'></div>
-                        <input type="text" value={newRow.subject} onChange={(e) => handleChange(e, 'subject')} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Subject" required />
-                        <div className='relative w-full'>
-                            <input type="text" value={newRow.email} onChange={handleEmailChange} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Email" required />
-                            {showSuggestions && suggestions.length > 0 && (
-                                <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
-                                    {suggestions.map((suggestion, idx) => (
-                                        <li
-                                            key={idx}
-                                            className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
-                                            onClick={() => handleSuggestionClick(suggestion)}
-                                        >
-                                            <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                            {suggestion.email}
-                                        </li>
-                                    ))}
-                                </ul>
+                    />
+                    Scholistics
+                </label>
+
+                <label className="text-lg font-medium text-center">
+                    <input
+                        type="radio"
+                        name="role"
+                        value="CoScholistics"
+                        checked={role === "CoScholistics"}
+                        onChange={handleRoleChange}
+                        className="mr-3 w-4 h-4"
+
+                    />
+                    Co-Scholistics
+                </label>
+
+            </div>
+            {role === 'Scholistics' ? (
+                <div>
+                    <div className="border border-black rounded-lg mobile:max-laptop:w-fit w-full">
+                        <div className="flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border bg-blue-200">
+                            <h1 className="w-48 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm">
+                                Teacher
+                            </h1>
+                            <h1 className="w-36 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
+                                Subject
+                            </h1>
+                            <h1 className="w-48 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
+                                Email
+                            </h1>
+                            <h1 className="w-36 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
+                                Action
+                            </h1>
+                        </div>
+                        {!subjectLoading ?
+                            subjectDetails.length > 0 ?
+                                (
+                                    subjectDetails.map((detail, index) => (
+                                        <div key={index} className="pl-2 mobile:max-laptop:w-fit w-full flex justify-between  py-2  h-fit border items-center">
+                                            <div className='flex w-48 whitespace-nowrap items-center'>
+                                                <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
+                                                <h1 className="ml-2 text-lg  mobile:max-laptop:text-sm mobile:max-laptop:font-sm ">
+                                                    {detail.name}
+                                                </h1>
+                                            </div>
+                                            <h1 className="w-36 text-lg  mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
+                                                {detail.subject}
+                                            </h1>
+                                            <h1 className="w-48 text-lg  mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
+                                                {detail.email}
+                                            </h1>
+                                            <div className='w-36 text-lg  mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap'>
+                                                <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
+                                            </div>
+
+                                        </div>
+                                    ))
+                                )
+                                :
+                                <div className='text-center'>No subject added</div>
+                            :
+                            (
+                                <Loading />
                             )}
-                        </div>
-                        <div className='flex items-center'>
-                            <button className=' px-4 text-green-400 hover:text-green-700 ' onClick={handleAddRow}>
-                                Save
-                            </button>
-                            {" / "}
-                            <button className=' px-4 text-red-400 hover:text-red-700 ' onClick={() => { setShowNewRow(false) }}>
-                                Cancel
-                            </button>
-                        </div>
+                        {showNewRow ? (
+                            <div className="px-2 flex justify-between  py-2 pl-2 h-fit border  gap-4">
+                                <div className='w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'></div>
+                                <input type="text" value={newRow.subject} onChange={(e) => handleChange(e, 'subject')} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Subject" required />
+                                <div className='relative w-full'>
+                                    <input type="text" value={newRow.email} onChange={handleEmailChange} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Email" required />
+                                    {showSuggestions && suggestions.length > 0 && (
+                                        <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                            {suggestions.map((suggestion, idx) => (
+                                                <li
+                                                    key={idx}
+                                                    className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                                    onClick={() => handleSuggestionClick(suggestion)}
+                                                >
+                                                    <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                                    {suggestion.email}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                                <div className='flex items-center'>
+                                    <button className=' px-4 text-green-400 hover:text-green-700 ' onClick={handleAddRow}>
+                                        Save
+                                    </button>
+                                    {" / "}
+                                    <button className=' px-4 text-red-400 hover:text-red-700 ' onClick={() => { setShowNewRow(false) }}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div></div>
+                        )}
                     </div>
-                ) : (
-                    <div></div>
-                )}
-            </div>
-            <div className="flex justify-center w-full px-3 py-1  h-fit ">
-                <button className='mt-2 px-4 py-2 bg-green-400 hover:bg-green-500 text-white rounded-lg' onClick={() => setShowNewRow(true)}>
-                    Add subject
-                </button>
-            </div>
-            {/* {!showNewRow ? (
-                <button className='mt-2 px-4 py-2 bg-green-500 text-white rounded-lg ' onClick={() => setShowNewRow(true)}>
-                    Add Row
-                </button>
+                    <div className="flex justify-center w-full px-3 py-1  h-fit ">
+                        <button className='mt-2 px-4 py-2 bg-green-400 hover:bg-green-500 text-white rounded-lg' onClick={() => setShowNewRow(true)}>
+                            Add subject
+                        </button>
+                    </div>
+                </div>
             ) : (
-                <button className='mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg' onClick={handleAddRow}>
-                    Save
-                </button>
-            )} */}
+                <div>
+                    <div className="border border-black rounded-lg mobile:max-laptop:w-fit w-full">
+                        Change
+                        <div className="flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border bg-blue-200">
+                            <h1 className="w-48 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm">
+                                Teacher
+                            </h1>
+                            <h1 className="w-36 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
+                                Subject
+                            </h1>
+                            <h1 className="w-48 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
+                                Email
+                            </h1>
+                            <h1 className="w-36 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
+                                Action
+                            </h1>
+                        </div>
+                        {!subjectLoading ?
+                            subjectDetails.length > 0 ?
+                                (
+                                    subjectDetails.map((detail, index) => (
+                                        <div key={index} className="pl-2 mobile:max-laptop:w-fit w-full flex justify-between  py-2  h-fit border items-center">
+                                            <div className='flex w-48 whitespace-nowrap items-center'>
+                                                <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
+                                                <h1 className="ml-2 text-lg  mobile:max-laptop:text-sm mobile:max-laptop:font-sm ">
+                                                    {detail.name}
+                                                </h1>
+                                            </div>
+                                            <h1 className="w-36 text-lg  mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
+                                                {detail.subject}
+                                            </h1>
+                                            <h1 className="w-48 text-lg  mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap">
+                                                {detail.email}
+                                            </h1>
+                                            <div className='w-36 text-lg  mobile:max-laptop:text-sm mobile:max-laptop:font-sm whitespace-nowrap'>
+                                                <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
+                                            </div>
+
+                                        </div>
+                                    ))
+                                )
+                                :
+                                <div className='text-center'>No subject added</div>
+                            :
+                            (
+                                <Loading />
+                            )}
+                        {showNewRow ? (
+                            <div className="px-2 flex justify-between  py-2 pl-2 h-fit border  gap-4">
+                                <div className='w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'></div>
+                                <input type="text" value={newRow.subject} onChange={(e) => handleChange(e, 'subject')} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Subject" required />
+                                <div className='relative w-full'>
+                                    <input type="text" value={newRow.email} onChange={handleEmailChange} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Email" required />
+                                    {showSuggestions && suggestions.length > 0 && (
+                                        <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                            {suggestions.map((suggestion, idx) => (
+                                                <li
+                                                    key={idx}
+                                                    className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                                    onClick={() => handleSuggestionClick(suggestion)}
+                                                >
+                                                    <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                                    {suggestion.email}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                                <div className='flex items-center'>
+                                    <button className=' px-4 text-green-400 hover:text-green-700 ' onClick={handleAddRow}>
+                                        Save
+                                    </button>
+                                    {" / "}
+                                    <button className=' px-4 text-red-400 hover:text-red-700 ' onClick={() => { setShowNewRow(false) }}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div></div>
+                        )}
+                    </div>
+                    <div className="flex justify-center w-full px-3 py-1  h-fit ">
+                        <button className='mt-2 px-4 py-2 bg-green-400 hover:bg-green-500 text-white rounded-lg' onClick={() => setShowNewRow(true)}>
+                            Add subject
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

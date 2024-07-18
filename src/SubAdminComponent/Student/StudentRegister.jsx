@@ -49,7 +49,7 @@ export default function StudentRegister() {
             category: '',
             nationality: '',
             stream: '',
-            accessToken : authState.accessToken
+            accessToken: authState.accessToken
         }
     );
     const handleChange = (e) => {
@@ -101,6 +101,13 @@ export default function StudentRegister() {
 
         console.log(formData);
         try {
+            console.log(formData, authState.accessToken)
+            const [year, month, day] = formData.DOB.split('-');
+            const formattedDate = `${day}-${month}-${year}`;
+            formData.DOB = formattedDate
+            console.log(formData, authState.accessToken)
+
+            
             formData.password = formData.aadhaarNumber;
             const response = await axios.post(`${BASE_URL_Login}/signup/student`, formData);
             if (response.status === 200) {
@@ -176,12 +183,12 @@ export default function StudentRegister() {
 
 
     return (
-        <div className="rounded-lg shadow-lg mx-4 mb-4 border-gray-100 px-4 pt-20">
+        <div className=" mx-4 mb-4 border-gray-100 px-4 pt-20">
             <ToastContainer />
             <div className="mt-2"><h1 className="text-2xl font-semibold px-2 mt-4">Add New Student</h1></div>
             <form onSubmit={handleSubmit} className="flex flex-col w-full gap-8 px-2 mb-2">
                 <div className="flex w-full gap-4 mobile:max-tablet:flex-col mobile:max-laptop:gap-2">
-                    <div className="flex flex-col mt-8 tablet:max-laptop:w-4/12">
+                    <div className="flex flex-col mt-8 ">
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
                             <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="name">
                                 Name
