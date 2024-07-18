@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Selection from './utils/Selection';
 import { Outlet, useSearchParams } from "react-router-dom";
 import Tabs from './utils/Tabs';
+import AuthContext from '../../Context/AuthContext';
 
 function NoteBook() {
-    const [Class, setClass] = useState('');
-    const [Section, setSection] = useState('');
+    const { authState } = useContext(AuthContext);
+    const [Class, setClass] = useState(authState.subject[0].class);
+    const [Section, setSection] = useState(authState.subject[0].section);
     const [selectedTab, setSelectedTab] = useState('All');
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const [Subject, setSubject] = useState('');
+    const [Subject, setSubject] = useState(authState.subject[0].subject);
 
     const onTabChange = (tab) => {
         setSelectedTab(tab);

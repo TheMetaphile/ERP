@@ -3,8 +3,8 @@ import AuthContext from "../../../Context/AuthContext";
 
 function Selection({setClass,setSection,setSubject}) {
     const { authState } = useContext(AuthContext);
-    const [selectedClass, setSelectedClass] = useState("");
-    const [selectedSection, setSelectedSection] = useState("");
+    const [selectedClass, setSelectedClass] = useState(authState.subject[0].class);
+    const [selectedSection, setSelectedSection] = useState(authState.subject[0].section);
 
     const handleClassChange = (event) => {
         setSelectedClass(event.target.value);
