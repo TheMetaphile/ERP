@@ -10,7 +10,7 @@ import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL_Student_Leave } from "../../Config";
 ChartJS.register(Tooltip, Legend, ArcElement);
 
-export default function leave() {
+export default function Leave() {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
@@ -49,6 +49,7 @@ export default function leave() {
         plugins: {
             legend: {
                 display: false,
+
             }
         }
     };
@@ -64,8 +65,8 @@ export default function leave() {
             ],
             bg: ['text-red-600', 'text-green-600', 'text-yellow-400'],
             hoverOffset: 4,
-            cutout: "80%",
-            borderRadius: 30,
+            cutout: "82%",
+            borderRadius: 20,
             borderColor: "transparent"
         }]
     };
@@ -80,10 +81,10 @@ export default function leave() {
             {loading ? (
                 <Loading />
             ) : (
-                <div className='flex mobile:max-tablet:grid mobile:max-tablet:grid-rows-2 items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg'>
-                    <div className='flex flex-1  flex-col w-40  mobile:max-laptop:h-52 desktop:h-72 justify-center px-2  border border-gray-300 mobile:max-tablet:w-full  rounded-lg shadow-lg  text-center font-medium text-lg '>
-                        <div className='mx-2  '>
-                            <Doughnut data={chartData} options={options} className=' w-36 mobile:max-laptop:h-24 h-60 ' />
+                <div className='flex mobile:max-tablet:grid mobile:max-tablet:grid-cols-2 items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg'>
+                    <div className='flex   flex-col w-52  mobile:max-laptop:h-52 desktop:h-52 justify-center px-2  border border-gray-300 mobile:max-tablet:w-full  rounded-lg shadow-lg  text-center font-medium text-lg '>
+                        <div className='mx-2 h-32 '>
+                            <Doughnut data={chartData} options={options} className=' ' />
                         </div>
                         <h1 className="">Total Leave Status</h1>
                     </div>

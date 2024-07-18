@@ -1,0 +1,50 @@
+/* DoughnutChart.css */
+
+/* Base container styles */
+.doughnut-chart-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #e6fffa;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Adjustments for title */
+.chart-title {
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+/* Flexbox adjustments for labels and data */
+.chart-labels {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.chart-label {
+    text-align: center;
+    font-size: 1.25rem;
+    margin-right: 0.75rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+    .doughnut-chart-container {
+        padding: 0.5rem;
+    }
+    .chart-title {
+        font-size: 1.25rem;
+    }
+    .chart-label {
+        font-size: 1rem;
+        margin-right: 0.5rem;
+    }
+}
