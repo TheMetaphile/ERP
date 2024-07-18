@@ -12,8 +12,8 @@ export default function Notification() {
     return (
         <div className=" flex flex-col px-3  items-start mt-2">
 
-            <div className=" flex  ml-3 mr-3 items-center justify-between">
-                <h1 className='text-3xl'>Notice</h1>
+            <div className=" flex  mx-3 items-center justify-between">
+                <h1 className='text-3xl mobile:max-tablet:text-xl mt-2'>Notice</h1>
 
                 <div className=" flex  gap-2 ">
                     {/* <Link

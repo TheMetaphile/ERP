@@ -88,26 +88,29 @@ export default function FeeStructureField({ fees }) {
 
 
     return (
-        <div className=" w-full  rounded-t-lg  whitespace-nowrap">
-            {fees.map((data, index) => (
-                <div key={index} className="whitespace-nowrap flex items-center border-b border-gray-300 justify-center w-full ">
-                    <h5 className="text-gray-500 font-normal border-r border-gray-300 h-full py-2 w-full text-center">{index + 1}</h5>
-                    <h5 className="text-gray-500 font-normal border-r border-gray-300 h-full py-2 w-full text-center">{data.title}</h5>
-                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-full text-center">{data.amount}</h5>
-                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-full text-center">{data.discount}</h5>
-                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-full text-center">{data.payableAmount}</h5>
-                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-full text-center">{data.deadline}</h5>
-                    <h5 className="text-gray-500 border-r border-gray-300 h-full py-2 font-normal w-full text-center">{data.status}</h5>
-                    {/* <h5 className="text-gray-500 py-2 font-normal w-28 text-center">Pay</h5> */}
-                    <h5 className="w-18 my-2 mx-2 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer"
-                        onClick={() => handlePayment({ amount: data.payableAmount, order_id: data.id, title: data.title, deadline: data.deadline })}
-                    >
-                        Pay
-                    </h5>
-
-                </div>
-            ))}
-        </div>
+        // <div className=" ">
+        <>
+            {
+                fees.map((data, index) => (
+                    <tbody key={index} className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
+                        <tr className=" w-full flex">
+                            <td className="text-gray-500 border-r w-24    border-gray-300 py-2 font-normal  text-center">{index + 1}</td>
+                            <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{data.title}</td>
+                            <td className="text-gray-500 border-r w-28    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
+                            <td className="text-gray-500 border-r w-20    border-gray-300 py-2 font-normal  text-center">{data.discount}</td>
+                            <td className="text-gray-500 border-r w-60   border-gray-300 py-2 font-normal  text-center">{data.payableAmount}</td>
+                            <td className="text-gray-500 border-r w-36    border-gray-300 py-2 font-normal  text-center">{data.deadline}</td>
+                            <td className="text-gray-500 border-r w-24    border-gray-300 py-2 font-normal  text-center">{data.status}</td>
+                            {/* <td className="text-gray-500 py-2 font-normal w-28 text-center">Pay</h5> */}
+                            <td className=" w-36 text-center">
+                                <button className=" my-2 mx-1 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer" onClick={() => handlePayment({ amount: data.payableAmount, order_id: data.id, title: data.title, deadline: data.deadline })}>Pay</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                ))
+            }
+        </>
+        // </div > */ 
     );
 }
 

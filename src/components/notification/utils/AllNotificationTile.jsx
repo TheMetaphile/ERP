@@ -9,7 +9,7 @@ export default function AllNotificationTile({ details }) {
                         <div className='flex justify-between items-center'>
                             <div className="pl-2 mt-1 font-medium text-lg">Title : {detail.title}</div>
                         </div>
-                        <div className="pl-2 mt-1 font-medium text-lg text-justify">Description : <span className='font-normal'>{detail.description}</span></div>
+                        <div className="pl-2 mt-1 font-medium text-lg ">Description : <p className='font-normal text-justify'>{detail.description}</p></div>
                         <div className='flex gap-2 mobile:max-tablet:gap-0 justify-between mt-2 items-center'>
                             <div className='flex'>
                                 <img src={detail.from.profileLink} alt="img" className='h-10 w-10 mobile:max-tablet:h-8 mobile:max-tablet:w-8 rounded-full' />

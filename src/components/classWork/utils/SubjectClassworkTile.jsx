@@ -11,7 +11,7 @@ export default function SubjectClassWorkTile({ subject, details }) {
 
                     </div>
                     <div className="pl-2 mb-1  font-medium">Topic : <span className="font-normal">{detail.topic}</span></div>
-                    <h1 className="font-medium pl-2">Description: <span className="font-normal">{detail.description}</span></h1>
+                    <h1 className="font-medium mx-2 text-justify">Description: <span className="font-normal">{detail.description}</span></h1>
 
                     <div className='flex pl-2 justify-end gap-1  text-gray-500 mobile:max-tablet:flex-col'>
                         <h1 className=" text-gray-500">Classwork on <span className="font-medium text-black">{detail.date}</span></h1>

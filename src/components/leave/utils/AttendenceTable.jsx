@@ -70,7 +70,7 @@ export default function AttendenceTable({ additionalData, status }) {
 
 
   useEffect(() => {
-    if (additionalData && status==='Pending') {
+    if (additionalData && status === 'Pending') {
       console.log('bef', data)
       setData(prevData => [...additionalData, ...prevData]);
       console.log('afte', data)
@@ -187,29 +187,30 @@ export default function AttendenceTable({ additionalData, status }) {
       ) : (
         <div className='px-4'>
           {data.map((leave, index) => (
-            <div key={index} className='border border-gray-400 cursor-pointer rounded-lg shadow-md mt-2 mb-2' onClick={editRowIndex === index ? '' : () => handleClick(`${index}`)}>
+            <div key={index} className='border w-full flex mobile:max-tablet:justify-center border-gray-400 cursor-pointer rounded-lg shadow-md mt-2 mb-2' onClick={editRowIndex === index ? '' : () => handleClick(`${index}`)}>
               <div className="font-normal px-4 py-1 text-justify ">
                 <div className='flex items-center justify-between py-2'>
-                  <div className='flex items-center'>
+                  <div className='flex items-center mobile:max-tablet:flex-col justify-evenly tablet:gap-10'>
                     <img src={authState.userDetails.profileLink} alt="" className='w-10 h-10 rounded-full'></img>
-                    <div className="font-medium ">
-                      <span className='px-2 font-normal'>Leave request from</span>{editRowIndex === index ? (
-                        <input
-                          type="date" name='startDate' value={editData.startDate} onChange={handleInputChange} className='border' />
-                      ) :
-                        (leave.startDate)
-                      }
-                    </div>
-
-                    <div className="font-medium">
-                      <span className='font-norma'>&nbsp;to </span>{editRowIndex === index ?
-                        (
-                          <input type="date" name='endDate' value={editData.endDate} onChange={handleInputChange} className='border' />
+                    <span className='px-2 font-normal'>Leave request from</span>
+                    <div className='flex '>
+                      <div className="font-medium  ">
+                        {editRowIndex === index ? (
+                          <input
+                            type="date" name='startDate' value={editData.startDate} onChange={handleInputChange} className='border' />
                         ) :
-                        (leave.endDate)
-                      }
+                          (leave.startDate)
+                        }
+                      </div>
+                      <div className="font-medium">
+                        <span className='font-norma'>&nbsp;To </span>{editRowIndex === index ?
+                          (
+                            <input type="date" name='endDate' value={editData.endDate} onChange={handleInputChange} className='border' />
+                          ) :
+                          (leave.endDate)
+                        }
+                      </div>
                     </div>
-
                     <div className={`${leave.status === "Pending" ? "text-orange-300" :
                       leave.status === "Rejected" ? "text-red-400" :
                         "text-green-400"

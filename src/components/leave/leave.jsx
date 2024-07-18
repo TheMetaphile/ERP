@@ -80,12 +80,12 @@ export default function leave() {
             {loading ? (
                 <Loading />
             ) : (
-                <div className='flex mobile:max-tablet:grid mobile:max-tablet:grid-rows-2 border  border-gray-300 items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg'>
-                    <div className='flex  flex-col w-44  border border-gray-300 mobile:max-tablet:w-full h-60  rounded-lg shadow-lg  text-center font-medium text-lg '>
+                <div className='flex mobile:max-tablet:grid mobile:max-tablet:grid-rows-2 items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg'>
+                    <div className='flex flex-1  flex-col w-40  mobile:max-laptop:h-52 desktop:h-72 justify-center px-2  border border-gray-300 mobile:max-tablet:w-full  rounded-lg shadow-lg  text-center font-medium text-lg '>
                         <div className='mx-2  '>
-                            <Doughnut data={chartData} options={options} className='w-44 h-44' />
+                            <Doughnut data={chartData} options={options} className=' w-36 mobile:max-laptop:h-24 h-60 ' />
                         </div>
-                        <h1>Total Leave Status</h1>
+                        <h1 className="">Total Leave Status</h1>
                     </div>
                     <ProgressCard
                         title='Approved'
@@ -93,7 +93,6 @@ export default function leave() {
                         centerText={details.approved}
                         trailColor='#c8ebc9'
                         strokeColor='#4caf50'
-
                     />
                     <ProgressCard
                         title='Pending'
@@ -101,7 +100,6 @@ export default function leave() {
                         centerText={details.pending}
                         trailColor='#FFD8B2'
                         strokeColor='#FE8D01'
-
                     />
                     <ProgressCard
                         title='Rejected'

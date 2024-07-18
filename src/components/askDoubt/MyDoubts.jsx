@@ -186,14 +186,14 @@ export default function MyDoubts() {
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-                    <div className="bg-white rounded-lg p-6 shadow-lg w-1/2">
-                        <h2 className="text-base font-medium mb-4">To Ask a doubt please select class and subject and write your Question? You can also attached photos for references.</h2>
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center mobile:max-tablet:z-50">
+                    <div className="bg-white rounded-lg mobile:max-tablet:p-4  mobile:max-tablet:w-full mobile:max-tablet:mx-10   p-6 shadow-lg w-1/2">
+                        <h2 className="text-base font-medium mb-4 text-justify">To Ask a doubt please select class and subject and write your Question? You can also attached photos for references.</h2>
 
                         <div className="flex flex-col tablet:flex-row justify-between items-center gap-3 w-full ">
                             <div className="flex-1 mobile:max-tablet:w-full">
                                 <select
-                                    className=" shadow-md border border-grey-300 rounded-lg p-2 w-full ml-2 mr-2  mb-2"
+                                    className=" shadow-md border border-grey-300 rounded-lg p-2 w-full mr-2  mb-2"
                                     onChange={handleModalSubject}
                                 >
                                     {['Hindi', 'Maths', 'English', 'Computer', 'Science', 'Chemistry', 'Physics', 'Sanskrit'].map(
@@ -212,10 +212,14 @@ export default function MyDoubts() {
                         <textarea className="w-full px-3 py-2 mb-4 border rounded-lg" placeholder="Write here.." rows={2} value={doubtDescription}
                             onChange={(e) => setDoubtDescription(e.target.value)}></textarea>
 
-                        <IoCameraOutline className='w-6 h-6 ' />
-                        <div className="flex justify-end">
-                            <button className="bg-gray-300 rounded-lg px-4 py-2 mr-2" onClick={handleCloseModal}>Cancel</button>
-                            <button className="bg-blue-600 text-white rounded-lg px-4 py-2" onClick={handleSubmitDoubt}>{loading ? <Loading /> : 'Submit'}</button>
+                        <div className="flex justify-between">
+                            <div className=' flex items-center'>
+                                <IoCameraOutline className='w-6 h-6 mobile:max-tablet:w-5 mobile:max-tablet:h-5 ' />
+                            </div>
+                            <div>
+                                <button className="bg-gray-300 rounded-lg mobile:max-tablet:px-2 mobile:max-tablet:py-1 px-4 py-2 mr-2" onClick={handleCloseModal}>Cancel</button>
+                                <button className="bg-blue-600 text-white rounded-lg mobile:max-tablet:px-2 mobile:max-tablet:py-1 px-4 py-2" onClick={handleSubmitDoubt}>{loading ? <Loading /> : 'Submit'}</button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -55,17 +55,19 @@ export default function FeeStructure() {
 
   return (
     <div className="w-full h-fit mb-4  rounded-lg shadow-md overflow-auto border border-gray-300">
-      <Header />
-      {loading ? (
-        <Loading />
-      ) : fees === null ? (
-        <div>No data available</div>
-      ) : (
-        <div className="">
-          <FeeStructureField fees={fees} />
-          <FeeStructureFooter totalAmount={totalAmount} />
-        </div>
-      )}
+      <table className=" w-full">
+        <Header />
+        {loading ? (
+          <Loading />
+        ) : fees === null ? (
+          <div>No data available</div>
+        ) : (
+          <div className="">
+            <FeeStructureField fees={fees} />
+            <FeeStructureFooter totalAmount={totalAmount} />
+          </div>
+        )}
+      </table>
     </div>
   );
 }
