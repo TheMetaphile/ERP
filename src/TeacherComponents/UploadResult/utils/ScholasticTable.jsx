@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { BASE_URL_Result } from '../../../Config'; // Make sure to add the notebook API URL to your Config file
 import AuthContext from "../../../Context/AuthContext";
 
+
 export default function ScholasticTable({ students, term, Class, subject }) {
     const { authState } = useContext(AuthContext);
     const [totalTheoryMarks, setTotalMarks] = useState({
@@ -91,6 +92,26 @@ export default function ScholasticTable({ students, term, Class, subject }) {
             return;
         }
         const studentMarks = marks[email];
+        console.log('total',Number(totalTheoryMarks.noteBook),'aaye',Number(studentMarks.noteBook));
+        if(Number(studentMarks.noteBook)<=0 || Number(studentMarks.noteBook)> Number(totalTheoryMarks.noteBook)){
+            toast.error('Obtained notebook marks cannot be less then zero and more then total');
+            return;
+        }
+
+        if(Number(studentMarks.theory)<=0 || Number(studentMarks.theory)> Number(totalTheoryMarks.theory)){
+            toast.error('Obtained theory marks cannot be less then zero and more then total');
+            return;
+        }
+
+        if(Number(studentMarks.practical)<=0 || Number(studentMarks.practical)> Number(totalTheoryMarks.practical)){
+            toast.error('Obtained practical marks cannot be less then zero and more then total');
+            return;
+        }
+
+        if(Number(studentMarks.subjectEnrichment)<=0 || Number(studentMarks.subjectEnrichment)> Number(totalTheoryMarks.subjectEnrichment)){
+            toast.error('Obtained subject enrichment marks cannot be less then zero and more then total');
+            return;
+        }
         console.log(studentMarks);
         const schedules = {
             subject,

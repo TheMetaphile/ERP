@@ -15,6 +15,9 @@ const Access = ({ nextStep, prevStep, handleChange }) => {
             >
               <option value="">Select Department</option>
               <option value="Finance">Finance </option>
+              <option value="Cerificate">Cerificate </option>
+              <option value="Result">Result </option>
+
             </select>
           </label>
           <label className="block">
@@ -25,6 +28,8 @@ const Access = ({ nextStep, prevStep, handleChange }) => {
             >
               <option value="">Select Role</option>
               <option value="Accountant">Accountant</option>
+              <option value="Cerificate">Cerificate </option>
+              <option value="Result">Result </option>
             </select>
           </label>
         </div>

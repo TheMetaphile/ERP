@@ -14,6 +14,7 @@ import medical from "../assets/Picture1.png";
 import datesheet from "../assets/datesheet.png";
 import lifestyle from "../assets/lifestyle 1.png";
 import live from "../assets/live 1.png";
+import notebook from "../assets/notebook.png";
 import changePassword from "../assets/change_password.png";
 
 const menuItems = [
@@ -106,6 +107,12 @@ const menuItems = [
     alt: "Date sheet image",
     text: "Date Sheet",
     route: "/Student-Dashboard/datesheet",
+  },
+  {
+    image: notebook,
+    alt: "notebook image",
+    text: "Notebook Record",
+    route: "/Student-Dashboard/notebook"
   },
   // {
   //   image: lifestyle,

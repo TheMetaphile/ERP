@@ -145,6 +145,7 @@ import FeeSubAdmin from "./SubAdminComponent/SubAdminFee/FeeSubAdmin.jsx";
 import FeeDetailsSubAdmin from "./SubAdminComponent/SubAdminFee/StudentFee/FeeDetailsSubAdmin.jsx";
 import FeeStructureSubAdmin from "./SubAdminComponent/SubAdminFee/FeeStructure/FeeStructureSubAdmin.jsx";
 import FeeDiscountSubAdmin from "./SubAdminComponent/SubAdminFee/Discount/FeeDiscountSubAdmin.jsx";
+import Status from "./components/notebook/Status.jsx";
 
 const router = createBrowserRouter([
   {
@@ -351,6 +352,10 @@ const router = createBrowserRouter([
       {
         path: "/Student-Dashboard/homework",
         element: <HomeWork />,
+      },
+      {
+        path: "/Student-Dashboard/notebook",
+        element: <Status />,
       },
     ],
   },

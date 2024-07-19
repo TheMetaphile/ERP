@@ -17,6 +17,9 @@ function FeeDetailsSubAdmin() {
     const [end, setEnd] = useState(5);
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [mode, setMode] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedStudent, setSelectedStudent] = useState(null);
+    const [title, setTitle] = useState('');
 
     const handleClassChange = (e) => {
         setDetails([]);
@@ -25,10 +28,11 @@ function FeeDetailsSubAdmin() {
         setStart(0);
     };
 
-    const handleModeChange = (e) => {
+    const handleModeChange = (e, student) => {
         setMode(e.target.value);
+        setSelectedStudent(student);
+        setIsModalOpen(true);
     };
-
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
     };
@@ -72,7 +76,7 @@ function FeeDetailsSubAdmin() {
                 }
             });
             if (response.status === 200) {
-
+                console.log(response.data);
                 const list = response.data.output.length;
                 if (list < end) {
                     toast.success('All data fetched');
@@ -89,6 +93,15 @@ function FeeDetailsSubAdmin() {
             setLoading(false);
         }
     }
+
+    const handleConfirm = () => {
+        console.log(`Mode: ${mode}, Title: ${title}, Student:`, selectedStudent);
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <div className=" flex flex-col px-3  mobile:max-tablet:px-0   items-start mt-2  mb-3 ">
@@ -181,7 +194,7 @@ function FeeDetailsSubAdmin() {
                         details.length > 0 ? (
                             <div>
                                 {details.map((details, index) => (
-                                    <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center'>
+                                    <div key={index} className='px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center'>
                                         <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.rollNumber}
                                         </h1>
@@ -212,22 +225,18 @@ function FeeDetailsSubAdmin() {
                                         <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.payableFee}
                                         </h1>
-                                        <h1 className="w-32 text-lg rounded-full bg-secondary border border-gray-300 text-center whitespace-nowrap hover:cursor-pointer">
-                                            <select
-                                                className="w-full h-full rounded-full bg-secondary "
-                                                id="mode"
-                                                name="mode"
-                                                value={mode}
-                                                onChange={handleModeChange}
-                                                required
-                                            >
-                                                <option value="Cash">Cash</option>
-                                                <option value="Online">Online</option>
-                                                <option value="RTGS">RTGS</option>
-                                                <option value="Cheque">Cheque</option>
-                                                <option value="Draft">Draft</option>
-                                            </select>
-                                        </h1>
+                                        <select
+                                            className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-full bg-secondary py-2"
+                                            value={mode}
+                                            onChange={(e) => handleModeChange(e, details)}
+                                        >
+                                            <option value="none">None</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="Online">Online</option>
+                                            <option value="RTGS">RTGS</option>
+                                            <option value="Cheque">Cheque</option>
+                                            <option value="Demand Draft">Demand Draft</option>
+                                        </select>
                                     </div>
                                 ))}
                                 {!allDataFetched && (
@@ -242,6 +251,54 @@ function FeeDetailsSubAdmin() {
                     )}
                 </div>
             </div>
+            {isModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="fixed inset-0 bg-black opacity-50"></div>
+                    <div className="bg-white p-4 rounded-lg z-10 w-2/5">
+                        <h2 className="text-xl mb-4">Confirm Payment</h2>
+                        {selectedStudent && (
+                            <div className='flex gap-20 items-center'>
+                                <div>
+                                    <p><strong>Roll No:</strong> {selectedStudent.rollNumber}</p>
+                                    <p><strong>Name:</strong> {selectedStudent.name}</p>
+                                    <p><strong>Class:</strong> {selectedClass}</p>
+                                    <p><strong>Section:</strong> {selectedStudent.section}</p>
+                                    <p><strong>Session:</strong> {selectedStudent.session}</p>
+                                    <p><strong>Total Fee:</strong> {selectedStudent.totalfee}</p>
+                                </div>
+                                <div>
+                                    <p><strong>Discount:</strong> {selectedStudent.discountAmount}</p>
+                                    <p><strong>Fine:</strong> {selectedStudent.fine}</p>
+                                    <p><strong>Paid:</strong> {selectedStudent.paid}</p>
+                                    <p><strong>Payable:</strong> {selectedStudent.payableFee}</p>
+                                    <p><strong>Mode:</strong> {mode}</p>
+                                </div>
+                            </div>
+                        )}
+                        <input
+                            type="text"
+                            placeholder="Enter Title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            className="border rounded p-2 w-full mb-4"
+                        />
+                        <div className="flex justify-end gap-2">
+                            <button
+                                className="px-4 py-2 bg-green-500 text-white rounded"
+                                onClick={handleConfirm}
+                            >
+                                Confirm
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-red-500 text-white rounded"
+                                onClick={handleCancel}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
