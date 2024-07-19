@@ -19,14 +19,14 @@ export default function ScholasticRow({ area, index }) {
     const grade = scholastic.find(range => percentage >= range.lower && percentage <= range.upper)?.grade || 'N/A';
 
     return (
-        <tr className='text-center' key={index}>
-            <td className="px-4 py-2 border-x border-gray-200">{area.subject}</td>
-            <td className="px-4 py-2 border-x border-gray-200">{area.obtainedNoteBookMarks}</td>
-            <td className="px-4 py-2 border-x border-gray-200">{area.obtainedSubjectEnrichmentMarks}</td>
-            <td className="px-4 py-2 border-x border-gray-200">{area.marksObtained}</td>
-            <td className="px-4 py-2 border-x border-gray-200">{totalobtained}</td>
-            <td className="px-4 py-2 border-x border-gray-200">{percentage.toFixed(2)}</td>
-            <td className="px-4 py-2 border-x border-gray-200">{grade}</td>
+        <tr className='text-center text-lg font-normal ' key={index}>
+            <td className="px-4 pb-4 border-x border-gray-200">{area.subject}</td>
+            <td className="px-4 pb-4 border-x border-gray-200">{area.obtainedNoteBookMarks}</td>
+            <td className="px-4 pb-4 border-x border-gray-200">{area.obtainedSubjectEnrichmentMarks}</td>
+            <td className="px-4 pb-4 border-x border-gray-200">{area.marksObtained}</td>
+            <td className="px-4 pb-4 border-x border-gray-200">{totalobtained}</td>
+            <td className="px-4 pb-4 border-x border-gray-200">{percentage.toFixed(2)}</td>
+            <td className="px-4 pb-4 border-x border-gray-200">{grade}</td>
         </tr>
     );
 }

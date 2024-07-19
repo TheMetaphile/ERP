@@ -9,16 +9,14 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 const Result = () => {
-    const { id } = useParams();
+
     const [loading, setLoading] = useState(true);
     const { authState } = useContext(AuthContext);
     const [details, setDetails] = useState({ term1: [], term2: [] });
-    const [profile, setProfile] = useState({});
-    const [profileLoading, setProfileLoading] = useState(true);
+    const profile = authState.userDetails;
     const [selectedTermValue, setSelectedTerm] = useState('term1');
     const [selectedTermlabel, setSelectedTermLabel] = useState('Term 1');
     const [attendance, SetAttendance] = useState({});
-    const [Printing, setPrinting] = useState(false);
 
     const ref = useRef();
     // const ref2 = useRef();
@@ -63,32 +61,16 @@ const Result = () => {
         const selectedTerm = terms.find(term => term.value === event.target.value);
         console.log(selectedTerm);
         setSelectedTermLabel(selectedTerm.label);
-
     }
 
 
     useEffect(() => {
-        const fetchProfile = async () => {
-            setProfileLoading(true);
-            try {
-                const response = await axios.post(`${BASE_URL_Login}/fetchSingle/student`, {
-                    accessToken: authState.accessToken,
-                    email: id
-                });
-                if (response.status === 200) {
-                    setProfile(response.data.StudentDetails[0]);
-                    console.log(response.data.StudentDetails[0], "profile");
-                }
-            } catch (error) {
-                console.error('Error fetching profile:', error);
-            }
-            setProfileLoading(false);
-        };
+
 
         const fetchResult = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Result}/result/fetch/teacher?email=${id}`, {
+                const response = await axios.get(`${BASE_URL_Result}/result/fetch/student?email=${profile.email}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }
@@ -104,33 +86,33 @@ const Result = () => {
             }
         };
 
-        const fetchAttendance = async () => {
-            let config = {
-                method: 'get',
-                maxBodyLength: Infinity,
-                url: 'http://13.201.247.28:8000/studentAttendance/fetch/completeStats?class=9th&id=664c4da3a8cd53da5751bdba&year=2024',
-                headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
-                }
-            };
+        // const fetchAttendance = async () => {
+        //     let config = {
+        //         method: 'get',
+        //         maxBodyLength: Infinity,
+        //         url: 'http://13.201.247.28:8000/studentAttendance/fetch/completeStats?class=9th&id=664c4da3a8cd53da5751bdba&year=2024',
+        //         headers: {
+        //             'Authorization': `Bearer ${authState.accessToken}`
+        //         }
+        //     };
 
-            axios.request(config)
-                .then((response) => {
-                    SetAttendance(response.data);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+        //     axios.request(config)
+        //         .then((response) => {
+        //             SetAttendance(response.data);
+        //         })
+        //         .catch((error) => {
+        //             console.log(error);
+        //         });
 
-        }
+        // }
 
         const processAll = async () => {
-            await Promise.all([fetchAttendance(), fetchProfile(), fetchResult()]);
+            await Promise.all([fetchResult()]);
         }
         processAll();
-    }, [id, authState.accessToken]);
+    }, [authState.accessToken]);
 
-    if (loading || profileLoading) {
+    if (loading) {
         return <Loading />;
     }
 
@@ -206,7 +188,7 @@ const Result = () => {
                     <button className='text-lg font-semibold border rounded-md px-2 py-1' onClick={handlePrint}>Print</button>
                 </div>
             </div>
-            <div className="report-card border border-black " ref={ref} >
+            {details ? <div className="report-card border border-black " ref={ref} >
 
                 <div className=' border-b border-black py-3 items-center bg-teal-200 text-center'>
                     <h1 className={`text-3xl  font-semibold mb-2`}>{selectedTermlabel} : {profile.session || "2024-25"}</h1>
@@ -344,6 +326,10 @@ const Result = () => {
                     </div>
                 </div>
             </div>
+                :
+                <div className='text-2xl text-center'>Not Result found</div>
+            }
+
         </div>
     );
 };
