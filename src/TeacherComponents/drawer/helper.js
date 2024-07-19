@@ -152,13 +152,6 @@ const menuItems = [
     children: []
   },
   {
-    image: dashboardResult,
-    alt: "Result image",
-    title: "SubResult",
-    route: "/Teacher-Dashboard/SubResult",
-    children: []
-  },
-  {
     image: ClassActivity,
     alt: "img",
     title: "Upload Result",

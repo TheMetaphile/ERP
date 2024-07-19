@@ -38,7 +38,7 @@ export default function FeeStructureField({ fees }) {
                     installment_id: installmentId, // or a relevant installment id
                     order_id: "NA",
                     payment_id: response.razorpay_payment_id,
-                    signature: "NA"
+                    signature: "Online"
                 });
 
             },
@@ -62,7 +62,7 @@ export default function FeeStructureField({ fees }) {
                 installment_id: installmentId, // or a relevant installment id
                 order_id: "NA",
                 payment_id: response.error.metadata.payment_id,
-                signature: "NA" // no signature in case of failure
+                signature: "Online" // no signature in case of failure
             });
         });
 

@@ -35,7 +35,7 @@ function AllNotification() {
     }, [authState.accessToken]);
 
     return (
-        <div className='mx-3'>
+        <div className='px-3 w-full'>
             {loading ? (
                 <Loading />
             ) : details.length === 0 ? (

@@ -52,10 +52,10 @@ export default function Table() {
 
       <table className=' mt-7  w-full justify-evenly items-center ml-5 mr-5 shadow-md my-2 px-2 border-2 border-gray-300 rounded-lg mb-3'>
         <thead>
-          <tr className='rounded-t-lg border-b-2 border-gray-400 mt-3  no-underline text-xl'>
-            <th className='no-underline text-xl mobile:max-tablet:text-lg py-3'>Date </th>
-            <th className='no-underline text-xl mobile:max-tablet:text-lg bg-blue-200 py-3'>Subject </th>
-            <th className='no-underline text-xl mobile:max-tablet:text-lg bg-green-200 py-3'>Time </th>
+          <tr className='rounded-t-lg border-b-2 border-gray-400 mt-3'>
+            <th className='text-xl mobile:max-tablet:text-lg py-3'>Date </th>
+            <th className='text-xl mobile:max-tablet:text-lg bg-blue-200 py-3'>Subject </th>
+            <th className='text-xl mobile:max-tablet:text-lg bg-green-200 py-3'>Time </th>
           </tr>
         </thead>
 
@@ -63,7 +63,7 @@ export default function Table() {
         <tbody >
           {exams && exams.length > 0 ? (
             exams.map((exam, index) => (
-              <tr key={index} className='rounded-t-lg border-b-2 border-gray-400 mt-3  no-underline text-xl'>
+              <tr key={index} className='rounded-t-lg border-b-2 border-gray-400 mt-3 text-xl'>
                 <td className="font-normal text-gray-700 text-center p-3 whitespace-nowrap ">{exam.date}</td>
                 <td className="font-normal bg-blue-200 text-gray-700 text-center p-3 whitespace-nowrap">{exam.subject}</td>
                 <td className="font-normal bg-green-200 text-gray-700 text-center p-3 whitespace-nowrap">{exam.time}</td>

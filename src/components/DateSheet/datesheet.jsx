@@ -3,13 +3,13 @@ import logo from './../../assets/metaphile_logo.png';
 import School from './school.jsx';
 import download from './../../assets/Download.png';
 
-export default function datesheet() {
+export default function Datesheet() {
   const handlePrint = () => {
     window.print();
   };
   return (
     <div className=' mobile:max-tablet:mt-4'>
-      <h1 className='ml-4 text-3xl font-medium'>Datesheet</h1>
+      <h1 className='px-7 text-2xl font-medium'>Datesheet</h1>
       <div className='flex flex-col px-3 overflow-y-auto items-center justify-center ml-2 mr-2 mb-2 no-scrollbar'>
 
         <School img={logo} schoolname="Metaphile Public School" address="Noida sector 62, Block A23" />

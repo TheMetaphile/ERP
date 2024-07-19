@@ -1,9 +1,17 @@
+import React, { useState } from "react";
+
 export default function SubjectHomeWorkTile({ subject, details }) {
+    const [expanded, setExpanded] = useState(null);
+
+    const handleClick = (index) => {
+        setExpanded(expanded === index ? null : index);
+    }
+
     return (
         <div className='mt-2 w-full px-3'>
             {details.map((detail, index) => (
                 <div key={index} className='mt-1 p-3 w-full flex-col rounded-lg shadow-md items-center border  border-gray-300' >
-                    <div className="flex items-center justify-between  ">
+                    <div className="flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
 
                         <div className="w-80 pl-2  font-medium">Chapter : <span className="font-normal">{detail.chapter}</span></div>
 
@@ -12,7 +20,9 @@ export default function SubjectHomeWorkTile({ subject, details }) {
                     </div>
                     <div className="flex flex-col gap-1 mb-1">
                         <div className="pl-2  font-medium">Topic : <span className="font-normal">{detail.topic}</span></div>
-                        <h1 className="font-medium mx-2 text-justify">Description: <span className="font-normal">{detail.description}</span></h1>
+                        {expanded === index && (
+                            <h1 className="font-medium mx-2 text-justify">Description: <span className="font-normal">{detail.description}</span></h1>
+                        )}
                     </div>
 
                     <div className='flex pl-2 justify-between text-gray-500 mobile:max-tablet:flex-col gap-1 '>

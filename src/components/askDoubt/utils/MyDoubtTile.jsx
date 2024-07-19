@@ -10,6 +10,11 @@ export default function MyDoubtTile({ data }) {
     const [editMode, setEditMode] = useState(null);
     const [editedData, setEditedData] = useState({});
     const [doubts, setDoubts] = useState(data);
+    const [expanded, setExpanded] = useState(null);
+
+    const handleClick = (index) => {
+        setExpanded(expanded === index ? null : index);
+    }
 
     useEffect(() => {
         setDoubts(data);
@@ -84,7 +89,7 @@ export default function MyDoubtTile({ data }) {
         <div>
             {doubts.map((item, index) => (
                 <div key={index} className="border border-gray-300 py-2 px-3 mt-3 rounded-lg shadow-md">
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center cursor-pointer" onClick={() => handleClick(index)}>
                         <div className='flex items-center gap-2'>
                             {editMode === index ? (
                                 <input
@@ -128,30 +133,33 @@ export default function MyDoubtTile({ data }) {
 
 
                     </div>
+                    {expanded === index && (
+                        <>
+                            <div className="flex justify-between items-center mt-3 mobile:max-tablet:flex-col">
+                                <div className="font-normal px-2">
+                                    {editMode === index ? (
+                                        <input
+                                            type="text"
+                                            name="question"
+                                            value={editedData.question}
+                                            onChange={handleInputChange}
+                                            className="w-full border border-gray-300 rounded-lg px-3 py-1"
+                                        />
+                                    ) : (
+                                        item.question
+                                    )}
+                                </div>
 
-                    <div className="flex justify-between items-center mt-3 mobile:max-tablet:flex-col">
-                        <div className="font-normal px-2">
-                            {editMode === index ? (
-                                <input
-                                    type="text"
-                                    name="question"
-                                    value={editedData.question}
-                                    onChange={handleInputChange}
-                                    className="w-full border border-gray-300 rounded-lg px-3 py-1"
-                                />
-                            ) : (
-                                item.question
-                            )}
-                        </div>
-
-                    </div>
-                    <div className='mt-3 px-3 font-normal'>
-                        {item.status === 'Resolved' && (
-                            <div>
-                                <span className='text-lg font-medium'>Answer</span> : {item.solution}
                             </div>
-                        )}
-                    </div>
+                            <div className='mt-3 px-3 font-normal'>
+                                {item.status === 'Resolved' && (
+                                    <div>
+                                        <span className='text-lg font-medium'>Answer</span> : {item.solution}
+                                    </div>
+                                )}
+                            </div>
+                        </>
+                    )}
                     <div className='px-3 flex items-center justify-between mt-2 '>
                         {(item.status === 'Resolved' || item.status === 'Rejected') && (
                             <div className='flex items-center gap-2'>
