@@ -1,55 +1,72 @@
 import React, { useState, useEffect, useContext } from 'react'
-import Header from '../../AdminComponents/Home/utils/TeachersDetails/LeftCard/Header';
 import axios from 'axios';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Login } from '../../Config';
-import UploadResultRow from './UploadResultRow';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Switch from './utils/switch';
+import Selection from '../notebook/utils/Selection';
+import CoScholasticTable from './utils/CoScholasticTable';
+import ScholasticTable from './utils/ScholasticTable';
 
 function UploadResult() {
   const [students, setStudents] = useState([]);
   const { authState } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const [start, setStart] = useState(0);
-  const [end, setEnd] = useState(10);
-  const [allDataFetched, setAllDataFetched] = useState(false);
+  const end = 100;
+  const [Class, setClass] = useState(authState.subject[0].class);
+  const [Section, setSection] = useState(authState.subject[0].section);
+  const [Subject, setSubject] = useState(authState.subject[0].subject);
+  const [scholastic, setScholastic] = useState(false);
+  const [selectedTerm, setSelectedTerm] = useState('term1');
 
-  useEffect(() => {
-    fetchStudents();
-  }, [authState.accessToken]);
+  const terms = [
+    {
+      label: 'Term 1',
+      value: "term1"
+    },
+    {
+      label: 'Half Yearly',
+      value: "halfYearly"
+    },
+    {
+      label: 'Term 2',
+      value: "term2"
+    },
+    {
+      label: 'Final',
+      value: "final"
+    }
+  ];
 
-  const handleViewMore = () => {
-    setStart(prevStart => prevStart + end);
+  const handleTermChange = (event) => {
+    setSelectedTerm(event.target.value);
+}
+  const handleRoleChange = (event) => {
+    setScholastic(event);
   };
 
   useEffect(() => {
-    if (start !== 0) {
-      fetchStudents();
-    }
-  }, [start]);
+    setStudents([]);
+    fetchStudents();
+  }, [Class, Section]);
+
+
 
 
   const fetchStudents = async () => {
     setLoading(true);
-    console.log('start', start, 'end', end)
+
     try {
       const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
         accessToken: authState.accessToken,
         currentClass: authState.ClassDetails.class,
         section: authState.ClassDetails.section,
-        start: start,
         end: end
       });
       if (response.status == 200) {
-        const student = response.data.Students.length;
         console.log("API response:", response.data.Students);
-        if (student < end) {
-          toast.success('All data fetched');
-          console.log('All data fetched')
-          setAllDataFetched(true);
-        }
         setStudents(prevData => [...prevData, ...response.data.Students]);
         console.log("API responserrrrrr:", response.data.Students);
 
@@ -70,23 +87,35 @@ function UploadResult() {
     <div className="overflow-y-auto w-full items-start px-2 py-1 no-scrollbar">
       <ToastContainer />
       <div className='w-full flex items-center justify-between my-2'>
-        <h1 className="text-2xl font-medium mb-2">Upload Report Card</h1>
+        <h1 className="text-xl font-medium mb-2">Upload Report Card</h1>
+        <div className='flex items-end'>
+          <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
+          <div className="w-36 mr-3 self-center">
+            <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleTermChange}>
+              <option value="">Select Term</option>
+              {terms.map((sectionOption, index) => (
+                <option key={index} value={sectionOption.value}>{sectionOption.label}</option>
+              ))}
+            </select>
+          </div>
+          <Switch checked={scholastic} changeRole={handleRoleChange} />
+        </div>
       </div>
       {loading ? (
         <Loading />
-      ) : students.length === 0 ? (
-        <>No student found</>
-      ) : (
-        <div className='rounded-lg shadow-md border border-gray-300 w-full mb-2 h-screen overflow-auto'>
-          <Header headings={['Roll No.', 'Name', "Class", "section", ""]} />
-          {students.map((detail, index) => (
-            <UploadResultRow key={index} rollNumber={detail.rollNumber} name={detail.name} profileLink={detail.profileLink} email={detail.email} Class={authState.ClassDetails.class} section={authState.ClassDetails.section} />
-          ))}
-          {!allDataFetched && (
-            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-          )}
-        </div>
-      )}
+      ) :
+        scholastic
+          ?
+          (
+            <ScholasticTable students={students} subject={Subject} term={selectedTerm} Class={Class}/>
+          )
+          :
+          (
+            <CoScholasticTable students={students} Class={Class} term={selectedTerm} />
+          )
+
+      }
+
     </div>
   )
 }

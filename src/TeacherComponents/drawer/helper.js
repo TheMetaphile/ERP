@@ -1,22 +1,17 @@
 import homeImage from "../../assets/home.png";
-import adminImage from "../../assets/admin.png";
 import checkinImage from "../../assets/checkin.png";
 import dashboardLeaveImage from "../../assets/Dashboard_leave.png";
-import salaryImage from "../../assets/salary.png";
 import homeworkImage from "../../assets/freelance 1.png";
 import classworkImage from "../../assets/presentation 1.png";
 import timeTableImage from "../../assets/Dashboard_time_table.png";
-import resultImage from "../../assets/Dashboard_result.png";
-import studentFeesImage from "../../assets/Dashboard_fee.png";
-import transportImage from "../../assets/transport.png";
-import studentAttendanceImage from "../../assets/Dashboard_assignment.png";
 import birthdayImage from "../../assets/birthday.png";
-import messageImage from "../../assets/message.png";
 import noticeImage from "../../assets/notice2.png";
 import notebookImage from "../../assets/notebook.png";
 import ClassActivity from "../../assets/lecture.png";
 import Doubts from "../../assets/doubts.png";
 import Appraisal from "../../assets/appraisal.png";
+import dashboardResult from "../../assets/Dashboard_result.png";
+
 
 
 const menuItems = [
@@ -155,6 +150,22 @@ const menuItems = [
     title: "Note Book Record",
     route: '/Teacher-Dashboard/notebook',
     children: []
+  },
+  {
+    image: dashboardResult,
+    alt: "Result image",
+    title: "SubResult",
+    route: "/Teacher-Dashboard/SubResult",
+    children: []
+  },
+  {
+    image: ClassActivity,
+    alt: "img",
+    title: "Upload Result",
+    route: '/Teacher-Dashboard/uploadResult',
+    children: [
+      
+    ]
   },
 ];
 

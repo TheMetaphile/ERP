@@ -13,8 +13,7 @@ import DateSheet from "./components/DateSheet/datesheet.jsx";
 import Attendance from "./components/Attendance/Attendance.jsx";
 import TimeTable from "./components/TimeTable/Timetable.jsx";
 import AskDoubt from "./components/askDoubt/Askdoubt.jsx";
-import MyDoubts from './components/askDoubt/MyDoubts.jsx'
-import SubjectClassWork from "./components/classWork/SubjectClassWork.jsx";
+import MyDoubts from './components/askDoubt/MyDoubts.jsx';
 import ClassWork from "./components/classWork/route.jsx";
 import TodayClassWork from "./components/classWork/TodayClassWork.jsx";
 import Login from "./components/onBoarding/Login/Login.jsx";
@@ -45,11 +44,9 @@ import Mediacal from "./components/medical/Medical.jsx";
 import AddmissionForm from "./AdminComponents/Students/AllStudents/AddmissionForm.jsx";
 import StudentPromotion from "./AdminComponents/Students/AllStudents/StudentPromotion.jsx";
 import StudentAttendance from "./AdminComponents/Students/Students Attendance/StudentAttendance.jsx";
-import HomeWork from "./components/homeWork/HomeWork.jsx"
-import SubjectHomeWork from "./components/homeWork/SubjectHomeWork.jsx"
+import HomeWork from "./components/homeWork/HomeWork.jsx";
 
 import Route from './components/homeWork/route.jsx';
-import StudentResult from "./AdminComponents/Students/AllStudents/StudentResult.jsx";
 import AllParents from "./AdminComponents/Parents/AllParents.jsx";
 import AllBooks from "./AdminComponents/Library/AllBooks.jsx";
 import ResultLayout from "./AdminComponents/Students/AllStudents/utils/ResultLayout.jsx";
@@ -81,16 +78,12 @@ import TeacherStudentAttendance from "./TeacherComponents/studentattendence/Stud
 import TakeLeave from "./TeacherComponents/takeleave/TakeLeave.jsx";
 import ReportCard from "./TeacherComponents/reportcard/ReportCard.jsx";
 import AllReport from "./TeacherComponents/reportcard/AllReport.jsx";
-import Performance from "./TeacherComponents/reportcard/utils/performance/PerformanceProfile.jsx"
 import TimeTableTeacher from "./TeacherComponents/timetable/TimeTable.jsx"
 import BirthDay from "./TeacherComponents/birthday/BirthDay.jsx";
 import All from "./TeacherComponents/birthday/utils/All.jsx"
 import TeacherBirthDay from "./TeacherComponents/birthday/utils/Teacher.jsx"
 import StudentBirthDay from "./TeacherComponents/birthday/utils/Student.jsx"
 import StudentLeave from "./TeacherComponents/studentleave/StudentLeave.jsx";
-import New from "./TeacherComponents/studentleave/utils/New.jsx"
-import Approved from "./TeacherComponents/studentleave/utils/Approved.jsx";
-import Rejected from "./TeacherComponents/studentleave/utils/Rejected.jsx";
 import StudentFee from "./TeacherComponents/studentfee/StudentFee.jsx";
 import NoteBook from "./TeacherComponents/notebook/NoteBook.jsx";
 import TeacherMessage from "./TeacherComponents/message/Message.jsx"
@@ -141,8 +134,7 @@ import Salary from "./SubAdminComponent/Salary/Salary.jsx";
 import AllSalary from "./SubAdminComponent/Salary/AllSalary.jsx";
 import StudentRegister from "./SubAdminComponent/Student/StudentRegister.jsx";
 import TeacherRegister from "./SubAdminComponent/Teacher/TeacherRegister.jsx";
-import Allsubresult from "./components/Subresult/Allsubresult.jsx";
-import Subresult from "./components/Subresult/Subresult.jsx";
+import Subresult from "./TeacherComponents/Subresult/Subresult.jsx";
 import AllExReport from "./SubAdminComponent/result/ExReport/AllExReport.jsx";
 import List from "./SubAdminComponent/result/ExReport/List.jsx";
 import ExResult from "./SubAdminComponent/result/ExReport/utils/ExResult.jsx";
@@ -234,20 +226,6 @@ const router = createBrowserRouter([
             path: ':subject',
             element: <Quiz />
           }
-        ]
-      },
-      {
-        path: "/Student-Dashboard/SubResult",
-        element: <Allsubresult />,
-        children: [
-          {
-            path: '',
-            element: <Subresult />
-          },
-          // {
-          //   path: ':subject',
-          //   element: <Quiz />
-          // }
         ]
       },
       {
@@ -779,16 +757,12 @@ const router = createBrowserRouter([
               },
               {
                 path: ':id',
-                element: <Performance />
+                element: <Subresult />
               }
             ]
           },
 
-          {
-            path: "/Teacher-Dashboard/class_activity/uploadResult",
-            element: <UploadResult />,
-            children: []
-          },
+          
           {
             path: "/Teacher-Dashboard/class_activity/studentfee",
             element: <StudentFee />,
@@ -839,6 +813,25 @@ const router = createBrowserRouter([
       {
         path: "/Teacher-Dashboard/message",
         element: <TeacherMessage />,
+        children: []
+      },
+      // {
+      //   path: "/Teacher-Dashboard/SubResult",
+      //   element: <Allsubresult />,
+      //   children: [
+      //     {
+      //       path: '',
+      //       element: <Subresult />
+      //     },
+      //     // {
+      //     //   path: ':subject',
+      //     //   element: <Quiz />
+      //     // }
+      //   ]
+      // },
+      {
+        path: "/Teacher-Dashboard/uploadResult",
+        element: <UploadResult />,
         children: []
       },
     ]

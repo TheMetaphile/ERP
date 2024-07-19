@@ -12,17 +12,19 @@ export const AuthProvider = ({ children }) => {
         otpToken: null,
         subject: null,
         ClassDetails: null,
+        Co_scholastic:null
 
     });
 
-    const login = (userDetails, tokens,subject, ClassDetails) => {
+    const login = (userDetails, tokens,subject, ClassDetails,Co_scholastic) => {
         setAuthState({
             userDetails,
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
             otpToken: null,
             subject,
-            ClassDetails
+            ClassDetails,
+            Co_scholastic
 
         });
         console.log("auth user", userDetails);

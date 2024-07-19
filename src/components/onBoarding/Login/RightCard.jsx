@@ -41,11 +41,12 @@ export default function RightCard() {
                 password
             }).then((response) => {
                 if (response.status == 200) {
+                    console.log(response.data,"isuhgaoiud hfguj dsfkgj")
                     const { userDetails, tokens, subject, ClassDetails } = response.data;
                     console.log(userDetails, tokens);
 
 
-                    login(userDetails, tokens, subject, ClassDetails);
+                    login(userDetails, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : []);
                     navigate(`/${role}`);
                 }
             });

@@ -124,12 +124,6 @@ const menuItems = [
     alt: "Change password image",
     text: "Change Password",
   },
-  {
-    image: dashboardResult,
-    alt: "Result image",
-    text: "SubResult",
-    route: "/Student-Dashboard/SubResult",
-  },
 ];
 
 export default menuItems;

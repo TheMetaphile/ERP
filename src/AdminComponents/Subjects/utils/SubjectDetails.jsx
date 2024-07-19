@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdDeleteForever } from "react-icons/md";
 import { BASE_URL_Login, BASE_URL_Subject } from '../../../Config';
+import Switch from './switch';
 
 function SubjectDetails({ Class, section }) {
     const [subjectDetails, setSubjects] = useState([]);
@@ -16,12 +17,27 @@ function SubjectDetails({ Class, section }) {
     const [temp, setTemp] = useState();
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
-    const [role, setRole] = useState('Scholistics');
+    const [scholastic, setScholastic] = useState(false);
+    const [additionalLink, setAdditionalLink] = useState("");
+
 
     const handleRoleChange = (event) => {
-        setRole(event.target.value);
+        setScholastic(event);
     };
 
+    useEffect(()=>{
+        if(scholastic){
+            setAdditionalLink("/coScholastic");
+        }else{
+            setAdditionalLink("");
+        }
+    },[scholastic]);
+
+    useEffect(()=>{
+        console.log(additionalLink);
+        setSubjects([]);
+        fetchSubject()
+    },[additionalLink]);
     useEffect(() => {
         if (section != null && section != null) {
             setSubjectLoading(true);
@@ -32,7 +48,7 @@ function SubjectDetails({ Class, section }) {
     const fetchSubject = async () => {
         console.log('class', Class, 'section', section)
         try {
-            const response = await axios.post(`${BASE_URL_Subject}/fetch`, {
+            const response = await axios.post(`${BASE_URL_Subject}/fetch${additionalLink}`, {
                 accessToken: authState.accessToken,
                 class: Class,
                 section: section
@@ -52,7 +68,7 @@ function SubjectDetails({ Class, section }) {
 
         try {
             if (newRow.email) {
-                const response = await axios.post(`${BASE_URL_Subject}/assign`, {
+                const response = await axios.post(`${BASE_URL_Subject}/assign${additionalLink}`, {
                     accessToken: authState.accessToken,
                     class: Class,
                     section: section,
@@ -133,7 +149,7 @@ function SubjectDetails({ Class, section }) {
         console.log('Deleting ', Class, 'section:', section, 'email:', email, 'subject:', subject, authState.accessToken);
 
         try {
-            const response = await axios.delete(`${BASE_URL_Subject}/delete`, {
+            const response = await axios.delete(`${BASE_URL_Subject}/delete${additionalLink}`, {
                 data: {
                     accessToken: authState.accessToken,
                     class: Class,
@@ -156,35 +172,16 @@ function SubjectDetails({ Class, section }) {
     return (
         <div className='px-5 mt-2 mb-2 py-2 overflow-auto w-full border border-gray-300' >
             <ToastContainer />
-            <div className="flex gap-4 px-3 py-2  mt-2 text-lg justify-between mobile:max-tablet:pl-0">
-                <label className="text-lg font-medium text-center">
-                    <input
-                        type="radio"
-                        name="role"
-                        value="Scholistics"
-                        checked={role === "Scholistics"}
-                        onChange={handleRoleChange}
-                        className="mr-3 w-4 h-4"
-
-                    />
-                    Scholistics
+            <div className="flex gap-4 px-3 py-2  mt-2 text-lg justify-end items-center mobile:max-tablet:pl-0">
+                <label className="text-base font-normal text-center">
+                    Scholastic
                 </label>
-
-                <label className="text-lg font-medium text-center">
-                    <input
-                        type="radio"
-                        name="role"
-                        value="CoScholistics"
-                        checked={role === "CoScholistics"}
-                        onChange={handleRoleChange}
-                        className="mr-3 w-4 h-4"
-
-                    />
-                    Co-Scholistics
+                <Switch checked={scholastic} changeRole={handleRoleChange}/>
+                <label className="text-base font-normal text-center">
+                    Co-Scholastic
                 </label>
-
             </div>
-            {role === 'Scholistics' ? (
+            {scholastic === 'Scholistics' ? (
                 <div>
                     <div className="border border-black rounded-lg mobile:max-laptop:w-fit w-full">
                         <div className="flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border bg-blue-200">
@@ -275,7 +272,6 @@ function SubjectDetails({ Class, section }) {
             ) : (
                 <div>
                     <div className="border border-black rounded-lg mobile:max-laptop:w-fit w-full">
-                        Change
                         <div className="flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border bg-blue-200">
                             <h1 className="w-48 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm">
                                 Teacher

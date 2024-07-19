@@ -3,10 +3,6 @@ import { Link, Outlet } from 'react-router-dom'
 function ClassActivity() {
 
     const menuItems = [
-        // {
-        //     title: "Overview",
-        //     route: ""
-        // },
         {
             title: "Time Table",
             route: "/Teacher-Dashboard/class_activity/timetablestudent"
@@ -14,10 +10,6 @@ function ClassActivity() {
         {
             title: "Show Result",
             route: "/Teacher-Dashboard/class_activity/reportcard"
-        },
-        {
-            title: "Upload Result",
-            route: "/Teacher-Dashboard/class_activity/uploadResult"
         },
         {
             title: "Fee Status",
