@@ -112,10 +112,10 @@ export default function TeacherLeavesTile({ data }) {
                                             Approved
                                         </button>
                                         <div className="flex items-center">
-                                            Approved By: &nbsp;{teacher.AppliedBy && teacher.AppliedBy[0] && (
+                                            Approved By: &nbsp;{teacher.ApprovedBy && teacher.ApprovedBy[0] && (
                                                 <>
-                                                    <img src={teacher.AppliedBy[0].profileLink} alt="" className="h-8 w-8 mobile:max-tablet:hidden rounded-full" />
-                                                    <p className="  px-2 mobile:max-tablet:text-lg"> {teacher.AppliedBy[0].name}</p>
+                                                    <img src={teacher.ApprovedBy[0].profileLink} alt="" className="h-8 w-8 mobile:max-tablet:hidden rounded-full" />
+                                                    <p className="  px-2 mobile:max-tablet:text-lg"> {teacher.ApprovedBy[0].name}</p>
                                                 </>
                                             )}
                                         </div>

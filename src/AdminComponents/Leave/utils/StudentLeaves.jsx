@@ -25,7 +25,7 @@ export default function StudentLeaves() {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/admin?start=${0}&end=${10}`, {
+      const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/admin?start=${0}&end=${10}&status=Rejected`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }
@@ -35,7 +35,7 @@ export default function StudentLeaves() {
       setData(response.data.StudentsLeaves);
       setLoading(false);
     } catch (err) {
-      setError(err.message);
+      setError(err);
     }
   };
 
