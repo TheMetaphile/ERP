@@ -146,6 +146,8 @@ import FeeDetailsSubAdmin from "./SubAdminComponent/SubAdminFee/StudentFee/FeeDe
 import FeeStructureSubAdmin from "./SubAdminComponent/SubAdminFee/FeeStructure/FeeStructureSubAdmin.jsx";
 import FeeDiscountSubAdmin from "./SubAdminComponent/SubAdminFee/Discount/FeeDiscountSubAdmin.jsx";
 import Status from "./components/notebook/Status.jsx";
+import Planner from "./TeacherComponents/Planner/Planner.jsx";
+
 
 const router = createBrowserRouter([
   {
@@ -767,7 +769,7 @@ const router = createBrowserRouter([
             ]
           },
 
-          
+
           {
             path: "/Teacher-Dashboard/class_activity/studentfee",
             element: <StudentFee />,
@@ -807,8 +809,12 @@ const router = createBrowserRouter([
             path: "New",
             element: <NewNoteBookRecord />
           },
-          
+
         ]
+      },
+      {
+        path: "/Teacher-Dashboard/planner",
+        element: <Planner />,
       },
       {
         path: "/Teacher-Dashboard/notebook/details/:id",

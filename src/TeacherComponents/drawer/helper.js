@@ -12,15 +12,13 @@ import Doubts from "../../assets/doubts.png";
 import Appraisal from "../../assets/appraisal.png";
 import dashboardResult from "../../assets/Dashboard_result.png";
 
-
-
 const menuItems = [
   {
     image: homeImage,
     alt: "Attendance image",
     title: "Dashboard",
-    route: '/Teacher-Dashboard',
-    children: []
+    route: "/Teacher-Dashboard",
+    children: [],
   },
 
   // {
@@ -41,17 +39,15 @@ const menuItems = [
     image: Doubts,
     alt: "img",
     title: "Student Doubts",
-    route: '/Teacher-Dashboard/studentdoubts/new',
-    children: []
+    route: "/Teacher-Dashboard/studentdoubts/new",
+    children: [],
   },
   {
     image: ClassActivity,
     alt: "img",
     title: "Class Activity",
-    route: '/Teacher-Dashboard/class_activity',
-    children: [
-      
-    ]
+    route: "/Teacher-Dashboard/class_activity",
+    children: [],
   },
   // {
   //   image: adminImage,
@@ -64,15 +60,15 @@ const menuItems = [
     image: checkinImage,
     alt: "Check In Image",
     title: "Check In",
-    route: '/Teacher-Dashboard/checkin',
-    children: []
+    route: "/Teacher-Dashboard/checkin",
+    children: [],
   },
   {
     image: dashboardLeaveImage,
     alt: "Leave application image",
     title: "Take Leave",
-    route: '/Teacher-Dashboard/takeleave',
-    children: []
+    route: "/Teacher-Dashboard/takeleave",
+    children: [],
   },
   // {
   //   image: salaryImage,
@@ -84,22 +80,22 @@ const menuItems = [
     image: homeworkImage,
     alt: "Home Work Image",
     title: "Home Work",
-    route: '/Teacher-Dashboard/homework',
-    children: []
+    route: "/Teacher-Dashboard/homework",
+    children: [],
   },
   {
     image: classworkImage,
     alt: "Class Work Image",
     title: "Class Work",
-    route: '/Teacher-Dashboard/classwork',
-    children: []
+    route: "/Teacher-Dashboard/classwork",
+    children: [],
   },
   {
     image: timeTableImage,
     alt: "Time Table Image",
     title: "Time Table",
-    route: '/Teacher-Dashboard/timetable',
-    children: []
+    route: "/Teacher-Dashboard/timetable",
+    children: [],
   },
   // {
   //   image: resultImage,
@@ -120,8 +116,8 @@ const menuItems = [
     image: birthdayImage,
     alt: "BirthDay Image",
     title: "Birthdays",
-    route: '/Teacher-Dashboard/birthday',
-    children: []
+    route: "/Teacher-Dashboard/birthday",
+    children: [],
   },
   // {
   //   image: messageImage,
@@ -134,31 +130,43 @@ const menuItems = [
     image: Appraisal,
     alt: "Appraisal Image",
     title: "Appraisal",
-    route: '/Teacher-Dashboard/appraisal/apply',
-    children: []
+    route: "/Teacher-Dashboard/appraisal/apply",
+    children: [],
   },
   {
     image: noticeImage,
     alt: "Notice Image",
     title: "Notice Board",
-    route: '/Teacher-Dashboard/noticeboard/teacher',
-    children: []
+    route: "/Teacher-Dashboard/noticeboard/teacher",
+    children: [],
   },
   {
     image: notebookImage,
     alt: "Note Book Image",
     title: "Note Book Record",
-    route: '/Teacher-Dashboard/notebook',
-    children: []
+    route: "/Teacher-Dashboard/notebook",
+    children: [],
+  },
+  {
+    image: dashboardResult,
+    alt: "Result image",
+    title: "SubResult",
+    route: "/Teacher-Dashboard/SubResult",
+    children: [],
   },
   {
     image: ClassActivity,
     alt: "img",
     title: "Upload Result",
-    route: '/Teacher-Dashboard/uploadResult',
-    children: [
-      
-    ]
+    route: "/Teacher-Dashboard/uploadResult",
+    children: [],
+  },
+  {
+    image: notebookImage,
+    alt: "weekly-planner",
+    title: "Weekly Planner",
+    route: "/Teacher-Dashboard/planner",
+    children: [],
   },
 ];
 

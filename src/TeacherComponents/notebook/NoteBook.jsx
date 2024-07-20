@@ -24,7 +24,7 @@ function NoteBook() {
     useEffect(() => {
         updateQueryParams();
     }, [Class, Section, Subject]);
-    
+
     return (
         <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar">
             <div className='w-full flex items-center justify-between px-4 '>
@@ -33,8 +33,6 @@ function NoteBook() {
             </div>
             <Tabs onTabChange={onTabChange} selectedTab={selectedTab} Class={Class} Section={Section} Subject={Subject} />
             <Outlet />
-
-
         </div>
 
     )
