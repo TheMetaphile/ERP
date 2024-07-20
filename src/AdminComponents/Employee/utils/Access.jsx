@@ -1,6 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const Access = ({ nextStep, prevStep, handleChange }) => {
+const Access = ({ nextStep, prevStep, handleChange, formData }) => {
+
+  const handleProceed = () => {
+      if (!formData.department || !formData.role) {
+          alert('Please select both department and role.');
+      } else {
+          nextStep();
+      }
+  };
   return (
     <div className="rounded-lg w-full px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3">
       <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md space-y-4 border">
@@ -11,6 +19,7 @@ const Access = ({ nextStep, prevStep, handleChange }) => {
             <span>Select Department</span>
             <select
               className="w-full p-2 border rounded mt-1"
+              value={formData.department}
               onChange={handleChange('department')}
             >
               <option value="">Select Department</option>
@@ -24,6 +33,7 @@ const Access = ({ nextStep, prevStep, handleChange }) => {
             <span>Select Role</span>
             <select
               className="w-full p-2 border rounded mt-1"
+              value={formData.role}
               onChange={handleChange('role')}
             >
               <option value="">Select Role</option>
@@ -38,7 +48,7 @@ const Access = ({ nextStep, prevStep, handleChange }) => {
           <button onClick={prevStep} className="bg-gray-500 text-white p-2 rounded">
             Back
           </button>
-          <button onClick={nextStep} className="bg-blue-500 text-white p-2 rounded">
+          <button onClick={handleProceed} className="bg-blue-500 text-white p-2 rounded">
             Proceed
           </button>
         </div>

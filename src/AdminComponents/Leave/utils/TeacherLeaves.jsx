@@ -11,8 +11,11 @@ import TeacherLeavesTile from "./TeacherLeavesTile.jsx";
 export default function TeacherLeaves() {
   const [selectedLeave, setSelectedLeave] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const { authState } = useContext(AuthContext);
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(4);
+  const [allDataFetched, setAllDataFetched] = useState(false);
 
   useEffect(() => {
     if (authState.accessToken) {
@@ -23,6 +26,16 @@ export default function TeacherLeaves() {
       setLoading(false);
     }
   }, [authState.accessToken]);
+
+  const handleViewMore = () => {
+    setStart(prevStart => prevStart + end);
+  };
+
+  useEffect(() => {
+    if (start !== 0) {
+      fetchTeacherData();
+    }
+  }, [start]);
 
   function getCurrentSession() {
     const now = new Date();
@@ -40,15 +53,23 @@ export default function TeacherLeaves() {
     const session = getCurrentSession();
 
     try {
-      const response = await axios.get(`${BASE_URL_TeacherLeave}/teacherleave/fetch/admin?start=${0}&end=${10}&session=${session}`, {
+      const response = await axios.get(`${BASE_URL_TeacherLeave}/teacherleave/fetch/admin?start=${start}&end=${end}&session=${session}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }
       }
       );
-      console.log("API response teacher:", response.data.Leaves);
-      setData(response.data.Leaves);
+
+      const leave = response.data.Leaves.length;
+      console.log("API response:", response.data.Leaves);
+      if (leave < end) {
+        toast.success('All data fetched');
+        console.log('All data fetched')
+        setAllDataFetched(true);
+      }
+      setData(prevData => [...prevData,...response.data.Leaves]);
       setLoading(false);
+
     } catch (err) {
       setError(err.message);
     }
@@ -85,7 +106,7 @@ export default function TeacherLeaves() {
   };
 
 
- 
+
 
   return (
     <div className="flex flex-col space-y-4 mb-4">
@@ -94,8 +115,13 @@ export default function TeacherLeaves() {
       ) : data === null ? (
         <div>No data available</div>
       ) : (
-      <TeacherLeavesTile data={data}/>
-    )}
+        <>
+          <TeacherLeavesTile data={data} />
+          {!allDataFetched && (
+            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+          )}
+        </>
+      )}
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL_Exam } from "../../../Config";
+import { MdEdit, MdDeleteForever, MdCheck, MdCancel } from "react-icons/md";
 
 export default function AllExam() {
     const [exams, setExams] = useState([]);
@@ -246,10 +247,11 @@ export default function AllExam() {
                                                         className="border p-1"
                                                     />
                                                 </td>
-                                                <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">
-                                                    <button onClick={() => handleSave(index)} className="text-green-600 hover:text-green-900">Save</button>&nbsp;&nbsp;/ &nbsp;
-                                                    <button onClick={handleCancelEdit} className="text-red-600 hover:text-red-900">Cancel</button>
-                                                </td>
+                                                <div className='flex items-center gap-1 justify-center'>
+                                                    <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleSave(index)}><MdCheck /></button>
+                                                    <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
+                                                </div>
+
                                             </>
                                         ) : (
                                             <>
@@ -259,8 +261,10 @@ export default function AllExam() {
                                                 <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.date}</td>
                                                 <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">{exam.duration}</td>
                                                 <td className="px-4 py-2 whitespace-nowrap text-lg border-r text-center">
-                                                    <button onClick={() => deleteExam(index)} className="text-red-600 hover:text-red-900">Delete</button>&nbsp;&nbsp;/ &nbsp;
-                                                    <button onClick={() => handleEditClick(index)} className="text-green-600 hover:text-green-900">Edit</button>
+                                                    <div className='flex items-center gap-1 justify-center'>
+                                                        <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <MdEdit /></button>
+                                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => deleteExam(index)}><MdDeleteForever /></button>
+                                                    </div>
                                                 </td>
                                             </>
                                         )}

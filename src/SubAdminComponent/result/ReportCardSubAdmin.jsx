@@ -12,16 +12,21 @@ function ReportCardSubAdmin() {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false)
     // State to control the dropdown visibility
-    const [isDropdownVisible, setDropdownVisible] = useState(false);
-    const [Class, setClass] = useState('');
-    const [Section, setSection] = useState('');
-    const [selectedSession, setSelectedSession] = useState('');
+    const [Class, setClass] = useState(localStorage.getItem('Class') || '');
+    const [Section, setSection] = useState(localStorage.getItem('Section') || '');
+    const [selectedSession, setSelectedSession] = useState(localStorage.getItem('selectedSession') || '');
     const [error, setError] = useState(null);
     const containerRef = useRef(null);
     const [userData, setUserData] = useState([]);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(20);
     const [allDataFetched, setAllDataFetched] = useState(false);
+
+    useEffect(() => {
+        localStorage.setItem('Class', Class);
+        localStorage.setItem('Section', Section);
+        localStorage.setItem('selectedSession', selectedSession);
+    }, [Class, Section, selectedSession]);
 
     const handleClassChange = (event) => {
         setUserData([]);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const stateDistrictData = {
   "Andhra Pradesh": ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Nellore", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
@@ -39,7 +39,17 @@ const stateDistrictData = {
 };
 
 
-function Address({ nextStep, prevStep, handleChange }) {
+function Address({ nextStep, prevStep, handleChange, formData }) {
+
+
+  const handleProceed = () => {
+      if (!formData.residentialAddress || !formData.residentialState || !formData.residentialDistrict || !formData.residentialPincode ||
+          !formData.permanentAddress || !formData.permanentState || !formData.permanentDistrict || !formData.permanentPincode) {
+          alert('Please fill in all fields.');
+      } else {
+          nextStep();
+      }
+  };
   return (
     <div className="rounded-lg w-full px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3">
       <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md space-y-4 border">
@@ -51,12 +61,14 @@ function Address({ nextStep, prevStep, handleChange }) {
             type="text"
             placeholder="Address"
             className="w-full p-2 border rounded"
+            value={formData.residentialAddress}
             onChange={handleChange('residentialAddress')}
             required
           />
           <div className="flex space-x-2">
             <select
               className="w-full p-2 border rounded"
+              value={formData.residentialState}
               onChange={handleChange('residentialState')}
             >
               <option value="">Select State</option>
@@ -66,6 +78,7 @@ function Address({ nextStep, prevStep, handleChange }) {
               type="text"
               placeholder="District"
               className="w-full p-2 border rounded"
+              value={formData.residentialDistrict}
               onChange={handleChange('residentialDistrict')}
             />
           </div>
@@ -73,6 +86,7 @@ function Address({ nextStep, prevStep, handleChange }) {
             type="text"
             placeholder="Pincode"
             className="w-full p-2 border rounded"
+            value={formData.residentialPincode}
             onChange={handleChange('residentialPincode')}
           />
         </div>
@@ -83,11 +97,13 @@ function Address({ nextStep, prevStep, handleChange }) {
             type="text"
             placeholder="Address"
             className="w-full p-2 border rounded"
+            value={formData.permanentAddress}
             onChange={handleChange('permanentAddress')}
           />
           <div className="flex space-x-2">
             <select
               className="w-full p-2 border rounded"
+              value={formData.permanentState}
               onChange={handleChange('permanentState')}
             >
               <option value="">Select State</option>
@@ -98,6 +114,7 @@ function Address({ nextStep, prevStep, handleChange }) {
               type="text"
               placeholder="District"
               className="w-full p-2 border rounded"
+              value={formData.permanentDistrict}
               onChange={handleChange('permanentDistrict')}
             />
           </div>
@@ -105,6 +122,7 @@ function Address({ nextStep, prevStep, handleChange }) {
             type="text"
             placeholder="Pincode"
             className="w-full p-2 border rounded"
+            value={formData.permanentPincode}
             onChange={handleChange('permanentPincode')}
           />
         </div>
@@ -113,7 +131,7 @@ function Address({ nextStep, prevStep, handleChange }) {
           <button onClick={prevStep} className="bg-gray-500 text-white p-2 rounded">
             Back
           </button>
-          <button onClick={nextStep} className="bg-blue-500 text-white p-2 rounded">
+          <button onClick={handleProceed} className="bg-blue-500 text-white p-2 rounded">
             Proceed
           </button>
         </div>

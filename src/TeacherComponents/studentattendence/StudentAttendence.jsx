@@ -13,6 +13,7 @@ function StudentAttendance() {
     const containerRef = useRef(null);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(8);
+    const [error, setError] = useState('');
     const [loadMore, setLoadMore] = useState(false);
     const [studentClone, setStudentClone] = useState([]);
     const { authState } = useContext(AuthContext);
@@ -42,6 +43,7 @@ function StudentAttendance() {
                 setStudentClone(prevStudents => [...prevStudents, ...studentsList]);
                 console.log('fetch', studentsList);
             } catch (error) {
+                setError(error.response.data.error);
                 console.error("Error fetching student attendance:", error);
             }
             finally {
@@ -155,7 +157,7 @@ function StudentAttendance() {
                         </button>
                     </div>
                 </div>
-
+                {error}
                 <div className="border rounded-lg shadow-md mt-2 overflow-auto h-screen" onScroll={handleScroll} ref={containerRef}>
                     {loading && students.length == 0 ? (
                         <Loading />

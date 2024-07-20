@@ -96,7 +96,6 @@ export default function AddmissionForm() {
             const response = await axios.post(`${BASE_URL_Login}/signup/student`, formData);
             if (response.status === 200) {
                 toast.success('Student registered successfully!');
-                toast.success('Student registered successfully!');
                 console.log(formData)
                 handleReset();
             }

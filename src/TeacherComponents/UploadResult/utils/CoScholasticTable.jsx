@@ -21,6 +21,12 @@ export default function CoScholasticTable({ students, term, Class }) {
 
     const [errors, setErrors] = useState({});
 
+    const [clickedIndex, setClickedIndex] = useState(null);
+
+    const handleClick = (index) => {
+        setClickedIndex(index);
+    };
+
     const handleGradeChange = (studentEmail, subject, value) => {
         console.log(`${term}_Co_scholastic`);
         setGrades(prevGrades => ({
@@ -112,7 +118,7 @@ export default function CoScholasticTable({ students, term, Class }) {
                 </thead>
                 <tbody className="text-gray-600 text-md font-normal">
                     {students.map((Student, index) => (
-                        <tr key={index} className="border-b border-gray-200 last:border-none">
+                        <tr key={index} className={`border-b border-gray-200 last:border-none ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
                             <td className="py-2 px-6 text-center rounded-t-r">{Student.rollNumber}</td>
                             <td className="py-2 px-6 text-center">{Student.name}</td>
                             {Subjects.map((Subject, subIndex) => (

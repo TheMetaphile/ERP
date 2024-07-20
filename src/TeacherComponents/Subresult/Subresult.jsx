@@ -190,7 +190,6 @@ const Result = () => {
     };
 
 
-
     return (
         <div className="p-2 w-full">
             <div className="flex justify-between items-center mb-4">
@@ -226,73 +225,80 @@ const Result = () => {
 
 
                 </div>
-                {details[selectedTermValue].length === 0 || details===null? (
-                    <> No Scholastic Data Available</>
+                {details === null ? (
+                    <div className='font-medium text-center text-red-500'>No Result found</div>
                 ) : (
-                    <table className="min-w-full border border-gray-200">
-                        <thead className=' bg-teal-200 text-xl font-medium '>
-                            <tr className='text-center'>
-                                <th className="px-4 py-2 border">Scholastic Areas</th>
-                                <th className="px-4 py-2 border">
-                                    Note Book
-                                    <p>
-                                        ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalNoteBookMarks : ""})
-                                    </p>
-                                </th>
-                                <th className="px-4 py-2 border">
-                                    S.Enrichment
-                                    <p>
-                                        ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalSubjectEnrichmentMarks : ""})
-                                    </p>
+                    <>
+                        {details[selectedTermValue].length === 0 ?(
+                            <div className='font-medium text-center text-red-500'> No Scholastic Data Available</div>
+                        ) : (
+                        <table className="min-w-full border border-gray-200">
+                            <thead className=' bg-teal-200 text-xl font-medium '>
+                                <tr className='text-center'>
+                                    <th className="px-4 py-2 border">Scholastic Areas</th>
+                                    <th className="px-4 py-2 border">
+                                        Note Book
+                                        <p>
+                                            ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalNoteBookMarks : ""})
+                                        </p>
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                        S.Enrichment
+                                        <p>
+                                            ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalSubjectEnrichmentMarks : ""})
+                                        </p>
 
-                                </th>
-                                <th className="px-4 py-2 border">
-                                    Marks Obt
-                                    <p>
-                                        ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalMarks : ""})
-                                    </p>
+                                    </th>
+                                    <th className="px-4 py-2 border">
+                                        Marks Obt
+                                        <p>
+                                            ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalMarks : ""})
+                                        </p>
 
-                                </th>
-                                <th className="px-4 py-2 border">Total</th>
-                                <th className="px-4 py-2 border">%</th>
-                                <th className="px-4 py-2 border">Grade</th>
-                            </tr>
-                        </thead>
-                        <tbody className='pb-6'>
-                            {details[selectedTermValue].map((area, index) => (
-                                <ScholasticRow index={index} area={area} />
-                            ))}
-                            <tr></tr>
-                        </tbody>
-                    </table>
+                                    </th>
+                                    <th className="px-4 py-2 border">Total</th>
+                                    <th className="px-4 py-2 border">%</th>
+                                    <th className="px-4 py-2 border">Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody className='pb-6'>
+                                {details[selectedTermValue].map((area, index) => (
+                                    <ScholasticRow index={index} area={area} />
+                                ))}
+                                <tr></tr>
+                            </tbody>
+                        </table>
                 )}
 
 
 
-                <div className="">
-                    {details[selectedTermValue].length === 0 ? (
-                        <> No Co-Scholastic Data Available</>
-                    ) : (
-                        <table className="min-w-full bg-white border border-gray-200">
-                            <thead className=' bg-teal-200 text-xl font-medium'>
-                                <tr>
-                                    <th className="px-4 pb-4 border text-start">Co-Scholastic Areas:</th>
-                                    <th className="px-4 pb-4 border text-end">Grade</th>
-                                </tr>
-                            </thead>
-                            <tbody className='text-lg font-normal '>
-                                {details[`${selectedTermValue}_Co_scholastic`].map((area, index) => (
-                                    <tr key={index}>
-                                        <td className="px-4 pb-4 border text-start">{area.subject}</td>
-                                        <td className="px-4 pb-4 border text-end">{area.grade}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
+                        <div className="">
+                            {details[`${selectedTermValue}_Co_scholastic`].length === 0 ? (
+                                <div className='font-medium text-center text-red-500'> No Co-Scholastic Data Available</div>
+                            ) : (
+                                <table className="min-w-full bg-white border border-gray-200">
+                                    <thead className=' bg-teal-200 text-xl font-medium'>
+                                        <tr>
+                                            <th className="px-4 pb-4 border text-start">Co-Scholastic Areas:</th>
+                                            <th className="px-4 pb-4 border text-end">Grade</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className='text-lg font-normal '>
+                                        {details[`${selectedTermValue}_Co_scholastic`].map((area, index) => (
+                                            <tr key={index}>
+                                                <td className="px-4 pb-4 border text-start">{area.subject}</td>
+                                                <td className="px-4 pb-4 border text-end">{area.grade}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
 
 
-                </div>
+                        </div>
+                    </>
+                )}
+
 
 
                 <div className=' border-b border-black'>

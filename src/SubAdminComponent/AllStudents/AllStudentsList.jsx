@@ -222,7 +222,7 @@ export default function AllStudentsList() {
                 <div className="mobile:max-laptop:overflow-y-auto">
                     <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap mobile:max-tablet:mt-20" ref={containerRef} onScroll={handleScroll}>
                         <div className="stutable">
-                            <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail', 'Action']} />
+                            <Header headings={[ 'Name', 'Class', 'Section', 'Phone No.', 'E-mail', 'Action']} />
                         </div>
                         {loading && userData.length < 1 ? (
                             <Loading />

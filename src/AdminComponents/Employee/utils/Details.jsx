@@ -1,7 +1,17 @@
-import React from 'react';
-import { FaUser, FaGraduationCap, FaSchool, FaPhone, FaEnvelope, FaBirthdayCake, FaTint, FaRegIdCard  } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { FaUser, FaGraduationCap, FaSchool, FaPhone, FaEnvelope, FaBirthdayCake, FaTint, FaRegIdCard } from 'react-icons/fa';
 
-function Details({ nextStep, handleChange }) {
+function Details({ nextStep, handleChange, formData }) {
+
+
+    const handleProceed = () => {
+        if (!formData.name || !formData.qualification || !formData.institute || !formData.phoneNumber || !formData.emergencyContactNumber || !formData.email || !formData.dob || !formData.bloodGroup || !formData.aadhaarNumber) {
+            alert('Please fill in all fields.');
+        } else {
+            nextStep();
+        }
+    };
+
     return (
         <div className="rounded-lg w-full px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3">
             <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md space-y-4 border">
@@ -13,6 +23,7 @@ function Details({ nextStep, handleChange }) {
                         type="text"
                         placeholder="Enter name"
                         className="w-full p-2 border rounded"
+                        value={formData.name}
                         onChange={handleChange('name')}
                     />
                 </div>
@@ -22,6 +33,7 @@ function Details({ nextStep, handleChange }) {
                         type="text"
                         placeholder="Highest qualification"
                         className="w-full p-2 border rounded"
+                        value={formData.qualification}
                         onChange={handleChange('qualification')}
                     />
                 </div>
@@ -31,6 +43,7 @@ function Details({ nextStep, handleChange }) {
                         type="text"
                         placeholder="Name of institute"
                         className="w-full p-2 border rounded"
+                        value={formData.institute}
                         onChange={handleChange('institute')}
                     />
                 </div>
@@ -41,6 +54,7 @@ function Details({ nextStep, handleChange }) {
                             type="text"
                             placeholder="Phone number"
                             className="w-full p-2 border rounded"
+                            value={formData.phoneNumber}
                             onChange={handleChange('phoneNumber')}
                         />
                     </div>
@@ -50,6 +64,7 @@ function Details({ nextStep, handleChange }) {
                             type="text"
                             placeholder="Emergency contact number"
                             className="w-full p-2 border rounded"
+                            value={formData.emergencyContactNumber}
                             onChange={handleChange('emergencyContactNumber')}
                         />
                     </div>
@@ -60,6 +75,7 @@ function Details({ nextStep, handleChange }) {
                         type="email"
                         placeholder="Email"
                         className="w-full p-2 border rounded"
+                        value={formData.email}
                         onChange={handleChange('email')}
                     />
                 </div>
@@ -69,6 +85,7 @@ function Details({ nextStep, handleChange }) {
                         <input
                             type="date"
                             className="w-full p-2 border rounded"
+                            value={formData.dob}
                             onChange={handleChange('dob')}
                         />
                     </div>
@@ -78,20 +95,22 @@ function Details({ nextStep, handleChange }) {
                             type="text"
                             placeholder="Blood Group"
                             className="w-full p-2 border rounded"
+                            value={formData.bloodGroup}
                             onChange={handleChange('bloodGroup')}
                         />
                     </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <FaRegIdCard  />
+                    <FaRegIdCard />
                     <input
                         type="text"
                         placeholder="Aadhar Number"
                         className="w-full p-2 border rounded"
+                        value={formData.aadhaarNumber}
                         onChange={handleChange('aadhaarNumber')}
                     />
                 </div>
-                <button onClick={nextStep} className="w-full bg-blue-500 text-white p-2 rounded">
+                <button onClick={handleProceed} className="w-full bg-blue-500 text-white p-2 rounded">
                     Proceed
                 </button>
             </div>

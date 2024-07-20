@@ -31,6 +31,7 @@ export default function TeacherRegister() {
             admin: false,
             DOB: '',
             permanentAddress: '',
+            salary: '',
             accessToken: authState.accessToken
         }
     );
@@ -59,6 +60,7 @@ export default function TeacherRegister() {
             admin: false,
             DOB: '',
             permanentAddress: '',
+            salary: '',
         });
 
     };
@@ -71,13 +73,13 @@ export default function TeacherRegister() {
         console.log(formData, authState.accessToken)
         const [year, month, day] = formData.DOB.split('-');
         const formattedDate = `${day}-${month}-${year}`;
-        formData.DOB=formattedDate
+        formData.DOB = formattedDate
         console.log(formData, authState.accessToken)
 
         try {
             formData.password = formData.aadhaarNumber;
             const response = await axios.post(`${BASE_URL_Login}/signup/teacher`, formData,
-              );
+            );
             if (response.status === 200) {
                 toast.success('Teacher registered successfully!');
                 console.log(formData)
@@ -363,6 +365,22 @@ export default function TeacherRegister() {
                                     />
                                 </label>
                             </div>
+
+                        </div>
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="salary">
+                                Salary
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="salary"
+                                    type="text"
+                                    name="salary"
+                                    value={formData.salary}
+                                    onChange={handleChange}
+                                    placeholder="Per month in Rs."
+                                    required
+                                />
+                            </label>
                         </div>
                         <div className=" flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4">
                             <div className="w-1/2 rounded-lg mobile:max-tablet:w-full text-lg whitespace-nowrap">

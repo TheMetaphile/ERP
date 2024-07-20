@@ -5,6 +5,7 @@ import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Fee } from '../../../Config';
+import useRazorpay from "react-razorpay";
 
 function FeeDetailsSubAdmin() {
     const [selectedClass, setSelectedClass] = useState("9th");
@@ -20,6 +21,12 @@ function FeeDetailsSubAdmin() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [title, setTitle] = useState('');
+    const [Razorpay] = useRazorpay();
+    const [clickedIndex, setClickedIndex] = useState(null);
+
+    const handleClick = (index) => {
+        setClickedIndex(index);
+    };
 
     const handleClassChange = (e) => {
         setDetails([]);
@@ -97,6 +104,62 @@ function FeeDetailsSubAdmin() {
     const handleConfirm = () => {
         console.log(`Mode: ${mode}, Title: ${title}, Student:`, selectedStudent);
         setIsModalOpen(false);
+
+        // const options = {
+        //     'key': 'rzp_live_GFqD7mHBThythU',
+        //     'amount': selectedStudent.payableFee * 100,
+        //     'name': 'METAPHILE',
+        //     'description': title,
+        //     'retry': { 'enabled': true, 'max_count': 1 },
+        //     'send_sms_hash': true,
+        //     'prefill': {
+        //         'contact': '8979020025',
+        //         'email': 'bhanu68tyagi@gmail.com'
+        //     },
+        //     handler: function (response) {
+        //         const datee = new Date().toISOString().split('T')[0];
+        //         const email = authState.userDetails.email;
+        //         const installmentId = `${datee}-${email}`;
+        //         console.log(response, 'resssssssss', datee, email, installmentId)
+
+        //         postPaymentDetails({
+        //             email: email, // or the user's email
+        //             amount: selectedStudent.payableFee,
+        //             date: datee,
+        //             status: "Success",
+        //             doc_id: params.deadline,
+        //             installment_id: installmentId, // or a relevant installment id
+        //             order_id: "NA",
+        //             payment_id: response.razorpay_payment_id,
+        //             signature: "Online"
+        //         });
+
+        //     },
+
+        // };
+
+        // const rzp1 = new Razorpay(options);
+
+        // rzp1.on("payment.failed", function (response) {
+        //     const datee = new Date().toISOString().split('T')[0];
+        //     const email = authState.userDetails.email;
+        //     const installmentId = `${datee}-${email}`;
+        //     console.log(response, 'fffffffffff', datee, email, installmentId);
+
+        //     postPaymentDetails({
+        //         email: email, // or the user's email
+        //         amount: params.amount,
+        //         date: datee,
+        //         status: "Failed",
+        //         doc_id: params.deadline,
+        //         installment_id: installmentId, // or a relevant installment id
+        //         order_id: "NA",
+        //         payment_id: response.error.metadata.payment_id,
+        //         signature: "Online" // no signature in case of failure
+        //     });
+        // });
+
+        // rzp1.open();
     };
 
     const handleCancel = () => {
@@ -194,7 +257,7 @@ function FeeDetailsSubAdmin() {
                         details.length > 0 ? (
                             <div>
                                 {details.map((details, index) => (
-                                    <div key={index} className='px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center'>
+                                    <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
                                         <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.rollNumber}
                                         </h1>

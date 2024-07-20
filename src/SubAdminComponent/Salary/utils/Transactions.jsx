@@ -14,6 +14,11 @@ const Transactions = ({ transactions }) => {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(5);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const [clickedIndex, setClickedIndex] = useState(null);
+
+    const handleClick = (index) => {
+        setClickedIndex(index);
+    };
 
     const handleStatusChange = (event) => {
         setAllDataFetched(false);
@@ -97,7 +102,7 @@ const Transactions = ({ transactions }) => {
                     </thead>
                     <tbody className="text-center">
                         {data.map((transaction, index) => (
-                            <tr key={transaction.id}>
+                            <tr key={transaction.id} className={`${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
                                 <td className=" border-y p-2 text-start">{index + 1}</td>
                                 <td className=" border-y p-2 text-start">{transaction.student.name}</td>
                                 <td className=" border-y p-2">{transaction.date}</td>

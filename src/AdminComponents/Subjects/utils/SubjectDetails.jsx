@@ -124,7 +124,8 @@ function SubjectDetails({ Class, section }) {
                         console.log(response.data)
                         const teacherEmails = response.data.Teachers.map(teacher => ({
                             email: teacher.email,
-                            profileLink: teacher.profileLink
+                            profileLink: teacher.profileLink,
+                            name : teacher.name
                         }));
                         setSuggestions(teacherEmails);
 

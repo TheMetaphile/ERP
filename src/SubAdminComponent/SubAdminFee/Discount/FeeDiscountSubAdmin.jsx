@@ -19,6 +19,11 @@ function FeeDiscountSubAdmin() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(20);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const [clickedIndex, setClickedIndex] = useState(null);
+
+    const handleClick = (index) => {
+        setClickedIndex(index);
+    };
 
     useEffect(() => {
         const currentYear = new Date().getFullYear();
@@ -58,7 +63,7 @@ function FeeDiscountSubAdmin() {
 
     useEffect(() => {
         fetchDiscount();
-    }, [authState.accessToken,selectedClass]);
+    }, [authState.accessToken, selectedClass]);
 
     const fetchDiscount = async () => {
         console.log(selectedClass);
@@ -218,7 +223,7 @@ function FeeDiscountSubAdmin() {
                         details.length > 0 ? (
                             <div>
                                 {details.map((details, index) => (
-                                    <div key={index} className='flex  text-center justify-between items-center py-2 pl-2 h-fit border '>
+                                    <div key={index} className={`flex  text-center justify-between items-center py-2 pl-2 h-fit border ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
                                         <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                             {details.to.rollNumber}
                                         </h1>

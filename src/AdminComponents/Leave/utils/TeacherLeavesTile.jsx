@@ -15,11 +15,7 @@ export default function TeacherLeavesTile({ data }) {
     const [selectedLeave, setSelectedLeave] = useState(null);
 
 
-    useEffect(() => {
-        if (data) {
-            setLeaves(data);
-        }
-    }, [data]);
+   
 
     const handleClick = (index) => {
         setExpanded(expanded === index ? null : index);
@@ -72,17 +68,17 @@ export default function TeacherLeavesTile({ data }) {
 
     return (
         <div className="w-full">
-            {leaves.length > 0 ? (
-                leaves.map((teacher, teacherIndex) => (
+            {data.length > 0 ? (
+                data.map((teacher, teacherIndex) => (
                     <div key={teacherIndex} className=" border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center " onClick={() => handleClick(`${teacherIndex}`)}>
                         <div className='w-full'>
                             <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
-                                <div className='flex mobile:max-tablet:flex-wrap '>
+                                <div className='flex mobile:max-tablet:flex-wrap items-center'>
                                     <div className="flex items-center">
-                                        {teacher.by && teacher.by[0] && (
+                                        {teacher.AppliedBy && teacher.AppliedBy[0] && (
                                             <>
-                                                <img src={teacher.by[0].profileLink} alt="" className="h-12 w-12 mobile:max-tablet:hidden rounded-full" />
-                                                <p className="  px-2 mobile:max-tablet:text-lg"> {teacher.by[0].name}</p>
+                                                <img src={teacher.AppliedBy[0].profileLink} alt="" className="h-10 w-10 mobile:max-tablet:hidden rounded-full" />
+                                                <p className="  px-2 mobile:max-tablet:text-lg"> {teacher.AppliedBy[0].name}</p>
                                             </>
                                         )}
                                     </div>
@@ -106,21 +102,42 @@ export default function TeacherLeavesTile({ data }) {
                                     </div>
                                 </div>
                             )}
-                            <div className='flex gap-2 font-medium text-base ml-2 mt-2'>
+                            <div className='flex gap-2 font-medium text-base ml-2 mt-2 w-full'>
                                 {teacher.status === 'Approved' ? (
-                                    <button
-                                        className='p-1 rounded-lg border border-gray-300 text-black px-2 bg-green-300'
-                                        disabled={loading}
-                                    >
-                                        Approved
-                                    </button>
+                                    <div className='flex items-center justify-between w-full'>
+                                        <button
+                                            className='p-1 rounded-lg border border-gray-300 text-black px-2 bg-green-300'
+                                            disabled={loading}
+                                        >
+                                            Approved
+                                        </button>
+                                        <div className="flex items-center">
+                                            Approved By: &nbsp;{teacher.AppliedBy && teacher.AppliedBy[0] && (
+                                                <>
+                                                    <img src={teacher.AppliedBy[0].profileLink} alt="" className="h-8 w-8 mobile:max-tablet:hidden rounded-full" />
+                                                    <p className="  px-2 mobile:max-tablet:text-lg"> {teacher.AppliedBy[0].name}</p>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
                                 ) : teacher.status === 'Rejected' ? (
+                                    <div className='flex items-center justify-between w-full'>
+
                                     <button
                                         className='p-1 rounded-lg text-black border border-gray-300 px-2 bg-red-300'
                                         disabled={loading}
                                     >
                                         Rejected
                                     </button>
+                                    <div className="flex items-center">
+                                            Rejected By: &nbsp;{teacher.AppliedBy && teacher.AppliedBy[0] && (
+                                                <>
+                                                    <img src={teacher.AppliedBy[0].profileLink} alt="" className="h-8 w-8 mobile:max-tablet:hidden rounded-full" />
+                                                    <p className="  px-2 mobile:max-tablet:text-lg"> {teacher.AppliedBy[0].name}</p>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
                                 ) : (
                                     <>
                                         <button
@@ -154,71 +171,3 @@ export default function TeacherLeavesTile({ data }) {
     )
 }
 
-
-// (
-//     data.map((leave, index) => (
-//       <div key={index} className={`rounded-md border p-4 flex flex-col w-full`}>
-//         <div className="flex justify-between">
-//           <div className="flex">
-//             {leave.by && leave.by[0] && (
-//               <>
-//                 <img src={leave.by[0].profileLink} alt="" className="h-12 w-12 mobile:max-tablet:hidden rounded-full" />
-//                 <p className="text-xl mb-2 mt-2 px-2 mobile:max-tablet:text-lg"> {leave.by[0].name}</p>
-//               </>
-//             )}
-//           </div>
-//           <div>
-//             <h1 className={` px-2 py-1 rounded-lg ${leave.status === 'Pending' ? 'bg-orange-200 text-orange-700' : leave.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>
-//               {leave.status}
-//             </h1>
-//           </div>
-//           <div className="mt-2">
-//             <button
-//               className="rounded-lg bg-blue-400 px-4 mobile:max-tablet:px-2"
-//               onClick={() => handleViewDetails(leave)}
-//             >
-//               View Details
-//             </button>
-//           </div>
-//         </div>
-//         <div className="flex justify-between text-gray-900 mobile:max-tablet:flex-col">
-//           <span className="text-lg">Leave Taken on: {leave.startDate}</span>
-//           <span className="text-lg">Expected Arrival: {leave.endDate}</span>
-//         </div>
-//       </div>
-//     ))
-//   )}
-
-//   {selectedLeave && (
-//     <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
-//       <div className="bg-white rounded-lg p-6">
-//         <h2 className="text-2xl mb-4 text-center">Leave Details</h2>
-//         <p className="text-xl">Type: {selectedLeave.type}</p>
-//         <p className="text-xl">Reason: {selectedLeave.reason}</p>
-//         <div className="mt-4 flex justify-center">
-//           <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-2" onClick={handleClosePopup}>
-//             Cancel
-//           </button>
-//           {selectedLeave.status === 'Pending' ? (
-//             <>
-//               <button
-//                 className="bg-green-500 text-white px-4 py-2 rounded-md"
-//                 onClick={() => handleAction("Approved")}
-//               >
-//                 Approve
-//               </button>
-//               <button
-//                 className="bg-red-500 text-white px-4 py-2 rounded-md ml-2"
-//                 onClick={() => handleAction("Rejected")}
-//               >
-//                 Reject
-//               </button>
-//             </>
-//           ) : (
-//             <></>
-//           )}
-
-//         </div>
-//       </div>
-//     </div>
-//   )}

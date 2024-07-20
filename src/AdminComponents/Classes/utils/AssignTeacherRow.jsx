@@ -12,6 +12,7 @@ export default function AssignTeacherRow({ Class }) {
     const [sectionsDetails, setSections] = useState([]);
     const [newSection, setNewSection] = useState('');
     const [email, setEmail] = useState('');
+    const [name,setName]=useState('');
     const [temp, setTemp] = useState();
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -19,6 +20,8 @@ export default function AssignTeacherRow({ Class }) {
     const { authState } = useContext(AuthContext);
     const [showNewRow, setShowNewRow] = useState(false);
     const [editingRow, setEditingRow] = useState(null);
+    const [additionalData, setAdditionalData] = useState([]);
+
 
     const handleClick = () => {
         setExpanded(!expanded);
@@ -39,6 +42,7 @@ export default function AssignTeacherRow({ Class }) {
 
     const handleSuggestionClick = (suggestion) => {
         setEmail(suggestion.email);
+        setName(suggestion.name);
         setShowSuggestions(false);
     }
 
@@ -57,6 +61,7 @@ export default function AssignTeacherRow({ Class }) {
                         console.log(response.data)
                         const teacherEmails = response.data.Teachers.map(teacher => ({
                             email: teacher.email,
+                            name: teacher.name,
                             profileLink: teacher.profileLink
                         }));
                         setSuggestions(teacherEmails);
@@ -107,6 +112,11 @@ export default function AssignTeacherRow({ Class }) {
         console.log('section', newSection)
         console.log('teacher', email)
         try {
+            const newData = {
+                section: newSection,
+                name : name
+            }
+            console.log(newData)
             if (email) {
                 const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/assign`, {
                     accessToken: authState.accessToken,
@@ -116,7 +126,8 @@ export default function AssignTeacherRow({ Class }) {
                 });
                 if (response.status === 200) {
                     toast.success('Teacher Assigned successfully');
-                    fetchSections();
+                    // fetchSections();
+                    setSections(prevData => [...prevData, newData]);
                     setNewSection('');
                     setEmail('');
                     setShowNewRow(false);
@@ -137,8 +148,9 @@ export default function AssignTeacherRow({ Class }) {
     };
 
     const handleCancelEdit = () => {
-        setEditingRow(null);
         setEmail('');
+        setShowSuggestions(false);
+        setEditingRow(null);
     };
 
     const handleConfirmClick = async (index) => {
@@ -151,14 +163,29 @@ export default function AssignTeacherRow({ Class }) {
                     teacherEmail: email
                 });
                 if (response.status === 200) {
-                    toast.success('Teacher Updated successfully');
-                    fetchSections();
+                    toast.success('Teacher Updated successfully');     
+                    const updatedSection = {
+                        ...sectionsDetails[index], 
+                        name: name         
+                    };
+            
+                    const updatedSections = [
+                        ...sectionsDetails.slice(0, index), 
+                        updatedSection,                      
+                        ...sectionsDetails.slice(index + 1)  
+                    ];
+            
+                    setSections(updatedSections);
+                    // fetchSections();
                     setEmail('');
                     setEditingRow(null);
                 }
             }
         } catch (error) {
             toast.error('Error updating teacher');
+        }
+        finally{
+            setShowSuggestions(false);
         }
     };
 
@@ -242,7 +269,7 @@ export default function AssignTeacherRow({ Class }) {
                                                                 onClick={() => handleSuggestionClick(suggest)}
                                                             >
                                                                 <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                                                {suggest.email}
+                                                                {suggest.name}
                                                             </li>
                                                         ))}
                                                     </ul>

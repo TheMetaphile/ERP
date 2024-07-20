@@ -25,6 +25,12 @@ export default function ScholasticTable({ students, term, Class, subject }) {
         return acc;
     }, {}));
 
+    const [clickedIndex, setClickedIndex] = useState(null);
+
+    const handleClick = (index) => {
+        setClickedIndex(index);
+    };
+
     useEffect(() => {
         fetchLastNoteBookChecked();
     }, [subject]);
@@ -92,23 +98,23 @@ export default function ScholasticTable({ students, term, Class, subject }) {
             return;
         }
         const studentMarks = marks[email];
-        console.log('total',Number(totalTheoryMarks.noteBook),'aaye',Number(studentMarks.noteBook));
-        if(Number(studentMarks.noteBook)<=0 || Number(studentMarks.noteBook)> Number(totalTheoryMarks.noteBook)){
+        console.log('total', Number(totalTheoryMarks.noteBook), 'aaye', Number(studentMarks.noteBook));
+        if (Number(studentMarks.noteBook) <= 0 || Number(studentMarks.noteBook) > Number(totalTheoryMarks.noteBook)) {
             toast.error('Obtained notebook marks cannot be less then zero and more then total');
             return;
         }
 
-        if(Number(studentMarks.theory)<=0 || Number(studentMarks.theory)> Number(totalTheoryMarks.theory)){
+        if (Number(studentMarks.theory) <= 0 || Number(studentMarks.theory) > Number(totalTheoryMarks.theory)) {
             toast.error('Obtained theory marks cannot be less then zero and more then total');
             return;
         }
 
-        if(Number(studentMarks.practical)<=0 || Number(studentMarks.practical)> Number(totalTheoryMarks.practical)){
+        if (Number(studentMarks.practical) <= 0 || Number(studentMarks.practical) > Number(totalTheoryMarks.practical)) {
             toast.error('Obtained practical marks cannot be less then zero and more then total');
             return;
         }
 
-        if(Number(studentMarks.subjectEnrichment)<=0 || Number(studentMarks.subjectEnrichment)> Number(totalTheoryMarks.subjectEnrichment)){
+        if (Number(studentMarks.subjectEnrichment) <= 0 || Number(studentMarks.subjectEnrichment) > Number(totalTheoryMarks.subjectEnrichment)) {
             toast.error('Obtained subject enrichment marks cannot be less then zero and more then total');
             return;
         }
@@ -220,7 +226,7 @@ export default function ScholasticTable({ students, term, Class, subject }) {
                 </thead>
                 <tbody className="text-gray-600 text-md font-normal">
                     {students.map((student, index) => (
-                        <tr key={index} className="border-b border-gray-200 last:border-none">
+                        <tr key={index} className={`border-b border-gray-200 last:border-none ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
                             <td className="py-2 px-2 text-center rounded-t-r">{student.rollNumber}</td>
                             <td className="py-2 px-2 text-center">{student.name}</td>
                             <td className="py-2 px-2 text-center">

@@ -47,6 +47,23 @@ function Employee() {
         setFormData({ ...formData, instruments: [...formData.instruments, newInstrument] });
     };
 
+    const renderStep = () => {
+        switch (step) {
+            case 0:
+                return <Details nextStep={nextStep} handleChange={handleChange} formData={formData} />;
+            case 1:
+                return <Address nextStep={nextStep} prevStep={prevStep} handleChange={handleChange} formData={formData} />;
+            case 2:
+                return <Access nextStep={nextStep} prevStep={prevStep} handleChange={handleChange} formData={formData} />;
+            case 3:
+                return <Ctc nextStep={nextStep} prevStep={prevStep} handleAddInstrument={handleAddInstrument} formData={formData} />;
+            case 4:
+                return <Preview prevStep={prevStep} formData={formData} />;
+            default:
+                return null;
+        }
+    };
+
     return (
         <div className="flex flex-col px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3 mobile:max-tablet:mt-6">
             <ToastContainer />
@@ -54,35 +71,11 @@ function Employee() {
             <div className="flex flex-col items-center justify-center w-full">
                 <ProgressBar step={step} />
                 <div className="relative w-full">
-                    {step === 0 && (
-                        <div className={`transform transition-transform duration-300 ease-in-out ${step === 0 ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
-                            <Details nextStep={nextStep} handleChange={handleChange} />
-                        </div>
-                    )}
-                    {step === 1 && (
-                        <div className={`transform transition-transform duration-300 ease-in-out ${step === 1 ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
-                            <Address nextStep={nextStep} prevStep={prevStep} handleChange={handleChange} />
-                        </div>
-                    )}
-                    {step === 2 && (
-                        <div className={`transform transition-transform duration-300 ease-in-out ${step === 2 ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
-                            <Access nextStep={nextStep} prevStep={prevStep} handleChange={handleChange} />
-                        </div>
-                    )}
-                    {step === 3 && (
-                        <div className={`transform transition-transform duration-300 ease-in-out ${step === 3 ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
-                            <Ctc nextStep={nextStep} prevStep={prevStep} handleAddInstrument={handleAddInstrument} />
-                        </div>
-                    )}
-                    {step === 4 && (
-                        <div className={`transform transition-transform duration-300 ease-in-out ${step === 4 ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
-                            <Preview prevStep={prevStep} formData={formData} />
-                        </div>
-                    )}
+                    {renderStep()}
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default Employee
+export default Employee;

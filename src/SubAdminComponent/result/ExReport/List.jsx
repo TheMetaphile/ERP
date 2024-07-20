@@ -16,6 +16,11 @@ const List = () => {
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [sessions, setSessions] = useState([]);
     const [selectedSession, setSelectedSession] = useState('2024-25');
+    const [clickedIndex, setClickedIndex] = useState(null);
+
+    const handleClick = (index) => {
+        setClickedIndex(index);
+    };
 
     useEffect(() => {
         const currentYear = new Date().getFullYear();
@@ -44,7 +49,7 @@ const List = () => {
         }
     }, [selectedSession, Class]);
 
- 
+
 
     const handleViewMore = () => {
         setStart(prevStart => prevStart + end);
@@ -90,7 +95,7 @@ const List = () => {
         setClass(event.target.value);
     };
 
- 
+
 
     return (
         <div className="">
@@ -155,7 +160,7 @@ const List = () => {
                         ) : (
                             <>
                                 {data.map((item, index) => (
-                                    <tr key={index} className="border border-gray-300 text-center">
+                                    <tr key={index} className={`border border-gray-300 text-center ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
                                         <td className="p-2">{item.rollNumber}</td>
                                         <td className="p-2">15</td>
                                         <td className="flex items-center">
@@ -169,7 +174,7 @@ const List = () => {
                                             <Link to={`/Sub-Admin/Result/exStudent/${item._id}?Class=${item.currentClass}&session=${selectedSession}`}>
                                                 <button className="bg-purple-100 text-purple-500 px-2 py-0.5 mr-2 rounded">Result</button>
                                             </Link>
-                                           
+
                                         </td>
                                     </tr>
                                 ))}
