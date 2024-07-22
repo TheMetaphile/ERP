@@ -19,6 +19,26 @@ function NewDoubt() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
+
+    const [uniqueSections, setUniqueSections] = useState([]);
+    const [uniqueSubjects, setUniqueSubjects] = useState([]);
+    useEffect(() => {
+        setUniqueSections(Array.from(new Set(
+            authState.subject
+                .filter(subj => subj.class === Class)
+                .map(subj => subj.section)
+        )));
+    }, [Class]);
+
+
+    useEffect(() => {
+        setUniqueSubjects(Array.from(new Set(
+            authState.subject
+                .filter(subj => subj.section === Section && subj.class === Class)
+                .map(subj => subj.subject)
+        )));
+    }, [Section, Class]);
 
     useEffect(() => {
         setStart(0);
@@ -79,15 +99,10 @@ function NewDoubt() {
         setSubject(e.target.value);
     };
 
-    if (loading  && start === 0) {
+    if (loading && start === 0) {
         return <Loading />;
     }
 
-    const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
-
-    const uniqueSections = Array.from(new Set(authState.subject.map(subj => subj.section)));
-
-    const uniqueSubjects = Array.from(new Set(authState.subject.map(subj => subj.subject)));
 
     return (
         <div className=' mr-3'>
@@ -116,10 +131,10 @@ function NewDoubt() {
 
 
             </div>
-                <NewDoubtTile data={data} Class={Class} />
-                {(!allDataFetched) && (
-                    <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                )}
+            <NewDoubtTile data={data} Class={Class} />
+            {(!allDataFetched) && (
+                <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+            )}
         </div>
     )
 }

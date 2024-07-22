@@ -18,6 +18,26 @@ function Answered() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
+
+    const [uniqueSections, setUniqueSections] = useState([]);
+    const [uniqueSubjects, setUniqueSubjects] = useState([]);
+    useEffect(() => {
+        setUniqueSections(Array.from(new Set(
+            authState.subject
+                .filter(subj => subj.class === Class)
+                .map(subj => subj.section)
+        )));
+    }, [Class]);
+
+
+    useEffect(() => {
+        setUniqueSubjects(Array.from(new Set(
+            authState.subject
+                .filter(subj => subj.section === Section && subj.class === Class)
+                .map(subj => subj.subject)
+        )));
+    }, [Section, Class]);
 
     const handleViewMore = () => {
         setStart(prevStart => prevStart + end);
@@ -51,7 +71,7 @@ function Answered() {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
             });
-             const doubt = response.data.doubts;
+            const doubt = response.data.doubts;
             console.log("API response:", response.data);
             setData(prevData => [...prevData, ...response.data.doubts]);
             if (doubt.length < end) {
@@ -88,11 +108,6 @@ function Answered() {
     }
 
 
-    const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
-
-    const uniqueSections = Array.from(new Set(authState.subject.map(subj => subj.section)));
-
-    const uniqueSubjects = Array.from(new Set(authState.subject.map(subj => subj.subject)));
 
     return (
         <div className=' mr-3'>

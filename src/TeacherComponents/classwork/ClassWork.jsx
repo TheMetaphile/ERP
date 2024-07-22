@@ -21,6 +21,28 @@ function ClassWork() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const [uniqueSections, setUniqueSections] = useState([]);
+    const [uniqueSubjects, setUniqueSubjects] = useState([]);
+    
+    const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
+
+
+    useEffect(() => {
+        setUniqueSections(Array.from(new Set(
+            authState.subject
+                .filter(subj => subj.class === selectedClass)
+                .map(subj => subj.section)
+        )));
+    }, [selectedClass]);
+
+
+    useEffect(() => {
+        setUniqueSubjects(Array.from(new Set(
+            authState.subject
+                .filter(subj => subj.section === selectedSection && subj.class === selectedClass)
+                .map(subj => subj.subject)
+        )));
+    }, [selectedSection, selectedClass]);
 
     const handleOpen = () => {
         setIsDialogOpen(true);
@@ -91,12 +113,7 @@ function ClassWork() {
     };
 
 
-    const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
-
-    const uniqueSections = Array.from(new Set(authState.subject.map(subj => subj.section)));
-
-    const uniqueSubjects = Array.from(new Set(authState.subject.map(subj => subj.subject)));
-
+   
     return (
         <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
             <ToastContainer />
@@ -138,7 +155,7 @@ function ClassWork() {
                 <div className="text-center w-full mt-6">No Classwork found</div>
             ) : (
                 <div className='w-full mt-4 rounded-lg mb'>
-                    <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject}/>
+                    <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
                     {!allDataFetched && (
                         <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
                     )}

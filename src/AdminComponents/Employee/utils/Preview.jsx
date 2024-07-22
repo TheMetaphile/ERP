@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import Loading from '../../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
 import { BASE_URL_Login } from '../../../Config';
+import AuthContext from '../../../Context/AuthContext';
 
 const Preview = ({ prevStep, formData }) => {
     const [loading, setLoading] = useState(false);
+    const { authState } = useContext(AuthContext);
 
     const {
         name,
@@ -63,6 +65,7 @@ const Preview = ({ prevStep, formData }) => {
             residentialPincode,
             department,
             role,
+            accessToken : authState.accessToken
         };
         setLoading(true);
         console.log(payload)

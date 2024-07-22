@@ -2,14 +2,14 @@ import schoolImage from "../../assets/School.png";
 import logout1 from "../../assets/logout.png";
 import ExpansionTile from "../utils/ExpansionTile.jsx";
 import menuItems from "./helper.js";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import AuthContext from "../../Context/AuthContext.jsx";
 
 export default function TeacherDrawer({ isOpen }) {
-  const { logout } = useContext(AuthContext);
+  const { logout,authState } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [active,setActive]=useState(null)
+  const [active, setActive] = useState(null)
 
   const handleLogout = async () => {
     try {
@@ -20,7 +20,7 @@ export default function TeacherDrawer({ isOpen }) {
     }
   };
 
-  const handleClick=(index)=>{
+  const handleClick = (index) => {
     setActive(index)
   }
   return (
@@ -32,26 +32,31 @@ export default function TeacherDrawer({ isOpen }) {
       <div className="mt-5 bg-teal-300 px-2 py-4 rounded-2xl shadow-lg">
         <h2 className="text-xl font-semibold">Dashboard</h2>
         <div className="mt-4">
-          {menuItems.map((menuItem, index) => (
-             <div
-             key={index}
-             onClick={() => handleClick(index)}
-             className={`cursor-pointer rounded-lg ${active === index ? 'bg-secondary' : ''}`}
-           >
-            <ExpansionTile
-             
-              image={menuItem.image}
-              alternateText={menuItem.alt}
-              title={menuItem.title}
-              childrens={menuItem.children}
-              route={menuItem.route}
-            />
-            </div>
-          ))}
+          {menuItems.map((menuItem, index) => {
+            if (menuItem.title === 'Class Activity' && Object.keys(authState.ClassDetails).length === 0) {
+              return null;
+            }
+            return (
+              <div
+                key={index}
+                onClick={() => handleClick(index)}
+                className={`cursor-pointer rounded-lg ${active === index ? 'bg-secondary' : ''}`}
+              >
+                <ExpansionTile
+
+                  image={menuItem.image}
+                  alternateText={menuItem.alt}
+                  title={menuItem.title}
+                  childrens={menuItem.children}
+                  route={menuItem.route}
+                />
+              </div>
+            )
+          })}
         </div>
       </div>
       <div className="flex h-fit justify-center mt-8">
-      <button
+        <button
           onClick={handleLogout}
           className="bg-teal-300 border border-transparent rounded-xl px-4 py-2 flex items-center shadow-md"
         >

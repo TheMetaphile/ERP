@@ -147,6 +147,8 @@ import FeeStructureSubAdmin from "./SubAdminComponent/SubAdminFee/FeeStructure/F
 import FeeDiscountSubAdmin from "./SubAdminComponent/SubAdminFee/Discount/FeeDiscountSubAdmin.jsx";
 import Status from "./components/notebook/Status.jsx";
 import Planner from "./TeacherComponents/Planner/Planner.jsx";
+import StudentDetails from "./SubAdminComponent/SubAdminFee/StudentFee/utils/StudentDetails.jsx";
+import AllExDetails from "./SubAdminComponent/SubAdminFee/StudentFee/AllDetails.jsx";
 
 
 const router = createBrowserRouter([
@@ -959,7 +961,17 @@ const router = createBrowserRouter([
         children: [
           {
             path: '/Sub-Admin/StudentsFee/details',
-            element: <FeeDetailsSubAdmin />
+            element: <AllExDetails />,
+            children: [
+              {
+                path: '',
+                element: <FeeDetailsSubAdmin />
+              },
+              {
+                path: ':id',
+                element: <StudentDetails />
+              }
+            ]
           },
           {
             path: '/Sub-Admin/StudentsFee/structure',

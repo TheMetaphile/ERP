@@ -6,6 +6,7 @@ import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Fee } from '../../../Config';
 import useRazorpay from "react-razorpay";
+import { Link, Outlet } from 'react-router-dom';
 
 function FeeDetailsSubAdmin() {
     const [selectedClass, setSelectedClass] = useState("9th");
@@ -257,50 +258,53 @@ function FeeDetailsSubAdmin() {
                         details.length > 0 ? (
                             <div>
                                 {details.map((details, index) => (
-                                    <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.rollNumber}
-                                        </h1>
-                                        <h1 className="w-44 text-lg flex items-center text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            <span className='mr-2'>
+                                    <Link to={`/Sub-Admin/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}`}>
+                                        <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.rollNumber}
+                                            </h1>
+                                            <h1 className="w-44 text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 <img src={details.profileLink} alt="profile pic" className='w-10 h-10 rounded-full ' />
-                                            </span>
-                                            {details.name}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.section}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.session}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.totalfee}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.discountAmount}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.fine}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.paid}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.payableFee}
-                                        </h1>
-                                        <select
-                                            className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-full bg-secondary py-2"
-                                            value={mode}
-                                            onChange={(e) => handleModeChange(e, details)}
-                                        >
-                                            <option value="none">None</option>
-                                            <option value="Cash">Cash</option>
-                                            <option value="Online">Online</option>
-                                            <option value="RTGS">RTGS</option>
-                                            <option value="Cheque">Cheque</option>
-                                            <option value="Demand Draft">Demand Draft</option>
-                                        </select>
-                                    </div>
+                                                <div className='w-32'>
+                                                    {details.name}
+                                                </div>
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.section}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.session}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.totalfee}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.discountAmount}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.fine}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.paid}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.payableFee}
+                                            </h1>
+                                            <select
+                                                className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-full bg-secondary py-2"
+                                                value={mode}
+                                                onChange={(e) => handleModeChange(e, details)}
+                                            >
+                                                <option value="none">None</option>
+                                                <option value="Cash">Cash</option>
+                                                <option value="Online">Online</option>
+                                                <option value="RTGS">RTGS</option>
+                                                <option value="Cheque">Cheque</option>
+                                                <option value="Demand Draft">Demand Draft</option>
+                                            </select>
+                                        </div>
+                                    </Link>
+
                                 ))}
                                 {!allDataFetched && (
                                     <div colSpan="4" className="text-center">
@@ -314,6 +318,7 @@ function FeeDetailsSubAdmin() {
                     )}
                 </div>
             </div>
+            <Outlet />
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div className="fixed inset-0 bg-black opacity-50"></div>
@@ -362,6 +367,8 @@ function FeeDetailsSubAdmin() {
                     </div>
                 </div>
             )}
+
+
         </div>
     );
 }
