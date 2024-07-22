@@ -167,7 +167,7 @@ export default function TimeTable() {
     return (
         <div className=" flex flex-col w-full  items-start  pt-2 px-3">
             <div className="flex w-full justify-between ">
-                <h1 className="text-2xl font-medium">
+                <h1 className="text-2xl mobile:max-tablet:text-lg font-medium mt-2">
                     Time Table
                 </h1>
                 {/* <h3 className="text-base">
@@ -177,12 +177,12 @@ export default function TimeTable() {
             {/* <Calendar /> */}
 
             <div className="flex justify-between w-full items-center py-3">
-                <h1 className="text-xl font-medium">
+                <h1 className="text-xl mobile:max-tablet:text-sm font-medium whitespace-nowrap">
                     Day-wise Lectures
                 </h1>
                 <select
                     type="text"
-                    className=" px-4 py-2 border rounded-md"
+                    className=" px-4 py-2 border rounded-md mobile:max-tablet:text-sm"
                     placeholder="Day"
                     value={day}
                     onChange={handleDayChange}

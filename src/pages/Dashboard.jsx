@@ -17,12 +17,12 @@ export default function Dashboard() {
   };
   return (
     <div className="w-screen h-screen overflow-x-auto  no-scrollbar ">
-      <div className="fixed top-0 left-0 w-full px-2 z-10">
+      <div className="fixed top-0 left-0 w-full px-2 z-50">
         <Navbar onDrawerToggle={toggleDrawer} onEndDrawerToggle={toggleEndDrawer} />
       </div>
 
       <div className="flex flex-grow h-screen pt-20 mobile:max-tablet:pt-28 ">
-        <div className={`mobile:max-tablet:absolute z-50 flex-shrink-0 transition-all duration-300 ${isDrawerOpen ? 'w-60 h-full' : 'w-0'} overflow-y-auto no-scrollbar`}>
+        <div className={`mobile:max-tablet:absolute z-10 flex-shrink-0 transition-all duration-300 ${isDrawerOpen ? 'w-60 h-full' : 'w-0'} overflow-y-auto no-scrollbar`}>
           <Drawer isOpen={isDrawerOpen} />
         </div>
         <div className="flex-grow  overflow-y-auto no-scrollbar ">

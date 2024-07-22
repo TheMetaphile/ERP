@@ -76,7 +76,7 @@ export default function TodayClassWork() {
             <ClassWorkGrid /> */}
             <ToastContainer />
             <div className="flex justify-between items-center px-3">
-                <h1 className="text-xl font-medium px-2">Classwork</h1>
+                <h1 className="text-xl mobile:max-tablet:text-lg font-medium px-2">Classwork</h1>
                 <select
                     id="subject"
                     value={subject}

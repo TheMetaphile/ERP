@@ -39,19 +39,19 @@ const Status = () => {
             }
         };
         fetchData();
-    }, [authState.accessToken,subject]);
+    }, [authState.accessToken, subject]);
 
 
     return (
         <div className=" items-center  px-4 py-1 mb-2">
             <ToastContainer />
             <div className="flex items-center justify-between">
-                <h1 className="text-xl font-medium my-3">Checked Notebooks</h1>
+                <h1 className="text-xl mobile:max-tablet:text-lg font-medium my-3">Checked Notebooks</h1>
                 <select
                     id="subject"
                     value={subject}
                     onChange={handleSubjectChange}
-                    className="mt-1 border block py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                    className="mt-1 border block py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md  mobile:max-tablet:text-sm"
                 >
                     {subjects.map((subject) => (
                         <option key={subject} value={subject}>
@@ -70,7 +70,7 @@ const Status = () => {
                         <thead>
                             <tr className="bg-secondary text-gray-600 text-lg leading-normal">
 
-                                <th className="py-2 px-6 text-center">Notebook Checked By</th>
+                                <th className="py-2 px-6 text-center whitespace-nowrap">Notebook Checked By</th>
                                 <th className="py-2 px-6 text-center">Date</th>
                                 <th className="py-2 px-6 text-center">Chapter</th>
                                 <th className="py-2 px-6 text-center ">Topic</th>
@@ -83,10 +83,10 @@ const Status = () => {
 
                                 <tr key={index} className="border-b border-gray-200  last:border-none">
 
-                                    <td className="flex py-3 px-6 text-center justify-center items-center gap-2"><img src={Student.by.profileLink} alt="img" className="rounded-full h-10 w-10" />{Student.by.name}</td>
-                                    <td className="py-3 px-6 text-center">{Student.date}</td>
+                                    <td className="flex py-3 px-6 items-center gap-2"><img src={Student.by.profileLink} alt="img" className="rounded-full h-10 w-10" />{Student.by.name}</td>
+                                    <td className="py-3 px-6 text-center whitespace-nowrap">{Student.date}</td>
                                     <td className="py-3 px-6 text-center">{Student.chapter}</td>
-                                    <td className="py-3 px-6 text-center">{Student.topic}</td>
+                                    <td className="py-3 px-6 text-center whitespace-nowrap">{Student.topic}</td>
                                     <td className="flex py-3 px-6 justify-center">
                                         <Switch checked={Student.status} />
                                     </td>

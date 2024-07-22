@@ -7,15 +7,13 @@ export default function school(props) {
 
       <div className='flex justify-center'>
 
-        <img src={props.img} className='w-16 h-16 mt-3' />
+        <img src={props.img} className='w-16 h-16 mt-3 mobile:max-tablet:h-14 mobile:max-tablet:w-14 mobile:max-tablet:pl-2' />
 
         <div className='text-center mt-5 px-3 font-semibold'>
           <h2 className='text-xl'>{props.schoolname}</h2>
           <span className=' text-sm'>{props.address}</span>
         </div>
-
       </div>
-
       <div className=' border border-solid border-gray-300 mt-2 ml-3 mr-3'></div>
       <Term />
 

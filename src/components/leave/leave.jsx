@@ -76,12 +76,12 @@ export default function Leave() {
     };
 
     return (
-        <div className=" flex flex-col px-3 overflow-y-auto items-start mt-2 ml-2 mr-3 pb-4 no-scrollbar">
+        <div className=" flex flex-col px-3 overflow-y-auto items-start mt-2 ml-2 mr-3 mobile:max-tablet:mx-0 pb-4 no-scrollbar">
             <h1 className='text-xl font-medium'>Your Leave</h1>
             {loading ? (
                 <Loading />
             ) : (
-                <div className='flex mobile:max-tablet:grid mobile:max-tablet:grid-cols-2 items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg'>
+                <div className='flex mobile:max-tablet:grid mobile:max-tablet:grid-cols-2 items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg mobile:max-tablet:px-2.5'>
                     <div className='flex   flex-col w-52  mobile:max-laptop:h-52 desktop:h-52 justify-center px-2  border border-gray-300 mobile:max-tablet:w-full  rounded-lg shadow-lg  text-center font-medium text-lg '>
                         <div className='mx-2 h-32 '>
                             <Doughnut data={chartData} options={options} className=' ' />

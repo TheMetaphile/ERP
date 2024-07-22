@@ -175,8 +175,8 @@ const Result = () => {
 
     return (
         <div className="p-2 w-full">
-            <div className="flex justify-between items-center mb-4">
-                <h1 className='text-xl font-medium'>{profile.name} Progress Report</h1>
+            <div className="flex justify-between items-center mb-4 mobile:max-tablet:flex-col mobile:max-tablet:items-start">
+                <h1 className='text-xl mobile:max-tablet:text-lg font-medium'>{profile.name} Progress Report</h1>
                 <div className='flex gap-2 items-center'>
                     <div className="w-36 mr-3 self-center">
                         <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleTermChange}>
@@ -185,14 +185,14 @@ const Result = () => {
                             ))}
                         </select>
                     </div>
-                    <button className='text-lg font-semibold border rounded-md px-2 py-1' onClick={handlePrint}>Print</button>
+                    <button className='text-lg font-semibold border rounded-md px-2 py-1 mobile:max-tablet:hidden' onClick={handlePrint}>Print</button>
                 </div>
             </div>
             {details ? <div className="report-card border border-black " ref={ref} >
 
                 <div className=' border-b border-black py-3 items-center bg-teal-200 text-center'>
-                    <h1 className={`text-3xl  font-semibold mb-2`}>{selectedTermlabel} : {profile.session || "2024-25"}</h1>
-                    <h6 className="text-2xl mb-2">Report Card</h6>
+                    <h1 className={`text-3xl mobile:max-tablet:text-xl font-semibold mb-2`}>{selectedTermlabel} : {profile.session || "2024-25"}</h1>
+                    <h6 className="text-2xl mobile:max-tablet:text-lg mb-2">Report Card</h6>
                 </div>
 
                 <div className="mb-4 flex justify-between m-3 text-xl">
@@ -208,51 +208,51 @@ const Result = () => {
 
 
                 </div>
+                <div className=' overflow-auto'>
+                    <table className="min-w-full border border-gray-200">
+                        <thead className=' bg-teal-200 text-xl font-medium '>
+                            <tr className='text-center'>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Scholastic Areas</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">
+                                    Note Book
+                                    <p>
+                                        ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalNoteBookMarks : ""})
+                                    </p>
+                                </th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">
+                                    S.Enrichment
+                                    <p>
+                                        ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalSubjectEnrichmentMarks : ""})
+                                    </p>
 
-                <table className="min-w-full border border-gray-200">
-                    <thead className=' bg-teal-200 text-xl font-medium '>
-                        <tr className='text-center'>
-                            <th className="px-4 py-2 border">Scholastic Areas</th>
-                            <th className="px-4 py-2 border">
-                                Note Book
-                                <p>
-                                    ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalNoteBookMarks : ""})
-                                </p>
-                            </th>
-                            <th className="px-4 py-2 border">
-                                S.Enrichment
-                                <p>
-                                    ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalSubjectEnrichmentMarks : ""})
-                                </p>
+                                </th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">
+                                    Marks Obt
+                                    <p>
+                                        ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalMarks : ""})
+                                    </p>
 
-                            </th>
-                            <th className="px-4 py-2 border">
-                                Marks Obt
-                                <p>
-                                    ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalMarks : ""})
-                                </p>
+                                </th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Total</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">%</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody className='tablet:pb-6 mobile:max-tablet:text-xs'>
+                            {details[selectedTermValue].map((area, index) => (
+                                <ScholasticRow index={index} area={area} />
+                            ))}
+                            <tr></tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                            </th>
-                            <th className="px-4 py-2 border">Total</th>
-                            <th className="px-4 py-2 border">%</th>
-                            <th className="px-4 py-2 border">Grade</th>
-                        </tr>
-                    </thead>
-                    <tbody className='pb-6'>
-                        {details[selectedTermValue].map((area, index) => (
-                            <ScholasticRow index={index} area={area} />
-                        ))}
-                        <tr></tr>
-                    </tbody>
-                </table>
-
-
-                <div className="">
+                <div className=" overflow-auto">
                     <table className="min-w-full bg-white border border-gray-200">
                         <thead className=' bg-teal-200 text-xl font-medium'>
                             <tr>
-                                <th className="px-4 pb-4 border text-start">Co-Scholastic Areas:</th>
-                                <th className="px-4 pb-4 border text-end">Grade</th>
+                                <th className="px-4 py-4 mobile:max-tablet:py-2 border text-start mobile:max-tablet:text-lg">Co-Scholastic Areas:</th>
+                                <th className="px-4 py-4 mobile:max-tablet:py-2 border text-end mobile:max-tablet:text-lg">Grade</th>
                             </tr>
                         </thead>
                         <tbody className='text-lg font-normal '>
@@ -268,31 +268,31 @@ const Result = () => {
 
 
                 <div className=' border-b border-black'>
-                    <div className="flex bg-teal-200 text-xl items-center justify-between px-4 pb-4">
-                        <h2 className='  font-semibold'>Attendance:</h2>
-                        <p><strong className='  font-medium'>Total:</strong> {attendance.total}</p>
-                        <p><strong className=' font-medium'>Present:</strong> {attendance.present}</p>
-                        <p><strong className=' font-medium'>Percentage:</strong> {attendance.total !== 0 ? (attendance.present / attendance.total) * 100 : 0}%</p>
+                    <div className="flex bg-teal-200 text-xl items-center justify-between px-4 py-4 mobile:max-tablet:py-2 mobile:max-tablet:flex-col mobile:max-tablet:items-start">
+                        <h2 className='  font-semibold mobile:max-tablet:text-lg'>Attendance:</h2>
+                        <p><strong className='  font-medium mobile:max-tablet:text-sm'>Total:</strong> {attendance.total}</p>
+                        <p><strong className=' font-medium mobile:max-tablet:text-sm'>Present:</strong> {attendance.present}</p>
+                        <p><strong className=' font-medium mobile:max-tablet:text-sm'>Percentage:</strong> {attendance.total !== 0 ? (attendance.present / attendance.total) * 100 : 0}%</p>
                     </div>
 
                     <div className="mb-12 flex items-center gap-2 px-4">
-                        <h2 className="text-xl font-semibold">Remarks:</h2>
+                        <h2 className="text-xl font-semibold mobile:max-tablet:text-lg">Remarks:</h2>
                     </div>
-                    <div className="sign flex items-baseline py-3 text-xl justify-evenly">
+                    <div className="sign flex items-baseline py-3 text-xl justify-evenly mobile:max-tablet:text-sm">
                         <p>Class Teacher</p>
                         <p>Coordinator</p>
                         <p>Principal</p>
                     </div>
                 </div>
 
-                <div className=' flex gap-2'>
+                <div className=' flex gap-2 mobile:max-tablet:flex-col'>
                     <div className="flex-1">
                         <h1 className=' text-center text-xl my-2'>SCHOLASTIC</h1>
                         <table className="w-full bg-white border border-gray-200">
                             <thead className=' bg-teal-200'>
                                 <tr>
-                                    <th className="px-4 pb-4 border">MARKS RANGE</th>
-                                    <th className="px-4 pb-4 border">GRADE</th>
+                                    <th className="px-4 py-4 mobile:max-tablet:py-2 border">MARKS RANGE</th>
+                                    <th className="px-4 py-4 mobile:max-tablet:py-2 border">GRADE</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -306,12 +306,12 @@ const Result = () => {
                         </table>
                     </div>
                     <div className="flex-1 h-full">
-                        <h1 className=' text-center text-xl my-2'>CO-SCHOLASTIC AND DISCIPLINE</h1>
+                        <h1 className=' text-center text-xl my-2 whitespace-nowrap mobile:max-tablet:text-lg'>CO-SCHOLASTIC AND DISCIPLINE</h1>
                         <table className="w-full bg-white border border-gray-200">
                             <thead className=' bg-teal-200'>
                                 <tr>
-                                    <th className="px-4 pb-4 border whitespace-nowrap">PERFOMANCE INDICATORS</th>
-                                    <th className="px-4 pb-4 border">GRADE</th>
+                                    <th className="px-4 mobile:max-tablet:px-2 py-4 mobile:max-tablet:py-2 border">PERFOMANCE INDICATORS</th>
+                                    <th className="px-4 mobile:max-tablet:px-2 py-4 mobile:max-tablet:py-2 border">GRADE</th>
                                 </tr>
                             </thead>
                             <tbody>
