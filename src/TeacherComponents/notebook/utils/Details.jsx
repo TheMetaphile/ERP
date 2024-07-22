@@ -4,7 +4,7 @@ import AuthContext from "../../../Context/AuthContext";
 import axios from "axios";
 import Switch from "./switch";
 import { toast, ToastContainer } from "react-toastify";
-
+import {BASE_URL_Login} from '../../../Config'
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -33,7 +33,7 @@ const RecordDetails = () => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `http://philester.com:8000/notebook/fetch/teacher/particular?docId=${id}&session=${session}`,
+      url: `${BASE_URL_Login}/notebook/fetch/teacher/particular?docId=${id}&session=${session}`,
       headers: {
         'Authorization': `Bearer ${authState.accessToken}`
       }
@@ -64,7 +64,7 @@ const RecordDetails = () => {
     let config = {
       method: 'put',
       maxBodyLength: Infinity,
-      url: 'http://philester.com:8000/notebook/update/submission',
+      url: `${BASE_URL_Login}/notebook/update/submission`,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authState.accessToken}`

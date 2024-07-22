@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import AuthContext from "../../../Context/AuthContext";
 import Switch from "./switch";
 import { toast, ToastContainer } from "react-toastify";
+import {BASE_URL_Login} from '../../../Config'
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -74,7 +75,7 @@ const NewNoteBookRecord = () => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'http://philester.com:8000/fetchMultiple/student',
+      url:  `${BASE_URL_Login}/fetchMultiple/student`,
       headers: {
         'Content-Type': 'application/json'
       },
@@ -111,7 +112,7 @@ const NewNoteBookRecord = () => {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'http://philester.com:8000/notebook/upload/',
+        url: `${BASE_URL_Login}/notebook/upload/`,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authState.accessToken}`

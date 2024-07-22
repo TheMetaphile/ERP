@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import AuthContext from "../../../Context/AuthContext";
 import { toast, ToastContainer} from "react-toastify";
+import {BASE_URL_Login} from '../../../Config'
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -42,7 +43,7 @@ const AllNoteBookRecord = () => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `http://philester.com:8000/notebook/fetch/teacher/all?class=${Class}&section=${Section}&subject=${Subject}&session=${session}&start=${start}&count=${end}`,
+      url: `${BASE_URL_Login}/notebook/fetch/teacher/all?class=${Class}&section=${Section}&subject=${Subject}&session=${session}&start=${start}&count=${end}`,
       headers: {
         'Authorization': `Bearer ${authState.accessToken}`
       }
