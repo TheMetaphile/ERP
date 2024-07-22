@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import AuthContext from "../../../Context/AuthContext";
+import { toast, ToastContainer} from "react-toastify";
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -65,6 +66,7 @@ const AllNoteBookRecord = () => {
 
   return (
     <div className="flex-col mobile:max-tablet:flex-col-reverse justify-between tablet:items-center px-4 pb-0  mb-2 overflow-auto ">
+      <ToastContainer />
       <div className="overflow-x-auto rounded-lg">
         <table className="min-w-full bg-white border border-gray-300 rounded-lg">
           <thead>
