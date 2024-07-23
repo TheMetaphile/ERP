@@ -62,14 +62,14 @@ const menuItems = [
         text: "Students Result",
         route: "/Admin-Dashboard/Result",
       },
-      {
-        text: "Transfer Certificate",
-        route: "/Admin-Dashboard/transfercertificate",
-      },
-      {
-        text: "Character Certificate",
-        route: "/Admin-Dashboard/charactercetificate",
-      },
+      // {
+      //   text: "Transfer Certificate",
+      //   route: "/Admin-Dashboard/transfercertificate",
+      // },
+      // {
+      //   text: "Character Certificate",
+      //   route: "/Admin-Dashboard/charactercetificate",
+      // },
     ],
   },
   {
@@ -138,29 +138,29 @@ const menuItems = [
   //   },
   //   ]
   // },
-  {
-    image: events,
-    alt: "img",
-    title: "Events",
-    route: "/Admin-Dashboard/Events",
-    children: [],
-  },
-  {
-    image: accountImage,
-    alt: "img",
-    title: "Expenses",
-    route: "/Admin-Dashboard/Account/Expenses",
-    children: [
-      //   {
-      //   text: 'Teacher/Students',
-      //   route: '/Admin-Dashboard/Account/TeacherStudents'
-      // // },
-      // {
-      //   text: 'Expenses',
-      //   route: '/Admin-Dashboard/Account/Expenses'
-      // },
-    ],
-  },
+  // {
+  //   image: events,
+  //   alt: "img",
+  //   title: "Events",
+  //   route: "/Admin-Dashboard/Events",
+  //   children: [],
+  // },
+  // {
+  //   image: accountImage,
+  //   alt: "img",
+  //   title: "Expenses",
+  //   route: "/Admin-Dashboard/Account/Expenses",
+  //   children: [
+  //     //   {
+  //     //   text: 'Teacher/Students',
+  //     //   route: '/Admin-Dashboard/Account/TeacherStudents'
+  //     // // },
+  //     // {
+  //     //   text: 'Expenses',
+  //     //   route: '/Admin-Dashboard/Account/Expenses'
+  //     // },
+  //   ],
+  // },
   {
     image: examImage,
     alt: "img",
@@ -168,13 +168,13 @@ const menuItems = [
     route: "/Admin-Dashboard/Exam",
     children: [],
   },
-  {
-    image: transportImage,
-    alt: "img",
-    title: "Transport",
-    route: "/Admin-Dashboard/Transport",
-    children: [],
-  },
+  // {
+  //   image: transportImage,
+  //   alt: "img",
+  //   title: "Transport",
+  //   route: "/Admin-Dashboard/Transport",
+  //   children: [],
+  // },
   {
     image: noticeImage,
     alt: "img",

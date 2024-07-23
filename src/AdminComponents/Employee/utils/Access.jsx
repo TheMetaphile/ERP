@@ -24,7 +24,7 @@ const Access = ({ nextStep, prevStep, handleChange, formData }) => {
             >
               <option value="">Select Department</option>
               <option value="Finance">Finance </option>
-              <option value="Cerificate">Cerificate </option>
+              <option value="Certificate">Certificate </option>
               <option value="Result">Result </option>
 
             </select>
@@ -38,7 +38,7 @@ const Access = ({ nextStep, prevStep, handleChange, formData }) => {
             >
               <option value="">Select Role</option>
               <option value="Accountant">Accountant</option>
-              <option value="Cerificate">Cerificate </option>
+              <option value="Certificate">Certificate </option>
               <option value="Result">Result </option>
             </select>
           </label>

@@ -7,7 +7,7 @@ import { useContext, useState } from "react";
 import AuthContext from "../../Context/AuthContext.jsx";
 
 export default function SubadminDrawer({ isOpen }) {
-    const { logout } = useContext(AuthContext);
+    const { logout, authState } = useContext(AuthContext);
     const navigate = useNavigate();
     const [active, setActive] = useState(null)
 
@@ -32,22 +32,30 @@ export default function SubadminDrawer({ isOpen }) {
             {/* <div className="mt-5 bg-teal-300 px-2 py-4 rounded-2xl shadow-lg"> */}
             {/* <h2 className="text-xl font-semibold">Accounts</h2> */}
             <div className="mt-4">
-                {menuItems.map((menuItem, index) => (
-                    <div
-                        key={index}
-                        onClick={() => handleClick(index)}
-                        className={`cursor-pointer rounded-lg ${active === index ? 'bg-purple-200' : ''}`}
-                    >
-                        <ExpansionTile
+                {menuItems.map((menuItem, index) => {
+                    if ((menuItem.title === 'Salary History' || menuItem.title === 'Register Teacher' || menuItem.title === 'Register Student' ||
+                        menuItem.title === 'Student Fees') && authState.userDetails.role === 'Accountant' && authState.userDetails.department === 'Finance'
+                    ) {
+                        return (
+                            <div
+                                key={index}
+                                onClick={() => handleClick(index)}
+                                className={`cursor-pointer rounded-lg ${active === index ? 'bg-secondary' : ''}`}
+                            >
+                                <ExpansionTile
+    
+                                    image={menuItem.image}
+                                    alternateText={menuItem.alt}
+                                    title={menuItem.title}
+                                    childrens={menuItem.children}
+                                    route={menuItem.route}
+                                />
+                            </div>
+                        )
+                    }
+                    return null
 
-                            image={menuItem.image}
-                            alternateText={menuItem.alt}
-                            title={menuItem.title}
-                            childrens={menuItem.children}
-                            route={menuItem.route}
-                        />
-                    </div>
-                ))}
+                })}
             </div>
             {/* </div> */}
             <div className="flex h-fit justify-center my-2">

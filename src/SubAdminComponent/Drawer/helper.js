@@ -41,6 +41,13 @@ const menuItems = [
     route: "/Sub-Admin/StudentsFee",
     children: [],
   },
+  {
+    image: fee,
+    alt: "Notice image",
+    title: "Notice",
+    route: "/Sub-Admin/Notice",
+    children: [],
+  },
 ];
 
 export default menuItems;

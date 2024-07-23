@@ -73,7 +73,7 @@ function NewNotice({ setShowModal }) {
                 date: today,
             };
 
-            if (selectedOption === 'Particular Students' || selectedOption === 'Particular Teachers') {
+            if (selectedOption === 'Particular Students' || selectedOption === 'Particular Teachers' || selectedOption === 'Particular Sub Admin') {
                 payload.emailIds = emailIds;
             } else if (selectedOption === 'Particular Classes') {
                 payload.Classes = classes;
@@ -268,7 +268,52 @@ function NewNotice({ setShowModal }) {
                             onChange={handleSearchChange}
 
                         />
-                         {searchResults.length > 0 ? (
+                        {searchResults.length > 0 ? (
+                            <div className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2 max-h-40 overflow-y-scroll">
+                                {searchResults.map(user => (
+                                    <div key={user.email} className="flex justify-between items-center mb-2">
+                                        <span className="flex items-center gap-2">
+                                            <img src={user.profileLink} alt="" className="w-6 h-6 rounded-full"></img>{user.name} </span>
+                                        <button
+                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                                            onClick={() => addEmailId(user.email)}
+                                        >
+                                            Add
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+
+
+                        <div className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2">
+                            {emailIds.length > 0 ? (
+                                emailIds.map(email => (
+                                    <div key={email} className="flex justify-between border mt-2 border-gray-300 shadow-md rounded-full px-2 items-center py-1">
+                                        <span>{email}</span>
+                                        <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => removeEmailId(email)} />
+                                    </div>
+                                ))
+                            ) : (
+                                <span>No email IDs added.</span>
+                            )}
+                        </div>
+                    </div>
+                );
+            case 'Particular Sub Admin':
+                return (
+                    <div>
+                        <input
+                            type="text"
+                            className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2"
+                            placeholder="Search for users"
+                            value={searchInput}
+                            onChange={handleSearchChange}
+
+                        />
+                        {searchResults.length > 0 ? (
                             <div className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2 max-h-40 overflow-y-scroll">
                                 {searchResults.map(user => (
                                     <div key={user.email} className="flex justify-between items-center mb-2">
@@ -337,24 +382,24 @@ function NewNotice({ setShowModal }) {
                         </div>
                         {classes.length > 0 ? (
                             <ul className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2">
-                            {classes.map(cls => (
-                                <li key={cls.Class} className="mb-2">
-                                    <div className="flex justify-between mt-2 border border-gray-300 shadow-md rounded-full px-2 items-center py-1">
-                                        <span>{cls.Class}: {cls.sections.join(', ')}</span>
-                                        <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => handleRemoveClass(cls.Class)} />
-                                    </div>
-                                    <ul>
-                                        {cls.sections.map(section => (
-                                            <li key={section} className=" flex justify-between  mt-2 border border-gray-300 shadow-md rounded-full px-2 items-center py-1">
-                                                <span>{section}</span>
-                                                <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => handleRemoveSection(cls.Class, section)} />
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </li>
-                            ))}
-                        </ul>
-                        ): (
+                                {classes.map(cls => (
+                                    <li key={cls.Class} className="mb-2">
+                                        <div className="flex justify-between mt-2 border border-gray-300 shadow-md rounded-full px-2 items-center py-1">
+                                            <span>{cls.Class}: {cls.sections.join(', ')}</span>
+                                            <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => handleRemoveClass(cls.Class)} />
+                                        </div>
+                                        <ul>
+                                            {cls.sections.map(section => (
+                                                <li key={section} className=" flex justify-between  mt-2 border border-gray-300 shadow-md rounded-full px-2 items-center py-1">
+                                                    <span>{section}</span>
+                                                    <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => handleRemoveSection(cls.Class, section)} />
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
                             <></>
                         )}
                     </div>
@@ -377,9 +422,11 @@ function NewNotice({ setShowModal }) {
                         <option value="For All">For All</option>
                         <option value="For Students">For Student</option>
                         <option value="For Teachers">For Teacher</option>
+                        <option value="For Sub Admin">For Sub Admin</option>
                         <option value="Particular Students">Particular Students</option>
                         <option value="Particular Classes">Particular Classes</option>
                         <option value="Particular Teachers">Particular Teachers</option>
+                        <option value="Particular Sub Admin">Particular Sub Admin</option>
                     </select>
                 </div>
                 <input

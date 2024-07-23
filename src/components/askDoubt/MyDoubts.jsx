@@ -3,6 +3,7 @@ import AuthContext from '../../Context/AuthContext';
 import SelectClass from './utils/SelectClass';
 import SelectSubject from './utils/SelectSubject';
 import SelectTeacher from "./utils/SelectTeacher";
+import SubjectSelection from '../classWork/utils/SubjectSelection';
 import MyDoubtTile from "./utils/MyDoubtTile";
 import { IoCameraOutline } from "react-icons/io5";
 import axios from 'axios';
@@ -14,7 +15,7 @@ import { Link } from 'react-router-dom';
 export default function MyDoubts() {
 
     const { authState } = useContext(AuthContext);
-    const [selectedSubject, setSelectedSubject] = useState('Subject');
+    const [selectedSubject, setSelectedSubject] = useState('Maths');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -24,11 +25,12 @@ export default function MyDoubts() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
     const [allDataFetched, setAllDataFetched] = useState(false);
-    const [status, setStatus] = useState('Pending');
+    const [status, setStatus] = useState('Resolved');
 
-    const handleSubjectSelect = (selectedSubject) => {
-        setSelectedSubject(selectedSubject);
-    };
+    const handleSubjectSelect = (subject) => {
+        setSelectedSubject(subject);
+        console.log("Selected Subject:", subject);
+    }
 
     const handleAskDoubt = () => {
         setIsModalOpen(true);
@@ -124,7 +126,6 @@ export default function MyDoubts() {
             const doubts = response.data.doubts;
             console.log("API response:", response.data);
             setData(prevData => [...prevData, ...response.data.doubts]);
-            console.log("API responserrrrrr:", data);
             if (doubts.length < (end)) {
                 toast.success('All data fetched');
                 console.log('All data fetched')
@@ -153,11 +154,11 @@ export default function MyDoubts() {
                     <p className=' mobile:max-laptop:text-lg whitespace-nowrap'>My Doubts</p>
                 </Link>
                 <div className="flex md:order-2 md:w-full lg:w-fit md:ml-2 gap-2  ">
-                    <SelectSubject onSelect={handleSubjectSelect} />
+                    <SubjectSelection onSubjectSelect={handleSubjectSelect} />
                     <select
                         value={status}
                         onChange={handleStatusChange}
-                        className="border border-gray-300 rounded-lg shadow-md px-2 mb-2 mobile:max-tablet:px-0 mobile:max-tablet:text-xs"
+                        className="mt-1 border block py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                     >
                         <option value="Pending">Pending</option>
                         <option value="Resolved">Resolved</option>

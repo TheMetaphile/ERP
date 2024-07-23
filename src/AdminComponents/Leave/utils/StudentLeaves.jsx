@@ -92,9 +92,9 @@ export default function StudentLeaves() {
         <>
           {data.map((leave, index) => (
             <div key={index} className={`rounded-md border p-4 flex flex-col w-full`}>
-              <div className="flex justify-between" onClick={() => handleClick(`${index}`)}>
+              <div className="flex justify-between cursor-pointer" onClick={() => handleClick(`${index}`)}>
                 <div className="flex">
-                  <img src={leave.profileLink} alt="" className="h-12 w-12 mobile:max-tablet:hidden rounded-full" />
+                  <img src={leave.profileLink} alt="" className="h-10 w-10 mobile:max-tablet:hidden rounded-full" />
                   <p className="text-xl mb-2 mt-2 px-2 mobile:max-tablet:text-lg">{leave.name}</p>
                 </div>
                 <div>

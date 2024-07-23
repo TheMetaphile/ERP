@@ -17,6 +17,7 @@ function StudentDetails() {
   const [fees, setFees] = useState([]);
   const [loading, setLoading] = useState(false)
   const [totalAmount, setTotalAmount] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(10);
 
   const useQuery = () => {
     return new URLSearchParams(location.search);
@@ -40,9 +41,9 @@ function StudentDetails() {
   const formattedDate = today.toISOString().split('T')[0];
 
   const fetchFees = async () => {
-    console.log(authState.userDetails.currentClass, 'Class')
+
     try {
-      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student?date=${formattedDate}`, {
+      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student/detailedFee?email=${id}&date=${formattedDate}`, {
         headers: {
           'Authorization': `Bearer ${authState.accessToken}`
         }
@@ -63,29 +64,10 @@ function StudentDetails() {
     }
   }
 
-  const fetchTransaction = async () => {
-    console.log(authState.userDetails.currentClass, 'Class')
-    try {
-      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student?date=${formattedDate}`, {
-        headers: {
-          'Authorization': `Bearer ${authState.accessToken}`
-        }
-      });
-      const total = response.data.feeStructure.reduce((acc, fee) => acc + parseFloat(fee.payableAmount), 0);
-      console.log(total)
-      setTotalAmount(total)
-      console.log("API response fees:", response.data);
-      setFees(response.data.feeStructure);
 
-    }
-    catch (error) {
-      const errorMessage = error.response?.data?.error || 'An error occurred';
-      toast.error(errorMessage);
-    }
-    finally {
-      setLoading(false)
-    }
-  }
+  const handleViewMore = () => {
+    setVisibleCount(prevCount => prevCount + 10);
+  };
 
   return (
     <div className="w-full h-fit mb-4  rounded-lg shadow-md overflow-auto border border-gray-300">
@@ -93,11 +75,14 @@ function StudentDetails() {
         <Header />
         {loading ? (
           <Loading />
-        ) : fees === null ? (
+        ) : fees.length === 0 ? (
           <div>No data available</div>
         ) : (
           <div className="">
-            <FeeStructureField fees={fees} />
+            <FeeStructureField fees={fees.slice(0, visibleCount)} />
+            {visibleCount < fees.length && (
+              <button onClick={handleViewMore} className="w-full text-blue-500 text-center py-2">View More</button>
+            )}
             <FeeStructureFooter totalAmount={totalAmount} />
           </div>
         )}

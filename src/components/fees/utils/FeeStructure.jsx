@@ -14,6 +14,7 @@ export default function FeeStructure() {
   const [fees, setFees] = useState([]);
   const [loading, setLoading] = useState(false)
   const [totalAmount, setTotalAmount] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(10);
 
   useEffect(() => {
     if (authState.accessToken) {
@@ -51,7 +52,9 @@ export default function FeeStructure() {
     }
   }
 
-
+  const handleViewMore = () => {
+    setVisibleCount(prevCount => prevCount + 10);
+  };
 
   return (
     <div className="w-full h-fit mb-4  rounded-lg shadow-md overflow-auto border border-gray-300">
@@ -63,7 +66,10 @@ export default function FeeStructure() {
           <div>No data available</div>
         ) : (
           <div className="">
-            <FeeStructureField fees={fees} />
+            <FeeStructureField fees={fees.slice(0, visibleCount)} />
+            {visibleCount < fees.length && (
+              <button onClick={handleViewMore} className="w-full text-blue-500 text-center py-2">View More</button>
+            )}
             <FeeStructureFooter totalAmount={totalAmount} />
           </div>
         )}

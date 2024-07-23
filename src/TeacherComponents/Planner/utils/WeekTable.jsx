@@ -1,11 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { topics, plans, chapters } from './topics';
+import { BASE_URL_Login } from '../../../Config';
+import axios from "axios";
+import AuthContext from '../../../Context/AuthContext';
+import Loading from '../../../LoadingScreen/Loading';
 
-const WeekTable = ({ selectedTab }) => {
+const WeekTable = ({ selectedTab, Class, section, subject }) => {
+    const { authState } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+    const [details, setDetails] = useState([]);
     const [nextWeekPlans, setNextWeekPlans] = useState(Array(6).fill(''));
     const [nextWeekTopics, setNextWeekTopics] = useState(topics);
     const [nextWeekActivities, setNextWeekActivities] = useState(plans);
     const [nextWeekChapters, setNextWeekChapters] = useState(chapters);
+
+    function getCurrentSession() {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+
+        if (currentMonth >= 3) {
+            return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
+        } else {
+            return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
+        }
+    }
+    const session = getCurrentSession();
 
     const currentDate = new Date();
     const startOfWeek = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
@@ -22,6 +42,10 @@ const WeekTable = ({ selectedTab }) => {
         date.setDate(nextWeekStart.getDate() + i);
         return date;
     });
+
+  
+    const formattedDate = nextWeekStart.toISOString().split('T')[0];
+    console.log(formattedDate,session,Class,section,subject);
 
     const handleInputChange = (index, field, value) => {
         if (field === 'plan') {
@@ -46,6 +70,31 @@ const WeekTable = ({ selectedTab }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
     };
+
+   
+    useEffect(() => {
+        const fetchPlan = async () => {
+            const session = getCurrentSession();
+            setLoading(true);
+
+            try {
+                const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/teacher?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${formattedDate}`, {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`
+                    }
+                });
+
+                console.log("API response:", response.data);
+                setDetails(response.data.plan);
+                setLoading(false);
+            } catch (err) {
+                console.log(err)
+                setLoading(false);
+            }
+        };
+        fetchPlan();
+    }, [authState.accessToken,Class,section,subject])
+
 
     const renderTableRows = (days, topics, plans, chapters, editable = false) => {
         return days.map((day, index) => (

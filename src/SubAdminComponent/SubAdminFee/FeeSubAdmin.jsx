@@ -11,7 +11,7 @@ function FeeSubAdmin() {
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0  overflow-auto items-start mt-2  mb-3 no-scrollbar mobile:max-tablet:mx-2.5  mobile:max-tablet:mt-3 pt-20">
 
-            <div className=' border shadow-md mt-4 mobile:max-tablet:mt-0 rounded-lg w-full border-gray-300'>
+            <div className='  mt-4 mobile:max-tablet:mt-0 rounded-lg w-full'>
                 <div className=" flex mt-4 ml-3 mr-3 items-center justify-between">
                     <div className=" flex  gap-2 w-full ">
                         <Link to={`/Sub-Admin/StudentsFee/structure`} onClick={() => handleLinkSelect('/Sub-Admin/StudentsFee/structure')}>

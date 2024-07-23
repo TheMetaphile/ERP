@@ -6,25 +6,26 @@ import Switch from "./utils/switch";
 import { toast, ToastContainer } from "react-toastify";
 import Loading from '../../LoadingScreen/Loading';
 import { BASE_URL_Fee } from "../../Config";
+import SubjectSelection from "../classWork/utils/SubjectSelection";
 
 const Status = () => {
     const { id } = useParams();
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [subject, setSubject] = useState('Maths');
-    const subjects = ['Maths', 'Science', 'History', 'English', 'Geography'];
+    const [selectedSubject, setSelectedSubject] = useState('Maths');
 
-    const handleSubjectChange = (e) => {
-        const selectedSubject = e.target.value;
-        setSubject(selectedSubject);
-    };
+
+    const handleSubjectSelect = (subject) => {
+        setSelectedSubject(subject);
+        console.log("Selected Subject:", subject);
+    }
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Fee}/notebook/fetch/student?subject=${subject}`, {
+                const response = await axios.get(`${BASE_URL_Fee}/notebook/fetch/student?subject=${selectedSubject}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }
@@ -39,7 +40,7 @@ const Status = () => {
             }
         };
         fetchData();
-    }, [authState.accessToken, subject]);
+    }, [authState.accessToken, selectedSubject]);
 
 
     return (
@@ -47,18 +48,7 @@ const Status = () => {
             <ToastContainer />
             <div className="flex items-center justify-between">
                 <h1 className="text-xl mobile:max-tablet:text-lg font-medium my-3">Checked Notebooks</h1>
-                <select
-                    id="subject"
-                    value={subject}
-                    onChange={handleSubjectChange}
-                    className="mt-1 border block py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md  mobile:max-tablet:text-sm"
-                >
-                    {subjects.map((subject) => (
-                        <option key={subject} value={subject}>
-                            {subject}
-                        </option>
-                    ))}
-                </select>
+                <SubjectSelection onSubjectSelect={handleSubjectSelect} />
             </div>
             {loading ? (
                 <Loading />

@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import logo from './../../assets/metaphile_logo.png';
 import { Link } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import { FaBell } from 'react-icons/fa';
+import AuthContext from '../../Context/AuthContext';
+
 export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
+  const { authState } = useContext(AuthContext);
+  console.log(authState.userDetails.role, authState.userDetails.department);
 
   return (
     <div className="flex flex-grow mobile:max-tablet:flex-col h-full mt-1 px-2 py-3 mb-2 mobile:max-tablet:mb-0 items-center justify-between bg-purple-300 rounded-lg shadow-md">
@@ -20,12 +24,22 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
           <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1">
             <Link to="/Sub-Admin/Students" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Students</Link>
           </li>
-          <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1">
-            <Link to="/Sub-Admin/Certificates" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Certificate</Link>
-          </li>
-          <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1">
-            <Link to="/Sub-Admin/Result" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Result</Link>
-          </li>
+          {authState.userDetails.role === 'Certificate' && authState.userDetails.department === 'Certificate' ? (
+             <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1">
+             <Link to="/Sub-Admin/Certificates" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Certificate</Link>
+           </li>
+          ) : (
+            <></>
+          )}
+         
+          {authState.userDetails.role === 'Result' && authState.userDetails.department === 'Result' ? (
+            <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1">
+              <Link to="/Sub-Admin/Result" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Result</Link>
+            </li>
+          ) : (
+            <></>
+          )}
+
         </ul>
       </nav>
     </div>

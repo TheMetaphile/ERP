@@ -3,7 +3,7 @@ import WeekTable from './WeekTable';
 
 const tabs = ["Current Week", "Next Week"];
 
-const Tabs = () => {
+const Tabs = ({ Class, section, subject }) => {
     const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
     const handleTabChange = (tab) => {
@@ -25,7 +25,7 @@ const Tabs = () => {
                     ))}
                 </div>
             </div>
-            <WeekTable selectedTab={selectedTab} />
+            <WeekTable selectedTab={selectedTab} Class={Class} section ={section} subject={subject}/>
         </div>
     );
 };

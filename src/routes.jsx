@@ -149,6 +149,9 @@ import Status from "./components/notebook/Status.jsx";
 import Planner from "./TeacherComponents/Planner/Planner.jsx";
 import StudentDetails from "./SubAdminComponent/SubAdminFee/StudentFee/utils/StudentDetails.jsx";
 import AllExDetails from "./SubAdminComponent/SubAdminFee/StudentFee/AllDetails.jsx";
+import FeeDetail from "./SubAdminComponent/SubAdminFee/StudentFee/utils/FeeDetail.jsx";
+import NoticeSubAdmin from "./SubAdminComponent/notification/utils/NoticeSubAdmin.jsx";
+
 
 
 const router = createBrowserRouter([
@@ -969,7 +972,7 @@ const router = createBrowserRouter([
               },
               {
                 path: ':id',
-                element: <StudentDetails />
+                element: <FeeDetail />
               }
             ]
           },
@@ -986,6 +989,11 @@ const router = createBrowserRouter([
             element: <FeeDetailsSubAdmin />
           },
         ]
+      },
+      {
+        path: "/Sub-Admin/Notice",
+        element: <NoticeSubAdmin />,
+        children: []
       },
     ]
   }
