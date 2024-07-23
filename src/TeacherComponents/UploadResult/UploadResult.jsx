@@ -42,7 +42,7 @@ function UploadResult() {
 
   const handleTermChange = (event) => {
     setSelectedTerm(event.target.value);
-}
+  }
   const handleRoleChange = (event) => {
     setScholastic(event);
   };
@@ -80,15 +80,31 @@ function UploadResult() {
     }
   };
 
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
 
 
 
   return (
-    <div className="overflow-y-auto w-full items-start px-2 py-1 no-scrollbar">
+    <div className="overflow-y-auto w-full items-start px-2 py-1 no-scrollbar mobile:max-laptop:mt-2">
       <ToastContainer />
-      <div className='w-full flex items-center justify-between my-2'>
-        <h1 className="text-xl font-medium mb-2">Upload Report Card</h1>
-        <div className='flex items-end'>
+      <div className='w-full flex items-center justify-between my-2 '>
+        <h1 className="text-xl font-medium mb-2 mobile:max-tablet:text-lg whitespace-nowrap">Upload Report Card</h1>
+        <div className="block justify-end laptop:hidden w-full items-end tablet:flex mobile:max-laptop:text-end">
+          <button
+            className="p-2 border rounded items-end flex"
+            onClick={() => setDropdownVisible(!isDropdownVisible)}
+          >
+            Filter
+          </button>
+          {isDropdownVisible && (
+            <div className='flex absolute left-0 right-0 bg-white p-4 gap-2 justify-between mobile:max-tablet:flex-col'>
+              <Selection />
+            </div>
+          )}
+        </div>
+
+
+        <div className='flex items-end mobile:max-laptop:hidden'>
           <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
           <div className="w-36 mr-3 self-center">
             <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleTermChange}>
@@ -107,7 +123,7 @@ function UploadResult() {
         scholastic
           ?
           (
-            <ScholasticTable students={students} subject={Subject} term={selectedTerm} Class={Class}/>
+            <ScholasticTable students={students} subject={Subject} term={selectedTerm} Class={Class} />
           )
           :
           (

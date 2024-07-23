@@ -14,7 +14,7 @@ function Progress() {
 
     return (
         <div className="container mx-auto px-4  w-full h-96 border shadow-md rounded-lg"  >
-            <h1 className="text-2xl font-medium mb-3 mt-2">Class Progress</h1>
+            <h1 className="text-2xl mobile:max-tablet:text-lg font-medium mb-3 mt-2">Class Progress</h1>
 
             <div className='  overflow-auto  h-5/6'>
 
@@ -22,8 +22,8 @@ function Progress() {
 
                     <div key={index} className='mx-3 rounded-lg bg-blue-100 mt-1 flex justify-between items-center mb-2  '>
                         <div className='px-6  '>
-                            <div className='font- text-xl'>Class : {detail.class}</div>
-                            <div className='font- text-xl text-gray-500'>{detail.subject}</div>
+                            <div className='font- text-xl mobile:max-tablet:text-lg whitespace-nowrap'>Class : {detail.class}</div>
+                            <div className='font- text-xl text-gray-500 mobile:max-tablet:text-lg'>{detail.subject}</div>
                         </div>
 
                         <div className=''>

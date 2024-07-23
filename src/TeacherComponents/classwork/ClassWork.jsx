@@ -23,7 +23,7 @@ function ClassWork() {
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
-    
+
     const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
 
 
@@ -112,23 +112,56 @@ function ClassWork() {
         }
     };
 
+    const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-   
+
     return (
-        <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
+        <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-laptop:mt-6">
             <ToastContainer />
-            <div className='w-full flex items-center justify-between'>
-                <h1 className='text-2xl'>All ClassWork</h1>
-                <div className='flex items-center gap-2'>
+            <div className='w-full flex items-center justify-between mobile:max-tablet:px-3'>
+                <h1 className='text-2xl mobile:max-tablet:text-lg whitespace-nowrap'>All ClassWork</h1>
+                <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
+                    <button
+                        className="p-2 border rounded"
+                        onClick={() => setDropdownVisible(!isDropdownVisible)}
+                    >
+                        Filter
+                    </button>
+                    {isDropdownVisible && (
+                        <div className='flex absolute left-0 right-0 bg-white p-2 items-center gap-2 flex-col'>
+                            <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange} >
+                                <option value=""> Class</option>
+                                {uniqueClasses.map((classOption, index) => (
+                                    <option key={index} value={classOption}>{classOption}</option>
+                                ))}
+                            </select>
+                            <select id="section" className="w-full px-4 py-2 border rounded-md" onChange={handleSectionChange}>
+                                <option value=""> Section</option>
+                                {uniqueSections.map((sectionOption, index) => (
+                                    <option key={index} value={sectionOption}>{sectionOption}</option>
+                                ))}
+                            </select>
+
+                            <select id="subject" className="w-full px-4 py-2 border rounded-md" onChange={handleSubjectChange}>
+                                <option value=""> Subject</option>
+                                {uniqueSubjects.map((subjectOption, index) => (
+                                    <option key={index} value={subjectOption}>{subjectOption}</option>
+                                ))}
+                            </select>
+                            <div>
+                                <h1 className="bg-purple-300 px-4 py-2 rounded-md cursor-pointer" onClick={handleOpen}>Upload</h1>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div className='flex mobile:max-tablet:hidden items-center gap-2'>
                     <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange} >
                         <option value=""> Class</option>
                         {uniqueClasses.map((classOption, index) => (
                             <option key={index} value={classOption}>{classOption}</option>
                         ))}
                     </select>
-
-
-
                     <select id="section" className="w-full px-4 py-2 border rounded-md" onChange={handleSectionChange}>
                         <option value=""> Section</option>
                         {uniqueSections.map((sectionOption, index) => (
@@ -154,7 +187,7 @@ function ClassWork() {
             ) : details.length === 0 ? (
                 <div className="text-center w-full mt-6">No Classwork found</div>
             ) : (
-                <div className='w-full mt-4 rounded-lg mb'>
+                <div className='w-full mt-4 rounded-lg mb px-2'>
                     <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
                     {!allDataFetched && (
                         <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>

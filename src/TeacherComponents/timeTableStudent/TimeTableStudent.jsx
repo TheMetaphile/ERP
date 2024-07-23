@@ -169,7 +169,7 @@ export default function TimeTableStudent() {
                 <h1 className="text-2xl font-medium">
                     Time Table
                 </h1>
-               
+
             </div>
             <div className="flex justify-between w-full items-center p-3">
                 <h1 className="text-xl font-medium">
@@ -194,31 +194,31 @@ export default function TimeTableStudent() {
                 </select>
             </div>
             <div className='w-full rounded-lg border border-gray-400'>
-            <TimeTableHeader />
-            <div className=' w-full '>
-                {loading ? (
-                    <Loading />
-                ) : data === null || data.length === 0 ? (
-                    <div className=' w-full border border-gray-300 px-4 py-2 text-center'>No data available</div>
-                ) : (
-                    <div className='w-full'>
-                        {lectureTimes.map((time, index) => {
-                            return(
-                            <LeactureTile
-                                key={index}
-                                index={index}
-                                lectureNo={`${index + 1} `}
-                                Time={`${formatTime(time.start)}-${formatTime(time.end)}`}
-                                numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}
-                                data={data}
-                                day={day}
-                            />
-                        )
+                <TimeTableHeader />
+                <div className=' w-full '>
+                    {loading ? (
+                        <Loading />
+                    ) : data === null || data.length === 0 ? (
+                        <div className=' w-full border border-gray-300 px-4 py-2 text-center'>No data available</div>
+                    ) : (
+                        <div className='w-full'>
+                            {lectureTimes.map((time, index) => {
+                                return (
+                                    <LeactureTile
+                                        key={index}
+                                        index={index}
+                                        lectureNo={`${index + 1} `}
+                                        Time={`${formatTime(time.start)}-${formatTime(time.end)}`}
+                                        numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}
+                                        data={data}
+                                        day={day}
+                                    />
+                                )
 
-                        })}
-                    </div>
-                )}
-            </div>
+                            })}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )

@@ -34,32 +34,32 @@ function Mark() {
     return (
         <div className=''>
             <h1 className='px-3 py-2'>Mark your Attendance</h1>
-            <div className='flex flex-col items-center'>
-                <div className='w-full flex gap-3 p-5 mt-3 items-center'>
-                    <div className='w-full flex justify-center items-center flex-col'>
+            <div className='flex flex-col items-center '>
+                <div className='w-full flex gap-3 p-5 mt-3 mobile:max-tablet:mt-0 items-center mobile:max-tablet:flex-col'>
+                    <div className='w-full flex justify-center items-center flex-col '>
                         <DigitalClock />
                     </div>
-                    <div className='w-full flex justify-center items-center'>
+                    <div className='w-full flex justify-center items-center tablet:flex-col'>
                         {!checkIn ? (
                             <button
                                 onClick={handleCheckIn}
                                 className="flex w-64 shadow-md rounded-2xl py-2 mb-2 mt-2 justify-center bg-purple-300"
                             >
-                                <h1 className="font-medium text-2xl text-white">Check In</h1>
+                                <h1 className="font-medium text-2xl mobile:max-laptop:text-lg text-white">Check In</h1>
                             </button>
                         ) : (
                             <>
                                 <button
                                     onClick={handleCheckOut}
-                                    className="flex w-64 shadow-md rounded-2xl py-2 mb-2 mt-2 justify-center bg-purple-300 mr-2"
+                                    className=" flex w-64 shadow-md rounded-2xl py-2 mb-2 mt-2 justify-center bg-purple-300 mr-2"
                                 >
-                                    <h1 className="font-medium text-2xl text-white">Check Out</h1>
+                                    <h1 className="font-medium text-2xl mobile:max-laptop:text-lg text-white">Check Out</h1>
                                 </button>
                                 <button
                                     onClick={handleTakeBreak}
                                     className="flex w-64 shadow-md rounded-2xl py-2 mb-2 mt-2 justify-center bg-purple-300"
                                 >
-                                    <h1 className="font-medium text-2xl text-white">{onBreak ? "Resume work" : "Take Break"}</h1>
+                                    <h1 className="font-medium text-2xl mobile:max-laptop:text-lg text-white">{onBreak ? "Resume work" : "Take Break"}</h1>
                                 </button>
                             </>
                         )}

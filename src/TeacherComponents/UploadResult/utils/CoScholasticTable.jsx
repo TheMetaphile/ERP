@@ -86,7 +86,7 @@ export default function CoScholasticTable({ students, term, Class }) {
         console.log(resultData, authState);
 
         try {
-            const response = await axios.post(`${BASE_URL_Result}/result/create`, 
+            const response = await axios.post(`${BASE_URL_Result}/result/create`,
                 resultData,
                 {
                     headers: {
@@ -96,7 +96,7 @@ export default function CoScholasticTable({ students, term, Class }) {
             );
             if (response.status === 200) {
                 toast.success('Result saved successfully!');
-            } 
+            }
         } catch (error) {
             toast.error(error.response?.data?.error || 'Error saving result');
             console.error('Error saving result:', error.response?.data?.error);
@@ -108,7 +108,7 @@ export default function CoScholasticTable({ students, term, Class }) {
             <table className="min-w-full bg-white border border-gray-300 rounded-lg">
                 <thead>
                     <tr className="bg-secondary text-gray-600 text-lg leading-normal">
-                        <th className="py-2 px-6 text-center rounded-t-r">Roll No.</th>
+                        <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Roll No.</th>
                         <th className="py-2 px-6 text-center">Name</th>
                         {Subjects.map((Subject, index) => (
                             <th key={index} className="py-2 px-6 text-center">{Subject.subject}</th>
@@ -120,7 +120,7 @@ export default function CoScholasticTable({ students, term, Class }) {
                     {students.map((Student, index) => (
                         <tr key={index} className={`border-b border-gray-200 last:border-none ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
                             <td className="py-2 px-6 text-center rounded-t-r">{Student.rollNumber}</td>
-                            <td className="py-2 px-6 text-center">{Student.name}</td>
+                            <td className="py-2 px-6 text-center whitespace-nowrap">{Student.name}</td>
                             {Subjects.map((Subject, subIndex) => (
                                 <td key={subIndex} className="py-2 px-6 text-center">
                                     <input

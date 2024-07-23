@@ -11,8 +11,8 @@ function BirthDay() {
 
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
-            <h1 className='text-3xl'>Birthday</h1>
+        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-laptop:mt-6">
+            <h1 className='text-3xl mobile:max-tablet:text-xl'>Birthday</h1>
             <div className='  mt-3  w-full'>
                 <div className=" flex items-center justify-between">
                     <div className=" flex  gap-2 ">
@@ -25,21 +25,21 @@ function BirthDay() {
                         </Link> */}
                         <Link
                             to={'/Teacher-Dashboard/birthday/teacher'}
-                            className={`text-xl font-medium px-2 rounded-lg border border-gray-300 py-1 ${selectedLink === '/Teacher-Dashboard/birthday/teacher' ? 'bg-secondary ' : 'bg-gray-200'}`}
+                            className={`text-xl mobile:max-tablet:text-lg font-medium px-2 rounded-lg border border-gray-300 py-1 ${selectedLink === '/Teacher-Dashboard/birthday/teacher' ? 'bg-secondary ' : 'bg-gray-200'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/teacher')}
                         >
                             Teacher
                         </Link>
                         <Link
                             to={'/Teacher-Dashboard/birthday/student'}
-                            className={`text-xl font-medium px-2 rounded-lg border border-gray-300 py-1 ${selectedLink === '/Teacher-Dashboard/birthday/student' ? 'bg-secondary ' : 'bg-gray-200'}`}
+                            className={`text-xl mobile:max-tablet:text-lg font-medium px-2 rounded-lg border border-gray-300 py-1 ${selectedLink === '/Teacher-Dashboard/birthday/student' ? 'bg-secondary ' : 'bg-gray-200'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/student')}
                         >
                             Student
                         </Link>
                     </div>
 
-                   
+
                 </div>
                 <hr className='border-t-2 bg-slate-500 mt-2 mb-3 ml-3 mr-3' />
                 <Outlet />

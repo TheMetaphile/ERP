@@ -83,7 +83,7 @@ function History({ additionalData }) {
 
     return (
         <div className=''>
-            <h1 className='text-2xl'>Leave History</h1>
+            <h1 className='text-2xl mobile:max-tablet:text-lg'>Leave History</h1>
             {loading ? (
                 <Loading />
             ) : details.length === 0 ? (

@@ -15,7 +15,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
     const handleClick = (index) => {
         setExpanded(expanded === index ? null : index);
     }
-    
+
     const handleUpdateClick = (index) => {
         setEditingRow(index);
     };
@@ -134,22 +134,23 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                         ) : (
                             <>
 
-                                <div className="pl-2 font-medium">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
-                                <div className='flex items-center gap-1'>
+                                <div className="pl-2 font-medium whitespace-nowrap mobile:max-tablet:text-sm">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
+                                <div className='flex items-center gap-1 mobile:max-tablet:flex-col'>
+                                    <div className="flex">
+                                        <button
+                                            className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                            onClick={() => handleUpdateClick(index)}
+                                        >
+                                            <MdEdit />
+                                        </button>
 
-                                    <button
-                                        className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                        onClick={() => handleUpdateClick(index)}
-                                    >
-                                        <MdEdit />
-                                    </button>
-
-                                    <button
-                                        className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                        onClick={() => handleDelete(index)}
-                                    >
-                                        <MdDeleteForever />
-                                    </button>
+                                        <button
+                                            className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                            onClick={() => handleDelete(index)}
+                                        >
+                                            <MdDeleteForever />
+                                        </button>
+                                    </div>
                                     <div className="px-3 py-1 bg-bg_blue rounded-full w-fit">
 
                                         {detail.subject}
@@ -167,7 +168,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                         {editingRow === index ? (
                             <div className="flex flex-col">
                                 <div className="pl-2 font-medium">Topic: </div>
-                                
+
                                 <input
                                     className="font-normal my-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
                                     value={detail.topic}
@@ -185,28 +186,28 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                         ) : (
                             <div>
                                 <div className="pl-2 font-medium text-justify">Topic: <span className='font-normal'>{detail.topic}</span></div>
-                            {expanded === index && (
-                                <h1 className="pl-2 font-medium text-justify">Task: <span className='font-normal'>{detail.description}</span></h1>
-                            )}
+                                {expanded === index && (
+                                    <h1 className="pl-2 font-medium text-justify">Task: <span className='font-normal'>{detail.description}</span></h1>
+                                )}
                             </div>
                         )}
 
                     </div>
-                    <div className='flex justify-between px-2'>
-                        <div className='text-right'>
-                            <h1 className="font-medium">Date: {detail.date}</h1>
+                    <div className='flex justify-between mobile:max-tablet:justify-start px-2 mobile:max-tablet:flex-col'>
+                        <div className='text-right mobile:max-tablet:text-left'>
+                            <h1 className="font-medium mobile:max-tablet:text-sm">Date: {detail.date}</h1>
                         </div>
-                        <div className='text-left'>
+                        <div className='text-left mobile:max-tablet:text-sm'>
                             {editingRow === index ? (
-<>
-                                <div className="pl-2 font-medium">Deadline: </div>
+                                <>
+                                    <div className="pl-2 mobile:max-tablet:p-0 font-medium mobile:max-tablet:text-sm">Deadline: </div>
 
-                                <input
-                                    className="font-normal mt-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                    value={detail.deadline}
-                                    onChange={(e) => handleInputChange(index, 'deadline', e.target.value)}
-                                />
-</>
+                                    <input
+                                        className="font-normal mt-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
+                                        value={detail.deadline}
+                                        onChange={(e) => handleInputChange(index, 'deadline', e.target.value)}
+                                    />
+                                </>
                             ) : (
                                 <h1 className="font-medium">Deadline: {detail.deadline}</h1>
                             )}

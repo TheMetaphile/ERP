@@ -113,40 +113,41 @@ export default function HistoryTile({ details }) {
         <div className="relative w-full p-2 border rounded-lg border-gray-300 shadow-md mt-3 items-center">
             {data.map((item, index) => (
                 <div key={index} className="mb-2 border border-gray-200 shadow-md rounded-lg p-3">
-
-
-                    <div className='flex justify-between items-center font-medium cursor-pointer' onClick={() => handleClick(index)}>
+                    <div className='flex  justify-between items-center font-medium mobile:max-tablet:text-sm cursor-pointer whitespace-nowrap' onClick={() => handleClick(index)}>
                         Type: {editRowIndex === index ? (
                             <input
                                 type="text"
                                 value={editData.type}
                                 onChange={(e) => handleInputChange(e, 'type')}
-                                className='border'
+                                className='border mobile:max-tablet:w-32'
                             />
                         ) : (
                             item.type
                         )}
-                        <div className="flex items-center mt-2">
+                        <div className="flex items-center mt-2 mobile:max-tablet:flex-col">
                             {item.by && item.status !== 'Pending' ? (
                                 <>
-                                    <img src={item.by[0].profileLink} alt="img" className="w-8 h-8 rounded-full" />
-                                    <h5 className="ml-2">{item.by[0].name}</h5>
+                                    <div className='flex items-center mb-1 '>
+                                        <img src={item.by[0].profileLink} alt="img" className="w-8 h-8  mobile:max-tablet:w-6  mobile:max-tablet:h-6  rounded-full" />
+                                        <h5 className="ml-2">{item.by[0].name}</h5></div>
                                     <div className={`ml-2 font-normal text-sm px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-200 text-orange-700' : item.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>{item.status}</div>
 
                                 </>
                             ) : (
-                                <div className="flex justify-center items-center gap-1">
-                                    {editRowIndex === index ? (
-                                        <>
-                                            <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdCheck /></button>
-                                            <button className='bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <MdEdit /></button>
-                                            <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
-                                        </>
-                                    )}
+                                <div className="flex justify-center items-center gap-1  mobile:max-tablet:flex-col">
+                                    <div className=' flex'>
+                                        {editRowIndex === index ? (
+                                            <>
+                                                <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdCheck /></button>
+                                                <button className='bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <MdEdit /></button>
+                                                <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
+                                            </>
+                                        )}
+                                    </div>
                                     <div className={`font-normal text-sm px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-200 text-orange-700' : item.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>{item.status}</div>
                                 </div>
                             )}
@@ -170,9 +171,9 @@ export default function HistoryTile({ details }) {
                         )}
                     </div>
 
-                    <div className='w-full flex items-center justify-between'>
+                    <div className='w-full flex items-center justify-between mobile:max-tablet:text-sm'>
                         <div>
-                            Start Date: {editRowIndex === index ? (
+                            From: {editRowIndex === index ? (
                                 <input
                                     type="date"
                                     value={editData.startDate}
@@ -183,8 +184,9 @@ export default function HistoryTile({ details }) {
                                 item.startDate
                             )}
                         </div>
+                        <p className='min-tablet:desktop:hidden'>/</p>
                         <div>
-                            End Date: {editRowIndex === index ? (
+                            To: {editRowIndex === index ? (
                                 <input
                                     type="date"
                                     value={editData.endDate}

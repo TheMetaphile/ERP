@@ -8,7 +8,7 @@ import Classwork from './classwork.jsx';
 import Leave from "./leave.jsx";
 export default function TeacherEnddrawer() {
   return (
-    <div className="overflow-y-auto w-full h-full px-2 rounded-lg border border-gray-300">
+    <div className="overflow-y-auto w-full h-full px-2 rounded-lg border mobile:max-tablet:border-t-0 border-gray-300 z-10 mobile:max-laptop:mt-4">
       {/* <h6 className="flex justify-between text-sm mt-3">Upcoming Activities <span className="text-blue-500">See All</span></h6>
       <div className="dialyNotices w-full h-2/5 bg-blue-50 rounded-xl p-2 mt-3 mb-3 overflow-auto no-scrollbar">
         <div className='flex items-center '>

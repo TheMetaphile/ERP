@@ -9,23 +9,26 @@ export default function TeacherNavbar({ onDrawerToggle, onEndDrawerToggle }) {
 
   return (
 
-    <div className="flex flex-grow mobile:max-tablet:flex-col h-full mt-1 px-2 py-3 mb-2 items-center justify-between bg-teal-300 rounded-lg shadow-md">
-      <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-3">
+    <div className="flex flex-grow mobile:max-tablet:flex-col h-full mt-1 px-2 py-3 mb-2 items-center justify-between bg-teal-300 rounded-lg shadow-md mobile:max-tablet:gap-2 z-50">
+      <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet">
         <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-secondary shadow-lg' />
         <img src={logo} alt="Metaphile Public School" className="w-10" />
-        <span className="tablet:text-xl font-medium text-text_blue mobile:text-xl">Metaphile Public School</span>
+        <span className="tablet:text-lg font-medium text-text_blue mobile:text-sm mr-2">etaphile Public School</span>
+        <div>
+          <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-tablet:w-7 mobile:max-tablet:h-7 rounded-lg" />
+        </div>
       </div>
-      <h1 className='text-2xl font-medium '>Teacher Panel</h1>
-      <nav>
+      <h1 className='text-2xl font-medium mobile:max-tablet:text-xl items-center flex'>Teacher Panel</h1>
+      <nav className=' mobile:max-tablet:w-full mobile:max-tablet:py-1'>
         <ul className="flex w-full items-center mobile:max-tablet:text-sm">
-          <li className="mr-4 ">
+          <li className="mr-4 mobile:max-tablet:-mr-4 mobile:max-tablet:ml-0.5 mobile:max-tablet:flex-1">
             <Link to="" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Home</Link>
           </li>
           {
             authState.userDetails.admin
               ?
-              <li className="mr-4 ">
-                <Link to="/Admin-Dashboard" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Admin Panel</Link>
+              <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1 whitespace-nowrap">
+                <Link to="/Admin-Dashboard" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Admin  </Link>
               </li>
               :
               <div></div>
@@ -36,12 +39,10 @@ export default function TeacherNavbar({ onDrawerToggle, onEndDrawerToggle }) {
           {/* <li className="mr-4">
             <Link to="" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Salary</Link>
           </li> */}
-          <li>
+          <li className='mobile:max-tablet:mr-0 mobile:max-tablet:flex-1'>
             <Link to="/Teacher-Dashboard/timetable" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Time Table</Link>
           </li>
-          <li>
-            <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-tablet:w-9 mobile:max-tablet:h-9 rounded-lg" />
-          </li>
+
         </ul>
       </nav>
     </div>

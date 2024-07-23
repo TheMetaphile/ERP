@@ -68,7 +68,7 @@ export default function Progress() {
                 '#de98fa',
                 '#fc8beb'
             ],
-            bg: ['text-red-600', 'text-green-600', 'text-yellow-400', 'text-orange-300', 'text-blue-400','text-purple-400', 'text-pink-400'],
+            bg: ['text-red-600', 'text-green-600', 'text-yellow-400', 'text-orange-300', 'text-blue-400', 'text-purple-400', 'text-pink-400'],
             hoverOffset: 4,
             cutout: "80%",
             borderRadius: 60,
@@ -99,16 +99,16 @@ export default function Progress() {
     }, [authState.accessToken]);
 
     return (
-        <div className=" flex flex-col px-3  overflow-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 mobile:max-tablet:mx-0  items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
             {loading ? (
                 <Loading />
             ) : (
-                <div className=" flex flex-col tablet:flex-row items-center gap-3 w-full py-2 overflow-auto justify-start">
-                    <div className="tablet:w-1/3 h-72  mobile:max-tablet:w-full ">
+                <div className=" flex mobile:max-tablet:flex-col items-center gap-3 w-full py-2 mobile:max-laptop:gap-3  justify-start">
+                    <div className=" tablet:flex-1 h-72 mobile:max-tablet:text-lg  mobile:max-tablet:w-full ">
                         <DoughnutSecond chartData={chartData} title='Leave Status' />
                     </div>
 
-                    <div className="tablet:w-1/3 h-72  w-full ">
+                    <div className="tablet:flex-1 h-72 mobile:max-tablet:text-lg  w-full ">
                         <DoughnutSecond chartData={chartData2} title='Leave Status' />
                     </div>
 
@@ -150,10 +150,11 @@ export default function Progress() {
                     /> */}
 
                 </div>
-            )}
+            )
+            }
 
 
-        </div>
+        </div >
 
     )
 }

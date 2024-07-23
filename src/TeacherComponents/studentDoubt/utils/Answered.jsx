@@ -110,23 +110,23 @@ function Answered() {
 
 
     return (
-        <div className=' mr-3'>
-            <div className='flex justify-between'>
-                <select id="class" value={Class} onChange={handleClassChange} className="rounded-lg mr-3 shadow-md px-3 py-1 border-2 border-gray-200 text-lg">
+        <div className=''>
+            <div className='flex justify-between mobile:max-tablet:hidden gap-1'>
+                <select id="class" value={Class} onChange={handleClassChange} className="rounded-lg  shadow-md px-3 py-1 border-2 border-gray-200 text-lg tablet:text-sm">
                     <option value="">Search by Class</option>
                     {uniqueClasses.map((classOption, index) => (
                         <option key={index} value={classOption}>{classOption}</option>
                     ))}
                 </select>
 
-                <select id="section" value={Section} onChange={handleSectionChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg">
+                <select id="section" value={Section} onChange={handleSectionChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg tablet:text-sm">
                     <option value="">Search by Section</option>
                     {uniqueSections.map((sectionOption, index) => (
                         <option key={index} value={sectionOption}>{sectionOption}</option>
                     ))}
                 </select>
 
-                <select id="subject" value={Subject} onChange={handleSubjectChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg">
+                <select id="subject" value={Subject} onChange={handleSubjectChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg tablet:text-sm">
                     <option value="">Search by Subject</option>
                     {uniqueSubjects.map((subjectOption, index) => (
                         <option key={index} value={subjectOption}>{subjectOption}</option>

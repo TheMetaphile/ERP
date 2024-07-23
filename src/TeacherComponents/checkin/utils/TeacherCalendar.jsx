@@ -40,15 +40,15 @@ export default function TeacherCalendar() {
 
   return (
     <div className=" flex flex-col w-full overflow-y-auto items-start px-2 mb-1 pb-4 no-scrollbar">
-      <div className="flex justify-between w-full">
-        <h1 className="text-2xl font-medium">Attendance</h1>
-        <div>
+      <div className="flex justify-between w-full mobile:max-laptop:flex-col">
+        <h1 className="text-2xl mobile:max-laptop:text-xl font-medium">Attendance</h1>
+        <div className=" mobile:max-laptop:flex gap-1">
 
           <select
             id="month-selector"
             value={selectedMonth}
             onChange={(e) => handleMonthChange(e.target.value)}
-            className="border rounded p-2 mx-2"
+            className="border rounded p-2 mx-2 mobile:max-laptop:mx-0 mobile:max-laptop:text-sm "
           >
             <option value="" disabled>Select a month</option>
             {months.map((month, index) => (
@@ -61,7 +61,7 @@ export default function TeacherCalendar() {
             id="year-selector"
             value={selectedYear}
             onChange={(e) => handleYearChange(e.target.value)}
-            className="border rounded p-2 mx-2"
+            className="border rounded py-2 px-3.5 mx-2 mobile:max-laptop:text-sm "
           >
             <option value="" disabled>Select a year</option>
             {years.map((year) => (

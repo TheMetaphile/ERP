@@ -210,78 +210,79 @@ export default function ScholasticTable({ students, term, Class, subject }) {
                     />
                 </div>
             </div>
-
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg">
-                <thead>
-                    <tr className="bg-secondary text-gray-600 text-lg ">
-                        <th className="py-2 px-2 text-center rounded-t-r">Roll No.</th>
-                        <th className="py-2 px-2 text-center">Name</th>
-                        <th className="py-2 px-2 text-center">Last Note Book Checked</th>
-                        <th className="py-2 px-2 text-center">Note Book</th>
-                        <th className="py-2 px-2 text-center">Subject Enrichment</th>
-                        <th className="py-2 px-2 text-center">Practical Marks</th>
-                        <th className="py-2 px-2 text-center">Theory Marks</th>
-                        <th className="py-2 px-2 text-center rounded-t-l mr-2">Action</th>
-                    </tr>
-                </thead>
-                <tbody className="text-gray-600 text-md font-normal">
-                    {students.map((student, index) => (
-                        <tr key={index} className={`border-b border-gray-200 last:border-none ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
-                            <td className="py-2 px-2 text-center rounded-t-r">{student.rollNumber}</td>
-                            <td className="py-2 px-2 text-center">{student.name}</td>
-                            <td className="py-2 px-2 text-center">
-                                {marks[student.email]?.lastNoteBookChecked?.topic || 'No data'}
-                            </td>
-
-                            <td className="py-2 px-2 text-center">
-                                <input
-                                    type="number"
-                                    value={marks[student.email]?.noteBook || ''}
-                                    onChange={(e) => handleInputChange(student.email, 'noteBook', e.target.value)}
-                                    className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                                    placeholder="Note Book Marks"
-                                />
-                            </td>
-                            <td className="py-2 px-2 text-center">
-                                <input
-                                    type="number"
-                                    value={marks[student.email]?.subjectEnrichment || ''}
-                                    onChange={(e) => handleInputChange(student.email, 'subjectEnrichment', e.target.value)}
-                                    className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                                    placeholder="Subject Enrichment Marks"
-                                />
-                            </td>
-                            <td className="py-2 px-2 text-center">
-                                <input
-                                    type="number"
-                                    value={marks[student.email]?.practical || ''}
-                                    onChange={(e) => handleInputChange(student.email, 'practical', e.target.value)}
-                                    className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                                    placeholder="Practical Marks"
-                                />
-                            </td>
-                            <td className="py-2 px-2 text-center">
-                                <input
-                                    type="number"
-                                    value={marks[student.email]?.theory || ''}
-                                    onChange={(e) => handleInputChange(student.email, 'theory', e.target.value)}
-                                    className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                                    placeholder="Theory Marks"
-                                />
-                            </td>
-                            <td className="py-4 px-2 mr-2 flex justify-center items-center">
-                                <button
-                                    type="button"
-                                    onClick={() => handleSave(student.email)}
-                                    className="text-green-600 rounded-md border border-green-500 w-fit px-4 hover:bg-green-500 hover:text-white hover:cursor-pointer hover:shadow-md hover:border-black"
-                                >
-                                    Save
-                                </button>
-                            </td>
+            <div className=" overflow-auto">
+                <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+                    <thead>
+                        <tr className="bg-secondary text-gray-600 text-lg ">
+                            <th className="py-2 px-2 text-center whitespace-nowrap rounded-t-r">Roll No.</th>
+                            <th className="py-2 px-2 text-center whitespace-nowrap">Name</th>
+                            <th className="py-2 px-2 text-center whitespace-nowrap">Last Note Book Checked</th>
+                            <th className="py-2 px-2 text-center whitespace-nowrap">Note Book</th>
+                            <th className="py-2 px-2 text-center whitespace-nowrap">Subject Enrichment</th>
+                            <th className="py-2 px-2 text-center whitespace-nowrap">Practical Marks</th>
+                            <th className="py-2 px-2 text-center whitespace-nowrap">Theory Marks</th>
+                            <th className="py-2 px-2 text-center whitespace-nowrap rounded-t-l mr-2">Action</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody className="text-gray-600 text-md font-normal">
+                        {students.map((student, index) => (
+                            <tr key={index} className={`border-b border-gray-200 last:border-none ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
+                                <td className="py-2 px-2 text-center whitespace-nowrap rounded-t-r">{student.rollNumber}</td>
+                                <td className="py-2 px-2 text-center whitespace-nowrap">{student.name}</td>
+                                <td className="py-2 px-2 text-center whitespace-nowrap">
+                                    {marks[student.email]?.lastNoteBookChecked?.topic || 'No data'}
+                                </td>
+
+                                <td className="py-2 px-2 text-center whitespace-nowrap">
+                                    <input
+                                        type="number"
+                                        value={marks[student.email]?.noteBook || ''}
+                                        onChange={(e) => handleInputChange(student.email, 'noteBook', e.target.value)}
+                                        className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                                        placeholder="Note Book Marks"
+                                    />
+                                </td>
+                                <td className="py-2 px-2 text-center whitespace-nowrap">
+                                    <input
+                                        type="number"
+                                        value={marks[student.email]?.subjectEnrichment || ''}
+                                        onChange={(e) => handleInputChange(student.email, 'subjectEnrichment', e.target.value)}
+                                        className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                                        placeholder="Subject Enrichment Marks"
+                                    />
+                                </td>
+                                <td className="py-2 px-2 text-center whitespace-nowrap">
+                                    <input
+                                        type="number"
+                                        value={marks[student.email]?.practical || ''}
+                                        onChange={(e) => handleInputChange(student.email, 'practical', e.target.value)}
+                                        className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                                        placeholder="Practical Marks"
+                                    />
+                                </td>
+                                <td className="py-2 px-2 text-center whitespace-nowrap">
+                                    <input
+                                        type="number"
+                                        value={marks[student.email]?.theory || ''}
+                                        onChange={(e) => handleInputChange(student.email, 'theory', e.target.value)}
+                                        className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                                        placeholder="Theory Marks"
+                                    />
+                                </td>
+                                <td className="py-4 px-2 mr-2 flex justify-center items-center">
+                                    <button
+                                        type="button"
+                                        onClick={() => handleSave(student.email)}
+                                        className="text-green-600 rounded-md border border-green-500 w-fit px-4 hover:bg-green-500 hover:text-white hover:cursor-pointer hover:shadow-md hover:border-black"
+                                    >
+                                        Save
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

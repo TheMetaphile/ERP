@@ -85,6 +85,7 @@ function HomeWork() {
         }
     }, [start, selectedSubject, selectedSection, selectedClass]);
 
+    const [isDropdownVisible, setDropdownVisible] = useState(false);
 
     const fetchHomework = async () => {
         console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
@@ -117,11 +118,46 @@ function HomeWork() {
 
     return (
 
-        <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
+        <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-laptop:mt-6">
             <ToastContainer />
-            <div className='w-full flex items-center justify-between'>
-                <h1 className='text-2xl'>All HomeWork</h1>
-                <div className='flex items-center gap-2'>
+            <div className='w-full flex items-center justify-between tablet:max-laptop:flex-col tablet:max-laptop:items-start mobile:max-tablet:px-3'>
+                <h1 className='text-2xl mobile:max-tablet:text-lg whitespace-nowrap'>All HomeWork</h1>
+                <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
+                    <button
+                        className="p-2 border rounded"
+                        onClick={() => setDropdownVisible(!isDropdownVisible)}
+                    >
+                        Filter
+                    </button>
+                    {isDropdownVisible && (
+                        <div className='flex absolute left-0 right-0 flex-col items-center gap-2 bg-white p-2'>
+                            <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange} >
+                                <option value="">Search by Class</option>
+                                {uniqueClasses.map((classOption, index) => (
+                                    <option key={index} value={classOption}>{classOption}</option>
+                                ))}
+                            </select>
+                            <select id="section" className="w-full px-4 py-2 border rounded-md" onChange={handleSectionChange}>
+                                <option value="">Search by Section</option>
+                                {uniqueSections.map((sectionOption, index) => (
+                                    <option key={index} value={sectionOption}>{sectionOption}</option>
+                                ))}
+                            </select>
+
+                            <select id="subject" className="w-full px-4 py-2 border rounded-md" onChange={handleSubjectChange}>
+                                <option value="">Search by Subject</option>
+                                {uniqueSubjects.map((subjectOption, index) => (
+                                    <option key={index} value={subjectOption}>{subjectOption}</option>
+                                ))}
+
+                            </select>
+                            <div>
+                                <h1 className="bg-purple-300 px-4 py-2 rounded-md cursor-pointer" onClick={handleOpen}>Upload</h1>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div className='flex items-center gap-2 mobile:max-tablet:hidden '>
                     <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange} >
                         <option value="">Search by Class</option>
                         {uniqueClasses.map((classOption, index) => (
