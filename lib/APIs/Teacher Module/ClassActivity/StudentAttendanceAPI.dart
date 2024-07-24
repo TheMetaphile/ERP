@@ -4,10 +4,10 @@ import 'package:http/http.dart' as http;
 import '../../StudentsData/student.dart';
 
 class StudentService {
-    String baseUrl = 'http://ec2-13-127-187-81.ap-south-1.compute.amazonaws.com:8008';
+    String baseUrl = 'http://13.201.247.28:8000';
 
-   Future<List<Student>> fetchStudents(String date, int start, int end, String accessToken) async {
-    final url = Uri.parse('$baseUrl/studentAttendance/fetch/student/list?date=$date&start=$start&end=$end');
+   Future<List<Student>> fetchStudents(String date,String accessToken ,int start,) async {
+    final url = Uri.parse('$baseUrl/studentAttendance/fetch/student/list?date=$date&start=$start&end=10');
 
     try {
       final response = await http.get(

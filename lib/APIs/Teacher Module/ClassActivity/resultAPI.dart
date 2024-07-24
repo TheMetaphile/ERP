@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 
 class ResultApi {
-  static const String _baseUrl = 'http://ec2-13-127-187-81.ap-south-1.compute.amazonaws.com:8009';
+  static const String _baseUrl = 'http://13.201.247.28:8000';
 
   Future<Map<String,dynamic>> fetchResult(String accessToken,String email) async {
     final url = Uri.parse('$_baseUrl/result/fetch/teacher?email=$email');
@@ -19,6 +19,7 @@ class ResultApi {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        print(data.runtimeType);
         return data ;
       } else {
         throw Exception('Failed to load result: ${response.statusCode}');
@@ -27,4 +28,5 @@ class ResultApi {
       throw Exception('Error fetching result: $e');
     }
   }
+
 }

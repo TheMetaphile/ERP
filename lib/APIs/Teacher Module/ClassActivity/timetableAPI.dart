@@ -83,10 +83,10 @@ class TimetableStructure {
   }
 }
 class TimetableApi {
-  static const String baseUrl = 'http://ec2-13-127-187-81.ap-south-1.compute.amazonaws.com:';
+  static const String baseUrl = 'http://13.201.247.28:8000';
 
   Future<Timetable> fetchClassTeacherTimetable(String accessToken) async {
-    final url = Uri.parse('http://ec2-13-127-187-81.ap-south-1.compute.amazonaws.com:8010/timetable/fetch/classTeacher');
+    final url = Uri.parse('$baseUrl/timetable/fetch/classTeacher');
 
     try {
       final response = await http.post(
@@ -113,7 +113,7 @@ class TimetableApi {
   Future<TimetableStructure> fetchTimetableStructure(String accessToken) async {
     try {
       final response = await http.post(
-        Uri.parse('http://ec2-13-127-187-81.ap-south-1.compute.amazonaws.com:8015/timeTableStructure/fetch'),
+        Uri.parse('$baseUrl/timeTableStructure/fetch'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'accessToken': accessToken,
