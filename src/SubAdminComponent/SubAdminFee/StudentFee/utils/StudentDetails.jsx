@@ -76,7 +76,7 @@ function StudentDetails() {
         {loading ? (
           <Loading />
         ) : fees.length === 0 ? (
-          <div>No data available</div>
+          <div className='text-center'>No data available</div>
         ) : (
           <div className="">
             <FeeStructureField fees={fees.slice(0, visibleCount)} />

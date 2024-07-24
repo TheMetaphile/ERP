@@ -23,6 +23,7 @@ function NewNotice({ setShowModal }) {
     const [selectedSection, setSelectedSection] = useState('');
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [name, setName] = useState('');
 
     useEffect(() => {
         if (selectedClass) {
@@ -205,9 +206,10 @@ function NewNotice({ setShowModal }) {
         }
     };
 
-    const addEmailId = (email) => {
+    const addEmailId = (email,name) => {
         if (!emailIds.includes(email)) {
             setEmailIds([...emailIds, email]);
+            setName(name);
         }
     };
 
@@ -232,7 +234,7 @@ function NewNotice({ setShowModal }) {
                                             <img src={user.profileLink} alt="" className="w-6 h-6 rounded-full"></img>{user.name} </span>
                                         <button
                                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                                            onClick={() => addEmailId(user.email)}
+                                            onClick={() => addEmailId(user.email, user.name)}
                                         >
                                             Add
                                         </button>
@@ -247,7 +249,7 @@ function NewNotice({ setShowModal }) {
                             {emailIds.length > 0 ? (
                                 emailIds.map(email => (
                                     <div key={email} className="flex justify-between border mt-2 border-gray-300 shadow-md rounded-full px-2 items-center py-1">
-                                        <span>{email}</span>
+                                        <span>{name}</span>
                                         <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => removeEmailId(email)} />
                                     </div>
                                 ))
@@ -276,7 +278,7 @@ function NewNotice({ setShowModal }) {
                                             <img src={user.profileLink} alt="" className="w-6 h-6 rounded-full"></img>{user.name} </span>
                                         <button
                                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                                            onClick={() => addEmailId(user.email)}
+                                            onClick={() => addEmailId(user.email,user.name)}
                                         >
                                             Add
                                         </button>
@@ -292,7 +294,7 @@ function NewNotice({ setShowModal }) {
                             {emailIds.length > 0 ? (
                                 emailIds.map(email => (
                                     <div key={email} className="flex justify-between border mt-2 border-gray-300 shadow-md rounded-full px-2 items-center py-1">
-                                        <span>{email}</span>
+                                        <span>{name}</span>
                                         <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => removeEmailId(email)} />
                                     </div>
                                 ))

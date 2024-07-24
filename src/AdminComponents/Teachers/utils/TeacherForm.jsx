@@ -1,14 +1,14 @@
-
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import axios from 'axios';
 import Papa from 'papaparse'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Login } from "../../../Config";
+import AuthContext from '../../../Context/AuthContext';
 
 export default function TeacherForm() {
-
+    const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -31,6 +31,8 @@ export default function TeacherForm() {
             admin: false,
             DOB: '',
             permanentAddress: '',
+            salary: '',
+            accessToken: authState.accessToken
         }
     );
     const handleChange = (e) => {
@@ -58,6 +60,7 @@ export default function TeacherForm() {
             admin: false,
             DOB: '',
             permanentAddress: '',
+            salary: '',
         });
 
     };
@@ -110,7 +113,7 @@ export default function TeacherForm() {
 
     const handleMultiSignUp = async (data) => {
         setLoading(true);
-        
+
         try {
             for (let i = 0; i < data.length; i++) {
                 const userData = data[i];
@@ -119,7 +122,7 @@ export default function TeacherForm() {
                 await axios.post(`${BASE_URL_Login}/signup/teacher`, userData);
             }
             toast.success('All teachers registered successfully');
-           
+
         }
         catch (err) {
             console.error(err);
@@ -132,7 +135,7 @@ export default function TeacherForm() {
     return (
         <>
             <div className="mx-4">
-            <ToastContainer />
+                <ToastContainer />
 
                 <div className=" w-full flex justify-center mb-4 items-center">
                     <form onSubmit={handleSubmit} className=" flex flex-col w-full px-2 mb-2 gap-4">
@@ -355,6 +358,21 @@ export default function TeacherForm() {
                                     />
                                 </label>
                             </div>
+                        </div>
+                        <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2" htmlFor="salary">
+                                Salary
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="salary"
+                                    type="text"
+                                    name="salary"
+                                    value={formData.salary}
+                                    onChange={handleChange}
+                                    placeholder="Per month in Rs."
+                                    required
+                                />
+                            </label>
                         </div>
                         <div className=" flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4">
                             <div className="w-1/2 rounded-lg mobile:max-tablet:w-full text-lg whitespace-nowrap">

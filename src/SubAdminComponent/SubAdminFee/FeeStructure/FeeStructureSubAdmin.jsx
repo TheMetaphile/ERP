@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function FeeStructureSubAdmin() {
     const [sessions, setSessions] = useState([]);
-    const [selectedSession, setSelectedSession] = useState(sessions[1]);
+    const [selectedSession, setSelectedSession] = useState(sessions[0]);
 
     useEffect(() => {
         const currentYear = new Date().getFullYear();
@@ -23,6 +23,7 @@ function FeeStructureSubAdmin() {
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
     };
+    console.log(selectedSession)
     const content = [
         { class: 'Pre-Nursery' },
         { class: 'L.K.J' },

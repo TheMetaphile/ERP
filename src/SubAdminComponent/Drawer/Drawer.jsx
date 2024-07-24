@@ -40,7 +40,7 @@ export default function SubadminDrawer({ isOpen }) {
                             <div
                                 key={index}
                                 onClick={() => handleClick(index)}
-                                className={`cursor-pointer rounded-lg ${active === index ? 'bg-secondary' : ''}`}
+                                className={`cursor-pointer rounded-lg ${active === index ? 'bg-purple-200' : ''}`}
                             >
                                 <ExpansionTile
     

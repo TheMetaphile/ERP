@@ -17,6 +17,8 @@ const TeacherNotice = () => {
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(4);
   const [allDataFetched, setAllDataFetched] = useState(false);
+  const [type, setType] = useState('For Teachers');
+
 
   useEffect(() => {
     if (authState.accessToken) {
@@ -26,7 +28,7 @@ const TeacherNotice = () => {
       setError('No access token available');
       setLoading(false);
     }
-  }, [authState.accessToken]);
+  }, [authState.accessToken, type]);
 
   const handleViewMore = () => {
     setStart(prevStart => prevStart + end);
@@ -61,7 +63,7 @@ const TeacherNotice = () => {
     const session = getCurrentSession();
 
     try {
-      const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${'For Teachers'}`, {
+      const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${type}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }
@@ -132,8 +134,23 @@ const TeacherNotice = () => {
     e.stopPropagation();
   };
 
+  const handleTypeChange = (e) => {
+    setStart(0);
+    setAllDataFetched(false);
+    setData([]);
+    setType(e.target.value);
+  };
+
   return (
     <div className="mt-4 mx-2">
+      <select
+        value={type}
+        onChange={handleTypeChange}
+        className="border border-gray-300 rounded-lg px-2 py-1"
+      >
+        <option value="For Teachers">For Teachers</option>
+        <option value="Particular Teachers">Particular Teachers</option>
+      </select>
       <div className="flex flex-col space-y-4 mb-4">
         {loading ? (
           <Loading />
@@ -141,118 +158,116 @@ const TeacherNotice = () => {
           <div>No notices available</div>
         ) : (
           <>
+
             {data.map((notice, index) => (
-              (notice.type === 'For Teachers' || notice.type === 'Particular Teachers') && (
-                <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2 text-base">
-                  <div className="w-full flex items-center justify-between mb-2 cursor-pointer" onClick={() => handleClick(index)}>
-                    <h3>
-                      Title: {editingIndex === index ? (
-                        <input
-                          type="text"
-                          name="title"
-                          value={editedNotice.title}
-                          onChange={handleChange}
-                          onClick={handleFieldClick}
-                          className="border border-gray-300 rounded-lg px-2 py-1"
-                        />
-                      ) : (
-                        notice.title
-                      )}
-                    </h3>
-                    <p>
-                      Type: &nbsp;
-                      {/* {editingIndex === index ? (
-                      <select
-                        name="type"
-                        value={editedNotice.type}
+
+              <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2 text-base">
+                <div className="w-full flex items-center justify-between mb-2 cursor-pointer" onClick={() => handleClick(index)}>
+                  <h3>
+                    Title: {editingIndex === index ? (
+                      <input
+                        type="text"
+                        name="title"
+                        value={editedNotice.title}
                         onChange={handleChange}
                         onClick={handleFieldClick}
                         className="border border-gray-300 rounded-lg px-2 py-1"
-                      >
-                        <option value="For All">For All</option>
-                        <option value="For Student">For Student</option>
-                        <option value="For Teacher">For Teacher</option>
-                        <option value="Particular Students">Particular Students</option>
-                        <option value="Particular Teachers">Particular Teachers</option>
-                        <option value="Particular Classes">Particular Classes</option>
-                      </select>
-                    ) : ( */}
-                      {notice.type}
-                      {/* )} */}
-                      {editingIndex === index ? (
-                        <>
-                          <button
-                            className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                            onClick={() => handleSave(index)}
-                          >
-                            <MdCheck />
-                          </button>
-                          <button
-                            className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                            onClick={handleCancel}
-                          >
-                            <MdCancel />
-                          </button>
+                      />
+                    ) : (
+                      notice.title
+                    )}
+                  </h3>
+                  <p>
+                    Type: &nbsp;
+                    {notice.type}
+                    {editingIndex === index ? (
+                      <>
+                        <button
+                          className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                          onClick={() => handleSave(index)}
+                        >
+                          <MdCheck />
+                        </button>
+                        <button
+                          className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                          onClick={handleCancel}
+                        >
+                          <MdCancel />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                          onClick={() => handleEdit(index)}
+                        >
+                          <MdEdit />
+                        </button>
+                        <button
+                          className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                          onClick={() => handleDelete(index)}
+                        >
+                          <MdDeleteForever />
+                        </button>
+                      </>
+                    )}
+                  </p>
+                </div>
+                {expanded === index && (
+                  <>
+                    <div className='text-base mt-2'>
+                      <p className="mb-2">
+                        Description: {editingIndex === index ? (
+                          <textarea
+                            rows={6}
+                            name="description"
+                            value={editedNotice.description}
+                            onChange={handleChange}
+                            onClick={handleFieldClick}
+                            className="border border-gray-300 rounded-lg px-2 py-1 w-full"
+                          />
+                        ) : (
+                          notice.description
+                        )}
+                      </p>
+                      {editingIndex === index && type === 'Particular Teachers'? (
+                        <>For Teachers :<ul>
+                          {editedNotice.forId.map((teacher, idx) => (
+                            <li key={idx}>
+                              {teacher.name}
+                            </li>
+                          ))}
+                        </ul>
                         </>
                       ) : (
                         <>
-                          <button
-                            className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                            onClick={() => handleEdit(index)}
-                          >
-                            <MdEdit />
-                          </button>
-                          <button
-                            className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                            onClick={() => handleDelete(index)}
-                          >
-                            <MdDeleteForever />
-                          </button>
+                          {(type === 'Particular Teachers' && notice.forId.length > 0) && (
+                            <>For Teachers :
+                              <ul>
+                                {notice.forId.map((stud, index) => (
+                                  <li key={index}>{stud.name}</li>
+                                ))}
+                              </ul>
+                            </>
+                          )}
                         </>
                       )}
-                    </p>
-                  </div>
-                  {expanded === index && (
-                    <>
-                      <div className='text-base mt-2'>
-                        <p className="mb-2">
-                          Description: {editingIndex === index ? (
-                            <textarea
-                              name="description"
-                              value={editedNotice.description}
-                              onChange={handleChange}
-                              onClick={handleFieldClick}
-                              className="border border-gray-300 rounded-lg px-2 py-1 w-full"
-                            />
-                          ) : (
-                            notice.description
-                          )}
-                        </p>
-                        {editingIndex === index && (
-                          <ul>
-                            {editedNotice.forId.map((teacher, idx) => (
-                              <li key={idx}>
-                                {teacher.name} - Class: {teacher.currentClass}, Section: {teacher.section}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    </>
-                  )}
+                    </div>
+                  </>
+                )}
 
-                  <div className="w-full flex items-center justify-between mt-2">
-                    <p>Date: {notice.date}</p>
-                    <div className="flex items-center">
-                      By:
-                      <div className="flex items-center gap-1 px-1">
-                        <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full" />
-                        <p>{notice.from.name}</p>
-                      </div>
+                <div className="w-full flex items-center justify-between mt-2">
+                  <p>Date: {notice.date}</p>
+                  <div className="flex items-center">
+                    By:
+                    <div className="flex items-center gap-1 px-1">
+                      <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full" />
+                      <p>{notice.from.name}</p>
                     </div>
                   </div>
                 </div>
-              )
+              </div>
+
             ))}
             {!allDataFetched && (
               <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>

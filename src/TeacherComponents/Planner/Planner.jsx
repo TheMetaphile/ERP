@@ -2,7 +2,8 @@ import Tabs from "./utils/Tabs";
 import React, { useState } from "react";
 // import { useState } from "react";
 import Selection from "./utils/Selection";
-
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Planner() {
     const [selectedClass, setSelectedClass] = useState('');
@@ -13,6 +14,7 @@ function Planner() {
 
     return (
         <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar">
+            <ToastContainer />
             <div className='w-full flex items-center justify-between px-4 '>
                 <h1 className="text-2xl font-medium mb-2">Weekly Plan</h1>
                 <Selection

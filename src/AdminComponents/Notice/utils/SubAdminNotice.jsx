@@ -6,7 +6,7 @@ import { BASE_URL_Notice } from "../../../Config";
 import { MdEdit, MdCheck, MdCancel, MdDeleteForever } from 'react-icons/md';
 import { toast } from "react-toastify";
 
-export default function ()  {
+export default function () {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const { authState } = useContext(AuthContext);
@@ -17,6 +17,8 @@ export default function ()  {
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(4);
   const [allDataFetched, setAllDataFetched] = useState(false);
+  const [type, setType] = useState('For Sub Admin');
+
 
   useEffect(() => {
     if (authState.accessToken) {
@@ -26,7 +28,7 @@ export default function ()  {
       setError('No access token available');
       setLoading(false);
     }
-  }, [authState.accessToken]);
+  }, [authState.accessToken, type]);
 
   const handleViewMore = () => {
     setStart(prevStart => prevStart + end);
@@ -62,7 +64,7 @@ export default function ()  {
     const session = getCurrentSession();
 
     try {
-      const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${'For Sub Admin'}`, {
+      const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${type}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }
@@ -134,8 +136,23 @@ export default function ()  {
     e.stopPropagation();
   };
 
+  const handleTypeChange = (e) => {
+    setStart(0);
+    setAllDataFetched(false);
+    setData([]);
+    setType(e.target.value);
+  };
+
   return (
     <div className="mt-4 mx-2">
+      <select
+        value={type}
+        onChange={handleTypeChange}
+        className="border border-gray-300 rounded-lg px-2 py-1"
+      >
+        <option value="For Sub Admin">For Sub Admin</option>
+        <option value="Particular Sub Admin">Particular Sub Admin</option>
+      </select>
       <div className="flex flex-col space-y-4 mb-4">
         {loading ? (
           <Loading />
@@ -144,7 +161,7 @@ export default function ()  {
         ) : (
           <>
             {data.map((notice, index) => (
-              (notice.type === 'For Students' || notice.type === 'Particular Students') && (
+              (notice.type === 'For Sub Admin' || notice.type === 'Particular Sub Admin') && (
                 <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2 text-base ">
                   <div className="w-full flex items-center justify-between mb-2 cursor-pointer" onClick={() => handleClick(index)}>
                     <h3>
@@ -175,7 +192,7 @@ export default function ()  {
                         <option value="For Student">For Student</option>
                         <option value="For Teacher">For Teacher</option>
                         <option value="Particular Students">Particular Students</option>
-                        <option value="Particular Teachers">Particular Teachers</option>
+                        <option value="Particular Sub Admin">Particular Sub Admin</option>
                         <option value="Particular Classes">Particular Classes</option>
                       </select>
                     ) : ( */}

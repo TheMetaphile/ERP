@@ -169,6 +169,7 @@ const AllNotice = () => {
                           <option value="For All">For All</option>
                           <option value="For Student">For Student</option>
                           <option value="For Teacher">For Teacher</option>
+                          <option value="For Sub Admin">For Sub Admin</option>
                         </select>
                       ) : (
                         notice.type

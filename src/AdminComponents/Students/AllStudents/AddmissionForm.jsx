@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import axios from 'axios'
 import Papa from 'papaparse'
 import Loading from './../../../LoadingScreen/Loading';
+import AuthContext from "../../../Context/AuthContext";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Login } from "../../../Config";
@@ -12,6 +13,8 @@ import { BASE_URL_Login } from "../../../Config";
 export default function AddmissionForm() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const { authState } = useContext(AuthContext);
+
     // const [success, setSuccess] = useState('');
 
     const [formData, setFormData] = useState(
@@ -43,7 +46,11 @@ export default function AddmissionForm() {
             guardiansOccupation: '',
             guardiansPhoneNumber: '',
             gender: '',
-            religion: ''
+            religion: '',
+            category: '',
+            nationality: '',
+            stream: '',
+            accessToken: authState.accessToken
         }
     );
     const handleChange = (e) => {
@@ -82,7 +89,10 @@ export default function AddmissionForm() {
             guardiansOccupation: '',
             guardiansPhoneNumber: '',
             gender: '',
-            religion: ''
+            religion: '',
+            category: '',
+            nationality: '',
+            stream: ''
         });
     };
 
@@ -165,7 +175,6 @@ export default function AddmissionForm() {
                 }
                 return axios.post(`${BASE_URL_Login}/signup/student`, userData).catch((err) => {
                     const error = JSON.parse(err.request.response);
-                    //console.log("aosdgh",error.error, );
                     toast.error(error.error + " " + userData.name);
                 });
             });
@@ -259,8 +268,8 @@ export default function AddmissionForm() {
                                     <option value="">Select Class</option>
                                     <option value="Pre-Nursery">Pre-Nursery</option>
                                     <option value="Nursery">Nursery</option>
-                                    <option value="L.K.J">L.K.J</option>
-                                    <option value="U.K.J">U.K.J</option>
+                                    <option value="L.K.G">L.K.G</option>
+                                    <option value="U.K.G">U.K.G</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option>
                                     <option value="3rd">3rd</option>
@@ -351,6 +360,30 @@ export default function AddmissionForm() {
                                     placeholder=""
                                     required
                                 />
+                            </label>
+                        </div>
+
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="stream">
+                                Stream
+                                <select
+                                    className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
+                                    id="stream"
+                                    type="text"
+                                    name="stream"
+                                    value={formData.stream}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">Select Stream</option>
+                                    <option value="General">General</option>
+                                    <option value="PCM">PCM</option>
+                                    <option value="PCB">PCM</option>
+                                    <option value="PCMB">PCMB</option>
+                                    <option value="Commerce">Commerce</option>
+                                    <option value="Arts">Arts</option>
+
+                                </select>
                             </label>
                         </div>
 
@@ -647,6 +680,49 @@ export default function AddmissionForm() {
                                     onChange={handleChange}
                                     required
                                 />
+                            </label>
+                        </div>
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="category">
+                                Category
+                                <select
+                                    className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
+                                    id="category"
+                                    type="text"
+                                    name="category"
+                                    value={formData.category}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">Select Category</option>
+                                    <option value="General">General</option>
+                                    <option value="OBC">OBC</option>
+                                    <option value="SC">SC</option>
+                                    <option value="ST">ST</option>
+                                    <option value="EWS">ST</option>
+
+                                </select>
+                            </label>
+                        </div>
+
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="nationality">
+                                Nationality
+                                <select
+                                    className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
+                                    id="nationality"
+                                    type="text"
+                                    name="nationality"
+                                    value={formData.nationality}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">Select Nationality</option>
+                                    <option value="Indian">Indian</option>
+                                    <option value="Nepali">Nepali</option>
+                                    <option value="Tibetian">Tibetian</option>
+
+                                </select>
                             </label>
                         </div>
                     </div>

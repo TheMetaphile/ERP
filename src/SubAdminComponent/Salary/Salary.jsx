@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Tabs from "./utils/Tabs";
 import Dashboard from "./utils/Dashboard";
 import profile from '../../assets/Shailesh.jpg'
 import { GoBell } from "react-icons/go";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { CiSearch } from "react-icons/ci";
+import AuthContext from "../../Context/AuthContext";
 
 const data = {
     collectionReport: {
@@ -67,6 +68,7 @@ const data = {
 
 function Salary() {
     const [selectedTab, setSelectedTab] = useState("Reports");
+    const { authState } = useContext(AuthContext);
 
     const handleTabChange = (tab) => {
         setSelectedTab(tab);
@@ -76,8 +78,8 @@ function Salary() {
         <div className="pt-20">
             <header className="p-4 mobile:max-tablet:p-2 flex justify-between items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start">
                 <div>
-                    <h1 className="text-3xl font-semibold mb-2 mobile:max-laptop:text-lg whitespace-nowrap">Welcome Abhishek</h1>
-                    <p className="text-sm">Senior Admin</p>
+                    <h1 className="text-3xl font-semibold mb-2 mobile:max-laptop:text-lg whitespace-nowrap">Welcome {authState.userDetails.name}</h1>
+                    <p className="text-sm">{authState.userDetails.department}</p>
                 </div>
                 <div className=" flex tablet:items-center">
                     <div className="">
@@ -97,8 +99,8 @@ function Salary() {
                             <img src={profile} alt="profile.jpg" className=" h-10 w-10 rounded mr-2" />
                         </div>
                         <div className=" flex items- flex-col">
-                            <p className=" text-lg mobile:max-laptop:text-sm whitespace-nowrap"> Abhishek Kumar</p>
-                            <p className=" text-sm text-gray-500">Senior Admin</p>
+                            <p className=" text-lg mobile:max-laptop:text-sm whitespace-nowrap"> {authState.userDetails.name}</p>
+                            <p className=" text-sm text-gray-500">{authState.userDetails.role}</p>
                         </div>
                     </div>
                 </div>
