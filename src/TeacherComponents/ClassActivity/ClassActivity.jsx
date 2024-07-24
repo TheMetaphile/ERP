@@ -39,7 +39,6 @@ function ClassActivity() {
                             )
                         })
                     }
-
                 </ul>
             </nav>
             <Outlet />

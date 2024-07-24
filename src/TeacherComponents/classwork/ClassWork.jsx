@@ -116,7 +116,7 @@ function ClassWork() {
 
 
     return (
-        <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-laptop:mt-6">
+        <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-laptop:">
             <ToastContainer />
             <div className='w-full flex items-center justify-between mobile:max-tablet:px-3'>
                 <h1 className='text-2xl mobile:max-tablet:text-lg whitespace-nowrap'>All ClassWork</h1>
@@ -187,7 +187,7 @@ function ClassWork() {
             ) : details.length === 0 ? (
                 <div className="text-center w-full mt-6">No Classwork found</div>
             ) : (
-                <div className='w-full mt-4 rounded-lg mb px-2'>
+                <div className='w-full mt-2 rounded-lg mb px-2'>
                     <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
                     {!allDataFetched && (
                         <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>

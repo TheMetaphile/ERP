@@ -10,11 +10,11 @@ function Apply() {
             <div className="border-t-2 border-text_blue my-3 tablet:mx-3 rounded-full "></div>
             <div className='flex space-x-10 justify-center items-center'>
                 <div className='flex flex-col text-center items-center'>
-                    <img src={authState.userDetails.profileLink} alt="img" className=' w-20 h-20 rounded-full' />
+                    <img src={authState.userDetails.profileLink} alt="img" className=' w-20 h-20 rounded-full mobile:max-tablet:hidden' />
                     <h1 className='mt-2 teblet:text-2xl mobile:max-tablet:text-xl font-medium '>{authState.userDetails.name}</h1>
                 </div>
                 <div className='flex'>
-                    <div className='text-lg font-medium tablet:w-60 mobile:max-tablet:w-48 my-2'>
+                    <div className='text-lg mobile:max-tablet:text-sm font-medium tablet:w-60 mobile:max-tablet:w-48 my-2'>
                         <h1>Employee ID</h1>
                         <h1>Department</h1>
                         <h1>Designation</h1>
@@ -23,7 +23,7 @@ function Apply() {
                         <h1>Date of Joining</h1>
                         <h1>Date of Last Increment</h1>
                     </div>
-                    <div className='text-lg w-60 text-gray-400 my-2'>
+                    <div className='text-lg mobile:max-tablet:text-sm w-60 text-gray-400 my-2'>
                         <h1>{authState.userDetails.employeeId}</h1>
                         <h1>10th - 12th</h1>
                         <h1>Teacher</h1>
@@ -37,7 +37,7 @@ function Apply() {
             <div className="border-t-2 border-text_blue my-3 tablet:mx-3 rounded-full "></div>
 
             <div className="mr-3 ml-3">
-                <h1 className="font-medium text-lg">Qualification</h1>
+                <h1 className="font-medium text-lg mobile:max-tablet:text-sm">Qualification</h1>
                 <div className="overflow-x-auto border border-black mt-2 rounded-lg">
                     <table className="min-w-full border-collapse border border-gray-400">
                         <thead className="bg-gray-50">
@@ -68,11 +68,11 @@ function Apply() {
                 </div>
 
                 <div className="mt-3">
-                    <h1 className="font-medium text-lg">Experience</h1>
+                    <h1 className="font-medium text-lg mobile:max-tablet:text-sm">Experience</h1>
                     <div className="overflow-x-auto border border-black mt-2 rounded-lg">
                         <table className="min-w-full border-collapse border border-gray-400">
                             <thead className="bg-gray-50">
-                                <tr>
+                                <tr className=" whitespace-nowrap">
                                     <th className="px-6 py-3 text-sm font-medium text-center  border border-gray-400">Total Experience</th>
                                     <th className="px-6 py-3 text-sm font-medium text-center  border border-gray-400">Experience in School</th>
                                     <th className="px-6 py-3 text-sm font-medium text-center  border border-gray-400">Experience other than School</th>
@@ -100,16 +100,16 @@ function Apply() {
                 </div>
 
                 <div className="mt-3">
-                    <h1 className="font-medium text-lg">Result Analysis</h1>
+                    <h1 className="font-medium text-lg mobile:max-tablet:text-sm">Result Analysis</h1>
                     <div className="overflow-x-auto border border-black mt-2 rounded-lg">
                         <table className="min-w-full border-collapse border border-gray-400">
                             <thead className="bg-gray-50">
-                                <tr>
+                                <tr className=" whitespace-nowrap">
                                     <th className="px-6 py-3 text-sm font-medium text-center  border border-gray-400" colSpan="2">Half Yearly</th>
                                     <th className="px-6 py-3 text-sm font-medium text-center  border border-gray-400" colSpan="2">Final Exam</th>
                                     <th className="px-6 py-3 text-sm font-medium text-center  border border-gray-400" rowSpan="2">Verified by Principal</th>
                                 </tr>
-                                <tr>
+                                <tr className=" whitespace-nowrap">
                                     <th className="px-6 py-3 text-sm font-medium text-center  border border-gray-400">Subject Taught</th>
                                     <th className="px-6 py-3 text-sm font-medium text-center  border border-gray-400">Result</th>
                                     <th className="px-6 py-3 text-sm font-medium text-center  border border-gray-400">Subject Taught</th>
@@ -140,7 +140,7 @@ function Apply() {
                 </div>
 
                 <div className="mt-3">
-                    <h1 className="font-medium text-lg">To be furnished by Dean/ Principal</h1>
+                    <h1 className="font-medium text-lg mobile:max-tablet:text-sm">To be furnished by Dean/ Principal</h1>
                     <div className="overflow-x-auto border border-black mt-2 rounded-lg">
                         <table className="min-w-full border-collapse border border-gray-400">
                             <thead className="bg-gray-50">
@@ -171,11 +171,11 @@ function Apply() {
                 </div>
 
                 <div className="mt-3">
-                    <h1 className="font-medium text-lg">Rescord of Absence filled by Dean/ Principal</h1>
+                    <h1 className="font-medium text-lg mobile:max-tablet:text-sm">Record of Absence filled by Dean/ Principal</h1>
                     <div className="overflow-x-auto border border-black mt-2 rounded-lg">
                         <table className="min-w-full border-collapse border border-gray-400">
                             <thead className="bg-gray-50">
-                                <tr>
+                                <tr className=" whitespace-nowrap">
                                     <th className="px-6 py-3 text-sm font-medium text-center  border border-gray-400" rowSpan="2">Type of Leave</th>
                                     <th className="px-6 py-3 text-sm font-medium text-center  border border-gray-400" colSpan="2">No. of Leaves</th>
                                     <th className="px-6 py-3 text-sm font-medium text-center  border border-gray-400" rowSpan="2">Signature of Director</th>
@@ -215,7 +215,7 @@ function Apply() {
                 </div>
 
                 <div className="mt-3">
-                    <h1 className="font-medium text-lg">Brief about yourself</h1>
+                    <h1 className="font-medium text-lg mobile:max-tablet:text-sm">Brief about yourself</h1>
                     <div className=" mt-2 ">
                         <textarea
                             rows="4"
@@ -226,30 +226,30 @@ function Apply() {
                 </div>
 
                 <div className="mt-3">
-                    <h1 className="font-medium text-lg">Brief about your outstanding contribution toward Institution</h1>
+                    <h1 className="font-medium text-lg mobile:max-tablet:text-sm">Brief about your outstanding contribution toward Institution</h1>
                     <div className=" ">
                         <textarea
                             rows="4"
-                            className="w-full border border-black mt-2 rounded-lg"
+                            className="w-full border mobile:max-tablet:text-sm border-black mt-2 rounded-lg"
                             placeholder="Enter your remarks here..."
                         />
                     </div>
                 </div>
 
                 <div className="mt-3 px-4">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1 justify-between mobile:max-tablet:flex-col">
                         <div className="flex items-center gap-2">
-                            <label className="block text-sm font-medium ">Present Salary</label>
+                            <label className="block text-sm font-medium whitespace-nowrap">Present Salary</label>
                             <input
                                 type="text"
-                                className="border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-40 sm:text-sm p-2"
+                                className="border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block mobile:max-tablet:w-28 mobile:max-tablet:py-1 w-40 sm:text-sm p-2"
                             />
                         </div>
                         <div className="flex items-center gap-2">
-                            <label className="block text-sm font-medium ">Expected Salary</label>
+                            <label className="block text-sm font-medium whitespace-nowrap">Expected Salary</label>
                             <input
                                 type="text"
-                                className="border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-40 sm:text-sm p-2"
+                                className="border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block mobile:max-tablet:w-28 mobile:max-tablet:py-1 w-40 sm:text-sm p-2"
                             />
                         </div>
                     </div>

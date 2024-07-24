@@ -90,18 +90,18 @@ function ReportCard() {
             ) : students.length === 0 ? (
                 <>No student found</>
             ) : (
-                <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2'>
+                <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 overflow-auto'>
                     <Header headings={['Roll No.', 'Name', "Class", "Section"]} />
                     {students.map((detail, index) => (
                         <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`} key={index}>
                             <div key={index} className='flex justify-between items-center py-2 pl-2  h-fit  border border-gray-300 text-center w-fit mobilemedium:w-full laptop:w-full  gap-2' >
-                                <div className=' w-40 text-center'>{detail.rollNumber}</div>
-                                <div className=' w-52 text-center flex justify-center'>
+                                <div className=' w-40 mobile:max-tablet:w-20 text-center'>{detail.rollNumber}</div>
+                                <div className=' w-52 mobile:max-tablet:w-40 text-center flex justify-center'>
                                     <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full mr-2'></img>
                                     <div className='w-52 text-center'>{detail.name}</div>
                                 </div>
-                                <div className=' w-40 text-center'>{authState.ClassDetails.class}</div>
-                                <div className=' w-40 text-center'>{authState.ClassDetails.section}</div>
+                                <div className=' w-40 mobile:max-tablet:w-20 text-center'>{authState.ClassDetails.class}</div>
+                                <div className=' w-40 mobile:max-tablet:w-20 text-center'>{authState.ClassDetails.section}</div>
 
                             </div>
                         </Link>

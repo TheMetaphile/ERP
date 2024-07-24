@@ -48,7 +48,7 @@ function StudentDoubts() {
     };
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-laptop:mt-4">
+        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-laptop:mt-0">
             <ToastContainer />
             <div className=' mobile:max-tablet:flex mobile:max-tablet:justify-between mobile:max-tablet:w-full items-center'>
                 <h1 className='text-3xl mobile:max-laptop:text-xl whitespace-nowrap'>Student Doubts</h1>
@@ -82,8 +82,6 @@ function StudentDoubts() {
                                     <option key={index} value={subjectOption}>{subjectOption}</option>
                                 ))}
                             </select>
-
-
                         </div>
                     )}
                 </div>

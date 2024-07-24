@@ -196,7 +196,7 @@ function NewNotice({ setShowModal }) {
         switch (selectedOption) {
             case 'Particular Students':
                 return (
-                    <div>
+                    <div className="">
                         <input
                             type="text"
                             className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2"
@@ -303,9 +303,9 @@ function NewNotice({ setShowModal }) {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-            <div className="bg-white rounded-lg p-6">
-                <h2 className="text-xl font-bold mobile:max-tablet:font-normal mobile:max-tablet:w-1/4 mb-4">Write Notice</h2>
+        <div className="fixed z-50 inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+            <div className="bg-white rounded-lg mobile:max-tablet:p-4 mobile:max-tablet:mx-6 p-6">
+                <h2 className="text-xl font-bold mobile:max-tablet:font-normal mobile:max-tablet:w-1/4 mb-4 whitespace-nowrap">Write Notice</h2>
                 <div className="flex space-x-4 mb-4">
                     <select
                         className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2"
@@ -334,14 +334,14 @@ function NewNotice({ setShowModal }) {
                 {renderSpecificOptions()}
                 <div className="flex justify-end">
                     <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        className="bg-blue-500 mobile:max-tablet:text-sm mobile:max-tablet:px-2 mobile:max-tablet:py-1 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         onClick={handleSubmit}
                         disabled={loading}
                     >
                         {loading ? <Loading /> : "Submit"}
                     </button>
                     <button
-                        className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2"
+                        className="bg-gray-500 hover:bg-gray-700 mobile:max-tablet:text-sm mobile:max-tablet:px-2 mobile:max-tablet:py-1 text-white font-bold py-2 px-4 rounded ml-2"
                         onClick={handleCloseModal}
                     >
                         Cancel

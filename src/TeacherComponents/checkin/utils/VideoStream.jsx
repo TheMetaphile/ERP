@@ -159,24 +159,24 @@ function VideoStream({ onClose, onCapture }) {
 
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
+    <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
 
-      <div className="bg-white px-8 py-4 rounded-lg flex flex-col items-center">
+      <div className="bg-white mobile:max-tablet:mx-6  px-8 py-4 rounded-lg flex flex-col items-center">
         <span className="text-lg font-medium">Face Detection</span>
         <span className="text-base font-normal">Please sit in front of your webcam in a way such that your face is clearly visible.</span>
-        <div className="w-80 h-80 rounded-full mt-4 relative overflow-hidden">
+        <div className="w-80 mobile:max-tablet:h-60 mobile:max-tablet:w-60 h-80 rounded-full mt-4 relative overflow-hidden">
           <Webcam
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             className="absolute top-0 left-0 w-full h-full object-cover"
           />
         </div>
-        {userMatch === null ? 'Click Picture' : userMatch === true ? 'Attendence Marked' : 'No user founde click again'}
+        {userMatch === null ? 'Click Picture' : userMatch === true ? 'Attendence Marked' : 'No user found click again'}
         <div className="flex gap-2 mt-4">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded" onClick={handleCapture}>
+          <button className="bg-blue-500 mobile:max-tablet:text-sm mobile:max-tablet:px-2 mobile:max-tablet:py-1 hover:bg-blue-700 text-white font-bold p-2 rounded" onClick={handleCapture}>
             {loading ? <Loading /> : 'Capture'}
           </button>
-          <button className="bg-red-500 hover:bg-red-700 text-white font-bold p-2 rounded" onClick={handleCancel}>
+          <button className="bg-red-500 mobile:max-tablet:text-sm mobile:max-tablet:px-2 mobile:max-tablet:py-1 hover:bg-red-700 text-white font-bold p-2 rounded" onClick={handleCancel}>
             Cancel
           </button>
         </div>

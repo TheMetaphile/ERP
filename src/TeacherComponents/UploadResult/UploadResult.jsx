@@ -85,22 +85,33 @@ function UploadResult() {
 
 
   return (
-    <div className="overflow-y-auto w-full items-start px-2 py-1 no-scrollbar mobile:max-laptop:mt-2">
+    <div className="overflow-y-auto w-full items-start px-2 py-1 no-scrollbar">
       <ToastContainer />
       <div className='w-full flex items-center justify-between my-2 '>
-        <h1 className="text-xl font-medium mb-2 mobile:max-tablet:text-lg whitespace-nowrap">Upload Report Card</h1>
-        <div className="block justify-end laptop:hidden w-full items-end tablet:flex mobile:max-laptop:text-end">
+        <div className=' flex-1'>
+          <h1 className="text-xl font-medium mb-2 mobile:max-tablet:text-lg whitespace-nowrap">Upload Report Card</h1></div>
+        <div className="block flex-1 justify-end laptop:hidden w-full items-end mobile:max-laptop:text-end">
           <button
-            className="p-2 border rounded items-end flex"
+            className="p-2 border rounded "
             onClick={() => setDropdownVisible(!isDropdownVisible)}
           >
             Filter
           </button>
           {isDropdownVisible && (
             <div className='flex absolute left-0 right-0 bg-white p-4 gap-2 justify-between mobile:max-tablet:flex-col'>
-              <Selection />
+              <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
+              <div className="w-36 mr-3 self-center">
+                <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleTermChange}>
+                  <option value="">Select Term</option>
+                  {terms.map((sectionOption, index) => (
+                    <option key={index} value={sectionOption.value}>{sectionOption.label}</option>
+                  ))}
+                </select>
+              </div>
+              <Switch checked={scholastic} changeRole={handleRoleChange} />
             </div>
           )}
+
         </div>
 
 

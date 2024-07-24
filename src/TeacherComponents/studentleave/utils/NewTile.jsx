@@ -54,8 +54,11 @@ export default function NewTile({ data }) {
                         <div className='w-full'>
                             <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
                                 <div className='flex items-center'>
-                                    <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
-                                    <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span> from class &nbsp;
+                                    <div>
+                                        <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
+                                        <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span>
+                                    </div>
+                                    Class &nbsp;
                                     <span className='text-red-500 whitespace-nowrap'>{authState.ClassDetails.class} {authState.ClassDetails.section}&nbsp;</span> wants a Leave Request from &nbsp;
                                     <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span> to &nbsp;
                                     <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
@@ -102,6 +105,7 @@ export default function NewTile({ data }) {
 
                     <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
                         <div className='flex items-center'>
+
                             <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
                             <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span> from class &nbsp;
                             <span className='text-red-500 whitespace-nowrap'>{authState.ClassDetails.class} {authState.ClassDetails.section}&nbsp;</span> wants a Leave Request from &nbsp;

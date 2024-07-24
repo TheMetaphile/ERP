@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import AuthContext from "../../../Context/AuthContext";
-import { toast, ToastContainer} from "react-toastify";
-import {BASE_URL_Login} from '../../../Config'
+import { toast, ToastContainer } from "react-toastify";
+import { BASE_URL_Login } from '../../../Config'
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -25,7 +25,7 @@ const AllNoteBookRecord = () => {
     SetStart(0);
     console.log(Class, Subject, Section);
     if (Class && Subject && Section) {
-      
+
       fetchRecord();
     }
   }, [Class, Subject, Section])
@@ -75,7 +75,7 @@ const AllNoteBookRecord = () => {
               <th className="py-2 px-6 text-center rounded-t-r">Date</th>
               <th className="py-2 px-6 text-center">Chapter</th>
               <th className="py-2 px-6 text-center ">Topic</th>
-              <th className="py-2 px-6 text-center rounded-t-l">Notebook Checked</th>
+              <th className="py-2 px-6 text-center rounded-t-l whitespace-nowrap">Notebook Checked</th>
               <th className="py-2 px-6 text-center rounded-t-l">Action</th>
 
 
@@ -88,9 +88,9 @@ const AllNoteBookRecord = () => {
 
                 <td className="py-3 px-6 text-center whitespace-nowrap">{new Date(record.date).toDateString()}</td>
                 <td className="py-3 px-6 text-center">{record.chapter}</td>
-                <td className="py-3 px-6 text-center">{record.topic}</td>
+                <td className="py-3 px-6 text-center whitespace-nowrap">{record.topic}</td>
                 <td className="py-3 px-6 text-center">{record.checked}</td>
-                <td className="py-3 px-6 text-center">
+                <td className="py-3 px-6 text-center whitespace-nowrap">
                   <Link to={`/Teacher-Dashboard/notebook/details/${record._id}?session=${session}&date=${record.date}&chapter=${record.chapter}&topic=${record.topic}`} className="block w-full text-blue-500 underline hover:text-blue-700">
                     Show Details
                   </Link>

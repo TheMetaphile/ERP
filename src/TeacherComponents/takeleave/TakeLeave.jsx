@@ -23,7 +23,7 @@ function TakeLeave() {
     };
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-tablet:mt-6">
+        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-tablet:mt-0">
             <ToastContainer />
             <div className='w-full flex items-center justify-between'>
                 <h1 className='text-2xl mobile:max-tablet:text-lg'>Your Leave</h1>

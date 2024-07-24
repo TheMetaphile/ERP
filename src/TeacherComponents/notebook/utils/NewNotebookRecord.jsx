@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import AuthContext from "../../../Context/AuthContext";
 import Switch from "./switch";
 import { toast, ToastContainer } from "react-toastify";
-import {BASE_URL_Login} from '../../../Config'
+import { BASE_URL_Login } from '../../../Config'
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -75,7 +75,7 @@ const NewNoteBookRecord = () => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url:  `${BASE_URL_Login}/fetchMultiple/student`,
+      url: `${BASE_URL_Login}/fetchMultiple/student`,
       headers: {
         'Content-Type': 'application/json'
       },
@@ -94,7 +94,7 @@ const NewNoteBookRecord = () => {
 
   const handleSave = () => {
     const year = date.getFullYear();
-    const month = date.getMonth()+1;
+    const month = date.getMonth() + 1;
     const day = date.getDate();
 
     if (checkedStudents.length > 0 && chapter != "" && topic != "" && Subject && Class && Section && session) {
@@ -131,7 +131,7 @@ const NewNoteBookRecord = () => {
           toast.error(error.response.data.error);
         });
 
-    }else{
+    } else {
       toast.error("Please fill all the field");
     }
   }
@@ -139,31 +139,31 @@ const NewNoteBookRecord = () => {
     <div className="flex-col mobile:max-tablet:flex-col-reverse justify-between tablet:items-center px-4 pb-0  mb-2 overflow-auto ">
       <ToastContainer />
       <div className="flex items-center justify-between mb-4">
+        <div className=" mobile:max-tablet:flex-row flex">
+          <div className="w-2/5 mobile:max-tablet:w-1/3 mr-2">
+            <label htmlFor="chapter" className="block text-sm font-medium text-gray-700">Chapter</label>
+            <input
+              type="text"
+              id="chapter"
+              name="chapter"
+              value={chapter}
+              onChange={handleChapterChange}
+              className="mt-1 block w-full px-3 mobile:max-tablet:py-1 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            />
+          </div>
 
-        <div className="w-2/5 mr-2">
-          <label htmlFor="chapter" className="block text-sm font-medium text-gray-700">Chapter</label>
-          <input
-            type="text"
-            id="chapter"
-            name="chapter"
-            value={chapter}
-            onChange={handleChapterChange}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-          />
+          <div className="w-2/5 ml-2 mobile:max-tablet:w-1/3">
+            <label htmlFor="topic" className="block text-sm font-medium text-gray-700">Topic</label>
+            <input
+              type="text"
+              id="topic"
+              name="topic"
+              value={topic}
+              onChange={handleTopicChange}
+              className="mt-1 block mobile:max-tablet:py-1 w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            />
+          </div>
         </div>
-
-        <div className="w-2/5 ml-2">
-          <label htmlFor="topic" className="block text-sm font-medium text-gray-700">Topic</label>
-          <input
-            type="text"
-            id="topic"
-            name="topic"
-            value={topic}
-            onChange={handleTopicChange}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-          />
-        </div>
-
         <div className="w-1/5 flex justify-end">
           <button className="text-xl mt-8 text-green-500 border border-green-500 px-4  rounded-md shadow-md font-medium mb-2 hover:bg-green-600 hover:text-white hover:border-white" onClick={handleSave}>
             Save
@@ -177,13 +177,13 @@ const NewNoteBookRecord = () => {
         <table className="min-w-full bg-white border border-gray-300 rounded-lg">
           <thead>
             <tr className="bg-secondary text-gray-600 text-lg leading-normal">
-              <th className="py-2 px-6 text-center rounded-t-r">Roll No.</th>
+              <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Roll No.</th>
               <th className="py-2 px-6 text-center">Name</th>
               <th className="py-2 px-6 text-center">Date</th>
 
               <th className="py-2 px-6 text-center">Chapter</th>
               <th className="py-2 px-6 text-center ">Topic</th>
-              <th className="py-2 px-6 text-center rounded-t-l">Notebook Checked</th>
+              <th className="py-2 px-6 text-center rounded-t-l whitespace-nowrap">Notebook Checked</th>
 
 
             </tr>
@@ -194,8 +194,8 @@ const NewNoteBookRecord = () => {
               <tr key={index} className="border-b border-gray-200  last:border-none">
 
                 <td className="py-3 px-6 text-center whitespace-nowrap">{Student.rollNumber}</td>
-                <td className="flex py-3 px-6 text-center items-center gap-2"><img src={Student.profileLink} alt="img" className="rounded-full h-10 w-10" />{Student.name}</td>
-                <td className="py-3 px-6 text-center">{date.toDateString()}</td>
+                <td className="flex py-3 px-6 text-center items-center gap-2 whitespace-nowrap"><img src={Student.profileLink} alt="img" className="rounded-full h-10 w-10" />{Student.name}</td>
+                <td className="py-3 px-6 text-center whitespace-nowrap">{date.toDateString()}</td>
                 <td className="py-3 px-6 text-center">{chapter}</td>
                 <td className="py-3 px-6 text-center">{topic}</td>
                 <td className="py-3 px-6 text-center flex justify-center">

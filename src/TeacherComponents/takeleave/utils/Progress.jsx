@@ -103,7 +103,7 @@ export default function Progress() {
             {loading ? (
                 <Loading />
             ) : (
-                <div className=" flex mobile:max-tablet:flex-col items-center gap-3 w-full py-2 mobile:max-laptop:gap-3  justify-start">
+                <div className=" flex mobile:max-tablet:flex-col items-center gap-3 w-full py-2 mobile:max-laptop:gap-3  justify-start overflow-auto">
                     <div className=" tablet:flex-1 h-72 mobile:max-tablet:text-lg  mobile:max-tablet:w-full ">
                         <DoughnutSecond chartData={chartData} title='Leave Status' />
                     </div>

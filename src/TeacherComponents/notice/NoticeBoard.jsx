@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import AuthContext from '../../Context/AuthContext';
-import { ToastContainer} from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NewNotice from "./utils/NewNotice";
 
@@ -20,9 +20,9 @@ function NoticeBoard() {
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0  items-start mt-2 mb-3">
             <ToastContainer />
-            <div className="flex justify-between mt-2 w-full">
-                <h1 className='text-3xl'>Notice Board</h1>
-                <div className="w-fit text-base font-normal text-white bg-purple-300 rounded-lg shadow-md p-2 cursor-pointer" onClick={handleOpenModal}>
+            <div className="flex justify-between mobile:max-tablet:px-2  w-full">
+                <h1 className='text-3xl mobile:max-tablet:text-lg'>Notice Board</h1>
+                <div className="w-fit text-base font-normal text-white bg-purple-300 rounded-lg shadow-md mobile:max-tablet:p-1 p-2 cursor-pointer" onClick={handleOpenModal}>
                     Publish
                 </div>
             </div>
@@ -39,14 +39,14 @@ function NoticeBoard() {
                         </Link> */}
                         <Link
                             to={'/Teacher-Dashboard/noticeboard/teacher'}
-                            className={`text-xl font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/teacher' ? 'bg-secondary ' : 'bg-gray-300'}`}
+                            className={`text-xl mobile:max-tablet:text-sm font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/teacher' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/teacher')}
                         >
                             For You
                         </Link>
                         <Link
                             to={'/Teacher-Dashboard/noticeboard/upload'}
-                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/upload' ? 'bg-secondary ' : 'bg-gray-300'}`}
+                            className={`text-xl mobile:max-tablet:text-sm font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/upload' ? 'bg-secondary ' : 'bg-gray-300'}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/upload')}
                         >
                             By You

@@ -14,9 +14,7 @@ export default function TeacherNavbar({ onDrawerToggle, onEndDrawerToggle }) {
         <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-secondary shadow-lg' />
         <img src={logo} alt="Metaphile Public School" className="w-10" />
         <span className="tablet:text-lg font-medium text-text_blue mobile:text-sm mr-2">etaphile Public School</span>
-        <div>
-          <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-tablet:w-7 mobile:max-tablet:h-7 rounded-lg" />
-        </div>
+
       </div>
       <h1 className='text-2xl font-medium mobile:max-tablet:text-xl items-center flex'>Teacher Panel</h1>
       <nav className=' mobile:max-tablet:w-full mobile:max-tablet:py-1'>
@@ -42,7 +40,9 @@ export default function TeacherNavbar({ onDrawerToggle, onEndDrawerToggle }) {
           <li className='mobile:max-tablet:mr-0 mobile:max-tablet:flex-1'>
             <Link to="/Teacher-Dashboard/timetable" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Time Table</Link>
           </li>
-
+          <li>
+            <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-laptop:w-7 mobile:max-laptop:h-7 rounded-lg" />
+          </li>
         </ul>
       </nav>
     </div>

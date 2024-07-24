@@ -154,7 +154,7 @@ function TimeTable() {
     };
 
     return (
-        <div className=" flex w-full flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2  mb-3 no-scrollbar mobile:max-laptop:mt-4">
+        <div className=" flex w-full flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2  mb-3 no-scrollbar mobile:max-laptop:">
             <div className='w-full flex justify-between mobile:max-tablet:px-3'>
                 <h1 className=' text-2xl mobile:max-tablet:text-lg'>Time Table</h1>
                 <Selection onDayChange={handleDayChange} />

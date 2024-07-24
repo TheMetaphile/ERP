@@ -32,8 +32,8 @@ function NewLeave({ onClose, onNewLeave }) {
   function getCurrentSession() {
     const now = new Date();
     const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth(); 
-  
+    const currentMonth = now.getMonth();
+
     if (currentMonth >= 3) {
       return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
     } else {
@@ -44,17 +44,17 @@ function NewLeave({ onClose, onNewLeave }) {
   const getCurrentDate = () => {
     const today = new Date();
     const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0'); 
+    const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
-};
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const session=getCurrentSession();
-    const datee=getCurrentDate();
-    console.log({ fromDate, toDate, leaveType, reason, session , datee});
+    const session = getCurrentSession();
+    const datee = getCurrentDate();
+    console.log({ fromDate, toDate, leaveType, reason, session, datee });
     setLoading(true);
     try {
       const response = await axios.post(`${BASE_URL_TeacherLeave}/leave/apply`,
@@ -91,8 +91,8 @@ function NewLeave({ onClose, onNewLeave }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-      <div className="bg-white rounded-lg p-6 shadow-lg w-96">
+    <div className="fixed z-50  inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+      <div className="bg-white mobile:max-tablet:mx-4 rounded-lg p-6 shadow-lg w-96">
         <h2 className="text-lg font-semibold mb-4">Apply for Leave</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -145,14 +145,14 @@ function NewLeave({ onClose, onNewLeave }) {
           <div className="flex justify-end">
             <button
               type="button"
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 hover:bg-gray-500"
+              className="bg-gray-300 mobile:max-tablet:text-sm mobile:max-tablet:px-2 mobile:max-tablet:py-1 text-gray-700 px-4 py-2 rounded-md mr-2 hover:bg-gray-500"
               onClick={onClose}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+              className="bg-blue-500 mobile:max-tablet:text-sm mobile:max-tablet:px-2 mobile:max-tablet:py-1 text-white px-4 py-2 rounded-md hover:bg-blue-700"
             >
               {loading ? <Loading /> : 'Submit'}
             </button>

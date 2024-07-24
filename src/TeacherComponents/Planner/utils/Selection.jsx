@@ -42,10 +42,10 @@ function Selection({ setClass, setSection, setSubject }) {
 
 
     return (
-        <div className="container p-3 w-fit ">
+        <div className="container p-3 w-fit mobile:max-tablet:w-full  ">
 
-            <div className="flex justify-between gap-3">
-                <div className="w-36">
+            <div className="flex justify-between gap-3 mobile:max-tablet:flex-col">
+                <div className="w-36 mobile:max-tablet:w-full">
                     <select id="class" className="w-full px-2 py-2 border rounded-md" onChange={handleClassChange} >
                         <option value="">Select Class</option>
                         {uniqueClasses.map((classOption, index) => (
@@ -53,7 +53,7 @@ function Selection({ setClass, setSection, setSubject }) {
                         ))}
                     </select>
                 </div>
-                <div className="w-36">
+                <div className="w-36 mobile:max-tablet:w-full">
                     <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleSectionChange}>
                         <option value="">Select Section</option>
                         {uniqueSections.map((sectionOption, index) => (
@@ -61,7 +61,7 @@ function Selection({ setClass, setSection, setSubject }) {
                         ))}
                     </select>
                 </div>
-                <div className="w-36">
+                <div className="w-36 mobile:max-tablet:w-full">
                     <select id="subject" className="w-full px-2 py-2 border rounded-md" onChange={handleSubjectChange}>
                         <option value="">Select Subject</option>
                         {uniqueSubjects.map((subjectOption, index) => (

@@ -79,9 +79,9 @@ export default function UploadTile({ details }) {
             {newDetails.map((detail, index) => (
                 <div key={index} className='p-2 border justify-between rounded-lg shadow-md mt-3 flex items-center'>
                     <div className='flex items-center w-full'>
-                        <img src={Logo} alt="" className='h-12' />
+                        <img src={Logo} alt="" className='h-12 mobile:max-tablet:hidden' />
                         <div className='px-2 w-full'>
-                            <div className="flex items-center w-full justify-between cursor-pointer" onClick={() => handleClick(index)}>
+                            <div className="flex items-center mobile:max-tablet:items-end w-full justify-between cursor-pointer" onClick={() => handleClick(index)}>
                                 <div className="pl-2 mt-1 font-normal text-sm">
                                     <span className='font-medium'>Title :</span>
                                     {editingIndex === index ? (
@@ -95,7 +95,7 @@ export default function UploadTile({ details }) {
                                         detail.title
                                     )}
                                 </div>
-                                <div className="flex">
+                                <div className="flex px-1">
                                     {editingIndex === index ? (
                                         <>
                                             <button

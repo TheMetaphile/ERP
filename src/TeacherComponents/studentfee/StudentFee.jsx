@@ -74,8 +74,7 @@ function StudentFee() {
         <div className=" w-full items-start  px-2 ">
             <ToastContainer />
             <div className=' my-3 flex  w-full justify-between'>
-                <h1 className="text-2xl font-medium mb-2">Student Fee</h1>
-
+                <h1 className="text-2xl mobile:max-tablet:text-lg font-medium mb-2">Student Fee</h1>
                 <Selection setFilter={setFilter} />
             </div>
 
@@ -93,9 +92,9 @@ function StudentFee() {
                                     ?
                                     details.payableFee - details.paid == 0
                                         ?
-                                        <div key={index} className={`flex justify-evenly  py-2 pl-2 h-fit border ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
+                                        <div key={index} className={`flex justify-evenly  py-2 pl-2 h-fit mobile:max-laptop:w-fit border ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
 
-                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            <h1 className="w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}
                                             </h1>
                                             <div className="w-52 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
@@ -131,33 +130,33 @@ function StudentFee() {
                                         ?
                                         details.payableFee - details.paid > 0
                                             ?
-                                            <div key={index} className={`flex justify-evenly  py-2 pl-2 h-fit border ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
+                                            <div key={index} className={`flex justify-evenly  py-2 pl-2 h-fit border mobile:max-laptop:w-fit ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
 
-                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                <h1 className="w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.rollNumber}
                                                 </h1>
-                                                <div className="w-52 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
+                                                <div className="w-52 mobile:max-tablet:w-44 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
                                                     <img src={details.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
                                                     <h1 >
                                                         {details.name}
                                                     </h1>
                                                 </div>
-                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                <h1 className="w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.totalfee}
                                                 </h1>
-                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                <h1 className="w-40 text-lg mobile:max-tablet:w-28 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.fine}
                                                 </h1>
-                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                <h1 className="w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.discountAmount}
                                                 </h1>
-                                                <h1 className={`w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap`}>
+                                                <h1 className={`w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap`}>
                                                     {details.paid}
                                                 </h1>
-                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                <h1 className="w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.payableFee}
                                                 </h1>
-                                                <h1 className={`w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap ${(details.payableFee - details.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
+                                                <h1 className={`w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap ${(details.payableFee - details.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
                                                     {details.payableFee - details.paid}
                                                 </h1>
                                             </div>
@@ -166,7 +165,7 @@ function StudentFee() {
                                         :
                                         <div key={index} className={`flex justify-evenly  py-2 pl-2 h-fit border ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
 
-                                            <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            <h1 className="w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}
                                             </h1>
                                             <div className="w-52 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">

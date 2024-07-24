@@ -26,7 +26,7 @@ export default function DoughnutSecond({ chartData, title }) {
         </div>
 
       </div>
-      <div className="flex mt-2 mobile:max-tablet:flex-wrap gap-0.5 my-2 mobile:max-tablet:w-full">
+      <div className="flex mt-2 mobile:max-tablet:justify-center mobile:max-tablet:flex-wrap gap-0.5 my-2 mobile:max-tablet:w-full">
         {chartData.labels.map((label, index) => (
 
           <div key={index} className={`text-center ${chartData.datasets[0].bg[index]} text-xl mr-3 `}>

@@ -43,9 +43,9 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
         return date;
     });
 
-  
+
     const formattedDate = nextWeekStart.toISOString().split('T')[0];
-    console.log(formattedDate,session,Class,section,subject);
+    console.log(formattedDate, session, Class, section, subject);
 
     const handleInputChange = (index, field, value) => {
         if (field === 'plan') {
@@ -71,7 +71,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
         e.preventDefault();
     };
 
-   
+
     useEffect(() => {
         const fetchPlan = async () => {
             const session = getCurrentSession();
@@ -93,40 +93,40 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
             }
         };
         fetchPlan();
-    }, [authState.accessToken,Class,section,subject])
+    }, [authState.accessToken, Class, section, subject])
 
 
     const renderTableRows = (days, topics, plans, chapters, editable = false) => {
         return days.map((day, index) => (
             <tr className='' key={index}>
-                <td className=' border-y p-4 border-black'>{day.toDateString()}</td>
-                <td className=' border-y p-4 border-black'>{editable ? (
+                <td className=' border-y p-4 border-black whitespace-nowrap'>{day.toDateString()}</td>
+                <td className=' border-y p-4 border-black whitespace-nowrap'>{editable ? (
                     <input
-                        className=' border-secondary border-2 rounded-md p-2'
+                        className=' border-secondary border-2 rounded-md p-2 mobile:max-tablet:p-1 '
                         type="text"
                         value={chapters[index]}
                         onChange={(e) => handleInputChange(index, 'chapter', e.target.value)}
                     />
                 ) : chapters[index]}</td>
-                <td className=' border-y p-4 border-black'>{editable ? (
+                <td className=' border-y p-4 border-black whitespace-nowrap'>{editable ? (
                     <input
-                        className=' border-secondary border-2 rounded-md p-2'
+                        className=' border-secondary border-2 rounded-md p-2 mobile:max-tablet:p-1'
                         type="text"
                         value={topics[index]}
                         onChange={(e) => handleInputChange(index, 'topic', e.target.value)}
                     />
                 ) : topics[index]}</td>
-                <td className=' border-y p-4 border-black'>{editable ? (
+                <td className=' border-y p-4 border-black whitespace-nowrap'>{editable ? (
                     <input
-                        className=' border-secondary border-2 rounded-md p-2'
+                        className=' border-secondary border-2 rounded-md p-2 mobile:max-tablet:p-1'
                         type="text"
                         value={plans[index]}
                         onChange={(e) => handleInputChange(index, 'plan', e.target.value)}
                     />
                 ) : plans[index]}</td>
-                <td className=' border-y p-4 border-black'>{editable ? (
+                <td className=' border-y p-4 border-black whitespace-nowrap'>{editable ? (
                     <input
-                        className=' border-secondary border-2 rounded-md p-2'
+                        className=' border-secondary border-2 rounded-md p-2 mobile:max-tablet:p-1'
                         type="text"
                         value={nextWeekPlans[index]}
                         onChange={(e) => handleInputChange(index, 'activity', e.target.value)}
@@ -137,16 +137,16 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
     };
 
     return (
-        <div className=' rounded-md'>
+        <div className=' rounded-md border border-black overflow-auto'>
             {selectedTab === 'Current Week' ? (
-                <table className='w-full rounded-md border border-purple-700'>
-                    <thead className=' bg-secondary border-b border-black '>
+                <table className='w-full '>
+                    <thead className=' bg-secondary  '>
                         <tr className='p-4 text-center'>
-                            <th className='border-y border-black py-2 text-xl font-semibold'>Date</th>
-                            <th className='border-y border-black py-2 text-xl font-semibold'>Chapter</th>
-                            <th className='border-y border-black py-2 text-xl font-semibold'>Topic</th>
-                            <th className='border-y border-black py-2 text-xl font-semibold'>Plan</th>
-                            <th className='border-y border-black py-2 text-xl font-semibold'>Activity (if any)</th>
+                            <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:py-1 font-semibold'>Date</th>
+                            <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:py-1 font-semibold'>Chapter</th>
+                            <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:py-1 font-semibold'>Topic</th>
+                            <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:py-1 font-semibold'>Plan</th>
+                            <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:py-1 font-semibold'>Activity (if any)</th>
                         </tr>
                     </thead>
                     <tbody className=' text-center'>
@@ -154,20 +154,20 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
                     </tbody>
                 </table>
             ) : (
-                <div>
+                <div className=' '>
                     <form onSubmit={handleSubmit}>
-                        <table className='w-full rounded-md border border-purple-700'>
-                            <thead className=' bg-secondary border-b border-black '>
-                                <tr className='p-4 text-center'>
-                                    <th className='border-y border-black py-2 text-xl font-semibold'>Date</th>
-                                    <th className='border-y border-black py-2 text-xl font-semibold'>Chapter</th>
-                                    <th className='border-y border-black py-2 text-xl font-semibold'>Topic</th>
-                                    <th className='border-y border-black py-2 text-xl font-semibold'>Plan</th>
-                                    <th className='border-y border-black py-2 text-xl font-semibold'>Activity (if any)</th>
+                        <table className='w-full'>
+                            <thead className=' bg-secondary  mobile:max-tablet:text-lg mobile:max-tablet:font-normal'>
+                                <tr className='p-4 text-center '>
+                                    <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:py-1 font-semibold'>Date</th>
+                                    <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:py-1 font-semibold'>Chapter</th>
+                                    <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:py-1 font-semibold'>Topic</th>
+                                    <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:py-1 font-semibold'>Plan</th>
+                                    <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:py-1 font-semibold'>Activity <br />(if any)</th>
 
                                 </tr>
                             </thead>
-                            <tbody className=' text-center'>
+                            <tbody className=' text-center whitespace-nowrap'>
                                 {renderTableRows(nextWeekDays, nextWeekTopics, nextWeekActivities, nextWeekChapters, true)}
                             </tbody>
                         </table>
