@@ -100,3 +100,4 @@ class _ClassActivityState extends State<ClassActivity> {
     );
   }
 }
+

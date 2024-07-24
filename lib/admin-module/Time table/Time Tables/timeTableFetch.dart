@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../APIs/Time Table/timeTableStructure.dart';
+import '../../../APIs/Teacher Module/TimeTable/Time Table/timeTableStructure.dart';
+
+
 
 class TimetableFetchScreen extends StatefulWidget {
   TimetableFetchScreen({Key? key, required this.classRange, required this.section}) : super(key: key);
@@ -34,10 +36,10 @@ class _TimetableFetchScreenState extends State<TimetableFetchScreen> {
     try {
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? accessToken = pref.getString("accessToken");
-      final timetable = await apiObj.fetchTimetable(accessToken!, widget.classRange, widget.section);
+      // final timetable = await apiObj.fetchTimetable(accessToken!, widget.classRange, widget.section);
       //final timetable = await apiObj.fetchTimetable("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imppb3JhYXphQGdtYWlsLmNvbSIsImRlc2lnbmF0aW9uIjoiQWRtaW4iLCJpYXQiOjE3MTczOTEzOTAsImV4cCI6MTcxNzk5NjE5MH0.D8ikXXgySLJ3ULFL3Sap7tEVpot7yihizCTwG-iMQ0o", "9th", "A");
       setState(() {
-        _timetableData = timetable['timetable'];
+        // _timetableData = timetable['timetable'];
       });
     } catch (e) {
       print('Error fetching timetable: $e');

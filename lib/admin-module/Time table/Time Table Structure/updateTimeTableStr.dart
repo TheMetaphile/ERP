@@ -3,7 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/admin-module/Time%20table/Time%20Table%20Structure/timeTableFetch.dart';
 import 'package:untitled/utils/utils.dart';
-import '../../../APIs/Time Table/timeTableStructure.dart';
+
+import '../../../APIs/Teacher Module/TimeTable/Time Table/timeTableStructure.dart';
+
 
 class UpdateStructureScreen extends StatefulWidget {
 

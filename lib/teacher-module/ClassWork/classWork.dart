@@ -1,9 +1,14 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/APIs/Teacher%20Module/ClassWorks/classWorkAPI.dart';
+import 'package:untitled/utils/utils.dart';
 
-import '../utils/theme.dart';
+import '../../utils/theme.dart';
 
 class ClassWork extends StatefulWidget {
   const ClassWork({super.key});
@@ -12,10 +17,10 @@ class ClassWork extends StatefulWidget {
   State<ClassWork> createState() => _ClassWorkState();
 }
 
-class _ClassWorkState extends State<ClassWork> with TickerProviderStateMixin {
-  String? _selectedClass;
-  String? _selectedSection;
-  String? _selectedSubject;
+class _ClassWorkState extends State<ClassWork> {
+  String _selectedClass="9th";
+  String _selectedSection ="A";
+  String _selectedSubject="Maths";
   List<String> classOptions = [
     '12th',
     '11th',
@@ -33,235 +38,542 @@ class _ClassWorkState extends State<ClassWork> with TickerProviderStateMixin {
     'Social Science',
     'Hindi',
   ];
-  late TabController tabBarController;
-  final TextEditingController chapter = TextEditingController();
-  final TextEditingController topic = TextEditingController();
-  final TextEditingController subTopics = TextEditingController();
-  final TextEditingController description = TextEditingController();
+
+
   CustomTheme themeObj = new CustomTheme();
-  bool viewSelected = true;
-  bool uploadSelected = false;
+    ClassWorkAPI apiObj=ClassWorkAPI();
+    bool isLoading=false;
+    String date=DateTime.now().toString().split(" ")[0];
+    String year=DateTime.now().toString().split(" ")[0].split("-")[0];
+    String month=DateTime.now().toString().split(" ")[0].split("-")[1];
+    int start=0;
+  List<dynamic>? classWorkList;
+  TextEditingController chapter = TextEditingController();
+  TextEditingController topic = TextEditingController();
+  TextEditingController subTopics = TextEditingController();
+  TextEditingController question = TextEditingController();
 
-  void _handleTabSelection() {
+
+  Future<void> fetchClassWork() async {
     setState(() {
-      if (tabBarController.index == 0) {
-        viewSelected = true;
-        uploadSelected = false;
-      } else {
-        viewSelected = false;
-        uploadSelected = true;
-      }
+      isLoading = true;
     });
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? accessToken = pref.getString("accessToken");
+
+      if (accessToken == null) {
+        throw Exception('Access token is null');
+      }
+      List<dynamic> data=await apiObj.fetchClassWorkList(accessToken,_selectedClass,month,year,_selectedSection,_selectedSubject,start);
+      print(data);
+      setState(() {
+        classWorkList=data;
+      });
+    } catch (e) {
+      print('Error fetching classWorkList data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load classWorkList. Please try again.')),
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
-  @override
-  void dispose() {
-    tabBarController.removeListener(_handleTabSelection);
-    tabBarController.dispose();
-    super.dispose();
+
+
+  Future<dynamic> uploadClassWork(String Class,String section,String subject,String chapter,String topic,String description) async {
+
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? accessToken = pref.getString("accessToken");
+      String? email = pref.getString("email");
+
+
+      var uploadMap = await apiObj.uploadClassWork(accessToken!,email!,date, Class, section, subject, chapter,topic, description);
+      print(uploadMap);
+
+      return uploadMap;
+    } catch (e) {
+      print('Error fetching upload data: $e');
+      showRedSnackBar("Failed to load upload. Please try again.", context);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    tabBarController = TabController(length: 2, vsync: this);
-    tabBarController.addListener(_handleTabSelection);
+  Future<dynamic> updateClassWork(String Class,String id,String subject,String chapter,String topic,String description) async {
+
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? accessToken = pref.getString("accessToken");
+
+
+      bool status = await apiObj.updatedClassWork(accessToken!, Class, id, date, subject, chapter, topic, description);
+      print(status);
+
+      return status;
+    } catch (e) {
+      print('Error fetching upload data: $e');
+      showRedSnackBar("Failed to load upload. Please try again.", context);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: themeObj.textBlack,
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            Container(
-                color: themeObj.textWhite,
-                child: Column(
-                  children: [
-                    TabBar(
-                      controller: tabBarController,
-                      dividerColor: themeObj.textgrey,
-                      dividerHeight: 3,
-                      indicator: const BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.transparent,
-                            width: 5.0,
-                          ),
-                        ),
-                      ),
-                      tabs: [
+
+
+  Future<void>publishPopup( BuildContext context ,Size size)async {
+    bool isChecked = false;
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return  Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 10,),
+                  elevation: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child:   Column(
+                      children: [
                         Card(
-                          color: viewSelected ? themeObj.primayColor : Color.fromRGBO(209, 213, 219, 1),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          child: Container(
-                            height: size.height * 0.045,
-                            width: size.width * 0.2,
-                            child: Center(
-                              child: Text(
-                                "View",
-                                style: GoogleFonts.openSans(
-                                  fontSize: size.width * 0.055,
-                                  color: themeObj.textBlack,
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: themeObj.textgrey,)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                dropDownButton(size),
+                                SizedBox(height: size.height * 0.01,),
+                                Text("Chapter", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                SizedBox(height: size.height * 0.02,),
+                                SizedBox(
+                                  height: size.height * 0.07,
+                                  child: TextField(
+                                    showCursor: false,
+                                    controller: chapter,
+
+                                    decoration: InputDecoration(
+                                        hintText: "Chapter",
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: themeObj.textgrey,))
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Card(
-                          color: uploadSelected ? themeObj.primayColor : Color.fromRGBO(209, 213, 219, 1),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          child: Container(
-                            height: size.height * 0.045,
-                            width: size.width * 0.2,
-                            child: Center(
-                              child: Text(
-                                "Upload",
-                                style: GoogleFonts.openSans(
-                                  fontSize: size.width * 0.055,
-                                  color: themeObj.textBlack,
+                                SizedBox(height: size.height * 0.02,),
+                                Text("Topic", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                SizedBox(height: size.height * 0.01,),
+                                SizedBox(
+                                  child: TextField(
+                                    maxLines: 1,
+                                    decoration: InputDecoration(
+                                        hintText: "Topic",
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: Colors.grey))
+                                    ),
+                                    controller: topic,
+                                  ),
                                 ),
-                              ),
+                                SizedBox(height: size.height * 0.02,),
+                                Text("Question", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                SizedBox(height: size.height * 0.01,),
+                                SizedBox(
+                                  child: TextField(
+                                    maxLines: 6,
+                                    decoration: InputDecoration(
+                                        hintText: "Question",
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: themeObj.textgrey,))
+                                    ),
+                                    controller: question,
+                                  ),
+                                ),
+                                SizedBox(height: size.height * 0.03,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      width: size.width*0.3,
+                                      child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(backgroundColor:Color.fromRGBO(209,213,219,1),shape: RoundedRectangleBorder(side: BorderSide(color: Colors.grey,width: 1),borderRadius: BorderRadius.circular(8))),
+                                          onPressed: (){
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Cancel",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.black),)),
+                                    ),
+                                    Container(
+                                      width: size.width * 0.3,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(backgroundColor: Color(0XFF6FF87D), shape: RoundedRectangleBorder(side: BorderSide(color: Colors.grey, width: 1), borderRadius: BorderRadius.circular(8))),
+                                        onPressed: () async {
+                                          if (chapter.text.isNotEmpty&& topic.text.isNotEmpty && question.text.isNotEmpty) {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            Map<dynamic, dynamic>? upload=  await uploadClassWork(_selectedClass, _selectedSection, _selectedSubject, chapter.text.toString(), topic.text.toString(), question.text.toString());
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            if (upload != null) {
+
+                                              classWorkList?.insert(0, upload);
+                                              print("added");
+                                              this.setState(() {});
+                                              Navigator.of(context).pop();
+                                            } else {
+                                              showRedSnackBar("Upload failed", context);
+                                            }
+
+
+
+                                          } else {
+                                            showRedSnackBar("Please Field all the Data", context);
+                                          }
+                                        },
+                                        child: isLoading
+                                            ? CircularProgressIndicator(color: Colors.black)
+                                            : Text("Submit", style: GoogleFonts.openSans(fontSize: size.width * 0.035, color: Colors.black),),
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: size.height * 0.02,),
-                    dropDownButton(size),
-                    SizedBox(height: size.height * 0.02,),
-                    Container(
-                      height: size.height * 0.8,
-                      child: TabBarView(
-                          controller: tabBarController,
-                          children: [
-                            Column(
+                  ),
+                ),
+              ],
+            );
+          },);
+
+      },);
+
+  }
+
+
+  Future<void>updatePopup( BuildContext context ,Size size,String chap,String top,String quest,String id)async {
+    TextEditingController chapter = TextEditingController(text: chap);
+    TextEditingController topic = TextEditingController(text:top );
+    TextEditingController question = TextEditingController(text: quest);
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setInnerState) {
+            return  Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 10,),
+                  elevation: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child:   Column(
+                      children: [
+                        Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: themeObj.textgrey,)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ListView.builder(
-                                  itemCount: 3,
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    return Card(
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: SizedBox(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Card(
-                                                color: themeObj.secondayColor,
-                                                elevation: 5,
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                                margin: EdgeInsets.all(0),
-                                                child: Container(
-                                                  width: size.width * 0.3,
-                                                  child: Text("English", textAlign: TextAlign.center, style: GoogleFonts.openSans(fontSize: size.width * 0.05, color: themeObj.textBlack,)),
-                                                ),
-                                              ),
-                                              SizedBox(height: size.height * 0.02,),
-                                              Text("Today's Class Work", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                              SizedBox(height: size.height * 0.01,),
-                                              Text("Sentence Making", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.04, fontWeight: FontWeight.w400),),
-                                              SizedBox(height: size.height * 0.02,),
-                                              Center(
-                                                child: ElevatedButton(
-                                                    style: ElevatedButton.styleFrom(backgroundColor: themeObj.primayColor,),
-                                                    onPressed: () {}, child: Text("Download", style: GoogleFonts.openSans(color: themeObj.textBlack,),)),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Card(
-                                  elevation: 5,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: themeObj.textgrey,)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text("Chapter", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                        SizedBox(height: size.height * 0.01,),
-                                        SizedBox(
-                                          height: size.height * 0.07,
-                                          child: TextField(
-                                            showCursor: false,
-                                            controller: chapter,
-                                            decoration: InputDecoration(
-                                                hintText: "Chapter",
-                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: themeObj.textgrey,))
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: size.height * 0.02,),
-                                        Text("Topic", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                        SizedBox(height: size.height * 0.01,),
-                                        SizedBox(
-                                          height: size.height * 0.07,
-                                          child: TextField(
-                                            decoration: InputDecoration(
-                                                hintText: "Topic",
-                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: Colors.grey))
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: size.height * 0.02,),
-                                        Text("Sub Topic", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                        SizedBox(height: size.height * 0.01,),
-                                        SizedBox(
-                                          height: size.height * 0.07,
-                                          child: TextField(
-                                            decoration: InputDecoration(
-                                                hintText: "Sub Topic",
-                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: themeObj.textgrey))
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: size.height * 0.02,),
-                                        Text("Description", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                        SizedBox(height: size.height * 0.01,),
-                                        SizedBox(
-                                          height: size.height * 0.07,
-                                          child: TextField(
-                                            decoration: InputDecoration(
-                                                hintText: "Description",
-                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: themeObj.textgrey,))
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: size.height * 0.03,),
-                                        Center(
-                                          child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(backgroundColor: themeObj.primayColor,),
-                                              onPressed: () {}, child: Text("Publish", style: GoogleFonts.openSans(color: themeObj.textBlack,),)),
-                                        ),
-                                      ],
+                                dropDownButton(size),
+                                SizedBox(height: size.height * 0.01,),
+                                Text("Chapter", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                SizedBox(height: size.height * 0.02,),
+                                SizedBox(
+                                  height: size.height * 0.07,
+                                  child: TextField(
+                                    showCursor: false,
+                                    controller: chapter,
+                                    decoration: InputDecoration(
+                                        hintText: "Chapter",
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: themeObj.textgrey,))
                                     ),
                                   ),
                                 ),
+                                SizedBox(height: size.height * 0.02,),
+                                Text("Topic", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                SizedBox(height: size.height * 0.01,),
+                                SizedBox(
+                                  child: TextField(
+                                    maxLines: 1,
+                                    decoration: InputDecoration(
+                                        hintText: "Topic",
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: Colors.grey))
+                                    ),
+                                    controller: topic,
+                                  ),
+                                ),
+                                SizedBox(height: size.height * 0.02,),
+                                Text("Question", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                SizedBox(height: size.height * 0.01,),
+                                SizedBox(
+                                  child: TextField(
+                                    maxLines: 6,
+                                    decoration: InputDecoration(
+                                        hintText: "Question",
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: themeObj.textgrey,))
+                                    ),
+                                    controller: question,
+                                  ),
+                                ),
+                                SizedBox(height: size.height * 0.03,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      width: size.width*0.3,
+                                      child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(backgroundColor:Color.fromRGBO(209,213,219,1),shape: RoundedRectangleBorder(side: BorderSide(color: Colors.grey,width: 1),borderRadius: BorderRadius.circular(8))),
+                                          onPressed: (){
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Cancel",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.black),)),
+                                    ),
+                                    Container(
+                                      width: size.width * 0.3,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(backgroundColor: Color(0XFF6FF87D), shape: RoundedRectangleBorder(side: BorderSide(color: Colors.grey, width: 1), borderRadius: BorderRadius.circular(8))),
+                                        onPressed: () async {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            bool status= await updateClassWork(_selectedClass,id,_selectedSubject,chapter.text.toString(),topic.text.toString(),question.text.toString());
+                                            setState(() {
+                                              isLoading = false;
+                                            });
+                                            if (status ) {
+                                              showGreenSnackBar("Upload Success", context);
+                                              this.setState(() {});
+                                              Navigator.of(context).pop();
+                                              fetchClassWork();
+
+                                            } else {
+                                              showRedSnackBar("Upload failed", context);
+                                            }
+
+                                        },
+                                        child: isLoading
+                                            ? CircularProgressIndicator(color: Colors.black)
+                                            : Text("Submit", style: GoogleFonts.openSans(fontSize: size.width * 0.035, color: Colors.black),),
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
                               ],
                             ),
-                          ]
-                      ),
-                    )
-                  ],
-                )
-            ),
-          ],
-        ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },);
+
+      },);
+
+  }
+  @override
+  void initState() {
+    super.initState();
+    fetchClassWork();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+print(classWorkList);
+    Size size = MediaQuery.of(context).size;
+    return Scaffold(
+      backgroundColor: themeObj.textWhite,
+      body: Column(
+        children: [
+          Container(
+              color: themeObj.textWhite,
+              child: Column(
+                children: [
+                  SizedBox(height: size.height * 0.02,),
+                  dropDownButton(size),
+                  isLoading ?   Center(
+                    child: LoadingAnimationWidget.threeArchedCircle(
+                      color: themeObj.primayColor,
+                      size: 50,
+                    ),
+                  ):classWorkList==null || classWorkList!.isEmpty?const Center(child: Text("There was no ClassWork Found"),):SizedBox(
+                    height: size.height*0.72,
+                    child: ListView.builder(
+                      itemCount: classWorkList?.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final classWork=classWorkList?[index];
+                        return Card(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Card(
+                                      color: themeObj.secondayColor,
+                                      elevation: 5,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                      margin: EdgeInsets.all(0),
+                                      child: Container(
+                                        width: size.width * 0.3,
+                                        child: Text(classWork["subject"], textAlign: TextAlign.center, style: GoogleFonts.openSans(fontSize: size.width * 0.05, color: themeObj.textBlack,)),
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Card(
+                                          margin: EdgeInsets.all(0),
+                                          color: Color.fromRGBO(96,165,250,1),
+                                          child: SizedBox(
+                                            height: size.height*0.045,
+                                            child: Center(
+                                              child: IconButton(
+                                                onPressed: (){
+                                                  updatePopup(this.context, size, classWork["chapter"], classWork["topic"], classWork["description"],classWork["_id"]);
+
+                                                },
+                                                icon: Icon(Icons.edit,color: themeObj.textWhite,size: 20,),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: size.width*0.02,),
+                                        Card(
+                                          margin: EdgeInsets.all(0),
+                                          color: Colors.red,
+                                          child: SizedBox(
+                                            height: size.height*0.045,
+                                            child: IconButton(
+                                              onPressed: () async {
+                                                SharedPreferences pref = await SharedPreferences.getInstance();
+                                                String? accessToken = pref.getString("accessToken");
+
+                                               bool status= await apiObj.deletedClassWork(accessToken!, _selectedClass, month, year, classWork["_id"]);
+                                                if (status ) {
+                                                  showGreenSnackBar("Delete Success", context);
+                                                  this.setState(() {});
+                                                  fetchClassWork();
+
+                                                } else {
+                                                  showRedSnackBar("Delete failed", context);
+                                                }
+                                                },
+                                              icon: Icon(Icons.delete_forever,color: themeObj.textWhite,size: 20,),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Chapter:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                      SizedBox(width: size.width*0.02,),
+                                      SizedBox(
+                                          width: size.width*0.7,
+                                          child: AutoSizeText(classWork["chapter"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),)),
+
+                                    ],
+                                  ),
+                                SizedBox(height: size.height * 0.02,),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      AutoSizeText("Topic:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                      SizedBox(width: size.width*0.02,),
+                                      SizedBox(
+                                          width: size.width*0.7,
+                                          child: AutoSizeText(classWork["topic"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),)),
+
+                                    ],
+                                  ),
+                                SizedBox(height: size.height * 0.02,),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AutoSizeText("Task:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                    SizedBox(width: size.width*0.02,),
+                                    SizedBox(
+                                        width: size.width*0.8,
+                                        child: AutoSizeText(classWork["description"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),)),
+
+                                  ],
+                                ),
+                                SizedBox(height: size.height * 0.02,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        AutoSizeText("Date:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                        SizedBox(width: size.width*0.02,),
+                                        AutoSizeText(classWork["date"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),),
+
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                index==classWorkList!.length-1? SizedBox(height: size.height * 0.06,):SizedBox(),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                ],
+              )
+          ),
+        ],
       ),
+        floatingActionButton:  SizedBox(
+          width: size.width*0.35,
+          child: TextButton(onPressed: (){
+            publishPopup(context,size);
+          },
+            style: TextButton.styleFrom(backgroundColor: Color.fromRGBO(96,165,250,0.6),),
+            child:Row(
+              children: [
+                Icon(CupertinoIcons.add_circled,color: themeObj.textBlack,),
+                SizedBox(width: size.width*0.02,),
+                Text("Upload",style: GoogleFonts.openSans(color: themeObj.textBlack,fontWeight: FontWeight.w400,fontSize: size.width*0.045),),
+
+              ],
+            ),),
+        )
     );
   }
 
@@ -345,6 +657,8 @@ class _ClassWorkState extends State<ClassWork> with TickerProviderStateMixin {
                   onChanged: (newValue) {
                     setState(() {
                       _selectedSubject = newValue!;
+                      classWorkList=null;
+                      fetchClassWork();
                     });
                   },
                   items: classSubjects.map((String option) {

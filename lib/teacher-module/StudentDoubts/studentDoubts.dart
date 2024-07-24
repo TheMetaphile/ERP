@@ -20,70 +20,45 @@ class _StudentDoubtsState extends State<StudentDoubts> {
   String _selectedSection = 'A';
   String _selectedSubject = 'Maths';
   List<String> classOptions = [
-    'Pre-Nursery',
-    'Nursery',
-    'L.K.G',
-    'U.K.G',
-    '1st',
-    '2nd',
-    '3rd',
-    '4th',
-    '5th',
-    '6th',
-    '7th',
-    '8th',
-    '9th',
-    '10th',
-    '11th',
-    '12th',];
-  List<String> classSections = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',];
-  List<String> classSubjects = ['Science',
-    'Maths',
-    'English',
-    'Social Science',
-    'Hindi',
-    'Computer'
+    'Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th',
+    '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th',
+  ];
+  List<String> classSections = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+  List<String> classSubjects = [
+    'Science', 'Maths', 'English', 'Social Science', 'Hindi', 'Computer'
   ];
   bool isLoading = false;
   TextEditingController solutionController = TextEditingController();
 
-//Api Calling
   final doubtsApi = DoubtsApi();
-  int start =0;
   String status = 'Pending';
   List<Doubt>? doubts;
   Map<String, TextEditingController> solutionControllers = {};
+
   Future<void> fetchDoubts() async {
     setState(() {
       isLoading = true;
+      doubts = [];
     });
+
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? accessToken = pref.getString("accessToken");
     try {
-      List<Doubt> allDoubts = await doubtsApi.fetchTeacherDoubts(
-        accessToken!,
-        _selectedClass,
-        _selectedSection,
-        _selectedSubject,
-        status,
-        start
+      List<Doubt> newDoubts = await doubtsApi.fetchTeacherDoubts(
+          accessToken!,
+          _selectedClass,
+          _selectedSection,
+          _selectedSubject,
+          status,
+          0  // start from the beginning
       );
-      print(allDoubts);
+
       setState(() {
-        doubts = allDoubts;
+        doubts = newDoubts;
       });
 
       // Create controllers for new doubts
-      for (var doubt in allDoubts) {
+      for (var doubt in newDoubts) {
         if (!solutionControllers.containsKey(doubt.id)) {
           solutionControllers[doubt.id] = TextEditingController();
         }
@@ -118,9 +93,8 @@ class _StudentDoubtsState extends State<StudentDoubts> {
           const SnackBar(content: Text('Doubt answered successfully')),
         );
         solutionControllers[doubtId]!.clear();
-        start = 0;
         status = 'Resolved';
-        fetchDoubts(); // Refresh both lists
+        fetchDoubts(); // Refresh the list
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to answer doubt')),
@@ -137,14 +111,15 @@ class _StudentDoubtsState extends State<StudentDoubts> {
       });
     }
   }
+
   @override
   void initState() {
     super.initState();
     fetchDoubts();
   }
+
   @override
   void dispose() {
-    // Dispose of all controllers
     solutionControllers.values.forEach((controller) => controller.dispose());
     super.dispose();
   }
@@ -181,7 +156,7 @@ class _StudentDoubtsState extends State<StudentDoubts> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      status='Pending';
+                      status = 'Pending';
                     });
                     fetchDoubts();
                   },
@@ -234,14 +209,14 @@ class _StudentDoubtsState extends State<StudentDoubts> {
               ),
             )
                 : Expanded(
-              child: _buildDoubtsList(doubts, size, status=='Pending')
-
+                child: _buildDoubtsList(doubts, size, status=='Pending')
             )
           ],
         ),
       ),
     );
   }
+
   Widget _buildDoubtsList(List<Doubt>? doubts, Size size, bool isNewDoubt) {
     return doubts == null || doubts.isEmpty
         ? Center(child: Text("No doubts found"))
@@ -256,7 +231,13 @@ class _StudentDoubtsState extends State<StudentDoubts> {
               margin: EdgeInsets.all(0),
               elevation: 3,
               child: ExpansionTile(
-                leading: Icon(CupertinoIcons.profile_circled, color: themeObj.textBlack, size: size.width * 0.1),
+                leading: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: CircleAvatar(
+                    radius: size.width * 0.08,
+                    backgroundImage: NetworkImage(doubt.students[0].profileLink?? 'https://example.com/default-profile-pic.jpg'),
+                  ),
+                ),
                 title: Text(
                   "${doubt.students[0].name} with roll number ${doubt.students[0].rollNumber} has a doubt in ${doubt.subject}",
                   style: TextStyle(
@@ -343,9 +324,9 @@ class _StudentDoubtsState extends State<StudentDoubts> {
                               "Solution: ${doubt.solution}",
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                color: Color(0XFF6FF87D),
+                                color: Colors.blue,
                                 fontWeight: FontWeight.w400,
-                                fontSize: size.width * 0.035,
+                                fontSize: size.width * 0.045,
                               ),
                             ),
                           ],
@@ -361,6 +342,7 @@ class _StudentDoubtsState extends State<StudentDoubts> {
       },
     );
   }
+
   Widget dropDownButton(Size size) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -370,7 +352,6 @@ class _StudentDoubtsState extends State<StudentDoubts> {
           buildDropdown(size, "Class", _selectedClass, classOptions, (newValue) {
             setState(() {
               _selectedClass = newValue!;
-              start=0;
               fetchDoubts();
             });
           }),
@@ -392,6 +373,7 @@ class _StudentDoubtsState extends State<StudentDoubts> {
       ),
     );
   }
+
   Widget buildDropdown(Size size, String hint, String value, List<String> items, Function(String?) onChanged) {
     return Card(
       child: SizedBox(

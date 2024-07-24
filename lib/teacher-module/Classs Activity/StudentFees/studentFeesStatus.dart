@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../APIs/Teacher Module/ClassActivity/studentFeeApI.dart';
 import '../../../utils/theme.dart';
-
-// Assuming CustomTheme and other dependencies are correctly imported
-// from '../../../utils/theme.dart'
+import '../../../utils/utils.dart';
 
 class StudentFeesStatus extends StatefulWidget {
   const StudentFeesStatus({Key? key}) : super(key: key);
@@ -16,36 +16,89 @@ class StudentFeesStatus extends StatefulWidget {
 
 class _StudentFeesStatusState extends State<StudentFeesStatus> {
   CustomTheme themeObj = CustomTheme();
-  String? selectedStatus;
-  List<String> statusOption = [
-    'Paid',
-    'Pending', // No trailing comma here
-  ];
+  String selectedStatus = "Pending";
+  List<String> statusOption = ['Paid', 'Pending'];
 
   int? selectedRowIndex;
+  bool isLoading = false;
+  bool isLoadingMore = false;
+  int start = 0;
+  StudentFeesAPi feeObj = StudentFeesAPi();
+  List<dynamic>? students;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchStudentData();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      fetchMoreStudentData();
+    }
+  }
+
+  Future<void> fetchStudentData() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? accessToken = pref.getString("accessToken");
+
+      List<dynamic> fetchedStudents = await feeObj.fetchStudentData(accessToken!, start);
+
+      setState(() {
+        students = fetchedStudents;
+      });
+    } catch (e) {
+      print('Error fetching student data: $e');
+      showRedSnackBar("Failed to load students. Please try again.", context);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> fetchMoreStudentData() async {
+    if (isLoadingMore) return;
+
+    setState(() {
+      isLoadingMore = true;
+    });
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? accessToken = pref.getString("accessToken");
+
+      List<dynamic> fetchedStudents = await feeObj.fetchStudentData(accessToken!, start + students!.length);
+
+      setState(() {
+        students?.addAll(fetchedStudents);
+      });
+    } catch (e) {
+      print('Error fetching more student data: $e');
+      showRedSnackBar("Failed to load more students. Please try again.", context);
+    } finally {
+      setState(() {
+        isLoadingMore = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white, // Assuming themeObj.textWhite is Color
-      // appBar: AppBar(
-      //   leading: IconButton(
-      //     onPressed: () {
-      //       Navigator.pop(context);
-      //     },
-      //     icon: Icon(Icons.arrow_back_ios, color: Colors.black), // Assuming themeObj.textBlack is Color
-      //   ),
-      //   backgroundColor: themeObj.primayColor, // Assuming themeObj.primaryColor is Color
-      //   title: Text(
-      //     "Fees Status",
-      //     style: TextStyle(
-      //       color: Colors.black, // Assuming themeObj.textBlack is Color
-      //       fontWeight: FontWeight.w400,
-      //       fontSize: size.width * 0.05,
-      //     ),
-      //   ),
-      // ),
+      backgroundColor: Colors.white,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 3),
         width: size.width,
@@ -61,7 +114,7 @@ class _StudentFeesStatusState extends State<StudentFeesStatus> {
                   "Student Fee",
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.openSans(
-                    color: Colors.black, // Assuming themeObj.textBlack is Color
+                    color: Colors.black,
                     fontWeight: FontWeight.w600,
                     fontSize: size.width * 0.045,
                   ),
@@ -106,11 +159,26 @@ class _StudentFeesStatusState extends State<StudentFeesStatus> {
                     fontSize: size.width * 0.035),
               ),
             ),
-            Expanded(child: FeeListScreen(selectedRowIndex: selectedRowIndex, onRowTap: (index) {
-              setState(() {
-                selectedRowIndex = index;
-              });
-            })),
+            SizedBox(height: size.height * 0.01),
+            isLoading
+                ? Center(
+                child: LoadingAnimationWidget.threeArchedCircle(
+                  color: themeObj.primayColor,
+                  size: 50,
+                ))
+                : Expanded(
+              child: FeeListScreen(
+                selectedRowIndex: selectedRowIndex,
+                onRowTap: (index) {
+                  setState(() {
+                    selectedRowIndex = index;
+                  });
+                },
+                studentData: students ?? [],
+                status: selectedStatus,
+                scrollController: _scrollController,
+              ),
+            ),
           ],
         ),
       ),
@@ -118,39 +186,42 @@ class _StudentFeesStatusState extends State<StudentFeesStatus> {
   }
 }
 
+
 class FeeListScreen extends StatelessWidget {
   final int? selectedRowIndex;
   final Function(int) onRowTap;
+  final List<dynamic> studentData;
+  final String status;
+  final ScrollController scrollController;
 
-  FeeListScreen({required this.selectedRowIndex, required this.onRowTap});
-
-  final List<Map<String, dynamic>> studentData = [
-    {'rollNo': 1, 'name': 'Aarav Bhardwaj', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 2, 'name': 'Ananya Bhatt', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 3, 'name': 'Aryan Nair', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 4, 'name': 'Gavin Gonzalez', 'totalFee': 15400, 'fine': 1150, 'discount': 0, 'paid': 0, 'payable': 16550, 'pending': 16550},
-    {'rollNo': 5, 'name': 'Kartik Bhatt', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 6, 'name': 'Kiran Sharma', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 7, 'name': 'Lavanya Patel', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 8, 'name': 'Neha Kapoor', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 9, 'name': 'Nisha Sharma', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 10, 'name': 'Pranav Patel', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 11, 'name': 'Riya Bhardwaj', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 12, 'name': 'Saanvi Sen', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 13, 'name': 'Salman Khan', 'totalFee': 15400, 'fine': 600, 'discount': 2080, 'paid': 4050, 'payable': 13920, 'pending': 9870},
-    {'rollNo': 14, 'name': 'Sneha Patel', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 14, 'name': 'Sneha Patel', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 14, 'name': 'Sneha Patel', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-    {'rollNo': 14, 'name': 'Sneha Patel', 'totalFee': 5000, 'fine': 0, 'discount': 0, 'paid': 0, 'payable': 5000, 'pending': 5000},
-  ];
+  FeeListScreen({
+    required this.selectedRowIndex,
+    required this.onRowTap,
+    required this.studentData,
+    required this.status,
+    required this.scrollController,
+  });
 
   CustomTheme themeObj = CustomTheme();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    List filteredStudents = studentData.where((student) {
+      bool isPending = (student['payableFee'] - student['paid']) > 0;
+      return (status == "Pending" && isPending) || (status == "Paid" && !isPending);
+    }).toList();
+
+    if (filteredStudents.isEmpty) {
+      return Center(
+        child: Text("No Data Found"),
+      );
+    }
+
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
+      controller: scrollController,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Column(
@@ -158,182 +229,40 @@ class FeeListScreen extends StatelessWidget {
           children: [
             SizedBox(height: size.height * 0.01),
             DataTable(
-              headingRowColor:
-              MaterialStateColor.resolveWith((states) => themeObj.secondayColor),
+              headingRowColor: MaterialStateColor.resolveWith((states) => themeObj.secondayColor),
+              dataRowHeight: 60,
               columns: [
-                DataColumn(
-                    label: Text(
-                      'Roll No.',
-                      style: GoogleFonts.openSans(
-                          fontSize: size.width * 0.04,
-                          fontWeight: FontWeight.w500,
-                          color: themeObj.textBlack),
-                    )),
-                DataColumn(
-                    label: Text('Name',
-                        style: GoogleFonts.openSans(
-                            fontSize: size.width * 0.035,
-                            fontWeight: FontWeight.w500,
-                            color: themeObj.textBlack))),
-                DataColumn(
-                    label: Text('Total Fee',
-                        style: GoogleFonts.openSans(
-                            fontSize: size.width * 0.035,
-                            fontWeight: FontWeight.w500,
-                            color: themeObj.textBlack))),
-                DataColumn(
-                    label: Text('Fine',
-                        style: GoogleFonts.openSans(
-                            fontSize: size.width * 0.04,
-                            fontWeight: FontWeight.w500,
-                            color: themeObj.textBlack))),
-                DataColumn(
-                    label: Text('Discount',
-                        style: GoogleFonts.openSans(
-                            fontSize: size.width * 0.04,
-                            fontWeight: FontWeight.w500,
-                            color: themeObj.textBlack))),
-                DataColumn(
-                    label: Text('Paid',
-                        style: GoogleFonts.openSans(
-                            fontSize: size.width * 0.04,
-                            fontWeight: FontWeight.w500,
-                            color: themeObj.textBlack))),
-                DataColumn(
-                    label: Text('Payable',
-                        style: GoogleFonts.openSans(
-                            fontSize: size.width * 0.04,
-                            fontWeight: FontWeight.w500,
-                            color: themeObj.textBlack))),
-                DataColumn(
-                    label: Text('Pending',
-                        style: GoogleFonts.openSans(
-                            fontSize: size.width * 0.04,
-                            fontWeight: FontWeight.w500,
-                            color: themeObj.textBlack))),
+                DataColumn(label: Center(child: Text('Roll No.', style: _headerStyle(size)))),
+                DataColumn(label: Center(child: Text('Name', style: _headerStyle(size)))),
+                DataColumn(label: Center(child: Text('Total Fee', style: _headerStyle(size)))),
+                DataColumn(label: Center(child: Text('Fine', style: _headerStyle(size)))),
+                DataColumn(label: Center(child: Text('Discount', style: _headerStyle(size)))),
+                DataColumn(label: Center(child: Text('Paid', style: _headerStyle(size)))),
+                DataColumn(label: Center(child: Text('Payable', style: _headerStyle(size)))),
+                DataColumn(label: Center(child: Text('Pending', style: _headerStyle(size)))),
               ],
-              rows: studentData.asMap().entries.map((entry) {
+              rows: filteredStudents.asMap().entries.map((entry) {
                 int index = entry.key;
                 Map<String, dynamic> student = entry.value;
+
                 return DataRow(
                   color: MaterialStateColor.resolveWith((states) {
-                    if (selectedRowIndex == index) {
-                      return themeObj.secondayColor;
-                    }
-                    return Colors.transparent;
+                    return selectedRowIndex == index ? themeObj.secondayColor : Colors.transparent;
                   }),
                   cells: [
+                    DataCell(Text(student['rollNumber'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
+                    DataCell(_buildNameCell(student, size), onTap: () => onRowTap(index)),
+                    DataCell(Text(student['totalfee'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
+                    DataCell(Text(student['fine'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
+                    DataCell(Text(student['discountAmount'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
+                    DataCell(Text(student['paid'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
+                    DataCell(Text(student['payableFee'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
                     DataCell(
-                      GestureDetector(
-                        onTap: () {
-                          onRowTap(index);
-                        },
-                        child: Text(
-                          student['rollNo'].toString(),
-                          style: GoogleFonts.openSans(
-                              fontSize: size.width * 0.04,
-                              fontWeight: FontWeight.w400,
-                              color: themeObj.textBlack),
-                        ),
+                      Text(
+                        (student['payableFee'] - student['paid']).toString(),
+                        style: _cellStyle(size).copyWith(color: Colors.red),
                       ),
-                    ),
-                    DataCell(
-                      GestureDetector(
-                        onTap: () {
-                          onRowTap(index);
-                        },
-                        child: Text(
-                          student['name'],
-                          style: GoogleFonts.openSans(
-                              fontSize: size.width * 0.04,
-                              fontWeight: FontWeight.w400,
-                              color: themeObj.textBlack),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      GestureDetector(
-                        onTap: () {
-                          onRowTap(index);
-                        },
-                        child: Text(
-                          student['totalFee'].toString(),
-                          style: GoogleFonts.openSans(
-                              fontSize: size.width * 0.04,
-                              fontWeight: FontWeight.w400,
-                              color: themeObj.textBlack),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      GestureDetector(
-                        onTap: () {
-                          onRowTap(index);
-                        },
-                        child: Text(
-                          student['fine'].toString(),
-                          style: GoogleFonts.openSans(
-                              fontSize: size.width * 0.04,
-                              fontWeight: FontWeight.w400,
-                              color: themeObj.textBlack),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      GestureDetector(
-                        onTap: () {
-                          onRowTap(index);
-                        },
-                        child: Text(
-                          student['discount'].toString(),
-                          style: GoogleFonts.openSans(
-                              fontSize: size.width * 0.04,
-                              fontWeight: FontWeight.w400,
-                              color: themeObj.textBlack),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      GestureDetector(
-                        onTap: () {
-                          onRowTap(index);
-                        },
-                        child: Text(
-                          student['paid'].toString(),
-                          style: GoogleFonts.openSans(
-                              fontSize: size.width * 0.04,
-                              fontWeight: FontWeight.w400,
-                              color: themeObj.textBlack),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      GestureDetector(
-                        onTap: () {
-                          onRowTap(index);
-                        },
-                        child: Text(
-                          student['payable'].toString(),
-                          style: GoogleFonts.openSans(
-                              fontSize: size.width * 0.04,
-                              fontWeight: FontWeight.w400,
-                              color: themeObj.textBlack),
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      GestureDetector(
-                        onTap: () {
-                          onRowTap(index);
-                        },
-                        child: Text(
-                          student['pending'].toString(),
-                          style: GoogleFonts.openSans(
-                              fontSize: size.width * 0.04,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.red),
-                        ),
-                      ),
+                      onTap: () => onRowTap(index),
                     ),
                   ],
                 );
@@ -342,6 +271,38 @@ class FeeListScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildNameCell(Map<String, dynamic> student, Size size) {
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: CircleAvatar(
+            radius: size.width * 0.06,
+            backgroundImage: NetworkImage(student['profileLink'] ?? 'https://example.com/default-profile-pic.jpg'),
+          ),
+        ),
+        SizedBox(width: size.width * 0.02),
+        Text(student['name'], style: _cellStyle(size)),
+      ],
+    );
+  }
+
+  TextStyle _headerStyle(Size size) {
+    return GoogleFonts.openSans(
+      fontSize: size.width * 0.045,
+      fontWeight: FontWeight.w500,
+      color: themeObj.textBlack,
+    );
+  }
+
+  TextStyle _cellStyle(Size size) {
+    return GoogleFonts.openSans(
+      fontSize: size.width * 0.04,
+      fontWeight: FontWeight.w400,
+      color: themeObj.textBlack,
     );
   }
 }

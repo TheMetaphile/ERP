@@ -50,9 +50,9 @@ class _AllStudentsState extends State<AllStudents> {
       String? section=pref.getString("section");
 
 
-      final students = await studentApiobj.fetchStudents(accessToken!,'9th','A',0,16);
+      final students = await studentApiobj.fetchStudents(accessToken!,'9th','A',0);
       setState(() {
-        _students = students;
+        // _students = students;
       });
     } catch (e) {
       print('Error: $e');

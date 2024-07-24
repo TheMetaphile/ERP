@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/teacher-module/Classs%20Activity/studentAttendance/previousMonth.dart';
 import 'package:untitled/utils/utils.dart';
 import '../../../APIs/StudentsData/student.dart';
-import '../../../APIs/Teacher Module/ClassActivty/StudentAttendanceAPI.dart';
+import '../../../APIs/Teacher Module/ClassActivity/StudentAttendanceAPI.dart';
 import '../../../utils/theme.dart';
 
 class StudentAttendance extends StatefulWidget {
@@ -19,12 +19,29 @@ class _StudentAttendanceState extends State<StudentAttendance> {
   CustomTheme themeObj = CustomTheme();
   List<Student> students = [];
   bool isLoading = true;
+  bool isLoadingMore = false;
   StudentService _studentService = StudentService();
+  int start = 0;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     fetchStudentData();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      fetchMoreStudentData();
+    }
   }
 
   Future<void> fetchStudentData() async {
@@ -39,7 +56,7 @@ class _StudentAttendanceState extends State<StudentAttendance> {
         throw Exception('Access token is null');
       }
       String date = DateTime.now().toIso8601String().split('T')[0];
-      List<Student> fetchedStudents = await _studentService.fetchStudents(date, 8, 13, accessToken);
+      List<Student> fetchedStudents = await _studentService.fetchStudents(date, accessToken,  start);
       print('Fetched students: $fetchedStudents');
 
       setState(() {
@@ -57,7 +74,48 @@ class _StudentAttendanceState extends State<StudentAttendance> {
       });
     }
   }
+
+  Future<void> fetchMoreStudentData() async {
+    if (isLoadingMore) return;
+    setState(() {
+      isLoadingMore = true;
+    });
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? accessToken = pref.getString("accessToken");
+
+      if (accessToken == null) {
+        throw Exception('Access token is null');
+      }
+      String date = DateTime.now().toIso8601String().split('T')[0];
+      List<Student> fetchedStudents = await _studentService.fetchStudents(date,accessToken,  start + students.length);
+
+      setState(() {
+        students.addAll(fetchedStudents);
+      });
+    } catch (e) {
+      print('Error fetching more student data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load more students. Please try again.')),
+      );
+    } finally {
+      setState(() {
+        isLoadingMore = false;
+      });
+    }
+  }
+
   Future<void> markAttendance() async {
+    print(students.length);
+    for (var student in students) {
+      print("${student.name}: ${student.selectedAttendance}");
+    }
+    bool allStudentsMarked = students.every((student) => student.selectedAttendance.isNotEmpty);
+    print("All students marked: $allStudentsMarked");
+    if (!allStudentsMarked) {
+      showRedSnackBar("Please fill attendance for all students", context);
+      return;
+    }
     try {
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? accessToken = pref.getString("accessToken");
@@ -78,19 +136,19 @@ class _StudentAttendanceState extends State<StudentAttendance> {
           'status': status,
         };
       }).toList();
-        print(studentAttendance);
-      String date = DateTime.now().toIso8601String().split('T')[0]; // Current date in YYYY-MM-DD format
+      print(studentAttendance);
+      String date = DateTime.now().toIso8601String().split('T')[0];
 
       bool success = await _studentService.markAttendance(accessToken, date, studentAttendance);
 
       if (success) {
-       showGreenSnackBar("Attendance marked successfully", context);
+        showGreenSnackBar("Attendance marked successfully", context);
       } else {
         throw Exception('Failed to mark attendance');
       }
     } catch (e) {
       print('Error marking attendance: $e');
-     showRedSnackBar("Failed to mark attendance. Please try again.", context);
+      showRedSnackBar("Failed to mark attendance. Please try again.", context);
     }
   }
 
@@ -103,42 +161,6 @@ class _StudentAttendanceState extends State<StudentAttendance> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: themeObj.textWhite,
-      // appBar: AppBar(
-      //   backgroundColor: themeObj.primayColor,
-      //   leading: IconButton(
-      //     icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
-      //     onPressed: () {
-      //       Navigator.pop(context);
-      //     },
-      //   ),
-      //   title: Text(
-      //     "Student Attendance",
-      //     style: GoogleFonts.openSans(
-      //       color: themeObj.textBlack,
-      //       fontWeight: FontWeight.w600,
-      //       fontSize: size.width * 0.05,
-      //     ),
-      //   ),
-      //   actions: [
-      //     SizedBox(
-      //       width: size.width*0.3,
-      //       child: TextButton(onPressed: (){
-      //         Navigator.push(context, MaterialPageRoute(builder: (context) => PreviousStudentAttendanceRecords()));
-      //
-      //       },
-      //         style: TextButton.styleFrom(backgroundColor: Color.fromRGBO(233,213,255,1)),
-      //         child:Row(
-      //           children: [
-      //             Icon(Icons.history),
-      //             SizedBox(width: size.width*0.02,),
-      //             Text("History ",style: GoogleFonts.openSans(color: themeObj.textBlack,fontWeight: FontWeight.w400,fontSize: size.width*0.036),),
-      //
-      //           ],
-      //         ),),
-      //     )
-      //
-      //   ],
-      // ),
       body: isLoading
           ? Center(
         child: LoadingAnimationWidget.threeArchedCircle(
@@ -146,34 +168,88 @@ class _StudentAttendanceState extends State<StudentAttendance> {
           size: 50,
         ),
       )
-          : ListView.builder(
-        padding: const EdgeInsets.all(8.0),
-        itemCount: students.length,
-        itemBuilder: (context, index) {
-          final student = students[index];
-          return StudentContainer(
-            student: student,
-            size: size,
-            themeObj: themeObj,
-          );
-        },
+          : Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          SizedBox(
+            width: size.width * 0.5,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => PreviousStudentAttendanceRecords()));
+              },
+              style: TextButton.styleFrom(backgroundColor: Color.fromRGBO(233, 213, 255, 1)),
+              child: Row(
+                children: [
+                  Icon(Icons.history),
+                  SizedBox(width: size.width * 0.02),
+                  Text(
+                    "Attendance Record",
+                    style: GoogleFonts.openSans(
+                      color: themeObj.textBlack,
+                      fontWeight: FontWeight.w400,
+                      fontSize: size.width * 0.036,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              controller: _scrollController,
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(8.0),
+              itemCount: students.length + 1,
+              itemBuilder: (context, index) {
+                if (index == students.length) {
+                  return isLoadingMore
+                      ? Center(
+                    child: LoadingAnimationWidget.threeArchedCircle(
+                      color: themeObj.primayColor,
+                      size: 30,
+                    ),
+                  )
+                      : SizedBox.shrink();
+                }
+                final student = students[index];
+                return StudentContainer(
+                  student: student,
+                  size: size,
+                  themeObj: themeObj,
+                  onAttendanceChanged: (newAttendance ) {
+                    setState(() {
+                      student.selectedAttendance = newAttendance;
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
-        floatingActionButton:  SizedBox(
-          width: size.width*0.3,
-          child: TextButton(onPressed: (){
-          markAttendance();
+      floatingActionButton: SizedBox(
+        width: size.width * 0.3,
+        child: TextButton(
+          onPressed: () {
+            markAttendance();
           },
-            style: TextButton.styleFrom(backgroundColor: Color.fromRGBO(233,213,255,1)),
-            child:Row(
-              children: [
-
-                Icon(Icons.add,color: themeObj.textBlack,),
-                SizedBox(width: size.width*0.02,),
-                Text("Mark ",style: GoogleFonts.openSans(color: themeObj.textBlack,fontWeight: FontWeight.w400,fontSize: size.width*0.036),),
-
-              ],
-            ),),
-        )
+          style: TextButton.styleFrom(backgroundColor: Color.fromRGBO(233, 213, 255, 1)),
+          child: Row(
+            children: [
+              Icon(Icons.check, color: themeObj.textBlack),
+              SizedBox(width: size.width * 0.02),
+              Text(
+                "Mark ",
+                style: GoogleFonts.openSans(
+                  color: themeObj.textBlack,
+                  fontWeight: FontWeight.w400,
+                  fontSize: size.width * 0.036,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -182,12 +258,14 @@ class StudentContainer extends StatefulWidget {
   final Student student;
   final Size size;
   final CustomTheme themeObj;
+  final Function(String) onAttendanceChanged;
 
   const StudentContainer({
     Key? key,
     required this.student,
     required this.size,
     required this.themeObj,
+    required this.onAttendanceChanged,
   }) : super(key: key);
 
   @override
@@ -200,12 +278,13 @@ class _StudentContainerState extends State<StudentContainer> {
   @override
   void initState() {
     super.initState();
-    selectedAttendance = widget.student.leave ? 'L' : '';
+    selectedAttendance = widget.student.selectedAttendance;
   }
 
   void updateAttendance(String attendance) {
     setState(() {
       selectedAttendance = attendance;
+      widget.onAttendanceChanged(selectedAttendance);
     });
   }
 
@@ -280,6 +359,7 @@ class _StudentContainerState extends State<StudentContainer> {
     );
   }
 }
+
 
 class AttendanceButton extends StatelessWidget {
   final String label;

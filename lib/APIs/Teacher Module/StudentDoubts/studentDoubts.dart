@@ -65,7 +65,7 @@ class Doubt {
 //   }
 // }
 class DoubtsApi {
-  static const String baseUrl = 'http://ec2-13-127-187-81.ap-south-1.compute.amazonaws.com:8001';
+  static const String baseUrl = 'http://13.201.247.28:8000';
 
   Future<List<Doubt>> fetchTeacherDoubts(String accessToken, String classNumber, String section, String subject,String status, int start) async {
     final url = Uri.parse('$baseUrl/doubts/fetch/teacher?class=$classNumber&section=$section&subject=$subject&status=$status&start=$start&end=10');
@@ -95,6 +95,8 @@ class DoubtsApi {
       throw Exception('Network error: $e');
     }
   }
+
+
   Future<bool> updateDoubt({required String accessToken, required String doubtId, required String classNumber, required String solution, required String replyDate,}) async {
     final url = Uri.parse('$baseUrl/doubts/update/teacher?id=$doubtId');
 
@@ -123,5 +125,7 @@ class DoubtsApi {
       throw Exception('Network error: $e');
     }
   }
+
+
 }
 // You can add more methods here for other API endpoints if needed

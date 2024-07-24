@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:untitled/onBoarding/Screens/email_verification.dart';
 import '../../APIs/Authentication/teacherAuthenticationService.dart';
+import '../../utils/theme.dart';
 import '../../utils/utils.dart';
 import '../utils/text_field.dart';
 import 'package:http/http.dart' as http;
@@ -22,12 +23,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   final authApiAcess=  TeacherAuthentication();
 
   bool isLoading=false;
-
+  CustomTheme themeObj=CustomTheme();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(108, 137, 204, 1),
+      backgroundColor: themeObj.primayColor,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white.withOpacity(0.6),
         onPressed: () { Navigator.pop(context); },
@@ -38,7 +39,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         child: Column(
           children: [
             SizedBox(
-              height: size.height*0.5,
+              height: size.height*0.35,
               width: size.width,
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: size.height*0.08),
@@ -47,14 +48,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             ),
             Card(
               margin: const EdgeInsets.all(0),
-              shape: const OutlineInputBorder(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(45),
-                      topLeft: Radius.circular(45)
-                  )
-              ),
+              elevation: 10,
               child: SizedBox(
-                  height: size.height*0.5,
+                  height: size.height*0.65,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: size.width*0.06),
                     child: Column(
@@ -116,13 +112,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
   Widget resetButtton(Size size,BuildContext context){
     return Card(
-      color:isLoading? Colors.transparent: const Color.fromRGBO(108, 137, 204, 1),
-      shape: isLoading? Border.all(color: Colors.transparent):const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(
-            color: Colors.black,
-          )
-      ),
+      color:isLoading? Colors.transparent: themeObj.primayColor,
+
       elevation: isLoading?0:15,
       child: InkWell(
         onTap: () async {
@@ -155,7 +146,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             );
           }
         },
-        child:  isLoading ? Center(child: CircularProgressIndicator()):
+        child:  isLoading ? Center(child: CircularProgressIndicator(color: themeObj.textgrey)):
         Padding(
           padding: EdgeInsets.all(size.width*0.01),
           child: Center(

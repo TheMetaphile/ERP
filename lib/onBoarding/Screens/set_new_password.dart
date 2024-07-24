@@ -4,9 +4,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../APIs/Authentication/teacherAuthenticationService.dart';
+import '../../utils/theme.dart';
 import '../../utils/utils.dart';
-import '../api/api_call.dart';
-import '../api/api_link.dart';
+
 import '../utils/text_field.dart';
 import 'Successful.dart';
 import 'package:http/http.dart' as http;
@@ -27,12 +27,12 @@ class _SetPasswordState extends State<SetPassword> {
   final authApiAcess=  TeacherAuthentication();
 
   bool isLoading=false;
-
+  CustomTheme themeObj=CustomTheme();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(108, 137, 204, 1),
+      backgroundColor: themeObj.primayColor,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white.withOpacity(0.6),
         onPressed: () { Navigator.pop(context); },
@@ -43,7 +43,7 @@ class _SetPasswordState extends State<SetPassword> {
         child: Column(
           children: [
             SizedBox(
-              height: size.height*0.4,
+              height: size.height*0.33,
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: size.height*0.03),
                 child: Align(
@@ -54,21 +54,16 @@ class _SetPasswordState extends State<SetPassword> {
             ),
             Card(
               margin: const EdgeInsets.all(0),
-              shape: const OutlineInputBorder(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(45),
-                      topLeft: Radius.circular(45)
-                  )
-              ),
+        
               child: SizedBox(
-                  height: size.height*0.6,
+                  height: size.height*0.67,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: size.width*0.06),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: size.height*0.03,
+                          height: size.height*0.02,
                         ),
                         AutoSizeText("Set a new Password",
                           style: GoogleFonts.openSans(
@@ -76,10 +71,10 @@ class _SetPasswordState extends State<SetPassword> {
                               fontWeight: FontWeight.w400,
                               color: Colors.black
                           ),
-
+        
                         ),
                         SizedBox(
-                          height: size.height*0.03,
+                          height: size.height*0.01,
                         ),
                         AutoSizeText("Create a new password. Ensure that it differs from previous ones for security",
                           style: GoogleFonts.openSans(
@@ -87,10 +82,10 @@ class _SetPasswordState extends State<SetPassword> {
                               fontWeight: FontWeight.w500,
                               color: Colors.grey.shade700
                           ),
-
+        
                         ),
                         SizedBox(
-                          height: size.height*0.03,
+                          height: size.height*0.02,
                         ),
                         AutoSizeText("New Password",
                           style: GoogleFonts.openSans(
@@ -98,9 +93,9 @@ class _SetPasswordState extends State<SetPassword> {
                               fontWeight: FontWeight.w400,
                               color: Colors.black
                           ),
-
+        
                         ),
-
+        
                         SizedBox(
                           height: size.height*0.01,
                         ),
@@ -114,7 +109,7 @@ class _SetPasswordState extends State<SetPassword> {
                               fontWeight: FontWeight.w400,
                               color: Colors.black
                           ),
-
+        
                         ),
                         SizedBox(
                           height: size.height*0.01,
@@ -137,13 +132,7 @@ class _SetPasswordState extends State<SetPassword> {
 
   Widget updateButtton(Size size,BuildContext context){
     return Card(
-      color:isLoading? Colors.transparent: const Color.fromRGBO(108, 137, 204, 1),
-      shape: isLoading? Border.all(color: Colors.transparent):const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(
-            color: Colors.black,
-          )
-      ),
+      color:isLoading? Colors.transparent: themeObj.primayColor,
       elevation: isLoading?0:15,
       child: InkWell(
         onTap: () async {
@@ -179,7 +168,7 @@ class _SetPasswordState extends State<SetPassword> {
           }
 
         },
-        child: isLoading ? Center(child: CircularProgressIndicator()):
+        child: isLoading ? Center(child: CircularProgressIndicator(color: themeObj.textgrey)):
         Padding(
           padding: EdgeInsets.all(size.width*0.01),
           child: Center(

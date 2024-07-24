@@ -4,15 +4,25 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:untitled/onBoarding/Screens/login.dart';
 import 'package:untitled/onBoarding/Screens/successfull_animation.dart';
 
-class Successful extends StatelessWidget {
-  const Successful({super.key});
+import '../../utils/theme.dart';
+
+class Successful extends StatefulWidget {
+   const Successful({super.key});
+
+  @override
+  State<Successful> createState() => _SuccessfulState();
+}
+
+class _SuccessfulState extends State<Successful> {
+  CustomTheme themeObj=CustomTheme();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: themeObj.primayColor,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromRGBO(108, 137, 204, 1),
+        backgroundColor: Colors.white.withOpacity(0.6),
         onPressed: () { Navigator.pop(context); },
         child: const Icon(Icons.arrow_back_ios_new_outlined,color: Colors.black,),
       ),
@@ -59,15 +69,11 @@ class Successful extends StatelessWidget {
       ),
     );
   }
+
   Widget continueButtton(Size size,BuildContext context){
     return Card(
-      color: const Color.fromRGBO(108, 137, 204, 1),
-      shape: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(
-            color: Colors.black,
-          )
-      ),
+      color: Color.fromRGBO(216,180,254,1),
+
       elevation: 20,
       child: InkWell(
         onTap: (){

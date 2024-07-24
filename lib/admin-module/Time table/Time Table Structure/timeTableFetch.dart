@@ -6,7 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/admin-module/Time%20table/Time%20Table%20Structure/timeTableCreate.dart';
 import 'package:untitled/admin-module/Time%20table/Time%20Table%20Structure/updateTimeTableStr.dart';
 import 'package:untitled/utils/utils.dart';
-import '../../../APIs/Time Table/timeTableStructure.dart';
+
+import '../../../APIs/Teacher Module/TimeTable/Time Table/timeTableStructure.dart';
 import '../Time Tables/timeTableFetch.dart';
 
 class TimeTableStructureScreen extends StatefulWidget {

@@ -4,7 +4,8 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/utils/theme.dart';
 
-import '../../../APIs/Teacher Module/ClassActivty/timetableAPI.dart';
+import '../../../APIs/Teacher Module/ClassActivity/timetableAPI.dart';
+
 
 class TimeTable extends StatefulWidget {
   const TimeTable({super.key});
@@ -260,21 +261,26 @@ Future<void> getDetails()async {
           ),
           SizedBox(height: size.height * 0.02),
           Expanded(
-            child: Container(
-              decoration: const BoxDecoration(),
-              child: Table(
-                border: TableBorder.all(color: Colors.grey.shade300),
-                children: [
-                  TableRow(
-                    decoration: BoxDecoration(color: Color(0xFFA5D6A7)),
-                    children: [
-                      _buildTableHeader('Lecture', size),
-                      _buildTableHeader('Timing', size),
-                      _buildTableHeader('Subject', size),
-                    ],
-                  ),
-                  ...schedule.map((item) => _buildTableRow(item, size)).toList(),
-                ],
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                decoration: const BoxDecoration(),
+                width: size.width*1.2,
+
+                child: Table(
+                  border: TableBorder.all(color: Colors.grey.shade300),
+                  children: [
+                    TableRow(
+                      decoration: BoxDecoration(color: Color(0xFFA5D6A7)),
+                      children: [
+                        _buildTableHeader('Lecture', size),
+                        _buildTableHeader('Timing', size),
+                        _buildTableHeader('Subject', size),
+                      ],
+                    ),
+                    ...schedule.map((item) => _buildTableRow(item, size)).toList(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -287,10 +293,15 @@ Future<void> getDetails()async {
     return TableCell(
       child: Padding(
         padding: EdgeInsets.all(8.0),
-        child: Text(
-          text,
-          style: GoogleFonts.openSans(fontWeight: FontWeight.w700, fontSize: size.width * 0.035),
-          textAlign: TextAlign.center,
+        child: Container(
+          height: size.height*0.05,
+          child: Center(
+            child: Text(
+              text,
+              style: GoogleFonts.openSans(fontWeight: FontWeight.w600, fontSize: size.width * 0.045),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
       ),
     );
@@ -302,6 +313,8 @@ Future<void> getDetails()async {
         : Colors.transparent;
 
     return TableRow(
+
+
       decoration: BoxDecoration(color: rowColor),
       children: [
         _buildTableCell(item['lecture']!, size),
@@ -315,10 +328,15 @@ Future<void> getDetails()async {
     return TableCell(
       child: Padding(
         padding: EdgeInsets.all(8.0),
-        child: Text(
-          text,
-          style: GoogleFonts.openSans(fontWeight: FontWeight.w400, fontSize: size.width * 0.035),
-          textAlign: TextAlign.center,
+        child: Container(
+          height: size.height*0.05,
+          child: Center(
+            child: Text(
+              text,
+              style: GoogleFonts.openSans(fontWeight: FontWeight.w400, fontSize: size.width * 0.035),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
       ),
     );

@@ -37,7 +37,7 @@ class _StudentDetailState extends State<StudentDetail> {
     SharedPreferences pref=await SharedPreferences.getInstance();
     try {
       final accessToken = pref.getString("accessToken");
-       final student = await studentApiobj.fetchStudentData(accessToken!, widget.email);
+       final student = await studentApiobj.fetchSingleUser(accessToken!, widget.email);
       setState(() {
         studentData=student as Map<String, dynamic>?;
       });

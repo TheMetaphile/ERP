@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../main.dart';
 import '../../onBoarding/Screens/Successful.dart';
 import '../../onBoarding/Screens/email_verification.dart';
 import '../../onBoarding/Screens/reset_confirmation.dart';
@@ -13,9 +14,13 @@ import '../../utils/utils.dart';
 import 'package:http/http.dart' as http;
 
 class TeacherAuthentication{
+    static String baseUrl = "http://13.201.247.28:8000";
 
-  Future<void> loginUser(String email, String password, BuildContext context) async {
-    final url = Uri.parse('http://ec2-13-127-187-81.ap-south-1.compute.amazonaws.com:8007/login/Teacher');
+
+  Future<dynamic> loginUser(String email, String password, BuildContext context) async {
+    print(email);
+    print(password);
+    final url = Uri.parse('$baseUrl/login/Teacher');
     final body = jsonEncode({
       'email': email,
       'password': password,
@@ -28,55 +33,74 @@ class TeacherAuthentication{
         body: body,
       );
 
+
       if (response.statusCode == 200) {
         print('Login successful');
 
         final data = jsonDecode(response.body);
-        final tokens = data['tokens'];
-        final accessToken = tokens['accessToken'];
-        final userDetails = data["userDetails"];
-        List subject = data["subject"];
+        //  print(data);
+        //  final tokens = data['tokens'];
+        //  final accessToken = tokens['accessToken'];
+        //  final refreshToken = tokens['refreshToken'];
+        //  final userDetails = data["userDetails"];
+        // var subject = data["subject"];
+        //
+        //
+        //
+        //
+        //  if (userDetails != null ) {
+        //    String clas = "";
+        //    String section = "";
+        //
+        //    if (subject is List) {
+        //      if (subject.isNotEmpty) {
+        //        clas = subject[0]["class"] ?? "";
+        //        section = subject[0]["section"] ?? "";
+        //      }
+        //    } else if (subject is Map) {
+        //      clas = subject["class"] ?? "";
+        //      section = subject["section"] ?? "";
+        //    }
+        //
+        //    final userEmail = userDetails["email"];
+        //    final name = userDetails["name"];
+        //    final profileLink = userDetails["profileLink"];
+        //    final employeeId = userDetails["employeeId"];
+        //    SharedPreferences pref = await SharedPreferences.getInstance();
+        //
+        //    // await pref.setStringList("SubjectList", subject);
+        //    await pref.setString("accessToken", accessToken);
+        //    await pref.setString("refreshToken", refreshToken);
+        //    await pref.setString("email", userEmail);
+        //    await pref.setString("name", name);
+        //    await pref.setString("profileLink", profileLink);
+        //    await pref.setString("class", clas);
+        //    await pref.setString("section", section);
+        //    await pref.setString("employeeId", employeeId);
+        //
+        //    print(pref.getString("email"));
+        //    print(pref.getString("accessToken"));
+        //
+        //    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage()));
+        //    showGreenSnackBar("Login successful", context);
+        //    return true;
+        //  }
 
+      return data;
+    }else{
 
-
-        if (userDetails != null && subject != null) {
-          final userEmail = userDetails["email"];
-          final name = userDetails["name"];
-          final profileLink = userDetails["profileLink"];
-          final clas = subject[0]["class"]; // Use the first subject's class
-          final section = subject[0]["section"]; // Use the first subject's section
-          final employeeId = userDetails["employeeId"];
-
-          SharedPreferences pref = await SharedPreferences.getInstance();
-          // await pref.setStringList("SubjectList", subject);
-          await pref.setString("accessToken", accessToken);
-          await pref.setString("email", userEmail);
-          await pref.setString("name", name);
-          await pref.setString("profileLink", profileLink);
-          await pref.setString("class", clas);
-          await pref.setString("section", section);
-          await pref.setString("employeeId", employeeId);
-
-          print(pref.getString("email"));
-          print(pref.getString("accessToken"));
-
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TeacherHome()));
-          showGreenSnackBar("Login successful", context);
-
-        } else {
-
-        print('Login failed');
-        showRedSnackBar("Something Went Wrong",context);
+        return "Invalid Credentials";
       }
-    }
     } catch (e) {
+      print('Ne twork error: $e');
+      return "Network Error";
 
-      print('Network error: $e');
     }
   }
 
+
   Future<void> forgetUser(String email, BuildContext context) async {
-    final url = Uri.parse('https://loginapi-y0aa.onrender.com/otp/send/teacher');
+    final url = Uri.parse('$baseUrl/otp/send/teacher');
     final body = jsonEncode({
       'email': email,
     });
@@ -116,9 +140,11 @@ class TeacherAuthentication{
       print('Network error: $e');
     }
   }
+
+
   Future<void> verifyOtp(String email,String otpToken, String otp,BuildContext context) async {
     print(otpToken);
-    final url = Uri.parse('https://loginapi-y0aa.onrender.com/otp/verify');
+    final url = Uri.parse('$baseUrl/otp/verify');
 
     final body = jsonEncode({
       'email': email,
@@ -160,8 +186,10 @@ class TeacherAuthentication{
       print('Network error: $e');
     }
   }
+
+
   Future<void> setNewPassword(String email,String newPassword, BuildContext context) async {
-    final url = Uri.parse('https://loginapi-y0aa.onrender.com/password/forgot/Teacher');
+    final url = Uri.parse('$baseUrl/password/forgot/Teacher');
     final body = jsonEncode({
       'email': email,
       'newPassword':newPassword
@@ -193,4 +221,59 @@ class TeacherAuthentication{
       print('Network error: $e');
     }
   }
+
+
+  Future<bool> verifyAccessToken(String accessToken,) async {
+    final url = Uri.parse('$baseUrl/token/verify');
+    final body = jsonEncode({
+      'token':accessToken
+    });
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['valid']??false;
+      }else{
+        return false;
+      }
+    } catch (e) {
+     return false;
+
+    }
+  }
+
+
+  Future<String> generateNewAccessToken(String refreshToken,) async {
+    final url = Uri.parse('$baseUrl/token/newAccessToken');
+    final body = jsonEncode({
+      'refreshToken':refreshToken
+    });
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['accessToken'];
+      }else{
+        return "Invalid refresh token";
+      }
+    } catch (e) {
+     throw ("Invalid refresh token");
+
+    }
+  }
+
+
+
 }
