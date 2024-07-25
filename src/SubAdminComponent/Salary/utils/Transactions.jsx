@@ -110,7 +110,7 @@ const Transactions = ({ transactions }) => {
                                 <td className="border-y p-2 text-red-500 ">{transaction.amount}</td>
                                 <td className=" border-y p-2">{transaction.student.fatherPhoneNumber}</td>
                                 <td className=" border-y p-2 ">{transaction.signature}</td>
-                                <td className="border-y p-2 text-green-500" >{transaction.payment_status}</td>
+                                <td className={`border-y p-2  ${transaction.payment_status === 'Success' ? 'text-green-500' : 'text-red-500'}`} >{transaction.payment_status}</td>
                             </tr>
                         ))}
                         {!allDataFetched && (

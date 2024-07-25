@@ -8,10 +8,10 @@ export default function Leaves() {
     return (
         <div className="flex flex-col mobile:max-tablet:mt-4">
             <ToastContainer />
-            <div className="px-20 mobile:max-laptop:px-0 w-full">
+            {/* <div className="px-20 mobile:max-laptop:px-0 w-full">
                 <Stats />
-            </div>
-            <div className="mt-8 rounded-lg shadow-lg mb-4 mx-2">
+            </div> */}
+            <div className="  mb-4 mx-2">
                 <LeaveCard />
             </div>
         </div>

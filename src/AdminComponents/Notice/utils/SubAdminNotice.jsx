@@ -161,118 +161,115 @@ export default function () {
         ) : (
           <>
             {data.map((notice, index) => (
-              (notice.type === 'For Sub Admin' || notice.type === 'Particular Sub Admin') && (
-                <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2 text-base ">
-                  <div className="w-full flex items-center justify-between mb-2 cursor-pointer" onClick={() => handleClick(index)}>
-                    <h3>
-                      Title: {editingIndex === index ? (
-                        <input
-                          type="text"
-                          name="title"
-                          value={editedNotice.title}
-                          onChange={handleChange}
-                          onClick={handleFieldClick}
-                          className="border border-gray-300 rounded-lg px-2 py-1"
-                        />
-                      ) : (
-                        notice.title
-                      )}
-                    </h3>
-                    <p>
-                      Type: &nbsp;
-                      {/* {editingIndex === index ? (
-                      <select
-                        name="type"
-                        value={editedNotice.type}
+
+              <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2 text-base ">
+                <div className="w-full flex items-center justify-between mb-2 cursor-pointer" onClick={() => handleClick(index)}>
+                  <h3>
+                    Title: {editingIndex === index ? (
+                      <input
+                        type="text"
+                        name="title"
+                        value={editedNotice.title}
                         onChange={handleChange}
                         onClick={handleFieldClick}
                         className="border border-gray-300 rounded-lg px-2 py-1"
-                      >
-                        <option value="For All">For All</option>
-                        <option value="For Student">For Student</option>
-                        <option value="For Teacher">For Teacher</option>
-                        <option value="Particular Students">Particular Students</option>
-                        <option value="Particular Sub Admin">Particular Sub Admin</option>
-                        <option value="Particular Classes">Particular Classes</option>
-                      </select>
-                    ) : ( */}
-                      {notice.type}
-                      {/* )} */}
-                      {editingIndex === index ? (
-                        <>
-                          <button
-                            className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                            onClick={() => handleSave(index)}
-                          >
-                            <MdCheck />
-                          </button>
-                          <button
-                            className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                            onClick={handleCancel}
-                          >
-                            <MdCancel />
-                          </button>
+                      />
+                    ) : (
+                      notice.title
+                    )}
+                  </h3>
+                  <p>
+                    Type: &nbsp;
+                    {notice.type}
+
+                    {editingIndex === index ? (
+                      <>
+                        <button
+                          className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                          onClick={() => handleSave(index)}
+                        >
+                          <MdCheck />
+                        </button>
+                        <button
+                          className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                          onClick={handleCancel}
+                        >
+                          <MdCancel />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                          onClick={() => handleEdit(index)}
+                        >
+                          <MdEdit />
+                        </button>
+                        <button
+                          className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                          onClick={() => handleDelete(index)}
+                        >
+                          <MdDeleteForever />
+                        </button>
+                      </>
+                    )}
+                  </p>
+                </div>
+                {expanded === index && (
+                  <>
+                    <div className='text-base mt-2'>
+                      <p className="mb-2">
+                        Description: {editingIndex === index ? (
+                          <textarea
+                            rows={6}
+                            name="description"
+                            value={editedNotice.description}
+                            onChange={handleChange}
+                            onClick={handleFieldClick}
+                            className="border border-gray-300 rounded-lg px-2 py-1 w-full"
+                          />
+                        ) : (
+                          notice.description
+                        )}
+                      </p>
+                      {editingIndex === index && type === 'Particular Sub Admin' ? (
+                        <>For Sub Admin :<ul>
+                          {editedNotice.forId.map((teacher, idx) => (
+                            <li key={idx}>
+                              {teacher.name}
+                            </li>
+                          ))}
+                        </ul>
                         </>
                       ) : (
                         <>
-                          <button
-                            className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                            onClick={() => handleEdit(index)}
-                          >
-                            <MdEdit />
-                          </button>
-                          <button
-                            className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                            onClick={() => handleDelete(index)}
-                          >
-                            <MdDeleteForever />
-                          </button>
+                          {(type === 'Particular Sub Admin' && notice.forId.length > 0) && (
+                            <>For Sub Admin :
+                              <ul>
+                                {notice.forId.map((stud, index) => (
+                                  <li key={index}>{stud.name}</li>
+                                ))}
+                              </ul>
+                            </>
+                          )}
                         </>
                       )}
-                    </p>
-                  </div>
-                  {expanded === index && (
-                    <>
-                      <div className='text-base mt-2'>
-                        <p className="mb-2">
-                          Description: {editingIndex === index ? (
-                            <textarea
-                              rows={6}
-                              name="description"
-                              value={editedNotice.description}
-                              onChange={handleChange}
-                              onClick={handleFieldClick}
-                              className="border border-gray-300 rounded-lg px-2 py-1 w-full"
-                            />
-                          ) : (
-                            notice.description
-                          )}
-                        </p>
-                        {editingIndex === index && (
-                          <ul>
-                            {editedNotice.forId.map((student, idx) => (
-                              <li key={idx}>
-                                {student.name} - Class: {student.currentClass}, Section: {student.section}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    </>
-                  )}
+                    </div>
+                  </>
+                )}
 
-                  <div className="w-full flex items-center justify-between mt-2">
-                    <p>Date: {notice.date}</p>
-                    <div className="flex items-center">
-                      By:
-                      <div className="flex items-center gap-1 px-1">
-                        <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full" />
-                        <p>{notice.from.name}</p>
-                      </div>
+                <div className="w-full flex items-center justify-between mt-2">
+                  <p>Date: {notice.date}</p>
+                  <div className="flex items-center">
+                    By:
+                    <div className="flex items-center gap-1 px-1">
+                      <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full" />
+                      <p>{notice.from.name}</p>
                     </div>
                   </div>
                 </div>
-              )
+              </div>
+
             ))}
             {!allDataFetched && (
               <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>

@@ -25,7 +25,7 @@ export default function MyDoubts() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
     const [allDataFetched, setAllDataFetched] = useState(false);
-    const [status, setStatus] = useState('Resolved');
+    const [status, setStatus] = useState('Pending');
 
     const handleSubjectSelect = (subject) => {
         setSelectedSubject(subject);
@@ -74,9 +74,11 @@ export default function MyDoubts() {
             );
             if (response.status === 200) {
                 console.log(response.data);
-                if (modalSubject === selectedSubject || selectedSubject === 'Subject') {
+                if ((modalSubject === selectedSubject || selectedSubject === 'Subject') && status === 'Pending') {
                     console.log('before', data);
-                    setData(prevData => [response.data, ...prevData]);
+                  
+                        setData(prevData => [response.data, ...prevData]);
+                    
                     console.log('after', data);
 
                 }
@@ -162,7 +164,7 @@ export default function MyDoubts() {
                     >
                         <option value="Pending">Pending</option>
                         <option value="Resolved">Resolved</option>
-                        <option value="rejected">Rejected</option>
+                        <option value="Rejected">Rejected</option>
                     </select>
                     <div className="ml-auto md:hidden">
                         <button className='bg-purple-400 mobile:max-tablet:text-xs whitespace-nowrap rounded-lg shadow-md px-3 py-2 text-white' onClick={handleAskDoubt}>+ Ask A Doubt</button>

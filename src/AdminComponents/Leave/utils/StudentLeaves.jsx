@@ -93,23 +93,23 @@ export default function StudentLeaves() {
           {data.map((leave, index) => (
             <div key={index} className={`rounded-md border p-4 flex flex-col w-full`}>
               <div className="flex justify-between cursor-pointer" onClick={() => handleClick(`${index}`)}>
-                <div className="flex">
-                  <img src={leave.profileLink} alt="" className="h-10 w-10 mobile:max-tablet:hidden rounded-full" />
-                  <p className="text-xl mb-2 mt-2 px-2 mobile:max-tablet:text-lg">{leave.name}</p>
+                <div className="flex items-center">
+                  <img src={leave.profileLink} alt="" className="h-8 w-8 mobile:max-tablet:hidden rounded-full" />
+                  <p className=" mb-2 mt-2 px-2 mobile:max-tablet:">{leave.name}</p>
                 </div>
                 <div>
-                  <h1 className="text-xl mt-2 mobile:max-tablet:text-lg mobile:max-tablet:px-2">
+                  <h1 className=" mt-2 mobile:max-tablet: mobile:max-tablet:px-2">
                     Class: {leave.class} {leave.section}
                   </h1>
                 </div>
 
               </div>
               {expanded === `${index}` && (
-                <p className="text-xl">Reason for Leave: {leave.reason}</p>
+                <p className="mt-2">Reason for Leave: {leave.reason}</p>
               )}
-              <div className="flex justify-between text-gray-900 mobile:max-tablet:flex-col">
-                <span className="text-lg">Leave Taken on: {leave.startDate}</span>
-                <span className="text-lg">Expected Arrival: {leave.endDate}</span>
+              <div className="flex justify-between text-gray-900 mobile:max-tablet:flex-col mt-2">
+                <span className="">Leave Taken on: {leave.startDate}</span>
+                <span className="">Expected Arrival: {leave.endDate}</span>
               </div>
             </div>
           ))}

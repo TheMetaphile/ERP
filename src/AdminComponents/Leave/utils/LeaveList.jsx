@@ -10,7 +10,7 @@ const LeaveCard = () => {
     };
 
     return (
-        <div className="bg-white p-4 rounded-lg shadow-md w-full flex flex-col">
+        <div className="bg-white p-4 r w-full flex flex-col">
 
             <div className="flex gap-10  mobile:max-tablet:gap-4 mobile:max-tablet:justify-between">
                 <button className={`p-2 mx-1 ${selectedRole === 'student' ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}

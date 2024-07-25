@@ -13,30 +13,68 @@ export default function StudentAttendance() {
     const [loading, setLoading] = useState(false);
     // State to control the dropdown visibility
     const [isDropdownVisible, setDropdownVisible] = useState(false);
+    const [error, setError] = useState('');
+
+    const [Class, setClass] = useState('');
+    const handleClassChange = (event) => {
+        setClass(event.target.value);
+    };
+
+    const [Section, setSection] = useState('');
+    const handleSectionChange = (event) => {
+        setSection(event.target.value);
+    };
+
+    const [Month, setMonth] = useState('');
+    const handleMonthChange = (event) => {
+        setMonth(event.target.value);
+    };
+
+    const [bothEventsCalled, setBothEventsCalled] = useState(false);
+    const handlebothEventsCalled = (event) => {
+        setBothEventsCalled(true);
+    };
+
+    useEffect(() => {
+        if (bothEventsCalled) {
+            console.log(Class);
+            console.log(Section);
+            setBothEventsCalled(false);
+        }
+    }, [Class, Section, bothEventsCalled]);
+
+    const today = new Date();
+    const month = parseInt(today.getMonth() + 1, 10);
+    const year = today.getFullYear();
 
     useEffect(() => {
         const fetchStudents = async () => {
             setLoading(true);
+            setError('')
             try {
-                const today = new Date();
-                const month = parseInt(today.getMonth() + 1, 10);
-                const year = today.getFullYear();
-                const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/classTeacher?month=${month}&year=${year}`, {
+
+                console.log(Class, Section, Month, year)
+
+                const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/admin?month=${month}&year=${year}&class=${Class}&section=${Section}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }
                 });
-                console.log('data', response.data);
-                setData(response.data);
+                if (response.status === 200) {
+                    console.log('data', response.data);
+                    setData(response.data);
+                }
+
             } catch (error) {
                 console.error("Error fetching student month attendance:", error);
+                setError(error.response.data.error)
             } finally {
                 setLoading(false);
             }
         };
 
         fetchStudents();
-    }, [authState.accessToken]);
+    }, [authState.accessToken, Class, Section, Month]);
 
     return (
         <div className="flex flex-col mx-2">
@@ -63,11 +101,22 @@ export default function StudentAttendance() {
             {/* Original SearchBar for non-mobile screens */}
             <div className="w-full desktop:block hidden mobile:max-tablet:mt-14">
                 <SearchBar
+                    Class={Class}
+                    Section={Section}
+                    Month={Month}
+                    handleClassChange={handleClassChange}
+                    handleSectionChange={handleSectionChange}
+                    handlebothEventsCalled={handlebothEventsCalled}
+                    handleMonthChange={handleMonthChange}
                 />
             </div>
 
             {loading ? (
                 <Loading />
+            ) : error ? (
+                <div className=" flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 ">
+                    {error}
+                </div>
             ) : !data ? (
                 <div className=" flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 ">
                     <div className="mx-4 text-xl px-4 mt-4">
@@ -77,10 +126,10 @@ export default function StudentAttendance() {
             ) : (
                 <div className="flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 mobile:max-tablet:mt-20">
                     <div className=" text-xl px-4 mt-4 mobile:max-tablet:text-sm ">
-                        Attendance Sheet Of Class {data.output.class} {data.output.section} April, 2024
+                        Attendance Sheet Of Class {Class} {Section}, {year}
                     </div>
                     <div className="px-3">
-                        <AttendanceStatusGridTile data={data} />
+                        <AttendanceStatusGridTile data={data} month={Month}/>
                     </div>
                 </div>
             )}

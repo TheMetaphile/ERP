@@ -244,15 +244,39 @@ const StudentNotice = () => {
                       ) : (
                         <>
                           {(type === 'Particular Students' && notice.forId.length > 0) && (
-                            <>For Students :
-                              <ul>
-                                {notice.forId.map((stud, index) => (
-                                  <li key={index}>{stud.name} - Class: {stud.currentClass}, Section: {stud.section} </li>
-                                ))}
-                              </ul>
+                            <>
+                              For Students:
+                              <div className="flex flex-col gap-4">
+                                {Object.entries(notice.forId.reduce((acc, stud, index) => {
+                                  const { currentClass, section } = stud;
+                                  const key = `${currentClass}-${section}`;
 
+                                  if (!acc[key]) {
+                                    acc[key] = [];
+                                  }
+                                  acc[key].push(
+                                    <div key={index} className="bg-gray-200 border border-gray-400 rounded-full px-3 py-1 inline-block">
+                                      {stud.name}
+                                    </div>
+                                  );
+                                  return acc;
+                                }, {})).map(([key, students]) => {
+                                  const [currentClass, section] = key.split('-');
+                                  return (
+                                    <div key={key} className="flex items-center gap-2 w-full">
+                                      <div className="font-medium">
+                                        Class: {currentClass}, Section: {section}
+                                      </div>
+                                      <div className="flex flex-wrap gap-2">
+                                        {students}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
                             </>
                           )}
+
                         </>
                       )}
                     </div>

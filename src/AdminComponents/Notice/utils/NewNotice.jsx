@@ -17,6 +17,8 @@ function NewNotice({ setShowModal }) {
     const [searchResults, setSearchResults] = useState([]);
     const [searchInputStudent, setSearchInputStudent] = useState('');
     const [searchResultsStudent, setSearchResultsStudent] = useState([]);
+    const [searchInputSubAdmin, setSearchInputSubAdmin] = useState('');
+    const [searchResultsSubAdmin, setSearchResultsSubAdmin] = useState([]);
     const [classOptions] = useState(['Pre-Nursery', 'Nursery', 'KG', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']);
     const [selectedClass, setSelectedClass] = useState('');
     const [sectionOptions, setSectionOptions] = useState([]);
@@ -179,6 +181,15 @@ function NewNotice({ setShowModal }) {
         }
     };
 
+    const handleSearchChangeSubAdmin = (e) => {
+        setSearchInputSubAdmin(e.target.value);
+        if (e.target.value.length > 2) {
+            searchSubAdmin(e.target.value);
+        } else {
+            setSearchResultsSubAdmin([]);
+        }
+    };
+
     const searchStudents = async (query) => {
         console.log(query)
         try {
@@ -188,6 +199,20 @@ function NewNotice({ setShowModal }) {
             });
             console.log('search', response.data);
             setSearchResultsStudent(response.data.Teachers);
+        } catch (error) {
+            console.error("Error searching users:", error);
+        }
+    };
+
+    const searchSubAdmin = async (query) => {
+        console.log(query)
+        try {
+            const response = await axios.post(`${BASE_URL_Login}/search/subAdmin`, {
+                accessToken: authState.accessToken,
+                searchString: query,
+            });
+            console.log('search', response.data);
+            setSearchResultsSubAdmin(response.data.Teachers);
         } catch (error) {
             console.error("Error searching users:", error);
         }
@@ -311,19 +336,19 @@ function NewNotice({ setShowModal }) {
                             type="text"
                             className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2"
                             placeholder="Search for users"
-                            value={searchInput}
-                            onChange={handleSearchChange}
+                            value={searchInputSubAdmin}
+                            onChange={handleSearchChangeSubAdmin}
 
                         />
-                        {searchResults.length > 0 ? (
+                        {searchResultsSubAdmin.length > 0 ? (
                             <div className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2 max-h-40 overflow-y-scroll">
-                                {searchResults.map(user => (
+                                {searchResultsSubAdmin.map(user => (
                                     <div key={user.email} className="flex justify-between items-center mb-2">
                                         <span className="flex items-center gap-2">
                                             <img src={user.profileLink} alt="" className="w-6 h-6 rounded-full"></img>{user.name} </span>
                                         <button
                                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                                            onClick={() => addEmailId(user.email)}
+                                            onClick={() => addEmailId(user.email, user.name)}
                                         >
                                             Add
                                         </button>
@@ -339,7 +364,7 @@ function NewNotice({ setShowModal }) {
                             {emailIds.length > 0 ? (
                                 emailIds.map(email => (
                                     <div key={email} className="flex justify-between border mt-2 border-gray-300 shadow-md rounded-full px-2 items-center py-1">
-                                        <span>{email}</span>
+                                        <span>{name}</span>
                                         <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => removeEmailId(email)} />
                                     </div>
                                 ))

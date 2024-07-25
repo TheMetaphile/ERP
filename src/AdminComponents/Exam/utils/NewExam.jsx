@@ -165,8 +165,8 @@ const NewExam = ({ onClose, addExam }) => {
                       <option value="" disabled>Select Class</option>
                       <option value="Pre-Nursery">Pre-Nursery</option>
                       <option value="Nursery">Nursery</option>
-                      <option value="L.K.J">L.K.J</option>
-                      <option value="U.K.J">U.K.J</option>
+                      <option value="L.K.G">L.K.G</option>
+                      <option value="U.K.G">U.K.G</option>
                       <option value="1st">1st</option>
                       <option value="2nd">2nd</option>
                       <option value="3rd">3rd</option>

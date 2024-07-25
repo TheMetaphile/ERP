@@ -1,52 +1,90 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Fee } from '../../../Config';
+import { Link, Outlet } from 'react-router-dom';
 
 function FeeDetails() {
     const [selectedClass, setSelectedClass] = useState("9th");
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([])
     const { authState } = useContext(AuthContext);
+    const [sessions, setSessions] = useState([]);
+    const [selectedSession, setSelectedSession] = useState(sessions[1]);
+    const [start, setStart] = useState(0);
+    const [end, setEnd] = useState(9);
+    const [allDataFetched, setAllDataFetched] = useState(false);
+
+    const [clickedIndex, setClickedIndex] = useState(null);
+
+    const handleClick = (index) => {
+        setClickedIndex(index);
+    };
 
     const handleClassChange = (e) => {
+        setDetails([]);
+        setAllDataFetched(false);
         setSelectedClass(e.target.value);
+        setStart(0);
     };
-    const sessions = [
-        '2020-21',
-        '2021-22',
-        '2022-23',
-        '2023-24',
-        '2024-25',
-    ];
 
-    // State to store the selected session
-    const [selectedSession, setSelectedSession] = useState(sessions[3]);
+
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
     };
+
+    useEffect(() => {
+        const currentYear = new Date().getFullYear();
+        const newSessions = [];
+
+        for (let i = 0; i < 5; i++) {
+            const startYear = currentYear - i;
+            const endYear = startYear + 1;
+            newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
+        }
+
+        setSessions(newSessions);
+    }, []);
+
     useEffect(() => {
         if (selectedClass !== "") {
             fetchDetails();
         }
     }, [selectedClass]);
 
+    const handleViewMore = () => {
+        setStart(prevStart => prevStart + end);
+    };
+
+    useEffect(() => {
+        if (start !== 0) {
+            fetchDetails();
+        }
+    }, [start]);
+
     const fetchDetails = async () => {
         console.log(selectedClass)
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/admin?class=${selectedClass}&start=0&end20`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/admin?class=${selectedClass}&start=${start}&end=${end}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
             });
             if (response.status === 200) {
-                console.log("API response:", response.data);
-                setDetails(response.data.output || []);
+                console.log(response.data);
+                const list = response.data.output.length;
+                if (list < end) {
+                    toast.success('All data fetched');
+                    console.log('All data fetched')
+                    setAllDataFetched(true);
+                }
+                setDetails(prevUsers => [...prevUsers, ...response.data.output]);
                 setLoading(false);
+
             }
 
         } catch (err) {
@@ -54,6 +92,7 @@ function FeeDetails() {
             setLoading(false);
         }
     }
+
 
     return (
         <div className=" flex flex-col px-3  mobile:max-tablet:px-0   items-start mt-2  mb-3 ">
@@ -86,8 +125,8 @@ function FeeDetails() {
                         <option value="" >Select Class</option>
                         <option value="Pre-Nursery">Pre-Nursery</option>
                         <option value="Nursery">Nursery</option>
-                        <option value="L.K.J">L.K.J</option>
-                        <option value="U.K.J">U.K.J</option>
+                        <option value="L.K.G">L.K.G</option>
+                        <option value="U.K.G">U.K.G</option>
                         <option value="1st">1st</option>
                         <option value="2nd">2nd</option>
                         <option value="3rd">3rd</option>
@@ -107,7 +146,7 @@ function FeeDetails() {
             </div>
 
             <div className='overflow-auto w-full'>
-                <div className=' mt-2 w-fit border border-black rounded-lg'>
+                <div className=' mt-2  border border-black rounded-lg'>
                     <div className="flex justify-between  py-2  bg-bg_blue  rounded-t-lg border border-b-2  whitespace-nowrap">
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Roll No.
@@ -136,9 +175,6 @@ function FeeDetails() {
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Payable
                         </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Action
-                        </h1>
                     </div>
                     {loading ? (
                         <Loading />
@@ -146,42 +182,47 @@ function FeeDetails() {
                         details.length > 0 ? (
                             <div>
                                 {details.map((details, index) => (
-                                    <div key={index} className='flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center'>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.rollNumber}
-                                        </h1>
-                                        <h1 className="w-44 text-lg flex items-center text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            <span className='mr-2'>
+                                    <Link to={`/Admin-Dashboard/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}&section=${details.section}`}>
+                                        <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.rollNumber}
+                                            </h1>
+                                            <h1 className="w-44 text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 <img src={details.profileLink} alt="profile pic" className='w-10 h-10 rounded-full ' />
-                                            </span>
-                                            {details.name}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.section}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.session}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.totalfee}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.discountAmount}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.fine}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.paid}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.payableFee}
-                                        </h1>
-                                        <h1 className="w-32 text-lg rounded-full bg-secondary px-2 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer">
-                                            Pay
-                                        </h1>
-                                    </div>
+                                                <div className='w-32'>
+                                                    {details.name}
+                                                </div>
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.section}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.session}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.totalfee}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.discountAmount}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.fine}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.paid}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.payableFee}
+                                            </h1>
+                                        </div>
+                                    </Link>
+
                                 ))}
+                                {!allDataFetched && (
+                                    <div colSpan="4" className="text-center">
+                                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer' onClick={handleViewMore}>View More</h1>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <div className='text-center mt-2'>No Fee Details available</div>
@@ -189,6 +230,7 @@ function FeeDetails() {
                     )}
                 </div>
             </div>
+            <Outlet />
         </div>
     );
 }

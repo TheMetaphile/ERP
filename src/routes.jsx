@@ -151,6 +151,8 @@ import StudentDetails from "./SubAdminComponent/SubAdminFee/StudentFee/utils/Stu
 import AllExDetails from "./SubAdminComponent/SubAdminFee/StudentFee/AllDetails.jsx";
 import FeeDetail from "./SubAdminComponent/SubAdminFee/StudentFee/utils/FeeDetail.jsx";
 import NoticeSubAdmin from "./SubAdminComponent/notification/utils/NoticeSubAdmin.jsx";
+import FeeDetailAdmin from "./AdminComponents/fee/StudentFee/utils/FeeDetailAdmin.jsx";
+import AllDetailsAdmin from "./AdminComponents/fee/StudentFee/AllDetailsAdmin.jsx";
 
 
 
@@ -403,7 +405,17 @@ const router = createBrowserRouter([
         children: [
           {
             path: '/Admin-Dashboard/StudentsFee/details',
-            element: <FeeDetails />
+            element: <AllDetailsAdmin />,
+            children: [
+              {
+                path: '',
+                element: <FeeDetails />
+              },
+              {
+                path: ':id',
+                element: <FeeDetailAdmin />
+              }
+            ]
           },
           {
             path: '/Admin-Dashboard/StudentsFee/structure',
@@ -419,6 +431,7 @@ const router = createBrowserRouter([
           },
         ]
       },
+     
       {
         path: "/Admin-Dashboard/StudentAttendance",
         element: <StudentAttendance />,
@@ -439,7 +452,7 @@ const router = createBrowserRouter([
           },
           {
             path: ':id',
-            element: <PerformanceProfileAdmin />
+            element: <Subresult />
           }
         ]
       },
@@ -858,7 +871,10 @@ const router = createBrowserRouter([
       <SubAdminDashboard />
     ),
     children: [
-
+      {
+        path: '',
+        element: <AllStudentsList />
+      },
       {
         path: "/Sub-Admin/Certificates",
         element: <Allcertificate />,
