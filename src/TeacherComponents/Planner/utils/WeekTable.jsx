@@ -70,7 +70,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
             date: day.toISOString().split('T')[0],
             chapter: nextWeekChapters[index],
             topic: nextWeekTopics[index],
-            TeachingAids: "White board, Marker",
+            TeachingAids: nextWeekPlans[index],
             Activity: nextWeekActivities[index]
         }));
 
@@ -187,7 +187,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
                                 <th className='border-y border-black py-2 text-xl font-semibold'>Date</th>
                                 <th className='border-y border-black py-2 text-xl font-semibold'>Chapter</th>
                                 <th className='border-y border-black py-2 text-xl font-semibold'>Topic</th>
-                                <th className='border-y border-black py-2 text-xl font-semibold'>Plan</th>
+                                <th className='border-y border-black py-2 text-xl font-semibold'>Teaching Aids</th>
                                 <th className='border-y border-black py-2 text-xl font-semibold'>Activity (if any)</th>
                             </tr>
                         </thead>
@@ -203,7 +203,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
                                     <th className='border-y border-black py-2 text-xl font-semibold'>Date</th>
                                     <th className='border-y border-black py-2 text-xl font-semibold'>Chapter</th>
                                     <th className='border-y border-black py-2 text-xl font-semibold'>Topic</th>
-                                    <th className='border-y border-black py-2 text-xl font-semibold'>Plan</th>
+                                    <th className='border-y border-black py-2 text-xl font-semibold'>Teaching Aids</th>
                                     <th className='border-y border-black py-2 text-xl font-semibold'>Activity (if any)</th>
                                 </tr>
                             </thead>

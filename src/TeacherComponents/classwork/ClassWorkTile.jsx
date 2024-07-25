@@ -108,7 +108,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                                 />
 
                                 <div className='flex gap-2 justify-end'>
-                                    <button
+                                    {/* <button
                                         className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
                                         onClick={() => handleConfirmClick(index)}
                                     >
@@ -119,7 +119,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                                         onClick={() => handleUpdateClick(-1)}
                                     >
                                         <FaTimes />
-                                    </button>
+                                    </button> */}
                                     <input
                                         className="font-normal  border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
                                         value={detail.subject}
@@ -135,7 +135,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                                 <div className="pl-2 font-medium">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
                                 <div className='flex items-center gap-1'>
 
-                                    <button
+                                    {/* <button
                                         className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
                                         onClick={() => handleUpdateClick(index)}
                                     >
@@ -147,7 +147,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                                         onClick={() => handleDelete(index)}
                                     >
                                         <MdDeleteForever />
-                                    </button>
+                                    </button> */}
                                     <div className="px-3 py-1 bg-bg_blue rounded-full w-fit">
 
                                         {detail.subject}
@@ -183,9 +183,9 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                         ) : (
                             <div>
                                 <div className="pl-2 font-medium text-justify">Topic: <span className='font-normal'>{detail.topic}</span></div>
-                            {expanded === index && (
-                                <h1 className="pl-2 font-medium text-justify">Task: <span className='font-normal'>{detail.description}</span></h1>
-                            )}
+                                {expanded === index && (
+                                    <h1 className="pl-2 font-medium text-justify">Task: <span className='font-normal'>{detail.description}</span></h1>
+                                )}
                             </div>
                         )}
 
@@ -193,6 +193,41 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                     <div className='text-right'>
                         <h1 className="font-medium">Date: {detail.date}</h1>
                     </div>
+                    <div className='mt-2'>
+                        {editingRow === index ? (
+                            <div className='flex gap-2 justify-end'>
+                                <button
+                                    className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                    onClick={() => handleConfirmClick(index)}
+                                >
+                                    <MdCheck />
+                                </button>
+                                <button
+                                    className='bg-red-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                    onClick={() => handleUpdateClick(-1)}
+                                >
+                                    <FaTimes />
+                                </button>
+                            </div>
+                        ) : (
+                            <div className='flex items-center gap-1 justify-end'>
+                                <button
+                                    className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                    onClick={() => handleUpdateClick(index)}
+                                >
+                                    <MdEdit />
+                                </button>
+
+                                <button
+                                    className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                    onClick={() => handleDelete(index)}
+                                >
+                                    <MdDeleteForever />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
 
                 </div>
             ))}
