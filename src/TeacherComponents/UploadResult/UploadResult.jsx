@@ -100,7 +100,7 @@ function UploadResult() {
           {isDropdownVisible && (
             <div className='flex absolute left-0 right-0 bg-white p-4 gap-2 justify-between mobile:max-tablet:flex-col'>
               <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
-              <div className="w-36 mr-3 self-center">
+              <div className="w-36 mobile:max-tablet:w-full mobile:max-tablet:mr-0 mr-3 self-center">
                 <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleTermChange}>
                   <option value="">Select Term</option>
                   {terms.map((sectionOption, index) => (
@@ -117,7 +117,7 @@ function UploadResult() {
 
         <div className='flex items-end mobile:max-laptop:hidden'>
           <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
-          <div className="w-36 mr-3 self-center">
+          <div className="w-36  mr-3 self-center">
             <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleTermChange}>
               <option value="">Select Term</option>
               {terms.map((sectionOption, index) => (

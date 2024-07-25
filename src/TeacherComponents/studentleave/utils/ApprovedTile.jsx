@@ -21,9 +21,12 @@ export default function ApprovedTile({ data }) {
                             leave Request
                             <div className="flex">
                                 <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
+                                <span className='text-red-500 whitespace-nowrap'>{student.name}</span>
                             </div>
-                            <span className='text-red-500 whitespace-nowrap'>{student.name}</span>Class &nbsp;
-                            <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span>&nbsp;
+                            <div>
+                                Class &nbsp;
+                                <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span>
+                            </div>&nbsp;
                             <span className='text-red-500 whitespace-nowrap'>{student.startDate}</span> to &nbsp;
                             <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
                         </div>

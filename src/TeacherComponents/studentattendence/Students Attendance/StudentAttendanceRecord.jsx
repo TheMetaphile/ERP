@@ -11,7 +11,7 @@ export default function StudentAttendanceRecord() {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const todayDate = new Date();
-    const [month, setMonth] = useState(todayDate.getMonth()+1)
+    const [month, setMonth] = useState(todayDate.getMonth() + 1)
 
 
     useEffect(() => {
@@ -34,19 +34,19 @@ export default function StudentAttendanceRecord() {
         };
 
         fetchStudents();
-    }, [authState.accessToken,month]);
+    }, [authState.accessToken, month]);
 
-    const handleMonthChange = (month)=>{
-        console.log('cc',month)
+    const handleMonthChange = (month) => {
+        console.log('cc', month)
         setMonth(month);
     }
 
     return (
         <div className="w-full flex flex-col  mobile:max-tablet:px-0 h-screen  items-start  mb-3">
             <div className="container mx-auto py-3 px-2">
-                <div className=" flex justify-between items-center mb-4">
-                    <h1 className="text-2xl  font-medium"> Student's Attendance Details</h1>
-                    <SearchBar handleMonthChange={handleMonthChange} month={month}/>
+                <div className=" flex justify-between items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start  mb-4">
+                    <h1 className="text-2xl mobile:max-tablet:text-lg whitespace-nowrap  font-medium"> Student's Attendance Details</h1>
+                    <SearchBar handleMonthChange={handleMonthChange} month={month} />
 
                 </div>
 
@@ -64,10 +64,10 @@ export default function StudentAttendanceRecord() {
             ) : (
                 <div className="flex flex-col w-full shadow-md rounded-lg border border-gray-400 mb-4 ">
                     <div className="mx-2 text-xl px-2 mt-2">
-                        Attendance Sheet Of Class {data.output.class} {data.output.section} {month  ==1 ?'January' : month ==2 ? 'February' : month ==3 ? 'March' :month ==4 ? 'April' :month ==5 ? 'May' :month ==6 ? 'June' :month ==7 ? 'July' :month ==8 ? 'August' :month ==9 ? 'September' :month ==10 ? 'October' :month ==11 ? 'November' : 'December' }, 2024
+                        Attendance Sheet Of Class {data.output.class} {data.output.section} {month == 1 ? 'January' : month == 2 ? 'February' : month == 3 ? 'March' : month == 4 ? 'April' : month == 5 ? 'May' : month == 6 ? 'June' : month == 7 ? 'July' : month == 8 ? 'August' : month == 9 ? 'September' : month == 10 ? 'October' : month == 11 ? 'November' : 'December'}, 2024
                     </div>
                     <div className="px-3 w-full overflow-x-auto ">
-                        <AttendanceStatusGridTile data={data} month={month}/>
+                        <AttendanceStatusGridTile data={data} month={month} />
                     </div>
                 </div>
             )}

@@ -158,7 +158,7 @@ export default function ScholasticTable({ students, term, Class, subject }) {
     };
     return (
         <div className="w-full overflow-x-auto rounded-lg">
-            <div className="flex gap-3 ml-2">
+            <div className="flex gap-3 ml-2 overflow-auto">
                 <div className="flex flex-col mb-4">
                     <label className="mb-2 text-gray-700">
                         Total Theory Marks
@@ -172,7 +172,7 @@ export default function ScholasticTable({ students, term, Class, subject }) {
                     />
                 </div>
                 <div className="flex flex-col mb-4">
-                    <label className="mb-2 text-gray-700">
+                    <label className="mb-2 text-gray-700 whitespace-nowrap">
                         Total Subject Enrichment Marks
                     </label>
                     <input

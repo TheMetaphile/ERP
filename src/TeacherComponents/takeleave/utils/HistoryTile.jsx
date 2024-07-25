@@ -184,7 +184,7 @@ export default function HistoryTile({ details }) {
                                 item.startDate
                             )}
                         </div>
-                        <p className='min-tablet:desktop:hidden'>/</p>
+                        <p className='tablet:hidden'>/</p>
                         <div>
                             To: {editRowIndex === index ? (
                                 <input

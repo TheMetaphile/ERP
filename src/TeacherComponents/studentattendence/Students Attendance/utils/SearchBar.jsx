@@ -6,8 +6,8 @@ export default function SearchBar({ handleMonthChange, month }) {
                 id="month"
                 name="month"
                 value={month}
-                onChange={(e)=>{handleMonthChange(e.target.value)}}
-                className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg"
+                onChange={(e) => { handleMonthChange(e.target.value) }}
+                className="rounded-lg mobile:max-tablet:text-sm shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg"
             >
                 <option value="">Select Month</option>
                 <option value="1">January</option>

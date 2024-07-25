@@ -97,7 +97,7 @@ function StudentFee() {
                                             <h1 className="w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}
                                             </h1>
-                                            <div className="w-52 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
+                                            <div className="w-52 mobile:max-tablet:w-72 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
                                                 <img src={details.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
                                                 <h1 >
                                                     {details.name}

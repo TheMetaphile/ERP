@@ -181,9 +181,10 @@ function HomeWork() {
                         ))}
 
                     </select>
-                    <div>
-                        <h1 className="bg-purple-300 px-4 py-2 rounded-md cursor-pointer" onClick={handleOpen}>Upload</h1>
-                    </div>
+
+                </div>
+                <div>
+                    <h1 className="bg-purple-300 px-2 py-2 ml-2 rounded-md cursor-pointer" onClick={handleOpen}>Upload</h1>
                 </div>
 
             </div>

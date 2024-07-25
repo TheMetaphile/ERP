@@ -105,7 +105,7 @@ function NewDoubt() {
 
 
     return (
-        <div className=' mr-3'>
+        <div className='mobile:max-tablet:mr-0 mr-3'>
             <div className='flex justify-between mobile:max-tablet:hidden'>
                 <select id="class" value={Class} onChange={handleClassChange} className="rounded-lg mr-3 shadow-md px-3 py-1 border-2 border-gray-200 text-lg">
                     <option value="">Search by Class</option>

@@ -78,40 +78,41 @@ function ReportCard() {
             <ToastContainer />
 
             <div className='w-full flex items-center justify-between  my-2'>
-                <h1 className="text-2xl font-medium mb-2">Search Report Card</h1>
+                <h1 className="text-2xl mobile:max-tablet:text-lg font-medium mb-2">Search Report Card</h1>
 
                 {/* <span className='flex gap-2 w-fit'>
                     <Selection />
                 </span> */}
             </div>
+            <div className=' overflow-auto'>
+                {loading ? (
+                    <Loading />
+                ) : students.length === 0 ? (
+                    <>No student found</>
+                ) : (
+                    <div className=' rounded-lg shadow-md border border-gray-300 w-full mb-2 overflow-auto'>
+                        <Header headings={['Roll No.', 'Name', "Class", "Section"]} />
+                        {students.map((detail, index) => (
+                            <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`} key={index}>
+                                <div key={index} className='flex justify-between items-center py-2 pl-2  h-fit  border border-gray-300 text-center w-fit mobilemedium:w-full laptop:w-full  gap-2' >
+                                    <div className=' w-40 mobile:max-tablet:w-20 text-center'>{detail.rollNumber}</div>
+                                    <div className=' w-52 mobile:max-tablet:w-40 text-center flex justify-center'>
+                                        <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full mr-2'></img>
+                                        <div className='w-52 text-center'>{detail.name}</div>
+                                    </div>
+                                    <div className=' w-40 mobile:max-tablet:w-20 text-center'>{authState.ClassDetails.class}</div>
+                                    <div className=' w-40 mobile:max-tablet:w-20 text-center'>{authState.ClassDetails.section}</div>
 
-            {loading ? (
-                <Loading />
-            ) : students.length === 0 ? (
-                <>No student found</>
-            ) : (
-                <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 overflow-auto'>
-                    <Header headings={['Roll No.', 'Name', "Class", "Section"]} />
-                    {students.map((detail, index) => (
-                        <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`} key={index}>
-                            <div key={index} className='flex justify-between items-center py-2 pl-2  h-fit  border border-gray-300 text-center w-fit mobilemedium:w-full laptop:w-full  gap-2' >
-                                <div className=' w-40 mobile:max-tablet:w-20 text-center'>{detail.rollNumber}</div>
-                                <div className=' w-52 mobile:max-tablet:w-40 text-center flex justify-center'>
-                                    <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full mr-2'></img>
-                                    <div className='w-52 text-center'>{detail.name}</div>
                                 </div>
-                                <div className=' w-40 mobile:max-tablet:w-20 text-center'>{authState.ClassDetails.class}</div>
-                                <div className=' w-40 mobile:max-tablet:w-20 text-center'>{authState.ClassDetails.section}</div>
-
-                            </div>
-                        </Link>
-                    ))}
-                    {!allDataFetched && (
-                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                    )}
-                </div>
-            )
-            }
+                            </Link>
+                        ))}
+                        {!allDataFetched && (
+                            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                        )}
+                    </div>
+                )
+                }
+            </div>
             {isDialogOpen && <NewReport onClose={handleClose} />}
         </div>
 

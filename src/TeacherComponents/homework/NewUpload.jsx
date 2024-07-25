@@ -47,7 +47,7 @@ function NewUpload({ onClose, onNewWork }) {
                 }
             );
             if (response.status == 200) {
-                console.log('Homework Created',response.data)
+                console.log('Homework Created', response.data)
                 onNewWork(response.data)
                 toast.success('HomeWork Created')
                 onClose();
@@ -70,8 +70,8 @@ function NewUpload({ onClose, onNewWork }) {
     const uniqueSubjects = Array.from(new Set(authState.subject.map(subj => subj.subject)));
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-            <div className="bg-white rounded-lg p-4 shadow-lg ">
+        <div className="fixed inset-0  flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+            <div className="bg-white mobile:max-tablet:mx-4 rounded-lg p-4 shadow-lg ">
                 <div className='flex justify-between'>
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700">Select Class</label>

@@ -137,7 +137,9 @@ export default function NewTile({ data }) {
                 <div key={student._id} className="border border-gray-300 p-2 justify-between rounded-lg shadow-md mt-3 items-center" onClick={() => handleClick(studentIndex)}>
                     <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
                         <div className='flex items-center'>
-                            <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
+                            <div>
+                                <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
+                            </div>
                             <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span> from class &nbsp;
                             <span className='text-red-500 whitespace-nowrap'>{authState.ClassDetails.class} {authState.ClassDetails.section}&nbsp;</span> wants a Leave Request from &nbsp;
                             <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span> to &nbsp;

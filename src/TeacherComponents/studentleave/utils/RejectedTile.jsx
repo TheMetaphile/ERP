@@ -16,11 +16,13 @@ export default function RejectedTile({ data }) {
         <div className="w-full">
             {
                 data.StudentsLeaves.filter(student => student.status === 'Rejected').map((student, studentIndex) => (
-                    <div key={student._id} className="border border-gray-300 p-2 justify-between rounded-lg shadow-md mt-3 items-center" onClick={()=>handleClick(studentIndex)}>
+                    <div key={student._id} className="border border-gray-300 p-2 justify-between rounded-lg shadow-md mt-3 items-center" onClick={() => handleClick(studentIndex)}>
                         <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
                             <div className='flex items-center'>
-                                <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
-                                <span className='text-red-500 whitespace-nowrap'>{student.name}</span> from class &nbsp;
+                                <div>
+                                    <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
+                                    <span className='text-red-500 whitespace-nowrap'>{student.name}</span>
+                                </div> from class &nbsp;
                                 <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span> wants a Leave Request from &nbsp;
                                 <span className='text-red-500 whitespace-nowrap'>{student.startDate}</span> to &nbsp;
                                 <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>

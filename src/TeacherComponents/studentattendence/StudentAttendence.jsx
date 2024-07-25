@@ -143,12 +143,12 @@ function StudentAttendance() {
         <div className="w-full flex flex-col mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mb-3 no-scrollbar" >
             <ToastContainer />
             <div className="container mx-auto py-3 px-2">
-                <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-2xl font-medium">Student Attendance</h1>
-                    <div className="">
+                <div className="flex justify-between mobile:max-tablet:items-start items-center mb-4 mobile:max-tablet:flex-col">
+                    <h1 className="text-2xl mobile:max-tablet:text-lg font-medium">Student Attendance</h1>
+                    <div className="mobile:max-tablet:flex">
                         <Link
                             to="/Teacher-Dashboard/class_activity/studentattendence/record"
-                            className="text-lg px-2 py-1 mr-2 bg-green-500 text-white rounded-md hover:cursor-pointer"
+                            className="text-lg mobile:max-tablet:text-sm px-2 py-1 mr-2 bg-green-500 text-white rounded-md hover:cursor-pointer"
                         >
                             Previous Record
                         </Link>
@@ -169,10 +169,10 @@ function StudentAttendance() {
                                         <span className="mr-2">{student.name[0]}</span>
                                         <div className="bg-gray-300 h-1 w-full"></div>
                                     </div>
-                                    <div className="flex w-full justify-between items-center border p-2 rounded-lg">
+                                    <div className="flex w-full justify-between mobile:max-tablet:gap-2 items-center border p-2 rounded-lg mobile:max-tablet:flex-col mobile:max-tablet:items-start">
                                         <div className="flex items-center px-3">
                                             <span className="mr-3 text-xl">{student.rollNumber}</span>
-                                            <img src={student.profileLink} alt="User image" className="w-12 h-12 rounded-full"></img>
+                                            <img src={student.profileLink} alt="User image" className="w-12 h-12 mobile:max-tablet:w-8 mobile:max-tablet:h-8 rounded-full"></img>
                                             <span className="ml-2">{student.name}</span>
                                         </div>
                                         <div className="flex items-center space-x-2">

@@ -67,12 +67,18 @@ export default function NewDoubtTile({ data, Class }) {
                         <div className='w-full flex items-center'>
 
                             <div className="w-full" >
-                                <div className='font-medium w-full text-base ml-2 flex justify-between items-center gap-2' onClick={() => handleClick(index)}>
-                                    <div className='flex items-center gap-2'>
-                                        <img src={doubt.student[0].profileLink} alt="" className='w-10 h-10 rounded-full' />
-                                        <span className='text-red-500 whitespace-nowrap'>{doubt.student[0].name}</span> with roll number
-                                        <span className='text-red-500 whitespace-nowrap'>{doubt.student[0].rollNumber}</span> has a doubt in
-                                        <span className='text-red-500 whitespace-nowrap'>{doubt.subject}</span>
+                                <div className='font-medium text-base ml-2 flex justify-between items-center' onClick={() => handleClick(index)}>
+                                    <div className='flex items-center gap-2 mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
+                                        <div className=' flex items-center gap-1'>
+                                            <img src={doubt.student[0].profileLink} alt="" className='w-10 h-10 rounded-full' />
+                                            <span className='text-red-500 whitespace-nowrap'>{doubt.student[0].name}</span>
+                                        </div>
+                                        <div className=' flex'>Roll number -
+                                            <span className='text-red-500 whitespace-nowrap'>{doubt.student[0].rollNumber}</span>
+                                        </div>
+                                        <div className=' flex'> Doubt -
+                                            <span className='text-red-500 whitespace-nowrap'>{doubt.subject}</span>
+                                        </div>
                                     </div>
                                     <div className='items-center px-3 cursor-pointer' >
                                         {expanded === index ? <FaChevronUp /> : <FaChevronDown />}

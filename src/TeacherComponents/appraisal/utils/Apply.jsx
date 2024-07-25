@@ -8,13 +8,13 @@ function Apply() {
         <div className=" border border-gray-300 shadow-md rounded-lg py-2 mt-4 mr-3 ml-3">
             <h1 className='tablet:text-3xl mobile:max-tablet:text-xl font-medium text-text_blue text-center'>Profile</h1>
             <div className="border-t-2 border-text_blue my-3 tablet:mx-3 rounded-full "></div>
-            <div className='flex space-x-10 justify-center items-center'>
+            <div className='flex tablet:space-x-10 mobile:max-tablet:flex-col justify-center items-center'>
                 <div className='flex flex-col text-center items-center'>
-                    <img src={authState.userDetails.profileLink} alt="img" className=' w-20 h-20 rounded-full mobile:max-tablet:hidden' />
+                    <img src={authState.userDetails.profileLink} alt="img" className=' w-20 h-20 rounded-full mobile:max-tablet:w-10 mobile:max-tablet:h-10' />
                     <h1 className='mt-2 teblet:text-2xl mobile:max-tablet:text-xl font-medium '>{authState.userDetails.name}</h1>
                 </div>
-                <div className='flex'>
-                    <div className='text-lg mobile:max-tablet:text-sm font-medium tablet:w-60 mobile:max-tablet:w-48 my-2'>
+                <div className='flex mobile:max-tablet:mx-4 mobile:max-tablet:gap-4'>
+                    <div className='text-lg mobile:max-tablet:text-sm font-medium tablet:w-60 mobile:max-tablet:w-auto my-2'>
                         <h1>Employee ID</h1>
                         <h1>Department</h1>
                         <h1>Designation</h1>
@@ -23,7 +23,7 @@ function Apply() {
                         <h1>Date of Joining</h1>
                         <h1>Date of Last Increment</h1>
                     </div>
-                    <div className='text-lg mobile:max-tablet:text-sm w-60 text-gray-400 my-2'>
+                    <div className='text-lg mobile:max-tablet:text-sm w-60 text-gray-400 mobile:max-tablet:w-auto my-2'>
                         <h1>{authState.userDetails.employeeId}</h1>
                         <h1>10th - 12th</h1>
                         <h1>Teacher</h1>
