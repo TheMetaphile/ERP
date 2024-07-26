@@ -14,7 +14,7 @@ export default function RightCard() {
     const [otp, setOtp] = useState('');
     const [role, setRole] = useState('');
     // const [otpToken, setOtpToken] = useState('');
-    // const [error, setError] = useState('');
+    const [error, setError] = useState('');
     // const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,8 +26,18 @@ export default function RightCard() {
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
     };
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
     const sendOTP = async () => {
+        if (!validateEmail(email)) {
+            setError("Please enter a valid email address.");
+            toast.error("Please enter a valid email address.");
+            return;
+        }
         setIsSubmitting(true);
+        setError('');
         try {
             const response = await axios.post(`${BASE_URL_Login}/otp/send/${role}`, {
                 email,
