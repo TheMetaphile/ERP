@@ -265,28 +265,13 @@ class _StudentDoubtsState extends State<StudentDoubts> {
                       ),
                       SizedBox(height: size.height * 0.01),
                       if (isNewDoubt)
-                        Container(
-                          height: size.height * 0.1,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.grey, width: 1),
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(1),
-                                spreadRadius: 0,
-                                blurRadius: 5,
-                                offset: Offset(0, 6),
-                              ),
-                            ],
+                        TextField(
+                          maxLines: 5,
+
+                          decoration:InputDecoration(
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))
                           ),
-                          child: TextField(
-                            maxLines: 5,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                            ),
-                            controller: solutionControllers[doubt.id],
-                          ),
+                          controller: solutionControllers[doubt.id],
                         ),
                       if (isNewDoubt)
                         Container(

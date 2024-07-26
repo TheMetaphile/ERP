@@ -423,16 +423,16 @@ print(classWorkList);
                       size: 50,
                     ),
                   ):classWorkList==null || classWorkList!.isEmpty?const Center(child: Text("There was no ClassWork Found"),):SizedBox(
-                    height: size.height*0.72,
                     child: ListView.builder(
                       itemCount: classWorkList?.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         final classWork=classWorkList?[index];
                         return Card(
+
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey)),
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 5),
                             child: Column(
                               children: [
                                 Row(
@@ -440,7 +440,6 @@ print(classWorkList);
                                   children: [
                                     Card(
                                       color: themeObj.secondayColor,
-                                      elevation: 5,
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                       margin: EdgeInsets.all(0),
                                       child: Container(
@@ -495,6 +494,7 @@ print(classWorkList);
                                     )
                                   ],
                                 ),
+                                SizedBox(height: size.height * 0.02,),
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -518,34 +518,27 @@ print(classWorkList);
 
                                     ],
                                   ),
-                                SizedBox(height: size.height * 0.02,),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    AutoSizeText("Task:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                    SizedBox(width: size.width*0.02,),
-                                    SizedBox(
-                                        width: size.width*0.8,
-                                        child: AutoSizeText(classWork["description"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),)),
+                                ExpansionTile(
+                                  
+                                  shape: Border.all(color: Colors.transparent),
+                                    leading:   AutoSizeText("Task:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600),),
+                                    title: Text(""),
+                                    children: [
+                                      SizedBox(
+                                          width: size.width*0.8,
+                                          child: AutoSizeText(classWork["description"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),)),
+                                      SizedBox(height: size.height * 0.02,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          AutoSizeText("Date: ${classWork["date"]}", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
 
-                                  ],
-                                ),
-                                SizedBox(height: size.height * 0.02,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        AutoSizeText("Date:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                        SizedBox(width: size.width*0.02,),
-                                        AutoSizeText(classWork["date"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),),
+                                        ],
+                                      ),
+                                    ],
 
-                                      ],
-                                    ),
-                                  ],
                                 ),
-                                index==classWorkList!.length-1? SizedBox(height: size.height * 0.06,):SizedBox(),
+                                index==classWorkList!.length-1? SizedBox(height: size.height * 0.02,):SizedBox(),
                               ],
                             ),
                           ),

@@ -30,7 +30,7 @@ class _PreviousNoteBookRecordState extends State<PreviousNoteBookRecord> {
   bool isLoading=false;
 
 
-  NotebookrecordAPI apiObj=NotebookrecordAPI();
+  NoteBookRecordAPI apiObj=NoteBookRecordAPI();
 
   Future<void> getPreviousRecord() async {
     setState(() {

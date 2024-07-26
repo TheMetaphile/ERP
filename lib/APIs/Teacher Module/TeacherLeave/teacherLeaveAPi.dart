@@ -5,8 +5,7 @@ class TeacherLeaveApi{
 
 
   Future<List<dynamic>>  teacherLeaveData(String accessToken,int start,String session) async {
-    print(start);
-    print(session);
+
     final url = Uri.parse('$_baseUrl/teacherleave/fetch/teacher?start=$start&end=4&session=$session');
 
     try {
@@ -21,7 +20,6 @@ class TeacherLeaveApi{
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         var leaves=data["Leaves"];
-      print(leaves);
 
         return leaves ;
 
@@ -68,6 +66,92 @@ class TeacherLeaveApi{
     }
   }
 
+  Future<dynamic>  deleteLeave(String accessToken,String leaveID,String session) async {
+    final url = Uri.parse('$_baseUrl/teacherleave/delete?leaveId=$leaveID&session=$session');
+
+    try {
+      final response = await http.delete(
+        url,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print(data);
+        return data["status"] ;
+
+      } else {
+        throw Exception('Failed to delete leaves: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error on delete leaves: $e');
+    }
+  }
+
+  Future<dynamic>  updateLeave(String accessToken,String docID, String session,Map<String,dynamic> updateData) async {
+    print(updateData);
+
+    final url = Uri.parse('$_baseUrl/teacherleave/update?leaveId=$docID&session=$session');
+
+    try {
+      final response = await http.put(
+        url,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'startDate': updateData["startDate"],
+          'endDate':  updateData["endDate"],
+          'reason':  updateData["reason"],
+          'type':  updateData["type"],
+          'session':  updateData["session"],
+          'applyOn':  updateData["applyOn"],
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        return data["status"] ;
+
+      } else {
+        throw Exception('Failed to apply leaves: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error on apply leaves: $e');
+    }
+  }
+
+  Future<dynamic>  getStats(String accessToken,String session) async {
+
+
+    final url = Uri.parse('$_baseUrl/teacherleave/fetch/stats?session=$session');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        return data;
+
+      } else {
+        throw Exception('Failed to load stats: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error on load stats: $e');
+    }
+  }
 
 
 }

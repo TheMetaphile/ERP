@@ -48,7 +48,7 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
   List<String> checkedList =[];
   List<Map<String, dynamic>>? noteBookRecordList;
   bool isLoading=false;
-  NotebookrecordAPI apiObj=NotebookrecordAPI();
+  NoteBookRecordAPI apiObj=NoteBookRecordAPI();
     String date=DateTime.now().toString().split(" ")[0];
 
     String session = '';
@@ -254,7 +254,7 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
                  ),
                ):
                SizedBox(
-                 height: size.height*0.59,
+                 height: size.height*0.61,
                  child: newTable(),
                ),
              ],
@@ -279,7 +279,7 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
                        size: 50,
                      ),
                    ):SizedBox(
-                     height: size.height*0.59,
+                     height: size.height*0.66,
                      child: allTable(),
                    ),
                  ],
@@ -463,8 +463,10 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
         'Notebook Checked',
         'Action',
       ].map((header) => TableCell(
-        child: Padding(
+        child: Container(
+          height: 60, // Set your desired height here
           padding: EdgeInsets.all(8),
+          alignment: Alignment.center, // This centers the content vertically
           child: Text(
               header,
               style: TextStyle(fontWeight: FontWeight.bold)
@@ -505,6 +507,7 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
             4: FixedColumnWidth(120),
             5: FixedColumnWidth(150),
           },
+
           children: [
             newHeader(),
             ...newRows(),
@@ -525,8 +528,10 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
         'Topic',
         'Notebook Checked'
       ].map((header) => TableCell(
-        child: Padding(
+        child: Container(
+          height: 60, // Set your desired height here
           padding: EdgeInsets.all(8),
+          alignment: Alignment.center, // This centers the content vertically
           child: Text(
               header,
               style: TextStyle(fontWeight: FontWeight.bold)
@@ -539,6 +544,8 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
   List<TableRow> newRows() {
     return studentsList!.map((student) {
       return TableRow(
+        decoration: BoxDecoration(),
+
         children: [
           newTableCell(student["rollNumber"]?.toString() ?? ""),
           newTableCell(student['name']?.toString() ?? ""),
@@ -553,8 +560,10 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
 
   Widget newTableCell(String text) {
     return TableCell(
-      child: Padding(
+      child: Container(
+        height: 60, // Set your desired height here
         padding: EdgeInsets.all(8),
+        alignment: Alignment.center, // This centers the content vertically
         child: Text(text),
       ),
     );

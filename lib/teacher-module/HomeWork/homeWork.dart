@@ -496,8 +496,8 @@ class _HomeWorkState extends State<HomeWork> {
                         color: themeObj.primayColor,
                         size: 50,
                       ),
-                    ):homeWorkList==null || homeWorkList!.isEmpty?const Center(child: Text("There was no ClassWork Found"),):SizedBox(
-                      height: size.height*0.72,
+                    ):homeWorkList==null || homeWorkList!.isEmpty?const Center(child: Text("There was no HomeWork Found"),):SizedBox(
+
                       child: ListView.builder(
                         itemCount: homeWorkList?.length,
                         shrinkWrap: true,
@@ -514,7 +514,7 @@ class _HomeWorkState extends State<HomeWork> {
                                     children: [
                                       Card(
                                         color: themeObj.secondayColor,
-                                        elevation: 5,
+                                        elevation: 0,
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                         margin: EdgeInsets.all(0),
                                         child: Container(
@@ -569,6 +569,7 @@ class _HomeWorkState extends State<HomeWork> {
                                       )
                                     ],
                                   ),
+                                  SizedBox(height: size.height * 0.02,),
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -592,43 +593,28 @@ class _HomeWorkState extends State<HomeWork> {
 
                                     ],
                                   ),
-                                  SizedBox(height: size.height * 0.02,),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  ExpansionTile(
+
+                                    shape: Border.all(color: Colors.transparent),
+                                    leading:   AutoSizeText("Task:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600),),
+                                    title: Text(""),
                                     children: [
-                                      AutoSizeText("Task:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                      SizedBox(width: size.width*0.02,),
                                       SizedBox(
-                                          width: size.width*0.8,
+                                            width: size.width*0.8,
                                           child: AutoSizeText(classWork["description"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),)),
-
-                                    ],
-                                  ),
-                                  SizedBox(height: size.height * 0.02,),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                      SizedBox(height: size.height * 0.02,),                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          AutoSizeText("Date:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                          SizedBox(width: size.width*0.02,),
-                                          AutoSizeText(classWork["date"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),),
+                                          AutoSizeText("Date: ${classWork["date"]}", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
 
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          AutoSizeText("Deadline:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                          SizedBox(width: size.width*0.02,),
-                                          AutoSizeText(classWork["deadline"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),),
-
+                                          AutoSizeText("Deadline:  ${classWork["deadline"]}", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
                                         ],
                                       ),
                                     ],
+
                                   ),
-                                  index==homeWorkList!.length-1? SizedBox(height: size.height * 0.06,):SizedBox(),
+
+                                  index==homeWorkList!.length-1? SizedBox(height: size.height * 0.03,):SizedBox(),
 
 
                                 ],

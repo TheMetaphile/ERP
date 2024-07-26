@@ -155,7 +155,7 @@ void initState(){
                             children: [
                               CircleAvatar(
                                 radius: size.width * 0.08,
-                                backgroundImage: NetworkImage(particularCard["profileLink"]),
+                                backgroundImage: NetworkImage(particularCard["profileLink"]?? ""),
                               ),
                               SizedBox(width: size.width * 0.03),
                               Expanded(
@@ -163,7 +163,7 @@ void initState(){
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      particularCard["name"],
+                                      particularCard["name"] ?? "Unknown",
                                       style: GoogleFonts.openSans(
                                         color: Color(0xFF045156),
                                         fontSize: size.width * 0.045,
@@ -171,20 +171,20 @@ void initState(){
                                       ),
                                     ),
                                     Text(
-                                      particularCard["currentClass"],
+                                      particularCard["currentClass"]?? "Unknown",
                                       style: GoogleFonts.openSans(
                                         color: Color(0xFF045156),
                                         fontSize: size.width * 0.035,
                                       ),
                                     ),
                                     Text(
-                                      "Birthday: ${particularCard["DOB"].split("-")[0]}",
+                                      "Birthday: ${particularCard["DOB"].split("-")[0]?? "Unknown"}",
                                       style: GoogleFonts.openSans(
                                         color: Color(0xFF045156),
                                         fontSize: size.width * 0.035,
                                       ),
                                     ),
-                                    Text("Send a Birthday wish to ${particularCard["name"]}...",
+                                    Text("Send a Birthday wish to ${particularCard["name"]?? "Unknown"}...",
                                       style: GoogleFonts.openSans(
                                         color: Color(0xFF1FE23E),
                                         fontSize: size.width * 0.035,
@@ -233,7 +233,7 @@ void initState(){
                               children: [
                                 CircleAvatar(
                                   radius: size.width * 0.08,
-                                  backgroundImage: NetworkImage(particularCard["profileLink"]),
+                                  backgroundImage: NetworkImage(particularCard["profileLink"] ?? ""),
                                 ),
                                 SizedBox(width: size.width * 0.03),
                                 Expanded(
@@ -241,7 +241,7 @@ void initState(){
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        particularCard["name"],
+                                        particularCard["name"]?? "Unknown",
                                         style: GoogleFonts.openSans(
                                           color: Color(0xFF045156),
                                           fontSize: size.width * 0.045,
@@ -249,20 +249,20 @@ void initState(){
                                         ),
                                       ),
                                       Text(
-                                        particularCard["currentClass"],
+                                        particularCard["currentClass"]?? "UnknownClass",
                                         style: GoogleFonts.openSans(
                                           color: Color(0xFF045156),
                                           fontSize: size.width * 0.035,
                                         ),
                                       ),
                                       Text(
-                                        "Birthday: ${particularCard["DOB"].split("-")[0]}",
+                                        "Birthday: ${particularCard["DOB"].split("-")[0]?? "Unknown"}",
                                         style: GoogleFonts.openSans(
                                           color: Color(0xFF045156),
                                           fontSize: size.width * 0.035,
                                         ),
                                       ),
-                                      Text("Send a Birthday wish to ${particularCard["name"]}...",
+                                      Text("Send a Birthday wish to ${particularCard["name"]?? "Unknown"}...",
                                         style: GoogleFonts.openSans(
                                           color: Color(0xFF1FE23E),
                                           fontSize: size.width * 0.035,
@@ -317,7 +317,7 @@ void initState(){
                             children: [
                               CircleAvatar(
                                 radius: size.width * 0.08,
-                                backgroundImage: NetworkImage(particularCard["profileLink"]),
+                                backgroundImage: NetworkImage(particularCard["profileLink"]?? ""),
                               ),
                               SizedBox(width: size.width * 0.03),
                               Expanded(
@@ -325,7 +325,7 @@ void initState(){
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      particularCard["name"].toString(),
+                                      particularCard["name"]?? "Unknown",
                                       style: GoogleFonts.openSans(
                                         color: Color(0xFF045156),
                                         fontSize: size.width * 0.045,
@@ -333,20 +333,20 @@ void initState(){
                                       ),
                                     ),
                                     Text(
-                                      particularCard["currentClass"] ?? "Class",
+                                      particularCard["currentClass"] ?? "Unknown",
                                       style: GoogleFonts.openSans(
                                         color: Color(0xFF045156),
                                         fontSize: size.width * 0.035,
                                       ),
                                     ),
                                     Text(
-                                      "Birthday: ${particularCard["DOB"].split("-")[0]}",
+                                      "Birthday: ${particularCard["DOB"].split("-")[0]?? "Unknown"}",
                                       style: GoogleFonts.openSans(
                                         color: Color(0xFF045156),
                                         fontSize: size.width * 0.035,
                                       ),
                                     ),
-                                    Text("Send a Birthday wish to ${particularCard["name"]}...",
+                                    Text("Send a Birthday wish to ${particularCard["name"]?? "Unknown"}...",
                                       style: GoogleFonts.openSans(
                                         color: Color(0xFF1FE23E),
                                         fontSize: size.width * 0.035,
@@ -395,7 +395,7 @@ void initState(){
                               children: [
                                 CircleAvatar(
                                   radius: size.width * 0.08,
-                                  backgroundImage: NetworkImage(particularCard["profileLink"]),
+                                  backgroundImage: NetworkImage(particularCard["profileLink"]?? ""),
                                 ),
                                 SizedBox(width: size.width * 0.03),
                                 Expanded(
@@ -403,7 +403,7 @@ void initState(){
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        particularCard["name"],
+                                        particularCard["name"]?? "Unknown",
                                         style: GoogleFonts.openSans(
                                           color: Color(0xFF045156),
                                           fontSize: size.width * 0.045,
@@ -411,20 +411,20 @@ void initState(){
                                         ),
                                       ),
                                       Text(
-                                        particularCard["currentClass"],
+                                        particularCard["currentClass"]?? "Unknown",
                                         style: GoogleFonts.openSans(
                                           color: Color(0xFF045156),
                                           fontSize: size.width * 0.035,
                                         ),
                                       ),
                                       Text(
-                                        "Birthday: ${particularCard["DOB"].split("-")[0]}",
+                                        "Birthday: ${particularCard["DOB"].split("-")[0]?? "Unknown"}",
                                         style: GoogleFonts.openSans(
                                           color: Color(0xFF045156),
                                           fontSize: size.width * 0.035,
                                         ),
                                       ),
-                                      Text("Send a Birthday wish to ${particularCard["name"]}...",
+                                      Text("Send a Birthday wish to ${particularCard["name"]?? "Unknown"}...",
                                         style: GoogleFonts.openSans(
                                           color: Color(0xFF1FE23E),
                                           fontSize: size.width * 0.035,

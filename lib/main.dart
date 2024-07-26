@@ -104,20 +104,23 @@ class MyApp extends StatelessWidget {
           '/logout': (context) =>Login(),
 
       },
-      home:FutureBuilder<bool>(
-        future: verifyToken(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return   Center(
-              child: LoadingAnimationWidget.threeArchedCircle(
-                color: themeObj.primayColor,
-                size: 50,
-              ),
-            );
-          } else{
-            return snapshot.data == true ? TeacherHome() : Login();
-          }
-        },
+      home:Scaffold(
+        backgroundColor: themeObj.textWhite,
+        body: FutureBuilder<bool>(
+          future: verifyToken(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return   Center(
+                child: LoadingAnimationWidget.threeArchedCircle(
+                  color: themeObj.primayColor,
+                  size: 50,
+                ),
+              );
+            } else{
+              return snapshot.data == true ? TeacherHome() : Login();
+            }
+          },
+        ),
       ),
     );
   }

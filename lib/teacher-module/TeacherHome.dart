@@ -267,268 +267,265 @@ class _TeacherHomeState extends State<TeacherHome> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: themeObj.textWhite,
-        appBar: AppBar(
-          backgroundColor: themeObj.primayColor,
-          title: Text(
-            getTitle(_selectedIndex),
-            style: TextStyle(
-              color: themeObj.textBlack,
-              fontWeight: FontWeight.w400,
-              fontSize: size.width * 0.06,
-            ),
+    return Scaffold(
+      backgroundColor: themeObj.textWhite,
+      appBar: AppBar(
+        backgroundColor: themeObj.primayColor,
+        title: Text(
+          getTitle(_selectedIndex),
+          style: TextStyle(
+            color: themeObj.textBlack,
+            fontWeight: FontWeight.w400,
+            fontSize: size.width * 0.06,
           ),
-          actions: [
-            _selectedIndex == 0
-                ? IconButton(
-              onPressed: () {
-                // Implement action
-              },
-              icon: const Icon(Icons.notification_add),
+        ),
+        actions: [
+          _selectedIndex == 0
+              ? IconButton(
+            onPressed: () {
+              // Implement action
+            },
+            icon: const Icon(Icons.notification_add),
+          )
+              : SizedBox(),
+        ],
+      ),
+      drawer: Drawer(
+        width: size.width * 0.8,
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 10),
+              width: size.width * 1,
+              decoration: BoxDecoration(
+                color: themeObj.primayColor,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: size.height * 0.04),
+                  CircleAvatar(
+                    radius: size.width * 0.1,
+                    backgroundImage: NetworkImage(profileLink),
+                  ),
+                  SizedBox(height: size.height * 0.01),
+                  Text(
+                    teacherName,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: themeObj.textBlack,
+                      fontSize: size.width * 0.04,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    teacherEmail,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: themeObj.textBlack,
+                      fontSize: size.width * 0.035,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  Text(
+                    employeeID,
+                    style: TextStyle(
+                      color: themeObj.textBlack,
+                      fontSize: size.width * 0.035,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(height: size.height * 0.01),
+                ],
+              ),
+            ),
+            SizedBox(height: size.height * 0.02),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Container(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading:Icon(Icons.home,size:  size.height*0.04,color: themeObj.textBlack,),
+                        title: Text("Dashboard",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                        onTap: (){
+                          Navigator.pop(context);
+
+                        },
+                      ),
+                      ListTile(
+                        leading: Image.asset("assets/Images/TeacherDashboard/doubts.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
+                        title: Text("Student Doubts",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => StudentDoubts(),));
+                        },
+                      ),
+                      ListTile(
+                        leading: Image.asset("assets/Images/TeacherDashboard/Classroom.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
+                        title: Text("Class Activity",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ClassActivity(),));
+                        },
+                      ),
+                      // ListTile(
+                      //   leading: Image.asset("assets/Images/TeacherDashboard/checkin.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
+                      //   title: Text("Check In",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                      //   onTap: (){
+                      //     Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherAttendanceCheckIn(),));
+                      //   },
+                      // ),
+                      ListTile(
+                        leading: Image.asset("assets/Images/TeacherDashboard/TakeLeave.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
+                        title: Text("Take Leave",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherLeave(),));
+                        },
+                      ),
+                      ListTile(
+                        leading: Image.asset("assets/Images/TeacherDashboard/Dashboard_time_table.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
+                        title: Text("Time Table",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => DrawerTimeTable(),));
+                        },
+                      ),
+                      ListTile(
+                        leading: Image.asset("assets/Images/gift-box-icon.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
+                        title: Text("Birthday",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Birthday(),));
+                        },
+                      ),
+                      ListTile(
+                        leading: Image.asset("assets/Images/TeacherDashboard/notice2.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
+                        title: Text("Notice Board",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => NoticeBoard(),));
+                        },
+                      ),
+                      ListTile(
+                        leading: Image.asset("assets/Images/TeacherDashboard/NoteBookRecord.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
+                        title: Text("Note Book Record",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => NoteBookRecord(),));
+                        },
+                      ),
+                      ListTile(
+                        leading: Image.asset("assets/Images/TeacherDashboard/uploadResult.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
+                        title: Text("Upload Result",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => UploadResult(),));
+                        },
+                      ),
+                      // ListTile(
+                      //   leading: Image.asset("assets/Images/Leave.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
+                      //   title: Text("Student Leave Application",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                      //   onTap: (){
+                      //     Navigator.push(context, MaterialPageRoute(builder: (context) => studentLeaveApplications(),));
+                      //   },
+                      // ),
+                      // ListTile(
+                      //   leading: Image.asset("assets/Images/moneybag.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
+                      //   title: Text("Salary",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                      //   onTap: (){
+                      //     Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherSalary(),));
+                      //   },
+                      // ),
+                      // ListTile(
+                      //   leading: Icon(Icons.admin_panel_settings,color: themeObj.textBlack,size: size.width*0.1,),
+                      //   title: Text("Admin Panel",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                      //   onTap: (){
+                      //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AdminHome(),));
+                      //   },
+                      // ),
+                      ListTile(
+                        leading: Icon(Icons.logout, color: themeObj.textBlack, size: size.width*0.1),
+                        title: Text("Logout", overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(fontSize: size.width*0.04, color: themeObj.textBlack, fontWeight: FontWeight.w400)),
+                        onTap: () async {
+                          PermissionStatus microphoneStatus = await Permission.microphone.status;
+
+                          if (microphoneStatus.isGranted) {
+                            // If microphone permission is still granted, show dialog to revoke it
+                            await showRevokeMicrophonePermissionDialog(context);
+                          } else {
+                            // If microphone permission is already revoked, proceed with logout
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            await prefs.clear();
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+                          }
+                        },
+                      ),
+
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: size.width * 0.75,
+              child: Text(
+                " © 2024 All Right Reserved by School\nDesigned by MetaPhile",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.openSans(
+                  fontSize: size.width * 0.04,
+                  color: themeObj.textBlack,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
             )
-                : SizedBox(),
           ],
         ),
-        drawer: Drawer(
-          width: size.width * 0.8,
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.only(left: 10),
-                width: size.width * 1,
-                decoration: BoxDecoration(
-                  color: themeObj.primayColor,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: size.height * 0.04),
-                    CircleAvatar(
-                      radius: size.width * 0.1,
-                      backgroundImage: NetworkImage(profileLink),
-                    ),
-                    SizedBox(height: size.height * 0.01),
-                    Text(
-                      teacherName,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: themeObj.textBlack,
-                        fontSize: size.width * 0.04,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      teacherEmail,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: themeObj.textBlack,
-                        fontSize: size.width * 0.035,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Text(
-                      employeeID,
-                      style: TextStyle(
-                        color: themeObj.textBlack,
-                        fontSize: size.width * 0.035,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.01),
-                  ],
-                ),
-              ),
-              SizedBox(height: size.height * 0.02),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading:Icon(Icons.home,size:  size.height*0.04,color: themeObj.textBlack,),
-                          title: Text("Dashboard",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                          onTap: (){
-                            Navigator.pop(context);
-      
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset("assets/Images/TeacherDashboard/doubts.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                          title: Text("Student Doubts",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => StudentDoubts(),));
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset("assets/Images/TeacherDashboard/Classroom.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                          title: Text("Class Activity",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => ClassActivity(),));
-                          },
-                        ),
-                        // ListTile(
-                        //   leading: Image.asset("assets/Images/TeacherDashboard/checkin.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                        //   title: Text("Check In",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                        //   onTap: (){
-                        //     Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherAttendanceCheckIn(),));
-                        //   },
-                        // ),
-                        ListTile(
-                          leading: Image.asset("assets/Images/TeacherDashboard/TakeLeave.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                          title: Text("Take Leave",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherLeave(),));
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset("assets/Images/TeacherDashboard/Dashboard_time_table.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                          title: Text("Time Table",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => DrawerTimeTable(),));
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset("assets/Images/gift-box-icon.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                          title: Text("Birthday",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => Birthday(),));
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset("assets/Images/TeacherDashboard/notice2.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                          title: Text("Notice Board",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => NoticeBoard(),));
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset("assets/Images/TeacherDashboard/NoteBookRecord.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                          title: Text("Note Book Record",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => NoteBookRecord(),));
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset("assets/Images/TeacherDashboard/uploadResult.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                          title: Text("Upload Result",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => UploadResult(),));
-                          },
-                        ),
-                        // ListTile(
-                        //   leading: Image.asset("assets/Images/Leave.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                        //   title: Text("Student Leave Application",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                        //   onTap: (){
-                        //     Navigator.push(context, MaterialPageRoute(builder: (context) => studentLeaveApplications(),));
-                        //   },
-                        // ),
-                        // ListTile(
-                        //   leading: Image.asset("assets/Images/moneybag.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
-                        //   title: Text("Salary",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                        //   onTap: (){
-                        //     Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherSalary(),));
-                        //   },
-                        // ),
-                        // ListTile(
-                        //   leading: Icon(Icons.admin_panel_settings,color: themeObj.textBlack,size: size.width*0.1,),
-                        //   title: Text("Admin Panel",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
-                        //   onTap: (){
-                        //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AdminHome(),));
-                        //   },
-                        // ),
-                        ListTile(
-                          leading: Icon(Icons.logout, color: themeObj.textBlack, size: size.width*0.1),
-                          title: Text("Logout", overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(fontSize: size.width*0.04, color: themeObj.textBlack, fontWeight: FontWeight.w400)),
-                          onTap: () async {
-                            PermissionStatus microphoneStatus = await Permission.microphone.status;
-      
-                            if (microphoneStatus.isGranted) {
-                              // If microphone permission is still granted, show dialog to revoke it
-                              await showRevokeMicrophonePermissionDialog(context);
-                            } else {
-                              // If microphone permission is already revoked, proceed with logout
-                              SharedPreferences prefs = await SharedPreferences.getInstance();
-                              await prefs.clear();
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
-                            }
-                          },
-                        ),
-      
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: size.width * 0.75,
-                child: Text(
-                  " © 2024 All Right Reserved by School\nDesigned by MetaPhile",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.openSans(
-                    fontSize: size.width * 0.04,
-                    color: themeObj.textBlack,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              )
-            ],
-          ),
+      ),
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: themeObj.primayColor,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
         ),
-        body: _screens[_selectedIndex],
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: themeObj.primayColor,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 20,
-                color: Colors.black.withOpacity(.1),
-              )
-            ],
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-              child: GNav(
-                rippleColor: Colors.grey[300]!,
-                hoverColor: Colors.grey[100]!,
-                gap: 3,
-                activeColor: themeObj.textBlack,
-                iconSize: 20,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                duration: Duration(milliseconds: 400),
-                tabBackgroundColor: Colors.grey[100]!,
-                color: Colors.black,
-                tabs: [
-                  GButton(
-                    icon: Icons.home,
-                    text: 'Home',
-                    textStyle: GoogleFonts.openSans(fontSize: size.width*0.03),
-                  ),
-                  GButton(
-                    icon: Icons.timer,
-                    text: 'Attendance',textStyle: GoogleFonts.openSans(fontSize: size.width*0.03),
-                  ),
-                  GButton(
-                    icon: Icons.work_history_outlined,
-                    text: 'Class Work',
-                    textStyle: GoogleFonts.openSans(fontSize: size.width*0.03),
-                  ),
-                  GButton(
-                    icon: Icons.home_work_outlined,
-                    text: 'Home Work',
-                    textStyle: GoogleFonts.openSans(fontSize: size.width*0.03),
-                  ),
-                ],
-                selectedIndex: _selectedIndex,
-                onTabChange: (index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                },
-              ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            child: GNav(
+              rippleColor: Colors.grey[300]!,
+              hoverColor: Colors.grey[100]!,
+              gap: 3,
+              activeColor: themeObj.textBlack,
+              iconSize: 20,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              duration: Duration(milliseconds: 400),
+              tabBackgroundColor: Colors.grey[100]!,
+              color: Colors.black,
+              tabs: [
+                GButton(
+                  icon: Icons.home,
+                  text: 'Home',
+                  textStyle: GoogleFonts.openSans(fontSize: size.width*0.03),
+                ),
+                GButton(
+                  icon: Icons.timer,
+                  text: 'Attendance',textStyle: GoogleFonts.openSans(fontSize: size.width*0.03),
+                ),
+                GButton(
+                  icon: Icons.work_history_outlined,
+                  text: 'Class Work',
+                  textStyle: GoogleFonts.openSans(fontSize: size.width*0.03),
+                ),
+                GButton(
+                  icon: Icons.home_work_outlined,
+                  text: 'Home Work',
+                  textStyle: GoogleFonts.openSans(fontSize: size.width*0.03),
+                ),
+              ],
+              selectedIndex: _selectedIndex,
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
             ),
           ),
         ),

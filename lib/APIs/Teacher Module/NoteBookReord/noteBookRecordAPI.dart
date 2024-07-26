@@ -4,7 +4,7 @@ import 'package:untitled/APIs/StudentsData/student.dart';
 import 'package:http/http.dart' as http;
 import 'package:untitled/utils/utils.dart';
 
-class NotebookrecordAPI{
+class NoteBookRecordAPI{
 
   static String baseUrl = "http://13.201.247.28:8000";
 
@@ -156,4 +156,28 @@ class NotebookrecordAPI{
     }
   }
 
+  Future<dynamic> lastRecord(String accessToken,String subject,String email)
+  async {
+
+    final url = Uri.parse('$baseUrl/notebook/fetch/student/last?subject=$subject&email=$email');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data["last"] ;
+      } else {
+        throw Exception('Failed to last notebookRecord: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error fetching notebookRecord: $e');
+    }
+  }
 }

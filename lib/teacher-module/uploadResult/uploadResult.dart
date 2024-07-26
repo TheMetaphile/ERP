@@ -1,7 +1,14 @@
+import 'package:chatview/chatview.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/APIs/Teacher%20Module/ClassActivity/resultAPI.dart';
 import 'package:untitled/utils/theme.dart';
+import 'package:untitled/utils/utils.dart';
+
+import '../../APIs/StudentsData/StudentApi.dart';
+import '../../APIs/Teacher Module/NoteBookReord/noteBookRecordAPI.dart';
 
 class UploadResult extends StatefulWidget {
   const UploadResult({super.key});
@@ -15,6 +22,7 @@ class _UploadResultState extends State<UploadResult> {
   String _selectedClass="9th";
   String _selectedSection ="A";
   String _selectedSubject="Maths";
+  String _selectedTerm="Term 1";
   List<String> classOptions = [
     '12th',
     '11th',
@@ -32,12 +40,249 @@ class _UploadResultState extends State<UploadResult> {
     'English',
     'Hindi',
   ];
+  List<String> termOptions = [
+    "Term 1",
+    'Half Yearly',
+    'Term 2',
+    'Final',
+
+  ];
   String _selectedTab = 'Scholastic';
   TextEditingController totalTheoryMarks=TextEditingController();
   TextEditingController totalSubjectEnrichmentMarks=TextEditingController();
   TextEditingController totalNoteBookMarks=TextEditingController();
   TextEditingController totalPracticalMarks=TextEditingController();
   bool isLoading=false;
+  List<Map<String, dynamic>>? studentsList;
+  Map<String, bool> savedStudents = {};
+  String session = '';
+  int? selectedStudentIndex;
+  Map<String, Map<String, TextEditingController>> scholasticControllers = {};
+  Map<String, Map<String, TextEditingController>> nonScholasticControllers = {};
+
+
+
+  String calculateCurrentSession() {
+    DateTime now = DateTime.now();
+    int currentYear = now.year;
+    int nextYear = currentYear + 1;
+
+    if (now.isBefore(DateTime(currentYear, 3, 31))) {
+      currentYear--;
+      nextYear--;
+    }
+
+    return "$currentYear-${nextYear.toString().substring(2)}";
+  }
+
+
+
+  Future<void> getStudentData() async {
+    setState(() {
+      isLoading=true;
+    });
+    try{
+      StudentApi apiObj= StudentApi();
+
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      var accessToken = pref.getString("accessToken");
+
+      List<dynamic> students=await apiObj.fetchStudents(accessToken! , _selectedClass, _selectedSection, 0,);
+      print("students                  $students");
+      if(students.isNotEmpty){
+        setState(() {
+          studentsList=students.cast();
+          initializeControllers();
+        });
+      }else{
+        studentsList=[];
+      }
+    }catch(e){
+      print("error $e");
+    }finally{
+      setState(() {
+        isLoading=false;
+      });
+    }
+  }
+
+
+  Future<void> saveScholasticMarks(Map<String, dynamic> student, String noteBook, String subjectEnrichment,
+      String practical, String theory) async {
+
+    int totalNoteBookMark=int.tryParse(totalTheoryMarks.text) ?? -1;
+    int totalSubjectEnrichmentMark=int.tryParse(totalSubjectEnrichmentMarks.text) ?? -1;
+    int totalPracticalMark=int.tryParse(totalPracticalMarks.text) ?? -1;
+    int totalTheoryMark=int.tryParse(totalTheoryMarks.text) ?? -1;
+
+    int totalMarks=totalNoteBookMark+totalSubjectEnrichmentMark+totalPracticalMark+totalTheoryMark;
+
+
+    int obtainedNoteBookMark = int.tryParse(noteBook) ?? -1;
+    int obtainedSubjectEnrichmentMark = int.tryParse(subjectEnrichment) ?? -1;
+    int obtainedPracticalMark = int.tryParse(practical) ?? -1;
+    int obtainedTheoryMark = int.tryParse(theory) ?? -1;
+
+    int marksObtained=obtainedNoteBookMark+obtainedSubjectEnrichmentMark+obtainedPracticalMark+obtainedTheoryMark;
+
+    Map<String,dynamic> result =
+    {  "subject":_selectedSubject,
+      "marksObtained":marksObtained,
+      "totalMarks":totalMarks,
+      "totalPracticalMarks":totalPracticalMark,
+      "obtainedPracticalMarks":obtainedPracticalMark,
+      "totalNoteBookMarks":totalNoteBookMark,
+      "obtainedNoteBookMarks":obtainedNoteBookMark,
+      "totalSubjectEnrichmentMarks":totalSubjectEnrichmentMark,
+      "obtainedSubjectEnrichmentMarks":obtainedSubjectEnrichmentMark,
+
+    };
+    if (obtainedNoteBookMark < 0 || obtainedNoteBookMark > totalNoteBookMark) {
+      showRedSnackBar("Invalid Notebook marks", context);
+      return;
+    }
+    if (obtainedSubjectEnrichmentMark < 0 || obtainedSubjectEnrichmentMark > totalSubjectEnrichmentMark) {
+      showRedSnackBar("Invalid Subject Enrichment marks", context);
+      return;
+    }
+    if (obtainedPracticalMark < 0 || obtainedPracticalMark > totalPracticalMark) {
+      showRedSnackBar("Invalid Practical marks", context);
+      return;
+    }
+    if (obtainedTheoryMark < 0 || obtainedTheoryMark > totalTheoryMark) {
+      showRedSnackBar("Invalid Theory marks", context);
+      return;
+    }
+
+         ResultApi apiObj=ResultApi();
+         try{
+
+           SharedPreferences pref = await SharedPreferences.getInstance();
+           var accessToken = pref.getString("accessToken");
+
+           dynamic success=await apiObj.createResult(accessToken!, student["email"], _selectedClass,_selectedTerm.toLowerCase().replaceAll(" ", ""),result);
+
+            if(success){
+              showGreenSnackBar("${student["name"]} Mark successfully upload", context);
+              setState(() {
+                student['savedMarks'] = {
+                  'noteBook': noteBook,
+                  'subjectEnrichment': subjectEnrichment,
+                  'practical': practical,
+                  'theory': theory,
+                };
+              });
+
+            }else{
+              showRedSnackBar("$success", context);
+            }
+
+         }catch(e){
+           print("error $e");
+         }
+
+
+    print(result);
+
+  }
+
+
+
+  Future<void> saveNonScholasticMarks(Map<String, dynamic> student, String workEducationGrade, String generalKnowledgeGrade,
+  ) async {
+
+    Map<String,dynamic> result =
+    {
+      "subject":_selectedSubject,
+      "workEducation":workEducationGrade,
+      "generalKnowledge":generalKnowledgeGrade
+
+    };
+    print(result);
+    ResultApi apiObj=ResultApi();
+    try{
+
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      var accessToken = pref.getString("accessToken");
+
+      dynamic success=await apiObj.createResult(accessToken!, student["email"], _selectedClass,_selectedTerm.toLowerCase().replaceAll(" ", ""),result);
+
+      if(success){
+        showGreenSnackBar("${student["name"]} Mark successfully upload", context);
+        setState(() {
+          student['savedMarks'] = {
+            'workEducation': workEducationGrade,
+            'generalKnowledge': generalKnowledgeGrade,
+          };
+        });
+
+      }else{
+        showRedSnackBar("$success", context);
+      }
+
+    }catch(e){
+      print("error $e");
+    }
+
+
+    print(result);
+
+  }
+
+
+
+Future<String> getLastRecord(String email) async {
+  NoteBookRecordAPI apiObj=NoteBookRecordAPI();
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  var accessToken = pref.getString("accessToken");
+  dynamic lastCheck=await apiObj.lastRecord(accessToken!, _selectedSubject, email);
+  if(lastCheck is List){
+    return lastCheck[0]["topic"];
+  }else{
+    return "Not Found";
+  }
+
+}
+
+  void initializeControllers() {
+    for (var student in studentsList!) {
+      String studentId = student['email'];
+      Map<String, String> savedMarks = student['savedMarks'] ?? {};
+
+      scholasticControllers[studentId] = {
+        'noteBook': TextEditingController(text: savedMarks['noteBook'] ?? ''),
+        'subjectEnrichment': TextEditingController(text: savedMarks['subjectEnrichment'] ?? ''),
+        'practical': TextEditingController(text: savedMarks['practical'] ?? ''),
+        'theory': TextEditingController(text: savedMarks['theory'] ?? ''),
+      };
+
+      nonScholasticControllers[studentId] = {
+        'workEducation': TextEditingController(text: savedMarks['workEducation'] ?? ''),
+        'generalKnowledge': TextEditingController(text: savedMarks['generalKnowledge'] ?? ''),
+      };
+    }
+  }
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getStudentData();
+  }
+
+  @override
+  void dispose() {
+    // Dispose of both scholastic and non-scholastic controllers
+    scholasticControllers.values.forEach((controllers) {
+      controllers.values.forEach((controller) => controller.dispose());
+    });
+    nonScholasticControllers.values.forEach((controllers) {
+      controllers.values.forEach((controller) => controller.dispose());
+    });
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,129 +305,118 @@ class _UploadResultState extends State<UploadResult> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            dropDownButton(size),
-            SizedBox(height: size.height*0.01),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                tabButton('Scholastic'),
-                SizedBox(width: 8),
-                tabButton('C0-Scholastic'),
-              ],
-            ),
-            SizedBox(height: size.height*0.01),
-            _selectedTab == "Scholastic"?Column(
-              children: [
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-
-                          child: TextField(
-                            controller: totalTheoryMarks,
-                            decoration: const InputDecoration(
-                              hintText: 'Total Theory Marks',
-                              border: OutlineInputBorder(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              dropDownButton(size),
+              SizedBox(height: size.height*0.01),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  tabButton('Scholastic'),
+                  SizedBox(width: 8),
+                  tabButton('CO-Scholastic'),
+                ],
+              ),
+              SizedBox(height: size.height*0.01),
+              _selectedTab == "Scholastic"?Column(
+                children: [
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+        
+                            child: TextField(
+                              controller: totalTheoryMarks,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: 'Total Theory Marks',
+                                border: OutlineInputBorder(),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: size.width*0.02,),
-                        Expanded(
-                          child: TextField(
-                            controller: totalSubjectEnrichmentMarks,
-                            decoration: const InputDecoration(
-                              labelText: 'Total Subj Enrichment Mark',
-                              border: OutlineInputBorder(),
+                          SizedBox(width: size.width*0.02,),
+                          Expanded(
+                            child: TextField(
+                              controller: totalSubjectEnrichmentMarks,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: 'Total Subj Enrichment Mark',
+                                border: OutlineInputBorder(),
+                              ),
                             ),
                           ),
-                        ),
-
-                      ],
-                    ),
-                    SizedBox(height: size.height*0.01),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: totalNoteBookMarks,
-                            decoration: const InputDecoration(
-                              labelText: 'Total NoteBook Mark',
-                              border: OutlineInputBorder(),
+        
+                        ],
+                      ),
+                      SizedBox(height: size.height*0.01),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: totalNoteBookMarks,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: 'Total NoteBook Mark',
+                                border: OutlineInputBorder(),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: size.width*0.02,),
-                        Expanded(
-                          child: TextField(
-                            controller: totalPracticalMarks,
-                            decoration: const InputDecoration(
-                              labelText: 'Total Practical Marks',
-                              border: OutlineInputBorder(),
+                          SizedBox(width: size.width*0.02,),
+                          Expanded(
+                            child: TextField(
+                              controller: totalPracticalMarks,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: 'Total Practical Marks',
+                                border: OutlineInputBorder(),
+                              ),
                             ),
                           ),
-                        ),
-
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: size.height*0.02),
-                isLoading? Center(
-                  child: LoadingAnimationWidget.threeArchedCircle(
-                    color: themeObj.primayColor,
-                    size: 50,
+        
+                        ],
+                      ),
+                    ],
                   ),
-                ):
-                SizedBox(
-                  height: size.height*0.57,
-                  child: scholasticTable(),
-                ),
-              ],
-            ):Column(
-              children: [
-                isLoading? Center(
-                  child: LoadingAnimationWidget.threeArchedCircle(
-                    color: themeObj.primayColor,
-                    size: 50,
+                  SizedBox(height: size.height*0.02),
+                  isLoading? Center(
+                    child: LoadingAnimationWidget.threeArchedCircle(
+                      color: themeObj.primayColor,
+                      size: 50,
+                    ),
+                  ):
+                  SizedBox(
+                    height: size.height*0.57,
+                    child: scholasticTable(size),
                   ),
-                ):
-                SizedBox(
-                  height: size.height*0.57,
-                  child: nonScholasticTable(),
-                ),
-              ],
-            )
-          ]
-
-            ),
+                ],
+              ):Column(
+                children: [
+                  isLoading? Center(
+                    child: LoadingAnimationWidget.threeArchedCircle(
+                      color: themeObj.primayColor,
+                      size: 50,
+                    ),
+                  ):
+                  SizedBox(
+                    height: size.height*0.74,
+                    child: nonScholasticTable(size),
+                  ),
+                ],
+              )
+            ]
+        
+              ),
+        ),
       ),
 
-      floatingActionButton: _selectedTab=="New"?
-      SizedBox(
-        width: size.width*0.3,
 
-        child: TextButton(
-          onPressed: (){
-
-
-          },
-          style: TextButton.styleFrom(backgroundColor: Color.fromRGBO(216,180,254,1)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Save",style: GoogleFonts.openSans(color: themeObj.textBlack,fontWeight: FontWeight.w400,fontSize: size.width*0.045),),
-            ],
-          ),
-        ),
-      ):SizedBox(),
     );
   }
   Widget dropDownButton(Size size) {
@@ -191,11 +425,10 @@ class _UploadResultState extends State<UploadResult> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Card(
               child: Container(
-                width: size.width * 0.3,
+                width: size.width * 0.23,
                 height: size.height * 0.05,
                 child: DropdownButton<String>(
                   isExpanded: true,
@@ -220,10 +453,10 @@ class _UploadResultState extends State<UploadResult> {
                 ),
               ),
             ),
-            SizedBox(width: size.width * 0.02,),
+            SizedBox(width: size.width * 0.01,),
             Card(
               child: Container(
-                width: size.width * 0.3,
+                width: size.width * 0.23,
                 height: size.height * 0.05,
                 child: DropdownButton<String>(
                   isExpanded: true,
@@ -248,7 +481,7 @@ class _UploadResultState extends State<UploadResult> {
                 ),
               ),
             ),
-            SizedBox(width: size.width * 0.02,),
+            SizedBox(width: size.width * 0.01,),
             Card(
               child: Container(
                 width: size.width * 0.3,
@@ -279,6 +512,36 @@ class _UploadResultState extends State<UploadResult> {
 
               ),
             ),
+            SizedBox(width: size.width * 0.01,),
+            Card(
+              child: Container(
+                width: size.width * 0.3,
+                height: size.height * 0.05,
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  borderRadius: BorderRadius.circular(12),
+                  hint: Text("Term ", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(8),
+                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey,),
+                  underline: Container(),
+                  value: _selectedTerm,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedTerm = newValue!;
+                      getStudentData();
+
+                    });
+                  },
+                  items: termOptions.map((String option) {
+                    return DropdownMenuItem<String>(
+                      value: option,
+                      child: Text(option, overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -300,14 +563,14 @@ class _UploadResultState extends State<UploadResult> {
     );
   }
 
-  Widget scholasticTable() {
+  Widget scholasticTable(Size size) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Table(
           border: TableBorder.all(),
-          columnWidths: {
+          columnWidths: const {
             0: FixedColumnWidth(90),
             1: FixedColumnWidth(150),
             2: FixedColumnWidth(120),
@@ -315,11 +578,11 @@ class _UploadResultState extends State<UploadResult> {
             4: FixedColumnWidth(120),
             5: FixedColumnWidth(120),
             6: FixedColumnWidth(120),
-            7: FixedColumnWidth(120),
+            7: FixedColumnWidth(80),
           },
           children: [
             scholasticHeader(),
-            scholasticRow(),
+            ...scholasticRow(size),
           ],
         ),
       ),
@@ -349,43 +612,147 @@ class _UploadResultState extends State<UploadResult> {
       )).toList(),
     );
   }
-  TableRow scholasticRow() {
-    // return noteBookRecordList!.map((notebook) {
+
+
+  List<TableRow> scholasticRow(Size size) {
+    return studentsList!.map((student) {
+      String studentId = student['email'];
+      Map<String, TextEditingController> controllers = scholasticControllers[studentId]!;
+
       return TableRow(
         children: [
-          newTableCell( ""),
-          newTableCell( ""),
-          newTableCell( ""),
-          newTableCell( ""),
-          newTableCell( ""),
-          newTableCell( ""),
-          newTableCell( ""),
-          TextButton(onPressed: (){
+          newTableCell(student["rollNumber"]?.toString() ?? ""),
+          newTableCell(student['name']?.toString() ?? ""),
 
+          FutureBuilder(future: getLastRecord(student["email"]),
+            builder: (context, snapshot) {
+            if(snapshot.connectionState== ConnectionState.waiting){
+              return SizedBox();
+            }else if(snapshot.hasError){
+              return TableCell(
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text("Error "),
+                ),
+              );
+            }
+            else{
+              return TableCell(
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(snapshot.data.toString()),
+                ),
+              );
+            }
+          },),
 
-          }, child: Text("Save")),
+          noteBookCell(controllers['noteBook']!),
+          subjectEnrichmentCell(controllers['subjectEnrichment']!),
+          practical(controllers['practical']!),
+          theoryMark(controllers['theory']!),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton(
+             // style: ElevatedButton.styleFrom(alignment: Alignment.center,backgroundColor: Colors.transparent,shape:RoundedRectangleBorder(side: BorderSide(color: Colors.green))),
+              onPressed: () {
+                // Save marks for this student
+
+                saveScholasticMarks(
+                    student,
+                    controllers['noteBook']!.text,
+                    controllers['subjectEnrichment']!.text,
+                    controllers['practical']!.text,
+                    controllers['theory']!.text
+                );
+              },
+              child: Center(child: Text("Save",style: GoogleFonts.openSans(fontSize: size.width*0.045,fontWeight: FontWeight.w500,color: Colors.green),)),
+            ),
+          ),
         ],
       );
-    // }).toList();
+    }).toList();
+  }
+  Widget noteBookCell(TextEditingController controller) {
+    return TableCell(
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child:  TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          decoration:  const InputDecoration(
+            hintText: 'Note Book Mark',
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ),
+    );
+  }
+  Widget subjectEnrichmentCell(TextEditingController controller) {
+    return TableCell(
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child:  TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(
+            hintText: 'Subject Enrichment Mark',
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ),
+    );
+  }
+  Widget practical(TextEditingController controller) {
+    return TableCell(
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child:  TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(
+            hintText: 'Practical Mark',
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ),
+    );
+  }
+  Widget theoryMark(TextEditingController controller) {
+    return TableCell(
+      child: Padding(
+        padding: EdgeInsets.all(8),
+
+        child:  TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(
+            hintText: 'Theory Mark',
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ),
+    );
   }
 
-  Widget nonScholasticTable() {
+
+
+  Widget nonScholasticTable(Size size) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Table(
           border: TableBorder.all(),
-          columnWidths: {
+          columnWidths: const {
             0: FixedColumnWidth(90),
             1: FixedColumnWidth(150),
             2: FixedColumnWidth(120),
-            3: FixedColumnWidth(120),
-            4: FixedColumnWidth(120),
+            3: FixedColumnWidth(160),
+            4: FixedColumnWidth(80),
           },
           children: [
             nonScholasticHeader(),
-            nonScholasticRow(),
+            ...nonScholasticRow(size),
           ],
         ),
       ),
@@ -412,24 +779,68 @@ class _UploadResultState extends State<UploadResult> {
       )).toList(),
     );
   }
-  TableRow nonScholasticRow() {
-    // return noteBookRecordList!.map((notebook) {
-    return TableRow(
-      children: [
-        newTableCell( ""),
-        newTableCell( ""),
-        newTableCell( ""),
-        newTableCell( ""),
-        TextButton(onPressed: (){
 
+  List<TableRow> nonScholasticRow(Size size) {
+    return studentsList!.map((student) {
+      String studentId = student['email'];
+      Map<String, TextEditingController> controllers = nonScholasticControllers[studentId]!;
 
-        }, child: Text("Save")),
-      ],
-    );
-    // }).toList();
+      return TableRow(
+        children: [
+          newTableCell(student["rollNumber"]?.toString() ?? ""),
+          newTableCell(student['name']?.toString() ?? ""),
+          workEducationCell(controllers['workEducation']!),
+          generalKnowledgeCell(controllers['generalKnowledge']!),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton(
+              onPressed: () {
+                // Save marks for this student
+
+                saveNonScholasticMarks(
+                    student,
+                    controllers['workEducation']!.text,
+                    controllers['generalKnowledge']!.text
+                );
+              },
+              child: Center(child: Text("Save",style: GoogleFonts.openSans(fontSize: size.width*0.045,fontWeight: FontWeight.w500,color: Colors.green),)),
+            ),
+          ),
+        ],
+      );
+    }).toList();
   }
 
+  Widget workEducationCell(TextEditingController controller) {
+    return TableCell(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child:  TextField(
+          controller: controller,
+          decoration:  const InputDecoration(
+            hintText: 'Grade',
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ),
+    );
+  }
+  Widget generalKnowledgeCell(TextEditingController controller) {
+    return TableCell(
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child:  TextField(
+          controller: controller,
 
+          decoration: const InputDecoration(
+            hintText: 'Grade',
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ),
+    );
+  }
   Widget newTableCell(String text) {
     return TableCell(
       child: Padding(
