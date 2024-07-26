@@ -25,6 +25,7 @@ function StudentFee() {
         setStart(0);
         setDetails([]);
         setLoading(true);
+        setAllDataFetched(false);
         fetchDetails();
     }, [authState.accessToken, filter]);
 

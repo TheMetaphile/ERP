@@ -124,34 +124,7 @@ export default function HistoryTile({ details }) {
                         ) : (
                             item.type
                         )}
-                        <div className="flex items-center mt-2 mobile:max-tablet:flex-col">
-                            {item.by && item.status !== 'Pending' ? (
-                                <>
-                                    <div className='flex items-center mb-1 '>
-                                        <img src={item.by[0].profileLink} alt="img" className="w-8 h-8  mobile:max-tablet:w-6  mobile:max-tablet:h-6  rounded-full" />
-                                        <h5 className="ml-2">{item.by[0].name}</h5></div>
-                                    <div className={`ml-2 font-normal text-sm px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-200 text-orange-700' : item.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>{item.status}</div>
 
-                                </>
-                            ) : (
-                                <div className="flex justify-center items-center gap-1  mobile:max-tablet:flex-col">
-                                    <div className=' flex'>
-                                        {editRowIndex === index ? (
-                                            <>
-                                                <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdCheck /></button>
-                                                <button className='bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <MdEdit /></button>
-                                                <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
-                                            </>
-                                        )}
-                                    </div>
-                                    <div className={`font-normal text-sm px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-200 text-orange-700' : item.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>{item.status}</div>
-                                </div>
-                            )}
-                        </div>
                     </div>
                     <div className='font-medium text-justify'>
                         Reason: {editRowIndex === index ? (
@@ -198,6 +171,34 @@ export default function HistoryTile({ details }) {
                             )}
                         </div>
 
+                    </div>
+                    <div className="flex items-center mt-2 justify-between">
+                        {item.by && item.status !== 'Pending' ? (
+                            <>
+                                <div className='flex items-center mb-1 '>
+                                    <img src={item.by[0].profileLink} alt="img" className="w-8 h-8  mobile:max-tablet:w-6  mobile:max-tablet:h-6  rounded-full" />
+                                    <h5 className="ml-2">{item.by[0].name}</h5></div>
+                                <div className={`ml-2 font-normal text-sm px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-200 text-orange-700' : item.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>{item.status}</div>
+
+                            </>
+                        ) : (
+                            <div className="flex justify-between items-center gap-1  w-full">
+                                <div className=' flex'>
+                                    {editRowIndex === index ? (
+                                        <>
+                                            <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdate(index)}><MdCheck /></button>
+                                            <button className='bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}> <MdEdit /></button>
+                                            <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever /></button>
+                                        </>
+                                    )}
+                                </div>
+                                <div className={`font-normal text-sm px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-200 text-orange-700' : item.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>{item.status}</div>
+                            </div>
+                        )}
                     </div>
                 </div>
             ))}

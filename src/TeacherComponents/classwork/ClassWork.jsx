@@ -118,7 +118,7 @@ function ClassWork() {
     return (
         <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-laptop:">
             <ToastContainer />
-            <div className='w-full flex items-center justify-between mobile:max-tablet:px-3'>
+            <div className='w-full flex items-center justify-between tablet:max-laptop:flex-col tablet:max-laptop:items-start mobile:max-tablet:px-3'>
                 <h1 className='text-2xl mobile:max-tablet:text-lg whitespace-nowrap'>All ClassWork</h1>
                 <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
                     <button
@@ -128,6 +128,7 @@ function ClassWork() {
                         Filter
                     </button>
                     {isDropdownVisible && (
+
                         <div className='flex absolute left-0 right-0 bg-white p-2 items-center gap-2 flex-col'>
                             <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange} >
                                 <option value=""> Class</option>
@@ -148,55 +149,58 @@ function ClassWork() {
                                     <option key={index} value={subjectOption}>{subjectOption}</option>
                                 ))}
                             </select>
-                            <div>
-                                <h1 className="bg-purple-300 px-4 py-2 rounded-md cursor-pointer" onClick={handleOpen}>Upload</h1>
-                            </div>
+
                         </div>
                     )}
+
+
                 </div>
+                <div className=" flex">
+                    <div className='flex mobile:max-tablet:hidden items-center gap-2'>
+                        <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange} >
+                            <option value=""> Class</option>
+                            {uniqueClasses.map((classOption, index) => (
+                                <option key={index} value={classOption}>{classOption}</option>
+                            ))}
+                        </select>
+                        <select id="section" className="w-full px-4 py-2 border rounded-md" onChange={handleSectionChange}>
+                            <option value=""> Section</option>
+                            {uniqueSections.map((sectionOption, index) => (
+                                <option key={index} value={sectionOption}>{sectionOption}</option>
+                            ))}
+                        </select>
 
-                <div className='flex mobile:max-tablet:hidden items-center gap-2'>
-                    <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange} >
-                        <option value=""> Class</option>
-                        {uniqueClasses.map((classOption, index) => (
-                            <option key={index} value={classOption}>{classOption}</option>
-                        ))}
-                    </select>
-                    <select id="section" className="w-full px-4 py-2 border rounded-md" onChange={handleSectionChange}>
-                        <option value=""> Section</option>
-                        {uniqueSections.map((sectionOption, index) => (
-                            <option key={index} value={sectionOption}>{sectionOption}</option>
-                        ))}
-                    </select>
+                        <select id="subject" className="w-full px-4 py-2 border rounded-md" onChange={handleSubjectChange}>
+                            <option value=""> Subject</option>
+                            {uniqueSubjects.map((subjectOption, index) => (
+                                <option key={index} value={subjectOption}>{subjectOption}</option>
+                            ))}
+                        </select>
 
-                    <select id="subject" className="w-full px-4 py-2 border rounded-md" onChange={handleSubjectChange}>
-                        <option value=""> Subject</option>
-                        {uniqueSubjects.map((subjectOption, index) => (
-                            <option key={index} value={subjectOption}>{subjectOption}</option>
-                        ))}
-                    </select>
+                    </div>
                     <div>
-                        <h1 className="bg-purple-300 px-4 py-2 rounded-md cursor-pointer" onClick={handleOpen}>Upload</h1>
+                        <h1 className="bg-purple-300 px-2 py-2 ml-2 rounded-md cursor-pointer" onClick={handleOpen}>Upload</h1>
                     </div>
                 </div>
 
             </div>
-
-            {loading ? (
-                <Loading />
-            ) : details.length === 0 ? (
-                <div className="text-center w-full mt-6">No Classwork found</div>
-            ) : (
-                <div className='w-full mt-2 rounded-lg mb px-2'>
-                    <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
-                    {!allDataFetched && (
-                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                    )}
-                </div>
-            )}
+            {
+                loading ? (
+                    <Loading />
+                ) : details.length === 0 ? (
+                    <div className="text-center w-full mt-6">No Classwork found</div>
+                ) : (
+                    <div className='w-full mt-2 rounded-lg mb px-2'>
+                        <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
+                        {!allDataFetched && (
+                            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                        )}
+                    </div>
+                )
+            }
 
             {isDialogOpen && <NewUpload onClose={handleClose} onNewWork={handleNewWork} />}
-        </div>
+        </div >
 
     )
 }

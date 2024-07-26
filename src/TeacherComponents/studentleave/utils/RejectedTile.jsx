@@ -23,8 +23,12 @@ export default function RejectedTile({ data }) {
                                     <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
                                     <span className='text-red-500 whitespace-nowrap'>{student.name}</span>
                                 </div>  class &nbsp;
-                                <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span> wants a Leave Request from &nbsp;
-                                <span className='text-red-500 whitespace-nowrap'>{student.startDate}</span> to &nbsp;
+                                <div>
+                                    <span className='text-red-500 whitespace-nowrap'>{data.class} {data.section}</span> wants a Leave Request from &nbsp;
+                                </div>
+                                <div>
+                                    <span className='text-red-500 whitespace-nowrap'>{student.startDate}</span> to &nbsp;
+                                </div>
                                 <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
                             </div>
                             <div className='items-center px-3 cursor-pointer'>

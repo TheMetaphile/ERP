@@ -50,7 +50,7 @@ function StudentDoubts() {
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-laptop:mt-0">
             <ToastContainer />
-            <div className=' mobile:max-tablet:flex mobile:max-tablet:justify-between mobile:max-tablet:w-full items-center'>
+            <div className='flex justify-between w-full items-center'>
                 <h1 className='text-3xl mobile:max-laptop:text-xl whitespace-nowrap'>Student Doubts</h1>
                 <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
                     <button
@@ -85,6 +85,7 @@ function StudentDoubts() {
                         </div>
                     )}
                 </div>
+
             </div>
             <div className='  mt-2 mobile:max-tablet:mt-0  w-full'>
                 <div className=" flex  mt-2 mobile:max-laptop:mt-1  mr-3 items-center justify-between">

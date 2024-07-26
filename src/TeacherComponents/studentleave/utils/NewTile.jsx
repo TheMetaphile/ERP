@@ -53,17 +53,24 @@ export default function NewTile({ data }) {
                     <div key={studentIndex} className=" border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center " onClick={() => handleClick(`${studentIndex}`)}>
                         <div className='w-full'>
                             <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
-                                <div className='flex items-center'>
-                                    <div>
-                                        <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
+                                <div className='flex gap-2 items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
+                                    <div className=' flex items-center'>
+                                        <img src={student.profileLink} alt="" className='w-10 h-10 mobile:max-tablet:w-8 mobile:max-tablet:h-8 rounded-full mr-3' />
                                         <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span>
                                     </div>
-                                    Class &nbsp;
-                                    <span className='text-red-500 whitespace-nowrap'>{authState.ClassDetails.class} {authState.ClassDetails.section}&nbsp;</span> wants a Leave Request from &nbsp;
-                                    <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span> to &nbsp;
-                                    <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
+                                    <div>
+                                        Class &nbsp;
+                                        <span className='text-red-500 whitespace-nowrap'>{authState.ClassDetails.class} {authState.ClassDetails.section}&nbsp;</span>
+                                    </div>
+                                    Leave Request
+                                    <div className=' flex gap-1'>
+                                        <p>From: </p>
+                                        <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span>
+                                        <p>To </p>
+                                        <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
+                                    </div>
                                 </div>
-                                <div className='items-center px-3 cursor-pointer'>
+                                <div className='items-center px-3 mobile:max-tablet:pl-0 cursor-pointer'>
                                     {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}
                                 </div>
                             </div>

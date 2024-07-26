@@ -1,28 +1,17 @@
 import React, { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-function ClassActivity() {
 
+function Hod() {
     const menuItems = [
         {
-            title: "Time Table",
-            route: "/Teacher-Dashboard/class_activity/timetablestudent"
+            title: "Appraisal",
+            route: "/Teacher-Dashboard/HOD/Appraisal"
         },
         {
-            title: "Show Result",
-            route: "/Teacher-Dashboard/class_activity/reportcard"
+            title: "Students",
+            route: "/Teacher-Dashboard/HOD/students"
         },
-        {
-            title: "Fee Status",
-            route: "/Teacher-Dashboard/class_activity/studentfee"
-        },
-        {
-            title: "Student Attendance",
-            route: "/Teacher-Dashboard/class_activity/studentAttendence"
-        },
-        {
-            title: "Student Leave",
-            route: "/Teacher-Dashboard/class_activity/studentleave"
-        },
+
 
     ];
     const [idx, setidx] = useState(0)
@@ -47,4 +36,5 @@ function ClassActivity() {
     )
 }
 
-export default ClassActivity
+
+export default Hod

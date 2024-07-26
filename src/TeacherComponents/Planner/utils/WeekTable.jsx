@@ -128,8 +128,8 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
     const renderTableRows = (detail, editable = false) => {
         return detail.map((day, index) => (
             <tr key={index}>
-                <td className='border-y p-4 border-black'>{day.date}</td>
-                <td className='border-y p-4 border-black'>
+                <td className='border-y p-4 border-black whitespace-nowrap gap-2'>{day.date}</td>
+                <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
                     {editable ? (
                         <input
                             className='border-secondary border-2 rounded-md p-2'
@@ -139,7 +139,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
                         />
                     ) : day.chapter}
                 </td>
-                <td className='border-y p-4 border-black'>
+                <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
                     {editable ? (
                         <input
                             className='border-secondary border-2 rounded-md p-2'
@@ -149,7 +149,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
                         />
                     ) : day.topic}
                 </td>
-                <td className='border-y p-4 border-black'>
+                <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
                     {editable ? (
                         <input
                             className='border-secondary border-2 rounded-md p-2'
@@ -159,7 +159,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
                         />
                     ) : day.plan}
                 </td>
-                <td className='border-y p-4 border-black'>
+                <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
                     {editable ? (
                         <input
                             className='border-secondary border-2 rounded-md p-2'
@@ -174,21 +174,21 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
     };
 
     return (
-        <div className='rounded-md'>
+        <div className='rounded-md overflow-auto'>
             {loading ? (
                 <Loading />
             ) : details.length === 0 ? (
                 <>No Data Available</>
             ) : (
                 selectedTab === 'Current Week' ? (
-                    <table className='w-full rounded-md border border-purple-700'>
+                    <table className='w-full rounded-md border border-black'>
                         <thead className='bg-secondary border-b border-black'>
                             <tr className='p-4 text-center'>
-                                <th className='border-y border-black py-2 text-xl font-semibold'>Date</th>
-                                <th className='border-y border-black py-2 text-xl font-semibold'>Chapter</th>
-                                <th className='border-y border-black py-2 text-xl font-semibold'>Topic</th>
-                                <th className='border-y border-black py-2 text-xl font-semibold'>Teaching Aids</th>
-                                <th className='border-y border-black py-2 text-xl font-semibold'>Activity (if any)</th>
+                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 font-semibold'>Date</th>
+                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Chapter</th>
+                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Topic</th>
+                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Teaching Aids</th>
+                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Activity (if any)</th>
                             </tr>
                         </thead>
                         <tbody className='text-center'>
@@ -197,17 +197,17 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
                     </table>
                 ) : (
                     <form onSubmit={handleSubmit}>
-                        <table className='w-full rounded-md border border-purple-700'>
+                        <table className='w-full rounded-md border border-black'>
                             <thead className='bg-secondary border-b border-black'>
                                 <tr className='p-4 text-center'>
-                                    <th className='border-y border-black py-2 text-xl font-semibold'>Date</th>
-                                    <th className='border-y border-black py-2 text-xl font-semibold'>Chapter</th>
-                                    <th className='border-y border-black py-2 text-xl font-semibold'>Topic</th>
-                                    <th className='border-y border-black py-2 text-xl font-semibold'>Teaching Aids</th>
-                                    <th className='border-y border-black py-2 text-xl font-semibold'>Activity (if any)</th>
+                                    <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Date</th>
+                                    <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Chapter</th>
+                                    <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Topic</th>
+                                    <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Teaching Aids</th>
+                                    <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Activity (if any)</th>
                                 </tr>
                             </thead>
-                            <tbody className='text-center'>
+                            <tbody className='text-center whitespace-nowrap'>
                                 {renderTableRows(nextWeekDays, true)}
                             </tbody>
                         </table>

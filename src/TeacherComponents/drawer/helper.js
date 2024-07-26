@@ -168,6 +168,13 @@ const menuItems = [
     route: "/Teacher-Dashboard/planner",
     children: [],
   },
+  {
+    image: notebookImage,
+    alt: "HOD",
+    title: "HOD",
+    route: "/Teacher-Dashboard/HOD",
+    children: [],
+  },
 ];
 
 export default menuItems;

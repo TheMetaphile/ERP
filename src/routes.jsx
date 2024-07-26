@@ -153,6 +153,12 @@ import FeeDetail from "./SubAdminComponent/SubAdminFee/StudentFee/utils/FeeDetai
 import NoticeSubAdmin from "./SubAdminComponent/notification/utils/NoticeSubAdmin.jsx";
 import FeeDetailAdmin from "./AdminComponents/fee/StudentFee/utils/FeeDetailAdmin.jsx";
 import AllDetailsAdmin from "./AdminComponents/fee/StudentFee/AllDetailsAdmin.jsx";
+import Hod from "./TeacherComponents/HOD/Hod.jsx";
+// import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
+import Students from "./TeacherComponents/hodstudents/Students.jsx";
+import Appraisalhod from "./TeacherComponents/hodappraisal/Appaisalhod.jsx";
+import Applyhod from "./TeacherComponents/hodappraisal/utils/Applyhod.jsx";
+import Appliedhod from "./TeacherComponents/hodappraisal/utils/Appliedhod.jsx";
 
 
 
@@ -431,7 +437,7 @@ const router = createBrowserRouter([
           },
         ]
       },
-     
+
       {
         path: "/Admin-Dashboard/StudentAttendance",
         element: <StudentAttendance />,
@@ -687,8 +693,6 @@ const router = createBrowserRouter([
         element: <HomeWorkTeacher />,
         children: []
       },
-
-
       {
         path: "/Teacher-Dashboard/takeleave",
         element: <TakeLeave />,
@@ -826,6 +830,45 @@ const router = createBrowserRouter([
           {
             path: "New",
             element: <NewNoteBookRecord />
+          },
+
+        ]
+      },
+      {
+        path: "/Teacher-Dashboard/HOD",
+        element: <Hod />,
+        children: [
+          {
+            path: "",
+            element: <Appraisalhod />
+          },
+          {
+            path: "/Teacher-Dashboard/HOD/Appraisal",
+            element: <Appraisalhod />,
+            children: []
+          },
+          {
+            path: "/Teacher-Dashboard/HOD/students",
+            element: <Students />,
+            children: []
+          },
+          {
+            path: "/Teacher-Dashboard/HOD/Appraisal",
+            element: <Appraisalhod />,
+            children: [
+              {
+                path: '/Teacher-Dashboard/HOD/Appraisal/apply',
+                element: <Applyhod />
+              },
+              {
+                path: '/Teacher-Dashboard/HOD/Appraisal/applied',
+                element: <Appliedhod />
+              },
+              {
+                path: '',
+                element: <Applyhod />
+              },
+            ]
           },
 
         ]

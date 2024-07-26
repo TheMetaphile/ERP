@@ -134,23 +134,9 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                         ) : (
                             <>
 
-                                <div className="pl-2 font-medium whitespace-nowrap mobile:max-tablet:text-sm">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
+                                <div className="pl-2 font-medium whitespace-nowrap mobile:max-tablet:text-lg">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
                                 <div className='flex items-center gap-1 mobile:max-tablet:flex-col'>
-                                    <div className="flex">
-                                        <button
-                                            className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                            onClick={() => handleUpdateClick(index)}
-                                        >
-                                            <MdEdit />
-                                        </button>
 
-                                        <button
-                                            className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                            onClick={() => handleDelete(index)}
-                                        >
-                                            <MdDeleteForever />
-                                        </button>
-                                    </div>
                                     <div className="px-3 py-1 bg-bg_blue rounded-full w-fit">
 
                                         {detail.subject}
@@ -211,6 +197,21 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                             ) : (
                                 <h1 className="font-medium">Deadline: {detail.deadline}</h1>
                             )}
+                        </div>
+                        <div className="flex justify-end gap-1">
+                            <button
+                                className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                onClick={() => handleUpdateClick(index)}
+                            >
+                                <MdEdit />
+                            </button>
+
+                            <button
+                                className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                onClick={() => handleDelete(index)}
+                            >
+                                <MdDeleteForever />
+                            </button>
                         </div>
                     </div>
                 </div>
