@@ -57,7 +57,7 @@ function NewLeave({ onClose, onNewLeave }) {
     console.log({ fromDate, toDate, leaveType, reason, session, datee });
     setLoading(true);
     try {
-      const response = await axios.post(`${BASE_URL_TeacherLeave}/leave/apply`,
+      const response = await axios.post(`${BASE_URL_TeacherLeave}/teacherleave/apply`,
         {
           startDate: fromDate,
           endDate: toDate,

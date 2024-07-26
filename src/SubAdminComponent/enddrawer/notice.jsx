@@ -25,7 +25,7 @@ export default function Notice(props) {
     const fetchNotice = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/subAdmin?start=${start}&limit=${end}&session=${session}&type=${'For Sub Admin'}`, {
+        const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/subAdmin?start=${start}&limit=${end}&session=${session}&type=for`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
           }

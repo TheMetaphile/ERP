@@ -112,8 +112,11 @@ export default function AttendenceTable({ additionalData, status }) {
       toast.info('No changes detected');
       return;
     }
-
     try {
+      console.log({
+        ...updatedFields,
+        leaveId: data[index]._id
+      });
       const response = await axios.put(`${BASE_URL_Student_Leave}/leave/update`, {
         ...updatedFields,
         leaveId: data[index]._id

@@ -65,7 +65,7 @@ export default function FeeAdminRow({ Class, session }) {
         try {
             const response = await axios.post(`${BASE_URL_Fee}/fee/create/structure`, {
                 class: Class,
-                session: '2023-24',
+                session: session,
                 structure: structure
             }, {
                 headers: {
@@ -91,17 +91,18 @@ export default function FeeAdminRow({ Class, session }) {
         console.log(Class)
         console.log(id)
         try {
-            const response = await axios.delete(`${BASE_URL_Fee}/fee/delete/structure`,
-                {
+            const response = await axios.delete(`${BASE_URL_Fee}/fee/delete/structure`, {
+
+                data: {
                     class: Class,
                     session: session,
                     structureId: id
                 },
-                {
-                    headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
-                    }
+
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
                 }
+            }
             );
 
             if (response.status === 200) {

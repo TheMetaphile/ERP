@@ -33,7 +33,7 @@ export default function HistoryTile({ details }) {
         if ((data[index].status) === "Pending") {
             try {
                 const response = await axios.delete(
-                    `${BASE_URL_TeacherLeave}/leave/delete?leaveId=${id}&session=${session}`,
+                    `${BASE_URL_TeacherLeave}/teacherleave/delete?leaveId=${id}&session=${session}`,
                     {
                         headers: {
                             Authorization: `Bearer ${authState.accessToken}`
@@ -84,7 +84,7 @@ export default function HistoryTile({ details }) {
 
         try {
             const response = await axios.put(
-                `${BASE_URL_TeacherLeave}/leave/update?leaveId=${id}&session=${session}`,
+                `${BASE_URL_TeacherLeave}/teacherleave/update?leaveId=${id}&session=${session}`,
                 editData,
                 {
                     headers: {

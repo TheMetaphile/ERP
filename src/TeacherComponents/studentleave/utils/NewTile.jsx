@@ -26,10 +26,11 @@ export default function NewTile({ data }) {
         console.log('id', leaveId, 'status', status, 'email', email)
         setLoading(true);
         try {
-            const response = await axios.put(`${BASE_URL_Student_Leave}/leave/update`, {
-                status: status,
-                leaveId: leaveId
-            },
+            const response = await axios.put(`${BASE_URL_Student_Leave}/leave/update`,
+                {
+                    status: status,
+                    leaveId: leaveId
+                },
                 {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
@@ -40,7 +41,7 @@ export default function NewTile({ data }) {
             setLeaves(prevLeaves => prevLeaves.filter(leave => leave._id !== leaveId));
         } catch (err) {
             console.error("Error updating status");
-            setError(`Error updating status: ${err.message}`);
+            setError(`Error updating status: ${err}`);
         } finally {
             setLoading(false);
         }

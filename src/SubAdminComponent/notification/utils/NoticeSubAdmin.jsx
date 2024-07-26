@@ -12,7 +12,7 @@ function NoticeSubAdmin() {
     const [details, setDetails] = useState([]);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(5);
-    const [sessions, setSessions] = useState([]);
+    const sessions = getLast5Sessions();
     const [selectedSession, setSelectedSession] = useState(sessions[1]);
     const [allDataFetched, setAllDataFetched] = useState(false);
 
@@ -34,7 +34,7 @@ function NoticeSubAdmin() {
     const fetchNotice = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/subAdmin?start=${start}&limit=${end}&session=${selectedSession}&type=${'For Sub Admin'}`, {
+            const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/subAdmin?start=${start}&limit=${end}&session=${selectedSession}&type=for`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`,
                 }
@@ -65,19 +65,6 @@ function NoticeSubAdmin() {
         setSelectedSession(event.target.value);
         setDetails([]);
     };
-
-    useEffect(() => {
-        const currentYear = new Date().getFullYear();
-        const newSessions = [];
-
-        for (let i = 0; i < 5; i++) {
-            const startYear = currentYear - i;
-            const endYear = startYear + 1;
-            newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
-        }
-
-        setSessions(newSessions);
-    }, []);
 
     return (
         <div className='px-3 w-full pt-20'>
@@ -112,6 +99,19 @@ function NoticeSubAdmin() {
             )}
         </div>
     )
+}
+
+const getLast5Sessions = () => {
+    const currentYear = new Date().getFullYear();
+    const sessions = [];
+
+    for (let i = 0; i < 5; i++) {
+        const startYear = currentYear - i;
+        const endYear = (currentYear - i + 1).toString().slice(2);
+        sessions.push(`${startYear}-${endYear}`);
+    }
+
+    return sessions;
 }
 
 export default NoticeSubAdmin;
