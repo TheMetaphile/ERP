@@ -31,9 +31,19 @@ export default function RightCard() {
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
 
     const handleSubmit = async () => {
+        if (!validateEmail(email)) {
+            setError("Please enter a valid email address.");
+            toast.error("Please enter a valid email address.");
+            return;
+        }
         setIsSubmitting(true);
+        setError('');
         try {
             const endpoint = role === "Teacher-Dashboard" ? "/login/teacher" : role=== "Sub-Admin" ? "/login/SubAdmin" : "/login/student";
             await axios.post(`${BASE_URL_Login}${endpoint}`, {
