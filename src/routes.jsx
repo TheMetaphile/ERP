@@ -154,12 +154,12 @@ import NoticeSubAdmin from "./SubAdminComponent/notification/utils/NoticeSubAdmi
 import FeeDetailAdmin from "./AdminComponents/fee/StudentFee/utils/FeeDetailAdmin.jsx";
 import AllDetailsAdmin from "./AdminComponents/fee/StudentFee/AllDetailsAdmin.jsx";
 import Hod from "./TeacherComponents/HOD/Hod.jsx";
+import NoteBookHOD from "./TeacherComponents/HOD/utils/notebook/NoteBookHOD.jsx";
+import AllNoteBookRecordHOD from "./TeacherComponents/HOD/utils/notebook/utils/AllNotebookRecordHOD.jsx";
+import NewNoteBookRecordHOD from "./TeacherComponents/HOD/utils/notebook/utils/NewNotebookRecordHOD.jsx";
+import RecordDetailsHOD from "./TeacherComponents/HOD/utils/notebook/utils/Details.jsx";
+import PlannerHOD from "./TeacherComponents/HOD/utils/Planner/Planner.jsx";
 // import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
-import Students from "./TeacherComponents/hodstudents/Students.jsx";
-import Appraisalhod from "./TeacherComponents/hodappraisal/Appaisalhod.jsx";
-import Applyhod from "./TeacherComponents/hodappraisal/utils/Applyhod.jsx";
-import Appliedhod from "./TeacherComponents/hodappraisal/utils/Appliedhod.jsx";
-
 
 
 const router = createBrowserRouter([
@@ -749,17 +749,17 @@ const router = createBrowserRouter([
         element: <StudentDoubts />,
         children: [
           {
-            path: '/Teacher-Dashboard/studentdoubts/new',
+            path: "new",
             element: <NewDoubt />
           },
           {
-            path: '/Teacher-Dashboard/studentdoubts/answered',
+            path: "answered",
             element: <Answered />
           },
           {
-            path: '',
+            path: "",
             element: <NewDoubt />
-          },
+          }
         ]
       },
       {
@@ -840,36 +840,37 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <Appraisalhod />
+            element: <PlannerHOD />
           },
           {
-            path: "/Teacher-Dashboard/HOD/Appraisal",
-            element: <Appraisalhod />,
-            children: []
+            path: "/Teacher-Dashboard/HOD/planner",
+            element: <PlannerHOD />,
           },
           {
-            path: "/Teacher-Dashboard/HOD/students",
-            element: <Students />,
-            children: []
-          },
-          {
-            path: "/Teacher-Dashboard/HOD/Appraisal",
-            element: <Appraisalhod />,
+            path: "/Teacher-Dashboard/HOD/notebook",
+            element: <NoteBookHOD/>,
             children: [
               {
-                path: '/Teacher-Dashboard/HOD/Appraisal/apply',
-                element: <Applyhod />
+                path: "",
+                element: <AllNoteBookRecordHOD />
               },
               {
-                path: '/Teacher-Dashboard/HOD/Appraisal/applied',
-                element: <Appliedhod />
+                path: "All",
+                element: <AllNoteBookRecordHOD />
               },
               {
-                path: '',
-                element: <Applyhod />
+                path: "New",
+                element: <NewNoteBookRecordHOD />
               },
+    
             ]
           },
+          {
+            path: "/Teacher-Dashboard/HOD/notebook/details/:id",
+            element: <RecordDetailsHOD />,
+            children: []
+          },
+         
 
         ]
       },

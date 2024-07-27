@@ -247,7 +247,7 @@ export default function () {
                             <>For Sub Admin :
                               <ul>
                                 {notice.forId.map((stud, index) => (
-                                  <li key={index}>{stud.name}</li>
+                                  <li key={index} className="bg-gray-200 border border-gray-400 rounded-full px-3 py-1 inline-block">{stud.name}</li>
                                 ))}
                               </ul>
                             </>

@@ -4,12 +4,12 @@ import { Link, Outlet } from 'react-router-dom'
 function Hod() {
     const menuItems = [
         {
-            title: "Appraisal",
-            route: "/Teacher-Dashboard/HOD/Appraisal"
+            title: "Weekly Plan",
+            route: "/Teacher-Dashboard/HOD/planner"
         },
         {
-            title: "Students",
-            route: "/Teacher-Dashboard/HOD/students"
+            title: "NoteBook Record",
+            route: "/Teacher-Dashboard/HOD/notebook"
         },
 
 

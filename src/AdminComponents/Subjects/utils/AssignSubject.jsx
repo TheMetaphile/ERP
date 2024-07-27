@@ -5,8 +5,8 @@ function AssignSubject() {
 
     const content = [
         { class: 'Pre-Nursery' },
-        { class: 'L.K.J' },
-        { class: 'U.K.J' },
+        { class: 'L.K.G' },
+        { class: 'U.K.G' },
         { class: '1st' },
         { class: '2nd' },
         { class: '3rd' },

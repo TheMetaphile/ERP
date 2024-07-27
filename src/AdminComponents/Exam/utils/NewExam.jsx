@@ -78,7 +78,7 @@ const NewExam = ({ onClose, addExam }) => {
 
       if (response.status === 200) {
         toast.success('Exam Added')
-        addExam(response.data);
+        addExam(examData);
       } else {
         toast.error('Failed to add Exam. Try again after some time.');
 
@@ -91,7 +91,6 @@ const NewExam = ({ onClose, addExam }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 overflow-y-auto no-scrollbar">
-      <ToastContainer />
       <div className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-3xl">
         <button
           className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-700"

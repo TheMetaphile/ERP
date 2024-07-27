@@ -7,37 +7,15 @@ import { BASE_URL_AskDoubt } from '../../../Config'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Answered() {
+function Answered({Class,Section,Subject}) {
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [Class, setClass] = useState('9th');
-    const [Section, setSection] = useState('A');
-    const [Subject, setSubject] = useState('Maths');
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
     const [allDataFetched, setAllDataFetched] = useState(false);
-    const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
-
-    const [uniqueSections, setUniqueSections] = useState([]);
-    const [uniqueSubjects, setUniqueSubjects] = useState([]);
-    useEffect(() => {
-        setUniqueSections(Array.from(new Set(
-            authState.subject
-                .filter(subj => subj.class === Class)
-                .map(subj => subj.section)
-        )));
-    }, [Class]);
-
-
-    useEffect(() => {
-        setUniqueSubjects(Array.from(new Set(
-            authState.subject
-                .filter(subj => subj.section === Section && subj.class === Class)
-                .map(subj => subj.subject)
-        )));
-    }, [Section, Class]);
+ 
 
     const handleViewMore = () => {
         setStart(prevStart => prevStart + end);
@@ -90,19 +68,6 @@ function Answered() {
         }
     };
 
-
-    const handleClassChange = (e) => {
-        setClass(e.target.value);
-    };
-
-    const handleSectionChange = (e) => {
-        setSection(e.target.value);
-    };
-
-    const handleSubjectChange = (e) => {
-        setSubject(e.target.value);
-    };
-
     if (loading) {
         return <Loading />;
     }
@@ -111,28 +76,7 @@ function Answered() {
 
     return (
         <div className=''>
-            <div className='flex justify-between mobile:max-tablet:hidden gap-1'>
-                <select id="class" value={Class} onChange={handleClassChange} className="rounded-lg  shadow-md px-3 py-1 border-2 border-gray-200 text-lg tablet:text-sm">
-                    <option value="">Search by Class</option>
-                    {uniqueClasses.map((classOption, index) => (
-                        <option key={index} value={classOption}>{classOption}</option>
-                    ))}
-                </select>
-
-                <select id="section" value={Section} onChange={handleSectionChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg tablet:text-sm">
-                    <option value="">Search by Section</option>
-                    {uniqueSections.map((sectionOption, index) => (
-                        <option key={index} value={sectionOption}>{sectionOption}</option>
-                    ))}
-                </select>
-
-                <select id="subject" value={Subject} onChange={handleSubjectChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg tablet:text-sm">
-                    <option value="">Search by Subject</option>
-                    {uniqueSubjects.map((subjectOption, index) => (
-                        <option key={index} value={subjectOption}>{subjectOption}</option>
-                    ))}
-                </select>
-            </div>
+            
             <AnsweredTile data={data} />
             {!allDataFetched && (
                 <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
