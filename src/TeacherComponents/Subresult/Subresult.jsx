@@ -192,8 +192,8 @@ const Result = () => {
 
     return (
         <div className="p-2 w-full">
-            <div className="flex justify-between items-center mb-4">
-                <h1 className='text-xl font-medium'>{profile.name} Progress Report</h1>
+            <div className="flex justify-between items-center mb-4 mobile:max-tablet:flex-col mobile:max-tablet:items-start">
+                <h1 className='text-xl mobile:max-tablet:text-lg font-medium'>{profile.name} Progress Report</h1>
                 <div className='flex gap-2 items-center'>
                     <div className="w-36 mr-3 self-center">
                         <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleTermChange}>
@@ -208,12 +208,12 @@ const Result = () => {
             <div className="report-card border border-black " ref={ref} >
 
                 <div className=' border-b border-black py-3 items-center bg-teal-200 text-center'>
-                    <h1 className={`text-3xl  font-semibold mb-2`}>{selectedTermlabel} : {profile.session || "2024-25"}</h1>
-                    <h6 className="text-2xl mb-2">Report Card</h6>
+                    <h1 className={`text-3xl mobile:max-tablet:text-xl  font-semibold mb-2`}>{selectedTermlabel} : {profile.session || "2024-25"}</h1>
+                    <h6 className="text-2xl mobile:max-tablet:text-lg mb-2">Report Card</h6>
                 </div>
 
-                <div className="mb-4 flex justify-between m-3 text-xl">
-                    <div className=' leading-loose'>
+                <div className="mb-4 flex justify-between mobile:max-tablet:flex-col m-3 mobile:max-tablet:text-sm text-xl">
+                    <div className=' leading-loose mobile:max-tablet:'>
                         <p><strong className='font-medium'>Student's Name:</strong> {profile.name}</p>
                         <p><strong className='font-medium'>Father's Name:</strong> {profile.fatherName}</p>
                         <p><strong className='font-medium'>Mother's Name:</strong> {profile.motherName}</p></div>
@@ -229,46 +229,46 @@ const Result = () => {
                     <div className='font-medium text-center text-red-500'>No Result found</div>
                 ) : (
                     <>
-                        {details[selectedTermValue].length === 0 ?(
-                            <div className='font-medium text-center text-red-500'> No Scholastic Data Available</div>
+                        {details[selectedTermValue].length === 0 ? (
+                            <div className='font-medium  overflow-auto text-center text-red-500'> No Scholastic Data Available</div>
                         ) : (
-                        <table className="min-w-full border border-gray-200">
-                            <thead className=' bg-teal-200 text-xl font-medium '>
-                                <tr className='text-center'>
-                                    <th className="px-4 py-2 border">Scholastic Areas</th>
-                                    <th className="px-4 py-2 border">
-                                        Note Book
-                                        <p>
-                                            ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalNoteBookMarks : ""})
-                                        </p>
-                                    </th>
-                                    <th className="px-4 py-2 border">
-                                        S.Enrichment
-                                        <p>
-                                            ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalSubjectEnrichmentMarks : ""})
-                                        </p>
+                            <table className="min-w-full border border-gray-200">
+                                <thead className=' bg-teal-200 text-xl font-medium '>
+                                    <tr className='text-center'>
+                                        <th className="px-4 py-2 border">Scholastic Areas</th>
+                                        <th className="px-4 py-2 border">
+                                            Note Book
+                                            <p>
+                                                ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalNoteBookMarks : ""})
+                                            </p>
+                                        </th>
+                                        <th className="px-4 py-2 border">
+                                            S.Enrichment
+                                            <p>
+                                                ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalSubjectEnrichmentMarks : ""})
+                                            </p>
 
-                                    </th>
-                                    <th className="px-4 py-2 border">
-                                        Marks Obt
-                                        <p>
-                                            ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalMarks : ""})
-                                        </p>
+                                        </th>
+                                        <th className="px-4 py-2 border">
+                                            Marks Obt
+                                            <p>
+                                                ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalMarks : ""})
+                                            </p>
 
-                                    </th>
-                                    <th className="px-4 py-2 border">Total</th>
-                                    <th className="px-4 py-2 border">%</th>
-                                    <th className="px-4 py-2 border">Grade</th>
-                                </tr>
-                            </thead>
-                            <tbody className='pb-6'>
-                                {details[selectedTermValue].map((area, index) => (
-                                    <ScholasticRow index={index} area={area} />
-                                ))}
-                                <tr></tr>
-                            </tbody>
-                        </table>
-                )}
+                                        </th>
+                                        <th className="px-4 py-2 border">Total</th>
+                                        <th className="px-4 py-2 border">%</th>
+                                        <th className="px-4 py-2 border">Grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody className='pb-6'>
+                                    {details[selectedTermValue].map((area, index) => (
+                                        <ScholasticRow index={index} area={area} />
+                                    ))}
+                                    <tr></tr>
+                                </tbody>
+                            </table>
+                        )}
 
 
 
@@ -299,34 +299,32 @@ const Result = () => {
                     </>
                 )}
 
-
-
                 <div className=' border-b border-black'>
-                    <div className="flex bg-teal-200 text-xl items-center justify-between px-4 pb-4">
-                        <h2 className='  font-semibold'>Attendance:</h2>
+                    <div className="flex mobile:max-tablet:flex-col mobile:max-tablet:text-sm mobile:max-tablet:items-start  bg-teal-200 text-xl items-center justify-between px-4 pb-4">
+                        <h2 className='mobile:max-tablet:text-lg  font-semibold'>Attendance:</h2>
                         <p><strong className='  font-medium'>Total:</strong> {attendance.total}</p>
                         <p><strong className=' font-medium'>Present:</strong> {attendance.present}</p>
                         <p><strong className=' font-medium'>Percentage:</strong> {attendance.total !== 0 ? (attendance.present / attendance.total) * 100 : 0}%</p>
                     </div>
 
                     <div className="mb-12 flex items-center gap-2 px-4">
-                        <h2 className="text-xl font-semibold">Remarks:</h2>
+                        <h2 className="text-xl mobile:max-tablet:text-lg font-semibold">Remarks:</h2>
                     </div>
-                    <div className="sign flex items-baseline py-3 text-xl justify-evenly">
+                    <div className="sign mobile:max-tablet:text-sm flex items-baseline py-3 text-xl justify-evenly">
                         <p>Class Teacher</p>
                         <p>Coordinator</p>
                         <p>Principal</p>
                     </div>
                 </div>
 
-                <div className=' flex gap-2'>
+                <div className=' flex gap-2 mobile:max-tablet:flex-col'>
                     <div className="flex-1">
-                        <h1 className=' text-center text-xl my-2'>SCHOLASTIC</h1>
+                        <h1 className=' text-center text-xl mobile:max-tablet:text-lg my-2'>SCHOLASTIC</h1>
                         <table className="w-full bg-white border border-gray-200">
                             <thead className=' bg-teal-200'>
                                 <tr>
-                                    <th className="px-4 pb-4 border">MARKS RANGE</th>
-                                    <th className="px-4 pb-4 border">GRADE</th>
+                                    <th className="px-4 mobile:max-tablet:pb-1 pb-4 whitespace-nowrap mobile:max-tablet:sm border">MARKS RANGE</th>
+                                    <th className="px-4 pb-4 mobile:max-tablet:pb-1 mobile:max-tablet:sm border">GRADE</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -340,19 +338,19 @@ const Result = () => {
                         </table>
                     </div>
                     <div className="flex-1 h-full">
-                        <h1 className=' text-center text-xl my-2'>CO-SCHOLASTIC AND DISCIPLINE</h1>
+                        <h1 className=' text-center text-xl my-2 mobile:max-tablet:text-lg whitespace-nowrap'>CO-SCHOLASTIC AND DISCIPLINE</h1>
                         <table className="w-full bg-white border border-gray-200">
                             <thead className=' bg-teal-200'>
                                 <tr>
-                                    <th className="px-4 pb-4 border whitespace-nowrap">PERFOMANCE INDICATORS</th>
-                                    <th className="px-4 pb-4 border">GRADE</th>
+                                    <th className="px-4 mobile:max-tablet:font-semibold mobile:max-tablet:pb-1 pb-4 border whitespace-nowrap">PERFOMANCE INDICATORS</th>
+                                    <th className="px-4 mobile:max-tablet:font-semibold mobile:max-tablet:pb-1 pb-4 border">GRADE</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {coscholastic.map((item, index) => (
                                     <tr className='text-start text-lg' key={index}>
-                                        <td className="px-4 py-11 border w-1/2 text-center">{item.range}</td>
-                                        <td className="px-4 py-11 border w-1/2 text-center">{item.grade}</td>
+                                        <td className="px-4 mobile:max-tablet:px-1 py-11 border w-1/2 text-center">{item.range}</td>
+                                        <td className="px-4 py-11 mobile:max-tablet:px-1 border w-1/2 text-center">{item.grade}</td>
                                     </tr>
                                 ))}
                             </tbody>

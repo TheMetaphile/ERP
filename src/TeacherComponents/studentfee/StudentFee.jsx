@@ -87,7 +87,7 @@ function StudentFee() {
                     ) : (
                         details.length > 0 ? (
 
-                            <div className=' ' >
+                            <div className='tablet:max-laptop:w-fit ' >
                                 {details.map((details, index) => (
                                     filter === 'Paid'
                                         ?
@@ -104,22 +104,22 @@ function StudentFee() {
                                                         {details.name}
                                                     </h1>
                                                 </div>
-                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                <h1 className="w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.totalfee}
                                                 </h1>
-                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                <h1 className="w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.fine}
                                                 </h1>
-                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                <h1 className="w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.discountAmount}
                                                 </h1>
-                                                <h1 className={`w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap`}>
+                                                <h1 className={`w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap`}>
                                                     {details.paid}
                                                 </h1>
-                                                <h1 className="w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                <h1 className="w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.payableFee}
                                                 </h1>
-                                                <h1 className={`w-40 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap ${(details.payableFee - details.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
+                                                <h1 className={`w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap ${(details.payableFee - details.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
                                                     {details.payableFee - details.paid}
                                                 </h1>
 

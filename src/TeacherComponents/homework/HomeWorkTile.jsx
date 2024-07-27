@@ -21,18 +21,12 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
     };
 
     useEffect(() => {
-        // const subject=additionalData[0].subject;
         if (additionalData.length !== 0 && additionalData[0].subject === selectedSubject) {
-            console.log('adddito', additionalData, additionalData[0].subject)
-            console.log('bef', editedDetails)
             setEditedDetails(prevData => [...additionalData, ...prevData]);
-            console.log('afte', editedDetails)
-
         }
     }, [additionalData, selectedSubject]);
 
     const handleConfirmClick = async (index) => {
-        console.log(Class)
         const detail = editedDetails[index];
         try {
             const response = await axios.put(`${BASE_URL_Homework}/homework/update?class=${Class}&id=${detail._id}&date=${detail.date}`,
@@ -52,22 +46,18 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                     }
                 }
             );
-            if (response.status == 200) {
-                console.log('Homework Updated')
-                toast.success('HomeWork Updated')
+            if (response.status === 200) {
+                toast.success('Homework Updated');
                 setEditingRow(null);
-
             }
         } catch (error) {
             console.error("Error updating homework:", error);
             toast.error(error.response.data.error);
-
         }
     };
 
     const handleDelete = async (index) => {
         const currentYear = new Date().getFullYear();
-        console.log(Class, currentYear)
         const detail = editedDetails[index];
         try {
             const response = await axios.delete(`${BASE_URL_Homework}/homework/delete?class=${Class}&month=${new Date().getMonth() + 1}&year=${currentYear}&id=${detail._id}`,
@@ -77,9 +67,8 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                     }
                 }
             );
-            if (response.status == 200) {
-                console.log(response.data)
-                toast.success('Homework Deleted')
+            if (response.status === 200) {
+                toast.success('Homework Deleted');
                 setEditedDetails(editedDetails.filter((_, i) => i !== index));
             }
         } catch (error) {
@@ -96,72 +85,54 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
     };
 
     return (
-        <div className="mb-4 mt-3 items-center justify-between">
+        <div className="mb-4 mt-3 mobile:max-tablet:mx-2 items-center justify-between">
             {editedDetails.map((detail, index) => (
-                <div key={index} className='w-full  flex-col border border-gray-200 p-2 rounded-lg shadow-md mt-3'>
-                    <div className="flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
+                <div key={index} className='w-full flex-col border border-gray-200 px-1 py-2 rounded-lg shadow-md mt-3'>
+                    <div className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mobile:max-tablet:items-start items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
                         {editingRow === index ? (
                             <>
-                                <div className="pl-2 font-medium">Chapter: </div>
-                                <input
-                                    className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                    value={detail.chapter}
-                                    onChange={(e) => handleInputChange(index, 'chapter', e.target.value)}
-                                />
-
-                                <div className='flex gap-2 justify-end'>
-                                    <button
-                                        className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                        onClick={() => handleConfirmClick(index)}
-                                    >
-                                        <MdCheck />
-                                    </button>
-                                    <button
-                                        className='bg-red-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                        onClick={() => handleUpdateClick(-1)}
-                                    >
-                                        <FaTimes />
-                                    </button>
+                                <div className="pl-2 mobile:max-tablet:gap-1 mobile:max-tablet:pl-0 flex items-center font-medium">
+                                    Chapter:
                                     <input
-                                        className="font-normal  border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                        value={detail.subject}
-                                        onChange={(e) => handleInputChange(index, 'subject', e.target.value)}
+                                        className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
+                                        value={detail.chapter}
+                                        onChange={(e) => handleInputChange(index, 'chapter', e.target.value)}
                                     />
                                 </div>
-
-
+                                <div className='flex gap-2 justify-end mobile:max-tablet:flex-col'>
+                                    <div className='mobile:max-tablet:gap-2 flex items-center'>
+                                        Subject:
+                                        <input
+                                            className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
+                                            value={detail.subject}
+                                            onChange={(e) => handleInputChange(index, 'subject', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
                             </>
                         ) : (
                             <>
-
-                                <div className="pl-2 font-medium whitespace-nowrap mobile:max-tablet:text-lg">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
+                                <div className="pl-2 font-medium whitespace-nowrap mobile:max-tablet:text-lg">
+                                    Chapter: <span className='font-normal'>{detail.chapter}</span>
+                                </div>
                                 <div className='flex items-center gap-1 mobile:max-tablet:flex-col'>
-
                                     <div className="px-3 py-1 bg-bg_blue rounded-full w-fit">
-
                                         {detail.subject}
-
                                     </div>
                                 </div>
-
-
-
                             </>
                         )}
-
                     </div>
                     <div>
                         {editingRow === index ? (
                             <div className="flex flex-col">
                                 <div className="pl-2 font-medium">Topic: </div>
-
                                 <input
                                     className="font-normal my-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
                                     value={detail.topic}
                                     onChange={(e) => handleInputChange(index, 'topic', e.target.value)}
                                 />
                                 <div className="pl-2 font-medium">Task: </div>
-
                                 <textarea
                                     rows={6}
                                     className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
@@ -177,7 +148,6 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                                 )}
                             </div>
                         )}
-
                     </div>
                     <div className='flex justify-between mobile:max-tablet:justify-start px-2 mobile:max-tablet:flex-col'>
                         <div className='text-right mobile:max-tablet:text-left'>
@@ -187,7 +157,6 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                             {editingRow === index ? (
                                 <>
                                     <div className="pl-2 mobile:max-tablet:p-0 font-medium mobile:max-tablet:text-sm">Deadline: </div>
-
                                     <input
                                         className="font-normal mt-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
                                         value={detail.deadline}
@@ -198,6 +167,23 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                                 <h1 className="font-medium">Deadline: {detail.deadline}</h1>
                             )}
                         </div>
+                    </div>
+                    {editingRow === index ? (
+                        <div className='flex gap-1 justify-end mt-2'>
+                            <button
+                                className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                onClick={() => handleConfirmClick(index)}
+                            >
+                                <MdCheck />
+                            </button>
+                            <button
+                                className='bg-red-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                                onClick={() => setEditingRow(null)}
+                            >
+                                <FaTimes />
+                            </button>
+                        </div>
+                    ) : (
                         <div className="flex justify-end gap-1">
                             <button
                                 className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
@@ -205,7 +191,6 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                             >
                                 <MdEdit />
                             </button>
-
                             <button
                                 className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
                                 onClick={() => handleDelete(index)}
@@ -213,11 +198,10 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                                 <MdDeleteForever />
                             </button>
                         </div>
-                    </div>
+                    )}
+
                 </div>
             ))}
-
         </div>
-    )
+    );
 }
-

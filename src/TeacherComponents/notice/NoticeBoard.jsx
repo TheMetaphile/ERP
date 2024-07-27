@@ -28,8 +28,8 @@ function NoticeBoard() {
             </div>
 
             <div className=' border shadow-md mt-4 rounded-lg w-full '>
-                <div className=" flex   ml-3 mr-3 items-center justify-between">
-                    <div className=" flex  gap-2 mt-2">
+                <div className=" flex   ml-3 mr-3 items-center justify-between border-b-2 ">
+                    <div className=" flex  gap-2 mt-2 -mb-0.5 ">
                         {/* <Link
                             to={'/Teacher-Dashboard/noticeboard/allnotice'}
                             className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/allnotice' ? 'bg-secondary ' : 'bg-gray-300'}`}
@@ -39,14 +39,14 @@ function NoticeBoard() {
                         </Link> */}
                         <Link
                             to={'/Teacher-Dashboard/noticeboard/teacher'}
-                            className={`text-xl mobile:max-tablet:text-sm font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/teacher' ? 'bg-secondary ' : 'bg-gray-300'}`}
+                            className={`text-xl mobile:max-tablet:text-sm font-medium px-2   py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/teacher' ? 'text-purple-600 border-b-2 border-purple-600 ' : ''}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/teacher')}
                         >
                             For You
                         </Link>
                         <Link
                             to={'/Teacher-Dashboard/noticeboard/upload'}
-                            className={`text-xl mobile:max-tablet:text-sm font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/upload' ? 'bg-secondary ' : 'bg-gray-300'}`}
+                            className={`text-xl mobile:max-tablet:text-sm font-medium px-2  py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/upload' ? 'text-purple-600 border-b-2 border-purple-600 ' : ''}`}
                             onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/upload')}
                         >
                             By You
