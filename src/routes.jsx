@@ -159,6 +159,7 @@ import AllNoteBookRecordHOD from "./TeacherComponents/HOD/utils/notebook/utils/A
 import NewNoteBookRecordHOD from "./TeacherComponents/HOD/utils/notebook/utils/NewNotebookRecordHOD.jsx";
 import RecordDetailsHOD from "./TeacherComponents/HOD/utils/notebook/utils/Details.jsx";
 import PlannerHOD from "./TeacherComponents/HOD/utils/Planner/Planner.jsx";
+import ClassTeacherSubstitute from "./TeacherComponents/HOD/utils/ClassTeacherSubstitute/main.jsx";
 // import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
 
 
@@ -870,7 +871,10 @@ const router = createBrowserRouter([
             element: <RecordDetailsHOD />,
             children: []
           },
-         
+          {
+            path: "/Teacher-Dashboard/HOD/classTeacherSubstitute",
+            element: <ClassTeacherSubstitute />,
+          },
 
         ]
       },

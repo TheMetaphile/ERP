@@ -11,6 +11,10 @@ function Hod() {
             title: "NoteBook Record",
             route: "/Teacher-Dashboard/HOD/notebook"
         },
+        {
+            title: "Substitute Class Teacher",
+            route: "/Teacher-Dashboard/HOD/classTeacherSubstitute"
+        },
 
 
     ];

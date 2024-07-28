@@ -45,17 +45,52 @@ export default function RightCard() {
         setIsSubmitting(true);
         setError('');
         try {
-            const endpoint = role === "Teacher-Dashboard" ? "/login/teacher" : role=== "Sub-Admin" ? "/login/SubAdmin" : "/login/student";
+            const endpoint = role === "Teacher-Dashboard" ? "/login/teacher" : role === "Sub-Admin" ? "/login/SubAdmin" : "/login/student";
             await axios.post(`${BASE_URL_Login}${endpoint}`, {
                 email,
                 password
-            }).then((response) => {
+            }).then(async(response) => {
                 if (response.status == 200) {
-                    console.log(response.data,"isuhgaoiud hfguj dsfkgj")
-                    const { userDetails, tokens, subject, ClassDetails } = response.data;
+                    console.log(response.data, "isuhgaoiud hfguj dsfkgj")
+                    var { userDetails, tokens, subject, ClassDetails } = response.data;
                     console.log(userDetails, tokens);
+                    if (Object.keys(ClassDetails).length <= 0) {
+                        var date = new Date();
+                        var month = date.getMonth()+1 < 10 ? `0${date.getMonth()+1}` : date.getMonth()+1; 
+                        date = `${date.getFullYear()}-${month}-${date.getDate()}`
+                        console.log(date);
+                        var [ year1,month1,day] = date.split('-');
+                        var session = '';
+                        if (parseInt(month1) <= 3) {
+                            session = `${parseInt(year1) - 1}-${`${year1}`.substring(2, 4)}`;
+                        }
+                        else {
+                            console.log("here");
+                            session = `${year1}-${`${(parseInt(year1) + 1)}`.substring(2, 4)}`;
+                        }
+                        let config = {
+                            method: 'get',
+                            maxBodyLength: Infinity,
+                            url: `${BASE_URL_Login}/classTeacherSubstitute/fetch/checkSubstitute?date=${date}&session=${session}`,
+                            headers: {
+                                'Authorization': `Bearer ${tokens.accessToken}`
+                            }
+                        };
 
+                        await axios.request(config)
+                            .then((response) => {
+                                console.log(response, "respose dfh srh rh rfh sdf");
+                                if(response.data){
+                                    ClassDetails = response.data;
+                                }
+                                
+                                console.log("dsgsd" , ClassDetails);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
 
+                    }
                     login(userDetails, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : []);
                     navigate(`/${role}`);
                 }
@@ -120,19 +155,19 @@ export default function RightCard() {
             </Link>
 
             <div className="flex w-full   mt-2 text-lg justify-between">
-                    <select
-                        name="role"
-                        value={role}
-                        onChange={handleRoleChange}
-                        className="w-full p-2 border rounded"
-                        disabled={isSubmitting}
-                    >
-                        <option value="">Select Role</option>
-                        <option value="Teacher-Dashboard">Teacher</option>
-                        <option value="Student-Dashboard">Student</option>
-                        <option value="Sub-Admin">Sub Admin</option>
+                <select
+                    name="role"
+                    value={role}
+                    onChange={handleRoleChange}
+                    className="w-full p-2 border rounded"
+                    disabled={isSubmitting}
+                >
+                    <option value="">Select Role</option>
+                    <option value="Teacher-Dashboard">Teacher</option>
+                    <option value="Student-Dashboard">Student</option>
+                    <option value="Sub-Admin">Sub Admin</option>
 
-                    </select>
+                </select>
 
             </div>
 

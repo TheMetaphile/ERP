@@ -18,7 +18,9 @@ export default function StudentAttendanceRecord() {
         const fetchStudents = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/classTeacher?month=${month}&year=${todayDate.getFullYear()}`, {
+                var month1 = todayDate.getMonth()+1 < 10 ? `0${todayDate.getMonth()+1}` : todayDate.getMonth()+1; 
+                const formattedDate = `${todayDate.getFullYear()}-${month1}-${todayDate.getDate()}`;
+                const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/classTeacher?month=${month}&year=${todayDate.getFullYear()}&date=${formattedDate}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }
