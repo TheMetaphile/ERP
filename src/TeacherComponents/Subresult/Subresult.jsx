@@ -225,6 +225,7 @@ const Result = () => {
 
 
                 </div>
+
                 {details === null ? (
                     <div className='font-medium text-center text-red-500'>No Result found</div>
                 ) : (
@@ -232,42 +233,44 @@ const Result = () => {
                         {details[selectedTermValue].length === 0 ? (
                             <div className='font-medium  overflow-auto text-center text-red-500'> No Scholastic Data Available</div>
                         ) : (
-                            <table className="min-w-full border border-gray-200">
-                                <thead className=' bg-teal-200 text-xl font-medium '>
-                                    <tr className='text-center'>
-                                        <th className="px-4 py-2 border">Scholastic Areas</th>
-                                        <th className="px-4 py-2 border">
-                                            Note Book
-                                            <p>
-                                                ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalNoteBookMarks : ""})
-                                            </p>
-                                        </th>
-                                        <th className="px-4 py-2 border">
-                                            S.Enrichment
-                                            <p>
-                                                ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalSubjectEnrichmentMarks : ""})
-                                            </p>
+                            <div className=' overflow-auto'>
+                                <table className="min-w-full border border-gray-200">
+                                    <thead className=' bg-teal-200 text-xl font-medium whitespace-nowrap  '>
+                                        <tr className='text-center mobile:max-tablet:text-lg mobile:max-tablet:font-normal'>
+                                            <th className="px-4 py-2  border">Scholastic Areas</th>
+                                            <th className="px-4 py-2 border">
+                                                Note Book
+                                                <p>
+                                                    ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalNoteBookMarks : ""})
+                                                </p>
+                                            </th>
+                                            <th className="px-4 py-2 border">
+                                                S.Enrichment
+                                                <p>
+                                                    ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalSubjectEnrichmentMarks : ""})
+                                                </p>
 
-                                        </th>
-                                        <th className="px-4 py-2 border">
-                                            Marks Obt
-                                            <p>
-                                                ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalMarks : ""})
-                                            </p>
+                                            </th>
+                                            <th className="px-4 py-2 border">
+                                                Marks Obt
+                                                <p>
+                                                    ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalMarks : ""})
+                                                </p>
 
-                                        </th>
-                                        <th className="px-4 py-2 border">Total</th>
-                                        <th className="px-4 py-2 border">%</th>
-                                        <th className="px-4 py-2 border">Grade</th>
-                                    </tr>
-                                </thead>
-                                <tbody className='pb-6'>
-                                    {details[selectedTermValue].map((area, index) => (
-                                        <ScholasticRow index={index} area={area} />
-                                    ))}
-                                    <tr></tr>
-                                </tbody>
-                            </table>
+                                            </th>
+                                            <th className="px-4 py-2 border">Total</th>
+                                            <th className="px-4 py-2 border">%</th>
+                                            <th className="px-4 py-2 border">Grade</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className='pb-6'>
+                                        {details[selectedTermValue].map((area, index) => (
+                                            <ScholasticRow index={index} area={area} />
+                                        ))}
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         )}
 
 
@@ -279,8 +282,8 @@ const Result = () => {
                                 <table className="min-w-full bg-white border border-gray-200">
                                     <thead className=' bg-teal-200 text-xl font-medium'>
                                         <tr>
-                                            <th className="px-4 pb-4 border text-start">Co-Scholastic Areas:</th>
-                                            <th className="px-4 pb-4 border text-end">Grade</th>
+                                            <th className="px-4 pb-4 mobile:max-tablet:font-normal border text-start">Co-Scholastic Areas:</th>
+                                            <th className="px-4 pb-4 mobile:max-tablet:font-normal border text-end">Grade</th>
                                         </tr>
                                     </thead>
                                     <tbody className='text-lg font-normal '>
@@ -342,7 +345,7 @@ const Result = () => {
                         <table className="w-full bg-white border border-gray-200">
                             <thead className=' bg-teal-200'>
                                 <tr>
-                                    <th className="px-4 mobile:max-tablet:font-semibold mobile:max-tablet:pb-1 pb-4 border whitespace-nowrap">PERFOMANCE INDICATORS</th>
+                                    <th className="px-4 mobile:max-tablet:font-semibold mobile:max-tablet:pb-1 pb-4 border">PERFOMANCE INDICATORS</th>
                                     <th className="px-4 mobile:max-tablet:font-semibold mobile:max-tablet:pb-1 pb-4 border">GRADE</th>
                                 </tr>
                             </thead>

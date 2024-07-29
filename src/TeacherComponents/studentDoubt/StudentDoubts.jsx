@@ -122,7 +122,7 @@ function StudentDoubts() {
                         </button>
                     </div>
                 </div>
-                <hr className="border-t-2 bg-slate-500 mt-2 mb-3 mx-1" />
+                <hr className="border-t-2 bg-slate-500 -mt-0.5 mb-3" />
                 <div className="mt-2">
                     {selectedLink === '/Teacher-Dashboard/studentdoubts/new' && (
                         <div className="">

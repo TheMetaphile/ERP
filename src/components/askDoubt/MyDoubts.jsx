@@ -76,9 +76,9 @@ export default function MyDoubts() {
                 console.log(response.data);
                 if ((modalSubject === selectedSubject || selectedSubject === 'Subject') && status === 'Pending') {
                     console.log('before', data);
-                  
-                        setData(prevData => [response.data, ...prevData]);
-                    
+
+                    setData(prevData => [response.data, ...prevData]);
+
                     console.log('after', data);
 
                 }
@@ -155,18 +155,21 @@ export default function MyDoubts() {
                 >
                     <p className=' mobile:max-laptop:text-lg whitespace-nowrap'>My Doubts</p>
                 </Link>
-                <div className="flex md:order-2 md:w-full lg:w-fit md:ml-2 gap-2  ">
-                    <SubjectSelection onSubjectSelect={handleSubjectSelect} />
-                    <select
-                        value={status}
-                        onChange={handleStatusChange}
-                        className="mt-1 border block py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                    >
-                        <option value="Pending">Pending</option>
-                        <option value="Resolved">Resolved</option>
-                        <option value="Rejected">Rejected</option>
-                    </select>
-                    <div className="ml-auto md:hidden">
+                <div className=' flex items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
+                    <div className="flex md:order-2 md:w-full lg:w-fit md:ml-2 gap-2  ">
+                        <SubjectSelection onSubjectSelect={handleSubjectSelect} />
+                        <select
+                            value={status}
+                            onChange={handleStatusChange}
+                            className="mt-1 border block py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md mr-1"
+                        >
+                            <option value="Pending">Pending</option>
+                            <option value="Resolved">Resolved</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+
+                    </div>
+                    <div className="mt-2 md:hidden ">
                         <button className='bg-purple-400 mobile:max-tablet:text-xs whitespace-nowrap rounded-lg shadow-md px-3 py-2 text-white' onClick={handleAskDoubt}>+ Ask A Doubt</button>
                     </div>
                 </div>

@@ -13,7 +13,7 @@ function Progress() {
     ]
 
     return (
-        <div className="container mx-auto px-4  w-full h-96 border shadow-md rounded-lg"  >
+        <div className=" px-4  w-full h-96 border shadow-md rounded-lg"  >
             <h1 className="text-2xl mobile:max-tablet:text-lg font-medium mb-3 mt-2">Class Progress</h1>
 
             <div className='  overflow-auto  h-5/6'>

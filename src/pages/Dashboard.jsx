@@ -17,7 +17,7 @@ export default function Dashboard() {
   };
   return (
     <div className="w-screen h-screen overflow-x-auto  no-scrollbar ">
-      <div className="fixed top-0 left-0 w-full px-2 z-50">
+      <div className="fixed top-0 left-0 w-full px-2 z-10">
         <Navbar onDrawerToggle={toggleDrawer} onEndDrawerToggle={toggleEndDrawer} />
       </div>
 

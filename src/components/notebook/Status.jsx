@@ -55,7 +55,7 @@ const Status = () => {
             ) : data.length === 0 ? (
                 <div className="w-full text-center">No data available</div>
             ) : (
-                <div className="w-full overflow-x-auto rounded-lg">
+                <div className="w-full overflow-x-auto rounded-lg mt-4">
                     <table className="min-w-full bg-white border border-gray-300 rounded-lg">
                         <thead>
                             <tr className="bg-secondary text-gray-600 text-lg leading-normal">

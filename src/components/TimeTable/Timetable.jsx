@@ -199,7 +199,7 @@ export default function TimeTable() {
                 </select>
             </div>
             <div className="w-full overflow-auto">
-                <div className='w-full mobile:max-tablet:w-max rounded-lg border  border-gray-400'>
+                <div className='w-full tablet:max-laptop:w-fit mobile:max-tablet:w-max rounded-lg border  border-gray-400'>
                     <TimeTableHeader />
                     <div className=' w-full '>
                         {loading ? (

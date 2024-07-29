@@ -144,34 +144,7 @@ export default function HistoryTile({ details }) {
                         )}
                     </div>
 
-                    <div className='w-full flex items-center justify-between mobile:max-tablet:text-sm'>
-                        <div>
-                            From: {editRowIndex === index ? (
-                                <input
-                                    type="date"
-                                    value={editData.startDate}
-                                    onChange={(e) => handleInputChange(e, 'startDate')}
-                                    className='border '
-                                />
-                            ) : (
-                                item.startDate
-                            )}
-                        </div>
-                        <p className='tablet:hidden'>/</p>
-                        <div>
-                            To: {editRowIndex === index ? (
-                                <input
-                                    type="date"
-                                    value={editData.endDate}
-                                    onChange={(e) => handleInputChange(e, 'endDate')}
-                                    className='border'
-                                />
-                            ) : (
-                                item.endDate
-                            )}
-                        </div>
 
-                    </div>
                     <div className="flex items-center mt-2 justify-between">
                         {item.by && item.status !== 'Pending' ? (
                             <>
@@ -199,6 +172,34 @@ export default function HistoryTile({ details }) {
                                 <div className={`font-normal text-sm px-2 py-1 rounded-lg ${item.status === 'Pending' ? 'bg-orange-200 text-orange-700' : item.status === 'Approved' ? 'bg-green-200 text-green-700' : 'bg-red-200 text-red-700'}`}>{item.status}</div>
                             </div>
                         )}
+                    </div>
+                    <div className='w-full flex items-center justify-between mobile:max-tablet:text-sm'>
+                        <div>
+                            From: {editRowIndex === index ? (
+                                <input
+                                    type="date"
+                                    value={editData.startDate}
+                                    onChange={(e) => handleInputChange(e, 'startDate')}
+                                    className='border '
+                                />
+                            ) : (
+                                item.startDate
+                            )}
+                        </div>
+                        <p className='tablet:hidden'>/</p>
+                        <div>
+                            To: {editRowIndex === index ? (
+                                <input
+                                    type="date"
+                                    value={editData.endDate}
+                                    onChange={(e) => handleInputChange(e, 'endDate')}
+                                    className='border'
+                                />
+                            ) : (
+                                item.endDate
+                            )}
+                        </div>
+
                     </div>
                 </div>
             ))}

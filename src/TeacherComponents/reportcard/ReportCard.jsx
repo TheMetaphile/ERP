@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Selection from './utils/Selection';
-import Header from '../../AdminComponents/Home/utils/TeachersDetails/LeftCard/Header'
+import Header from './utils/Header'
 import { Link } from "react-router-dom";
 import NewReport from './utils/NewReport';
 import axios from 'axios';
@@ -90,7 +90,7 @@ function ReportCard() {
                 ) : students.length === 0 ? (
                     <>No student found</>
                 ) : (
-                    <div className=' rounded-lg shadow-md border border-gray-300 w-full mb-2 overflow-auto'>
+                    <div className=' rounded-lg shadow-md border border-gray-300 mb-2 overflow-auto'>
                         <Header headings={['Roll No.', 'Name', "Class", "Section"]} />
                         {students.map((detail, index) => (
                             <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`} key={index}>

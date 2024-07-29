@@ -112,15 +112,26 @@ export default function NewTile({ data }) {
                 <div key={student._id} className="border border-gray-300 p-2 justify-between rounded-lg shadow-md mt-3  items-center" onClick={() => handleClick(studentIndex)}>
 
                     <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
-                        <div className='flex items-center'>
-
-                            <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
-                            <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span> from class &nbsp;
-                            <span className='text-red-500 whitespace-nowrap'>{authState.ClassDetails.class} {authState.ClassDetails.section}&nbsp;</span> wants a Leave Request from &nbsp;
-                            <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span> to &nbsp;
-                            <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
+                        <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
+                            <div className='flex gap-2 items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
+                                <div className='flex items-center'>
+                                    <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mobile:max-tablet:w-8 mobile:max-tablet:h-8 mr-3' />
+                                    <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span>
+                                </div>
+                                <div>
+                                    Class:
+                                    <span className='text-red-500 whitespace-nowrap'>{authState.ClassDetails.class}
+                                        {authState.ClassDetails.section}</span> </div>
+                                Leave Request
+                                <div className=' flex gap-1'>
+                                    <p>From :</p>
+                                    <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span>
+                                    <p>To</p>
+                                    <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className='items-center px-3 cursor-pointer'>
+                        <div className='items-center px-3  mobile:max-tablet:pl-0 cursor-pointer'>
                             {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}
                         </div>
                     </div>
@@ -135,23 +146,28 @@ export default function NewTile({ data }) {
                     <div className='flex gap-2 font-medium text-base ml-2 mt-2'>
                         <span className='p-1 rounded-lg text-green-500 '>{student.status}</span>
                     </div>
-
-
-
                 </div>
             ))}
 
             {data.filter(student => student.status === 'Rejected').map((student, studentIndex) => (
                 <div key={student._id} className="border border-gray-300 p-2 justify-between rounded-lg shadow-md mt-3 items-center" onClick={() => handleClick(studentIndex)}>
                     <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
-                        <div className='flex items-center'>
-                            <div>
+                        <div className='flex gap-2 items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
+                            <div className='flex items-center'>
                                 <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
+                                <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span>
                             </div>
-                            <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span> from class &nbsp;
-                            <span className='text-red-500 whitespace-nowrap'>{authState.ClassDetails.class} {authState.ClassDetails.section}&nbsp;</span> wants a Leave Request from &nbsp;
-                            <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span> to &nbsp;
-                            <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
+                            <div>
+                                Class:
+                                <span className='text-red-500 whitespace-nowrap'>{authState.ClassDetails.class} {authState.ClassDetails.section}&nbsp;</span>
+                            </div>
+                            Leave Request
+                            <div className=' flex gap-1'>
+                                <p> From</p>
+                                <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span>
+                                <p>To</p>
+                                <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
+                            </div>
                         </div>
                         <div className='items-center px-3 cursor-pointer'>
                             {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}

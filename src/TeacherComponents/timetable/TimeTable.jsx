@@ -160,7 +160,7 @@ function TimeTable() {
                 <Selection onDayChange={handleDayChange} />
             </div>
 
-            <div className='w-full mobile:max-tablet:px-2'>
+            <div className='w-full mobile:max-tablet:px-2 mt-4'>
                 {loading ? (
                     <Loading />
                 ) : !fetchedTimeTableStructure ?

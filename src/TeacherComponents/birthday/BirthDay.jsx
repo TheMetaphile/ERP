@@ -12,7 +12,7 @@ function BirthDay() {
 
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-laptop:">
-            <h1 className='text-3xl mobile:max-tablet:text-xl'>Birthday</h1>
+            <h1 className='text-3xl font-semibold mobile:max-tablet:text-xl'>Birthday</h1>
             <div className='  mt-3  w-full'>
                 <div className=" flex items-center justify-between border-b mb-3 ">
                     <div className=" flex  gap-2 -mb-0.5 ">

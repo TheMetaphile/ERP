@@ -99,11 +99,11 @@ export default function ImageTextInRow(props) {
 
       {isDialogOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg">
+          <div className="bg-white p-4 mobile:max-tablet:p-6 rounded-lg shadow-lg z-50 mobile:max-tablet:mx-4">
             <FaRegCircleXmark className="text-red-600 float-right w-5 h-5 cursor-pointer" onClick={handleCloseDialog} />
-            <div className="flex flex-col bg-white tablet:w-fit tablet:px-10 mobile:w-full mobile:px-4 mobile:max-tablet:mt-10 justify-center">
+            <div className="flex flex-col bg-white tablet:w-fit tablet:px-5 mobile:w-full mobile:px- mobile:max-tablet:mt-10 justify-center">
 
-              <h1 className="tablet:text-xl mobile:max-tablet:text-lg py-2 font-medium self-center whitespace-nowrap ">Change Your Password</h1>
+              <h1 className="tablet:text-xl mobile:max-tablet:text-lg py-2 mobile:max-tablet:py-0 font-medium self-center whitespace-nowrap ">Change Your Password</h1>
 
 
               {error && <div className="text-red-500 text-center mt-2">{error}</div>}

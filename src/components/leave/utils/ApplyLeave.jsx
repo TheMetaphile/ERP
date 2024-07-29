@@ -54,8 +54,6 @@ export default function ApplyLeave({ onNewLeave }) {
             {/* <ToastContainer /> */}
             <h1 className=" text-lg md:text-xl font-medium">Apply Leave</h1>
             <div className='mt-3 w-full md:w-2/3 lg:w-1/2'>
-
-
                 <div className="flex flex-row mobile:max-laptop:flex-col  mt-2  ">
                     <div className='flex items-center w-full justify-between tablet:gap-3 mobile:max-tablet:flex-col'>
                         <div className='w-full '>

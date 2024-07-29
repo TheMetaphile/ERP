@@ -26,7 +26,7 @@ function StudentAttendance() {
             try {
                 console.log(start, "-", end);
                 const today = new Date();
-                var month = today.getMonth()+1 < 10 ? `0${today.getMonth()+1}` : today.getMonth()+1; 
+                var month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;
                 const formattedDate = `${today.getFullYear()}-${month}-${today.getDate()}`;
                 const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/student/list?date=${formattedDate}&start=${start}&end=${end}`, {
                     headers: {
@@ -143,17 +143,17 @@ function StudentAttendance() {
     return (
         <div className="w-full flex flex-col mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mb-3 no-scrollbar" >
             <ToastContainer />
-            <div className="container mx-auto py-3 px-2">
+            <div className=" w-full">
                 <div className="flex justify-between mobile:max-tablet:items-start items-center mb-4 mobile:max-tablet:flex-col">
                     <h1 className="text-2xl mobile:max-tablet:text-lg font-medium">Student Attendance</h1>
-                    <div className="mobile:max-tablet:flex">
+                    <div className="mobile:max-tablet:flex items-end">
                         <Link
                             to="/Teacher-Dashboard/class_activity/studentattendence/record"
                             className="text-lg mobile:max-tablet:text-sm px-2 py-1 mr-2 bg-green-500 text-white rounded-md hover:cursor-pointer"
                         >
                             Previous Record
                         </Link>
-                        <button className="px-2 py-1 bg-green-500 text-white rounded-md hover:cursor-pointer" onClick={handleMark}>
+                        <button className="px-2 py-1 bg-green-500 text-white rounded-md  mobile:max-tablet:text-sm hover:cursor-pointer" onClick={handleMark}>
                             {markLoading ? <Loading /> : 'Mark Attendance'}
                         </button>
                     </div>
@@ -176,7 +176,7 @@ function StudentAttendance() {
                                             <img src={student.profileLink} alt="User image" className="w-12 h-12 mobile:max-tablet:w-8 mobile:max-tablet:h-8 rounded-full"></img>
                                             <span className="ml-2">{student.name}</span>
                                         </div>
-                                        <div className="flex items-center space-x-2">
+                                        <div className="flex items-center mobile:ml-32 space-x-2">
                                             <button className={`px-2 rounded-full ${student.present ? "bg-green-500 text-white" : "bg-gray-300"}`} onClick={() => handleAttendance(index, "Present")}>
                                                 P
                                             </button>
