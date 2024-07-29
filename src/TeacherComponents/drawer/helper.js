@@ -56,13 +56,13 @@ const menuItems = [
   //   route: '/Admin-Dashboard',
   //   children: []
   // },
-  {
-    image: checkinImage,
-    alt: "Check In Image",
-    title: "Check In",
-    route: "/Teacher-Dashboard/checkin",
-    children: [],
-  },
+  // {
+  //   image: checkinImage,
+  //   alt: "Check In Image",
+  //   title: "Check In",
+  //   route: "/Teacher-Dashboard/checkin",
+  //   children: [],
+  // },
   {
     image: dashboardLeaveImage,
     alt: "Leave application image",

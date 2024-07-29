@@ -6,7 +6,7 @@ import { BASE_URL_Result } from '../../../Config';
 
 export default function CoScholasticTable({ students, term, Class }) {
     const { authState } = useContext(AuthContext);
-    const [Subjects] = useState(authState.Co_scholastic);
+    const [Subjects] = useState(authState.Co_scholastic === undefined ? [] : authState.Co_scholastic);
 
     const [grades, setGrades] = useState(() => {
         const initialGrades = {};

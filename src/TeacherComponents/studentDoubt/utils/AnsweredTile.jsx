@@ -35,7 +35,7 @@ export default function AnsweredTile({ data }) {
 
     return (
         <div className="w-full">
-            {data.length > 0 ? (
+            {
                 data.filter(doubt => doubt.status === "Resolved").map((doubt, index) => (
                     <div key={index} className="border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
                         <div className='w-full flex items-center'>
@@ -75,9 +75,7 @@ export default function AnsweredTile({ data }) {
 
                     </div>
                 ))
-            ) : (
-                <div className='w-full text-center mt-3'>No new doubt</div>
-            )}
+           }
         </div>
 
     )

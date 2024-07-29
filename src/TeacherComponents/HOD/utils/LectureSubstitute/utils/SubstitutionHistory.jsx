@@ -21,7 +21,7 @@ export default function ClassTeacherSubstitutionHistory() {
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_Login}/classTeacherSubstitute/fetch/completeHistory?date=${formattedDate}&start=${start}&end=${end}&session=${session}`,
+            url: `${BASE_URL_Login}/LectureSubstitute/fetch/completeHistory?date=${formattedDate}&start=${start}&end=${end}&session=${session}`,
             headers: {
                 'Authorization': `Bearer ${authState.accessToken}`
             }
@@ -70,6 +70,8 @@ export default function ClassTeacherSubstitutionHistory() {
                         <th className="py-2 px-6 text-center">Date</th>
                         <th className="py-2 px-6 text-center">Class</th>
                         <th className="py-2 px-6 text-center">Section</th>
+                        <th className="py-2 px-6 text-center">Lecture</th>
+                        <th className="py-2 px-6 text-center">Subject</th>
                         <th className="py-2 px-6 text-center">Substitute</th>
 
                     </tr>
@@ -84,6 +86,9 @@ export default function ClassTeacherSubstitutionHistory() {
                                 <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.date}</td>
                                 <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.class}</td>
                                 <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.section}</td>
+                                <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.Lecture}</td>
+                                <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.subject}</td>
+
                                 <div className="flex justify-start gap-2 items-center">
                                     <img src={teachers.substituteTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />
                                     <div className="text-start">

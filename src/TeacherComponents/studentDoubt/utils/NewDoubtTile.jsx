@@ -61,7 +61,7 @@ export default function NewDoubtTile({ data, Class }) {
 
     return (
         <div className="w-full">
-            {data.length > 0 ? (
+            {
                 data.filter(doubt => doubt.status === "Pending").map((doubt, index) => (
                     <div key={index} className="border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center" >
                         <div className='w-full flex items-center'>
@@ -121,9 +121,7 @@ export default function NewDoubtTile({ data, Class }) {
 
                     </div>
                 ))
-            ) : (
-                <div className='w-full text-center mt-3'>No new doubt</div>
-            )}
+            }
         </div>
 
     )

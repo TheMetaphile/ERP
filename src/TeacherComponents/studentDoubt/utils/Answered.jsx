@@ -7,7 +7,7 @@ import { BASE_URL_AskDoubt } from '../../../Config'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Answered({Class,Section,Subject}) {
+function Answered({ Class, Section, Subject }) {
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ function Answered({Class,Section,Subject}) {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
     const [allDataFetched, setAllDataFetched] = useState(false);
- 
+
 
     const handleViewMore = () => {
         setStart(prevStart => prevStart + end);
@@ -76,11 +76,17 @@ function Answered({Class,Section,Subject}) {
 
     return (
         <div className=''>
-            
-            <AnsweredTile data={data} />
-            {!allDataFetched && (
-                <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+            {data.length > 0 ? (
+                <>
+                    <AnsweredTile data={data} />
+                    {(!allDataFetched) && (
+                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                    )}
+                </>
+            ) : (
+                <div className='w-full text-center mt-3'>No answered doubt</div>
             )}
+
         </div>
     )
 }

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { set } from 'date-fns/fp/set'
 
-function NewDoubt({Class,Section,Subject}) {
+function NewDoubt({ Class, Section, Subject }) {
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -74,11 +74,17 @@ function NewDoubt({Class,Section,Subject}) {
 
     return (
         <div className='mobile:max-tablet:mr-0 mr-3'>
-
-            <NewDoubtTile data={data} Class={Class} />
-            {(!allDataFetched) && (
-                <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+            {data.length > 0 ? (
+                <>
+                    <NewDoubtTile data={data} Class={Class} />
+                    {(!allDataFetched) && (
+                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                    )}
+                </>
+            ) : (
+                <div className='w-full text-center mt-3'>No new doubt</div>
             )}
+
         </div>
     )
 }

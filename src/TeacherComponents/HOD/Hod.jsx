@@ -15,7 +15,10 @@ function Hod() {
             title: "Substitute Class Teacher",
             route: "/Teacher-Dashboard/HOD/classTeacherSubstitute"
         },
-
+        {
+            title: "Lecture Substitute",
+            route: "/Teacher-Dashboard/HOD/lectureSubstitute"
+        },
 
     ];
     const [idx, setidx] = useState(0)

@@ -7,9 +7,9 @@ import NewDoubt from './utils/NewDoubt';
 import Answered from './utils/Answered';
 function StudentDoubts() {
     const { authState } = useContext(AuthContext);
-    const [Class, setClass] = useState('9th');
-    const [Section, setSection] = useState('A');
-    const [Subject, setSubject] = useState('Maths');
+    const [Class, setClass] = useState('');
+    const [Section, setSection] = useState('');
+    const [Subject, setSubject] = useState('');
     const [selectedLink, setSelectedLink] = useState(`/Teacher-Dashboard/studentdoubts/new`);
 
     const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
