@@ -54,8 +54,9 @@ export default function RightCard() {
                     console.log(response.data, "isuhgaoiud hfguj dsfkgj")
                     var { userDetails, tokens, subject, ClassDetails } = response.data;
                     console.log(userDetails, tokens);
-                    if (Object.keys(ClassDetails).length <= 0) {
-                        var date = new Date();
+                    var date = new Date();
+                    if (role==="Teacher-Dashboard" && Object.keys(ClassDetails).length <= 0 && date.getHours()<17) {
+                       
                         var month = date.getMonth()+1 < 10 ? `0${date.getMonth()+1}` : date.getMonth()+1; 
                         date = `${date.getFullYear()}-${month}-${date.getDate()}`
                         console.log(date);
