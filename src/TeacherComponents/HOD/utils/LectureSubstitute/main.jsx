@@ -1,5 +1,5 @@
 import { ToastContainer } from "react-toastify";
-import ClassTeacherOnLeaveTable from "./utils/ClassTeachersOnLeaveTable";
+import ClassTeacherOnLeaveTable from "./utils/TeachersOnLeaveTable";
 import ClassTeacherSubstitutionHistory from "./utils/SubstitutionHistory";
 
 export default function LectureSubstitute() {

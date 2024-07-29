@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import ClassTeacherOnLeaveRow from "./ClassTeachersOnLeaveRow";
 import axios from "axios";
 import AuthContext from "../../../../../Context/AuthContext";
 import { BASE_URL_Login } from "../../../../../Config";
@@ -9,7 +8,7 @@ export default function ClassTeacherSubstitutionHistory() {
     const { authState } = useContext(AuthContext);
     const [PrevioursSubstitutions, SetPrevioursSubstitutions] = useState([]);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(4);
+    const end = 4;
     const [allDataFetched, setAllDataFetched] = useState(false);
 
     const date = new Date();

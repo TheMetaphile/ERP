@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import ClassTeacherOnLeaveRow from "./ClassTeachersOnLeaveRow";
+import ClassTeacherOnLeaveRow from "./TeachersOnLeaveRow";
 import axios from "axios";
 import AuthContext from "../../../../../Context/AuthContext";
 import { BASE_URL_Login } from "../../../../../Config";
@@ -43,22 +43,23 @@ export default function ClassTeacherOnLeaveTable() {
                 <thead>
                     <tr className="bg-secondary text-gray-600 text-lg ">
 
-                        <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Employee Id</th>
-                        <th className="py-2 px-6 ">Name</th>
+                        <th className="py-2 px-6 text-center  rounded-t">Name</th>
                         <th className="py-2 px-6 text-center">Date</th>
                         <th className="py-2 px-6 text-center">Class</th>
                         <th className="py-2 px-6 text-center">Section</th>
                         <th className="py-2 px-6 text-center">Lecture</th>
                         <th className="py-2 px-6 text-center">Subject</th>
                         <th className="py-2 px-6 text-center">Substitute</th>
-                        <th className="py-2 px-6 text-center">Actions</th>
+                        <th className="py-2 px-6 text-center">Remark</th>
+
+                        <th className="py-2 px-6 text-center  ">Actions</th>
 
                     </tr>
                 </thead>
                 <tbody className="text-gray-600 text-md font-normal ">
                     {
-                        TeachersOnLeave.map((teachers,index)=>{
-                            return <ClassTeacherOnLeaveRow Teacher={teachers} index={index} date={formattedDate} session={session}/>
+                        TeachersOnLeave.map((teachers)=>{
+                            return <ClassTeacherOnLeaveRow Teacher={teachers} date={formattedDate} session={session}/>
                         })
                     }
                 </tbody>
