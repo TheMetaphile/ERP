@@ -161,6 +161,8 @@ import RecordDetailsHOD from "./TeacherComponents/HOD/utils/notebook/utils/Detai
 import PlannerHOD from "./TeacherComponents/HOD/utils/Planner/Planner.jsx";
 import ClassTeacherSubstitute from "./TeacherComponents/HOD/utils/ClassTeacherSubstitute/main.jsx";
 import LectureSubstitute from "./TeacherComponents/HOD/utils/LectureSubstitute/main.jsx";
+import Assigncoordinator from "./AdminComponents/Coordinator/Assigncoordinator.jsx";
+import Substitutecoordinator from "./AdminComponents/SubstituteCoordinator/Substitutecoordinator.jsx";
 // import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
 
 
@@ -496,6 +498,16 @@ const router = createBrowserRouter([
             element: <CharacterCertificate />
           }
         ]
+      },
+      {
+        path: "/Admin-Dashboard/Assigncoordinator",
+        element: <Assigncoordinator />,
+        children: [],
+      },
+      {
+        path: "/Admin-Dashboard/Substitutecoordinator",
+        element: <Substitutecoordinator />,
+        children: [],
       },
       // {
       //   path: "/Admin-Dashboard/Certificates",
@@ -850,7 +862,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/Teacher-Dashboard/HOD/notebook",
-            element: <NoteBookHOD/>,
+            element: <NoteBookHOD />,
             children: [
               {
                 path: "",
@@ -864,7 +876,7 @@ const router = createBrowserRouter([
                 path: "New",
                 element: <NewNoteBookRecordHOD />
               },
-    
+
             ]
           },
           {

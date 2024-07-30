@@ -112,6 +112,20 @@ const menuItems = [
     ],
   },
   {
+    image: classImage,
+    alt: "img",
+    title: "Assign Coordinator ",
+    route: "/Admin-Dashboard/Assigncoordinator",
+    children: [],
+  },
+  {
+    image: classImage,
+    alt: "img",
+    title: "Substitute Co-ord ",
+    route: "/Admin-Dashboard/Substitutecoordinator",
+    children: [],
+  },
+  {
     image: subjectImage,
     alt: "img",
     title: "Subject Teacher",
