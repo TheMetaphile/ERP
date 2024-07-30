@@ -12,15 +12,9 @@ void callbackDispatcher() {
   print("enter Dispatcher***********");
   Workmanager().executeTask((task, inputData) async {
 
-      print("check task/////////");
-
-
-
-      print("listener task/////////");
 
     print("Executing task: $task at ${DateTime.now()}");
 
-      print("Task $task");
 
     switch (task) {
 
@@ -38,34 +32,15 @@ void callbackDispatcher() {
 
 Future<void> clearSharedPreferences() async {
   print("Starting clearSharedPreferences at ${DateTime.now()}");
-  SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  print("Before clearing:");
-
-  print("teacherSection: ${prefs.getString("teacherSection")}.........");
-  print("teacherClass: ${prefs.getString("teacherClass")}.........");
-
-  // bool sectionRemoved = await prefs.remove("teacherSection");
-  // bool classRemoved = await prefs.remove("teacherClass");
-  // await prefs.setString("teacherClass", "");
-  // await prefs.setString("teacherSection", "");
-
-
-  // print("Removal results - Section: $sectionRemoved, Class: $classRemoved");
   final listener = SharedPreferencesListener();
-
   await listener.setTeacherClass('');
   await listener.setTeacherSection('');
 
-  String? teacherClas=await prefs.getString("teacherClass");
-  String? teacherSection=await prefs.getString("teacherSection");
   print("After clearing:/..............");
-  print("teacherSection: ${teacherClas}....................");
-  print("teacherClass: ${teacherSection}................");
-
-  // You cannot use context here. Use a notification or state management to update UI.
-
-  print("Finished clearSharedPreferences at ${DateTime.now()}...........");
+  String? Class = await listener.getTeacherClass();
+  String? section =await listener.getTeacherSection();
+  print("${Class}, : $section");
 }
 
 Future<void> schedulePreferenceClear() async {
@@ -77,7 +52,7 @@ Future<void> schedulePreferenceClear() async {
         await Workmanager().registerOneOffTask(
           "clearSharedPreferencesTask",
           "clearSharedPreferencesTask",
-          initialDelay: const Duration(seconds: 15),
+          initialDelay: const Duration(seconds: 5),
           existingWorkPolicy: ExistingWorkPolicy.replace,
           constraints: Constraints(
             networkType: NetworkType.not_required,
@@ -87,7 +62,7 @@ Future<void> schedulePreferenceClear() async {
             requiresStorageNotLow: false,
           ),
         );
-        print("Task scheduled to clear preferences in 15 seconds");
+        print("Task scheduled to clear preferences in 5 seconds");
       } catch (e) {
         print("Error scheduling task: $e");
       }

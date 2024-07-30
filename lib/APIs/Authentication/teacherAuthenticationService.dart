@@ -100,7 +100,7 @@ class TeacherAuthentication{
 
 
     Future<dynamic> fetchSubstitutionTeacher(String accessToken,String date,String session) async {
-
+      print("/////2********************************************************");
 
       final url = Uri.parse('$baseUrl/classTeacherSubstitute/fetch/checkSubstitute?date=$date&session=$session');
 

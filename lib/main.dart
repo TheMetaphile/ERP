@@ -16,6 +16,7 @@ import 'package:untitled/teacher-module/NoticeBoard/noticeBoard.dart';
 import 'package:untitled/teacher-module/CheckIn/teacherAttendanceCheckIn.dart';
 import 'package:untitled/teacher-module/TakeLeave/teacherLeave.dart';
 import 'package:untitled/teacher-module/teacherSalary.dart';
+import 'package:untitled/teacher-module/techerClass.dart';
 import 'package:untitled/utils/theme.dart';
 import 'package:workmanager/workmanager.dart';
 import 'APIs/Authentication/teacherAuthenticationService.dart';
@@ -27,18 +28,14 @@ import 'onBoarding/Screens/login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-
-  runApp(MyApp());
+  Workmanager().initialize(callbackDispatcher,isInDebugMode: false);
+  runApp(const MyApp());
 
 }
 
 
 class MyApp extends StatefulWidget {
-
-
-
-
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -106,6 +103,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<bool> verifyToken() async {
     try {
+      print("***************** Verifying token **************************");
       TeacherAuthentication apiObj = TeacherAuthentication();
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? accessToken = pref.getString("accessToken");
@@ -116,13 +114,16 @@ class _MyAppState extends State<MyApp> {
       }
 
       bool isValid = await apiObj.verifyAccessToken(accessToken);
+      print(isValid);
       if (isValid) {
         SharedPreferences pref=await SharedPreferences.getInstance();
         String? teacherClass=pref.getString("teacherClass");
         String? teacherSection=pref.getString("teacherSection");
-        if(teacherClass==null && teacherSection == null){
+        print("Class: ${teacherClass}, section: ${teacherSection}");
 
+        if((teacherClass==null && teacherSection == null) || (teacherClass!.isEmpty && teacherSection!.isEmpty)){
 
+          print("*********hitting api again************");
           final authApiAcess = TeacherAuthentication();
           DateTime currentDateTime=DateTime.now();
           String date=currentDateTime.toString().split(' ')[0];
@@ -211,23 +212,21 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-      // fetchSubstitution();
-    Workmanager().initialize(callbackDispatcher,isInDebugMode: true);
-    _checkForCompletedTask();
+
   }
 
-  void _checkForCompletedTask() async {
-    print("_checkForCompletedTask 1111///////////");
-    final prefs = await SharedPreferences.getInstance();
-    final completed = prefs.getBool('backgroundTaskCompleted') ?? false;
-    if (completed) {
-      setState(() {
-
-      });
-      // Reset the flag
-      await prefs.setBool('backgroundTaskCompleted', false);
-    }
-  }
+  // void _checkForCompletedTask() async {
+  //   print("_checkForCompletedTask 1111///////////");
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final completed = prefs.getBool('backgroundTaskCompleted') ?? false;
+  //   if (completed) {
+  //     setState(() {
+  //
+  //     });
+  //     // Reset the flag
+  //     await prefs.setBool('backgroundTaskCompleted', false);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +270,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               );
             } else{
-              return snapshot.data == true ? TeacherHome() : Login();
+              return snapshot.data == true ? const TeacherHome() : const Login();
             }
           },
         ),

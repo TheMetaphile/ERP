@@ -31,7 +31,7 @@ import 'drawerTimeTable/TimeTable1.dart';
 import 'package:speech_to_text/speech_to_text.dart' as speechToText;
 
 class TeacherHome extends StatefulWidget {
-  const TeacherHome({Key? key});
+  const TeacherHome({super.key,});
 
   @override
   State<TeacherHome> createState() => _TeacherHomeState();
@@ -209,8 +209,7 @@ class _TeacherHomeState extends State<TeacherHome> {
       employeeID = pref.getString("employeeId") ?? "Unknown";
       teacherClass = pref.getString("teacherClass") ?? "";
       teacherSection = pref.getString("teacherSection") ?? "";
-
-
+      setState(() {});
   }
 
 
@@ -218,19 +217,18 @@ class _TeacherHomeState extends State<TeacherHome> {
   void initState() {
     super.initState();
     // initializeApp();
-    // getDetails();
+     getDetails();
     _loadInitialValues();
-    _listenToChanges();
-
   }
   final SharedPreferencesListener _prefsListener = SharedPreferencesListener();
 
   Future<void> _loadInitialValues() async {
+    prints();
     teacherClass = await _prefsListener.getTeacherClass();
     teacherSection = await _prefsListener.getTeacherSection();
     setState(() {});
     print("_loadInitialValues Run");
-    prints();
+
   }
 
   void _listenToChanges() {
@@ -254,11 +252,17 @@ class _TeacherHomeState extends State<TeacherHome> {
     super.dispose();
   }
   Future<void>  prints() async {
-    SharedPreferences pref=await SharedPreferences.getInstance();
-    // PreferenceManager.getDefaultSharedPreferences(context).edit().commit()
-    print("Home teacherClass ${teacherClass} $teacherSection ");
-    print("Home teacherSection ${await pref.getString("teacherSection")} ");
-    // print("Home workmanager ${pref.getString("workmanager")} ");
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
+
+    final listener = SharedPreferencesListener();
+
+    print("Prints log:/..............");
+    String? Class = await listener.getTeacherClass();
+    String? section =await listener.getTeacherSection();
+    print("${Class}, : $section");
+    print("var : ${teacherClass}, : $teacherSection");
+
   }
 
   Future<void> showRevokeMicrophonePermissionDialog(BuildContext context) async {
@@ -337,8 +341,8 @@ class _TeacherHomeState extends State<TeacherHome> {
         actions: [
           _selectedIndex == 0
               ? IconButton(
-            onPressed: () {
-            prints();
+            onPressed: () async{
+            await prints();
             },
             icon: const Icon(Icons.notification_add),
           )
@@ -359,10 +363,10 @@ class _TeacherHomeState extends State<TeacherHome> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: size.height * 0.04),
-                  CircleAvatar(
-                    radius: size.width * 0.1,
-                    backgroundImage: NetworkImage(profileLink),
-                  ),
+                  // CircleAvatar(
+                  //   radius: size.width * 0.1,
+                  //   backgroundImage: NetworkImage(profileLink),
+                  // ),
                   SizedBox(height: size.height * 0.01),
                   Text(
                     teacherName,

@@ -21,30 +21,29 @@ class SharedPreferencesListener {
   Future<void> setTeacherClass(String value) async {
 
     final prefs = await SharedPreferences.getInstance();
-
-    await prefs.setString('teacherClass', value).whenComplete(
-      () {
+    await prefs.setString('teacherClass', value);
+    await prefs.reload();
         _teacherClassController.add(value);
-      },
-    );
-
   }
 
   Future<void> setTeacherSection(String value) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('teacherSection', value).whenComplete(() {
+    await prefs.setString('teacherSection', value);
+
       _teacherSectionController.add(value);
-    },);
+
 
   }
 
   Future<String?> getTeacherClass() async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
     return prefs.getString('teacherClass');
   }
 
   Future<String?> getTeacherSection() async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
     return prefs.getString('teacherSection');
   }
 }
