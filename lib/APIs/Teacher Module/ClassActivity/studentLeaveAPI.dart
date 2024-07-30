@@ -9,8 +9,9 @@ class StudentLeaveAPI {
 
 
   Future<List<dynamic>> fetchLeaves(String accessToken, int start, String status) async {
-
-    final url = Uri.parse('$baseUrl/leave/fetch/classTeacher?start=$start&end=10&status=$status');
+    DateTime currentDateTime=DateTime.now();
+    String date=currentDateTime.toString().split(' ')[0];
+    final url = Uri.parse('$baseUrl/leave/fetch/classTeacher?start=$start&end=10&status=$status&date=$date');
     try {
       final response = await http.get(
         url,

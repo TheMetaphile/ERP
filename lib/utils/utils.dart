@@ -1,4 +1,4 @@
-import 'package:chatview/chatview.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/teacher-module/NoticeBoard/noticeBoard.dart';

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/APIs/StudentsData/student.dart';
 import 'package:http/http.dart' as http;
 import 'package:untitled/utils/utils.dart';
@@ -65,6 +66,28 @@ class NoteBookRecordAPI{
 
     Future<List<dynamic>> notebookRecord(String accessToken,String Class,String section,String subject,String session,int start)
     async {
+      if (Class == "" && section == "" && subject == "") {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String? jsonString = prefs.getString('class_section_subjects');
+
+        // Decode the JSON string
+        Map<String, dynamic> data = jsonDecode(jsonString!);
+
+        // Access the nested structure
+        String firstClass = data.keys.first;
+        Map<String, dynamic> sections = data[firstClass];
+        String firstSection = sections.keys.first;
+        List<dynamic> subjects = sections[firstSection];
+        String firstSubject = subjects.first;
+
+        Class = firstClass;
+        section = firstSection;
+        subject = firstSubject;
+      }
+    print(Class);
+    print(Class);
+    print(section);
+    print(subject);
 
     final url = Uri.parse('$baseUrl/notebook/fetch/teacher/all?class=$Class&section=$section&subject=$subject&session=$session&start=$start&count=');
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,26 +20,13 @@ class ClassWork extends StatefulWidget {
 }
 
 class _ClassWorkState extends State<ClassWork> {
-  String _selectedClass="9th";
-  String _selectedSection ="A";
-  String _selectedSubject="Maths";
-  List<String> classOptions = [
-    '12th',
-    '11th',
-    '10th',
-    '9th',
-  ];
-  List<String> classSections = [
-    'A',
-    'B',
-    'C',
-  ];
-  List<String> classSubjects = [
-    'Science',
-    'Maths',
-    'Social Science',
-    'Hindi',
-  ];
+  String _selectedClass = "";
+  String _selectedSection = "";
+  String _selectedSubject = "";
+
+  List<String> classSections = [];
+  List<String> classSubjects = [];
+  Map<String, dynamic> _storedData = {};
 
 
   CustomTheme themeObj = new CustomTheme();
@@ -397,15 +386,50 @@ class _ClassWorkState extends State<ClassWork> {
       },);
 
   }
+
+
+  void initializeDropdowns() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonString = prefs.getString('class_section_subjects');
+
+    if (jsonString != null) {
+      Map<String, dynamic> storedData = jsonDecode(jsonString);
+      setState(() {
+        _storedData = storedData;
+        updateSections();
+      });
+    }
+  }
+
+  void updateSections() {
+    classSections = _storedData[_selectedClass]?.keys.toList() ?? [];
+    _selectedSection = "";
+    updateSubjects();
+  }
+
+  void updateSubjects() {
+    if (_selectedClass.isNotEmpty && _selectedSection.isNotEmpty) {
+      // Cast List<dynamic> to List<String>
+      classSubjects = (_storedData[_selectedClass]?[_selectedSection] as List<dynamic>?)
+          ?.map((item) => item as String)
+          .toList() ?? [];
+      _selectedSubject = "";
+    } else {
+      classSubjects = [];
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     fetchClassWork();
+    initializeDropdowns();
   }
+
 
   @override
   Widget build(BuildContext context) {
-print(classWorkList);
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: themeObj.textWhite,
@@ -582,27 +606,31 @@ print(classWorkList);
               child: Container(
                 width: size.width * 0.3,
                 height: size.height * 0.05,
-                child: DropdownButton<String>(
+                child:DropdownButton<String>(
                   isExpanded: true,
                   borderRadius: BorderRadius.circular(12),
                   hint: Text("Classes", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(8),
-                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey,),
+                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
                   underline: Container(),
-                  value: _selectedClass,
+                  value: _selectedClass.isEmpty ? null : _selectedClass,
                   onChanged: (newValue) {
                     setState(() {
                       _selectedClass = newValue!;
+                      updateSections();
+
                     });
                   },
-                  items: classOptions.map((String option) {
+                  items: _storedData.keys.toList().map((String option) {
                     return DropdownMenuItem<String>(
                       value: option,
                       child: Text(option, overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
                     );
                   }).toList(),
                 ),
+
+
               ),
             ),
             SizedBox(width: size.width * 0.02,),
@@ -610,18 +638,20 @@ print(classWorkList);
               child: Container(
                 width: size.width * 0.3,
                 height: size.height * 0.05,
-                child: DropdownButton<String>(
+                child:DropdownButton<String>(
                   isExpanded: true,
                   borderRadius: BorderRadius.circular(12),
                   hint: Text("Sections", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
                   padding: EdgeInsets.all(8),
-                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey,),
+                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
                   alignment: Alignment.center,
                   underline: Container(),
-                  value: _selectedSection,
+                  value: _selectedSection.isEmpty ? null : _selectedSection,
                   onChanged: (newValue) {
                     setState(() {
                       _selectedSection = newValue!;
+                      updateSubjects();
+
                     });
                   },
                   items: classSections.map((String option) {
@@ -631,6 +661,8 @@ print(classWorkList);
                     );
                   }).toList(),
                 ),
+
+
               ),
             ),
             SizedBox(width: size.width * 0.02,),
@@ -643,14 +675,14 @@ print(classWorkList);
                   borderRadius: BorderRadius.circular(12),
                   hint: Text("Subjects", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
                   padding: EdgeInsets.all(8),
-                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey,),
+                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
                   alignment: Alignment.center,
                   underline: Container(),
-                  value: _selectedSubject,
+                  value: _selectedSubject.isEmpty ? null : _selectedSubject,
                   onChanged: (newValue) {
                     setState(() {
                       _selectedSubject = newValue!;
-                      classWorkList=null;
+
                       fetchClassWork();
                     });
                   },

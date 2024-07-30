@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/utils/theme.dart';
 
-import '../../APIs/Teacher Module/TimeTable/Time Table/timeTableStructure.dart';
-import '../../APIs/Teacher Module/TimeTable/Time Table/timeTableTeacherPannel.dart';
+import '../../APIs/Teacher Module/TimeTable/Time Table/timetableAPI.dart';
+import '../../utils/utils.dart';
 
 class DrawerTimeTable extends StatefulWidget {
   const DrawerTimeTable({super.key});
@@ -15,8 +16,7 @@ class DrawerTimeTable extends StatefulWidget {
 }
 
 class _DrawerTimeTableState extends State<DrawerTimeTable> {
-  String selectday = "Tuesday";
-  bool isLoading = false;
+  String selectday="Monday";
   List<String> dayOption = [
     'Monday',
     'Tuesday',
@@ -25,31 +25,31 @@ class _DrawerTimeTableState extends State<DrawerTimeTable> {
     'Friday',
     'Saturday',
   ];
-  String errorMessage = '';
-  List<Map<String, String>> schedule = [];
   CustomTheme themeObj = CustomTheme();
-  TeacherTimetableAPI apiObj = TeacherTimetableAPI();
-  TimeTableStructureAPI strObj=TimeTableStructureAPI();
 
-  // Timetable structure
-  Map<String, dynamic>? timetableStructure;
+  String? durationOfEachLecture;
+  String? durationOfLunch;
+  String? firstLectureTiming;
+  String? numberOfLecturesBeforeLunch;
+  String? numberOfLecture;
+  String? lastLectureTime;
 
-  Future<void> fetchTimetableStructure() async {
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
+  //API Callling
+  Map<String,dynamic>? timetableStructure;
+  List<Map<String, dynamic>>? timeTableData;
+  List<Map<String, dynamic>>? substituteData;
+  bool isLoading = true;
+  String errorMessage = '';
+  TimetableApi timetableApi = TimetableApi();
 
-      if (accessToken == null) {
-        throw Exception('Access token not found');
-      }
+  final weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  int today = DateTime.now().weekday;
+  String day="";
 
-      // Fetch timetable structure
-      timetableStructure = await strObj.fetchTimeTableStructure(accessToken,"1st-12th");
-      print(timetableStructure);
-    } catch (e) {
-      print('Error fetching timetable structure: $e');
+    String calculateDay(){
+      return weekdays[today-1];
     }
-  }
+
 
   Future<void> fetchTimetable() async {
     setState(() {
@@ -58,108 +58,141 @@ class _DrawerTimeTableState extends State<DrawerTimeTable> {
     });
 
     try {
+
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? accessToken = pref.getString("accessToken");
+      String? teacheremail=pref.getString("email");
 
       if (accessToken == null) {
         throw Exception('Access token not found');
       }
 
-      var timetableData = await apiObj.fetchClassTimeTable(selectday.toLowerCase());
+      var data = await timetableApi.fetchTimetableStructure(accessToken);
+        print("data $data");
 
-      if (timetableData == null) {
-        throw Exception('No timetable data available for the selected day');
+      if(data is Map){
+        timetableStructure = data.cast<String, dynamic>();
+        durationOfEachLecture = timetableStructure?["durationOfEachLeacture"]?.toString();
+        durationOfLunch = timetableStructure?["durationOfLunch"]?.toString();
+        firstLectureTiming = timetableStructure?["firstLectureTiming"]?.toString();
+        numberOfLecturesBeforeLunch = timetableStructure?["numberOfLeacturesBeforeLunch"]?.toString();
+        numberOfLecture = timetableStructure?["numberOfLecture"]?.toString();
+        lastLectureTime = firstLectureTiming;
+        //
+        // print("Timetable Structure:");
+        // print("First Lecture Timing: $firstLectureTiming");
+        // print("Duration of Each Lecture: $durationOfEachLecture");
+        // print("Number of Lectures: $numberOfLecture");
+
+        List<dynamic> fetchData = await timetableApi.fetchClassTimeTable(accessToken,teacheremail!,selectday.toLowerCase());
+    print(fetchData);
+        if(fetchData.isNotEmpty){
+
+          timeTableData=  fetchData.cast<Map<String, dynamic>>();
+          await fetchSubstitution();
+          overrideLectures();
+
+        }else{
+          showRedSnackBar("Something  went wrong $fetchData", context);
+        }
+
+
+      }else if(data==null){
+        showRedSnackBar("The Time Table Structure not found contact to admin", context);
+      }else{
+
+        showRedSnackBar("Something Went Wrong $data", context);
       }
 
-      if (timetableData is! List<dynamic>) {
-        throw Exception('Unexpected timetable data format');
-      }
-
-      updateSchedule(timetableData);
 
       setState(() {
         isLoading = false;
       });
     } catch (e) {
       setState(() {
+        errorMessage = 'Failed to load timetable: $e';
         isLoading = false;
-        errorMessage = e.toString();
       });
       print('Error in fetchTimetable: $e');
     }
   }
 
-  void updateSchedule(List<dynamic> timetable) {
-    if (timetableStructure == null) {
-      print('Timetable structure is null');
-      errorMessage = 'Timetable structure is not available';
-      return;
-    }
+  Future<void> fetchSubstitution()async {
 
-    schedule.clear();
-    TimeOfDay currentTime = _parseTime(timetableStructure!['firstLectureTiming']);
-    int lectureDuration = int.parse(timetableStructure!['durationOfEachLeacture'].split(' ')[0]);
-    int lunchDuration = int.parse(timetableStructure!['durationOfLunch'].split(' ')[0]);
-    int lecturesBeforeLunch = timetableStructure!['numberOfLeacturesBeforeLunch'];
+    try {
 
-    for (int i = 0; i < timetable.length; i++) {
-      if (i == lecturesBeforeLunch) {
-        // Add lunch break
-        TimeOfDay lunchEndTime = _addMinutesToTime(currentTime, lunchDuration);
-        schedule.add({
-          'lecture': 'LUNCH',
-          'timing': '${_formatTime(currentTime)} - ${_formatTime(lunchEndTime)}',
-          'class': 'LUNCH',
-          'section': 'LUNCH',
-          'subject': 'LUNCH',
-        });
-        currentTime = lunchEndTime;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? accessToken = pref.getString("accessToken");
+
+
+      if (accessToken == null) {
+        throw Exception('Access token not found');
       }
 
-      var lecture = timetable[i];
-      TimeOfDay lectureEndTime = _addMinutesToTime(currentTime, lectureDuration);
-      schedule.add({
-        'lecture': lecture['lectureNo'].toString(),
-        'timing': '${_formatTime(currentTime)} - ${_formatTime(lectureEndTime)}',
-        'class': lecture['class'] ?? '',
-        'section': lecture['section'] ?? '',
-        'subject': lecture['subject'],
-      });
+      var data = await timetableApi.fetchSubsituteTimeTable(accessToken);
+      print("data $data");
+       substituteData=data.cast<Map<String, dynamic>>();
 
-      currentTime = lectureEndTime;
+
+
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Failed to load timetable: $e';
+      });
+      print('Error in fetchTimetable: $e');
     }
   }
-  TimeOfDay _parseTime(String timeString) {
-    List<String> parts = timeString.toLowerCase().split(' ');
-    List<String> timeParts = parts[0].split(':');
-    int hour = int.parse(timeParts[0]);
-    int minute = int.parse(timeParts[1]);
-    if (parts[1] == 'pm' && hour != 12) hour += 12;
-    if (parts[1] == 'am' && hour == 12) hour = 0;
-    return TimeOfDay(hour: hour, minute: minute);
-  }
 
-  TimeOfDay _addMinutesToTime(TimeOfDay time, int minutes) {
-    int totalMinutes = time.hour * 60 + time.minute + minutes;
-    return TimeOfDay(hour: totalMinutes ~/ 60 % 24, minute: totalMinutes % 60);
-  }
 
-  String _formatTime(TimeOfDay time) {
-    final hour = time.hourOfPeriod;
-    final minute = time.minute.toString().padLeft(2, '0');
-    final period = time.period == DayPeriod.am ? 'AM' : 'PM';
-    return '$hour:$minute $period';
+  void overrideLectures() {
+    if (substituteData != null && substituteData!.isNotEmpty) {
+      if (selectday == day) {
+        for (var substitute in substituteData!) {
+          int lectureNo = int.parse(substitute['Lecture']);
+
+          // Find the index of the lecture in timeTableData
+          int index = timeTableData!.indexWhere((lecture) => lecture['lectureNo'] == lectureNo);
+
+          if (index != -1) {
+            // Override existing lecture
+            timeTableData![index] = {
+              'subject': substitute['subject'],
+              'class': substitute['class'],
+              'section': substitute['section'],
+              'lectureNo': lectureNo,
+              '_id': timeTableData![index]['_id'], // Preserve the original _id if it exists
+            };
+          } else {
+            // Add new substitute lecture
+            timeTableData!.add({
+              'subject': substitute['subject'],
+              'class': substitute['class'],
+              'section': substitute['section'],
+              'lectureNo': lectureNo,
+            });
+          }
+        }
+
+        // Sort timeTableData by lectureNo
+        timeTableData!.sort((a, b) => (a['lectureNo'] as int).compareTo(b['lectureNo'] as int));
+      }
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    fetchTimetableStructure().then((_) => fetchTimetable());
+    fetchTimetable();
+    fetchSubstitution();
+     day=calculateDay();
   }
 
   @override
   Widget build(BuildContext context) {
+      print(day);
+      print(day);
     Size size = MediaQuery.of(context).size;
+    print(substituteData);
     return Scaffold(
       backgroundColor: themeObj.textWhite,
       appBar: AppBar(
@@ -175,12 +208,7 @@ class _DrawerTimeTableState extends State<DrawerTimeTable> {
           style: TextStyle(color: themeObj.textBlack, fontWeight: FontWeight.w400, fontSize: size.width * 0.05),
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 3),
-        width: size.width,
-        height: size.height,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        body:Column(
           children: [
             SizedBox(height: size.height * 0.01),
             Row(
@@ -189,7 +217,11 @@ class _DrawerTimeTableState extends State<DrawerTimeTable> {
                 Text(
                   "Day-wise Lectures",
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.openSans(color: themeObj.textBlack, fontWeight: FontWeight.w600, fontSize: size.width * 0.045),
+                  style: GoogleFonts.openSans(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                    fontSize: size.width * 0.045,
+                  ),
                 ),
                 Card(
                   child: SizedBox(
@@ -207,6 +239,7 @@ class _DrawerTimeTableState extends State<DrawerTimeTable> {
                       onChanged: (newValue) {
                         setState(() {
                           selectday = newValue!;
+                          timeTableData=[];
                           fetchTimetable();
                         });
                       },
@@ -221,109 +254,157 @@ class _DrawerTimeTableState extends State<DrawerTimeTable> {
                 ),
               ],
             ),
-            Expanded(
-              child: isLoading
-                  ? Center(
-                child: LoadingAnimationWidget.threeArchedCircle(
-                  color: themeObj.primayColor,
-                  size: 50,
-                ),
-              )
-                  : errorMessage.isNotEmpty
-                  ? Center(child: Text(errorMessage))
-                  : schedule.isEmpty
-                  ? Center(child: Text("No timetable available for the selected day"))
-                  : SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SizedBox(
-                  width: size.width*1.4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Table(
-                      border: TableBorder.all(color: Colors.grey.shade300),
-                      columnWidths: const <int, TableColumnWidth>{
-                        0: FlexColumnWidth(1.5),
-                        1: FlexColumnWidth(2.4),
-                        2: FlexColumnWidth(1),
-                        3: FlexColumnWidth(1.5),
-                        4: FlexColumnWidth(2),
-                      },
-                      children: [
-                        _buildTableHeader(),
-                        ...schedule.map((item) => _buildTableRow(item)).toList(),
-                      ],
-                    ),
-                  ),
-                ),
+            SizedBox(height: size.height * 0.01),
+            isLoading
+                ? Center(
+              child: LoadingAnimationWidget.threeArchedCircle(
+                color: themeObj.primayColor,
+                size: 50,
               ),
-            ),
+            ) : errorMessage.isNotEmpty
+                ? Center(child: Text(errorMessage)):
+            timeTableData!.isEmpty ? Expanded(child: Center(child: Text("No Time Table Found on $selectday"),)):Expanded(
+                child: allTable()),
+          ],
+        )
+    );
+  }
+
+  Widget allTable() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+
+        child: Table(
+          border: TableBorder.all(),
+          columnWidths: {
+            0: FixedColumnWidth(90),
+            1: FixedColumnWidth(160),
+            2: FixedColumnWidth(120),
+            3: FixedColumnWidth(120),
+            4: FixedColumnWidth(100),
+          },
+          children: [
+            allHeader(),
+            ...allRows(),
           ],
         ),
       ),
     );
   }
-  TableRow _buildTableHeader() {
+
+  TableRow allHeader() {
     return TableRow(
-      decoration: BoxDecoration(color: Color(0xFFB3E5FC)),
+      decoration: BoxDecoration(color: Colors.cyan[100]),
       children: [
-        _buildHeaderCell('Lecture'),
-        _buildHeaderCell('Timing'),
-        _buildHeaderCell('Class'),
-        _buildHeaderCell('Section'),
-        _buildHeaderCell('Subject'),
-      ],
-    );
-  }
-  Widget _buildHeaderCell(String text) {
-    Size size= MediaQuery.of(context).size;
-    return TableCell(
-      child: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: SizedBox(
-          height: size.height*0.05,
-          child: Center(
-            child: Text(
-              text,
-              style: GoogleFonts.openSans(fontWeight: FontWeight.w700, fontSize: 14),
-              textAlign: TextAlign.center,
-            ),
+        'Lecture',
+        'Timing',
+        'Class',
+        'Section',
+        'Subject',
+      ].map((header) => TableCell(
+        child: Container(
+          height: 60,
+          padding: EdgeInsets.all(8),
+          alignment: Alignment.center,
+          child: Text(
+              header,
+              style: TextStyle(fontWeight: FontWeight.bold)
           ),
         ),
-      ),
+      )).toList(),
     );
   }
 
-  TableRow _buildTableRow(Map<String, String> item) {
-    Color rowColor = item['lecture'] == 'LUNCH'
-        ? Color(0xFFB3E5FC)
-        : Color(0xFFE1F5FE);
+  List<TableRow> allRows() {
+    DateTime currentTime = parseTime(firstLectureTiming!);
+    Duration lectureDuration = parseDuration(durationOfEachLecture!);
+    int lecturesBeforeLunch = int.parse(numberOfLecturesBeforeLunch!);
+    int totalLectures = int.parse(numberOfLecture!);
 
+    List<TableRow> rows = [];
+
+    for (int i = 1; i <= totalLectures; i++) {
+      // Add lunch break if it's time
+      if (i == lecturesBeforeLunch + 1) {
+        rows.add(createLunchRow(currentTime));
+        currentTime = currentTime.add(parseDuration(durationOfLunch!));
+      }
+
+      // Create lecture row
+      String timing = "${formatTime(currentTime)} - ${formatTime(currentTime.add(lectureDuration))}";
+      rows.add(createLectureRow(i, timing));
+
+      // Move to next lecture time
+      currentTime = currentTime.add(lectureDuration);
+    }
+
+    return rows;
+  }
+
+  TableRow createLunchRow(DateTime startTime) {
+    String timing = "${formatTime(startTime)} - ${formatTime(startTime.add(parseDuration(durationOfLunch!)))}";
     return TableRow(
-      decoration: BoxDecoration(color: rowColor),
       children: [
-        _buildTableCell(item['lecture'] ?? ''),
-        _buildTableCell(item['timing'] ?? ''),
-        _buildTableCell(item['class'] ?? ''),
-        _buildTableCell(item['section'] ?? ''),
-        _buildTableCell(item['subject'] ?? ''),
+        newTableCell("Lunch"),
+        newTableCell(timing),
+        newTableCell("Lunch"),
+        newTableCell("Lunch"),
+        newTableCell("Lunch"),
       ],
     );
   }
-  Widget _buildTableCell(String text) {
-    Size size= MediaQuery.of(context).size;
+
+  TableRow createLectureRow(int lectureNo, String timing) {
+    var lectureData = timeTableData!.firstWhere(
+          (item) => item["lectureNo"] == lectureNo,
+      orElse: () => {"subject": "-", "class": "-", "section": "-"},
+    );
+
+    return TableRow(
+      children: [
+        newTableCell(lectureNo.toString()),
+        newTableCell(timing),
+        newTableCell(lectureData['class']?.toString() ?? ""),
+        newTableCell(lectureData['section']?.toString() ?? ""),
+        newTableCell(lectureData['subject']?.toString() ?? ""),
+      ],
+    );
+  }
+
+  Duration parseDuration(String durationString) {
+    int minutes = int.parse(durationString.split(' ')[0]);
+    return Duration(minutes: minutes);
+  }
+
+  DateTime parseTime(String timeString) {
+    // First, try parsing with AM/PM
+    try {
+      return DateFormat("h:mm a").parse(timeString);
+    } catch (e) {
+      // If that fails, try parsing without AM/PM
+      try {
+        return DateFormat("HH:mm").parse(timeString);
+      } catch (e) {
+        // If all parsing attempts fail, return a default time
+        print("Error parsing time: $timeString. Using default time.");
+        return DateTime(2024, 1, 1, 9, 0); // Default to 9:00 AM
+      }
+    }
+  }
+
+  String formatTime(DateTime time) {
+    return DateFormat("h:mm a").format(time);
+  }
+
+  Widget newTableCell(String text) {
     return TableCell(
       child: Container(
-        height: size.height*0.08,
-        child: Center(
-          child: Text(
-            text,
-            style: GoogleFonts.openSans(
-              fontWeight: text == 'LUNCH' ? FontWeight.w700 : FontWeight.w400,
-              fontSize: 14,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
+        height: 60, // Set your desired height here
+        padding: EdgeInsets.all(8),
+        alignment: Alignment.center, // This centers the content vertically
+        child: Text(text),
       ),
     );
   }

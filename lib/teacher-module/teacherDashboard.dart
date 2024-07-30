@@ -1,23 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:molten_navigationbar_flutter/molten_navigationbar_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:untitled/teacher-module/Birthday/Birthday.dart';
-import 'package:untitled/teacher-module/Trash/studentLeaveApplications.dart';
-import 'package:untitled/teacher-module/Trash/studentReportCard.dart';
-import 'package:untitled/teacher-module/CheckIn/teacherAttendanceCheckIn.dart';
-import 'package:untitled/teacher-module/TakeLeave/teacherLeave.dart';
-import 'package:untitled/teacher-module/teacherSalary.dart';
 
-import '../Charts/LineChart.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../Charts/classprogressGraph.dart';
 import '../utils/theme.dart';
-import '../utils/utils.dart';
-import 'Trash/TimeTable.dart';
-import 'NoticeBoard/noticeBoard.dart';
+
 
 class TeacherDashboard extends StatefulWidget {
   const TeacherDashboard({super.key});

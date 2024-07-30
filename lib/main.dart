@@ -1,49 +1,108 @@
 import 'package:flutter/material.dart';
 import 'package:highlight_text/highlight_text.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:speech_to_text/speech_to_text.dart' as speechToText;
-import 'package:untitled/Charts/eventCalender.dart';
-import 'package:untitled/ChatView/chatView.dart';
+
 import 'package:untitled/admin-module/StudentPannel/StudentResults.dart';
-import 'package:untitled/admin-module/adminHome.dart';
+
 import 'package:untitled/admin-module/expenseManagement.dart';
-import 'package:untitled/teacher-module/Birthday/Birthday.dart';
-import 'package:untitled/teacher-module/Classs%20Activity/Result/result.dart';
 import 'package:untitled/teacher-module/Classs%20Activity/StudentFees/studentFeesStatus.dart';
 import 'package:untitled/teacher-module/NoteBookRecord/noteBookRecord.dart';
 import 'package:untitled/teacher-module/TeacherHome.dart';
-import 'package:untitled/teacher-module/Trash/TimeTable.dart';
-import 'package:untitled/teacher-module/Trash/assignment.dart';
 import 'package:untitled/teacher-module/ClassWork/classWork.dart';
 import 'package:untitled/teacher-module/HomeWork/homeWork.dart';
 import 'package:untitled/teacher-module/NoticeBoard/noticeBoard.dart';
-import 'package:untitled/teacher-module/Classs%20Activity/Result/resultPdf.dart';
-import 'package:untitled/teacher-module/Trash/studentFeesReport.dart';
-import 'package:untitled/teacher-module/Trash/studentReportCard.dart';
-import 'package:untitled/teacher-module/Trash/teacherAttendance.dart';
 import 'package:untitled/teacher-module/CheckIn/teacherAttendanceCheckIn.dart';
 import 'package:untitled/teacher-module/TakeLeave/teacherLeave.dart';
 import 'package:untitled/teacher-module/teacherSalary.dart';
 import 'package:untitled/utils/theme.dart';
-import 'package:untitled/utils/utils.dart';
-import 'package:untitled/voice_command_model/recoginize_intent.dart';
-import 'package:untitled/voice_command_model/snow_boy_wake_up.dart';
-import 'package:untitled/voice_command_model/speek.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:workmanager/workmanager.dart';
 import 'APIs/Authentication/teacherAuthenticationService.dart';
+import 'WorkManager1/workmanager1.dart';
 import 'admin-module/TeacherPannel/teacherAttendance.dart';
 import 'onBoarding/Screens/Forget.dart';
-import 'onBoarding/Screens/email_verification.dart';
+
 import 'onBoarding/Screens/login.dart';
-import 'voice_command_model/permission/permission.dart';
-void main() {
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+
   runApp(MyApp());
+
 }
 
-class MyApp extends StatelessWidget {
+
+class MyApp extends StatefulWidget {
+
+
+
+
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  // Future<void> fetchSubstitution() async{
+  //   final authApiAcess = TeacherAuthentication();
+  //   DateTime currentDateTime=DateTime.now();
+  //   String date=currentDateTime.toString().split(' ')[0];
+  //
+  //   String calculateCurrentSession() {
+  //     DateTime now = DateTime.now();
+  //     int currentYear = now.year;
+  //     int nextYear = currentYear + 1;
+  //
+  //     if (now.isBefore(DateTime(currentYear, 3, 31))) {
+  //       currentYear--;
+  //       nextYear--;
+  //     }
+  //
+  //     return "$currentYear-${nextYear.toString().substring(2)}";
+  //   }
+  //
+  //   SharedPreferences pref =await  SharedPreferences.getInstance();
+  //   String? accessToken=pref.getString("accessToken");
+  //
+  //   print("accessTOken $accessToken");
+  //   print(" session ${calculateCurrentSession()}");
+  //   print("date $date");
+  //   if(accessToken!=null){
+  //
+  //     var data=await authApiAcess.fetchSubstitutionTeacher(accessToken,date,calculateCurrentSession());
+  //
+  //     print("substitute data $data");
+  //
+  //     if(data!=null){
+  //       String? teacherClass=pref.getString("teacherClass") ??"";
+  //       String? teacherSection=pref.getString("teacherSection") ?? "";
+  //       print("teacherClass $teacherClass");
+  //       print("teacherSection $teacherSection");
+  //
+  //       if(teacherClass.isEmpty && teacherSection.isEmpty){
+  //
+  //         final teacherClass = data["class"] ?? "";
+  //         final teacherSection = data["section"] ?? "";
+  //         print("teacherClass $teacherClass");
+  //         print("teacherSection $teacherSection");
+  //         await pref.setString("teacherClass", teacherClass);
+  //         await pref.setString("teacherSection", teacherSection);
+  //
+  //         int currentHour=DateTime.now().hour;
+  //         int assignHour=17-currentHour;
+  //
+  //         await pref.setInt("assignHour", assignHour);
+  //        print("The main workmanager");
+  //         await schedulePreferenceClear();
+  //       }
+  //
+  //     }
+  //   }
+  //
+  // }
 
   Future<bool> verifyToken() async {
     try {
@@ -58,6 +117,77 @@ class MyApp extends StatelessWidget {
 
       bool isValid = await apiObj.verifyAccessToken(accessToken);
       if (isValid) {
+        SharedPreferences pref=await SharedPreferences.getInstance();
+        String? teacherClass=pref.getString("teacherClass");
+        String? teacherSection=pref.getString("teacherSection");
+        if(teacherClass==null && teacherSection == null){
+
+
+          final authApiAcess = TeacherAuthentication();
+          DateTime currentDateTime=DateTime.now();
+          String date=currentDateTime.toString().split(' ')[0];
+
+          String calculateCurrentSession() {
+            DateTime now = DateTime.now();
+            int currentYear = now.year;
+            int nextYear = currentYear + 1;
+
+            if (now.isBefore(DateTime(currentYear, 3, 31))) {
+              currentYear--;
+              nextYear--;
+            }
+
+            return "$currentYear-${nextYear.toString().substring(2)}";
+          }
+
+          SharedPreferences pref =await  SharedPreferences.getInstance();
+          String? accessToken=pref.getString("accessToken");
+
+          print("accessTOken $accessToken");
+          print(" session ${calculateCurrentSession()}");
+          print("date $date");
+          if(accessToken!=null){
+            var data=await authApiAcess.fetchSubstitutionTeacher(accessToken,date,calculateCurrentSession());
+
+            print("substitute data $data ...............");
+
+            if(data!=null){
+              print("//////////////////substitute data called successfully ..........///////////////// ");
+
+              String? teacherClass=pref.getString("teacherClass") ??"";
+              String? teacherSection=pref.getString("teacherSection") ?? "";
+              print("Before teacherClass $teacherClass");
+              print("Before teacherSection $teacherSection");
+
+              if(teacherClass.isEmpty && teacherSection.isEmpty){
+
+                final teacherClass = data["class"] ?? "";
+                final teacherSection = data["section"] ?? "";
+
+                print("Fetched teacherClass $teacherClass");
+                print("Fetched teacherSection $teacherSection");
+
+                await pref.setString("teacherClass", teacherClass);
+                await pref.setString("teacherSection", teacherSection);
+
+                print("Set teacherClass ${pref.getString("teacherClass")}");
+                print("Set teacherSection ${pref.getString("teacherSection")}");
+
+                int currentHour=DateTime.now().hour;
+                int assignHour=17-currentHour;
+                await pref.setInt("assignHour", assignHour);
+                print("The login workmanager");
+
+              }
+
+
+            }
+          }
+
+
+
+          schedulePreferenceClear();
+        }
         return true;
       } else {
         String newAccessToken = await apiObj.generateNewAccessToken(refreshToken);
@@ -73,7 +203,31 @@ class MyApp extends StatelessWidget {
       return false;
     }
   }
+
+
   CustomTheme themeObj= CustomTheme();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+      // fetchSubstitution();
+    Workmanager().initialize(callbackDispatcher,isInDebugMode: true);
+    _checkForCompletedTask();
+  }
+
+  void _checkForCompletedTask() async {
+    print("_checkForCompletedTask 1111///////////");
+    final prefs = await SharedPreferences.getInstance();
+    final completed = prefs.getBool('backgroundTaskCompleted') ?? false;
+    if (completed) {
+      setState(() {
+
+      });
+      // Reset the flag
+      await prefs.setBool('backgroundTaskCompleted', false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,14 +237,14 @@ class MyApp extends StatelessWidget {
         '/resetPassword': (context) => ForgetPassword(),
         // "/resultScreen": (context) => const ResultPdf(student: stu,),
 
-         '/dashboard': (context) => const TeacherHome(),
-         '/attendance': (context) => const TeacherAttendance(),
-         '/leave': (context) =>  const TeacherLeave(),
-          '/assignment': (context) => const HomeWork(),
-          '/resultAPI.dart': (context) => const StudentResults(),
-           '/expense management': (context) =>const ExpenseManagement(),
-           '/classwork': (context) =>const ClassWork(),
-           '/check-in': (context) =>const TeacherAttendanceCheckIn(),
+        '/dashboard': (context) => const TeacherHome(),
+        '/attendance': (context) => const TeacherAttendance(),
+        '/leave': (context) =>  const TeacherLeave(),
+        '/assignment': (context) => const HomeWork(),
+        '/resultAPI.dart': (context) => const StudentResults(),
+        '/expense management': (context) =>const ExpenseManagement(),
+        '/classwork': (context) =>const ClassWork(),
+        '/check-in': (context) =>const TeacherAttendanceCheckIn(),
         // '/classes': (context) =>const Timetable(),
         '/student fee status': (context) =>const StudentFeesStatus(),
         '/student notebook record': (context) => const NoteBookRecord(),
@@ -101,7 +255,7 @@ class MyApp extends StatelessWidget {
         // '/chat': (context) =>const ChatScreen(),
         '/notice-board': (context) =>const NoticeBoard(),
 
-          '/logout': (context) =>Login(),
+        '/logout': (context) =>Login(),
 
       },
       home:Scaffold(
@@ -124,7 +278,6 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-
 }
 
 // class InitializeVoiceCommands extends StatefulWidget {

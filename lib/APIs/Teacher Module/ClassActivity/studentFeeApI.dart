@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 class StudentFeesAPi{
-      static const String _baseUrl = 'http://13.201.247.28:8000';
+      static const String _baseUrl = "https://philester.com";
       Future<List<dynamic>>  fetchStudentData(String accessToken,int start) async {
+
         final url = Uri.parse('$_baseUrl/fee/fetch/classTeacher?end=10&start=$start');
 
         try {
@@ -20,7 +21,7 @@ class StudentFeesAPi{
             return students ;
 
           } else {
-            throw Exception('Failed to load student: ${response.statusCode}');
+            throw Exception('Failed to load student: ${response.body}');
           }
         } catch (e) {
           throw Exception('Error fetching student: $e');

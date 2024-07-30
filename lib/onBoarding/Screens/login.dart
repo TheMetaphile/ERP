@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,7 +7,9 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/teacher-module/TeacherHome.dart';
 import 'package:untitled/teacher-module/techerClass.dart';
+import 'package:workmanager/workmanager.dart';
 import '../../APIs/Authentication/teacherAuthenticationService.dart';
+import '../../WorkManager1/workmanager1.dart';
 import '../../utils/theme.dart';
 import '../../utils/utils.dart';
 import '../utils/text_field.dart';
@@ -39,139 +43,206 @@ class _LoginState extends State<Login> {
     });
 
     try {
-      var data=await authApiAcess.loginUser(email, password, context);
+      {
 
-      if(data=="Invalid Credentials"){
-        showRedSnackBar("Invalid Email and Password", context);
-      }
-
-      else if(data["userDetails"]!=null){
-        var userDetails= data["userDetails"];
-        var tokens= data["tokens"];
-        var subject= data["subject"];
-        var classDetails= data["ClassDetails"];
-        // print("User Details $userDetails");
-        // print("tokens Details $tokens");
-        // print("subject Details $subject");
-        // print("classDetails Details $classDetails");
-
+        var data=await authApiAcess.loginUser(email, password, context);
+        if(data=="Invalid Credentials"){
+          showRedSnackBar("Invalid Email and Password", context);
+        }
+        Map<String,dynamic> userDetails=data["userDetails"] ?? {};
+        Map<String,dynamic> tokens=data["tokens"] ?? {};
+        Map<String,dynamic> subject=data["subject"] ?? {};
+        Map<String,dynamic> classDetails=data["ClassDetails"] ?? {};
         SharedPreferences pref = await SharedPreferences.getInstance();
-      if(userDetails!=null){
-           final userEmail = userDetails["email"] ?? "email@gmail.com" ;
-           final name = userDetails["name"] ?? "UserName";
-           final profileLink = userDetails["profileLink"] ?? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" ;
-           final employeeId = userDetails["employeeId"] ?? "ID123";
-           final phoneNumber = userDetails["phoneNumber"] ?? "+91 ********";
-           final dob = userDetails["DOB"] ?? "DD-MM-YYYY";
-           final permanentAddress = userDetails["permanentAddress"] ?? "DD-MM-YYYY";
 
-           await pref.setString("email", userEmail);
-           await pref.setString("name", name);
-           await pref.setString("profileLink", profileLink);
-           await pref.setString("employeeId", employeeId);
-           await pref.setString("phoneNumber", phoneNumber);
-           await pref.setString("dob", dob);
-           await pref.setString("permanentAddress", permanentAddress);
+        print("user details $userDetails");
+        print("subject details $subject");
+        print("class details $classDetails");
 
-           // print(pref.getString("email"));
-           // print(pref.getString("name"));
-           // print(pref.getString("profileLink"));
-           // print(pref.getString("employeeId"));
-           // print(pref.getString("phoneNumber"));
-           // print(pref.getString("dob",));
-           // print(pref.getString("permanentAddress",));
+        if(userDetails.isNotEmpty) {
 
-      }
-
-      if(tokens!=null){
-        final accessToken = tokens["accessToken"];
-        final refreshToken = tokens["refreshToken"];
+          var tokens = data["tokens"];
+          // var subject= data["subject"];
+          var classDetails = data["ClassDetails"];
+          // print("User Details $userDetails");
+          // print("tokens Details $tokens");
+          // print("subject Details $subject");
+          // print("classDetails Details $classDetails");
 
 
-        await pref.setString("accessToken", accessToken);
-        await pref.setString("refreshToken", refreshToken);
+          final userEmail = userDetails["email"] ?? "email@gmail.com";
+          final name = userDetails["name"] ?? "UserName";
+          final profileLink = userDetails["profileLink"] ??
+              "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+          final employeeId = userDetails["employeeId"] ?? "ID123";
+          final phoneNumber = userDetails["phoneNumber"] ?? "+91 ********";
+          final dob = userDetails["DOB"] ?? "DD-MM-YYYY";
+          final permanentAddress = userDetails["permanentAddress"] ??
+              "DD-MM-YYYY";
 
-        print(pref.getString("accessToken"));
-      }
+          await pref.setString("email", userEmail);
+          await pref.setString("name", name);
+          await pref.setString("profileLink", profileLink);
+          await pref.setString("employeeId", employeeId);
+          await pref.setString("phoneNumber", phoneNumber);
+          await pref.setString("dob", dob);
+          await pref.setString("permanentAddress", permanentAddress);
 
-      if(subject!=null){
+          // print(pref.getString("email"));
+          // print(pref.getString("name"));
+          // print(pref.getString("profileLink"));
+          // print(pref.getString("employeeId"));
+          // print(pref.getString("phoneNumber"));
+          // print(pref.getString("dob",));
+          // print(pref.getString("permanentAddress",));
 
-          if(subject["subjects"]!=null){
-            List<dynamic> subjectsDetails=subject["subjects"];
-            List<String> subjects=[];
 
-            List<dynamic>? Classes;
-            List<dynamic>? sections;
+        }
+        if(tokens.isNotEmpty){
 
-            for(int i=0;i<subjectsDetails.length;i++){
-              final map=subjectsDetails[i];
-              final sub=map["subject"]?? "sub";
-              if(!subjects.contains(sub) && sub!="sub"){
-                subjects.add(sub);
+          final accessToken = tokens["accessToken"];
+          final refreshToken = tokens["refreshToken"];
+
+
+          await pref.setString("accessToken", accessToken);
+          await pref.setString("refreshToken", refreshToken);
+
+          print(pref.getString("accessToken"));
+
+
+        }
+        if(subject.isNotEmpty){
+
+          final Map<String, Map<String, List<String>>> transformedData = {};
+
+          void addSubjects(List<dynamic> subjects) {
+            for (var item in subjects) {
+              final className = item['class'];
+              final section = item['section'];
+              final subject = item['subject'];
+
+              if (!transformedData.containsKey(className)) {
+                transformedData[className] = {};
               }
-              // if(!Classes!.contains(map["class"])){
-              //   Classes[i]=map["class"];
-              // }
-              // if(!sections!.contains(map["sections"])){
-              //   sections[i]=map["sections"];
-              // }
-            }
-
-            if(subjects.isNotEmpty){
-              await pref.setStringList("subjects", subjects);
-
-            }
-            print("subjects ${pref.get("subjects")}");
-
-          }
-          if(subject["Co_scholastic"]!=null){
-
-            List<dynamic> Co_scholastic=subject["Co_scholastic"];
-            List<String> Co_scholasticSubjects=[];
-            List<dynamic>? Classes;
-            List<dynamic>? sections;
-            for(int i=0;i<Co_scholastic.length;i++){
-              final map=Co_scholastic[i];
-              final sub=map["subject"]?? "sub";
-              if(!Co_scholasticSubjects.contains(sub) && sub!="sub"){
-                Co_scholasticSubjects.add(sub);
+              if (!transformedData[className]!.containsKey(section)) {
+                transformedData[className]![section] = [];
               }
+              if (!transformedData[className]![section]!.contains(subject)) {
+                transformedData[className]![section]!.add(subject);
               }
-            if(Co_scholasticSubjects.isNotEmpty){
-              await pref.setStringList("Co_scholasticSubjects", Co_scholasticSubjects);
-
             }
-            print( "Co_scholastic ${pref.get("Co_scholasticSubjects")}");
           }
 
-      }
+          addSubjects(data['subject']['subjects'] as List<dynamic>);
+          addSubjects(data['subject']['Co_scholastic'] as List<dynamic>);
 
-      if(classDetails!=null){
-        final teacherSection = classDetails["section"] ?? "teacherSection" ;
-        final teacherClass = classDetails["class"] ?? "teacherClass";
+          print(transformedData);
+          await pref.setString(
+              'class_section_subjects', jsonEncode(transformedData));
 
-        await pref.setString("teacherSection", teacherSection);
-        await pref.setString("teacherClass", teacherClass);
-        print(pref.getString("teacherSection"));
-        print(pref.getString("teacherClass"));
-      }
+          // To retrieve the data
+          String? jsonString = pref.getString('class_section_subjects');
+          if (jsonString != null) {
+            Map<String, dynamic> retrievedData = jsonDecode(jsonString);
+            print(retrievedData); // Use the retrieved data as needed
+          }
+
+
+
+        }
+        if(classDetails.isNotEmpty){
+
+          final teacherClass = classDetails["class"] ?? "";
+          final teacherSection = classDetails["section"] ?? "";
+          print(teacherClass);
+          print(teacherSection);
+          await pref.setString("teacherClass", teacherClass);
+          await pref.setString("teacherSection", teacherSection);
+        }
+        // else{
+        //
+        //     final authApiAcess = TeacherAuthentication();
+        //     DateTime currentDateTime=DateTime.now();
+        //     String date=currentDateTime.toString().split(' ')[0];
+        //
+        //     String calculateCurrentSession() {
+        //       DateTime now = DateTime.now();
+        //       int currentYear = now.year;
+        //       int nextYear = currentYear + 1;
+        //
+        //       if (now.isBefore(DateTime(currentYear, 3, 31))) {
+        //         currentYear--;
+        //         nextYear--;
+        //       }
+        //
+        //       return "$currentYear-${nextYear.toString().substring(2)}";
+        //     }
+        //
+        //     SharedPreferences pref =await  SharedPreferences.getInstance();
+        //     String? accessToken=pref.getString("accessToken");
+        //
+        //     print("accessTOken $accessToken");
+        //     print(" session ${calculateCurrentSession()}");
+        //     print("date $date");
+        //     if(accessToken!=null){
+        //       var data=await authApiAcess.fetchSubstitutionTeacher(accessToken,date,calculateCurrentSession());
+        //
+        //       print("substitute data $data ...............");
+        //
+        //       if(data!=null){
+        //         print("//////////////////substitute data called successfully ..........///////////////// ");
+        //
+        //         String? teacherClass=pref.getString("teacherClass") ??"";
+        //         String? teacherSection=pref.getString("teacherSection") ?? "";
+        //         print("Before teacherClass $teacherClass");
+        //         print("Before teacherSection $teacherSection");
+        //
+        //         if(teacherClass.isEmpty && teacherSection.isEmpty){
+        //
+        //           final teacherClass = data["class"] ?? "";
+        //           final teacherSection = data["section"] ?? "";
+        //
+        //            print("Fetched teacherClass $teacherClass");
+        //            print("Fetched teacherSection $teacherSection");
+        //
+        //           await pref.setString("teacherClass", teacherClass);
+        //           await pref.setString("teacherSection", teacherSection);
+        //
+        //           print("Set teacherClass ${pref.getString("teacherClass")}");
+        //           print("Set teacherSection ${pref.getString("teacherSection")}");
+        //
+        //           int currentHour=DateTime.now().hour;
+        //           int assignHour=17-currentHour;
+        //           await pref.setInt("assignHour", assignHour);
+        //           print("The login workmanager");
+        //
+        //         }
+        //
+        //
+        //       }
+        //     }
+        //
+        //
+        // }
+
 
         Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherHome(),));
-      }else{
-        showRedSnackBar("Something went Wrong", context);
       }
+
+
     } catch (e) {
       print("Login error: $e");
-      showRedSnackBar("An error occurred during login", context);
+      showRedSnackBar("An error occurred during login ${e}", context);
     } finally {
 
-        setState(() {
-          isLoading = false;
-        });
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   CustomTheme themeObj = CustomTheme();
+
 
   @override
   Widget build(BuildContext context) {

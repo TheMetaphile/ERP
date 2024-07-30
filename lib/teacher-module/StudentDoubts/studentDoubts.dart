@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,17 +18,14 @@ class StudentDoubts extends StatefulWidget {
 
 class _StudentDoubtsState extends State<StudentDoubts> {
   CustomTheme themeObj = CustomTheme();
-  String _selectedClass = '9th';
-  String _selectedSection = 'A';
-  String _selectedSubject = 'Maths';
-  List<String> classOptions = [
-    'Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th',
-    '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th',
-  ];
-  List<String> classSections = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
-  List<String> classSubjects = [
-    'Science', 'Maths', 'English', 'Social Science', 'Hindi', 'Computer'
-  ];
+  String _selectedClass = "";
+  String _selectedSection = "";
+  String _selectedSubject = "";
+
+  List<String> classSections = [];
+  List<String> classSubjects = [];
+  Map<String, dynamic> _storedData = {};
+
   bool isLoading = false;
   TextEditingController solutionController = TextEditingController();
 
@@ -112,10 +111,41 @@ class _StudentDoubtsState extends State<StudentDoubts> {
     }
   }
 
+  void initializeDropdowns() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonString = prefs.getString('class_section_subjects');
+
+    if (jsonString != null) {
+      Map<String, dynamic> storedData = jsonDecode(jsonString);
+      setState(() {
+        _storedData = storedData;
+        updateSections();
+      });
+    }
+  }
+
+  void updateSections() {
+    classSections = _storedData[_selectedClass]?.keys.toList() ?? [];
+    _selectedSection = "";
+    updateSubjects();
+  }
+
+  void updateSubjects() {
+    if (_selectedClass.isNotEmpty && _selectedSection.isNotEmpty) {
+      // Cast List<dynamic> to List<String>
+      classSubjects = (_storedData[_selectedClass]?[_selectedSection] as List<dynamic>?)
+          ?.map((item) => item as String)
+          .toList() ?? [];
+      _selectedSubject = "";
+    } else {
+      classSubjects = [];
+    }
+  }
   @override
   void initState() {
     super.initState();
     fetchDoubts();
+    initializeDropdowns();
   }
 
   @override
@@ -149,7 +179,8 @@ class _StudentDoubtsState extends State<StudentDoubts> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: size.height * 0.01),
+            SizedBox(height: size.height*0.01,),
+            dropDownButton(size),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -199,7 +230,6 @@ class _StudentDoubtsState extends State<StudentDoubts> {
                 ),
               ],
             ),
-            dropDownButton(size),
             SizedBox(height: size.height * 0.02),
             isLoading
                 ? Center(
@@ -329,32 +359,108 @@ class _StudentDoubtsState extends State<StudentDoubts> {
   }
 
   Widget dropDownButton(Size size) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          buildDropdown(size, "Class", _selectedClass, classOptions, (newValue) {
-            setState(() {
-              _selectedClass = newValue!;
-              fetchDoubts();
-            });
-          }),
-          SizedBox(width: size.width * 0.02),
-          buildDropdown(size, "Subject", _selectedSubject, classSubjects, (newValue) {
-            setState(() {
-              _selectedSubject = newValue!;
-              fetchDoubts();
-            });
-          }),
-          SizedBox(width: size.width * 0.02),
-          buildDropdown(size, "Section", _selectedSection, classSections, (newValue) {
-            setState(() {
-              _selectedSection = newValue!;
-              fetchDoubts();
-            });
-          }),
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Card(
+              child: Container(
+                width: size.width * 0.3,
+                height: size.height * 0.05,
+                child:DropdownButton<String>(
+                  isExpanded: true,
+                  borderRadius: BorderRadius.circular(12),
+                  hint: Text("Classes", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(8),
+                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
+                  underline: Container(),
+                  value: _selectedClass.isEmpty ? null : _selectedClass,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedClass = newValue!;
+                      updateSections();
+
+                    });
+                  },
+                  items: _storedData.keys.toList().map((String option) {
+                    return DropdownMenuItem<String>(
+                      value: option,
+                      child: Text(option, overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
+                    );
+                  }).toList(),
+                ),
+
+
+              ),
+            ),
+            SizedBox(width: size.width * 0.02,),
+            Card(
+              child: Container(
+                width: size.width * 0.3,
+                height: size.height * 0.05,
+                child:DropdownButton<String>(
+                  isExpanded: true,
+                  borderRadius: BorderRadius.circular(12),
+                  hint: Text("Sections", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
+                  padding: EdgeInsets.all(8),
+                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
+                  alignment: Alignment.center,
+                  underline: Container(),
+                  value: _selectedSection.isEmpty ? null : _selectedSection,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedSection = newValue!;
+                      updateSubjects();
+
+                    });
+                  },
+                  items: classSections.map((String option) {
+                    return DropdownMenuItem<String>(
+                      value: option,
+                      child: Text(option, overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
+                    );
+                  }).toList(),
+                ),
+
+
+              ),
+            ),
+            SizedBox(width: size.width * 0.02,),
+            Card(
+              child: Container(
+                width: size.width * 0.3,
+                height: size.height * 0.05,
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  borderRadius: BorderRadius.circular(12),
+                  hint: Text("Subjects", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
+                  padding: EdgeInsets.all(8),
+                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
+                  alignment: Alignment.center,
+                  underline: Container(),
+                  value: _selectedSubject.isEmpty ? null : _selectedSubject,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedSubject = newValue!;
+
+                      fetchDoubts();
+                    });
+                  },
+                  items: classSubjects.map((String option) {
+                    return DropdownMenuItem<String>(
+                      value: option,
+                      child: Text(option, overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -16,10 +16,12 @@ class PreviousStudentAttendanceRecords extends StatefulWidget {
 
 class _PreviousStudentAttendanceRecordsState extends State<PreviousStudentAttendanceRecords> {
   String? _selectedMonth;
-  String _selectedYear = '2024'; // Default to 2024
+
+  final String _selectedYear = DateTime.now().year.toString();
+
   Map<String, dynamic>? _attendanceData;
   StudentService StudentServiceObj = StudentService();
-
+bool isLoading=false;
   @override
   void initState() {
     super.initState();
@@ -30,6 +32,7 @@ class _PreviousStudentAttendanceRecordsState extends State<PreviousStudentAttend
   Future<void> _fetchAttendanceData() async {
     setState(() {
       _attendanceData = null; // Reset data to show loading indicator
+      isLoading=true;
     });
 
     if (_selectedMonth != null) {
@@ -41,12 +44,13 @@ class _PreviousStudentAttendanceRecordsState extends State<PreviousStudentAttend
         }
 
         final monthIndex = monthOptions.indexOf(_selectedMonth!) + 1;
+
+
         final data = await StudentServiceObj.fetchAttendance(
             monthIndex.toString().padLeft(2, '0'),
-            _selectedYear,
-            accessToken
+           accessToken
         );
-
+        print("data $data");
         setState(() {
           _attendanceData = data;
         });
@@ -55,6 +59,10 @@ class _PreviousStudentAttendanceRecordsState extends State<PreviousStudentAttend
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to load attendance data: ${e.toString()}')),
         );
+      }finally{
+        setState(() {
+          isLoading=false;
+        });
       }
     }
   }
@@ -68,7 +76,8 @@ class _PreviousStudentAttendanceRecordsState extends State<PreviousStudentAttend
 
   @override
   Widget build(BuildContext context) {
-    print(_attendanceData);
+    print(_selectedYear);
+    print("Atendance data $_attendanceData");
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: themeObj.textWhite,
@@ -122,151 +131,133 @@ class _PreviousStudentAttendanceRecordsState extends State<PreviousStudentAttend
               ],
             ),
             SizedBox(height: size.height * 0.02,),
-            if (_selectedMonth != null)
+            if (_selectedMonth != null && _selectedMonth!.isNotEmpty)
               Text(
                 "Attendance Sheet Of Class 9th A $_selectedMonth, $_selectedYear",
                 style: TextStyle(color: themeObj.textBlack, fontWeight: FontWeight.w400, fontSize: size.width * 0.035),
               ),
-            SizedBox(height: size.height * 0.02,),
-            if (_attendanceData == null)
+            if (isLoading)
               Center(
                 child: LoadingAnimationWidget.threeArchedCircle(
                   color: themeObj.primayColor,
                   size: 50,
                 ),
-              )
-            else if (_attendanceData!['output'] is Map<String, dynamic> && (_attendanceData!['output'] as Map<String, dynamic>).isNotEmpty)
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: AttendanceTable(
-                  attendanceData: _attendanceData!,
-                  selectedMonth: _selectedMonth!,
-                  selectedYear: _selectedYear,
-                ),
-              )
-            else
-              Center(child: Text('No attendance data available for the selected month')),
+              ),
+            SizedBox(height: size.height * 0.02),
+            if (!isLoading && _attendanceData != null)
+              _attendanceData!.isNotEmpty ? allTable() : Center(child: Text('No attendance data available for the selected month')),
           ],
         ),
       ),
     );
   }
-}
-
-class AttendanceTable extends StatelessWidget {
-  final Map<String, dynamic> attendanceData;
-  final String selectedMonth;
-  final String selectedYear;
-
-  AttendanceTable({
-    required this.attendanceData,
-    required this.selectedMonth,
-    required this.selectedYear,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (attendanceData['output'] == null || attendanceData['output'] is! Map<String, dynamic>) {
-      return Center(child: Text('Invalid attendance data format'));
+  Widget allTable() {
+    if (_attendanceData == null || _selectedMonth == null) {
+      return Center(child: Text('No data available'));
     }
 
-    final output = attendanceData['output'] as Map<String, dynamic>;
-    final students = output.entries.where((entry) => entry.key != 'class' && entry.key != 'section').toList();
-    if (students.isEmpty) {
-      return Center(child: Text('No attendance data available'));
-    }
+    int daysInMonth = DateTime(_selectedYear.isEmpty ? DateTime.now().year : int.parse(_selectedYear), monthOptions.indexOf(_selectedMonth!) + 2, 0).day;
 
-    final dates = _getDates();
-
-    return DataTable(
-      headingRowColor: MaterialStateColor.resolveWith((states) => Color.fromRGBO(174, 238, 237, 1)),
-      columns: _createColumns(dates),
-      rows: _createRows(students, dates),
-      dataRowHeight: 56,
-      headingRowHeight: 56,
-      showCheckboxColumn: false,
-      border: TableBorder.all(color: Colors.black),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Table(
+          border: TableBorder.all(),
+          columnWidths: {
+            0: FixedColumnWidth(150), // Wider column for student names
+            for (int i = 1; i <= daysInMonth; i++) i: FixedColumnWidth(40), // Columns for each day
+          },
+          children: [
+            allHeader(daysInMonth),
+            ...allRows(daysInMonth),
+          ],
+        ),
+      ),
     );
   }
 
-  List<DataColumn> _createColumns(List<String> dates) {
-    return [
-      DataColumn(label: Text('Students')),
-      for (var date in dates)
-        DataColumn(label: Text('${date.split('-').last}\n${_getDayOfWeek(DateTime.parse(date).weekday)}'))
-    ];
+
+  TableRow allHeader(int daysInMonth) {
+    return TableRow(
+      decoration: BoxDecoration(color: Colors.cyan[100]),
+      children: [
+        TableCell(
+          child: Container(
+            height: 60,
+            padding: EdgeInsets.all(8),
+            alignment: Alignment.center,
+            child: Text('Students', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ),
+        for (int i = 1; i <= daysInMonth; i++)
+          TableCell(
+            child: Container(
+              height: 60,
+              padding: EdgeInsets.all(8),
+              alignment: Alignment.center,
+              child: Text('$i', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ),
+      ],
+    );
   }
 
-  List<DataRow> _createRows(List<MapEntry<String, dynamic>> students, List<String> dates) {
-    return students.map((entry) {
-      final studentName = entry.key;
-      final studentData = entry.value as Map<String, dynamic>;
-      return DataRow(
-        cells: [
-          DataCell(Text(studentName)),
-          for (var date in dates)
-            DataCell(_getAttendanceCell(studentData[date] as String?, date)),
-        ],
-      );
-    }).toList();
-  }
+  List<TableRow> allRows(int daysInMonth) {
+    List<TableRow> rows = [];
 
-  Widget _getAttendanceCell(String? status, String date) {
-    DateTime currentDate = DateTime.now();
-    DateTime cellDate = DateTime.parse(date);
-    DateTime selectedDate = DateTime(int.parse(selectedYear), _getMonthNumber(selectedMonth), 1);
+    _attendanceData!.forEach((studentName, data) {
+      if (studentName != 'class' && studentName != 'section') {
+        List<Widget> cellWidgets = [
+          newTableCell(studentName),
+        ];
 
-    // For future months, show empty cells
-    if (selectedDate.isAfter(currentDate)) {
-      return Text('');
-    }
+        for (int day = 1; day <= daysInMonth; day++) {
+          String formattedDate1 = '${_selectedYear}-${(monthOptions.indexOf(_selectedMonth!) + 1).toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}';
+          String formattedDate2 = '${day.toString().padLeft(2, '0')}/${(monthOptions.indexOf(_selectedMonth!) + 1).toString().padLeft(2, '0')}/${_selectedYear}';
 
-    // For past dates without data, show '-'
-    if (cellDate.isBefore(currentDate) && status == null) {
-      return Text('-');
-    }
+          String status = data[formattedDate1] ?? data[formattedDate2] ?? '--';
+          Widget statusWidget;
 
-    // For future dates in the current month, show empty cells
-    if (cellDate.isAfter(currentDate)) {
-      return Text('');
-    }
+          switch (status.toLowerCase()) {
+            case 'present':
+              statusWidget = Icon(Icons.check, color: Colors.green, size: 20);
+              break;
+            case 'absent':
+              statusWidget = Icon(Icons.close, color: Colors.red, size: 20);
+              break;
+            case 'leave':
+              statusWidget = Text('L', style: TextStyle(color: Colors.orange));
+              break;
+            default:
+              statusWidget = Text('--');
+          }
 
-    // For dates with data
-    switch (status?.toLowerCase()) {
-      case 'present':
-        return Icon(Icons.check, color: Colors.green);
-      case 'absent':
-        return Icon(Icons.close, color: Colors.red);
-      case 'leave':
-        return Icon(Icons.remove, color: Colors.yellow);
-      default:
-        return Text('-');
-    }
-  }
+          cellWidgets.add(TableCell(
+            child: Container(
+              height: 40,
+              alignment: Alignment.center,
+              child: statusWidget,
+            ),
+          ));
+        }
 
-  List<String> _getDates() {
-    int year = int.parse(selectedYear);
-    int month = _getMonthNumber(selectedMonth);
-    int daysInMonth = DateTime(year, month + 1, 0).day;
-    DateTime currentDate = DateTime.now();
-
-    List<String> dates = [];
-    for (int i = 1; i <= daysInMonth; i++) {
-      DateTime date = DateTime(year, month, i);
-      if (date.isBefore(currentDate) || (date.year == currentDate.year && date.month == currentDate.month && date.day <= currentDate.day)) {
-        dates.add(date.toIso8601String().split('T')[0]);
+        rows.add(TableRow(children: cellWidgets));
       }
-    }
-    return dates;
+    });
+
+    return rows;
   }
 
-  String _getDayOfWeek(int day) {
-    List<String> days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    return days[day - 1];
-  }
-
-  int _getMonthNumber(String monthName) {
-    List<String> months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    return months.indexOf(monthName) + 1;
+  Widget newTableCell(String text) {
+    return TableCell(
+      child: Container(
+        height: 40,
+        padding: EdgeInsets.all(8),
+        alignment: Alignment.centerLeft,
+        child: Text(text, overflow: TextOverflow.ellipsis),
+      ),
+    );
   }
 }
+

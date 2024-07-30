@@ -99,6 +99,35 @@ class TeacherAuthentication{
   }
 
 
+    Future<dynamic> fetchSubstitutionTeacher(String accessToken,String date,String session) async {
+
+
+      final url = Uri.parse('$baseUrl/classTeacherSubstitute/fetch/checkSubstitute?date=$date&session=$session');
+
+      try {
+        final response = await http.get(
+          url,
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        );
+
+        if (response.statusCode == 200) {
+          final data = json.decode(response.body);
+          print("/////2********************************************************");
+          return data;
+        } else {
+          throw Exception('Failed to load classwork: ${response.statusCode}');
+        }
+      } catch (e) {
+        throw Exception('Error fetching classwork: $e');
+      }
+    }
+
+
+
+
   Future<void> forgetUser(String email, BuildContext context) async {
     final url = Uri.parse('$baseUrl/otp/send/teacher');
     final body = jsonEncode({

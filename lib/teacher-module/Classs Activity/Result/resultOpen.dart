@@ -28,17 +28,18 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
   CustomTheme themeObj=CustomTheme();
   ResultApi apiObj=ResultApi();
   StudentApi stdObj=StudentApi();
-  List<Map<String, dynamic>>? Final;
-  List<Map<String, dynamic>>? finalCoScholastic;
-  List<Map<String, dynamic>>? halfYearly;
-  List<Map<String, dynamic>>? halfYearlyCoScholastic;
-  List<Map<String, dynamic>>? term1;
-  List<Map<String, dynamic>>? term1CoScholastic;
-  List<Map<String, dynamic>>? term2;
-  List<Map<String, dynamic>>? term2CoScholastic;
+  ScrollController scrolController =ScrollController();
+  List<dynamic>? Final;
+  List<dynamic>? finalCoScholastic;
+  List<dynamic>? halfYearly;
+  List<dynamic>? halfYearlyCoScholastic;
+  List<dynamic>? term1;
+  List<dynamic>? term1CoScholastic;
+  List<dynamic>? term2;
+  List<dynamic>? term2CoScholastic;
   bool isLoading=false;
 
-  List<Map<String , dynamic>> studentDetail=[];
+  List<dynamic> studentDetail=[];
 
   Future<void> fetchResultData() async {
     setState(() {
@@ -48,53 +49,23 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? accessToken = pref.getString("accessToken");
       final resultData = await apiObj.fetchResult(accessToken!, widget.email);
+      print("result data $resultData");
+      if(resultData.isNotEmpty && resultData!=null){
+       setState(() {
+         Final =resultData["final"]!=[]?resultData["final"] :[];
+         finalCoScholastic =resultData["final_Co_scholastic"]!=[]? resultData["final_Co_scholastic"]:[];
+         halfYearly =resultData["halfYearly"]!=[] ?resultData["halfYearly"] :[];
+         halfYearlyCoScholastic =resultData["halfYearly_Co_scholastic"]!=[] ? resultData["halfYearly_Co_scholastic"]: [];
+         term1 =resultData["term1"]!=[]? resultData["term1"]:[];
+         term1CoScholastic =resultData["term1_Co_scholastic"]!=[]? resultData["term1_Co_scholastic"]:[];
+         term2 =resultData["term2"]!=[] ? resultData["term2"]:[];
+         term2CoScholastic =resultData["term2_Co_scholastic"]!=[]?resultData["term2_Co_scholastic"]: [];
+       });
 
+      }
 
-      setState(() {
-        if (resultData["final"] is List) {
-          Final = List<Map<String, dynamic>>.from(resultData["final"]);
-        } else {
-          Final = null;
-        }
-        if (resultData["final_Co_scholastic"] is List) {
-          finalCoScholastic = List<Map<String, dynamic>>.from(resultData["final_Co_scholastic"]);
-        } else {
-          finalCoScholastic = null;
-        }
-        if(resultData["halfYearly"] is List){
-          halfYearly = List<Map<String, dynamic>>.from(resultData["halfYearly"]);
-        }else {
-          halfYearly = null;
-        }
-        if(resultData["halfYearly_Co_scholastic"] is List){
-          halfYearlyCoScholastic = List<Map<String, dynamic>>.from(resultData["halfYearly_Co_scholastic"]);
-        }else {
-          halfYearlyCoScholastic = null;
-        }
-        if(resultData["term1"] is List){
-          term1 = List<Map<String, dynamic>>.from(resultData["term1"]);
-        }else {
-          term1 = null;
-        }
-        if(resultData["term1_Co_scholastic"] is List){
-          term1CoScholastic = List<Map<String, dynamic>>.from(resultData["term1_Co_scholastic"]);
-        }else {
-          term1CoScholastic = null;
-        }
-        if(resultData["term2"] is List){
-          term2 = List<Map<String, dynamic>>.from(resultData["term2"]);
-        }else {
-          term2 = null;
-        }
-        if(resultData["term2_Co_scholastic"] is List){
-          term2CoScholastic = List<Map<String, dynamic>>.from(resultData["term2_Co_scholastic"]);
-        }else {
-          term2CoScholastic = null;
-        }
-
-      });
     } catch (e) {
-      print('Error loading student data: $e');
+      print('Error loading  result data: $e');
       setState(() {
 
       });
@@ -112,11 +83,15 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
     try {
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? accessToken = pref.getString("accessToken");
-      final student = await stdObj.fetchSingleUser(accessToken!,widget.email);
+      List<dynamic> student = await stdObj.fetchSingleUser(accessToken!,widget.email);
 
-      setState(() {
-        studentDetail =student.cast();
-      });
+      if(student.isNotEmpty){
+
+        setState(() {
+          studentDetail =student;
+        });
+      }
+
     } catch (e) {
       print('Error loading student data: $e');
     }finally{
@@ -190,7 +165,14 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
           ),
         ),
       ),
-      body: SafeArea(
+      body:  isLoading
+          ? Center(
+        child: LoadingAnimationWidget.threeArchedCircle(
+          color: themeObj.primayColor,
+          size: 50,
+        ),
+      )
+          : SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -299,13 +281,12 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
            padding: const EdgeInsets.symmetric(horizontal: 8.0),
            child: Column(
              children: [
-
-               _buildInfoRow('Student\'s Name', '${studentDetail[0]["name"] ?? "name"}'),
-               _buildInfoRow('Father\'s Name', '${studentDetail[0]["fatherName"] ?? "Mr. Father"}'),
-               _buildInfoRow('Mother\'s Name', '${studentDetail[0]["motherName"] ?? "Mrs. Mother"}'),
-               _buildInfoRow('Admission No.', '${studentDetail[0]["oldAdmissionNumber"] ?? "AdmID"}'),
-               _buildInfoRow('Class & Section', '${studentDetail[0]["currentClass"] ?? "class"} ${studentDetail[0]["section"] ?? "section"}'),
-               _buildInfoRow('Date of Birth', '${studentDetail[0]["DOB"] ?? "DOB"}'),
+               _buildInfoRow('Student\'s Name', studentDetail.isNotEmpty ? (studentDetail[0]["name"] ?? "N/A") : "N/A"),
+               _buildInfoRow('Father\'s Name', studentDetail.isNotEmpty ? (studentDetail[0]["fatherName"] ?? "N/A") : "N/A"),
+               _buildInfoRow('Mother\'s Name', studentDetail.isNotEmpty ? (studentDetail[0]["motherName"] ?? "N/A") : "N/A"),
+               _buildInfoRow('Admission No.', studentDetail.isNotEmpty ? (studentDetail[0]["oldAdmissionNumber"] ?? "N/A") : "N/A"),
+               _buildInfoRow('Class & Section', studentDetail.isNotEmpty ? "${studentDetail[0]["currentClass"] ?? "N/A"} ${studentDetail[0]["section"] ?? "N/A"}" : "N/A"),
+               _buildInfoRow('Date of Birth', studentDetail.isNotEmpty ? (studentDetail[0]["DOB"] ?? "N/A") : "N/A"),
              ],
            ),
          )
@@ -315,7 +296,7 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
   }
 
   Widget _buildScholasticCard(Size size) {
-    List<Map<String, dynamic>> currentTermData = [];
+    List<dynamic> currentTermData = [];
     if (_selectTerm == "Term 1" && term1 != null) {
       currentTermData = term1!;
     } else if (_selectTerm == "Half Yearly" && halfYearly != null) {
@@ -355,7 +336,9 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
             ),
           ),
           Scrollbar(
+           trackVisibility: true,
             thumbVisibility: true,
+            controller: scrolController,
             thickness: 6.0,
             radius: const Radius.circular(10.0),
             child: SingleChildScrollView(
@@ -400,7 +383,7 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
   }
 
   Widget _buildCoScholasticCard(Size size) {
-    List<Map<String, dynamic>> currentTermData = [];
+    List<dynamic> currentTermData = [];
     if (_selectTerm == "Term 1" && term1 != null) {
       currentTermData = term1CoScholastic!;
     } else if (_selectTerm == "Half Yearly" && halfYearly != null) {
@@ -439,7 +422,9 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
            padding: const EdgeInsets.symmetric(horizontal: 8.0),
            child: Column(
              children: [
-               ListView.builder(
+               currentTermData.isEmpty
+                   ? Center(child: Text("No co-scholastic data available for this term"))
+                   :ListView.builder(
                  shrinkWrap: true,
                    itemCount: currentTermData.length,
                  itemBuilder: (context, index) {

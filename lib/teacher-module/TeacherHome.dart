@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:highlight_text/highlight_text.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:untitled/teacher-module/Classs%20Activity/classActivity.dart';
@@ -16,6 +17,8 @@ import 'package:untitled/teacher-module/TakeLeave/teacherLeave.dart';
 import 'package:untitled/teacher-module/uploadResult/uploadResult.dart';
 import 'package:untitled/utils/theme.dart';
 import 'package:untitled/utils/utils.dart';
+import 'package:workmanager/workmanager.dart';
+import '../WorkManager1/preferenceListener.dart';
 import '../onBoarding/Screens/login.dart';
 import '../voice_command_model/permission/permission.dart';
 import '../voice_command_model/recoginize_intent.dart';
@@ -32,6 +35,8 @@ class TeacherHome extends StatefulWidget {
 
   @override
   State<TeacherHome> createState() => _TeacherHomeState();
+
+
 }
 
 class _TeacherHomeState extends State<TeacherHome> {
@@ -40,6 +45,7 @@ class _TeacherHomeState extends State<TeacherHome> {
   String textString = "";
   bool isListen = false;
   double confidence = 0.7;
+
   final Map<String, HighlightedWord> highlightWords = {
     "flutter": HighlightedWord(
         textStyle: const TextStyle(
@@ -143,16 +149,16 @@ class _TeacherHomeState extends State<TeacherHome> {
 
   void initializeApp() async {
     await Permissions().checkAudioPermission();
-    bool permissionGranted = await requestPermissions();
-    if (permissionGranted) {
-      _initializeSpeechRecognition();
-      _initializeWakeUp();
-
-
-    } else {
-      // Handle the case when permissions are not granted
-      print("Permissions not granted.");
-    }
+    // bool permissionGranted = await requestPermissions();
+    // if (permissionGranted) {
+    //   _initializeSpeechRecognition();
+    //   _initializeWakeUp();
+    //
+    //
+    // } else {
+    //   // Handle the case when permissions are not granted
+    //   print("Permissions not granted.");
+    // }
   }
 
   Future<bool> requestPermissions() async {
@@ -184,6 +190,8 @@ class _TeacherHomeState extends State<TeacherHome> {
   String profileLink = 'https://example.com/default-profile-pic.jpg';
   String teacherEmail = "Unknown";
   String employeeID = "Unknown";
+  String? teacherClass;
+  String? teacherSection;
 
   final List<Widget> _screens = [
     TeacherDashboard(),
@@ -194,21 +202,64 @@ class _TeacherHomeState extends State<TeacherHome> {
 
   Future<void> getDetails() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    setState(() {
+
       teacherName = pref.getString("name") ?? "Unknown";
       profileLink = pref.getString("profileLink") ?? 'https://example.com/default-profile-pic.jpg';
       teacherEmail = pref.getString("email") ?? "Unknown";
       employeeID = pref.getString("employeeId") ?? "Unknown";
-    });
+      teacherClass = pref.getString("teacherClass") ?? "";
+      teacherSection = pref.getString("teacherSection") ?? "";
+
+
   }
+
 
   @override
   void initState() {
     super.initState();
-    initializeApp();
-    getDetails();
+    // initializeApp();
+    // getDetails();
+    _loadInitialValues();
+    _listenToChanges();
+
+  }
+  final SharedPreferencesListener _prefsListener = SharedPreferencesListener();
+
+  Future<void> _loadInitialValues() async {
+    teacherClass = await _prefsListener.getTeacherClass();
+    teacherSection = await _prefsListener.getTeacherSection();
+    setState(() {});
+    print("_loadInitialValues Run");
+    prints();
   }
 
+  void _listenToChanges() {
+    _prefsListener.teacherClassStream.listen((value) {
+      setState(() => teacherClass = value);
+      print("Class Changed");
+      prints();
+    });
+
+    _prefsListener.teacherSectionStream.listen((value) {
+      setState(() => teacherSection = value);
+      print("Section Changed");
+      prints();
+    });
+
+  }
+
+  @override
+  void dispose() {
+    _prefsListener.dispose();
+    super.dispose();
+  }
+  Future<void>  prints() async {
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    // PreferenceManager.getDefaultSharedPreferences(context).edit().commit()
+    print("Home teacherClass ${teacherClass} $teacherSection ");
+    print("Home teacherSection ${await pref.getString("teacherSection")} ");
+    // print("Home workmanager ${pref.getString("workmanager")} ");
+  }
 
   Future<void> showRevokeMicrophonePermissionDialog(BuildContext context) async {
     return showDialog<void>(
@@ -249,7 +300,9 @@ class _TeacherHomeState extends State<TeacherHome> {
                 if (microphoneStatus.isDenied || microphoneStatus.isPermanentlyDenied) {
                   // Permission has been revoked, proceed with logout
                   SharedPreferences prefs = await SharedPreferences.getInstance();
-                  await prefs.clear();
+                  bool isCleared=await prefs.clear();
+                  print("isCleared $isCleared");
+                  print("teacherAccessToken ${prefs.getString("accessToken")}");
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
                 } else {
                   // Permission is still granted, show a message
@@ -266,8 +319,10 @@ class _TeacherHomeState extends State<TeacherHome> {
   }
   @override
   Widget build(BuildContext context) {
+
+
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
+     return Scaffold(
       backgroundColor: themeObj.textWhite,
       appBar: AppBar(
         backgroundColor: themeObj.primayColor,
@@ -283,7 +338,7 @@ class _TeacherHomeState extends State<TeacherHome> {
           _selectedIndex == 0
               ? IconButton(
             onPressed: () {
-              // Implement action
+            prints();
             },
             icon: const Icon(Icons.notification_add),
           )
@@ -360,13 +415,14 @@ class _TeacherHomeState extends State<TeacherHome> {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => StudentDoubts(),));
                         },
                       ),
-                      ListTile(
+                      teacherClass!=null && teacherSection!=null?   ListTile(
                         leading: Image.asset("assets/Images/TeacherDashboard/Classroom.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
                         title: Text("Class Activity",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ClassActivity(),));
                         },
-                      ),
+                      ):const SizedBox(),
+
                       // ListTile(
                       //   leading: Image.asset("assets/Images/TeacherDashboard/checkin.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
                       //   title: Text("Check In",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
@@ -438,22 +494,30 @@ class _TeacherHomeState extends State<TeacherHome> {
                       //   },
                       // ),
                       ListTile(
-                        leading: Icon(Icons.logout, color: themeObj.textBlack, size: size.width*0.1),
-                        title: Text("Logout", overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(fontSize: size.width*0.04, color: themeObj.textBlack, fontWeight: FontWeight.w400)),
-                        onTap: () async {
-                          PermissionStatus microphoneStatus = await Permission.microphone.status;
-
-                          if (microphoneStatus.isGranted) {
-                            // If microphone permission is still granted, show dialog to revoke it
-                            await showRevokeMicrophonePermissionDialog(context);
-                          } else {
-                            // If microphone permission is already revoked, proceed with logout
-                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                          leading: Icon(Icons.logout, color: themeObj.textBlack, size: size.width*0.1),
+                          title: Text("Logout", overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(fontSize: size.width*0.04, color: themeObj.textBlack, fontWeight: FontWeight.w400)),
+                          onTap: () async {
+                            // PermissionStatus microphoneStatus = await Permission
+                            //     .microphone.status;
+                            //
+                            // if (microphoneStatus.isGranted) {
+                            //   // If microphone permission is still granted, show dialog to revoke it
+                            //   await showRevokeMicrophonePermissionDialog(context);
+                            // } else {
+                            //   // If microphone permission is already revoked, proceed with logout
+                            //   SharedPreferences prefs = await SharedPreferences
+                            //       .getInstance();
+                            //   await prefs.clear();
+                            //   Navigator.pushReplacement(context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) => Login()));
+                            // }
+                            SharedPreferences prefs = await SharedPreferences
+                                .getInstance();
                             await prefs.clear();
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
-                          }
-                        },
-                      ),
+                            Navigator.pushReplacement(context,
+                                MaterialPageRoute(builder: (context) => Login()));
+                          } ),
 
                     ],
                   ),
@@ -548,3 +612,4 @@ class _TeacherHomeState extends State<TeacherHome> {
     }
   }
 }
+

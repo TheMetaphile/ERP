@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../StudentsData/student.dart';
 
@@ -67,8 +68,26 @@ class Doubt {
 class DoubtsApi {
   static const String baseUrl = 'http://13.201.247.28:8000';
 
-  Future<List<Doubt>> fetchTeacherDoubts(String accessToken, String classNumber, String section, String subject,String status, int start) async {
-    final url = Uri.parse('$baseUrl/doubts/fetch/teacher?class=$classNumber&section=$section&subject=$subject&status=$status&start=$start&end=10');
+  Future<List<Doubt>> fetchTeacherDoubts(String accessToken, String Class, String section, String subject,String status, int start) async {
+    if (Class == "" && section == "" && subject == "") {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? jsonString = prefs.getString('class_section_subjects');
+
+      // Decode the JSON string
+      Map<String, dynamic> data = jsonDecode(jsonString!);
+
+      // Access the nested structure
+      String firstClass = data.keys.first;
+      Map<String, dynamic> sections = data[firstClass];
+      String firstSection = sections.keys.first;
+      List<dynamic> subjects = sections[firstSection];
+      String firstSubject = subjects.first;
+
+      Class = firstClass;
+      section = firstSection;
+      subject = firstSubject;
+    }
+    final url = Uri.parse('$baseUrl/doubts/fetch/teacher?class=$Class&section=$section&subject=$subject&status=$status&start=$start&end=10');
 
     try {
       final response = await http.get(

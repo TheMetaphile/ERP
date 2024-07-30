@@ -565,6 +565,9 @@ class _TeacherLeaveState extends State<TeacherLeave> {
     }
   }
 
+  int totalLeave=0;
+  int rejectedLeave=0;
+  double ratio=0;
   Future<void> loadStats() async{
 
     try {
@@ -576,6 +579,9 @@ class _TeacherLeaveState extends State<TeacherLeave> {
       if(stats is Map){
         setState(() {
             states =stats.cast<String,dynamic >();
+            totalLeave=states!["total"];
+            rejectedLeave=states!["rejected"];
+            ratio=rejectedLeave/totalLeave;
         });
       }else{
         stats={};
@@ -607,6 +613,8 @@ class _TeacherLeaveState extends State<TeacherLeave> {
       fetchMoreLeavesData();
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -665,7 +673,12 @@ class _TeacherLeaveState extends State<TeacherLeave> {
                           height: size.width*0.34,
                           width: size.width*0.34,
                           child: CircularProgressIndicator(
-                              value: 0,
+                              value: ratio,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.red
+                            ),
+
+
                               strokeWidth: 10,
                               backgroundColor:Color.fromRGBO(216, 180, 254, 0.3),
 

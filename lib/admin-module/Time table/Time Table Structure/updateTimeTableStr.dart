@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/admin-module/Time%20table/Time%20Table%20Structure/timeTableFetch.dart';
 import 'package:untitled/utils/utils.dart';
 
-import '../../../APIs/Teacher Module/TimeTable/Time Table/timeTableStructure.dart';
+
 
 
 class UpdateStructureScreen extends StatefulWidget {
@@ -46,7 +46,7 @@ class _UpdateStructureScreenState extends State<UpdateStructureScreen> {
   late String _firstLectureTiming;
   late int _numberOfLecturesBeforeLunch;
   late String _durationOfLunch;
-  TimeTableStructureAPI apiobj = TimeTableStructureAPI();
+  // TimeTableStructureAPI apiobj = TimeTableStructureAPI();
 
   @override
   void initState() {
@@ -243,13 +243,13 @@ bool isUpdated=false;
 
           };
           print(updateData);
-          bool success = await apiobj.updateTimeTableStructure(
-            accessToken!,
-            _classRange,
-            updateData,
-          );
+          // bool success = await apiobj.updateTimeTableStructure(
+          //   accessToken!,
+          //   _classRange,
+          //   updateData,
+          // );
 
-          if (success) {
+          if (false) {
             // Time table structure updated successfully
             showGreenSnackBar("Time table structure updated successfully", context);
             // Navigate back or perform any other action

@@ -634,7 +634,8 @@ class _ReportCardState extends State<ReportCard> {
      accessToken = pref.getString("accessToken");
      currentClass = pref.getString("teacherClass");
      section = pref.getString("teacherSection");
-
+    print(currentClass);
+    print(section);
      currentClass ??= "class";
      List<dynamic> students=await studentObj.fetchStudents(accessToken! , currentClass!, section!, 0,);
      setState(() {
@@ -696,11 +697,7 @@ class _ReportCardState extends State<ReportCard> {
 
   @override
   Widget build(BuildContext context) {
-    print(studentList);
-    print(currentClass);
-    print(section);
-    print(section);
-    print(studentList);
+
 
 
     Size size = MediaQuery.of(context).size;
@@ -734,122 +731,109 @@ class _ReportCardState extends State<ReportCard> {
           color: themeObj.primayColor,
           size: 50,
         ),
-      ):
-      SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
+      ):studentList!.isEmpty? Center(child: Text("No student Data Found"),):
+      Column(
 
-          children: [
-            SingleChildScrollView(
-              child: Column(
+        children: [
+          SingleChildScrollView(
+            child: Column(
 
-                children: [
-                  SizedBox(height: size.height * 0.01),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50.0),
-                    child: Text(
-                      'Swipe left and right to see all details',
-                      style: GoogleFonts.openSans(
-                          fontStyle: FontStyle.italic,
-                          color: Colors.grey[600],
-                          fontSize: size.width * 0.035),
-                    ),
+              children: [
+                SizedBox(height: size.height * 0.01),
+                Padding(
+                  padding: const EdgeInsets.only(left: 50.0),
+                  child: Text(
+                    'Swipe left and right to see all details',
+                    style: GoogleFonts.openSans(
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey[600],
+                        fontSize: size.width * 0.035),
                   ),
-                  SizedBox(height: size.height * 0.02),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Column(
+                ),
+                SizedBox(height: size.height * 0.02),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
 
-                      children: [
-                        Container(
+                    children: [
+                      Container(
 
-                          width: size.width * 1.2,
-                          color: Color.fromRGBO(233, 213, 255, 1),
-                          child: Row(
-                            children: [
-                              _buildHeaderCell("Roll No.", size),
-                              _buildHeaderCell("Name", size),
-                              SizedBox(width: size.width*0.04,),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 18.0),
-                                child: _buildHeaderCell("Email", size),
-                              ),
-                            ],
-                          ),
+                        width: size.width * 1.2,
+                        color: Color.fromRGBO(233, 213, 255, 1),
+                        child: Row(
+                          children: [
+                            _buildHeaderCell("Roll No.", size),
+                            _buildHeaderCell("Name", size),
+                            SizedBox(width: size.width*0.04,),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 18.0),
+                              child: _buildHeaderCell("Email", size),
+                            ),
+                          ],
                         ),
-                        const Divider(thickness: 2, height: 2, color: Colors.black),
-                        Container(
-                          height: size.height * 0.75,
-                          width: size.width * 1.14,
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            controller: _scrollController,
-                            itemBuilder: (context, index) {
-                              if (index == studentList!.length && !allStudentsLoaded) {
-                                return Center(
-                                  child: LoadingAnimationWidget.threeArchedCircle(
-                                    color: themeObj.primayColor,
-                                    size: 50,
-                                  ),
-                                );
-                              }
-                              final student = studentList![index];
-                              return InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ReportCardOpen(email: student["email"],)));
-                                },
-                                child: Row(
-                                  children: [
-
-                                    _buildDataCell('0${student["rollNumber"]}', size),
-                                    Row(
-                                      children: [
-                                        CircleAvatar(
-                                          radius: size.width * 0.06,
-                                          backgroundImage: NetworkImage(student["profileLink"] ?? 'https://example.com/default-profile-pic.jpg'),
-                                        ),
-                                        SizedBox(width: size.width*0.02,),
-                                        _buildDataCell(student["name"], size),
-                                      ],
-                                    ),
-                                    SizedBox(width: size.width*0.03,),
-                                    _buildDataCell(student["email"], size),
-                                  ],
+                      ),
+                      const Divider(thickness: 2, height: 2, color: Colors.black),
+                      Container(
+                        height: size.height * 0.7,
+                        width: size.width * 1.14,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          controller: _scrollController,
+                          itemBuilder: (context, index) {
+                            if (index == studentList!.length && !allStudentsLoaded) {
+                              return Center(
+                                child: LoadingAnimationWidget.threeArchedCircle(
+                                  color: themeObj.primayColor,
+                                  size: 50,
                                 ),
                               );
-                            },
-                            separatorBuilder: (context, index) => Divider(),
-                            itemCount:studentList!.length,
+                            }
+                            final student = studentList![index];
+                            return Column(
+                              children: [
+                                InkWell(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => ReportCardOpen(email: student["email"],)));
+                                  },
+                                  child: Row(
+                                    children: [
 
-                          ),
-                        )
+                                      _buildDataCell('0${student["rollNumber"]}', size),
+                                      Row(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: size.width * 0.06,
+                                            backgroundImage: NetworkImage(student["profileLink"] ?? 'https://example.com/default-profile-pic.jpg'),
+                                          ),
+                                          SizedBox(width: size.width*0.02,),
+                                          _buildDataCell(student["name"], size),
+                                        ],
+                                      ),
+                                      SizedBox(width: size.width*0.03,),
+                                      _buildDataCell(student["email"], size),
+                                    ],
+                                  ),
+                                ),
 
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                              ],
+                            );
+                          },
+                          separatorBuilder: (context, index) => Divider(),
+                          itemCount:studentList!.length,
+
+                        ),
+                      ),
+
+                    ],
+                  ),
+                )
+              ],
             ),
-            SizedBox(height: size.height*0.02,),
-          ],
-        ),
+          ),
+
+        ],
       ),
-        // floatingActionButton:  SizedBox(
-        //   width: size.width*0.25,
-        //   child: TextButton(onPressed: (){
-        //     _addNewResultPopup(context,size);
-        //   },
-        //     style: TextButton.styleFrom(backgroundColor: Color.fromRGBO(233,213,255,1)),
-        //     child:Row(
-        //         children: [
-        //
-        //           Icon(Icons.add,color: themeObj.textBlack,),
-        //           SizedBox(width: size.width*0.02,),
-        //         Text("Add",style: GoogleFonts.openSans(color: themeObj.textBlack,fontWeight: FontWeight.w400,fontSize: size.width*0.036),),
-        //
-        //         ],
-        //         ),),
-        // )
+
     );
   }
   Widget _buildHeaderCell(String text, Size size) {

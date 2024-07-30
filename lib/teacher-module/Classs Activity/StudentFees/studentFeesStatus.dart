@@ -26,8 +26,9 @@ class _StudentFeesStatusState extends State<StudentFeesStatus> {
   StudentFeesAPi feeObj = StudentFeesAPi();
   List<dynamic>? students;
   final ScrollController _scrollController = ScrollController();
-
+String errorMsg="";
   @override
+
   void initState() {
     super.initState();
     fetchStudentData();
@@ -60,6 +61,7 @@ class _StudentFeesStatusState extends State<StudentFeesStatus> {
         students = fetchedStudents;
       });
     } catch (e) {
+      errorMsg=e.toString();
       print('Error fetching student data: $e');
       showRedSnackBar("Failed to load students. Please try again.", context);
     } finally {

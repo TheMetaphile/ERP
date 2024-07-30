@@ -21,7 +21,7 @@ class BirthdayAPI{
         final data = json.decode(response.body);
         return data ;
       } else {
-        throw Exception('Failed to load birthday: ${response.statusCode}');
+        throw Exception('Failed to load birthday: ${response.body}');
       }
     } catch (e) {
       throw Exception('Error fetching birthday: $e');
@@ -46,7 +46,7 @@ class BirthdayAPI{
         print(data);
         return data ;
       } else {
-        throw Exception('Failed to load birthday: ${response.statusCode}');
+        throw Exception('Failed to load birthday: ${response.body}');
       }
     } catch (e) {
       throw Exception('Error fetching birthday: $e');

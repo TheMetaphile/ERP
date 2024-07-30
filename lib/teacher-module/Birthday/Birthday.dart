@@ -17,12 +17,12 @@ class _BirthdayState extends State<Birthday> {
   String selectedFilter = 'Teacher';
   BirthdayAPI apiObj=BirthdayAPI();
     bool isLoading=false;
-  Map<dynamic,dynamic>? studentBirthday;
-  List<dynamic>? todayStudentBirthday;
-  List<dynamic>? upcomingStudentBirthday;
-  Map<dynamic,dynamic>? teacherBirthday;
-  List<dynamic>? todayTeacherBirthday;
-  List<dynamic>? upcomingteachersBirthday;
+  Map<dynamic, dynamic> studentBirthday = {};
+  List<dynamic> todayStudentBirthday = [];
+  List<dynamic> upcomingStudentBirthday = [];
+  Map<dynamic, dynamic> teacherBirthday = {};
+  List<dynamic> todayTeacherBirthday = [];
+  List<dynamic> upcomingteachersBirthday = [];
 
 
   
@@ -44,8 +44,8 @@ class _BirthdayState extends State<Birthday> {
 
       setState(() {
         studentBirthday = data;
-        todayStudentBirthday =studentBirthday?["todayBirthday"];
-        upcomingStudentBirthday =studentBirthday?["upcomingBirthdays"];
+        todayStudentBirthday = data['todayBirthday'] as List<dynamic>? ?? [];
+        upcomingStudentBirthday = data['upcomingBirthdays'] as List<dynamic>? ?? [];
       });
     } catch (e) {
       print('Error fetching student data: $e');
@@ -74,8 +74,8 @@ class _BirthdayState extends State<Birthday> {
 
       setState(() {
         teacherBirthday = data;
-        todayTeacherBirthday =teacherBirthday?["todayBirthday"];
-        upcomingteachersBirthday =teacherBirthday?["upcomingBirthdays"];
+        todayTeacherBirthday = data['todayBirthday'] as List<dynamic>? ?? [];
+        upcomingteachersBirthday = data['upcomingBirthdays'] as List<dynamic>? ?? [];
       });
     } catch (e) {
       print('Error fetching student data: $e');
@@ -126,7 +126,7 @@ void initState(){
             children: [
               SizedBox(height: size.height * 0.02),
               _buildFilterButtons(size),
-              isLoading ||  studentBirthday==null? Center(
+              isLoading? Center(
                 child: LoadingAnimationWidget.threeArchedCircle(
                   color: themeObj.primayColor,
                   size: 50,
@@ -137,13 +137,14 @@ void initState(){
                   SizedBox(height: size.height * 0.01),
                   _buildSectionTitle("Today's", size),
                   SizedBox(height: size.height * 0.01),
-                  todayStudentBirthday!.isEmpty ? Center(child: const Text("There is No Today  Birthday")):
+                  todayStudentBirthday.isEmpty ? Center(child: const Text("There is No Today Birthday")) :
                   ListView.builder(
                     shrinkWrap: true,
-                    itemCount: todayStudentBirthday?.length,
+                    itemCount: todayStudentBirthday.length,
                     itemBuilder: (context, index) {
 
-                      final particularCard=todayStudentBirthday?[index];
+                      final particularCard = todayStudentBirthday[index];
+
                       print( "${particularCard["DOB"].split("-")[0]}");
                       return Card(
                         elevation: 3,
@@ -155,7 +156,7 @@ void initState(){
                             children: [
                               CircleAvatar(
                                 radius: size.width * 0.08,
-                                backgroundImage: NetworkImage(particularCard["profileLink"]?? ""),
+                                backgroundImage: NetworkImage(particularCard["profileLink"]?? "Unknown"),
                               ),
                               SizedBox(width: size.width * 0.03),
                               Expanded(
@@ -215,7 +216,7 @@ void initState(){
 
                   _buildSectionTitle("Days To Go", size),
                   SizedBox(height: size.height * 0.01),
-                  upcomingStudentBirthday!.isEmpty ? Center(child: const Text("There is No Upcoming Birthday Found")):
+                  upcomingStudentBirthday.isEmpty ? Center(child: const Text("There is No Upcoming Birthday Found")) :
                   SizedBox(
                     height: size.height*0.53,
                     child: ListView.builder(
@@ -299,13 +300,13 @@ void initState(){
                   SizedBox(height: size.height * 0.02),
                   _buildSectionTitle("Today's", size),
                   SizedBox(height: size.height * 0.01),
-                  todayTeacherBirthday!.isEmpty ? Center(child: const Text("There is No Today Birthday")):
+                  todayTeacherBirthday.isEmpty ? Center(child: const Text("There is No Today Birthday")):
                   ListView.builder(
                     shrinkWrap: true,
-                    itemCount: todayTeacherBirthday?.length,
+                    itemCount: todayTeacherBirthday.length,
                     itemBuilder: (context, index) {
 
-                      final particularCard=todayTeacherBirthday?[index];
+                      final particularCard=todayTeacherBirthday[index];
                       print( "${particularCard["DOB"].split("-")[0]}");
                       return Card(
                         elevation: 3,
@@ -377,14 +378,14 @@ void initState(){
                   SizedBox(height: size.height * 0.02),
                   _buildSectionTitle("Days To Go", size),
                   SizedBox(height: size.height * 0.01),
-                  upcomingteachersBirthday!.isEmpty ? Center(child: const Text("There is No Upcoming Birthday Found")):
+                  upcomingteachersBirthday.isEmpty ? Center(child: const Text("There is No Upcoming Birthday Found")):
                   SizedBox(
                     height: size.height*0.53,
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: upcomingteachersBirthday?.length,
+                      itemCount: upcomingteachersBirthday.length,
                       itemBuilder: (context, index) {
-                        final particularCard=upcomingteachersBirthday?[index];
+                        final particularCard=upcomingteachersBirthday[index];
                         return Card(
                           elevation: 3,
                           margin: EdgeInsets.only(bottom: size.height * 0.01),

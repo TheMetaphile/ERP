@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:untitled/admin-module/Time%20table/Time%20Table%20Structure/timeTableCreate.dart';
+
 import 'package:untitled/admin-module/Time%20table/Time%20Table%20Structure/updateTimeTableStr.dart';
 import 'package:untitled/utils/utils.dart';
 
-import '../../../APIs/Teacher Module/TimeTable/Time Table/timeTableStructure.dart';
+
 import '../Time Tables/timeTableFetch.dart';
 
 class TimeTableStructureScreen extends StatefulWidget {
@@ -53,7 +53,7 @@ class _TimeTableStructureScreenState extends State<TimeTableStructureScreen> {
     _fetchTimeTableStructure();
   }
 
-  TimeTableStructureAPI apiObj = TimeTableStructureAPI();
+  // TimeTableStructureAPI apiObj = TimeTableStructureAPI();
 
   Future<List<String>> _fetchClassRanges() async {
     return ['1st-12th', '6th-10th', 'Nursery-5th'];
@@ -81,14 +81,14 @@ class _TimeTableStructureScreenState extends State<TimeTableStructureScreen> {
       String? accessToken = pref.getString("accessToken");
       print(accessToken);
 
-      final timeTableStructure = await apiObj.fetchTimeTableStructure(
-        accessToken!,
-        _selectedClassRange,
-      );
-
+      // final timeTableStructure = await apiObj.fetchTimeTableStructure(
+      //   accessToken!,
+      //   _selectedClassRange,
+      // );
+final timeTableStructure=[];
       if (timeTableStructure.isNotEmpty) {
         setState(() {
-          _timeTableStructure = timeTableStructure;
+
         });
       } else {
         print("not found");
@@ -406,21 +406,7 @@ class _TimeTableStructureScreenState extends State<TimeTableStructureScreen> {
       floatingActionButton: isFetched
           ? FloatingActionButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => _timeTableStructure == null
-                        ? CreateStructureScreen(
-                            classRange: _selectedClassRange.toString(),
-                            section: _selectedSection.toString(),
-                          )
-                        : UpdateStructureScreen(
-                            timeTableStructure: _timeTableStructure,
-                            classRange: _selectedClassRange.toString(),
-                            section: _selectedSection.toString(),
-                          ),
-                  ),
-                );
+
               },
               backgroundColor: Color(0xFF5A77BC),
               child: _timeTableStructure == null

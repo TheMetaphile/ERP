@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,109 +21,96 @@ class NoteBookRecord extends StatefulWidget {
 }
 
 class _NoteBookRecordState extends State<NoteBookRecord> {
-  String _selectedClass="9th";
-  String _selectedSection ="A";
-  String _selectedSubject="Maths";
-  List<String> classOptions = [
-    '12th',
-    '11th',
-    '10th',
-    '9th',
-  ];
-  List<String> classSections = [
-    'A',
-    'B',
-    'C',
-  ];
-  List<String> classSubjects = [
-    'Science',
-    'Maths',
-    'English',
-    'Hindi',
-  ];
+  String _selectedClass = "";
+  String _selectedSection = "";
+  String _selectedSubject = "";
+  List<String> classSections = [];
+  List<String> classSubjects = [];
+  Map<String, dynamic> _storedData = {};
   String _selectedTab = 'All';
-
   final TextEditingController _chapterController = TextEditingController();
   final TextEditingController _topicController = TextEditingController();
+  List<Map<String, dynamic>> studentsList = [];
+  List<String> checkedList = [];
+  List<Map<String, dynamic>> noteBookRecordList = [];
+  bool isLoading = false;
+  NoteBookRecordAPI apiObj = NoteBookRecordAPI();
+  String date = DateTime.now().toString().split(" ")[0];
+  String session = '';
 
-  List<Map<String, dynamic>>? studentsList;
-  List<String> checkedList =[];
-  List<Map<String, dynamic>>? noteBookRecordList;
-  bool isLoading=false;
-  NoteBookRecordAPI apiObj=NoteBookRecordAPI();
-    String date=DateTime.now().toString().split(" ")[0];
+  @override
+  void initState() {
+    super.initState();
+    initializeDropdowns();
+    session = calculateCurrentSession();
+    notebookRecord();
+    getStudentData();
+  }
 
-    String session = '';
-
-    String calculateCurrentSession() {
+  String calculateCurrentSession() {
     DateTime now = DateTime.now();
     int currentYear = now.year;
     int nextYear = currentYear + 1;
-
     if (now.isBefore(DateTime(currentYear, 3, 31))) {
       currentYear--;
       nextYear--;
     }
-
     return "$currentYear-${nextYear.toString().substring(2)}";
   }
 
   Future<void> getStudentData() async {
-      setState(() {
-        isLoading=true;
-      });
-    try{
-      StudentApi apiObj= StudentApi();
-
+    setState(() {
+      isLoading = true;
+    });
+    try {
       SharedPreferences pref = await SharedPreferences.getInstance();
-      var accessToken = pref.getString("accessToken");
+      String? accessToken = pref.getString("accessToken");
+      if (accessToken == null) throw Exception("Access token is null");
 
-      List<dynamic> students=await apiObj.fetchStudents(accessToken! , _selectedClass, _selectedSection, 0,);
-      print("students                  $students");
-      if(students.isNotEmpty){
-        setState(() {
-          studentsList=students.cast();
-        });
-      }else{
-        studentsList=[];
-      }
-      //  currentClass = pref.getString("teacherClass");
-      // section = pref.getString("teacherSection");
-      // if(currentClass==null){
-      //   currentClass="class";
-      // }
-    }catch(e){
-      print("error $e");
-    }finally{
+      StudentApi apiObj = StudentApi();
+      List<dynamic> students = await apiObj.fetchStudents(accessToken, _selectedClass, _selectedSection, 0);
       setState(() {
-        isLoading=false;
+        studentsList = students.cast<Map<String, dynamic>>();
+      });
+    } catch (e) {
+      showError("Failed to fetch student data: $e");
+    } finally {
+      setState(() {
+        isLoading = false;
       });
     }
   }
 
   Future<void> uploadNoteBookRecord() async {
-    try{
-
-
+    try {
       SharedPreferences pref = await SharedPreferences.getInstance();
-      var accessToken = pref.getString("accessToken");
+      String? accessToken = pref.getString("accessToken");
+      if (accessToken == null) throw Exception("Access token is null");
 
-      bool status= await apiObj.uploadNoteBook(accessToken!,_selectedClass,_selectedSection,date,_chapterController.text.toString(),_topicController.text.toString(),session,_selectedSubject,checkedList);
-      print("students $status");
-      if(status){
-        showGreenSnackBar("NoteBook Record Uploaded SuccessFully", context );
-          checkedList=List.empty();
+      bool status = await apiObj.uploadNoteBook(
+        accessToken,
+        _selectedClass,
+        _selectedSection,
+        date,
+        _chapterController.text,
+        _topicController.text,
+        session,
+        _selectedSubject,
+        checkedList,
+      );
+
+      if (status) {
+        showGreenSnackBar("NoteBook Record Uploaded Successfully", context);
+        setState(() {
+          checkedList = [];
           _chapterController.clear();
-        _topicController.clear();
-
-      }else{
-
-        showRedSnackBar("Failed to Upload a NoteBook Record", context);
+          _topicController.clear();
+        });
+      } else {
+        showRedSnackBar("Failed to Upload NoteBook Record", context);
       }
-
-
-    }catch(e){
-      print("error $e");
+    } catch (e) {
+      showError("Error uploading notebook record: $e");
     }
   }
 
@@ -132,21 +121,21 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
     try {
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? accessToken = pref.getString("accessToken");
+      if (accessToken == null) throw Exception("Access token is null");
 
-      if (accessToken == null) {
-        throw Exception('Access token is null');
-      }
-      List<dynamic> noteBookData=await apiObj.notebookRecord(accessToken, _selectedClass, _selectedSection, _selectedSubject, session, 0);
-      // print("NoteBookData $noteBookData");
-
+      List<dynamic> noteBookData = await apiObj.notebookRecord(
+        accessToken,
+        _selectedClass,
+        _selectedSection,
+        _selectedSubject,
+        session,
+        0,
+      );
       setState(() {
-        noteBookRecordList=noteBookData.cast<Map<String,dynamic>>();
+        noteBookRecordList = noteBookData.cast<Map<String, dynamic>>();
       });
     } catch (e) {
-      print('Error fetching classWorkList data: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load classWorkList. Please try again.')),
-      );
+      showError("Failed to load notebook records: $e");
     } finally {
       setState(() {
         isLoading = false;
@@ -154,37 +143,52 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
     }
   }
 
-
-  @override
-  void initState() {
-    super.initState();
-    _chapterController.addListener(_updateChapterTopic);
-    _topicController.addListener(_updateChapterTopic);
-
-    session=calculateCurrentSession();
-    notebookRecord();
-    getStudentData();
+  void initializeDropdowns() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? jsonString = prefs.getString('class_section_subjects');
+      if (jsonString != null) {
+        setState(() {
+          _storedData = jsonDecode(jsonString);
+          updateSections();
+        });
+      }
+    } catch (e) {
+      showError("Error initializing dropdowns: $e");
+    }
   }
 
-  void _updateChapterTopic() {
-    setState(() {});
+  void updateSections() {
+    setState(() {
+      classSections = _storedData[_selectedClass]?.keys.toList() ?? [];
+      _selectedSection = "";
+      updateSubjects();
+    });
   }
 
-  @override
-  void dispose() {
-    _chapterController.removeListener(_updateChapterTopic);
-    _topicController.removeListener(_updateChapterTopic);
-    _chapterController.dispose();
-    _topicController.dispose();
-    super.dispose();
+  void updateSubjects() {
+    setState(() {
+      if (_selectedClass.isNotEmpty && _selectedSection.isNotEmpty) {
+        classSubjects = (_storedData[_selectedClass]?[_selectedSection] as List<dynamic>?)
+            ?.map((item) => item as String)
+            .toList() ?? [];
+        _selectedSubject = "";
+      } else {
+        classSubjects = [];
+      }
+    });
   }
 
-
+  void showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
 
   CustomTheme themeObj=CustomTheme();
   @override
   Widget build(BuildContext context) {
-
+  print(noteBookRecordList);
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -221,45 +225,50 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
             SizedBox(height: size.height*0.01),
            _selectedTab == "New"?Column(
              children: [
-               Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                 children: [
-                   Expanded(
 
-                     child: TextField(
-                       controller: _chapterController,
-                       decoration: const InputDecoration(
-                         labelText: 'Chapter',
-                         border: OutlineInputBorder(),
+             studentsList.isNotEmpty? Column(
+               children: [
+                 Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                   children: [
+                     Expanded(
+
+                       child: TextField(
+                         controller: _chapterController,
+                         decoration: const InputDecoration(
+                           labelText: 'Chapter',
+                           border: OutlineInputBorder(),
+                         ),
                        ),
                      ),
-                   ),
-                   SizedBox(width: size.width*0.02,),
-                   Expanded(
-                     child: TextField(
-                       controller: _topicController,
-                       decoration: InputDecoration(
-                         labelText: 'Topic',
-                         border: OutlineInputBorder(),
+                     SizedBox(width: size.width*0.02,),
+                     Expanded(
+                       child: TextField(
+                         controller: _topicController,
+                         decoration: InputDecoration(
+                           labelText: 'Topic',
+                           border: OutlineInputBorder(),
+                         ),
                        ),
                      ),
-                   ),
-                 ],
-               ),
-               SizedBox(height: size.height*0.02),
-               isLoading? Center(
-                 child: LoadingAnimationWidget.threeArchedCircle(
-                   color: themeObj.primayColor,
-                   size: 50,
+                   ],
                  ),
-               ):
-               SizedBox(
-                 height: size.height*0.61,
-                 child: newTable(),
-               ),
+                 SizedBox(height: size.height*0.02),
+                 isLoading? Center(
+                   child: LoadingAnimationWidget.threeArchedCircle(
+                     color: themeObj.primayColor,
+                     size: 50,
+                   ),
+                 ):
+                 SizedBox(
+                   height: size.height*0.61,
+                   child: newTable(),
+                 ),
+               ],
+             ):     Center(child: Text("No Record Found")),
              ],
            ):
-           noteBookRecordList==null ||noteBookRecordList!.isEmpty ? Center(child: Text("No Record Found")):Column(
+           noteBookRecordList.isEmpty ? Center(child: Text("No Record Found")):Column(
                  children: [
 
                    Padding(
@@ -320,27 +329,31 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
               child: Container(
                 width: size.width * 0.3,
                 height: size.height * 0.05,
-                child: DropdownButton<String>(
+                child:DropdownButton<String>(
                   isExpanded: true,
                   borderRadius: BorderRadius.circular(12),
                   hint: Text("Classes", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(8),
-                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey,),
+                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
                   underline: Container(),
-                  value: _selectedClass,
+                  value: _selectedClass.isEmpty ? null : _selectedClass,
                   onChanged: (newValue) {
                     setState(() {
                       _selectedClass = newValue!;
+                      updateSections();
+
                     });
                   },
-                  items: classOptions.map((String option) {
+                  items: _storedData.keys.toList().map((String option) {
                     return DropdownMenuItem<String>(
                       value: option,
                       child: Text(option, overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
                     );
                   }).toList(),
                 ),
+
+
               ),
             ),
             SizedBox(width: size.width * 0.02,),
@@ -348,18 +361,20 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
               child: Container(
                 width: size.width * 0.3,
                 height: size.height * 0.05,
-                child: DropdownButton<String>(
+                child:DropdownButton<String>(
                   isExpanded: true,
                   borderRadius: BorderRadius.circular(12),
                   hint: Text("Sections", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
                   padding: EdgeInsets.all(8),
-                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey,),
+                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
                   alignment: Alignment.center,
                   underline: Container(),
-                  value: _selectedSection,
+                  value: _selectedSection.isEmpty ? null : _selectedSection,
                   onChanged: (newValue) {
                     setState(() {
                       _selectedSection = newValue!;
+                      updateSubjects();
+
                     });
                   },
                   items: classSections.map((String option) {
@@ -369,6 +384,8 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
                     );
                   }).toList(),
                 ),
+
+
               ),
             ),
             SizedBox(width: size.width * 0.02,),
@@ -381,18 +398,15 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
                   borderRadius: BorderRadius.circular(12),
                   hint: Text("Subjects", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
                   padding: EdgeInsets.all(8),
-                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey,),
+                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
                   alignment: Alignment.center,
                   underline: Container(),
-                  value: _selectedSubject,
+                  value: _selectedSubject.isEmpty ? null : _selectedSubject,
                   onChanged: (newValue) {
                     setState(() {
                       _selectedSubject = newValue!;
-                      if(_selectedTab=="All"){
-                        notebookRecord();
-                      }else{
-                        getStudentData();
-                      }
+
+                      notebookRecord();
                     });
                   },
                   items: classSubjects.map((String option) {
@@ -402,8 +416,6 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
                     );
                   }).toList(),
                 ),
-
-
               ),
             ),
           ],
@@ -476,7 +488,7 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
     );
   }
   List<TableRow> allRows() {
-    return noteBookRecordList!.map((notebook) {
+    return noteBookRecordList.map((notebook) {
       return TableRow(
         children: [
           newTableCell(notebook["date"]?.toString() ?? ""),
@@ -542,7 +554,7 @@ class _NoteBookRecordState extends State<NoteBookRecord> {
   }
 
   List<TableRow> newRows() {
-    return studentsList!.map((student) {
+    return studentsList.map((student) {
       return TableRow(
         decoration: BoxDecoration(),
 

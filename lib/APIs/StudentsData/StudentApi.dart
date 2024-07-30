@@ -1,12 +1,33 @@
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/APIs/StudentsData/student.dart';
 import 'package:http/http.dart' as http;
 import 'package:untitled/utils/utils.dart';
 class StudentApi{
 
   static const String _baseUrl = 'http://13.201.247.28:8000';
-  Future<List<dynamic>> fetchStudents(String accessToken,String currentClass,String section,int start) async {
+  Future<List<dynamic>> fetchStudents(String accessToken,String Class,String section,int start) async {
+
+    if (Class == "" && section == "") {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? jsonString = prefs.getString('class_section_subjects');
+
+      // Decode the JSON string
+      Map<String, dynamic> data = jsonDecode(jsonString!);
+
+      // Access the nested structure
+      String firstClass = data.keys.first;
+      Map<String, dynamic> sections = data[firstClass];
+      String firstSection = sections.keys.first;
+      // List<dynamic> subjects = sections[firstSection];
+      // String firstSubject = subjects.first;
+
+      Class = firstClass;
+      section = firstSection;
+
+    }
+
     final response = await http.post(
       Uri.parse('$_baseUrl/fetchMultiple/student'),
       headers: <String, String>{
@@ -14,7 +35,7 @@ class StudentApi{
       },
       body: jsonEncode(<String, dynamic>{
         'accessToken': accessToken,
-        'currentClass': currentClass,
+        'currentClass': Class,
         'section': section,
         'start': start,
         'end': 10
@@ -25,7 +46,7 @@ class StudentApi{
       final List<dynamic> students = jsonDecode(response.body)['Students'];
       return students;
     } else {
-      throw Exception('Failed to load students');
+      throw Exception('Failed to  load students');
     }
   }
 

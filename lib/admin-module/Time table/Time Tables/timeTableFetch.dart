@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../APIs/Teacher Module/TimeTable/Time Table/timeTableStructure.dart';
 
 
 
@@ -27,7 +26,7 @@ class _TimetableFetchScreenState extends State<TimetableFetchScreen> {
     fetchTimetable();
   }
 
-  TimeTableStructureAPI apiObj = TimeTableStructureAPI();
+  // TimeTableStructureAPI apiObj = TimeTableStructureAPI();
     bool isfetched=false;
   Future<void> fetchTimetable() async {
     setState(() {

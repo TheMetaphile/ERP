@@ -6,7 +6,7 @@ import 'package:untitled/utils/utils.dart';
 class ResultApi {
   static const String _baseUrl = 'http://13.201.247.28:8000';
 
-  Future<Map<String,dynamic>> fetchResult(String accessToken,String email) async {
+  Future<dynamic> fetchResult(String accessToken,String email) async {
     final url = Uri.parse('$_baseUrl/result/fetch/teacher?email=$email');
 
     try {
@@ -20,7 +20,7 @@ class ResultApi {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        print(data.runtimeType);
+
         return data ;
       } else {
         throw Exception('Failed to load result: ${response.statusCode}');
@@ -30,7 +30,7 @@ class ResultApi {
     }
   }
 
-  Future<dynamic> createResult (String accessToken , String email,String Class,String term,Map<String,dynamic> result) async {
+  Future<dynamic> createResult (String accessToken , String email,String Class,String term,List<Map<String,dynamic>> result) async {
 
     print(email);
     print(Class);

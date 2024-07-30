@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../../StudentsData/student.dart';
 
 class StudentService {
-    String baseUrl = 'http://13.201.247.28:8000';
+    String baseUrl = 'https://philester.com';
 
    Future<List<Student>> fetchStudents(String date,String accessToken ,int start,) async {
     final url = Uri.parse('$baseUrl/studentAttendance/fetch/student/list?date=$date&start=$start&end=10');
@@ -48,7 +48,7 @@ class StudentService {
           final Map<String, dynamic> data = json.decode(response.body);
           return data['status'] == true;
         } else {
-          throw Exception('Failed to mark attendance: ${response.statusCode}');
+          throw Exception('Failed to mark attendance: ${response.body}');
         }
       } catch (e) {
         print('Error marking attendance: $e');
@@ -56,16 +56,37 @@ class StudentService {
       }
     }
 
-    Future<Map<String, dynamic>> fetchAttendance(String month, String year, String accessToken) async {
-      final response = await http.get(
-        Uri.parse('$baseUrl/studentAttendance/fetch/classTeacher?month=$month&year=$year'),
-        headers: {'Authorization': 'Bearer $accessToken'},
-      );
+    Future<dynamic> fetchAttendance(String month, String accessToken) async {
+      try {
+        DateTime currentDateTime = DateTime.now();
+        String year = currentDateTime.year.toString();
+        String date = currentDateTime.toString().split(' ')[0];
 
-      if (response.statusCode == 200) {
-        return json.decode(response.body);
-      } else {
-        throw Exception('Failed to load attendance data');
+        print('Month: $month');
+        print('Year: $year');
+        print('Date: $date');
+
+        final url = '$baseUrl/studentAttendance/fetch/classTeacher?month=$month&year=$year&date=$date';
+        print('Request URL: $url');
+        print('Access Token: $accessToken');
+
+        final response = await http.get(
+          Uri.parse(url),
+          headers: {'Authorization': 'Bearer $accessToken'},
+        );
+
+        print('Response Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+
+        if (response.statusCode == 200) {
+          var data = json.decode(response.body);
+          print("Response Data: $data");
+          return data["output"];
+        } else {
+          throw Exception('Failed to load attendance data ${response.body}');
+        }
+      } catch (e) {
+        throw Exception('Failed to load attendance data ${e.toString()}');
       }
     }
 }

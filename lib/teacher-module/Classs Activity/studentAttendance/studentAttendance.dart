@@ -66,7 +66,7 @@ class _StudentAttendanceState extends State<StudentAttendance> {
     } catch (e) {
       print('Error fetching student data: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load students. Please try again.')),
+        SnackBar(content: Text('Failed to load students. Please try again. $e')),
       );
     } finally {
       setState(() {
