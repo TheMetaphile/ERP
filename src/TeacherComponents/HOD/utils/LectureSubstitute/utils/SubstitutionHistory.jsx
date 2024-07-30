@@ -63,13 +63,12 @@ export default function ClassTeacherSubstitutionHistory() {
             <table className="min-w-full bg-white border border-gray-300 rounded-lg">
                 <thead>
                     <tr className="bg-secondary text-gray-600 text-lg ">
-
-                        <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Employee Id</th>
-                        <th className="py-2 px-6 ">Name</th>
+                        <th className="py-2 px-6 text-center">Lecture</th>
                         <th className="py-2 px-6 text-center">Date</th>
                         <th className="py-2 px-6 text-center">Class</th>
+                        <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Employee Id</th>
+                        <th className="py-2 px-6 ">Name</th>
                         <th className="py-2 px-6 text-center">Section</th>
-                        <th className="py-2 px-6 text-center">Lecture</th>
                         <th className="py-2 px-6 text-center">Subject</th>
                         <th className="py-2 px-6 text-center">Substitute</th>
 
@@ -80,12 +79,12 @@ export default function ClassTeacherSubstitutionHistory() {
                         PrevioursSubstitutions.map((teachers, index) =>
                         (
                             <tr key={index} className="border-b border-gray-200  last:border-none">
-                                <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.classTeacherDetails.employeeId}</td>
-                                <td className="flex py-3 px-6 justify-start   items-center gap-2 whitespace-nowrap"><img src={teachers.classTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />{teachers.classTeacherDetails.name}</td>
+                                <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.Lecture}</td>
                                 <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.date}</td>
                                 <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.class}</td>
+                                <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.classTeacherDetails.employeeId}</td>
+                                <td className="flex py-3 px-6 justify-start   items-center gap-2 whitespace-nowrap"><img src={teachers.classTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />{teachers.classTeacherDetails.name}</td>
                                 <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.section}</td>
-                                <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.Lecture}</td>
                                 <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.subject}</td>
 
                                 <div className="flex justify-start gap-2 items-center">

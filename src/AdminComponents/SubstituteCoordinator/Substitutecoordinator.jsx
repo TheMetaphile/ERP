@@ -46,10 +46,12 @@ function SubstituteCoordinator() {
     return (
         <div className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-tablet:mt-6">
             <ToastContainer />
-            <h1 className="text-2xl p-2 mobile:max-tablet:text-xl">Substituted Coordinators</h1>
-            <div className="border rounded-lg shadow-md w-full flex flex-col  overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
-                <SubstituteTable data={data} />
+            <div className="flex justify-between">
+                <h1 className="text-xl font-medium mb-2 mobile:max-tablet:text-lg">Coordinators on leave (Today)</h1>
             </div>
+            <SubstituteTable />
+
+
         </div>
     );
 }

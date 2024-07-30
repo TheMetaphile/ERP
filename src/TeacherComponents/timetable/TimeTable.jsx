@@ -5,20 +5,23 @@ import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
 import { BASE_URL_TimeTableStructure, BASE_URL_TimeTable } from '../../Config';
+import TableSubstitute from './utils/TableSubstitue';
 
 function TimeTable() {
     const [data, setData] = useState(null);
     const { authState } = useContext(AuthContext);
-    const [teacherEmail, setTeacherEmail] = useState('bhanu68tyagi@gmail.com');
     const [day, setDay] = useState('tuesday');
     const [loading, setLoading] = useState(false);
-    const [selectClass, setClass] = useState('3rd')
+    const [fetchLoading, setFetchLoading] = useState(false);
+    const [selectClass, setClass] = useState(authState.ClassDetails.class);
     const [fetchedTimeTableStructure, setTimetableStructure] = useState(null);
     const [lectureTimes, setLectureTimes] = useState([]);
+    const [subsData, setSubsData] = useState([]);
 
     var ClassRange = null;
     const Class = selectClass;
 
+    console.log(Class)
     useEffect(() => {
         if (Class === 'Pre-Nursery' || Class === 'L.K.G' || Class === 'U.K.G' || Class === 'U.K.J') {
             ClassRange = 'Pre-Nursery - U.K.J'
@@ -42,6 +45,7 @@ function TimeTable() {
     useEffect(() => {
         if (fetchedTimeTableStructure != null) {
             handleSearch();
+            fetchSubstitute();
         }
     }, [fetchedTimeTableStructure, day]);
 
@@ -153,6 +157,34 @@ function TimeTable() {
 
     };
 
+    const date = new Date();
+    var month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+    const formattedDate = `${date.getFullYear()}-${month}-${date.getDate()}`;
+    const session = getCurrentSession();
+
+    const fetchSubstitute = async () => {
+        console.log(formattedDate, session)
+        setFetchLoading(true);
+        try {
+            const response = await axios.get(`${BASE_URL_TimeTable}/LectureSubstitute/fetch/checkSubstitute?date=${formattedDate}&session=${session}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${authState.accessToken}`
+                    }
+                });
+            if (response.status === 200) {
+                console.log('subs response', response.data);
+                setSubsData(response.data);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        finally {
+            setFetchLoading(false);
+        }
+
+    };
+
     return (
         <div className=" flex w-full flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2  mb-3 no-scrollbar mobile:max-laptop:">
             <div className='w-full flex justify-between mobile:max-tablet:px-3'>
@@ -165,7 +197,7 @@ function TimeTable() {
                     <Loading />
                 ) : !fetchedTimeTableStructure ?
                     (
-                        <>No</>
+                        <>No Data available</>
                     ) :
                     (
                         <Table
@@ -176,9 +208,40 @@ function TimeTable() {
                     )}
             </div>
 
+            <div className='w-full mobile:max-tablet:px-2 mt-4'>
+                {fetchLoading ? (
+                    <Loading />
+                ) : !fetchedTimeTableStructure ?
+                    (
+                        <>No Data available</>
+                    ) :
+                    (
+                        <>
+                            <h1 className=' text-2xl mobile:max-tablet:text-lg mb-3'>Today Substitute Time Table</h1>
+
+                            <TableSubstitute
+                                data={subsData}
+                                Time={lectureTimes}
+                                numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}
+                            />
+                        </>
+                    )}
+            </div>
         </div>
 
     )
+}
+
+function getCurrentSession() {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+
+    if (currentMonth >= 3) {
+        return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
+    } else {
+        return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
+    }
 }
 
 export default TimeTable

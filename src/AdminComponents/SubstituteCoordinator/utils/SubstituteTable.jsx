@@ -1,59 +1,77 @@
-import React from 'react';
-import { MdAssignmentInd } from "react-icons/md";
-import photo from '../../../assets/Shailesh.jpg'
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import AuthContext from "../../../Context/AuthContext";
+import { BASE_URL_Login } from "../../../Config";
+import CoOrdinatorOnLeaveRow from "./CoOrdinatorOnLeaveRow";
 
-function SubstituteTable({ data }) {
+export default function SubstituteTable() {
+    const {authState} = useContext(AuthContext);
+    const [CoOrdinatorsOnLeave, SetCoOrdinatorsOnLeave] = useState([]);
+    const date = new Date();
+    var month = date.getMonth()+1 < 10 ? `0${date.getMonth()+1}` : date.getMonth()+1; 
+    const formattedDate = `${date.getFullYear()}-${month}-${date.getDate()}`;
+    const session = getCurrentSession();
+
+    const fetchCoOrdinatorOnLeaveList = async () => {
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `${BASE_URL_Login}/CoordinatorSubstitute/fetch/checkLeave?date=${formattedDate}&session=${session}`,
+            headers: {
+                'Authorization': `Bearer ${authState.accessToken}`
+            }
+        };
+
+        await axios.request(config)
+            .then((response) => {
+                console.log(JSON.stringify(response.data.coordinatorsOnLeave));
+                SetCoOrdinatorsOnLeave(response.data.coordinatorsOnLeave)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    }
+
+    useEffect(()=>{
+        fetchCoOrdinatorOnLeaveList();
+    },[authState])
+
     return (
-        <div className="overflow-x-auto w-full">
-            <table className="w-full bg-white border rounded-lg shadow-md whitespace-nowrap">
-                <thead className="bg-teal-100">
-                    <tr>
-                        <th className="py-2 px-4 ">Employee Id</th>
-                        <th className="py-2 px-4 ">Name</th>
-                        <th className="py-2 px-4 ">Date</th>
-                        <th className="py-2 px-4 ">Class</th>
-                        <th className="py-2 px-4 ">Section</th>
-                        <th className="py-2 px-4 ">Substitute</th>
-                        <th className="py-2 px-4 ">Actions</th>
+        <div className="w-full overflow-x-auto rounded-lg">
+            <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+                <thead>
+                    <tr className="bg-secondary text-gray-600 text-lg ">
+
+                        <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Employee Id</th>
+                        <th className="py-2 px-6 ">Name</th>
+                        <th className="py-2 px-6 text-center">Date</th>
+                        <th className="py-2 px-6 text-center">Wing</th>
+                        <th className="py-2 px-6 text-center">Substitute</th>
+                        <th className="py-2 px-6 text-center">Actions</th>
+
                     </tr>
                 </thead>
-                <tbody>
-                    {data.map((item) => (
-                        <tr className=' text-center border-b items-center py-2 ' key={item.id}>
-                            <td className="py-2 px-4 ">{item.employeeId}</td>
-                            <td className="text-center ">
-                                {/* <img src={photo} alt={item.name} className="w-10 h-10 rounded-full mr-2" /> */}
-                                <p>{item.name}</p>
-
-                            </td>
-                            <td className="py-2 px-4  ">{item.date}</td>
-                            <td className="py-2 px-4 ">{item.class}</td>
-                            <td className="py-2 px-4 ">{item.section}</td>
-                            <td className="py-2 px-4  flex items-center justify-center">
-                                {item.substitute ? (
-                                    <>
-                                        <img src={item.substitutePhoto} alt={item.substituteName} className="w-8 h-8 rounded-full mr-2" />
-                                        {item.substituteName}
-                                    </>
-                                ) : (
-                                    <input
-                                        type="text"
-                                        placeholder="Search Teacher"
-                                        className="border rounded p-1"
-                                    />
-                                )}
-                            </td>
-                            <td className="py-2 px-4  text-center">
-                                <button className="bg-blue-500 text-white rounded px-2 py-1">
-                                    <MdAssignmentInd />
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
+                <tbody className="text-gray-600 text-md font-normal ">
+                    {
+                        CoOrdinatorsOnLeave.map((teachers,index)=>{
+                            return <CoOrdinatorOnLeaveRow Teacher={teachers} index={index} date={formattedDate} session={session}/>
+                        })
+                    }
                 </tbody>
             </table>
         </div>
-    );
+    )
 }
 
-export default SubstituteTable;
+function getCurrentSession() {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+
+    if (currentMonth >= 3) {
+      return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
+    } else {
+      return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
+    }
+  }

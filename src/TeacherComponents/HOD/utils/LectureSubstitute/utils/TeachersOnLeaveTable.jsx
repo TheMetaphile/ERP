@@ -5,10 +5,10 @@ import AuthContext from "../../../../../Context/AuthContext";
 import { BASE_URL_Login } from "../../../../../Config";
 
 export default function ClassTeacherOnLeaveTable() {
-    const {authState} = useContext(AuthContext);
+    const { authState } = useContext(AuthContext);
     const [TeachersOnLeave, SetTeachersOnLeave] = useState([]);
     const date = new Date();
-    var month = date.getMonth()+1 < 10 ? `0${date.getMonth()+1}` : date.getMonth()+1; 
+    var month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
     const formattedDate = `${date.getFullYear()}-${month}-${date.getDate()}`;
     const session = getCurrentSession();
     const fetchTeacherOnLeaveList = async () => {
@@ -33,35 +33,30 @@ export default function ClassTeacherOnLeaveTable() {
 
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchTeacherOnLeaveList();
-    },[authState])
+    }, [authState])
 
     return (
-        <div className="w-full overflow-x-auto rounded-lg">
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+        <div className=" h-screen overflow-x-auto overflow-y-auto rounded-lg">
+            <table className="min-w-fit bg-white border border-gray-300 rounded-lg">
                 <thead>
-                    <tr className="bg-secondary text-gray-600 text-lg ">
-
-                        <th className="py-2 px-6 text-center  rounded-t">Name</th>
+                    <tr className="bg-secondary text-gray-600 text-lg">
+                        <th className="py-2 px-6 text-center">Lecture</th>
                         <th className="py-2 px-6 text-center">Date</th>
                         <th className="py-2 px-6 text-center">Class</th>
+                        <th className="py-2 px-6 text-center rounded-t w-60 ">Name</th>
                         <th className="py-2 px-6 text-center">Section</th>
-                        <th className="py-2 px-6 text-center">Lecture</th>
                         <th className="py-2 px-6 text-center">Subject</th>
-                        <th className="py-2 px-6 text-center">Substitute</th>
-                        <th className="py-2 px-6 text-center">Remark</th>
-
-                        <th className="py-2 px-6 text-center  ">Actions</th>
-
+                        <th className="py-2 px-6 text-center w-60 ">Substitute</th>
+                        <th className="py-2 px-6 text-center w-60 ">Remark</th>
+                        <th className="py-2 px-6 text-center">Actions</th>
                     </tr>
                 </thead>
-                <tbody className="text-gray-600 text-md font-normal ">
-                    {
-                        TeachersOnLeave.map((teachers)=>{
-                            return <ClassTeacherOnLeaveRow Teacher={teachers} date={formattedDate} session={session}/>
-                        })
-                    }
+                <tbody className="text-gray-600 text-md font-normal">
+                    {TeachersOnLeave.map((teachers) => (
+                        <ClassTeacherOnLeaveRow Teacher={teachers} date={formattedDate} session={session} />
+                    ))}
                 </tbody>
             </table>
         </div>
@@ -74,8 +69,8 @@ function getCurrentSession() {
     const currentMonth = now.getMonth();
 
     if (currentMonth >= 3) {
-      return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
+        return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
     } else {
-      return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
+        return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
     }
-  }
+}

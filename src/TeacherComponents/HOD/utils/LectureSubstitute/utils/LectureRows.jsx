@@ -16,7 +16,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
     const [temp, setTemp] = useState();
     const [originalSubstitute, setSubstitute] = useState(substitutionDetail);
     const [editingRow, setEditingRow] = useState(originalSubstitute ? false : true);
-    const [Remark, setRemark] = useState(originalSubstitute ? "Good to go" :'Please search and select Teacher');
+    const [Remark, setRemark] = useState(originalSubstitute ? "Good to go" : 'Please search and select Teacher');
 
     const handleEmailChange = (event) => {
         const value = event.target.value;
@@ -164,21 +164,22 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
     return (
         <tr key={index} className="border-b border-gray-200 last:border-none">
 
-            <td className="flex py-3 px-6 items-center gap-2 text-center">
-            <div className="flex justify-start gap-2 items-center">
-                        <img src={Teacher.profileLink} alt="img" className="rounded-full h-12 w-12" />
-                        <div className="text-start ml-2">
-                            <p>{Teacher.name}</p>
-                            {Teacher.employeeId}
-                        </div>
-                    </div>
-            </td>
+            <td className="py-1 px-3 text-center whitespace-nowrap">{data.lectureNo}</td>
             <td className="py-3 px-6 text-center whitespace-nowrap">{date}</td>
             <td className="py-1 px-3 text-center whitespace-nowrap">{data.class}</td>
+            <td className="flex py-3 px-6 items-center gap-2 text-center w-60">
+                <div className="flex justify-start gap-2 items-center">
+                    <img src={Teacher.profileLink} alt="img" className="rounded-full h-12 w-12" />
+                    <div className="text-start ml-2">
+                        <p>{Teacher.name}</p>
+                        {Teacher.employeeId}
+                    </div>
+                </div>
+            </td>
+
             <td className="py-1 px-3 text-center whitespace-nowrap">{data.section}</td>
-            <td className="py-1 px-3 text-center whitespace-nowrap">{data.lectureNo}</td>
             <td className="py-1 px-3 text-center whitespace-nowrap">{data.subject}</td>
-            <td className="py-3 px-6 text-center items-center whitespace-nowrap">
+            <td className="py-3 px-6 text-center items-center  w-60">
                 {originalSubstitute ? (
                     <div className="flex justify-start gap-2 items-center">
                         <img src={originalSubstitute.profileLink} alt="img" className="rounded-full h-12 w-12" />
@@ -217,7 +218,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
                     <>N/A</>
                 )}
             </td>
-            <td className={`py-1 px-3 text-center ${Remark==='Good to go' ? "text-green-500" : "text-red-500"} whitespace-normal break-words`}>{Remark}</td>
+            <td className={`py-1 px-3 text-center w-60 ${Remark === 'Good to go' ? "text-green-500" : "text-red-500"} whitespace-normal break-words`}>{Remark}</td>
             <td className="py-3 px-6 text-center whitespace-nowrap">
                 {editingRow ? (
                     <div className='flex gap-1 justify-center'>
@@ -247,7 +248,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
             </td>
         </tr>
     )
-    
+
 }
 
 const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
