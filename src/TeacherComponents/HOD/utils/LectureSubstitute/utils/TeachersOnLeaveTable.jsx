@@ -25,7 +25,9 @@ export default function ClassTeacherOnLeaveTable() {
         await axios.request(config)
             .then((response) => {
                 console.log(JSON.stringify(response.data.Teachers));
-                SetTeachersOnLeave(response.data.Teachers)
+                if(!response.data.status){
+                    SetTeachersOnLeave(response.data.Teachers)
+                }
             })
             .catch((error) => {
                 console.log(error);
