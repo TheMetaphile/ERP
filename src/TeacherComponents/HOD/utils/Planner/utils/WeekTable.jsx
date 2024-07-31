@@ -17,6 +17,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
     const [nextWeekChapters, setNextWeekChapters] = useState(chapters);
     const [error, setError] = useState(null);
 
+
     const getCurrentSession = () => {
         const now = new Date();
         const currentYear = now.getFullYear();
@@ -36,6 +37,26 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
     });
 
     const formattedDate = startOfWeek.toISOString().split('T')[0];
+
+    const [date, setDate] = useState(formattedDate);
+    console.log(nextWeekStart)
+    useEffect(() => {
+        const handleDate = () => {
+            if (selectedTab === 'Next Week') {
+                setDate(formattedDate);
+
+            }
+            else {
+                setDate(nextWeekStart);
+
+            }
+        }
+        handleDate();
+    }, [selectedTab])
+
+
+
+
 
     const handleInputChange = (index, field, value) => {
         switch (field) {
@@ -108,10 +129,11 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
     console.log(formattedDate)
     console.log(selectedTab)
     useEffect(() => {
+        console.log(date)
         const fetchPlan = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/teacher?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${formattedDate}`, {
+                const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/coordinator?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${date}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
                     }
@@ -125,62 +147,47 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
                 setLoading(false);
             }
         };
-        fetchPlan();
-    }, [authState.accessToken, Class, section, subject, session]);
+        if (Class && section && subject) {
+            setDetails([]);
+            fetchPlan();
+        }
+    }, [authState.accessToken, Class, section, subject, session, date]);
 
     console.log(nextWeekDays)
-    const renderTableRows = (detail, editable = false) => {
+    const renderTableRows = (detail, editable = false, nextWeek) => {
         return detail.map((day, index) => (
             <tr key={index}>
                 <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                    {editable ? (
-                        day.toDateString()
-                    ) : day.date}
+                    {day.date}
                 </td>
 
                 <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                    {editable ? (
-                        <input
-                            className='border-secondary border-2 rounded-md p-2'
-                            type="text"
-                            value={nextWeekChapters[index]}
-                            onChange={(e) => handleInputChange(index, 'chapter', e.target.value)}
-                        />
-                    ) : day.chapter}
+                    {day.chapter}
                 </td>
                 <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                    {editable ? (
-                        <input
-                            className='border-secondary border-2 rounded-md p-2'
-                            type="text"
-                            value={nextWeekTopics[index]}
-                            onChange={(e) => handleInputChange(index, 'topic', e.target.value)}
-                        />
-                    ) : day.topic}
+                    {day.topic}
                 </td>
                 <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                    {editable ? (
-                        <input
-                            className='border-secondary border-2 rounded-md p-2'
-                            type="text"
-                            value={nextWeekPlans[index]}
-                            onChange={(e) => handleInputChange(index, 'plan', e.target.value)}
-                        />
-                    ) : day.plan}
+                    {day.plan}
                 </td>
                 <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                    {editable ? (
+                    {day.Activity}
+                </td>
+                {editable && (
+                    <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
                         <input
                             className='border-secondary border-2 rounded-md p-2'
                             type="text"
                             value={nextWeekActivities[index]}
                             onChange={(e) => handleInputChange(index, 'activity', e.target.value)}
                         />
-                    ) : day.Activity}
-                </td>
+                    </td>
+                )}
+
             </tr>
         ));
     };
+
 
     return (
         <div className='rounded-md overflow-auto'>
@@ -214,10 +221,11 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
                                     <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Topic</th>
                                     <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Teaching Aids</th>
                                     <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Activity (if any)</th>
+                                    <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Remark</th>
                                 </tr>
                             </thead>
                             <tbody className='text-center whitespace-nowrap'>
-                                {renderTableRows(nextWeekDays, true)}
+                                {renderTableRows(details, true, nextWeekDays)}
                             </tbody>
                         </table>
                         <div className='flex justify-center items-center py-4'>

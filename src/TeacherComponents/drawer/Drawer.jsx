@@ -7,7 +7,7 @@ import { useContext, useState } from "react";
 import AuthContext from "../../Context/AuthContext.jsx";
 
 export default function TeacherDrawer({ isOpen }) {
-  const { logout,authState } = useContext(AuthContext);
+  const { logout, authState } = useContext(AuthContext);
   const navigate = useNavigate();
   const [active, setActive] = useState(null)
 
@@ -34,6 +34,9 @@ export default function TeacherDrawer({ isOpen }) {
         <div className="mt-4">
           {menuItems.map((menuItem, index) => {
             if (menuItem.title === 'Class Activity' && Object.keys(authState.ClassDetails).length === 0) {
+              return null;
+            }
+            if (menuItem.title === 'HOD' && authState.userDetails.co_ordinator_wing === "") {
               return null;
             }
             return (

@@ -25,7 +25,7 @@ export default function ClassTeacherOnLeaveTable() {
         await axios.request(config)
             .then((response) => {
                 console.log(JSON.stringify(response.data.Teachers));
-                if(!response.data.status){
+                if (!response.data.status) {
                     SetTeachersOnLeave(response.data.Teachers)
                 }
             })
@@ -40,7 +40,7 @@ export default function ClassTeacherOnLeaveTable() {
     }, [authState])
 
     return (
-        <div className=" h-screen overflow-x-auto overflow-y-auto rounded-lg">
+        <div className="  rounded-lg">
             <table className="min-w-fit bg-white border border-gray-300 rounded-lg">
                 <thead>
                     <tr className="bg-secondary text-gray-600 text-lg">
@@ -55,10 +55,18 @@ export default function ClassTeacherOnLeaveTable() {
                         <th className="py-2 px-6 text-center">Actions</th>
                     </tr>
                 </thead>
-                <tbody className="text-gray-600 text-md font-normal">
-                    {TeachersOnLeave.map((teachers) => (
-                        <ClassTeacherOnLeaveRow Teacher={teachers} date={formattedDate} session={session} />
-                    ))}
+                <tbody className="text-gray-600 text-md font-normal min-h-10 max-h-screen overflow-x-auto overflow-y-auto ">
+                    {TeachersOnLeave.length === 0 ? (
+                        <div className="w-full whitespace-nowrap">No Teacher is on leave today</div>
+                    ) : (
+                        // h-screen overflow-x-auto overflow-y-auto min-w-fit
+                        <>
+                            {TeachersOnLeave.map((teachers) => (
+                                <ClassTeacherOnLeaveRow Teacher={teachers} date={formattedDate} session={session} />
+                            ))}
+                        </>
+                    )}
+
                 </tbody>
             </table>
         </div>

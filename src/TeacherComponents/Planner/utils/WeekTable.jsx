@@ -35,7 +35,21 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
         return date;
     });
 
-    const formattedDate = startOfWeek.toISOString().split('T')[0];
+    const formattedDate = nextWeekStart.toISOString().split('T')[0];
+
+    const [date, setDate] = useState(formattedDate);
+    console.log(nextWeekStart)
+    useEffect(() => {
+        const handleDate = () => {
+            if (selectedTab === 'Next Week') {
+                setDate(formattedDate);
+            }
+            else {
+                setDate(nextWeekStart);
+            }
+        }
+        handleDate();
+    }, [selectedTab])
 
     const handleInputChange = (index, field, value) => {
         switch (field) {
@@ -80,7 +94,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
             class: Class,
             section: section,
             subject: subject,
-            startingDate: formattedDate,
+            startingDate: date,
             session: session,
             plan: plan
         };
@@ -111,7 +125,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
         const fetchPlan = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/teacher?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${formattedDate}`, {
+                const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/teacher?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${date}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
                     }
@@ -125,8 +139,11 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
                 setLoading(false);
             }
         };
-        fetchPlan();
-    }, [authState.accessToken, Class, section, subject, session]);
+        if (Class && section && subject) {
+            setDetails([]);
+            fetchPlan();
+        }
+    }, [authState.accessToken, Class, section, subject, session, date]);
 
     console.log(nextWeekDays)
     const renderTableRows = (detail, editable = false) => {

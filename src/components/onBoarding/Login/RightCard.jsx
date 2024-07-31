@@ -55,7 +55,7 @@ export default function RightCard() {
                     var { userDetails, tokens, subject, ClassDetails } = response.data;
                     console.log(userDetails, tokens);
                     var date = new Date();
-                    if (role==="Teacher-Dashboard" && Object.keys(ClassDetails).length <= 0 && date.getHours()<17) {
+                    if (role==="Teacher-Dashboard"  && date.getHours()<17) {
                        
                         var month = date.getMonth()+1 < 10 ? `0${date.getMonth()+1}` : date.getMonth()+1; 
                         date = `${date.getFullYear()}-${month}-${date.getDate()}`
@@ -69,10 +69,35 @@ export default function RightCard() {
                             console.log("here");
                             session = `${year1}-${`${(parseInt(year1) + 1)}`.substring(2, 4)}`;
                         }
+
+                        if(Object.keys(ClassDetails).length <= 0){
+                            let config = {
+                                method: 'get',
+                                maxBodyLength: Infinity,
+                                url: `${BASE_URL_Login}/classTeacherSubstitute/fetch/checkSubstitute?date=${date}&session=${session}`,
+                                headers: {
+                                    'Authorization': `Bearer ${tokens.accessToken}`
+                                }
+                            };
+    
+                            await axios.request(config)
+                                .then((response) => {
+                                    console.log(response, "respose dfh srh rh rfh sdf");
+                                    if(response.data){
+                                        ClassDetails = response.data;
+                                    }
+                                    
+                                    console.log("dsgsd" , ClassDetails);
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        }
+
                         let config = {
                             method: 'get',
                             maxBodyLength: Infinity,
-                            url: `${BASE_URL_Login}/classTeacherSubstitute/fetch/checkSubstitute?date=${date}&session=${session}`,
+                            url: `${BASE_URL_Login}/CoordinatorSubstitute/fetch/checkSubstitute?date=${date}&session=${session}`,
                             headers: {
                                 'Authorization': `Bearer ${tokens.accessToken}`
                             }
@@ -80,16 +105,17 @@ export default function RightCard() {
 
                         await axios.request(config)
                             .then((response) => {
-                                console.log(response, "respose dfh srh rh rfh sdf");
+                                console.log(response, "respose coordinator");
                                 if(response.data){
-                                    ClassDetails = response.data;
+                                    userDetails.co_ordinator_wing = response.data.wing;
                                 }
                                 
-                                console.log("dsgsd" , ClassDetails);
+                                console.log("coordinator respo" , userDetails);
                             })
                             .catch((error) => {
                                 console.log(error);
                             });
+                        
 
                     }
                     login(userDetails, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : []);

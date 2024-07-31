@@ -56,11 +56,18 @@ export default function SubstituteTable() {
                     </tr>
                 </thead>
                 <tbody className="text-gray-600 text-md font-normal ">
-                    {
-                        CoOrdinatorsOnLeave.map((teachers, index) => {
-                            return <CoOrdinatorOnLeaveRow Teacher={teachers} index={index} date={formattedDate} session={session} />
-                        })
-                    }
+                    {CoOrdinatorsOnLeave.length === 0 ? (
+                        <>No Coordinator is on leave</>
+                    ) : (
+                        <>
+                            {
+                                CoOrdinatorsOnLeave.map((teachers, index) => {
+                                    return <CoOrdinatorOnLeaveRow Teacher={teachers} index={index} date={formattedDate} session={session} />
+                                })
+                            }
+                        </>
+                    )}
+
                 </tbody>
             </table>
         </div>

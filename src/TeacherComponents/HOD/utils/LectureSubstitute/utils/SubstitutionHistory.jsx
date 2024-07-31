@@ -59,51 +59,58 @@ export default function ClassTeacherSubstitutionHistory() {
     }, [start]);
 
     return (
-        <div className="w-full overflow-x-auto rounded-lg">
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+        <div className=" rounded-lg">
+            <table className="min-w-fit bg-white border border-gray-300 rounded-lg">
                 <thead>
                     <tr className="bg-secondary text-gray-600 text-lg ">
                         <th className="py-2 px-6 text-center">Lecture</th>
                         <th className="py-2 px-6 text-center">Date</th>
                         <th className="py-2 px-6 text-center">Class</th>
                         <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Employee Id</th>
-                        <th className="py-2 px-6 ">Name</th>
+                        <th className="py-2 px-6 w-64">Name</th>
                         <th className="py-2 px-6 text-center">Section</th>
                         <th className="py-2 px-6 text-center">Subject</th>
-                        <th className="py-2 px-6 text-center">Substitute</th>
+                        <th className="py-2 px-6 text-center w-72">Substitute</th>
 
                     </tr>
                 </thead>
-                <tbody className="text-gray-600 text-md font-normal ">
-                    {
-                        PrevioursSubstitutions.map((teachers, index) =>
-                        (
-                            <tr key={index} className="border-b border-gray-200  last:border-none">
-                                <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.Lecture}</td>
-                                <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.date}</td>
-                                <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.class}</td>
-                                <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.classTeacherDetails.employeeId}</td>
-                                <td className="flex py-3 px-6 justify-start   items-center gap-2 whitespace-nowrap"><img src={teachers.classTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />{teachers.classTeacherDetails.name}</td>
-                                <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.section}</td>
-                                <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.subject}</td>
+                <tbody className="text-gray-600 text-md font-normal min-h-10 max-h-screen overflow-x-auto overflow-y-auto">
+                    {PrevioursSubstitutions.length === 0 ? (
+                        <div className="w-full whitespace-nowrap">Teacher leave history not available</div>
+                    ) : (
+                        <>
+                            {
+                                PrevioursSubstitutions.map((teachers, index) =>
+                                (
+                                    <tr key={index} className="border-b border-gray-200  last:border-none">
+                                        <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.Lecture}</td>
+                                        <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.date}</td>
+                                        <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.class}</td>
+                                        <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.classTeacherDetails.employeeId}</td>
+                                        <td className="flex py-3 px-6 justify-start   items-center gap-2 whitespace-nowrap w-64"><img src={teachers.classTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />{teachers.classTeacherDetails.name}</td>
+                                        <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.section}</td>
+                                        <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.subject}</td>
 
-                                <div className="flex justify-start gap-2 items-center">
-                                    <img src={teachers.substituteTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />
-                                    <div className="text-start">
-                                        <p> {teachers.substituteTeacherDetails.name}</p>
-                                        {teachers.substituteTeacherDetails.employeeId}
+                                        <div className="flex justify-start gap-2 items-center w-72">
+                                            <img src={teachers.substituteTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />
+                                            <div className="text-start">
+                                                <p> {teachers.substituteTeacherDetails.name}</p>
+                                                {teachers.substituteTeacherDetails.employeeId}
 
-                                    </div>
-                                </div>
+                                            </div>
+                                        </div>
 
-                            </tr>
-                        )
-                        )
-                    }
+                                    </tr>
+                                )
+                                )
+                            }
 
-                    {!allDataFetched && (
-                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                            {!allDataFetched && (
+                                <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                            )}
+                        </>
                     )}
+
                 </tbody>
             </table>
         </div>
