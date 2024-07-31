@@ -5,10 +5,10 @@ import { BASE_URL_Login } from "../../../Config";
 import CoOrdinatorOnLeaveRow from "./CoOrdinatorOnLeaveRow";
 
 export default function SubstituteTable() {
-    const {authState} = useContext(AuthContext);
+    const { authState } = useContext(AuthContext);
     const [CoOrdinatorsOnLeave, SetCoOrdinatorsOnLeave] = useState([]);
     const date = new Date();
-    var month = date.getMonth()+1 < 10 ? `0${date.getMonth()+1}` : date.getMonth()+1; 
+    var month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
     const formattedDate = `${date.getFullYear()}-${month}-${date.getDate()}`;
     const session = getCurrentSession();
 
@@ -24,8 +24,11 @@ export default function SubstituteTable() {
 
         await axios.request(config)
             .then((response) => {
-                console.log(JSON.stringify(response.data.coordinatorsOnLeave));
-                SetCoOrdinatorsOnLeave(response.data.coordinatorsOnLeave)
+                console.log(JSON.stringify(response.data), "ouicxgvichohg");
+                if (!response.data.status) {
+                    console.log("Here");
+                    SetCoOrdinatorsOnLeave(response.data.coordinatorsOnLeave)
+                }
             })
             .catch((error) => {
                 console.log(error);
@@ -33,9 +36,9 @@ export default function SubstituteTable() {
 
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchCoOrdinatorOnLeaveList();
-    },[authState])
+    }, [authState])
 
     return (
         <div className="w-full overflow-x-auto rounded-lg">
@@ -54,8 +57,8 @@ export default function SubstituteTable() {
                 </thead>
                 <tbody className="text-gray-600 text-md font-normal ">
                     {
-                        CoOrdinatorsOnLeave.map((teachers,index)=>{
-                            return <CoOrdinatorOnLeaveRow Teacher={teachers} index={index} date={formattedDate} session={session}/>
+                        CoOrdinatorsOnLeave.map((teachers, index) => {
+                            return <CoOrdinatorOnLeaveRow Teacher={teachers} index={index} date={formattedDate} session={session} />
                         })
                     }
                 </tbody>
@@ -70,8 +73,8 @@ function getCurrentSession() {
     const currentMonth = now.getMonth();
 
     if (currentMonth >= 3) {
-      return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
+        return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
     } else {
-      return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
+        return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
     }
-  }
+}
