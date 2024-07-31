@@ -26,26 +26,31 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
-    const startOfWeek = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
-    const nextWeekStart = new Date(startOfWeek);
-    nextWeekStart.setDate(startOfWeek.getDate() + 7);
+    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
+    const nextWeekStart = new Date();
+    nextWeekStart.setDate(currentWeekStart.getDate() + 7);
+
     const nextWeekDays = Array.from({ length: 6 }, (_, i) => {
         const date = new Date(nextWeekStart);
         date.setDate(nextWeekStart.getDate() + i);
         return date;
     });
 
-    const formattedDate = nextWeekStart.toISOString().split('T')[0];
+    const nextWeekFormattedDate = nextWeekStart.toISOString().split('T')[0];
+    const currentWeekFormattedDate = currentWeekStart.toISOString().split('T')[0];
 
-    const [date, setDate] = useState(formattedDate);
-    console.log(nextWeekStart)
+
+    const [date, SetDate] = useState(currentWeekStart);
+
     useEffect(() => {
+        
+    console.log(nextWeekFormattedDate);
         const handleDate = () => {
             if (selectedTab === 'Next Week') {
-                setDate(formattedDate);
+                SetDate(nextWeekFormattedDate);
             }
             else {
-                setDate(nextWeekStart);
+                SetDate(currentWeekFormattedDate);
             }
         }
         handleDate();
@@ -119,11 +124,11 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
         }
     };
 
-    console.log(formattedDate)
+    console.log(date)
     console.log(selectedTab)
     useEffect(() => {
         const fetchPlan = async () => {
-            setLoading(true);
+
             try {
                 const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/teacher?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${date}`, {
                     headers: {
@@ -140,10 +145,11 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
             }
         };
         if (Class && section && subject) {
+            setLoading(true);
             setDetails([]);
             fetchPlan();
         }
-    }, [authState.accessToken, Class, section, subject, session, date]);
+    }, [Class, section, subject, date]);
 
     console.log(nextWeekDays)
     const renderTableRows = (detail, editable = false) => {
