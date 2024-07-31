@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import WeekTable from './WeekTable';
+import CurrentWeek from './CurrentWeek';
+import NextWeek from './NextWeek';
 
 const tabs = ["Current Week", "Next Week"];
 
@@ -25,7 +27,11 @@ const Tabs = ({ Class, section, subject }) => {
                     ))}
                 </div>
             </div>
-            <WeekTable selectedTab={selectedTab} Class={Class} section={section} subject={subject} />
+            {selectedTab === 'Current Week' ? (
+                <CurrentWeek selectedTab={selectedTab} Class={Class} section={section} subject={subject} />
+            ) : (
+                <NextWeek selectedTab={selectedTab} Class={Class} section={section} subject={subject} />
+            )}
         </div>
     );
 };

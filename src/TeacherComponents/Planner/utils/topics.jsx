@@ -26,3 +26,12 @@ export const chapters = [
     "Chapter 5",
     "Chapter 6"
 ];
+
+export const TeachingAids = [
+    "White board, Marker",
+    "White board, Marker",
+    "White board, Marker",
+    "White board, Marker",
+    "White board, Marker",
+    "White board, Marker"
+];

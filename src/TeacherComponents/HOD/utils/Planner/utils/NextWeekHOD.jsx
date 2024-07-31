@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { topics, plans, chapters } from './topics';
 
-const WeekTable = ({ selectedTab, Class, section, subject }) => {
+const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
@@ -38,27 +38,6 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
     });
 
     const nextWeekFormattedDate = nextWeekStart.toISOString().split('T')[0];
-    const currentWeekFormattedDate = currentWeekStart.toISOString().split('T')[0];
-
-
-    const [date, SetDate] = useState(currentWeekStart);
-
-    useEffect(() => {
-
-        console.log(nextWeekFormattedDate);
-        const handleDate = () => {
-            if (selectedTab === 'Next Week') {
-                SetDate(nextWeekFormattedDate);
-            }
-            else {
-                SetDate(currentWeekFormattedDate);
-            }
-        }
-        handleDate();
-    }, [selectedTab])
-
-
-
 
 
     const handleInputChange = (index, field, value) => {
@@ -129,14 +108,14 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
         }
     };
 
-    console.log(date)
+
     console.log(selectedTab)
     useEffect(() => {
-        console.log(date)
+        console.log(nextWeekFormattedDate)
         const fetchPlan = async () => {
 
             try {
-                const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/coordinator?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${date}`, {
+                const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/coordinator?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${nextWeekFormattedDate}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
                     }
@@ -155,7 +134,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
             setDetails([]);
             fetchPlan();
         }
-    }, [authState.accessToken, Class, section, subject, session, date]);
+    }, [authState.accessToken, Class, section, subject, session, nextWeekFormattedDate]);
 
     console.log(nextWeekDays)
     const renderTableRows = (detail, editable = false) => {
@@ -197,53 +176,36 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
         <div className='rounded-md overflow-auto'>
             {loading ? (
                 <Loading />
-            ) : details.length === 0 && selectedTab === 'Current Week' ? (
+            ) : details.length === 0 && selectedTab === 'Next Week' ? (
                 <>No Data Available</>
             ) : (
-                selectedTab === 'Current Week' ? (
+                <form onSubmit={handleSubmit}>
                     <table className='w-full rounded-md border border-black'>
                         <thead className='bg-secondary border-b border-black'>
                             <tr className='p-4 text-center'>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 font-semibold'>Date</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Chapter</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Topic</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Teaching Aids</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Activity (if any)</th>
+                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Date</th>
+                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Chapter</th>
+                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Topic</th>
+                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Teaching Aids</th>
+                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Activity (if any)</th>
+                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Remark</th>
                             </tr>
                         </thead>
-                        <tbody className='text-center'>
-                            {renderTableRows(details)}
+                        <tbody className='text-center whitespace-nowrap'>
+                            {renderTableRows(nextWeekDays, true)}
                         </tbody>
                     </table>
-                ) : (
-                    <form onSubmit={handleSubmit}>
-                        <table className='w-full rounded-md border border-black'>
-                            <thead className='bg-secondary border-b border-black'>
-                                <tr className='p-4 text-center'>
-                                    <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Date</th>
-                                    <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Chapter</th>
-                                    <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Topic</th>
-                                    <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Teaching Aids</th>
-                                    <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Activity (if any)</th>
-                                    <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Remark</th>
-                                </tr>
-                            </thead>
-                            <tbody className='text-center whitespace-nowrap'>
-                                {renderTableRows(nextWeekDays, true)}
-                            </tbody>
-                        </table>
-                        <div className='flex justify-center items-center py-4'>
-                            <button
-                                type="submit"
-                                className='p-1 px-4 rounded-md bg-secondary font-semibold border-black border hover:bg-white hover:text-black hover:border-black hover:border-2'>
-                                SAVE
-                            </button>
-                        </div>
-                    </form>
-                )
+                    <div className='flex justify-center items-center py-4'>
+                        <button
+                            type="submit"
+                            className='p-1 px-4 rounded-md bg-secondary font-semibold border-black border hover:bg-white hover:text-black hover:border-black hover:border-2'>
+                            SAVE
+                        </button>
+                    </div>
+                </form>
             )}
         </div>
     );
 };
 
-export default WeekTable;
+export default NextWeekHOD;
