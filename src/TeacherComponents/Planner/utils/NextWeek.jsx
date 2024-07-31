@@ -5,17 +5,11 @@ import AuthContext from '../../../Context/AuthContext';
 import Loading from '../../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { topics, plans, chapters, TeachingAids } from './topics';
 import NextWeekRow from './NextWeekRow';
 
 const NextWeek = ({ selectedTab, Class, section, subject }) => {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
-    const [details, setDetails] = useState([]);
-    const [nextWeekTeachingAids, setnextWeekTeachingAids] = useState(TeachingAids);
-    const [nextWeekTopics, setNextWeekTopics] = useState(topics);
-    const [nextWeekActivities, setNextWeekActivities] = useState(plans);
-    const [nextWeekChapters, setNextWeekChapters] = useState(chapters);
     const [error, setError] = useState(null);
 
     const getCurrentSession = () => {
@@ -24,6 +18,13 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
         const currentMonth = now.getMonth();
         return currentMonth >= 3 ? `${currentYear}-${(currentYear + 1).toString().slice(-2)}` : `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
     };
+    const defaultPlan = ()=>{
+        return Array.from({ length: 6 }, (_, i) => {
+            const date = new Date(nextWeekStart);
+            date.setDate(nextWeekStart.getDate() + i);
+            return {date:date.toISOString().split('T')[0],teachingAids:'',chapter:'',topic:'',Activity:''};
+        })
+    }
 
     const session = getCurrentSession();
     const currentDate = new Date();
@@ -38,45 +39,15 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
     });
 
     const nextWeekFormattedDate = nextWeekStart.toISOString().split('T')[0];
+    const [details, setDetails] = useState(defaultPlan());
 
 
-    const handleInputChange = (index, field, value) => {
-        switch (field) {
-            case 'TeachingAids':
-                const newPlans = [...nextWeekTeachingAids];
-                newPlans[index] = value;
-                setnextWeekTeachingAids(newPlans);
-                break;
-            case 'topic':
-                const newTopics = [...nextWeekTopics];
-                newTopics[index] = value;
-                setNextWeekTopics(newTopics);
-                break;
-            case 'activity':
-                const newActivities = [...nextWeekActivities];
-                newActivities[index] = value;
-                setNextWeekActivities(newActivities);
-                break;
-            case 'chapter':
-                const newChapters = [...nextWeekChapters];
-                newChapters[index] = value;
-                setNextWeekChapters(newChapters);
-                break;
-            default:
-                break;
-        }
-    };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const plan = nextWeekDays.map((day, index) => ({
-            date: day.toISOString().split('T')[0],
-            chapter: nextWeekChapters[index],
-            topic: nextWeekTopics[index],
-            TeachingAids: nextWeekTeachingAids[index],
-            Activity: nextWeekActivities[index]
-        }));
+
 
         const data = {
             accessToken: authState.accessToken,
@@ -85,7 +56,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
             subject: subject,
             startingDate: nextWeekFormattedDate,
             session: session,
-            plan: plan
+            plan: details
         };
         console.log(data);
 
@@ -97,10 +68,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
             });
             console.log("API response:", response.data);
             toast.success('Plan Saved Successfully');
-            setnextWeekTeachingAids('');
-            setNextWeekTopics('');
-            setNextWeekActivities('N/A');
-            setNextWeekChapters('');
+
         } catch (err) {
             console.log(err.response.data.error);
             toast.error(err.response.data.error);
@@ -120,17 +88,21 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                     }
                 });
                 console.log("API response:", response.data);
-                setDetails(response.data.plan);
+                if(response.data.plan && response.data.plan.length >0){
+                    setDetails(response.data.plan);
+                }else{
+                    setDetails(defaultPlan());
+                }
                 setLoading(false);
             } catch (err) {
                 console.log(err.response.data.error);
+                setDetails(defaultPlan());
                 setError(err.response.data.error);
                 setLoading(false);
             }
         };
         if (Class && section && subject) {
             setLoading(true);
-            setDetails([]);
             fetchPlan();
         }
     }, [Class, section, subject, nextWeekFormattedDate]);
@@ -159,7 +131,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                         </thead>
                         <tbody className='text-center whitespace-nowrap'>
                             {details.map((data, index) => (
-                                <NextWeekRow details={data} index={index} />
+                                <NextWeekRow details={data} index={index} setDetails={setDetails}/>
                             ))}
                         </tbody>
                     </table>

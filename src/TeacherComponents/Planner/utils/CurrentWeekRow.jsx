@@ -14,7 +14,7 @@ function CurrentWeekRow({ details, index }) {
                 {details.topic}
             </td>
             <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                {details.plan}
+                {details.teachingAids}
             </td>
             <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
                 {details.Activity}
