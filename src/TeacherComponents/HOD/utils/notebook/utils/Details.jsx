@@ -24,11 +24,7 @@ const RecordDetailsHOD = () => {
   const addEmail = (email) => {
     setCheckedStudents(prevChecked => [...prevChecked, email]);
   }
-  const removeEmail = (studentIdToRemove) => {
 
-    setCheckedStudents(prevChecked => prevChecked.filter(studentId => studentId !== studentIdToRemove));
-
-  }
   const fetchStudentList = () => {
     let config = {
       method: 'get',
@@ -54,45 +50,14 @@ const RecordDetailsHOD = () => {
     fetchStudentList()
   }, [id]);
 
-  const handleSave = () => {
-    let data = JSON.stringify({
-      "docId": id,
-      "session": session,
-      "submittedBy": checkedStudents
-    });
 
-    let config = {
-      method: 'put',
-      maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/notebook/update/submission`,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authState.accessToken}`
-      },
-      data: data
-    };
-
-    axios.request(config)
-      .then((response) => {
-        toast.success('Notebook Record updated Successfully ');
-        console.log(checkedStudents);
-        fetchStudentList();
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error(error.response.data.error);
-      });
-
-  }
 
   return (
     <div className=" items-center  px-4 py-1 mb-2">
       <ToastContainer />
       <div className="flex justify-between">
         <h1 className="text-xl font-medium mb-2 mobile:max-tablet:text-lg">Pending Notebooks</h1>
-        <button className="text-xl mobile:max-tablet:text-sm text-green-500 border border-green-500 px-4  rounded-md shadow-md font-medium mb-2 hover:bg-green-600 hover:text-white hover:border-white" onClick={handleSave}>
-          Save
-        </button>
+
       </div>
       <div className="w-full overflow-x-auto rounded-lg">
         <table className="min-w-full bg-white border border-gray-300 rounded-lg">
@@ -101,13 +66,11 @@ const RecordDetailsHOD = () => {
 
               <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Roll No.</th>
               <th className="py-2 px-6 text-center">Name</th>
-
               <th className="py-2 px-6 text-center">Date</th>
-
               <th className="py-2 px-6 text-center">Chapter</th>
               <th className="py-2 px-6 text-center ">Topic</th>
               <th className="py-2 px-6 text-center rounded-t-l whitespace-nowrap">Notebook Checked</th>
-              <th className="py-2 px-6 text-center rounded-t-l">Checked</th>
+
 
 
             </tr>
@@ -123,11 +86,6 @@ const RecordDetailsHOD = () => {
                 <td className="py-3 px-6 text-center">{chapter}</td>
                 <td className="py-3 px-6 text-center whitespace-nowrap">{topic}</td>
                 <td className="py-3 px-6 text-center">{chapter}</td>
-                <td className="flex py-3 px-6 justify-center">
-                  <Switch checked={checkedStudents.includes(Student.email)} addEmail={addEmail} removeEmail={removeEmail} email={Student.email} />
-                </td>
-
-
 
               </tr>
 

@@ -77,6 +77,7 @@ const AllNoteBookRecord = () => {
               <th className="py-2 px-6 text-center ">Topic</th>
               <th className="py-2 px-6 text-center rounded-t-l whitespace-nowrap">Notebook Checked</th>
               <th className="py-2 px-6 text-center rounded-t-l">Action</th>
+              <th className="py-2 px-6 text-center rounded-t-l">Remark</th>
 
 
             </tr>
@@ -95,6 +96,10 @@ const AllNoteBookRecord = () => {
                     Show Details
                   </Link>
                 </td>
+                <td className="py-3 px-6 text-center whitespace-nowrap">
+                  {record.remark ? record.remark : 'NA'}
+                </td>
+
               </tr>
 
             ))}

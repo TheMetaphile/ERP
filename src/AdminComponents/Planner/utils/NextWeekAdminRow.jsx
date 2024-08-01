@@ -1,6 +1,6 @@
 import React from 'react'
 
-function NextWeekHODRow({ details, index}) {
+function NextWeekAdminRow({ details, index}) {
 
     console.log(details);
 
@@ -26,5 +26,5 @@ function NextWeekHODRow({ details, index}) {
     )
 }
 
-export default NextWeekHODRow
+export default NextWeekAdminRow
 

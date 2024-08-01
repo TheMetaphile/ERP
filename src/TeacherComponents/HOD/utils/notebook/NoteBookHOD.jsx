@@ -3,6 +3,7 @@ import Selection from './utils/Selection';
 import { Outlet, useSearchParams } from "react-router-dom";
 import Tabs from './utils/Tabs';
 import AuthContext from '../../../../Context/AuthContext';
+import AllNoteBookRecordHOD from './utils/AllNotebookRecordHOD';
 
 function NoteBookHOD() {
     const { authState } = useContext(AuthContext);
@@ -48,7 +49,8 @@ function NoteBookHOD() {
                     <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
                 </div>
             </div>
-            <Tabs onTabChange={onTabChange} selectedTab={selectedTab} Class={Class} Section={Section} Subject={Subject} />
+            <AllNoteBookRecordHOD Class={Class} Section={Section} Subject={Subject}/>
+            {/* <Tabs onTabChange={onTabChange} selectedTab={selectedTab} Class={Class} Section={Section} Subject={Subject} /> */}
             <Outlet />
         </div>
 

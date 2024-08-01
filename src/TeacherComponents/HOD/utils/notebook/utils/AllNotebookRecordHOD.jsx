@@ -4,14 +4,15 @@ import { Link, useLocation } from 'react-router-dom';
 import AuthContext from "../../../../../Context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
 import { BASE_URL_Login } from "../../../../../Config";
+import AllNoteBookRecordRow from "./AllNoteBookRecordRow";
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
-const AllNoteBookRecordHOD = () => {
+const AllNoteBookRecordHOD = ({ Class, Section, Subject }) => {
   const query = useQuery();
-  const Class = query.get('Class');
-  const Section = query.get('Section');
-  const Subject = query.get('Subject');
+  // const Class = query.get('Class');
+  // const Section = query.get('Section');
+  // const Subject = query.get('Subject');
   const { authState } = useContext(AuthContext);
   const [records, SetRecord] = useState([]);
   const [start, SetStart] = useState(0);
@@ -32,7 +33,6 @@ const AllNoteBookRecordHOD = () => {
 
   useEffect(() => {
     if (Class && Subject && Section && start != 0) {
-
       fetchRecord();
     }
   }, [start]);
@@ -43,7 +43,7 @@ const AllNoteBookRecordHOD = () => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/notebook/fetch/teacher/all?class=${Class}&section=${Section}&subject=${Subject}&session=${session}&start=${start}&count=${end}`,
+      url: `${BASE_URL_Login}/notebook/fetch/coordinator/all?class=${Class}&section=${Section}&subject=${Subject}&session=${session}&start=${start}&count=${end}`,
       headers: {
         'Authorization': `Bearer ${authState.accessToken}`
       }
@@ -51,6 +51,7 @@ const AllNoteBookRecordHOD = () => {
 
     axios.request(config)
       .then((response) => {
+        console.log(response.data);
         SetRecord(prevState => [...prevState, ...response.data.notebookRecord])
       })
       .catch((error) => {
@@ -76,27 +77,17 @@ const AllNoteBookRecordHOD = () => {
               <th className="py-2 px-6 text-center">Chapter</th>
               <th className="py-2 px-6 text-center ">Topic</th>
               <th className="py-2 px-6 text-center rounded-t-l whitespace-nowrap">Notebook Checked</th>
+              <th className="py-2 px-6 text-center rounded-t-l">Details</th>
+              <th className="py-2 px-6 text-center rounded-t-l">Remark</th>
               <th className="py-2 px-6 text-center rounded-t-l">Action</th>
+
 
 
             </tr>
           </thead>
           <tbody className="text-gray-600 text-md font-normal ">
             {records.map((record, index) => (
-
-              <tr className="border-b border-gray-200  last:border-none">
-
-                <td className="py-3 px-6 text-center whitespace-nowrap">{new Date(record.date).toDateString()}</td>
-                <td className="py-3 px-6 text-center">{record.chapter}</td>
-                <td className="py-3 px-6 text-center whitespace-nowrap">{record.topic}</td>
-                <td className="py-3 px-6 text-center">{record.checked}</td>
-                <td className="py-3 px-6 text-center whitespace-nowrap">
-                  <Link to={`/Teacher-Dashboard/HOD/notebook/details/${record._id}?session=${session}&date=${record.date}&chapter=${record.chapter}&topic=${record.topic}`} className="block w-full text-blue-500 underline hover:text-blue-700">
-                    Show Details
-                  </Link>
-                </td>
-              </tr>
-
+              <AllNoteBookRecordRow record={record} index={index} />
             ))}
           </tbody>
         </table>

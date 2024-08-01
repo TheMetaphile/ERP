@@ -1,10 +1,6 @@
 import React from 'react'
 
-function NextWeekHODRow({ details, index}) {
-
-    console.log(details);
-
-
+function CurrentWeekAdminRow({ details, index }) {
     return (
         <tr key={index}>
             <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
@@ -26,5 +22,4 @@ function NextWeekHODRow({ details, index}) {
     )
 }
 
-export default NextWeekHODRow
-
+export default CurrentWeekAdminRow

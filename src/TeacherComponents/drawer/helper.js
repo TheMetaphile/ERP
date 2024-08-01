@@ -10,6 +10,7 @@ import notebookImage from "../../assets/notebook.png";
 import ClassActivity from "../../assets/lecture.png";
 import Doubts from "../../assets/doubts.png";
 import Appraisal from "../../assets/appraisal.png";
+import coordinatorImage from "../../assets/coordinator.png";
 import dashboardResult from "../../assets/Dashboard_result.png";
 
 const menuItems = [
@@ -169,9 +170,9 @@ const menuItems = [
     children: [],
   },
   {
-    image: notebookImage,
-    alt: "HOD",
-    title: "HOD",
+    image: coordinatorImage,
+    alt: "Coordinator",
+    title: "Coordinator",
     route: "/Teacher-Dashboard/HOD",
     children: [],
   },

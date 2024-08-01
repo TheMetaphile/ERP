@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const tabs = ["All", "New"];
+const tabs = ["All"];
 
 const Tabs = ({ selectedTab, onTabChange ,Class,Section,Subject}) => {
   return (

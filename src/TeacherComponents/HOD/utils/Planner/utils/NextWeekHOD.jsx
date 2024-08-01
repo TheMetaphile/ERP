@@ -5,18 +5,15 @@ import AuthContext from '../../../../../Context/AuthContext';
 import Loading from '../../../../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { topics, plans, chapters } from './topics';
+import NextWeekHODRow from './NextWeekHODRow';
 
 const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
-    const [details, setDetails] = useState([]);
-    const [nextWeekPlans, setNextWeekPlans] = useState(Array(6).fill(''));
-    const [nextWeekTopics, setNextWeekTopics] = useState(topics);
-    const [nextWeekActivities, setNextWeekActivities] = useState(plans);
-    const [nextWeekChapters, setNextWeekChapters] = useState(chapters);
     const [error, setError] = useState(null);
-
+    const [remark, setRemark] = useState('');
+    const [id, setId] = useState('');
+    const [status, setStatus] = useState('');
 
     const getCurrentSession = () => {
         const now = new Date();
@@ -25,89 +22,24 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
         return currentMonth >= 3 ? `${currentYear}-${(currentYear + 1).toString().slice(-2)}` : `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
     };
 
+    const defaultPlan = () => {
+        return Array.from({ length: 6 }, (_, i) => {
+            const date = new Date(nextWeekStart);
+            date.setDate(nextWeekStart.getDate() + i);
+            return { date: date.toISOString().split('T')[0], teachingAids: '', chapter: '', topic: '', Activity: '' };
+        })
+    }
+
+
     const session = getCurrentSession();
     const currentDate = new Date();
     const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
     const nextWeekStart = new Date();
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
-    const nextWeekDays = Array.from({ length: 6 }, (_, i) => {
-        const date = new Date(nextWeekStart);
-        date.setDate(nextWeekStart.getDate() + i);
-        return date;
-    });
 
     const nextWeekFormattedDate = nextWeekStart.toISOString().split('T')[0];
-
-
-    const handleInputChange = (index, field, value) => {
-        switch (field) {
-            case 'plan':
-                const newPlans = [...nextWeekPlans];
-                newPlans[index] = value;
-                setNextWeekPlans(newPlans);
-                break;
-            case 'topic':
-                const newTopics = [...nextWeekTopics];
-                newTopics[index] = value;
-                setNextWeekTopics(newTopics);
-                break;
-            case 'activity':
-                const newActivities = [...nextWeekActivities];
-                newActivities[index] = value;
-                setNextWeekActivities(newActivities);
-                break;
-            case 'chapter':
-                const newChapters = [...nextWeekChapters];
-                newChapters[index] = value;
-                setNextWeekChapters(newChapters);
-                break;
-            default:
-                break;
-        }
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const plan = nextWeekDays.map((day, index) => ({
-            date: day.toISOString().split('T')[0],
-            chapter: nextWeekChapters[index],
-            topic: nextWeekTopics[index],
-            TeachingAids: nextWeekPlans[index],
-            Activity: nextWeekActivities[index]
-        }));
-
-        const data = {
-            accessToken: authState.accessToken,
-            class: Class,
-            section: section,
-            subject: subject,
-            startingDate: formattedDate,
-            session: session,
-            plan: plan
-        };
-        console.log(data);
-
-        try {
-            const response = await axios.post(`${BASE_URL_Login}/lessonPlan/create`, data, {
-                headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
-                }
-            });
-            console.log("API response:", response.data);
-            toast.success('Plan Saved Successfully');
-            setNextWeekPlans('');
-            setNextWeekTopics('');
-            setNextWeekActivities('N/A');
-            setNextWeekChapters('');
-        } catch (err) {
-            console.log(err.response.data.error);
-            toast.error(err.response.data.error);
-
-        }
-    };
-
+    const [details, setDetails] = useState(defaultPlan());
 
     console.log(selectedTab)
     useEffect(() => {
@@ -121,10 +53,19 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
                     }
                 });
                 console.log("API response:", response.data);
-                setDetails(response.data.plan);
+                if (response.data.plan && response.data.plan.length > 0) {
+                    setDetails(response.data.plan);
+                    setId(response.data._id);
+                    setRemark(response.data.coordinatorRemark);
+                    setStatus(response.data.coordinatorStatus);
+                } else {
+                    setDetails(defaultPlan());
+                    setId('');
+                }
                 setLoading(false);
             } catch (err) {
                 console.log(err.response.data.error);
+                setDetails(defaultPlan());
                 setError(err.response.data.error);
                 setLoading(false);
             }
@@ -134,41 +75,39 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
             setDetails([]);
             fetchPlan();
         }
-    }, [authState.accessToken, Class, section, subject, session, nextWeekFormattedDate]);
+    }, [Class, section, subject, nextWeekFormattedDate]);
 
-    console.log(nextWeekDays)
-    const renderTableRows = (detail, editable = false) => {
-        return detail.map((day, index) => (
-            <tr key={index}>
-                <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                    {day.date}
-                </td>
 
-                <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                    {day.chapter}
-                </td>
-                <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                    {day.topic}
-                </td>
-                <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                    {day.plan}
-                </td>
-                <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                    {day.Activity}
-                </td>
-                {editable && (
-                    <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                        <input
-                            className='border-secondary border-2 rounded-md p-2'
-                            type="text"
-                            value={nextWeekActivities[index]}
-                            onChange={(e) => handleInputChange(index, 'activity', e.target.value)}
-                        />
-                    </td>
-                )}
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!status) {
+            alert('Please fill status');
+        }
+        const data = {
+            accessToken: authState.accessToken,
+            id: id,
+            status: status,
+            remark: remark,
+        };
+        console.log(data, id);
 
-            </tr>
-        ));
+        try {
+            const response = await axios.put(
+                `${BASE_URL_Login}/lessonPlan/update/coordinator?id=${id}&status=${status}&remark=${remark}&session=${session}`,
+                null,
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`
+                    }
+                }
+            );
+            console.log("API response:", response.data);
+            toast.success('Plan Saved Successfully');
+        }catch (err) {
+            console.log(err.response.data.error);
+            toast.error(err.response.data.error);
+
+        }
     };
 
 
@@ -188,13 +127,34 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
                                 <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Topic</th>
                                 <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Teaching Aids</th>
                                 <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Activity (if any)</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Remark</th>
                             </tr>
                         </thead>
                         <tbody className='text-center whitespace-nowrap'>
-                            {renderTableRows(nextWeekDays, true)}
+                            {details.map((data, index) => (
+                                <NextWeekHODRow details={data} index={index} setDetails={setDetails} />
+                            ))}
                         </tbody>
                     </table>
+
+                    <div className='flex justify-center items-center py-2 gap-2'>
+                        <textarea
+                            value={remark}
+                            onChange={(e) => setRemark(e.target.value)}
+                            placeholder='Enter your remark'
+                            className='w-full p-2 border border-black rounded-md mb-4'
+                        />
+
+                        <select
+                            value={status}
+                            onChange={(e) => setStatus(e.target.value)}
+                            className='p-5 border border-black rounded-md mb-4 '
+                        >
+                            <option value="">Select status</option>
+                            <option value="Accept">Accept</option>
+                            <option value="Reject">Reject</option>
+                        </select>
+
+                    </div>
                     <div className='flex justify-center items-center py-4'>
                         <button
                             type="submit"

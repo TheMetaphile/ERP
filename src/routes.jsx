@@ -163,6 +163,8 @@ import ClassTeacherSubstitute from "./TeacherComponents/HOD/utils/ClassTeacherSu
 import LectureSubstitute from "./TeacherComponents/HOD/utils/LectureSubstitute/main.jsx";
 import Assigncoordinator from "./AdminComponents/Coordinator/Assigncoordinator.jsx";
 import Substitutecoordinator from "./AdminComponents/SubstituteCoordinator/Substitutecoordinator.jsx";
+import PlannerAdmin from "./AdminComponents/Planner/PlannerAdmin.jsx";
+import AppraisalAdmin from "./AdminComponents/appraisal/AppraisalAdmin.jsx";
 // import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
 
 
@@ -649,6 +651,28 @@ const router = createBrowserRouter([
         element: <Upload />
       },
       {
+        path: "/Admin-Dashboard/weekplan",
+        element: <PlannerAdmin />,
+      },
+      {
+        path: "/Admin-Dashboard/appraisal",
+        element: <AppraisalAdmin />,
+        children: [
+          {
+            path: '/Admin-Dashboard/appraisal/apply',
+            element: <Apply />
+          },
+          {
+            path: '/Admin-Dashboard/appraisal/applied',
+            element: <Applied />
+          },
+          {
+            path: '',
+            element: <Apply />
+          },
+        ]
+      },
+      {
         path: '/Admin-Dashboard/Events',
         element: <Event />
       },
@@ -863,21 +887,7 @@ const router = createBrowserRouter([
           {
             path: "/Teacher-Dashboard/HOD/notebook",
             element: <NoteBookHOD />,
-            children: [
-              {
-                path: "",
-                element: <AllNoteBookRecordHOD />
-              },
-              {
-                path: "All",
-                element: <AllNoteBookRecordHOD />
-              },
-              {
-                path: "New",
-                element: <NewNoteBookRecordHOD />
-              },
-
-            ]
+            children: []
           },
           {
             path: "/Teacher-Dashboard/HOD/notebook/details/:id",

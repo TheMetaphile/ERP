@@ -213,6 +213,20 @@ const menuItems = [
   {
     image: leaveImage,
     alt: "img",
+    title: "Week Plan",
+    route: "/Admin-Dashboard/weekplan",
+    children: [],
+  },
+  {
+    image: leaveImage,
+    alt: "img",
+    title: "Appraisal",
+    route: "/Admin-Dashboard/appraisal",
+    children: [],
+  },
+  {
+    image: leaveImage,
+    alt: "img",
     title: "Employee",
     route: "/Admin-Dashboard/Employee",
     children: [],

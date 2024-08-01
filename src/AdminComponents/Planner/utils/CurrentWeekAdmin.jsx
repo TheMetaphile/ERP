@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { BASE_URL_Login } from '../../../../../Config';
+import { BASE_URL_Login } from './../../../Config';
 import axios from 'axios';
-import AuthContext from '../../../../../Context/AuthContext';
-import Loading from '../../../../../LoadingScreen/Loading';
+import AuthContext from './../../../Context/AuthContext';
+import Loading from '../../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import CurrentWeekHODRow from './CurrentWeekHODRow';
+import CurrentWeekAdminRow from './CurrentWeekAdminRow';
 
 
-const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
+const CurrentWeekAdmin = ({ selectedTab, Class, section, subject }) => {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
@@ -35,7 +35,7 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
         const fetchPlan = async () => {
 
             try {
-                const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/coordinator?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${currentWeekFormattedDate}`, {
+                const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/admin?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${currentWeekFormattedDate}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
                     }
@@ -78,7 +78,7 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
                     </thead>
                     <tbody className='text-center'>
                         {details.map((data, index) => (
-                            <CurrentWeekHODRow details={data} index={index}/>
+                            <CurrentWeekAdminRow details={data} index={index}/>
                         ))}
                     </tbody>
                 </table>
@@ -87,4 +87,4 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
     );
 };
 
-export default CurrentWeekHOD;
+export default CurrentWeekAdmin;
