@@ -21,32 +21,6 @@ function AppraisalAdmin() {
       <ToastContainer />
       <h1 className='text-3xl mobile:max-tablet:text-lg'>Appraisal</h1>
       <div className=' border shadow-md mt-4 rounded-lg w-full '>
-        <div className=" flex   ml-3 mr-3 items-center justify-between">
-          <div className=" flex  gap-2 mt-2">
-            {/* <Link
-                            to={'/Teacher-Dashboard/noticeboard/allnotice'}
-                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/allnotice' ? 'bg-secondary ' : 'bg-gray-300'}`}
-                            onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/allnotice')}
-                        >
-                            All
-                        </Link> */}
-            <Link
-              to={'/Admin-Dashboard/appraisal/applied'}
-              className={`text-xl mobile:max-tablet:text-sm font-medium px-2 rounded-lg py-1 ${selectedLink === '/Admin-Dashboard/appraisal/applied' ? 'bg-secondary ' : 'bg-gray-300'}`}
-              onClick={() => handleLinkSelect('/Admin-Dashboard/appraisal/applied')}
-            >
-              Applied
-            </Link>
-            <Link
-              to={'/Admin-Dashboard/appraisal/apply'}
-              className={`text-xl mobile:max-tablet:text-sm font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Admin-Dashboard/appraisal/apply' ? 'bg-secondary ' : 'bg-gray-300'}`}
-              onClick={() => handleLinkSelect('/Admin-Dashboard/appraisal/apply')}
-            >
-              Apply
-            </Link>
-
-          </div>
-        </div>
         <Outlet />
         <br></br>
       </div>

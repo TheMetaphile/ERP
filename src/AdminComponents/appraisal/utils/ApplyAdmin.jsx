@@ -1,10 +1,20 @@
 import React, { useContext } from "react";
 import AuthContext from '../../../Context/AuthContext';
 import { FaUser, FaEnvelope, FaCalendarAlt, FaGraduationCap, FaBriefcase, FaChartBar, FaClipboardList } from 'react-icons/fa';
+import { useLocation, useParams } from "react-router-dom";
 
-function Apply() {
+function ApplyAdmin() {
     const { authState } = useContext(AuthContext);
+    const { id } = useParams();
+    const location = useLocation();
+    const useQuery = () => {
+        return new URLSearchParams(location.search);
+      }
+    
+      const query = useQuery();
+      const employeeId = query.get('employeeId');
 
+      console.log(id, employeeId)
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -16,11 +26,11 @@ function Apply() {
                     <div className='flex flex-col md:flex-row md:space-x-10 items-center mb-8'>
                         <div className='flex flex-col items-center mb-4 md:mb-0'>
                             <img src={authState.userDetails.profileLink} alt="Profile" className='w-32 h-32 rounded-full border-4 border-purple-500 shadow-lg' />
-                            <h2 className='mt-4 text-2xl font-semibold text-gray-800'>{authState.userDetails.name}</h2>
+                            <h2 className='mt-4 text-2xl font-semibold text-gray-800'>{id}</h2>
                         </div>
                         <div className='flex-1 grid grid-cols-4 md:grid-cols-2 gap-4'>
                             {[
-                                { icon: <FaUser />, label: "Employee ID", value: authState.userDetails.employeeId },
+                                { icon: <FaUser />, label: "Employee ID", value: employeeId },
                                 { icon: <FaGraduationCap />, label: "Department", value: "10th - 12th" },
                                 { icon: <FaBriefcase />, label: "Designation", value: "Teacher" },
                                 { icon: <FaEnvelope />, label: "Email", value: authState.userDetails.email },
@@ -205,4 +215,4 @@ function Section({ title, icon, children }) {
     )
 }
 
-export default Apply;
+export default ApplyAdmin;

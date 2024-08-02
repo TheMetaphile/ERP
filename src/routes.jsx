@@ -165,6 +165,8 @@ import Assigncoordinator from "./AdminComponents/Coordinator/Assigncoordinator.j
 import Substitutecoordinator from "./AdminComponents/SubstituteCoordinator/Substitutecoordinator.jsx";
 import PlannerAdmin from "./AdminComponents/Planner/PlannerAdmin.jsx";
 import AppraisalAdmin from "./AdminComponents/appraisal/AppraisalAdmin.jsx";
+import ApplyAdmin from "./AdminComponents/appraisal/utils/ApplyAdmin.jsx";
+import AppliedAdmin from "./AdminComponents/appraisal/utils/AppliedAdmin.jsx";
 // import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
 
 
@@ -659,17 +661,13 @@ const router = createBrowserRouter([
         element: <AppraisalAdmin />,
         children: [
           {
-            path: '/Admin-Dashboard/appraisal/apply',
-            element: <Apply />
-          },
-          {
-            path: '/Admin-Dashboard/appraisal/applied',
-            element: <Applied />
-          },
-          {
             path: '',
-            element: <Apply />
+            element: <AppliedAdmin />
           },
+          {
+            path: ':id',
+            element: <ApplyAdmin />
+          }
         ]
       },
       {
