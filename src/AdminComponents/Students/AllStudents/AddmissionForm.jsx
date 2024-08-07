@@ -15,6 +15,10 @@ export default function AddmissionForm() {
     const [error, setError] = useState('');
     const { authState } = useContext(AuthContext);
 
+    const currentYear = new Date().getFullYear();
+    const nextYear = currentYear + 1;
+    const formattedYear = `${currentYear}-${nextYear.toString().slice(-2)}`;
+    console.log(formattedYear);
     // const [success, setSuccess] = useState('');
 
     const [formData, setFormData] = useState(
@@ -23,10 +27,10 @@ export default function AddmissionForm() {
             email: '',
             password: '',
             aadhaarNumber: '',
-            academicYear: '2024',
+            academicYear: formattedYear,
             admissionClass: '',
             currentClass: '',
-            section: '',
+            percentage: '',
             admissionDate: '',
             oldAdmissionNumber: '',
             emergencyContactNumber: '',
@@ -69,7 +73,7 @@ export default function AddmissionForm() {
             academicYear: '',
             admissionClass: '',
             currentClass: '',
-            section: '',
+            percentage: '',
             admissionDate: '',
             oldAdmissionNumber: '',
             emergencyContactNumber: '',
@@ -140,25 +144,6 @@ export default function AddmissionForm() {
         }
     }
 
-    // const handleMultiSignUp = async (data) => {
-    //     setLoading(true);
-    //     try {
-    //         for (let i = 0; i < data.length; i++) {
-    //             const userData = data[i];
-    //             userData.password = userData.aadhaarNumber;
-
-    //             await axios.post(`${BASE_URL_Login}/signup/student`, userData);
-    //         }
-    //         toast.success('All Students registered successfully');
-    //     }
-    //     catch (err) {
-    //         console.error(err);
-    //         const errorMessage = error.response?.data?.error || 'An error occurred';
-    //         toast.error(errorMessage);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }
     const handleMultiSignUp = async (data) => {
         setLoading(true);
         console.log("here");
@@ -169,6 +154,7 @@ export default function AddmissionForm() {
             const promises = data.map(userData => {
                 userData.password = userData.aadhaarNumber;
                 userData.session = session;
+                userData.accessToken = authState.accessToken;
                 console.log(userData);
                 if (!userData.name) {
                     return;
@@ -377,9 +363,7 @@ export default function AddmissionForm() {
                                 >
                                     <option value="">Select Stream</option>
                                     <option value="General">General</option>
-                                    <option value="PCM">PCM</option>
-                                    <option value="PCB">PCM</option>
-                                    <option value="PCMB">PCMB</option>
+                                    <option value="Science">Science</option>
                                     <option value="Commerce">Commerce</option>
                                     <option value="Arts">Arts</option>
 
@@ -455,8 +439,8 @@ export default function AddmissionForm() {
                                     <option value="">Select Class</option>
                                     <option value="Pre-Nursery">Pre-Nursery</option>
                                     <option value="Nursery">Nursery</option>
-                                    <option value="L.K.J">L.K.J</option>
-                                    <option value="U.K.J">U.K.J</option>
+                                    <option value="L.K.G">L.K.G</option>
+                                    <option value="U.K.G">U.K.G</option>
                                     <option value="1st">1st</option>
                                     <option value="2nd">2nd</option>
                                     <option value="3rd">3rd</option>
@@ -596,27 +580,17 @@ export default function AddmissionForm() {
                             </label>
                         </div>
                         <div className="w-full rounded-md mobile:max-tablet:w-full">
-                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="section">
-                                Section
-                                <select
-                                    className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
-                                    id="section"
-                                    name="section"
-                                    value={formData.section}
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="percentage">
+                                Percentage
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="percentage"
+                                    type="text"
+                                    name="percentage"
+                                    value={formData.percentage}
                                     onChange={handleChange}
-                                    required
-                                >
-                                    <option value="">Select Section</option>
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
-                                    <option value="C">C</option>
-                                    <option value="D">D</option>
-                                    <option value="E">E</option>
-                                    <option value="F">F</option>
-                                    <option value="G">G</option>
-                                    <option value="H">H</option>
-                                    <option value="I">I</option>
-                                </select>
+                                    placeholder=""
+                                />
                             </label>
                         </div>
 
@@ -699,7 +673,7 @@ export default function AddmissionForm() {
                                     <option value="OBC">OBC</option>
                                     <option value="SC">SC</option>
                                     <option value="ST">ST</option>
-                                    <option value="EWS">ST</option>
+                                    <option value="EWS">EWS</option>
 
                                 </select>
                             </label>

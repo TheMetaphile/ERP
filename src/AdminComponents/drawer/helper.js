@@ -132,6 +132,13 @@ const menuItems = [
     route: "/Admin-Dashboard/Assignsubject",
     children: [],
   },
+  {
+    image: classImage,
+    alt: "img",
+    title: "New Admission",
+    route: "/Admin-Dashboard/NewAdmission",
+    children: [],
+  },
   // {
   //   image: parentImage,
   //   alt: "img",

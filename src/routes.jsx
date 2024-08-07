@@ -167,6 +167,7 @@ import PlannerAdmin from "./AdminComponents/Planner/PlannerAdmin.jsx";
 import AppraisalAdmin from "./AdminComponents/appraisal/AppraisalAdmin.jsx";
 import ApplyAdmin from "./AdminComponents/appraisal/utils/ApplyAdmin.jsx";
 import AppliedAdmin from "./AdminComponents/appraisal/utils/AppliedAdmin.jsx";
+import NewAdmission from "./AdminComponents/New Admission/NewAdmission.jsx";
 // import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
 
 
@@ -531,7 +532,11 @@ const router = createBrowserRouter([
       //     }
       //   ]
       // },
-
+      {
+        path: "/Admin-Dashboard/NewAdmission",
+        element: <NewAdmission />,
+        children: []
+      },
       {
         path: "/Admin-Dashboard/Teachers",
         element: <AllTeachers />,
