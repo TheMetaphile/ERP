@@ -6,6 +6,7 @@ import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Login } from '../../Config';
+import { ToastContainer } from 'react-toastify';
 
 function NewAdmission() {
     const [Class, setClass] = useState('9th');
@@ -91,6 +92,7 @@ function NewAdmission() {
 
     return (
         <div className="w-full px-3 mobile:max-tablet:px-0 overflow-auto items-start mt-2 mb-3 no-scrollbar mobile:max-tablet:mt-6">
+            <ToastContainer />
             <div className='flex items-center justify-between '>
                 <h1 className="text-2xl p-2 mobile:max-tablet:text-xl">New Admission</h1>
 
@@ -139,7 +141,7 @@ function NewAdmission() {
             <div className="mobile:max-laptop:overflow-y-auto mt-6">
                 <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap mobile:max-tablet:mt-20">
                     <div className="stutable">
-                        <Header headings={['Name', 'Class', 'Gender', 'Phone No.', 'E-mail']} />
+                        <Header headings={['Name', 'Class', 'Gender', 'Percentage', 'Phone No.', 'E-mail', 'Action']} />
                     </div>
                     {loading && userData.length < 1 ? (
                         <Loading />

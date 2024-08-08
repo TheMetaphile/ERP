@@ -9,39 +9,37 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Fee } from "../../../Config.js";
 
-export default function FeeStructure() {
+export default function FeeStructure({ selectedOption }) {
   const { authState } = useContext(AuthContext);
-  const [fees, setFees] = useState([]);
-  const [loading, setLoading] = useState(false)
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(10);
+  const [fees, setFees] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (authState.accessToken) {
-      setLoading(true);
-      fetchFees();
-    } else {
-      toast.error('No access token available');
-    }
+    setLoading(true);
+    fetchFees();
   }, [authState.accessToken]);
 
   const today = new Date();
   const formattedDate = today.toISOString().split('T')[0];
+  const getCurrentSession = () => {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+    return currentMonth >= 3 ? `${currentYear}-${(currentYear + 1).toString().slice(-2)}` : `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
+  };
+
+  const session = getCurrentSession();
 
   const fetchFees = async () => {
     console.log(authState.userDetails.currentClass, 'Class')
     try {
-      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student?date=${formattedDate}`, {
+      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student?session=${session}`, {
         headers: {
           'Authorization': `Bearer ${authState.accessToken}`
         }
       });
-      const total = response.data.feeStructure.reduce((acc, fee) => acc + parseFloat(fee.payableAmount), 0);
-      console.log(total)
-      setTotalAmount(total)
       console.log("API response fees:", response.data);
-      setFees(response.data.feeStructure);
-
+      setFees(response.data);
     }
     catch (error) {
       const errorMessage = error.response?.data?.error || 'An error occurred';
@@ -52,25 +50,20 @@ export default function FeeStructure() {
     }
   }
 
-  const handleViewMore = () => {
-    setVisibleCount(prevCount => prevCount + 10);
-  };
+
 
   return (
     <div className="w-full h-fit mb-4  rounded-lg shadow-md overflow-auto border border-gray-300">
       <table className=" w-full">
-        <Header />
         {loading ? (
           <Loading />
         ) : fees === null ? (
           <div>No data available</div>
         ) : (
           <div className="">
-            <FeeStructureField fees={fees.slice(0, visibleCount)} />
-            {visibleCount < fees.length && (
-              <button onClick={handleViewMore} className="w-full text-blue-500 text-center py-2">View More</button>
-            )}
-            <FeeStructureFooter totalAmount={totalAmount} />
+            <FeeStructureField fees={fees} selectedOption={selectedOption} />
+
+            <FeeStructureFooter />
           </div>
         )}
       </table>

@@ -8,8 +8,8 @@ import { toast } from 'react-toastify';
 function NewLeave({ onClose, onNewLeave }) {
   const { authState } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [fromDate, setFromDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date());
   const [leaveType, setLeaveType] = useState('');
   const [reason, setReason] = useState('');
 
@@ -56,6 +56,8 @@ function NewLeave({ onClose, onNewLeave }) {
     const datee = getCurrentDate();
     console.log({ fromDate, toDate, leaveType, reason, session, datee });
     setLoading(true);
+
+
     try {
       const response = await axios.post(`${BASE_URL_TeacherLeave}/teacherleave/apply`,
         {
@@ -90,6 +92,16 @@ function NewLeave({ onClose, onNewLeave }) {
     }
   };
 
+  const getTodayDate = () => {
+    const today = new Date(fromDate);
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+
+
   return (
     <div className="fixed z-50  inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
       <div className="bg-white mobile:max-tablet:mx-4 rounded-lg p-6 shadow-lg w-96">
@@ -100,6 +112,7 @@ function NewLeave({ onClose, onNewLeave }) {
             <input
               type="date"
               value={fromDate}
+              min={getTodayDate()}
               onChange={handleFromDateChange}
               className="w-full px-3 py-2 border rounded-md"
               required
@@ -110,6 +123,7 @@ function NewLeave({ onClose, onNewLeave }) {
             <input
               type="date"
               value={toDate}
+              min={getTodayDate()}
               onChange={handleToDateChange}
               className="w-full px-3 py-2 border rounded-md"
               required

@@ -24,6 +24,7 @@ function NewUpload({ onClose, onNewWork }) {
             alert('Fill all fields')
             return;
         }
+
         console.log(subject, classLevel, section, topic, question, chapter, deadline, new Date().toISOString().slice(0, 10), authState.userDetails.email);
         setLoading(true);
         try {
@@ -60,6 +61,14 @@ function NewUpload({ onClose, onNewWork }) {
         finally {
             setLoading(false)
         }
+    };
+
+    const getTodayDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
 
 
@@ -147,6 +156,7 @@ function NewUpload({ onClose, onNewWork }) {
                         <label className="block text-sm font-medium text-gray-700">Deadline</label>
                         <input
                             type="date"
+                            min={getTodayDate()}
                             value={deadline}
                             onChange={(e) => setDeadline(e.target.value)}
                             className="mt-2 w-full px-3 py-2 border rounded-md"

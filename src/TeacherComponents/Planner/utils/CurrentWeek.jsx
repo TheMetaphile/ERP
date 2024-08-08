@@ -13,6 +13,7 @@ const CurrentWeek = ({ selectedTab, Class, section, subject }) => {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [error, setError] = useState(null);
+    const [id,setId]=useState('');
 
     const getCurrentSession = () => {
         const now = new Date();
@@ -41,6 +42,7 @@ const CurrentWeek = ({ selectedTab, Class, section, subject }) => {
                 });
                 console.log("API response:", response.data);
                 setDetails(response.data.plan);
+                setId(response.data._id);
                 setLoading(false);
             } catch (err) {
                 console.log(err.response.data.error);
@@ -51,6 +53,7 @@ const CurrentWeek = ({ selectedTab, Class, section, subject }) => {
         if (Class && section && subject) {
             setLoading(true);
             setDetails([]);
+            setId('');
             fetchPlan();
         }
     }, [Class, section, subject, currentWeekFormattedDate]);
@@ -73,11 +76,12 @@ const CurrentWeek = ({ selectedTab, Class, section, subject }) => {
                                 <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Topic</th>
                                 <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Teaching Aids</th>
                                 <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Activity (if any)</th>
+                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Status</th>
                             </tr>
                         </thead>
                         <tbody className='text-center'>
                         {details.map((data, index) => (
-                            <CurrentWeekRow details={data} index={index}/>
+                            <CurrentWeekRow details={data} index={index} mapId={id}/>
                         ))}
                         </tbody>
                     </table>

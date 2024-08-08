@@ -8,8 +8,8 @@ import { BASE_URL_Student_Leave } from '../../../Config';
 
 export default function ApplyLeave({ onNewLeave }) {
     const { authState } = useContext(AuthContext);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
     const [reason, setReason] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -18,6 +18,7 @@ export default function ApplyLeave({ onNewLeave }) {
             alert("Please fill all fields");
             return;
         }
+
         setIsLoading(true);
         console.log(startDate, endDate, reason)
         try {
@@ -48,6 +49,13 @@ export default function ApplyLeave({ onNewLeave }) {
         }
     };
 
+    const getTodayDate = () => {
+        const today = new Date(startDate);
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
 
     return (
         <div className=" flex flex-col border  border-gray-300 items-center p-4 ml-1 mr-2 rounded-lg shadow-md">
@@ -58,11 +66,11 @@ export default function ApplyLeave({ onNewLeave }) {
                     <div className='flex items-center w-full justify-between tablet:gap-3 mobile:max-tablet:flex-col'>
                         <div className='w-full '>
                             <label className="text-sm font-medium">From Date</label>
-                            <input type="date" className="mt-2 px-3 py-1 border border-gray-300 shadow-md rounded-lg w-full md:w-auto" value={startDate} onChange={((e) => setStartDate(e.target.value))} />
+                            <input type="date" min={getTodayDate()} className="mt-2 px-3 py-1 border border-gray-300 shadow-md rounded-lg w-full md:w-auto" value={startDate} onChange={((e) => setStartDate(e.target.value))} />
                         </div>
                         <div className='w-full'>
                             <label className="text-sm font-medium">To Date</label>
-                            <input type="date" className="mt-2 px-3 py-1 shadow-md border border-gray-300 rounded-lg w-full md:w-auto" value={endDate} onChange={((e) => setEndDate(e.target.value))} />
+                            <input type="date" min={getTodayDate()} className="mt-2 px-3 py-1 shadow-md border border-gray-300 rounded-lg w-full md:w-auto" value={endDate} onChange={((e) => setEndDate(e.target.value))} />
                         </div>
 
                     </div>
