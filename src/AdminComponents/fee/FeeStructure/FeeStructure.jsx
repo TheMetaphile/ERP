@@ -7,7 +7,7 @@ import Header from './Header';
 function FeeStructure() {
 
     const [sessions, setSessions] = useState([]);
-    const [selectedSession, setSelectedSession] = useState('');
+    const [selectedSession, setSelectedSession] = useState(sessions[0]);
 
     useEffect(() => {
         const currentYear = new Date().getFullYear();

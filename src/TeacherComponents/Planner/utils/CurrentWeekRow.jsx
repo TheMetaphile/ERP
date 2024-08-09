@@ -10,8 +10,6 @@ function CurrentWeekRow({ details, index, mapId }) {
     const [editMode, setEditMode] = useState(null);
     const [editedData, setEditedData] = useState({});
     const [localUserData, setLocalUserData] = useState(details);
-    const [description, setDescription] = useState('');
-    const [status, setStatus] = useState('');
 
     const currentYear = new Date().getFullYear();
     const nextYear = currentYear + 1;
@@ -25,19 +23,21 @@ function CurrentWeekRow({ details, index, mapId }) {
     const handleConfirmEdit = async (index, id) => {
         try {
             const { description, status } = editedData;
-    
-            // Make the API call to update the data
-            const response = await axios.put(`${BASE_URL_Login}/lessonPlan/update/teacher/${formattedYear}/${mapId}/${id}`, { description, status }, {
+
+            // API call to update data
+            await axios.put(`${BASE_URL_Login}/lessonPlan/update/teacher/${formattedYear}/${mapId}/${id}`, { description, status }, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`,
                 },
             });
-    
-            // Update the local data immediately
-            const updatedData = { ...localUserData, description, status };
-            setLocalUserData(updatedData);
-            setDescription(description);
-            setStatus(status);
+
+            // Directly update local state with new data
+            setLocalUserData(prevData => ({
+                ...prevData,
+                description,
+                status
+            }));
+            
             toast.success('Status saved');
             setEditMode(null);
             setEditedData({});
@@ -114,10 +114,10 @@ function CurrentWeekRow({ details, index, mapId }) {
                     </>
                 ) : (
                     <div className='flex items-center gap-2'>
-                        {details.description ? (
-                            <>  {details.description}, {details.status}</>
+                        {localUserData.description ? (
+                            <>  {localUserData.description}, {localUserData.status}</>
                         ) : (
-                            <>{description}  {status}</>
+                            <>No data available</>
                         )}
                         <button
                             className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
@@ -125,8 +125,6 @@ function CurrentWeekRow({ details, index, mapId }) {
                         >
                             <MdOutlineModeEdit />
                         </button>
-                   
-
                     </div>
                 )}
             </td>

@@ -18,6 +18,13 @@ function CurrentWeekHODRow({ details, index }) {
             <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
                 {details.Activity}
             </td>
+            <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
+                {details.description ? (
+                    <>{details.description}, {details.status}</>
+                ) : (
+                    <>NA</>
+                )}
+            </td>
         </tr>
     )
 }

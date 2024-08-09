@@ -5,11 +5,12 @@ import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Fee } from "../../../Config";
 import Header from './feestructureheader.jsx';
 import QuarterFeeHeader from "./QuarterFeeHeader.jsx";
+import { usePaymentContext } from "./PaymentContext.jsx";
 
 export default function FeeStructureField({ fees, selectedOption }) {
     const [Razorpay] = useRazorpay();
     const { authState } = useContext(AuthContext);
-
+    const { setPaymentDetails } = usePaymentContext();
 
     const handlePayment = async (params) => {
         // const order = await createOrder(params); //  Create order on your backend
@@ -26,7 +27,7 @@ export default function FeeStructureField({ fees, selectedOption }) {
                 'email': 'bhanu68tyagi@gmail.com'
             },
             handler: function (response) {
-                const today=new Date();
+                const today = new Date();
                 const datee = new Date().toISOString().split('T')[0];
                 const email = authState.userDetails.email;
                 const installmentId = `${datee}-${email}`;
@@ -50,7 +51,7 @@ export default function FeeStructureField({ fees, selectedOption }) {
         const rzp1 = new Razorpay(options);
 
         rzp1.on("payment.failed", function (response) {
-            const today=new Date();
+            const today = new Date();
             const datee = new Date().toISOString().split('T')[0];
             const email = authState.userDetails.email;
             const installmentId = `${datee}-${email}`;
@@ -82,7 +83,11 @@ export default function FeeStructureField({ fees, selectedOption }) {
                     }
                 }
             );
-            console.log('Payment details posted successfully:', response.data);
+            if (response.status === 200) {
+                setPaymentDetails(paymentDetails);
+                console.log('Payment details posted and stored successfully:', response.data);
+            }
+
         } catch (error) {
             console.error('Error posting payment details:', error);
         }
@@ -99,11 +104,15 @@ export default function FeeStructureField({ fees, selectedOption }) {
                         fees.monthlyStatus.map((data, index) => (
                             <tbody key={index} className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
                                 <tr className=" w-full flex">
-                                    <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{data.month}</td>
-                                    <td className="text-gray-500 border-r w-28    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
-                                    <td className="text-gray-500 border-r w-24    border-gray-300 py-2 font-normal  text-center">{data.status}</td>
-                                    <td className=" w-36 text-center">
-                                        <button className=" my-2 mx-1 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer" onClick={() => handlePayment({ amount: data.amount, order_id: data.month, title: selectedOption })}>Pay</button>
+                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.month}</td>
+                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
+                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.status}</td>
+                                    <td className=" w-full text-center">
+                                        {data.status === 'Submitted' ? (
+                                            <>Paid</>
+                                        ) : (
+                                            <button className=" my-2 mx-1 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer" onClick={() => handlePayment({ amount: data.amount, order_id: data.month, title: selectedOption })}>Pay</button>
+                                        )}
                                     </td>
                                 </tr>
                             </tbody>
@@ -117,13 +126,17 @@ export default function FeeStructureField({ fees, selectedOption }) {
                         fees.quarterlyStatus.map((data, index) => (
                             <tbody key={index} className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
                                 <tr className=" w-full flex">
-                                    <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{data.months}</td>
-                                    <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{data.quarter}</td>
-                                    <td className="text-gray-500 border-r w-28    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
-                                    <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{data.pendingFee}</td>
-                                    <td className="text-gray-500 border-r w-24    border-gray-300 py-2 font-normal  text-center">{data.status}</td>
-                                    <td className=" w-36 text-center">
-                                        <button className=" my-2 mx-1 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer" onClick={() => handlePayment({ amount: data.pendingFee, order_id: data.quarter, title: selectedOption })}>Pay</button>
+                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center"> {data.months.join(', ')}</td>
+                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.quarter}</td>
+                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
+                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.pendingFee}</td>
+                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.status}</td>
+                                    <td className=" w-full text-center">
+                                        {data.status === 'Submitted' ? (
+                                            <>Paid</>
+                                        ) : (
+                                            <button className=" my-2 mx-1 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer" onClick={() => handlePayment({ amount: data.pendingFee, order_id: data.quarter, title: selectedOption })}>Pay</button>
+                                        )}
                                     </td>
                                 </tr>
                             </tbody>

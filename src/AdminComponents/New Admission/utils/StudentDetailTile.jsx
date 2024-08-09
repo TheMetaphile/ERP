@@ -59,12 +59,12 @@ export default function StudentDetailTile({ userData, Class }) {
                         {editMode === index ? (
                             <>
                                 <input
-                                    className="p-2 border border-gray-300 rounded-md ml-2"
+                                    className="p-2 border border-gray-300 rounded-md ml-2 w-24"
                                     id="section"
                                     type="text"
                                     value={selectedSection}
                                     onChange={(e) => setSelectedSection(e.target.value)}
-                                    placeholder="Enter Section"
+                                    placeholder="Section"
                                 />
 
                                 <button

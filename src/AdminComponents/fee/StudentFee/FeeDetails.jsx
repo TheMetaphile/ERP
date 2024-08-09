@@ -69,7 +69,7 @@ function FeeDetails() {
         console.log(selectedClass)
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/admin?class=${selectedClass}&start=${start}&end=${end}`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/admin?class=${selectedClass}&start=${start}&end=${end}&session=${selectedSession}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -167,9 +167,6 @@ function FeeDetails() {
                             Discount
                         </h1>
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Fine
-                        </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Paid
                         </h1>
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
@@ -200,19 +197,16 @@ function FeeDetails() {
                                                 {details.session}
                                             </h1>
                                             <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.totalfee}
+                                                {details.totalfee || 'NA'}
                                             </h1>
                                             <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.discountAmount}
                                             </h1>
                                             <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.fine}
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.paid}
                                             </h1>
                                             <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.payableFee}
+                                                {details.payableFee ||'NA'}
                                             </h1>
                                         </div>
                                     </Link>

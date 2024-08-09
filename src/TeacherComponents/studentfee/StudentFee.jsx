@@ -39,25 +39,33 @@ function StudentFee() {
         }
     }, [start, filter]);
 
+    const getCurrentSession = () => {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+        return currentMonth >= 3 ? `${currentYear}-${(currentYear + 1).toString().slice(-2)}` : `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
+    };
+
+    const session = getCurrentSession();
 
     const fetchDetails = async () => {
         setLoading(true);
         try {
             console.log(start, "-", end);
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/classTeacher?&start=${start}&end=${end}`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/classTeacher?&start=${start}&end=${end}&session=${session}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
             });
             if (response.status === 200) {
-                const output = response.data.output;
-                console.log("API response:", response.data.output);
+                const output = response.data.students;
+                console.log("API response:", response.data);
                 if (output < end) {
                     toast.success('All data fetched');
                     console.log('All data fetched')
                     setAllDataFetched(true);
                 }
-                setDetails(prevStudents => [...prevStudents, ...response.data.output]);
+                setDetails(prevStudents => [...prevStudents, ...response.data.students]);
             }
 
         } catch (err) {
@@ -80,7 +88,7 @@ function StudentFee() {
             </div>
             <div className=' overflow-auto'>
                 <div className='  rounded-lg border shadow-md border-gray-300 mobile:max-tablet:h-auto  w-full mobile:max-tablet:w-fit  overflow-x-auto'  >
-                    <Header headings={['Roll No.', 'Name', 'Total Fee', 'Fine', 'Discount', 'Paid', 'Payable', 'Pending']} />
+                    <Header headings={['Roll Number', 'Name', 'Total Fee', 'Discount', 'Paid', 'Payable', 'Pending']} />
 
                     {loading && details.length == 0 ? (
                         <Loading />
@@ -106,9 +114,6 @@ function StudentFee() {
                                                 </div>
                                                 <h1 className="w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.totalfee}
-                                                </h1>
-                                                <h1 className="w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                    {details.fine}
                                                 </h1>
                                                 <h1 className="w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.discountAmount}
@@ -145,9 +150,6 @@ function StudentFee() {
                                                     <h1 className="w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                         {details.totalfee}
                                                     </h1>
-                                                    <h1 className="w-40 text-lg mobile:max-tablet:w-28 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                        {details.fine}
-                                                    </h1>
                                                     <h1 className="w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                         {details.discountAmount}
                                                     </h1>
@@ -177,9 +179,6 @@ function StudentFee() {
                                                 </div>
                                                 <h1 className="w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.totalfee}
-                                                </h1>
-                                                <h1 className="w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                    {details.fine}
                                                 </h1>
                                                 <h1 className="w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.discountAmount}
