@@ -5,7 +5,7 @@ import Loading from '../../../LoadingScreen/Loading';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import CreateDiscount from './CreateDiscount';
-import { MdDeleteForever } from "react-icons/md";
+import { MdDeleteForever, MdAdd, MdRemove } from "react-icons/md";
 import { BASE_URL_Fee } from '../../../Config';
 
 function FeeDiscount() {
@@ -27,16 +27,13 @@ function FeeDiscount() {
     useEffect(() => {
         const currentYear = new Date().getFullYear();
         const newSessions = [];
-
         for (let i = 0; i < 5; i++) {
             const startYear = currentYear - i;
             const endYear = startYear + 1;
             newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
         }
-
         setSessions(newSessions);
     }, []);
-
 
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
@@ -53,12 +50,11 @@ function FeeDiscount() {
 
     useEffect(() => {
         if (start !== 0) {
-            fetchHomework();
+            fetchDiscount();
         }
     }, [start]);
 
     const fetchDiscount = async () => {
-        console.log(selectedClass);
         setLoading(true);
         try {
             const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/discount?end=${end}&start=${start}&class=${selectedClass}`, {
@@ -67,17 +63,13 @@ function FeeDiscount() {
                 }
             });
             if (response.status === 200) {
-
                 const data = response.data.length;
-                console.log("API response:", response.data);
                 if (data < end) {
                     toast.success('All data fetched');
-                    console.log('All data fetched')
                     setAllDataFetched(true);
                 }
                 setDetails(prevData => [...prevData, ...response.data]);
                 setLoading(false);
-
             }
         } catch (err) {
             console.log(err);
@@ -86,15 +78,12 @@ function FeeDiscount() {
     }
 
     const handleDelete = async (index, id) => {
-        console.log(id)
         try {
             const response = await axios.delete(`${BASE_URL_Fee}/fee/delete/discount?id=${id}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
-            }
-            );
-
+            });
             if (response.status === 200) {
                 const updatedDiscount = details.filter((_, i) => i !== index);
                 setDetails(updatedDiscount);
@@ -107,33 +96,29 @@ function FeeDiscount() {
     };
 
     return (
-        <div className="flex flex-col px-3 mobile:max-tablet:px-0  overflow-auto items-start mt-2  mb-3 ">
+        <div className="flex flex-col px-6 py-8 bg-gray-100 min-h-screen">
             <ToastContainer />
-            <div className='flex justify-between w-full items-center px-2 mobile:max-tablet:flex-col'>
-                <h1 className="text-2xl p-2 whitespace-nowrap mobile:max-tablet:text-xl mobile:max-tablet:w-full">Student Fee Discount</h1>
-                <div className='flex w-full justify-end gap-1 items-center mobile:max-tablet:flex-col'>
+            <div className='flex justify-between items-center mb-8 bg-white rounded-lg shadow-md p-6'>
+                <h1 className="text-3xl font-bold text-purple-700">Student Fee Discount</h1>
+                <div className='flex gap-4 items-center'>
                     <select
                         id="sessionSelector"
                         value={selectedSession}
                         onChange={handleChange}
-                        className="mx-4 border rounded-md w-fit py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2 mobile:max-tablet:w-full"
+                        className="border rounded-md py-2 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
                     >
                         {sessions.map((session, index) => (
-                            <option key={index} value={session}>
-                                {session}
-                            </option>
+                            <option key={index} value={session}>{session}</option>
                         ))}
                     </select>
-
                     <select
-                        className="mx-4 border rounded-md w-fit py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2 mobile:max-tablet:w-full"
                         id="Class"
                         name="Class"
                         value={selectedClass}
                         onChange={handleClassChange}
-                        required
+                        className="border rounded-md py-2 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
                     >
-                        <option value="" >Select Class</option>
+                        <option value="">Select Class</option>
                         <option value="Pre-Nursery">Pre-Nursery</option>
                         <option value="Nursery">Nursery</option>
                         <option value="L.K.G">L.K.G</option>
@@ -151,105 +136,80 @@ function FeeDiscount() {
                         <option value="11th">11th</option>
                         <option value="12th">12th</option>
                     </select>
-                    <h1
-                        className="text-lg h-fit py-1 px-2 text-center bg-purple-200 rounded-lg hover:cursor-pointer mobile:max-tablet:mt-2"
+                    <button
+                        className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${
+                            showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'
+                        }`}
                         onClick={() => setShowDiscountStructure(!showDiscountStructure)}
                     >
-                        {showDiscountStructure ? 'Cancel' : 'Add'}
-                    </h1>
+                        {showDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Add</>}
+                    </button>
                 </div>
-
             </div>
-
-
             <div className='w-full'>
-                {showDiscountStructure
-                    ? <CreateDiscount selectedSession={selectedSession}/>
-                    : <div></div>
-                }
-
-                <div className=' mt-4 w-full overflow-auto  border border-black rounded-lg'>
-                    <div className="px-2 flex justify-between w-fit py-2 text-center  bg-bg_blue  rounded-t-lg border border-b-2  whitespace-nowrap ">
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            RollNo.
-                        </h1>
-                        <h1 className="w-44 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Student Name
-                        </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Current Class
-                        </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Title
-                        </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Session
-                        </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Discount
-                        </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            By
-                        </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Employee ID
-                        </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Action
-                        </h1>
-                    </div>
-
-                    {loading ? (
-                        <Loading />
-                    ) : (
-                        details.length > 0 ? (
-                            <div>
-                                {details.map((details, index) => (
-                                    <div key={index} className='flex w-fit text-center justify-between items-center py-2 pl-2 h-fit border '>
-                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.to.rollNumber}
-                                        </h1>
-                                        <h1 className="w-44 text-lg items-center  mobile:max-tablet:text-sm mobile:max-tablet:font-sm flex whitespace-nowrap">
-                                            <img src={details.to.profileLink} alt="profileLink" className='h-10 w-10 rounded-full mr-3' />
-                                            {details.to.name}
-                                        </h1>
-                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.to.currentClass}
-                                        </h1>
-                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.field}
-                                        </h1>
-                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.session}
-                                        </h1>
-                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.percentage}
-                                        </h1>
-                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.by.name}
-                                        </h1>
-                                        <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.by.employeeId}
-                                        </h1>
-                                        <div className='w-36 text-lg flex items-center justify-center hover:cursor-pointer text-red-500 font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
-                                            <span>Delete</span>
-                                            <MdDeleteForever
-                                                className="text-red-500 hover:text-red-700 ml-2"
-                                                onClick={() => handleDelete(index, details._id)}
-                                            />
-                                        </div>
-
-                                    </div>
-                                ))}
-                                {!allDataFetched && (
-                                    <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                                )}
-                            </div>
-                        ) : (
-                            <div className='text-center mt-2'>No Fee Discount available</div>
-                        )
-                    )}
+                {showDiscountStructure && <CreateDiscount selectedSession={selectedSession} />}
+                <div className='mt-8 bg-white rounded-lg shadow-md overflow-hidden'>
+                    <table className="w-full">
+                        <thead className="bg-purple-600 text-white">
+                            <tr>
+                                <th className="py-3 px-4 text-left">Roll No.</th>
+                                <th className="py-3 px-4 text-left">Student Name</th>
+                                <th className="py-3 px-4 text-left">Current Class</th>
+                                <th className="py-3 px-4 text-left">Session</th>
+                                <th className="py-3 px-4 text-left">Discount</th>
+                                <th className="py-3 px-4 text-left">By</th>
+                                <th className="py-3 px-4 text-left">Employee ID</th>
+                                <th className="py-3 px-4 text-left">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loading ? (
+                                <tr>
+                                    <td colSpan="8" className="text-center py-4">
+                                        <Loading />
+                                    </td>
+                                </tr>
+                            ) : details.length > 0 ? (
+                                details.map((detail, index) => (
+                                    <tr key={index} className="border-b hover:bg-gray-100 transition duration-200">
+                                        <td className="py-3 px-4">{detail.to.rollNumber}</td>
+                                        <td className="py-3 px-4 flex items-center">
+                                            <img src={detail.to.profileLink} alt="profile" className="h-8 w-8 rounded-full mr-3" />
+                                            {detail.to.name}
+                                        </td>
+                                        <td className="py-3 px-4">{detail.to.currentClass}</td>
+                                        <td className="py-3 px-4">{detail.session}</td>
+                                        <td className="py-3 px-4">{detail.amount}</td>
+                                        <td className="py-3 px-4">{detail.by.name}</td>
+                                        <td className="py-3 px-4">{detail.by.employeeId}</td>
+                                        <td className="py-3 px-4">
+                                            <button
+                                                className="text-red-500 hover:text-red-700 transition duration-200"
+                                                onClick={() => handleDelete(index, detail._id)}
+                                            >
+                                                <MdDeleteForever size={20} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="8" className="text-center py-4">No Fee Discount available</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
+                {!allDataFetched && (
+                    <div className="text-center mt-4">
+                        <button
+                            className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-300"
+                            onClick={handleViewMore}
+                        >
+                            View More
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
