@@ -48,9 +48,10 @@ export default function FeeStatus() {
     return (
         details ?
             <div className='flex w-full justify-between border border-gray-300 shadow-md rounded-lg bg-teal-100 tablet:p-4 mobile:max-tablet:py-3  mobile:max-tablet:px-2  mobile:max-tablet:gap-1 '>
-                <FeeCard img={Payable} amount={details.payableFee} title='Total Payable' />
+                <FeeCard img={Payable} amount={details.total} title='Total Payable' />
                 <FeeCard img={Paid} amount={details.paid} title='Total Paid' />
-                <FeeCard img={Pending} amount={details.payableFee - details.paid} title='Pending' />
+                <FeeCard img={Paid} amount={details.discount} title='Total Discount' />
+                <FeeCard img={Pending} amount={details.total - details.discount - details.paid} title='Pending' />
             </div>
             :
             <Loading />

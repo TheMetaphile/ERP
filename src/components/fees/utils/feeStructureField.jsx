@@ -12,7 +12,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
     const { authState } = useContext(AuthContext);
     const { paymentDetails, setPaymentDetails } = usePaymentContext();
 
-
+console.log(fees);
 
     const handlePayment = async (params) => {
         // const order = await createOrder(params); //  Create order on your backend

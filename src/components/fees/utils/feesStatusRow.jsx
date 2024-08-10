@@ -4,11 +4,13 @@ import axios from 'axios'
 import Loading from "../../../LoadingScreen/Loading.jsx";
 import AuthContext from "../../../Context/AuthContext.jsx";
 import { BASE_URL_Fee } from "../../../Config.js";
+import { usePaymentContext } from "./PaymentContext.jsx";
 
 export default function FeeStatusRow() {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
+
 
     useEffect(() => {
         if (authState.accessToken) {
@@ -49,24 +51,24 @@ export default function FeeStatusRow() {
             ) : (
                 <>
                     <div className={`feeStatus tablet:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md rounded-lg border border-gray-400  flex flex-col items-center justify-center bg-yellow-200 flex-1`}>
-                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.totalfee}</h1>
+                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.total}</h1>
                         <p className="text-lg font-medium text-gray-600">Total Fees</p>
                     </div>
                     <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md border border-gray-400 rounded-lg  flex flex-col items-center justify-center bg-green-200 flex-1`}>
-                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.discountAmount}</h1>
+                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.discount}</h1>
                         <p className="text-lg font-medium text-gray-600">Discount</p>
                     </div>
-                    <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md border border-gray-400 rounded-lg  flex flex-col items-center justify-center bg-red-200 flex-1`}>
-                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.fine}</h1>
-                        <p className="text-lg font-medium text-gray-600">Fine</p>
+                    <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md rounded-lg  flex flex-col items-center justify-center border border-gray-400 bg-orange-200 flex-1`}>
+                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.total - details.discount}</h1>
+                        <p className="text-lg font-medium text-gray-500">Payable</p>
                     </div>
                     <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md rounded-lg  flex flex-col items-center justify-center border border-gray-400 bg-green-200 flex-1`}>
                         <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.paid}</h1>
                         <p className="text-lg font-medium text-gray-500">Paid</p>
                     </div>
                     <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md rounded-lg  flex flex-col items-center justify-center border border-gray-400 bg-orange-200 flex-1`}>
-                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.payableFee}</h1>
-                        <p className="text-lg font-medium text-gray-500">Payable</p>
+                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.total - details.discount - details.paid}</h1>
+                        <p className="text-lg font-medium text-gray-500">Pending</p>
                     </div>
                 </>
             )}

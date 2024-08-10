@@ -5,13 +5,17 @@ const PaymentContext = createContext();
 
 export const PaymentProvider = ({ children }) => {
     const [paymentDetails, setPaymentDetails] = useState(null);
+    const [statsDetails, setStatsDetails] = useState(null);
 
-    useEffect(()=>{
+
+    useEffect(() => {
         console.log(paymentDetails, "form context !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    },[paymentDetails]);
+        console.log(statsDetails, "form context !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
+    }, [paymentDetails, statsDetails]);
 
     return (
-        <PaymentContext.Provider value={{ paymentDetails, setPaymentDetails }}>
+        <PaymentContext.Provider value={{ paymentDetails, setPaymentDetails, statsDetails, setStatsDetails }}>
             {children}
         </PaymentContext.Provider>
     );
