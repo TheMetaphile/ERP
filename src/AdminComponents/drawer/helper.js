@@ -50,10 +50,10 @@ const menuItems = [
         text: "Admission Form",
         route: "/Admin-Dashboard/StudentsAddmissionForm",
       },
-      {
-        text: "Students Promotion",
-        route: "/Admin-Dashboard/StudentPromotion",
-      },
+      // {
+      //   text: "Students Promotion",
+      //   route: "/Admin-Dashboard/StudentPromotion",
+      // },
       {
         text: "Students Attendance",
         route: "/Admin-Dashboard/StudentAttendance",
@@ -85,14 +85,14 @@ const menuItems = [
         text: "Add New Teacher",
         route: "/Admin-Dashboard/AddTeachers",
       },
-      {
-        text: "Teachers Sallery",
-        route: "/Admin-Dashboard/TeachersSalary",
-      },
-      {
-        text: "Teachers Attendance",
-        route: "/Admin-Dashboard/TeachersAttendance",
-      },
+      // {
+      //   text: "Teachers Sallery",
+      //   route: "/Admin-Dashboard/TeachersSalary",
+      // },
+      // {
+      //   text: "Teachers Attendance",
+      //   route: "/Admin-Dashboard/TeachersAttendance",
+      // },
     ],
   },
   {
@@ -224,13 +224,13 @@ const menuItems = [
     route: "/Admin-Dashboard/weekplan",
     children: [],
   },
-  {
-    image: leaveImage,
-    alt: "img",
-    title: "Appraisal",
-    route: "/Admin-Dashboard/appraisal",
-    children: [],
-  },
+  // {
+  //   image: leaveImage,
+  //   alt: "img",
+  //   title: "Appraisal",
+  //   route: "/Admin-Dashboard/appraisal",
+  //   children: [],
+  // },
   {
     image: leaveImage,
     alt: "img",

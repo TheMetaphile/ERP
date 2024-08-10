@@ -8,14 +8,27 @@ import CreateDiscount from './CreateDiscount';
 import { MdDeleteForever, MdAdd, MdRemove } from "react-icons/md";
 import { BASE_URL_Fee } from '../../../Config';
 
+const getSessions = () => {
+    const currentYear = new Date().getFullYear();
+    const newSessions = [];
+
+    for (let i = 0; i < 5; i++) {
+        const startYear = currentYear - i;
+        const endYear = startYear + 1;
+        newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
+    }
+
+    return newSessions;
+}
+
 function FeeDiscount() {
     const [selectedClass, setSelectedClass] = useState("9th");
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const { authState } = useContext(AuthContext);
     const [showDiscountStructure, setShowDiscountStructure] = useState(false);
-    const [sessions, setSessions] = useState([]);
-    const [selectedSession, setSelectedSession] = useState(sessions[0]);
+    const session = getSessions();
+    const [selectedSession, setSelectedSession] = useState(session[0]);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
     const [allDataFetched, setAllDataFetched] = useState(false);
@@ -24,22 +37,15 @@ function FeeDiscount() {
         setSelectedClass(e.target.value);
         setShowDiscountStructure(false);
     };
-    useEffect(() => {
-        const currentYear = new Date().getFullYear();
-        const newSessions = [];
-        for (let i = 0; i < 5; i++) {
-            const startYear = currentYear - i;
-            const endYear = startYear + 1;
-            newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
-        }
-        setSessions(newSessions);
-    }, []);
 
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
     };
     useEffect(() => {
         if (selectedClass !== "" && selectedSession !== "") {
+            setDetails([]);
+            setStart(0);
+            setAllDataFetched(false);
             fetchDiscount();
         }
     }, [selectedClass, selectedSession]);
@@ -96,18 +102,18 @@ function FeeDiscount() {
     };
 
     return (
-        <div className="flex flex-col px-6 py-8 bg-gray-100 min-h-screen">
+        <div className="flex flex-col px-3 bg-gray-100 min-h-screen">
             <ToastContainer />
-            <div className='flex justify-between items-center mb-8 bg-white rounded-lg shadow-md p-6'>
-                <h1 className="text-3xl font-bold text-purple-700">Student Fee Discount</h1>
+            <div className='flex justify-between items-center'>
+                <h1 className="text-2xl p-2">Student Fee Discount</h1>
                 <div className='flex gap-4 items-center'>
                     <select
                         id="sessionSelector"
                         value={selectedSession}
                         onChange={handleChange}
-                        className="border rounded-md py-2 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                        className="border rounded-md py-2 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-secondary transition duration-300"
                     >
-                        {sessions.map((session, index) => (
+                        {session.map((session, index) => (
                             <option key={index} value={session}>{session}</option>
                         ))}
                     </select>
@@ -116,7 +122,7 @@ function FeeDiscount() {
                         name="Class"
                         value={selectedClass}
                         onChange={handleClassChange}
-                        className="border rounded-md py-2 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                        className="border rounded-md py-2 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-secondary transition duration-300"
                     >
                         <option value="">Select Class</option>
                         <option value="Pre-Nursery">Pre-Nursery</option>
@@ -137,9 +143,8 @@ function FeeDiscount() {
                         <option value="12th">12th</option>
                     </select>
                     <button
-                        className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${
-                            showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'
-                        }`}
+                        className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'
+                            }`}
                         onClick={() => setShowDiscountStructure(!showDiscountStructure)}
                     >
                         {showDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Add</>}
@@ -148,9 +153,9 @@ function FeeDiscount() {
             </div>
             <div className='w-full'>
                 {showDiscountStructure && <CreateDiscount selectedSession={selectedSession} />}
-                <div className='mt-8 bg-white rounded-lg shadow-md overflow-hidden'>
+                <div className='mt-8 bg-white border border-black rounded-lg shadow-md overflow-hidden'>
                     <table className="w-full">
-                        <thead className="bg-purple-600 text-white">
+                        <thead className="bg-bg_blue">
                             <tr>
                                 <th className="py-3 px-4 text-left">Roll No.</th>
                                 <th className="py-3 px-4 text-left">Student Name</th>

@@ -1,72 +1,75 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import { MdDeleteForever } from "react-icons/md";
 import AuthContext from '../../../Context/AuthContext';
 import Loading from '../../../LoadingScreen/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { BASE_URL_Fee } from '../../../Config';
+import { MdCheck, MdCancel, MdOutlineModeEdit } from 'react-icons/md';
 
-export default function FeeAdminRow({ Class, session }) {
-    const [expanded, setExpanded] = useState(false);
-    const [structure, setStructure] = useState([])
+export default function FeeAdminRow({ Class, session, key }) {
+    const [structure, setStructure] = useState([]);
     const [loading, setLoading] = useState(false);
     const { authState } = useContext(AuthContext);
-    const [showNewRow, setShowNewRow] = useState(false);
-    const [newTitle, setNewTitle] = useState('');
-    const [newAmount, setNewAmount] = useState('');
-    const [newDeadline, setNewDeadline] = useState('');
+    const [admissionFee, setAdmissionFee] = useState('');
+    const [monthlyFee, setMonthlyFee] = useState('');
+    const [quarterFee, setQuarterFee] = useState('');
+    const [editMode, setEditMode] = useState(null);
 
-    // Fetch data based on queryParams
-
-    const handleClick = () => {
-        setExpanded(!expanded);
+    const handleEditToggle = (index) => {
+        setEditMode(index);
     };
 
     useEffect(() => {
-        if (expanded) {
-            setLoading(true);
-            console.log(session);
-            fetchStructure();
-        }
-    }, [expanded, session]);
+        setLoading(true);
+        fetchStructure();
+    }, [session]);
 
     const fetchStructure = async () => {
-        console.log(Class)
+        const classs = getClassNames(Class);
+        const stream = getStream(Class);
         try {
             const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/structure?class=${Class}&session=${session}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
             });
+
             if (response.status === 200) {
-                console.log("API response:", response.data);
-                setStructure(response.data.feeStructure || []);
+                const feeStructure = response.data.feeStructure || [];
+                setStructure(feeStructure);
+                console.log(response.data);
+                const currentStructure = feeStructure.find(item => item.class.includes(classs[0]));
+                if (currentStructure) {
+                    setAdmissionFee(currentStructure.admissionFee);
+                    setMonthlyFee(currentStructure.monthlyfee);
+                    setQuarterFee(currentStructure.quarterFee);
+                }
                 setLoading(false);
             }
-
         } catch (err) {
-            console.log(err);
+            console.error(err);
             setLoading(false);
             setStructure([]);
         }
     };
 
-    const handleAddStructure = async () => {
-        const structure = [
-            {
-                title: newTitle,
-                amount: newAmount,
-                deadline: newDeadline
-            }
-        ];
-        console.log(structure)
+    const handleCancelEdit = () => {
+        setEditMode(null);
+    };
+
+    const handleConfirmEdit = async () => {
+        const classs = getClassNames(Class);
+        const stream = getStream(Class);
 
         try {
             const response = await axios.post(`${BASE_URL_Fee}/fee/create/structure`, {
-                class: Class,
-                session: '2023-24',
-                structure: structure
+                class: classs,
+                session: session,
+                admissionFee: admissionFee,
+                monthlyfee: monthlyFee,
+                quarterFee: quarterFee,
+                stream: stream
             }, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
@@ -74,158 +77,122 @@ export default function FeeAdminRow({ Class, session }) {
             });
 
             if (response.status === 200) {
-                toast.success('Structure added successfully');
-                fetchStructure();
-                setShowNewRow(false);
-                setNewTitle('');
-                setNewAmount('');
-                setNewDeadline('');
+                const updatedStructure = response.data.feeStructure; 
+                setStructure(prevStructure => 
+                    prevStructure.map(item => 
+                        item.class.includes(classs[0]) ? { ...item, admissionFee, monthlyfee: monthlyFee, quarterFee } : item
+                    )
+                );
+                toast.success('Structure updated successfully');
+                setEditMode(null);
             }
         } catch (error) {
-            toast.error('Error adding structure');
+            toast.error('Error updating structure');
+            console.error(error);
         }
     };
 
+    const getClassNames = (className) => {
+        switch (className) {
+            case 'Pre-Nursery-U.K.G':
+                return ['Pre-Nursery', 'L.K.G', 'U.K.G'];
+            case '1st-5th':
+                return ['1st', '2nd', '3rd', '4th', '5th'];
+            case '6th-8th':
+                return ['6th', '7th', '8th'];
+            case '9th-10th':
+                return ['9th', '10th'];
+            case '11th-12th Commerce':
+                return ['11th', '12th'];
+            case '11th-12th Science':
+                return ['11th', '12th'];
+            default:
+                return [];
+        }
+    };
 
-    const handleDelete = async (index, id) => {
-        console.log(Class,authState.accessToken)
-        console.log(id)
-        try {
-            const response = await axios.delete(`${BASE_URL_Fee}/fee/delete/structure`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
-                    },
-                    data: {
-                        class: Class,
-                        session: session,
-                        structureId: id
-                    }
-                }
-            );
-
-            if (response.status === 200) {
-                const updatedStructure = structure.filter((_, i) => i !== index);
-                setStructure(updatedStructure);
-                toast.success('Structure Deleted Successfully');
-            }
-        } catch (error) {
-            console.error("Error deleting Structure:", error);
-            toast.error('Error deleting Structure');
+    const getStream = (className) => {
+        switch (className) {
+            case '11th-12th Commerce':
+                return 'Commerce';
+            case '11th-12th Science':
+                return 'Science';
+            default:
+                return 'General';
         }
     };
 
     return (
-        <div key={Class} className="w-full mb-4  border border-gray-300 px-4 pb-2 rounded-lg mt-2 shadow-md  overflow-auto">
-            <div className="flex justify-between items-center p-2 hover:cursor-pointer" onClick={handleClick}>
-                <div className="w-1/4">
-                    <div className="px-3 py-2 whitespace-nowrap">
-                        {Class}
-                    </div>
-                </div>
-                <div className="self-center cursor-pointer">
-                    {expanded ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-            </div>
-
-            {expanded && (
-                <div className=' overflow-auto '>
-                    <div className=' mt-2 mobile:max-tablet:w-fit w-full overflow-x-auto no-scrollbar border border-black rounded-lg'>
-                        <div className="flex justify-between px-2 py-2 text-center bg-bg_blue  rounded-t-lg border border-b-2  whitespace-nowrap">
-                            <h1 className="w-40 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                                Title
-                            </h1>
-                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                                Deadline
-                            </h1>
-                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                                Amount
-                            </h1>
-                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                                Action
-                            </h1>
-
-                        </div>
-
-                        {loading ? (
-                            <Loading />
-                        ) : (
-                            structure.length > 0 ? (
-                                <div>
-                                    {structure.map((details, index) => (
-                                        <div key={index} className='flex text-center justify-between w-full py-2 pl-2 h-fit border '>
-                                            <h1 className="w-40 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.title}
-                                            </h1>
-                                            <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.deadline}
-                                            </h1>
-                                            <h1 className="w-36 text-lg  mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.amount}
-                                            </h1>
-                                            <div className='w-36 text-lg flex items-center justify-center hover:cursor-pointer text-red-500 font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
-                                                <span>Delete</span>
-                                                <MdDeleteForever
-                                                    className="text-red-500 hover:text-red-700 ml-2"
-                                                    onClick={() => handleDelete(index, details._id)}
-                                                />
-                                            </div>
-
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className='text-center'>No structure added</div>
-                            )
-                        )}
-
-                        {showNewRow && (
-                            <div className="flex justify-between w-full py-2 pl-2 h-fit ">
-                                <input
-                                    type="text"
-                                    className="w-36 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm"
-                                    placeholder="Title"
-                                    value={newTitle}
-                                    onChange={(e) => setNewTitle(e.target.value)}
-                                    required
-                                />
-                                <input
-                                    type="text"
-                                    className="w-36 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm"
-                                    placeholder="Deadline"
-                                    value={newDeadline}
-                                    onChange={(e) => setNewDeadline(e.target.value)}
-                                    required
-                                />
-                                <input
-                                    type="number"
-                                    className="w-36 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm"
-                                    placeholder="Amount"
-                                    value={newAmount}
-                                    onChange={(e) => setNewAmount(e.target.value)}
-                                    required
-                                />
-                                <button
-                                    className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md"
-                                    onClick={handleAddStructure}
-                                >
-                                    Add
-                                </button>
-                            </div>
-                        )}
-
-                        <div className="flex justify-center w-full px-3 py-1 h-fit">
-                            <button
-                                className='mt-2 px-4 py-2 bg-green-400 hover:bg-green-500 text-white rounded-lg'
-                                onClick={() => setShowNewRow(true)}
-                            >
-                                Add structure
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+        <tr key={key} className="border-b border-gray-300">
+            <td className="px-4 py-2 whitespace-nowrap">{Class}</td>
+            <td className="px-4 py-2 whitespace-nowrap">
+                {editMode === key ? (
+                    <input
+                        className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
+                        id="admissionFee"
+                        type="text"
+                        value={admissionFee}
+                        onChange={(e) => setAdmissionFee(e.target.value)}
+                        required
+                    />
+                ) : (
+                    admissionFee || 'N/A'
+                )}
+            </td>
+            <td className="px-4 py-2 whitespace-nowrap">
+                {editMode === key ? (
+                    <input
+                        className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
+                        id="monthlyFee"
+                        type="text"
+                        value={monthlyFee}
+                        onChange={(e) => setMonthlyFee(e.target.value)}
+                        required
+                    />
+                ) : (
+                    monthlyFee || 'N/A'
+                )}
+            </td>
+            <td className="px-4 py-2 whitespace-nowrap">
+                {editMode === key ? (
+                    <input
+                        className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
+                        id="quarterFee"
+                        type="text"
+                        value={quarterFee}
+                        onChange={(e) => setQuarterFee(e.target.value)}
+                        required
+                    />
+                ) : (
+                    quarterFee || 'N/A'
+                )}
+            </td>
+            
+            <td className="px-4 py-2 whitespace-nowrap">
+                {editMode === key ? (
+                    <>
+                        <button
+                            className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                            onClick={handleConfirmEdit}
+                        >
+                            <MdCheck />
+                        </button>
+                        <button
+                            className="bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                            onClick={handleCancelEdit}
+                        >
+                            <MdCancel />
+                        </button>
+                    </>
+                ) : (
+                    <button
+                        className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md"
+                        onClick={() => handleEditToggle(key)}
+                    >
+                        <MdOutlineModeEdit />
+                    </button>
+                )}
+            </td>
+        </tr>
     );
 }
-

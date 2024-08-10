@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Fee } from "../../../../Config";
 
-function StudentDetails() {
+function StudentDetails({ selectedOption }) {
   const { id } = useParams();
   const location = useLocation();
   const { authState } = useContext(AuthContext);
@@ -43,20 +43,19 @@ function StudentDetails() {
   const fetchFees = async () => {
 
     try {
-      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student/detailedFee?email=${id}&date=${formattedDate}`, {
+      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student/detailedFee?email=${id}&session=${session}`, {
         headers: {
           'Authorization': `Bearer ${authState.accessToken}`
         }
       });
-      const total = response.data.feeStructure.reduce((acc, fee) => acc + parseFloat(fee.payableAmount), 0);
-      console.log(total)
-      setTotalAmount(total)
+
       console.log("API response fees:", response.data);
-      setFees(response.data.feeStructure);
+      setFees(response.data);
 
     }
     catch (error) {
       const errorMessage = error.response?.data?.error || 'An error occurred';
+      console.log(error)
       toast.error(errorMessage);
     }
     finally {
@@ -70,20 +69,15 @@ function StudentDetails() {
   };
 
   return (
-    <div className="w-full h-fit mb-4  rounded-lg shadow-md overflow-auto border border-gray-300">
+    <div className="w-full h-fit mb-4 mt-3 rounded-lg shadow-md overflow-auto border border-gray-300">
       <table className=" w-full">
-        <Header />
         {loading ? (
           <Loading />
         ) : fees.length === 0 ? (
           <div className='text-center'>No data available</div>
         ) : (
           <div className="">
-            <FeeStructureField fees={fees.slice(0, visibleCount)} />
-            {visibleCount < fees.length && (
-              <button onClick={handleViewMore} className="w-full text-blue-500 text-center py-2">View More</button>
-            )}
-            <FeeStructureFooter totalAmount={totalAmount} />
+            <FeeStructureField fees={fees} selectedOption={selectedOption} setFees={setFees}/>
           </div>
         )}
       </table>

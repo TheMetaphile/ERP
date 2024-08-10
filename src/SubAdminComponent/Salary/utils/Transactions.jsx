@@ -5,6 +5,19 @@ import Loading from "../../../LoadingScreen/Loading";
 import { ToastContainer, toast } from "react-toastify";
 import { BASE_URL_Fee } from "../../../Config";
 
+const getSessions = () => {
+    const currentYear = new Date().getFullYear();
+    const newSessions = [];
+
+    for (let i = 0; i < 5; i++) {
+        const startYear = currentYear - i;
+        const endYear = startYear + 1;
+        newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
+    }
+
+    return newSessions;
+}
+
 
 const Transactions = ({ transactions }) => {
     const { authState } = useContext(AuthContext);
@@ -15,6 +28,13 @@ const Transactions = ({ transactions }) => {
     const [end, setEnd] = useState(5);
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [clickedIndex, setClickedIndex] = useState(null);
+
+    const session = getSessions();
+    const [selectedSession, setSelectedSession] = useState(session[0]);
+
+    const handleChange = (event) => {
+        setSelectedSession(event.target.value);
+    };
 
     const handleClick = (index) => {
         setClickedIndex(index);
@@ -29,7 +49,7 @@ const Transactions = ({ transactions }) => {
 
     useEffect(() => {
         fetchTransaction();
-    }, [authState.accessToken, status]);
+    }, [authState.accessToken, status, selectedSession]);
 
     const handleViewMore = () => {
         setStart(prevStart => prevStart + end);
@@ -43,10 +63,10 @@ const Transactions = ({ transactions }) => {
 
     const fetchTransaction = async () => {
         setLoading(true);
-        console.log(start, 'start', end, 'end')
+        console.log(start, 'start', end, 'end',status)
 
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/allTransactions?start=${start}&end=${end}&status=${status}`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/allTransactions?start=${start}&end=${end}&status=${status}&session=${selectedSession}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -85,6 +105,18 @@ const Transactions = ({ transactions }) => {
                     <option value="Failed">Failed</option>
                 </select>
 
+                <select
+                    id="sessionSelector"
+                    value={selectedSession}
+                    onChange={handleChange}
+                    className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200  mr-3 "
+                >
+                    {session.map((session, index) => (
+                        <option key={index} value={session}>
+                            {session}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div className=" overflow-x-auto">
                 <table className="w-full border-collapse whitespace-nowrap">

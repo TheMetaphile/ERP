@@ -7,15 +7,21 @@ import TransactionField from "./TransactionField.jsx";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Fee } from "../../../../Config.js";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 export default function TransactionRow() {
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false)
     const { id } = useParams();
+    const location = useLocation();
 
-
+    const useQuery = () => {
+        return new URLSearchParams(location.search);
+      }
+    
+      const query = useQuery();
+      const session = query.get('session');
     useEffect(() => {
         if (authState.accessToken) {
             setLoading(true);
@@ -27,7 +33,7 @@ export default function TransactionRow() {
 
     const fetchTransaction = async () => {
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/particularStudent/transactions?email=${id}`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/particularStudent/transactions?email=${id}&session=${session}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }

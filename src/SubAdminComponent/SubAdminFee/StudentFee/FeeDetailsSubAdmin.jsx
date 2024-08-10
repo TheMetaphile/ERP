@@ -7,13 +7,27 @@ import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Fee } from '../../../Config';
 import { Link, Outlet } from 'react-router-dom';
 
+const getSessions = () => {
+    const currentYear = new Date().getFullYear();
+    const newSessions = [];
+
+    for (let i = 0; i < 5; i++) {
+        const startYear = currentYear - i;
+        const endYear = startYear + 1;
+        newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
+    }
+
+    return newSessions;
+}
+
 function FeeDetailsSubAdmin() {
     const [selectedClass, setSelectedClass] = useState("9th");
+    const [section, setSelectedSection] = useState("A");
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([])
     const { authState } = useContext(AuthContext);
-    const [sessions, setSessions] = useState([]);
-    const [selectedSession, setSelectedSession] = useState(sessions[1]);
+    const session = getSessions();
+    const [selectedSession, setSelectedSession] = useState(session[0]);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(9);
     const [allDataFetched, setAllDataFetched] = useState(false);
@@ -31,29 +45,27 @@ function FeeDetailsSubAdmin() {
         setStart(0);
     };
 
+    const handleSectionChange = (e) => {
+        setDetails([]);
+        setAllDataFetched(false);
+        setSelectedSection(e.target.value);
+        setStart(0);
+    };
 
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
     };
 
-    useEffect(() => {
-        const currentYear = new Date().getFullYear();
-        const newSessions = [];
 
-        for (let i = 0; i < 5; i++) {
-            const startYear = currentYear - i;
-            const endYear = startYear + 1;
-            newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
-        }
 
-        setSessions(newSessions);
-    }, []);
+
+
 
     useEffect(() => {
-        if (selectedClass !== "") {
+        if (selectedClass !== "" && selectedSession !== "" && section !== "") {
             fetchDetails();
         }
-    }, [selectedClass]);
+    }, [selectedClass, selectedSession, section]);
 
     const handleViewMore = () => {
         setStart(prevStart => prevStart + end);
@@ -66,10 +78,10 @@ function FeeDetailsSubAdmin() {
     }, [start]);
 
     const fetchDetails = async () => {
-        console.log(selectedClass)
+        console.log(selectedClass, selectedSession)
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/admin?class=${selectedClass}&start=${start}&end=${end}`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/admin?class=${selectedClass}&start=${start}&end=${end}&session=${selectedSession}&section=${section}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -108,7 +120,7 @@ function FeeDetailsSubAdmin() {
                         onChange={handleChange}
                         className="mobile:max-tablet:mx-4 border rounded-md w-fit mobile:max-tablet:px-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
                     >
-                        {sessions.map((session, index) => (
+                        {session.map((session, index) => (
                             <option key={index} value={session}>
                                 {session}
                             </option>
@@ -125,8 +137,8 @@ function FeeDetailsSubAdmin() {
                         <option value="" >Select Class</option>
                         <option value="Pre-Nursery">Pre-Nursery</option>
                         <option value="Nursery">Nursery</option>
-                        <option value="L.K.J">L.K.J</option>
-                        <option value="U.K.J">U.K.J</option>
+                        <option value="L.K.G">L.K.G</option>
+                        <option value="U.K.G">U.K.G</option>
                         <option value="1st">1st</option>
                         <option value="2nd">2nd</option>
                         <option value="3rd">3rd</option>
@@ -142,6 +154,20 @@ function FeeDetailsSubAdmin() {
 
                     </select>
 
+                    <select
+                        className="mobile:max-tablet:mx-4 border rounded-md w-fit  px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
+                        id="Section"
+                        name="Section"
+                        value={section}
+                        onChange={handleSectionChange}
+                        required
+                    >
+                        <option value="" >Select Section</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+
+                    </select>
                 </div>
             </div>
 
@@ -165,9 +191,6 @@ function FeeDetailsSubAdmin() {
                         </h1>
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Discount
-                        </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Fine
                         </h1>
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Paid
@@ -234,6 +257,8 @@ function FeeDetailsSubAdmin() {
         </div>
     );
 }
+
+
 
 export default FeeDetailsSubAdmin;
 

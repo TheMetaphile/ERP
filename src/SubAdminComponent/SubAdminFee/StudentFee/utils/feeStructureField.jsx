@@ -4,8 +4,10 @@ import axios from 'axios';
 import AuthContext from "../../../../Context/AuthContext";
 import { BASE_URL_Fee } from "../../../../Config";
 import { useLocation, useParams } from "react-router-dom";
+import FeeStructureHeader from "../../../../components/fees/utils/feestructureheader";
+import QuarterFeeHeader from "../../../../components/fees/utils/QuarterFeeHeader";
 
-export default function FeeStructureField({ fees }) {
+export default function FeeStructureField({ fees, selectedOption, setFees }) {
     const [Razorpay] = useRazorpay();
     const { authState } = useContext(AuthContext);
     const [mode, setMode] = useState('');
@@ -19,7 +21,7 @@ export default function FeeStructureField({ fees }) {
     const handleClick = (index) => {
         setClickedIndex(index);
     };
-    
+
     const useQuery = () => {
         return new URLSearchParams(location.search);
     }
@@ -41,10 +43,10 @@ export default function FeeStructureField({ fees }) {
 
         if (mode === 'Online') {
             const options = {
-                'key': 'rzp_live_GFqD7mHBThythU',
-                'amount': selectedStudent.payableAmount * 100,
+                'key': 'rzp_test_nNousIIsoO34Lz',
+                'amount': selectedStudent.amount * 100,
                 'name': 'METAPHILE',
-                'description': selectedStudent.title,
+                'description': selectedOption,
                 'retry': { 'enabled': true, 'max_count': 1 },
                 'send_sms_hash': true,
                 'prefill': {
@@ -52,18 +54,18 @@ export default function FeeStructureField({ fees }) {
                     'email': 'bhanu68tyagi@gmail.com'
                 },
                 handler: function (response) {
+                    const today = new Date();
                     const datee = new Date().toISOString().split('T')[0];
                     const installmentId = `${datee}-${id}`;
                     console.log(response, 'success online', datee, id, installmentId)
 
                     postPaymentDetails({
-                        email: id, 
-                        amount: selectedStudent.payableAmount,
-                        date: datee,
+                        email: id,
+                        amount: selectedStudent.amount,
+                        date: today,
                         status: "Success",
-                        doc_id: selectedStudent.deadline,
-                        installment_id: installmentId, 
-                        order_id: "NA",
+                        installment_id: installmentId,
+                        order_id: selectedStudent.month,
                         payment_id: response.razorpay_payment_id,
                         signature: "Online"
                     });
@@ -75,18 +77,19 @@ export default function FeeStructureField({ fees }) {
             const rzp1 = new Razorpay(options);
 
             rzp1.on("payment.failed", function (response) {
+                const today = new Date();
+
                 const datee = new Date().toISOString().split('T')[0];
                 const installmentId = `${datee}-${id}`;
                 console.log(response, 'fail online', datee, id, installmentId);
 
                 postPaymentDetails({
-                    email: id, 
+                    email: id,
                     amount: selectedStudent.payableAmount,
-                    date: datee,
+                    date: today,
                     status: "Failed",
-                    doc_id: selectedStudent.deadline,
-                    installment_id: installmentId, 
-                    order_id: "NA",
+                    installment_id: installmentId,
+                    order_id: selectedStudent.month,
                     payment_id: response.error.metadata.payment_id,
                     signature: "Online"
                 });
@@ -95,43 +98,44 @@ export default function FeeStructureField({ fees }) {
             rzp1.open();
         }
         else if (mode === 'Cash') {
+            const today = new Date();
+
             const datee = new Date().toISOString().split('T')[0];
             const installmentId = `${datee}-${id}`;
             console.log('normal', datee, id, installmentId);
 
             postPaymentDetails({
                 email: id,
-                amount: selectedStudent.payableAmount,
-                date: datee,
+                amount: selectedStudent.amount,
+                date: today,
                 status: "Success",
-                doc_id: selectedStudent.deadline,
                 installment_id: installmentId,
-                order_id: "NA",
+                order_id: selectedStudent.month,
                 payment_id: 'Cash',
                 signature: mode
             });
         }
         else {
-            if(!docId){
+            if (!docId) {
                 alert('Fill Doc Id First');
             }
-            else{
+            else {
+                const today = new Date();
                 const datee = new Date().toISOString().split('T')[0];
                 const installmentId = `${datee}-${id}`;
                 console.log('normal', datee, id, installmentId);
-    
+
                 postPaymentDetails({
                     email: id,
-                    amount: selectedStudent.payableAmount,
-                    date: datee,
+                    amount: selectedStudent.amount,
+                    date: today,
                     status: "Success",
-                    doc_id: selectedStudent.deadline,
                     installment_id: installmentId,
-                    order_id: "NA",
+                    order_id: selectedStudent.month,
                     payment_id: docId,
                     signature: mode
                 });
-            }     
+            }
         }
     };
 
@@ -158,35 +162,94 @@ export default function FeeStructureField({ fees }) {
 
     return (
         <>
-            {
-                fees.map((data, index) => (
-                    <tbody key={index} className={`w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ${clickedIndex === index ? 'bg-purple-200' : ''}`} onClick={() => handleClick(index)}>
-                        <tr className=" w-full flex justify-between">
-                            <td className="text-gray-500 border-r w-24  border-gray-300 py-2 font-normal  text-center my-2">{index + 1}</td>
-                            <td className="text-gray-500 border-r w-64  border-gray-300 py-2 font-normal  text-center my-2">{data.title}</td>
-                            <td className="text-gray-500 border-r w-28  border-gray-300 py-2 font-normal  text-center my-2">{data.session}</td>
-                            <td className="text-gray-500 border-r w-28  border-gray-300 py-2 font-normal  text-center my-2">{data.amount}</td>
-                            <td className="text-gray-500 border-r w-20  border-gray-300 py-2 font-normal  text-center my-2">{data.discount}</td>
-                            <td className="text-gray-500 border-r w-60  border-gray-300 py-2 font-normal  text-center my-2">{data.payableAmount}</td>
-                            <td className="text-gray-500 border-r w-36  border-gray-300 py-2 font-normal  text-center my-2">{data.deadline}</td>
-                            <td className="text-gray-500 border-r w-24  border-gray-300 py-2 font-normal  text-center my-2">{data.status}</td>
+            {selectedOption === 'monthlyfee' ? (
+                <>
+                    <FeeStructureHeader />
+                    {fees.monthlyStatus.map((data, index) => (
+                        <tbody key={index} className={`w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
+                            <tr className=" w-full flex ">
+                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">{data.month}</td>
+                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">{data.amount}</td>
+                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">{data.discountApplied}</td>
+                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">{data.status}</td>
 
-                            <select
-                                className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-full bg-secondary py-2 my-2 mx-2"
-                                value={mode}
-                                onChange={(e) => handleModeChange(e, data)}
-                            >
-                                <option value="none">None</option>
-                                <option value="Cash">Cash</option>
-                                <option value="Online">Online</option>
-                                <option value="RTGS">RTGS</option>
-                                <option value="Cheque">Cheque</option>
-                                <option value="Demand Draft">Demand Draft</option>
-                            </select>
-                        </tr>
-                    </tbody>
-                ))
-            }
+                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">
+
+                                    {data.status === 'Submitted' ? (
+                                        <>Paid</>
+                                    ) : (
+                                        <select
+                                            className=" text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-full bg-aquamarine py-2"
+                                            value={mode}
+                                            onChange={(e) => handleModeChange(e, data)}
+                                        >
+                                            <option value="none">None</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="Online">Online</option>
+                                            <option value="RTGS">RTGS</option>
+                                            <option value="Cheque">Cheque</option>
+                                            <option value="Demand Draft">Demand Draft</option>
+                                        </select>
+                                    )}
+                                </td>
+                            </tr>
+                        </tbody>
+                    ))}
+                </>
+            ) : selectedOption === 'quarterFee' ? (
+                <>
+                    <QuarterFeeHeader />
+                    {
+                        fees.quarterlyStatus.map((data, index) => (
+                            <tbody key={index} className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
+                                <tr className=" w-full flex">
+                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center"> {data.months.join(', ')}</td>
+                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.quarter}</td>
+                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
+                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.discountApplied}</td>
+                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.pendingFee}</td>
+                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.status}</td>
+                                    <td className=" w-full text-center">
+                                        {data.status === 'Submitted' ? (
+                                            <>Paid</>
+                                        ) : (
+                                            <select
+                                                className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-full bg-aquamarine py-2 my-2 mx-2"
+                                                value={mode}
+                                                onChange={(e) => handleModeChange(e, data)}
+                                            >
+                                                <option value="none">None</option>
+                                                <option value="Cash">Cash</option>
+                                                <option value="Online">Online</option>
+                                                <option value="RTGS">RTGS</option>
+                                                <option value="Cheque">Cheque</option>
+                                                <option value="Demand Draft">Demand Draft</option>
+                                            </select>
+                                        )}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        ))
+                    }
+                </>
+            ) : (
+                <tbody className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
+                    <tr className=" w-full flex">
+
+                        <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{fees.admissionFee}</td>
+                        <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{fees.monthlyfee}</td>
+                        <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{fees.quarterFee}</td>
+
+
+
+                        <td className=" w-36 text-center">
+                            <button className=" my-2 mx-1 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer" onClick={() => handlePayment({ amount: data.payableAmount, order_id: data.id, title: data.title, deadline: data.deadline })}>Pay</button>
+                        </td>
+                    </tr>
+                </tbody>
+            )}
+
+
 
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -199,12 +262,11 @@ export default function FeeStructureField({ fees }) {
                                     <p><strong>Name:</strong> {Name}</p>
                                     <p><strong>Class:</strong> {Class}</p>
                                     <p><strong>Section:</strong> {Section}</p>
-                                    <p><strong>Session:</strong> {selectedStudent.session}</p>
+                                    <p><strong>Month:</strong> {selectedStudent.month}</p>
                                 </div>
                                 <div>
-                                    <p><strong>Title:</strong> {selectedStudent.title}</p>
-                                    <p><strong>Discount:</strong> {selectedStudent.discount}</p>
-                                    <p><strong>Payable:</strong> {selectedStudent.payableAmount}</p>
+                                    <p><strong>Discount:</strong> {selectedStudent.discountApplied}</p>
+                                    <p><strong>Payable:</strong> {selectedStudent.amount}</p>
                                     <p><strong>Mode:</strong> {mode}</p>
                                 </div>
                             </div>

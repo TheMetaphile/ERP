@@ -4,23 +4,25 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from './Header';
 
+const getSessions = () => {
+    const currentYear = new Date().getFullYear();
+    const newSessions = [];
+
+    for (let i = 0; i < 5; i++) {
+        const startYear = currentYear - i;
+        const endYear = startYear + 1;
+        newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
+    }
+
+    return newSessions;
+}
+
 function FeeStructure() {
 
-    const [sessions, setSessions] = useState([]);
-    const [selectedSession, setSelectedSession] = useState(sessions[0]);
+    const session = getSessions();
+    const [selectedSession, setSelectedSession] = useState(session[0]);
 
-    useEffect(() => {
-        const currentYear = new Date().getFullYear();
-        const newSessions = [];
 
-        for (let i = 0; i < 5; i++) {
-            const startYear = currentYear - i;
-            const endYear = startYear + 1;
-            newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
-        }
-
-        setSessions(newSessions);
-    }, []);
 
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
@@ -49,7 +51,7 @@ function FeeStructure() {
                         onChange={handleChange}
                         className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                     >
-                        {sessions.map((session, index) => (
+                        {session.map((session, index) => (
                             <option key={index} value={session}>
                                 {session}
                             </option>
@@ -57,7 +59,7 @@ function FeeStructure() {
                     </select>
                 </div>
             </div>
-            <table className="w-full border-collapse">
+            <table className="w-full  mt-3">
                 <Header headings={['Classes', 'Admission Fee', 'Monthly Fee', 'Quarter Fee', 'Action']} />
                 <tbody>
                     {content.map((con, index) => (

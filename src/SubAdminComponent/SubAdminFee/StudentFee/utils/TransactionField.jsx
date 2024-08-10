@@ -4,9 +4,9 @@ import { useState } from 'react';
 export default function TransactionField({ data }) {
   const [clickedIndex, setClickedIndex] = useState(null);
 
-    const handleClick = (index) => {
-        setClickedIndex(index);
-    };
+  const handleClick = (index) => {
+    setClickedIndex(index);
+  };
 
   const generateReceipt = (data) => {
     const doc = new jsPDF();
@@ -33,23 +33,33 @@ export default function TransactionField({ data }) {
     URL.revokeObjectURL(url);
   };
 
+  
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
+  };
+
   return (
     <div className="flex flex-col items-center mobile:max-tablet:w-fit border-b border-gray-200 ">
-      {data.map((value, index) => (
-        <div key={index} className={`whitespace-nowrap flex items-center w-full border-b border-gray-300 ${clickedIndex === index ? 'bg-purple-200' : ''}`} onClick={() => handleClick(index)}>
+      {data ? data.map((value, index) => (
+        <div key={index} className="whitespace-nowrap flex items-center w-full border-b border-gray-300 ">
           <h5 className="text-gray-500 font-normal w-20 text-center border-r border-gray-300 h-full py-2">{index + 1}</h5>
           <h5 className="text-gray-500 font-normal w-96 text-center border-r border-gray-300 h-full py-2">{value.installment_id}</h5>
+          <h5 className="text-gray-500 font-normal w-32 text-center border-r border-gray-300 h-full py-2">{value.order_id}</h5>
           <h5 className="text-gray-500 font-normal w-96 text-center border-r border-gray-300 h-full py-2">{value.payment_id}</h5>
-          <h5 className="text-gray-500 font-normal w-36 text-center border-r border-gray-300 h-full py-2">{value.date}</h5>
-          <h5 className="text-gray-500 font-normal w-44 text-center border-r border-gray-300 h-full py-2">{value.session}</h5>
+          <h5 className="text-gray-500 font-normal w-60 text-center border-r border-gray-300 h-full py-2">{formatDate(value.date)}</h5>
           <h5 className="text-gray-500 font-normal w-24 text-center border-r border-gray-300 h-full py-2">{value.amount}</h5>
+          <h5 className="text-gray-500 font-normal w-24 text-center border-r border-gray-300 h-full py-2">{value.signature}</h5>
           <h5 className="text-gray-500 font-normal w-28 text-center border-r border-gray-300 h-full py-2">{value.payment_status}</h5>
-          <h5 className="text-gray-500 font-normal w-28 text-center border-r border-gray-300 h-full py-2">{value.signature}</h5>
           <button className="text-gray-500 font-normal w-36 text-center h-full py-2" onClick={() => generateReceipt(value)}>
             Download <i className="bi bi-download"></i>
           </button>
         </div>
-      ))}
+      ))
+        :
+        <></>
+
+      }
     </div>
   );
 }

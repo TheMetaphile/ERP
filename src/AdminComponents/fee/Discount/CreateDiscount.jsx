@@ -81,6 +81,7 @@ function CreateDiscount({ selectedSession }) {
                     email: selectedSuggestion.email,
                     amount: Number(amount),
                     session: selectedSession,
+                    date: new Date()
                 },
                 {
                     headers: {
@@ -105,7 +106,7 @@ function CreateDiscount({ selectedSession }) {
     return (
         <form onSubmit={handleSubmit} className="mt-4 w-full p-6 rounded-lg shadow-md border bg-white">
             <ToastContainer />
-            <h2 className="text-2xl font-bold mb-6 text-purple-700">Create Discount</h2>
+            <h2 className="text-2xl font-bold mb-6 ">Create Discount</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div ref={inputRef} className="relative">
                     <label className="block text-gray-700 font-medium mb-2">Student Email</label>
