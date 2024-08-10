@@ -6,7 +6,7 @@ import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Login } from '../../Config';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer,toast } from 'react-toastify';
 
 function NewAdmission() {
     const [Class, setClass] = useState('9th');
@@ -17,6 +17,7 @@ function NewAdmission() {
     const { authState } = useContext(AuthContext);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(20);
+    const [allDataFetched, setAllDataFetched] = useState(false);
     const [stat, setStat] = useState({});
 
     const handleClassChange = (event) => {
@@ -29,10 +30,23 @@ function NewAdmission() {
 
     useEffect(() => {
         if (authState.accessToken) {
+            setStart(0);
+            setUserData([]);
             fetchUserData();
             fetchUserStat();
         }
     }, [authState.accessToken, Class]);
+
+
+    const handleViewMore = () => {
+        setStart(prevStart => prevStart + end);
+    };
+
+    useEffect(() => {
+        if (start !== 0) {
+            fetchUserData();
+        }
+    }, [start]);
 
     const fetchUserData = async () => {
         setLoading(true);
@@ -44,8 +58,15 @@ function NewAdmission() {
             });
             console.log("API response:", response.data);
 
-            setUserData(response.data.list);
+            const data = response.data.list.length;
+            console.log("API response:", response.data.list);
+            if (data < end) {
+                toast.success('All data fetched');
+                console.log('All data fetched')
+                setAllDataFetched(true);
+            }
             setLoading(false);
+            setUserData(prevData => [...prevData, ...response.data.list]);
 
 
         } catch (err) {
@@ -139,7 +160,7 @@ function NewAdmission() {
             </div>
 
             <div className="mobile:max-laptop:overflow-y-auto mt-6">
-                <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap mobile:max-tablet:mt-20">
+                <div className="rounded-lg shadow-md border h-fit text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap mobile:max-tablet:mt-20">
                     <div className="stutable">
                         <Header headings={['Name', 'Class', 'Gender', 'Percentage', 'Phone No.', 'E-mail', 'Action']} />
                     </div>
@@ -148,7 +169,12 @@ function NewAdmission() {
                     ) : userData.length === 0 ? (
                         <div>No students found</div>
                     ) : (
-                        <StudentDetailTile userData={userData} Class={Class} />
+                        <>
+                            <StudentDetailTile userData={userData} Class={Class} />
+                            {!allDataFetched && (
+                                <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                            )}
+                        </>
                     )}
 
                 </div>

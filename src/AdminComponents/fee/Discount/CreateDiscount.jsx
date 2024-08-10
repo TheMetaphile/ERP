@@ -4,12 +4,10 @@ import AuthContext from '../../../Context/AuthContext';
 import { useRef } from 'react';
 import { BASE_URL_Fee } from '../../../Config';
 
-function CreateDiscount() {
+function CreateDiscount({ selectedSession }) {
     const { authState } = useContext(AuthContext);
-    const [email, setEmail] = useState('');
+    const [selectedSuggestion, setSelectedSuggestion] = useState({});
     const [percentage, setPercentage] = useState('');
-    const [session, setSession] = useState('');
-    const [field, setField] = useState('');
     const [temp, setTemp] = useState();
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -17,41 +15,43 @@ function CreateDiscount() {
 
     const handleClickOutside = (event) => {
         if (inputRef.current && !inputRef.current.contains(event.target)) {
-          console.log("Clicked outside the input field");
-          setShowSuggestions(false);
-          // Execute your function here
+            console.log("Clicked outside the input field");
+            setShowSuggestions(false);
+            // Execute your function here
         }
-      };
-      const handleClickInside = () => {
+    };
+    const handleClickInside = () => {
         console.log("Clicked inside the input field");
         // Execute your function for inside click here
         setShowSuggestions(true);
-      };
-      useEffect(() => {
+    };
+    useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
-          document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("mousedown", handleClickOutside);
         };
-      }, []);
+    }, []);
+
     const handleEmailChange = (event) => {
         const value = event.target.value;
-        setEmail(value);
+        setSelectedSuggestion({ ...selectedSuggestion, 'name': value });
         setShowSuggestions(true);
     };
 
     const handleSuggestionClick = (suggestion) => {
-        setEmail(suggestion.name);
+        console.log(suggestion)
+        setSelectedSuggestion(suggestion);
         setShowSuggestions(false);
     };
 
     useEffect(() => {
         const handler = setTimeout(() => {
-            setTemp(email);
+            setTemp(selectedSuggestion);
         }, 500);
         return () => {
             clearTimeout(handler);
         }
-    }, [email])
+    }, [selectedSuggestion])
 
     useEffect(() => {
         if (temp) {
@@ -81,37 +81,33 @@ function CreateDiscount() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (Number(percentage) < 100) {
-            try {
-                const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discount`,
-                    {
-                        email: email,
-                        percentage: Number(percentage),
-                        session: session,
-                        field: field
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${authState.accessToken}`
-                        }
+
+        try {
+            const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discount`,
+                {
+                    email: selectedSuggestion.email,
+                    amount: Number(percentage),
+                    session: selectedSession,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`
                     }
-                );
-
-                if (response.status === 200) {
-                    console.log('Discount created successfully');
-                    setEmail('');
-                    setPercentage('');
-                    setSession('');
-                    setField('');
                 }
+            );
 
-            } catch (error) {
-                console.error('Error:', error);
+            if (response.status === 200) {
+                console.log('Discount created successfully');
+                setSelectedSuggestion('');
+                setPercentage('');
+                setSession('');
+                setField('');
             }
+
+        } catch (error) {
+            console.error('Error:', error);
         }
-        else {
-            console.log('Percentage is above 100')
-        }
+
     };
 
     return (
@@ -119,13 +115,12 @@ function CreateDiscount() {
             <div className="grid grid-cols-1 gap-4 mb-4 rounded-lg ">
                 <h1 className="text-xl">Create Discount</h1>
                 <div className="grid grid-cols-3 gap-4 ">
-                    <div>
+                    <div ref={inputRef}>
                         <label className="text-black font-medium">Student Email</label>
                         <input
                             type="text"
                             name="email"
-                            ref={inputRef}
-                            value={email}
+                            value={selectedSuggestion.name}
                             onChange={handleEmailChange}
                             onClick={handleClickInside}
                             required
@@ -148,10 +143,10 @@ function CreateDiscount() {
                     </div>
 
                     <div>
-                        <label className="text-black font-medium">Percent</label>
+                        <label className="text-black font-medium">Amount</label>
                         <input
-                            type="text"
-                            name="percentage"
+                            type="number"
+                            name="amount"
                             value={percentage}
                             onChange={(e) => setPercentage(e.target.value)}
                             required
@@ -159,29 +154,6 @@ function CreateDiscount() {
                         />
                     </div>
 
-                    <div>
-                        <label className="text-black font-medium">Session</label>
-                        <input
-                            type="text"
-                            name="session"
-                            value={session}
-                            onChange={(e) => setSession(e.target.value)}
-                            required
-                            className="w-full border p-2"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="text-black font-medium">Title</label>
-                        <input
-                            type="text"
-                            name="field"
-                            value={field}
-                            onChange={(e) => setField(e.target.value)}
-                            required
-                            className="w-full border p-2"
-                        />
-                    </div>
                 </div>
             </div>
             <div className="flex items-center justify-between mt-4">

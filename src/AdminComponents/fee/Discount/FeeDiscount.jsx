@@ -14,43 +14,70 @@ function FeeDiscount() {
     const [details, setDetails] = useState([]);
     const { authState } = useContext(AuthContext);
     const [showDiscountStructure, setShowDiscountStructure] = useState(false);
+    const [sessions, setSessions] = useState([]);
+    const [selectedSession, setSelectedSession] = useState(sessions[0]);
+    const [start, setStart] = useState(0);
+    const [end, setEnd] = useState(4);
+    const [allDataFetched, setAllDataFetched] = useState(false);
 
     const handleClassChange = (e) => {
         setSelectedClass(e.target.value);
         setShowDiscountStructure(false);
     };
-    const sessions = [
-        '2020-21',
-        '2021-22',
-        '2022-23',
-        '2023-24',
-        '2024-25',
-    ];
+    useEffect(() => {
+        const currentYear = new Date().getFullYear();
+        const newSessions = [];
 
-    // State to store the selected session
-    const [selectedSession, setSelectedSession] = useState(sessions[3]);
+        for (let i = 0; i < 5; i++) {
+            const startYear = currentYear - i;
+            const endYear = startYear + 1;
+            newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
+        }
+
+        setSessions(newSessions);
+    }, []);
+
+
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
     };
     useEffect(() => {
-        if (selectedClass !== "") {
+        if (selectedClass !== "" && selectedSession !== "") {
             fetchDiscount();
         }
-    }, [selectedClass]);
+    }, [selectedClass, selectedSession]);
+
+    const handleViewMore = () => {
+        setStart(prevStart => prevStart + end);
+    };
+
+    useEffect(() => {
+        if (start !== 0) {
+            fetchHomework();
+        }
+    }, [start]);
 
     const fetchDiscount = async () => {
         console.log(selectedClass);
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/discount?end=20&start=0&class=${selectedClass}`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/discount?end=${end}&start=${start}&class=${selectedClass}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
             });
             if (response.status === 200) {
+
+                const data = response.data.length;
                 console.log("API response:", response.data);
-                setDetails(response.data || []);
+                if (data < end) {
+                    toast.success('All data fetched');
+                    console.log('All data fetched')
+                    setAllDataFetched(true);
+                }
+                setDetails(prevData => [...prevData, ...response.data]);
                 setLoading(false);
+
             }
         } catch (err) {
             console.log(err);
@@ -85,7 +112,6 @@ function FeeDiscount() {
             <div className='flex justify-between w-full items-center px-2 mobile:max-tablet:flex-col'>
                 <h1 className="text-2xl p-2 whitespace-nowrap mobile:max-tablet:text-xl mobile:max-tablet:w-full">Student Fee Discount</h1>
                 <div className='flex w-full justify-end gap-1 items-center mobile:max-tablet:flex-col'>
-
                     <select
                         id="sessionSelector"
                         value={selectedSession}
@@ -110,8 +136,8 @@ function FeeDiscount() {
                         <option value="" >Select Class</option>
                         <option value="Pre-Nursery">Pre-Nursery</option>
                         <option value="Nursery">Nursery</option>
-                        <option value="L.K.J">L.K.J</option>
-                        <option value="U.K.J">U.K.J</option>
+                        <option value="L.K.G">L.K.G</option>
+                        <option value="U.K.G">U.K.G</option>
                         <option value="1st">1st</option>
                         <option value="2nd">2nd</option>
                         <option value="3rd">3rd</option>
@@ -138,7 +164,7 @@ function FeeDiscount() {
 
             <div className='w-full'>
                 {showDiscountStructure
-                    ? <CreateDiscount />
+                    ? <CreateDiscount selectedSession={selectedSession}/>
                     : <div></div>
                 }
 
@@ -215,6 +241,9 @@ function FeeDiscount() {
 
                                     </div>
                                 ))}
+                                {!allDataFetched && (
+                                    <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                                )}
                             </div>
                         ) : (
                             <div className='text-center mt-2'>No Fee Discount available</div>
