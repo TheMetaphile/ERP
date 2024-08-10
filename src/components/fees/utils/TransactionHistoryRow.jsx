@@ -7,11 +7,13 @@ import TransactionField from "./TransactionField.jsx";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Fee } from "../../../Config.js";
+import { usePaymentContext } from "./PaymentContext.jsx";
 
 export default function TransactionRow() {
     const { authState } = useContext(AuthContext);
-    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false)
+    const paymentDetail = usePaymentContext();
+    const {setPaymentDetails} = paymentDetail;
 
     useEffect(() => {
         if (authState.accessToken) {
@@ -30,7 +32,7 @@ export default function TransactionRow() {
                 }
             });
             console.log("API response transaction:", response.data);
-            setData(response.data.transactions)
+            setPaymentDetails(response.data.transactions);
         }
         catch (error) {
             const errorMessage = error.response?.data?.error || 'An error occurred';
@@ -46,11 +48,9 @@ export default function TransactionRow() {
             <TransactionHistoryHeader />
             {loading ? (
                 <Loading />
-            ) : data === null ? (
-                <div className='text-center'>No data available</div>
             ) : (
                 <div>
-                    <TransactionField data={data} />
+                    <TransactionField />
                 </div>
             )}
 

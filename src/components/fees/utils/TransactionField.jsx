@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import jsPDF from 'jspdf';
 import { usePaymentContext } from './PaymentContext';
 
-export default function TransactionField({ data }) {
-  const { paymentDetails } = usePaymentContext();
+export default function TransactionField() {
+  const paymentDetail = usePaymentContext();
+  const {paymentDetails} = paymentDetail;
+  console.log(paymentDetail,"****************************************");
+  const [data,setData] = useState(paymentDetails);
 
+  useEffect(()=>{
+    setData(paymentDetails);
+  },[paymentDetail])
   const generateReceipt = (data) => {
     const doc = new jsPDF();
 
@@ -48,7 +54,7 @@ export default function TransactionField({ data }) {
             Download <i className="bi bi-download"></i>
           </button>
         </div> */}
-      {data.map((value, index) => (
+      {data ? data.map((value, index) => (
         <div key={index} className="whitespace-nowrap flex items-center w-full border-b border-gray-300 ">
           <h5 className="text-gray-500 font-normal w-20 text-center border-r border-gray-300 h-full py-2">{index + 1}</h5>
           <h5 className="text-gray-500 font-normal w-96 text-center border-r border-gray-300 h-full py-2">{value.installment_id}</h5>
@@ -61,7 +67,11 @@ export default function TransactionField({ data }) {
             Download <i className="bi bi-download"></i>
           </button>
         </div>
-      ))}
+      ))
+      :
+      <></>
+    
+    }
     </div>
   );
 }

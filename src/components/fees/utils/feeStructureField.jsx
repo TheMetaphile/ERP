@@ -7,10 +7,12 @@ import Header from './feestructureheader.jsx';
 import QuarterFeeHeader from "./QuarterFeeHeader.jsx";
 import { usePaymentContext } from "./PaymentContext.jsx";
 
-export default function FeeStructureField({ fees, selectedOption }) {
+export default function FeeStructureField({ fees, selectedOption, setFees }) {
     const [Razorpay] = useRazorpay();
     const { authState } = useContext(AuthContext);
-    const { setPaymentDetails } = usePaymentContext();
+    const { paymentDetails, setPaymentDetails } = usePaymentContext();
+
+
 
     const handlePayment = async (params) => {
         // const order = await createOrder(params); //  Create order on your backend
@@ -72,11 +74,11 @@ export default function FeeStructureField({ fees, selectedOption }) {
         rzp1.open();
     };
 
-    const postPaymentDetails = async (paymentDetails) => {
-        console.log('postpayment', paymentDetails)
+    const postPaymentDetails = async (NewpaymentDetails) => {
+        console.log('postpayment', NewpaymentDetails)
         try {
             const response = await axios.post(`${BASE_URL_Fee}/fee/payment`,
-                paymentDetails,
+                NewpaymentDetails,
                 {
                     headers: {
                         'Authorization': `Bearer ${authState.accessToken}`
@@ -84,7 +86,29 @@ export default function FeeStructureField({ fees, selectedOption }) {
                 }
             );
             if (response.status === 200) {
-                setPaymentDetails(paymentDetails);
+                updateContext({
+                    amount: NewpaymentDetails.amount,
+                    date: NewpaymentDetails.date,
+                    payment_status: NewpaymentDetails.status,
+                    installment_id: NewpaymentDetails.installment_id, // or a relevant installment id
+                    order_id: NewpaymentDetails.order_id,
+                    payment_id: NewpaymentDetails.payment_id,
+                    signature: "Online" // no signature in case of failure
+                });
+
+                // Update the fees state
+                setFees((prevFees) => {
+                    return {
+                        ...prevFees,
+                        monthlyStatus: prevFees.monthlyStatus.map((item) =>
+                            item.month === NewpaymentDetails.order_id ? { ...item, status: 'Submitted' } : item
+                        ),
+                        quarterlyStatus: prevFees.quarterlyStatus.map((item) =>
+                            item.quarter === NewpaymentDetails.order_id ? { ...item, status: 'Submitted' } : item
+                        ),
+                    };
+                });
+
                 console.log('Payment details posted and stored successfully:', response.data);
             }
 
@@ -93,6 +117,9 @@ export default function FeeStructureField({ fees, selectedOption }) {
         }
     };
 
+    const updateContext = (newRow) => {
+        setPaymentDetails(Array.isArray(paymentDetails) ? [newRow, ...paymentDetails] : [newRow]);
+    };
 
     return (
         <>

@@ -20,7 +20,7 @@ export default function FeeStructure({ selectedOption }) {
   }, [authState.accessToken]);
 
   const today = new Date();
-  const formattedDate = today.toISOString().split('T')[0];
+  // const formattedDate = today.toISOString().split('T')[0];
   const getCurrentSession = () => {
     const now = new Date();
     const currentYear = now.getFullYear();
@@ -61,7 +61,7 @@ export default function FeeStructure({ selectedOption }) {
           <div>No data available</div>
         ) : (
           <div className="">
-            <FeeStructureField fees={fees} selectedOption={selectedOption} />
+            <FeeStructureField fees={fees} selectedOption={selectedOption} setFees={setFees}/>
 
             <FeeStructureFooter />
           </div>
