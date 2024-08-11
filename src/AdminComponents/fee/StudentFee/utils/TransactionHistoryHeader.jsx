@@ -1,6 +1,6 @@
 export default function TransactionHistoryHeader() {
     return (
-        <div className="bg-aquamarine mobile:max-tablet:w-fit  flex rounded-t-lg ">
+        <div className="bg-gradient-to-r from-teal-400 to-blue-500 text-white mobile:max-tablet:w-fit  flex rounded-t-lg ">
             <h4 className="w-20 text-center border-r border-gray-300 h-full py-2">Sr. No.</h4>
             <h4 className="w-96 text-center border-r border-gray-300 h-full py-2">Installment Id</h4>
             <h4 className="w-32 text-center border-r border-gray-300 h-full py-2">Order Id</h4>

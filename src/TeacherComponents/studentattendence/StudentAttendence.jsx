@@ -144,7 +144,7 @@ function StudentAttendance() {
         <div className="w-full flex flex-col mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mb-3 no-scrollbar" >
             <ToastContainer />
             <div className=" w-full">
-                <div className="flex justify-between mobile:max-tablet:items-start items-center mb-4 mobile:max-tablet:flex-col">
+                <div className="flex justify-between mobile:max-tablet:items-start items-center mb-4 mobile:max-tablet:flex-col mt-3">
                     <h1 className="text-2xl mobile:max-tablet:text-lg font-medium">Student Attendance</h1>
                     <div className="mobile:max-tablet:flex items-end">
                         <Link

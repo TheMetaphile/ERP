@@ -23,6 +23,8 @@ const getSessions = () => {
 function FeeDetails() {
     const [selectedClass, setSelectedClass] = useState("9th");
     const [section, setSelectedSection] = useState("A");
+    const [sectionsDetails, setSectionsDetails] = useState([]);
+
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([])
     const { authState } = useContext(AuthContext);
@@ -33,6 +35,25 @@ function FeeDetails() {
     const [allDataFetched, setAllDataFetched] = useState(false);
 
     const [clickedIndex, setClickedIndex] = useState(null);
+
+    useEffect(() => {
+        const fetchSections = async () => {
+            console.log(selectedClass)
+            try {
+                const response = await axios.post(`${BASE_URL_Fee}/classTeacher/fetch/sections`, {
+                    accessToken: authState.accessToken,
+                    class: selectedClass,
+                });
+                console.log(response.data, 'section');
+                const sectionsDetail = response.data.sections.map(sectionObj => sectionObj.section);
+                setSectionsDetails(sectionsDetail);
+            } catch (error) {
+                console.error("Error while fetching section:", error);
+            }
+        };
+        fetchSections();
+    }, [selectedClass])
+
 
     const handleClick = (index) => {
         setClickedIndex(index);
@@ -154,26 +175,18 @@ function FeeDetails() {
 
                     </select>
 
-                    <select
-                        className="mobile:max-tablet:mx-4 border rounded-md w-fit  px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
-                        id="Section"
-                        name="Section"
-                        value={section}
-                        onChange={handleSectionChange}
-                        required
-                    >
-                        <option value="" >Select Section</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-
+                    <select id="section" value={sectionsDetails} onChange={handleSectionChange} className="w-full px-4 py-2 border rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2">
+                        <option value="">Search by Section</option>
+                        {sectionsDetails.map((section, index) => (
+                            <option key={index} value={section}>{section}</option>
+                        ))}
                     </select>
                 </div>
             </div>
 
             <div className='overflow-auto w-full'>
-                <div className=' mt-2  border border-black rounded-lg'>
-                    <div className="flex justify-between  py-2  bg-bg_blue  rounded-t-lg border border-b-2  whitespace-nowrap">
+                <div className=' mt-2  border rounded-lg'>
+                    <div className="flex justify-between  py-2  bg-gradient-to-r from-teal-400 to-blue-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap">
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Roll No.
                         </h1>

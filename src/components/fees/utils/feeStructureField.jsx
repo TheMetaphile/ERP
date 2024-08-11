@@ -133,6 +133,7 @@ console.log(fees);
                                 <tr className=" w-full flex">
                                     <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.month}</td>
                                     <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
+                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.discountApplied}</td>
                                     <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.status}</td>
                                     <td className=" w-full text-center">
                                         {data.status === 'Submitted' ? (
@@ -156,6 +157,7 @@ console.log(fees);
                                     <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center"> {data.months.join(', ')}</td>
                                     <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.quarter}</td>
                                     <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
+                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.discountApplied}</td>
                                     <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.pendingFee}</td>
                                     <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.status}</td>
                                     <td className=" w-full text-center">

@@ -4,7 +4,7 @@ import axios from 'axios';
 import AuthContext from "../../../../Context/AuthContext";
 import { BASE_URL_Fee } from "../../../../Config";
 import { useLocation, useParams } from "react-router-dom";
-import FeeStructureHeader from "../../../../components/fees/utils/feestructureheader";
+import FeeStructureHeader from "./feestructureheader";
 import QuarterFeeHeader from "../../../../components/fees/utils/QuarterFeeHeader";
 
 export default function FeeStructureField({ fees, selectedOption, setFees }) {
@@ -163,27 +163,34 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
     return (
         <>
             {selectedOption === 'monthlyfee' ? (
-                <>
+
+                <table className="min-w-full divide-y divide-gray-200">
                     <FeeStructureHeader />
-                    {fees.monthlyStatus.map((data, index) => (
-                        <tbody key={index} className={`w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
-                            <tr className=" w-full flex ">
-                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">{data.month}</td>
-                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">{data.amount}</td>
-                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">{data.discountApplied}</td>
-                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">{data.status}</td>
-
-                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">
-
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {fees.monthlyStatus.map((data, index) => (
+                            <tr
+                                key={index}
+                                className={`transition-colors duration-200 ease-in-out hover:bg-gray-50 ${clickedIndex === index ? 'bg-blue-50' : ''}`}
+                                onClick={() => handleClick(index)}
+                            >
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-1/4 text-center">{data.month}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-1/4 text-center">{data.amount}</td>
+                                <td className="px-6 py-4 whitespace-nowrap w-1/4 text-center">
+                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${data.status === 'Submitted' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                                        }`}>
+                                        {data.status}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-1/4 text-center">
                                     {data.status === 'Submitted' ? (
-                                        <>Paid</>
+                                        <span className="text-green-600 font-medium">Paid</span>
                                     ) : (
                                         <select
-                                            className=" text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-full bg-aquamarine py-2"
+                                            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                             value={mode}
                                             onChange={(e) => handleModeChange(e, data)}
                                         >
-                                            <option value="none">None</option>
+                                            <option value="none">Select Payment Mode</option>
                                             <option value="Cash">Cash</option>
                                             <option value="Online">Online</option>
                                             <option value="RTGS">RTGS</option>
@@ -193,45 +200,50 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
                                     )}
                                 </td>
                             </tr>
-                        </tbody>
-                    ))}
-                </>
+                        ))}
+                    </tbody>
+                </table>
+
+
             ) : selectedOption === 'quarterFee' ? (
-                <>
+                <table className="min-w-full divide-y divide-gray-200">
                     <QuarterFeeHeader />
-                    {
-                        fees.quarterlyStatus.map((data, index) => (
-                            <tbody key={index} className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
-                                <tr className=" w-full flex">
-                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center"> {data.months.join(', ')}</td>
-                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.quarter}</td>
-                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
-                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.discountApplied}</td>
-                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.pendingFee}</td>
-                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.status}</td>
-                                    <td className=" w-full text-center">
-                                        {data.status === 'Submitted' ? (
-                                            <>Paid</>
-                                        ) : (
-                                            <select
-                                                className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-full bg-aquamarine py-2 my-2 mx-2"
-                                                value={mode}
-                                                onChange={(e) => handleModeChange(e, data)}
-                                            >
-                                                <option value="none">None</option>
-                                                <option value="Cash">Cash</option>
-                                                <option value="Online">Online</option>
-                                                <option value="RTGS">RTGS</option>
-                                                <option value="Cheque">Cheque</option>
-                                                <option value="Demand Draft">Demand Draft</option>
-                                            </select>
-                                        )}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        ))
-                    }
-                </>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {fees.quarterlyStatus.map((data, index) => (
+                            <tr key={index} className="hover:bg-gray-50 transition-colors duration-200">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{data.months.join(', ')}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{data.quarter}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{data.amount}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{data.discountApplied}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{data.pendingFee}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${data.status === 'Submitted' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                                        }`}>
+                                        {data.status}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {data.status === 'Submitted' ? (
+                                        <span className="text-green-600 font-medium">Paid</span>
+                                    ) : (
+                                        <select
+                                            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            value={mode}
+                                            onChange={(e) => handleModeChange(e, data)}
+                                        >
+                                            <option value="none">Select Payment Mode</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="Online">Online</option>
+                                            <option value="RTGS">RTGS</option>
+                                            <option value="Cheque">Cheque</option>
+                                            <option value="Demand Draft">Demand Draft</option>
+                                        </select>
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             ) : (
                 <tbody className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
                     <tr className=" w-full flex">

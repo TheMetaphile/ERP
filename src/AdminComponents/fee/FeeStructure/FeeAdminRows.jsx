@@ -123,75 +123,75 @@ export default function FeeAdminRows({ Class, session, key }) {
     };
 
     return (
-        <tr key={key} className="border-b border-gray-300">
-            <td className="px-4 py-2 whitespace-nowrap">{Class}</td>
-            <td className="px-4 py-2 whitespace-nowrap">
-                {editMode === key ? (
-                    <input
-                        className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
-                        id="admissionFee"
-                        type="text"
-                        value={admissionFee}
-                        onChange={(e) => setAdmissionFee(e.target.value)}
-                        required
-                    />
-                ) : (
-                    admissionFee || 'N/A'
-                )}
-            </td>
-            <td className="px-4 py-2 whitespace-nowrap">
-                {editMode === key ? (
-                    <input
-                        className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
-                        id="monthlyFee"
-                        type="text"
-                        value={monthlyFee}
-                        onChange={(e) => setMonthlyFee(e.target.value)}
-                        required
-                    />
-                ) : (
-                    monthlyFee || 'N/A'
-                )}
-            </td>
-            <td className="px-4 py-2 whitespace-nowrap">
-                {editMode === key ? (
-                    <input
-                        className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
-                        id="quarterFee"
-                        type="text"
-                        value={quarterFee}
-                        onChange={(e) => setQuarterFee(e.target.value)}
-                        required
-                    />
-                ) : (
-                    quarterFee || 'N/A'
-                )}
-            </td>
-            <td className="px-4 py-2 whitespace-nowrap">
-                {editMode === key ? (
-                    <>
-                        <button
-                            className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                            onClick={handleConfirmEdit}
-                        >
-                            <MdCheck />
-                        </button>
-                        <button
-                            className="bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                            onClick={handleCancelEdit}
-                        >
-                            <MdCancel />
-                        </button>
-                    </>
-                ) : (
+        <tr key={key} className="bg-white border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
+        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{Class}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {editMode === key ? (
+                <input
+                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                    id="admissionFee"
+                    type="text"
+                    value={admissionFee}
+                    onChange={(e) => setAdmissionFee(e.target.value)}
+                    required
+                />
+            ) : (
+                <span className="font-semibold">{admissionFee || 'N/A'}</span>
+            )}
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {editMode === key ? (
+                <input
+                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                    id="monthlyFee"
+                    type="text"
+                    value={monthlyFee}
+                    onChange={(e) => setMonthlyFee(e.target.value)}
+                    required
+                />
+            ) : (
+                <span className="font-semibold">{monthlyFee || 'N/A'}</span>
+            )}
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {editMode === key ? (
+                <input
+                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                    id="quarterFee"
+                    type="text"
+                    value={quarterFee}
+                    onChange={(e) => setQuarterFee(e.target.value)}
+                    required
+                />
+            ) : (
+                <span className="font-semibold">{quarterFee || 'N/A'}</span>
+            )}
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            {editMode === key ? (
+                <div className="flex space-x-2">
                     <button
-                        className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md"
-                        onClick={() => handleEditToggle(key)}
+                        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md shadow-md transition-colors duration-200 flex items-center"
+                        onClick={handleConfirmEdit}
                     >
-                        <MdOutlineModeEdit />
+                        <MdCheck className="mr-1" /> Save
                     </button>
-                )}
-            </td>
-        </tr>
+                    <button
+                        className="bg-gray-400 hover:bg-gray-500 text-white px-3 py-1 rounded-md shadow-md transition-colors duration-200 flex items-center"
+                        onClick={handleCancelEdit}
+                    >
+                        <MdCancel className="mr-1" /> Cancel
+                    </button>
+                </div>
+            ) : (
+                <button
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md shadow-md transition-colors duration-200 flex items-center"
+                    onClick={() => handleEditToggle(key)}
+                >
+                    <MdOutlineModeEdit className="mr-1" /> Edit
+                </button>
+            )}
+        </td>
+    </tr>
     );
 }

@@ -70,7 +70,7 @@ export default function FeeStructure({ selectedOption }) {
           <div className="">
             <FeeStructureField fees={fees} selectedOption={selectedOption} setFees={setFees} />
 
-            <FeeStructureFooter />
+            {/* <FeeStructureFooter /> */}
           </div>
         )}
       </table>

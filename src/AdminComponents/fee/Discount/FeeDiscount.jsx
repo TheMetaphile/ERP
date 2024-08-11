@@ -153,9 +153,9 @@ function FeeDiscount() {
             </div>
             <div className='w-full'>
                 {showDiscountStructure && <CreateDiscount selectedSession={selectedSession} />}
-                <div className='mt-8 bg-white border border-black rounded-lg shadow-md overflow-hidden'>
+                <div className='mt-8 bg-white border rounded-lg shadow-md overflow-hidden'>
                     <table className="w-full">
-                        <thead className="bg-bg_blue">
+                        <thead className="bg-gradient-to-r from-teal-400 to-blue-500 text-white">
                             <tr>
                                 <th className="py-3 px-4 text-left">Roll No.</th>
                                 <th className="py-3 px-4 text-left">Student Name</th>

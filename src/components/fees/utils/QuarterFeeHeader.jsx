@@ -1,17 +1,15 @@
 export default function QuarterFeeHeader() {
     return (
-        <>
-            <thead className="  bg-aquamarine w-full flex rounded-t-lg border-b border-gray-300   whitespace-nowrap">
-                <tr className=" w-full flex">
-                    <th className=" text-center w-full border-r border-gray-300  py-2">Month</th>
-                    <th className=" text-center w-full  border-r border-gray-300  py-2">Quarter</th>
-                    <th className=" text-center w-full border-r border-gray-300  py-2">Amount</th>
-                    <th className=" text-center w-full border-r border-gray-300  py-2">Discount</th>
-                    <th className=" text-center w-full border-r border-gray-300  py-2 whitespace-nowrap">Pending Amount</th>
-                    <th className=" text-center w-full border-r border-gray-300  py-2">Status</th>
-                    <th className=" text-center  w-full  py-2">Action</th>
-                </tr>
-            </thead>
-        </>
+        <thead className="bg-gradient-to-r from-blue-500 to-teal-400 text-white">
+            <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Month</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Quarter</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Discount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Pending Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Action</th>
+            </tr>
+        </thead>
     );
 }

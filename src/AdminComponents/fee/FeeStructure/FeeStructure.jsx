@@ -59,9 +59,9 @@ function FeeStructure() {
                     </select>
                 </div>
             </div>
-            <table className="w-full  mt-3">
+            <table className="min-w-full divide-y divide-gray-200 rounded-lg">
                 <Header headings={['Classes', 'Admission Fee', 'Monthly Fee', 'Quarter Fee', 'Action']} />
-                <tbody>
+                <tbody className="bg-white divide-y divide-gray-200">
                     {content.map((con, index) => (
                         <FeeAdminRows
                             Class={con.class}

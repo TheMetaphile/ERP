@@ -88,7 +88,7 @@ function StudentFee() {
             </div>
             <div className=' overflow-auto'>
                 <div className='  rounded-lg border shadow-md border-gray-300 mobile:max-tablet:h-auto  w-full mobile:max-tablet:w-fit  overflow-x-auto'  >
-                    <Header headings={['Roll Number', 'Name', 'Total Fee', 'Discount', 'Paid', 'Payable', 'Pending']} />
+                    <Header headings={['Roll Number', 'Name', 'Total Fee', 'Discount', 'Payable', 'Paid', 'Pending']} />
 
                     {loading && details.length == 0 ? (
                         <Loading />
@@ -118,11 +118,11 @@ function StudentFee() {
                                                 <h1 className="w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.discountAmount}
                                                 </h1>
-                                                <h1 className={`w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap`}>
-                                                    {details.paid}
-                                                </h1>
                                                 <h1 className="w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                     {details.payableFee}
+                                                </h1>
+                                                <h1 className={`w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap`}>
+                                                    {details.paid}
                                                 </h1>
                                                 <h1 className={`w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap ${(details.payableFee - details.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
                                                     {details.payableFee - details.paid}

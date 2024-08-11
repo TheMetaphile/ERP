@@ -91,7 +91,7 @@ function StudentLeave() {
     return (
         <div className=" w-full flex flex-col px-2 mobile:max-tablet:px-0 h-screen  items-start  mb-3">
             <ToastContainer />
-            <div className='flex items-center justify-between w-full mobile:max-tablet:px-2'>
+            <div className='flex items-center justify-between w-full mobile:max-tablet:px-2 mt-3'>
                 <h1 className='container mx-auto py-3  font-medium text-2xl mobile:max-tablet:text-lg'>Student Leave</h1>
                 <select
                     value={status}
