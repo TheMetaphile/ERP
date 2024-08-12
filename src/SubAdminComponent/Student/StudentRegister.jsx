@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Login } from "../../Config";
 import AuthContext from "../../Context/AuthContext";
+import SubjectInputs from "./SubjectInputs";
 
 export default function StudentRegister() {
     const { authState } = useContext(AuthContext);
@@ -49,6 +50,19 @@ export default function StudentRegister() {
             category: '',
             nationality: '',
             stream: '',
+            stream: '',
+            physics: '',
+            chemistry: '',
+            maths: '',
+            biology: '',
+            accountancy: '',
+            businessStudies: '',
+            economics: '',
+            history: '',
+            politicalScience: '',
+            geography: '',
+            subject4: '',
+            optionalSubject: '',
             accessToken: authState.accessToken
         }
     );
@@ -59,6 +73,14 @@ export default function StudentRegister() {
             [name]: name === 'photo' ? files[0] : value,
         }));
     };
+    const handleSubject = (event) => {
+        const { name, value } = event.target;
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
+    };
+
     const handleReset = () => {
         setFormData({
             name: '',
@@ -107,7 +129,7 @@ export default function StudentRegister() {
             formData.DOB = formattedDate
             console.log(formData, authState.accessToken)
 
-            
+
             formData.password = formData.aadhaarNumber;
             const response = await axios.post(`${BASE_URL_Login}/signup/student`, formData);
             if (response.status === 200) {
@@ -358,13 +380,13 @@ export default function StudentRegister() {
                                     type="text"
                                     name="stream"
                                     value={formData.stream}
-                                    onChange={handleChange}
+                                    onChange={handleSubject}
                                     required
                                 >
                                     <option value="">Select Stream</option>
                                     <option value="General">General</option>
                                     <option value="PCM">PCM</option>
-                                    <option value="PCB">PCM</option>
+                                    <option value="PCB">PCB</option>
                                     <option value="PCMB">PCMB</option>
                                     <option value="Commerce">Commerce</option>
                                     <option value="Arts">Arts</option>
@@ -715,6 +737,9 @@ export default function StudentRegister() {
                     </div>
 
                 </div>
+                <div className=" flex">
+                    <SubjectInputs stream={formData.stream} formData={formData} handleChange={handleChange} />
+                </div>
                 <div className=" flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4 mobile:max-tablet:mb-0">
                     <div className="w-1/2 rounded-lg mobile:max-tablet:w-full text-lg whitespace-nowrap">
                         Add Google Drive Link for Photo
@@ -731,6 +756,7 @@ export default function StudentRegister() {
                             />
                         </label>
                     </div>
+
                     <div className="w-1/2 rounded-md mobile:max-tablet:w-full">
                         <div className="flex justify-center tablet:mt-6 mt-1">
                             <button

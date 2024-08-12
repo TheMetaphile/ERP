@@ -168,6 +168,8 @@ import AppraisalAdmin from "./AdminComponents/appraisal/AppraisalAdmin.jsx";
 import ApplyAdmin from "./AdminComponents/appraisal/utils/ApplyAdmin.jsx";
 import AppliedAdmin from "./AdminComponents/appraisal/utils/AppliedAdmin.jsx";
 import NewAdmission from "./AdminComponents/New Admission/NewAdmission.jsx";
+import Readmission from "./SubAdminComponent/Readmission/Readmission.jsx";
+import AllAdmission from "./SubAdminComponent/Readmission/AllAdmission.jsx";
 // import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
 
 
@@ -982,6 +984,16 @@ const router = createBrowserRouter([
           //   path: '/Sub-Admin/Students/studentdetails',
           //   element: <StudentDetailScreen />
           // },
+        ]
+      },
+      {
+        path: "/Sub-Admin/Readmission",
+        element: <Readmission />,
+        children: [
+          {
+            path: '',
+            element: <AllAdmission />
+          },
         ]
       },
       {
