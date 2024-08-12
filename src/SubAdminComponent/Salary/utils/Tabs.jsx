@@ -1,7 +1,9 @@
 import React from "react";
 import { FiUpload } from "react-icons/fi";
 
-const tabs = ["Reports", "Transactions", "Credit", "Debit", "Upcoming", "Due"];
+const tabs = ["Transactions"];
+// const tabs = ["Reports", "Transactions", "Credit", "Debit", "Upcoming", "Due"];
+
 
 const Tabs = ({ selectedTab, onTabChange }) => {
   return (

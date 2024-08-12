@@ -5,7 +5,6 @@ function AdmissionTileRow({ data, index, clickedIndex, setClickedIndex,  handleR
     const [loadinfIndex, setLoadingIndex] = useState('');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    console.log(data, 'row');
     const handleClick = () => {
         setClickedIndex(index);
     };

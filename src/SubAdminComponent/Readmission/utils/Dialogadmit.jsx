@@ -6,7 +6,7 @@ import { BASE_URL_Login } from "../../../Config";
 import { toast } from "react-toastify";
 import AdmissionInputs from './AdmissionInputs';
 
-const ReadmissionDialog = ({ isOpen, onClose,onSave, user }) => {
+const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
 
@@ -38,6 +38,11 @@ const ReadmissionDialog = ({ isOpen, onClose,onSave, user }) => {
 
         console.log(authState.accessToken, email, formData.stream, selectedSubjects, session)
         setLoading(true);
+
+        if (formData.stream || selectedSubjects.length < 1) {
+            toast.error("Select stream and subject first");
+            return;
+        }
 
         try {
             const response = await axios.put(`${BASE_URL_Login}/promote/readmit`,

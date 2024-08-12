@@ -67,7 +67,7 @@ const data = {
 };
 
 function Salary() {
-    const [selectedTab, setSelectedTab] = useState("Reports");
+    const [selectedTab, setSelectedTab] = useState("Transactions");
     const { authState } = useContext(AuthContext);
 
     const handleTabChange = (tab) => {
