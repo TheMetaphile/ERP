@@ -50,7 +50,6 @@ export default function StudentRegister() {
             category: '',
             nationality: '',
             stream: '',
-            stream: '',
             physics: '',
             chemistry: '',
             maths: '',
@@ -61,7 +60,7 @@ export default function StudentRegister() {
             history: '',
             politicalScience: '',
             geography: '',
-            subject4: '',
+            english: '',
             optionalSubject: '',
             accessToken: authState.accessToken
         }

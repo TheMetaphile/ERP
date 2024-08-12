@@ -137,6 +137,12 @@ export default function AllAdmission() {
     // State to control the dropdown visibility
     const [isDropdownVisible, setDropdownVisible] = useState(false);
 
+    const handleRemove = (student) => {
+        setUserData((prev) => prev.filter(user => user.email !== student.email));
+    };
+
+    console.log("********************************",typeof(handleRemove));
+    
     return (
         <>
             <div className="flex  pt-20  items-center  bg-white mb-4">
@@ -193,7 +199,7 @@ export default function AllAdmission() {
                         ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
                             <div>No students found</div>
                         ) : Array.isArray(filteredStudents) ? (
-                            <StudentDetailTile userData={filteredStudents} />
+                            <StudentDetailTile userData={filteredStudents} handleRemove={handleRemove}/>
                         ) : (
                             <div>Unexpected data format</div>
                         )}

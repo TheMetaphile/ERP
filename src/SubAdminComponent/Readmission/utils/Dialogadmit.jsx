@@ -68,6 +68,7 @@ const ReadmissionDialog = ({ isOpen, onClose,onSave, user }) => {
 
 
     };
+
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         setFormData((prevData) => ({
@@ -75,6 +76,7 @@ const ReadmissionDialog = ({ isOpen, onClose,onSave, user }) => {
             [name]: name === 'photo' ? files[0] : value,
         }));
     };
+
     const [formData, setFormData] = useState(
         {
             stream: '',
@@ -92,6 +94,7 @@ const ReadmissionDialog = ({ isOpen, onClose,onSave, user }) => {
             optionalSubject: '',
         }
     );
+
     const handleSubject = (event) => {
         const { name, value } = event.target;
         setFormData((prevFormData) => ({
@@ -99,6 +102,7 @@ const ReadmissionDialog = ({ isOpen, onClose,onSave, user }) => {
             [name]: value,
         }));
     };
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-5 ">
             <div className="flex flex-col rounded bg-white tablet:w-fit tablet:px-5 mobile:w-full mobile:px- mobile:max-tablet:mt-10 justify-center mobile:max-tablet:mx-1">
@@ -137,7 +141,7 @@ const ReadmissionDialog = ({ isOpen, onClose,onSave, user }) => {
 
                 <div className="flex justify-end p-2">
                     <button
-                        onClick={() => handleSave(user.email)}
+                        onClick={() => handleSave()}
                         className="bg-blue-500 text-white px-3 py-1 rounded mr-2"
                     >
                         Save

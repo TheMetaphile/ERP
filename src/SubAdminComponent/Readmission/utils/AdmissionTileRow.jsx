@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ReadmissionDialog from "./Dialogadmit";
 
-function AdmissionTileRow({ data, index, clickedIndex, setClickedIndex, handleRemove }) {
+function AdmissionTileRow({ data, index, clickedIndex, setClickedIndex,  handleRemove }) {
     const [loadinfIndex, setLoadingIndex] = useState('');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -17,8 +17,9 @@ function AdmissionTileRow({ data, index, clickedIndex, setClickedIndex, handleRe
     };
 
     const handleSave = () => {
-        handleRemove(data)
-    }
+        handleRemove(data);
+    };
+
     return (
         <div
             key={index}
