@@ -144,50 +144,56 @@ class _MyAppState extends State<MyApp> {
           SharedPreferences pref =await  SharedPreferences.getInstance();
           String? accessToken=pref.getString("accessToken");
 
-          print("accessTOken $accessToken");
+          print("accessToken $accessToken");
           print(" session ${calculateCurrentSession()}");
           print("date $date");
           if(accessToken!=null){
-            var data=await authApiAcess.fetchSubstitutionTeacher(accessToken,date,calculateCurrentSession());
+            int currentHour=DateTime.now().hour;
 
-            print("substitute data $data ...............");
+            if(currentHour<17){
+              var data=await authApiAcess.fetchSubstitutionTeacher(accessToken,date,calculateCurrentSession());
+              print("substitute data $data ...............");
 
-            if(data!=null){
-              print("//////////////////substitute data called successfully ..........///////////////// ");
+              if(data!=null){
+                print("//////////////////substitute data called successfully ..........///////////////// ");
 
-              String? teacherClass=pref.getString("teacherClass") ??"";
-              String? teacherSection=pref.getString("teacherSection") ?? "";
-              print("Before teacherClass $teacherClass");
-              print("Before teacherSection $teacherSection");
+                String? teacherClass=pref.getString("teacherClass") ??"";
+                String? teacherSection=pref.getString("teacherSection") ?? "";
+                print("Before teacherClass $teacherClass");
+                print("Before teacherSection $teacherSection");
 
-              if(teacherClass.isEmpty && teacherSection.isEmpty){
+                if(teacherClass.isEmpty && teacherSection.isEmpty){
 
-                final teacherClass = data["class"] ?? "";
-                final teacherSection = data["section"] ?? "";
+                  final teacherClass = data["class"] ?? "";
+                  final teacherSection = data["section"] ?? "";
 
-                print("Fetched teacherClass $teacherClass");
-                print("Fetched teacherSection $teacherSection");
+                  print("Fetched teacherClass $teacherClass");
+                  print("Fetched teacherSection $teacherSection");
 
-                await pref.setString("teacherClass", teacherClass);
-                await pref.setString("teacherSection", teacherSection);
+                  await pref.setString("teacherClass", teacherClass);
+                  await pref.setString("teacherSection", teacherSection);
 
-                print("Set teacherClass ${pref.getString("teacherClass")}");
-                print("Set teacherSection ${pref.getString("teacherSection")}");
+                  print("Set teacherClass ${pref.getString("teacherClass")}");
+                  print("Set teacherSection ${pref.getString("teacherSection")}");
 
-                int currentHour=DateTime.now().hour;
-                int assignHour=17-currentHour;
-                await pref.setInt("assignHour", assignHour);
-                print("The login workmanager");
+                  int currentHour=DateTime.now().hour;
+                  int assignHour=17-currentHour;
+                  await pref.setInt("assignHour", assignHour);
+                  print("The login workmanager");
+                  schedulePreferenceClear();
+
+                }
+
 
               }
-
-
             }
+
+
           }
 
 
 
-          schedulePreferenceClear();
+
         }
         return true;
       } else {

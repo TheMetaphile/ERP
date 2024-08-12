@@ -7,7 +7,7 @@ import 'package:untitled/utils/utils.dart';
 
 class NoteBookRecordAPI{
 
-  static String baseUrl = "http://13.201.247.28:8000";
+  static String baseUrl = "https://philester.com";
 
   Future<bool> uploadNoteBook( String accessToken, String Class,  String section,  String date,  String chapter, String topic, String session, String subject, List<String> submittedBy) async {
 
@@ -181,6 +181,22 @@ class NoteBookRecordAPI{
 
   Future<dynamic> lastRecord(String accessToken,String subject,String email)
   async {
+    if (subject == "") {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? jsonString = prefs.getString('class_section_subjects');
+
+      // Decode the JSON string
+      Map<String, dynamic> data = jsonDecode(jsonString!);
+
+      // Access the nested structure
+      String firstClass = data.keys.first;
+      Map<String, dynamic> sections = data[firstClass];
+      String firstSection = sections.keys.first;
+      List<dynamic> subjects = sections[firstSection];
+      String firstSubject = subjects.first;
+
+      subject = firstSubject;
+    }
 
     final url = Uri.parse('$baseUrl/notebook/fetch/student/last?subject=$subject&email=$email');
 

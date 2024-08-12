@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 class TeacherLeaveApi{
-  static const String _baseUrl = 'http://13.201.247.28:8000';
+  static const String _baseUrl = 'https://philester.com';
 
 
   Future<List<dynamic>>  teacherLeaveData(String accessToken,int start,String session) async {
@@ -24,7 +24,7 @@ class TeacherLeaveApi{
         return leaves ;
 
       } else {
-        throw Exception('Failed to load leaves: ${response.statusCode}');
+        throw Exception('Failed to load leaves: ${response.body}');
       }
     } catch (e) {
       throw Exception('Error fetching leaves: $e');
@@ -84,7 +84,7 @@ class TeacherLeaveApi{
         return data["status"] ;
 
       } else {
-        throw Exception('Failed to delete leaves: ${response.statusCode}');
+        throw Exception('Failed to delete leaves: ${response.body}');
       }
     } catch (e) {
       throw Exception('Error on delete leaves: $e');
@@ -119,7 +119,7 @@ class TeacherLeaveApi{
         return data["status"] ;
 
       } else {
-        throw Exception('Failed to apply leaves: ${response.statusCode}');
+        throw Exception('Failed to apply leaves: ${response.body}');
       }
     } catch (e) {
       throw Exception('Error on apply leaves: $e');
@@ -146,7 +146,7 @@ class TeacherLeaveApi{
         return data;
 
       } else {
-        throw Exception('Failed to load stats: ${response.statusCode}');
+        throw Exception('Failed to load stats: ${response.body}');
       }
     } catch (e) {
       throw Exception('Error on load stats: $e');

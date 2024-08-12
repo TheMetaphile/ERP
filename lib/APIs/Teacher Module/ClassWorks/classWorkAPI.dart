@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ClassWorkAPI{
-  static const String _baseUrl = 'http://13.201.247.28:8000';
+  static const String _baseUrl = 'https://philester.com';
 
   Future<List<dynamic>> fetchClassWorkList(String accessToken,String Class,String month,String year,String section,String subject,int start) async {
 

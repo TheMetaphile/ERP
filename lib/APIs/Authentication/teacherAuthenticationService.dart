@@ -14,7 +14,7 @@ import '../../utils/utils.dart';
 import 'package:http/http.dart' as http;
 
 class TeacherAuthentication{
-    static String baseUrl = "http://13.201.247.28:8000";
+    static String baseUrl = "https://philester.com";
 
 
   Future<dynamic> loginUser(String email, String password, BuildContext context) async {
@@ -82,7 +82,7 @@ class TeacherAuthentication{
         //    print(pref.getString("accessToken"));
         //
         //    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage()));
-        //    showGreenSnackBar("Login successful", context);
+            showGreenSnackBar("Login successful", context);
         //    return true;
         //  }
 

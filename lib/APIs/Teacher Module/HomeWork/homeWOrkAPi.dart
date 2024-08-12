@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeWorkAPI{
-  static const String _baseUrl = 'http://13.201.247.28:8000';
+  static const String _baseUrl = 'https://philester.com';
 
   Future<List<dynamic>> fetchHomeWorkList(String accessToken,String Class,String month,String year,String section,String subject,int start) async {
 
@@ -41,7 +41,7 @@ class HomeWorkAPI{
         print(data);
         return data["homework"] ;
       } else {
-        throw Exception('Failed to load homework: ${response.statusCode}');
+        throw Exception('Failed to load homework: ${response.body}');
       }
     } catch (e) {
       throw Exception('Error fetching homework: $e');
@@ -88,7 +88,7 @@ class HomeWorkAPI{
         print(data);
         return data;
       } else {
-        throw Exception('Failed upload classwork (${response.statusCode})');
+        throw Exception('Failed upload classwork (${response.body})');
       }
     } catch (e) {
       throw Exception('Network error: $e');
@@ -131,7 +131,7 @@ class HomeWorkAPI{
         print(status);
         return status["status"]?? false;
       } else {
-        throw Exception('Failed upload classwork (${response.statusCode})');
+        throw Exception('Failed upload classwork (${response.body})');
       }
     } catch (e) {
       throw Exception('Network error: $e');
@@ -164,7 +164,7 @@ class HomeWorkAPI{
         print(status);
         return status["status"]?? false;
       } else {
-        throw Exception('Failed upload classwork (${response.statusCode})');
+        throw Exception('Failed upload classwork (${response.body})');
       }
     } catch (e) {
       throw Exception('Network error: $e');

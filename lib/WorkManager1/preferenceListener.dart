@@ -17,20 +17,40 @@ class SharedPreferencesListener {
     _teacherClassController.close();
     _teacherSectionController.close();
   }
+  //
+  // Future<void> setTeacherClass(String value) async {
+  //
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('teacherClass', value);
+  //   await prefs.reload();
+  //       _teacherClassController.add(value);
+  // }
+  //
+  // Future<void> setTeacherSection(String value) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('teacherSection', value);
+  //
+  //     _teacherSectionController.add(value);
+  //
+  //
+  // }
 
-  Future<void> setTeacherClass(String value) async {
+
+  Future<void> removeTeacherClass() async {
 
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('teacherClass', value);
-    await prefs.reload();
-        _teacherClassController.add(value);
+    await prefs.remove('teacherClass');
+    // await prefs.reload();
+    _teacherClassController.add("");
   }
 
-  Future<void> setTeacherSection(String value) async {
+  Future<void> removeTeacherSection() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('teacherSection', value);
 
-      _teacherSectionController.add(value);
+    await prefs.remove('teacherSection');
+    // await prefs.reload();
+
+    _teacherSectionController.add("");
 
 
   }

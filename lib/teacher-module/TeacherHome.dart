@@ -7,7 +7,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:untitled/admin-module/adminHome.dart';
 import 'package:untitled/teacher-module/Classs%20Activity/classActivity.dart';
+import 'package:untitled/teacher-module/HOD/HOD.dart';
 import 'package:untitled/teacher-module/StudentDoubts/studentDoubts.dart';
 import 'package:untitled/teacher-module/ClassWork/classWork.dart';
 import 'package:untitled/teacher-module/HomeWork/homeWork.dart';
@@ -24,9 +26,11 @@ import '../voice_command_model/permission/permission.dart';
 import '../voice_command_model/recoginize_intent.dart';
 import '../voice_command_model/snow_boy_wake_up.dart';
 import '../voice_command_model/speek.dart';
+import 'Appraisal/appraisal.dart';
 import 'Birthday/Birthday.dart';
 import 'NoteBookRecord/noteBookRecord.dart';
 import 'NoticeBoard/noticeBoard.dart';
+import 'WeeklyPlanTeacher/WeeklyPlannerTeacher.dart';
 import 'drawerTimeTable/TimeTable1.dart';
 import 'package:speech_to_text/speech_to_text.dart' as speechToText;
 
@@ -149,16 +153,16 @@ class _TeacherHomeState extends State<TeacherHome> {
 
   void initializeApp() async {
     await Permissions().checkAudioPermission();
-    // bool permissionGranted = await requestPermissions();
-    // if (permissionGranted) {
-    //   _initializeSpeechRecognition();
-    //   _initializeWakeUp();
-    //
-    //
-    // } else {
-    //   // Handle the case when permissions are not granted
-    //   print("Permissions not granted.");
-    // }
+    bool permissionGranted = await requestPermissions();
+    if (permissionGranted) {
+      _initializeSpeechRecognition();
+      _initializeWakeUp();
+
+
+    } else {
+      // Handle the case when permissions are not granted
+      print("Permissions not granted.");
+    }
   }
 
   Future<bool> requestPermissions() async {
@@ -216,7 +220,7 @@ class _TeacherHomeState extends State<TeacherHome> {
   @override
   void initState() {
     super.initState();
-    // initializeApp();
+     initializeApp();
      getDetails();
     _loadInitialValues();
   }
@@ -363,10 +367,10 @@ class _TeacherHomeState extends State<TeacherHome> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: size.height * 0.04),
-                  // CircleAvatar(
-                  //   radius: size.width * 0.1,
-                  //   backgroundImage: NetworkImage(profileLink),
-                  // ),
+                  CircleAvatar(
+                    radius: size.width * 0.1,
+                    backgroundImage: NetworkImage(profileLink),
+                  ),
                   SizedBox(height: size.height * 0.01),
                   Text(
                     teacherName,
@@ -456,6 +460,13 @@ class _TeacherHomeState extends State<TeacherHome> {
                         },
                       ),
                       ListTile(
+                        leading: Icon(CupertinoIcons.sunrise,color: themeObj.textBlack,size: size.width*0.1,),
+                        title: Text("Appraisal",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Appraisal(),));
+                        },
+                      ),
+                      ListTile(
                         leading: Image.asset("assets/Images/TeacherDashboard/notice2.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
                         title: Text("Notice Board",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
                         onTap: (){
@@ -476,6 +487,27 @@ class _TeacherHomeState extends State<TeacherHome> {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => UploadResult(),));
                         },
                       ),
+                      ListTile(
+                        leading: Image.asset("assets/Images/TeacherDashboard/Hod.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
+                        title: Text("Weekly Planner",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => WeeklyPlanTeacher(),));
+                        },
+                      ),
+                      ListTile(
+                        leading:Icon(Icons.admin_panel_settings_rounded,color: themeObj.textBlack,size: size.width*0.1),
+                        title: Text("Coordinator",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Hod(),));
+                        },
+                      ),
+                      // ListTile(
+                      //   leading:Icon(Icons.admin_panel_settings_rounded,color: themeObj.textBlack,size: size.width*0.1),
+                      //   title: Text("assd",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),
+                      //   onTap: (){
+                      //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AdminHome(),));
+                      //   },
+                      // ),
                       // ListTile(
                       //   leading: Image.asset("assets/Images/Leave.png",color: themeObj.textBlack,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
                       //   title: Text("Student Leave Application",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: themeObj.textBlack,fontWeight:FontWeight.w400),),

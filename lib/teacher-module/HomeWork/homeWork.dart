@@ -523,121 +523,128 @@ class _HomeWorkState extends State<HomeWork> {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           final classWork=homeWorkList?[index];
-                          return Card(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Card(
-                                        color: themeObj.secondayColor,
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                        margin: EdgeInsets.all(0),
-                                        child: Container(
-                                          width: size.width * 0.3,
-                                          child: Text(classWork["subject"], textAlign: TextAlign.center, style: GoogleFonts.openSans(fontSize: size.width * 0.05, color: themeObj.textBlack,)),
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Card(
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                side: BorderSide(color: themeObj.primayColor.withOpacity(0.5), width: 1.5),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Card(
+                                          color: themeObj.secondayColor,
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                          margin: EdgeInsets.all(0),
+                                          child: Container(
+                                            width: size.width * 0.3,
+                                            child: Text(classWork["subject"], textAlign: TextAlign.center, style: GoogleFonts.openSans(fontSize: size.width * 0.05, color: themeObj.textBlack,)),
+                                          ),
                                         ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Card(
-                                            margin: EdgeInsets.all(0),
-                                            color: Color.fromRGBO(96,165,250,1),
-                                            child: SizedBox(
-                                              height: size.height*0.045,
-                                              child: Center(
-                                                child: IconButton(
-                                                  onPressed: (){
-                                                    updatePopup(this.context, size, classWork["chapter"], classWork["topic"], classWork["description"],classWork["_id"]);
+                                        Row(
+                                          children: [
+                                            Card(
+                                              margin: EdgeInsets.all(0),
+                                              color: Color.fromRGBO(96,165,250,1),
+                                              child: SizedBox(
+                                                height: size.height*0.045,
+                                                child: Center(
+                                                  child: IconButton(
+                                                    onPressed: (){
+                                                      updatePopup(this.context, size, classWork["chapter"], classWork["topic"], classWork["description"],classWork["_id"]);
 
-                                                  },
-                                                  icon: Icon(Icons.edit,color: themeObj.textWhite,size: 20,),
+                                                    },
+                                                    icon: Icon(Icons.edit,color: themeObj.textWhite,size: 20,),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(width: size.width*0.02,),
-                                          Card(
-                                            margin: EdgeInsets.all(0),
-                                            color: Colors.red,
-                                            child: SizedBox(
-                                              height: size.height*0.045,
-                                              child: IconButton(
-                                                onPressed: () async {
-                                                  SharedPreferences pref = await SharedPreferences.getInstance();
-                                                  String? accessToken = pref.getString("accessToken");
+                                            SizedBox(width: size.width*0.02,),
+                                            Card(
+                                              margin: EdgeInsets.all(0),
+                                              color: Colors.red,
+                                              child: SizedBox(
+                                                height: size.height*0.045,
+                                                child: IconButton(
+                                                  onPressed: () async {
+                                                    SharedPreferences pref = await SharedPreferences.getInstance();
+                                                    String? accessToken = pref.getString("accessToken");
 
-                                                  bool status= await apiObj.deletedHomeWrok(accessToken!, _selectedClass, month, year, classWork["_id"]);
-                                                  if (status ) {
-                                                    showGreenSnackBar("Delete Success", context);
-                                                    this.setState(() {});
-                                                    fetchHomeWork();
+                                                    bool status= await apiObj.deletedHomeWrok(accessToken!, _selectedClass, month, year, classWork["_id"]);
+                                                    if (status ) {
+                                                      showGreenSnackBar("Delete Success", context);
+                                                      this.setState(() {});
+                                                      fetchHomeWork();
 
-                                                  } else {
-                                                    showRedSnackBar("Delete failed", context);
-                                                  }
-                                                },
-                                                icon: Icon(Icons.delete_forever,color: themeObj.textWhite,size: 20,),
+                                                    } else {
+                                                      showRedSnackBar("Delete failed", context);
+                                                    }
+                                                  },
+                                                  icon: Icon(Icons.delete_forever,color: themeObj.textWhite,size: 20,),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(height: size.height * 0.02,),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Chapter:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                      SizedBox(width: size.width*0.02,),
-                                      SizedBox(
-                                          width: size.width*0.7,
-                                          child: AutoSizeText(classWork["chapter"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),)),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: size.height * 0.02,),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Chapter:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                        SizedBox(width: size.width*0.02,),
+                                        SizedBox(
+                                            width: size.width*0.7,
+                                            child: AutoSizeText(classWork["chapter"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),)),
 
-                                    ],
-                                  ),
-                                  SizedBox(height: size.height * 0.02,),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      AutoSizeText("Topic:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                      SizedBox(width: size.width*0.02,),
-                                      SizedBox(
-                                          width: size.width*0.7,
-                                          child: AutoSizeText(classWork["topic"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),)),
+                                      ],
+                                    ),
+                                    SizedBox(height: size.height * 0.02,),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        AutoSizeText("Topic:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                        SizedBox(width: size.width*0.02,),
+                                        SizedBox(
+                                            width: size.width*0.7,
+                                            child: AutoSizeText(classWork["topic"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),)),
 
-                                    ],
-                                  ),
-                                  ExpansionTile(
+                                      ],
+                                    ),
+                                    ExpansionTile(
 
-                                    shape: Border.all(color: Colors.transparent),
-                                    leading:   AutoSizeText("Task:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600),),
-                                    title: Text(""),
-                                    children: [
-                                      SizedBox(
-                                            width: size.width*0.8,
-                                          child: AutoSizeText(classWork["description"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),)),
-                                      SizedBox(height: size.height * 0.02,),                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          AutoSizeText("Date: ${classWork["date"]}", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                      shape: Border.all(color: Colors.transparent),
+                                      leading:   AutoSizeText("Description:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600),),
+                                      title: Text(""),
+                                      children: [
+                                        SizedBox(
+                                              width: size.width*0.8,
+                                            child: AutoSizeText(classWork["description"], style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w500),)),
+                                        SizedBox(height: size.height * 0.02,),                                      Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            AutoSizeText("Date: ${classWork["date"]}", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
 
-                                          AutoSizeText("Deadline:  ${classWork["deadline"]}", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
-                                        ],
-                                      ),
-                                    ],
+                                            AutoSizeText("Deadline:  ${classWork["deadline"]}", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.035, fontWeight: FontWeight.w600),),
+                                          ],
+                                        ),
+                                      ],
 
-                                  ),
+                                    ),
 
-                                  index==homeWorkList!.length-1? SizedBox(height: size.height * 0.03,):SizedBox(),
+                                    index==homeWorkList!.length-1? SizedBox(height: size.height * 0.03,):SizedBox(),
 
 
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           );

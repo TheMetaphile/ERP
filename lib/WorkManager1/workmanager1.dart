@@ -34,25 +34,28 @@ Future<void> clearSharedPreferences() async {
   print("Starting clearSharedPreferences at ${DateTime.now()}");
 
   final listener = SharedPreferencesListener();
-  await listener.setTeacherClass('');
-  await listener.setTeacherSection('');
+  await listener.removeTeacherClass();
+  await listener.removeTeacherSection();
 
   print("After clearing:/..............");
   String? Class = await listener.getTeacherClass();
   String? section =await listener.getTeacherSection();
+
+  print("Direct print  ${ await listener.getTeacherClass()}");
   print("${Class}, : $section");
 }
 
 Future<void> schedulePreferenceClear() async {
 
         try {
-        // Generate a unique task IDankits
-        String taskId = "clearSharedPreferencesTask_${DateTime.now().millisecondsSinceEpoch}";
+      SharedPreferences pref=await SharedPreferences.getInstance();
 
+      int delay=pref.getInt("assignHour") ?? 0;
+      print("delay -------------$delay");
         await Workmanager().registerOneOffTask(
           "clearSharedPreferencesTask",
           "clearSharedPreferencesTask",
-          initialDelay: const Duration(seconds: 5),
+          initialDelay:  Duration(seconds: 5),
           existingWorkPolicy: ExistingWorkPolicy.replace,
           constraints: Constraints(
             networkType: NetworkType.not_required,

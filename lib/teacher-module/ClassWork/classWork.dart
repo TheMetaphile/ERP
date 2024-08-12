@@ -545,7 +545,7 @@ class _ClassWorkState extends State<ClassWork> {
                                 ExpansionTile(
                                   
                                   shape: Border.all(color: Colors.transparent),
-                                    leading:   AutoSizeText("Task:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600),),
+                                    leading:   AutoSizeText("Description:", style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600),),
                                     title: Text(""),
                                     children: [
                                       SizedBox(

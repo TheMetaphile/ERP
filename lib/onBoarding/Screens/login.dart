@@ -10,6 +10,7 @@ import 'package:untitled/teacher-module/techerClass.dart';
 import 'package:workmanager/workmanager.dart';
 import '../../APIs/Authentication/teacherAuthenticationService.dart';
 import '../../WorkManager1/workmanager1.dart';
+import '../../main.dart';
 import '../../utils/theme.dart';
 import '../../utils/utils.dart';
 import '../utils/text_field.dart';
@@ -226,7 +227,7 @@ class _LoginState extends State<Login> {
         // }
 
 
-        Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherHome(),));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(),));
       }
 
 
