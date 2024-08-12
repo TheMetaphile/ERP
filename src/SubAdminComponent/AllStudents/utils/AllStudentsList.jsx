@@ -162,6 +162,10 @@ export default function AllStudentsList() {
     // State to control the dropdown visibility
     const [isDropdownVisible, setDropdownVisible] = useState(false);
 
+    const handleRemove=(particularUser)=>{
+        setUserData((prevData) => prevData.filter(user => user.email !== particularUser.email));
+
+    }
     return (
         <>
             <div className="flex tablet:max-tablet:mt-5  mobile:max-tablet:my-3 justify-between items-center mobile:max-tablet:items-baseline mobile:max-tablet:pl-1 mobile:max-tablet:py-2 px-2  mobile:max-tablet:fixed top-34 left-0 right-0 bg-white mb-4">
@@ -225,7 +229,7 @@ export default function AllStudentsList() {
                         ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
                             <div>No students found</div>
                         ) : Array.isArray(filteredStudents) ? (
-                            <StudentDetailTile userData={filteredStudents} />
+                            <StudentDetailTile userData={filteredStudents} handleRemove={handleRemove}/>
                         ) : (
                             <div>Unexpected data format</div>
                         )}

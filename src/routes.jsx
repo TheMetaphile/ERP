@@ -170,6 +170,7 @@ import AppliedAdmin from "./AdminComponents/appraisal/utils/AppliedAdmin.jsx";
 import NewAdmission from "./AdminComponents/New Admission/NewAdmission.jsx";
 import Readmission from "./SubAdminComponent/Readmission/Readmission.jsx";
 import AllAdmission from "./SubAdminComponent/Readmission/AllAdmission.jsx";
+import TabsStudentFee from "./components/fees/Tabs.jsx";
 // import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
 
 
@@ -208,7 +209,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/Student-Dashboard/fee-due",
-        element: <Fee />,
+        element: <TabsStudentFee />,
       },
       {
         path: "/Student-Dashboard/events",

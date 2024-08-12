@@ -121,29 +121,7 @@ export default function AllAdmission() {
         );
     });
 
-    const showAddRollNumberButton = filteredStudents.some(student => !student.rollNumber);
 
-    const handleRollNumber = async () => {
-        if (!Class || !Section) {
-            setError('Please select a class and section first');
-            return;
-        }
-        try {
-            setLoading(true);
-            console.log("start");
-            const response = await axios.post(`${BASE_URL_Login}/assignRollNumber`, {
-                accessToken: authState.accessToken,
-                currentClass: Class,
-                section: Section
-            });
-            setStart(0);
-            console.log("end");
-            // console.log(response.data);
-            fetchUserData();
-        } catch (err) {
-            setError(err.message);
-        }
-    };
 
     const handleScroll = () => {
         const container = containerRef.current;
@@ -204,15 +182,7 @@ export default function AllAdmission() {
                     />
                 </div>
 
-                {loading && userData.length > 0 ? <Loading /> : null}
-                {/* {(showAddRollNumberButton && Class && Section && !loading) && (
-                    <button
-                        className=" rounded-lg shadow-md px-3 py-1 mr-2 border-2 border-r-gray-200 text-lg bg-secondary float-right mb-3"
-                        onClick={handleRollNumber}
-                    >
-                        Add Roll Number
-                    </button>
-                )} */}
+  
                 <div className="mobile:max-laptop:overflow-y-auto">
                     <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap mobile:max-tablet:mt-20" ref={containerRef} onScroll={handleScroll}>
                         <div className="stutable">

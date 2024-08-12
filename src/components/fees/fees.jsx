@@ -14,11 +14,11 @@ export default function Fees() {
 
     return (
         <PaymentProvider>
-            <div className="flex flex-col tablet:w-full mobile:max-tablet:w-screen overflow-y-auto no-scrollbar items-start mobile:max-tablet:mt-4 px-2">
+            <div className="flex flex-col tablet:w-full mobile:max-tablet:w-screen overflow-y-auto no-scrollbar items-start mobile:max-tablet:mt-4 px-2 mt-3">
                 <ToastContainer />
                 <h1 className="mb-2 text-2xl font-medium mobile:max-tablet:text-lg">Fee Status</h1>
                 <FeeStatusRow />
-                <div className='flex items-center justify-between w-full'>
+                <div className='flex items-center justify-between w-full mb-3'>
                     <h1 className="mb-2 text-2xl font-medium mobile:max-tablet:text-lg">Fees Structure</h1>
                     <select
                         value={selectedOption}

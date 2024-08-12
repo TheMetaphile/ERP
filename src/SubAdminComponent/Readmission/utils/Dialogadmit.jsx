@@ -1,28 +1,72 @@
-import React, { useState } from 'react';
+import { useState, useContext } from "react";
+import axios from 'axios';
+import AuthContext from "../../../Context/AuthContext";
+import Loading from "../../../LoadingScreen/Loading";
+import { BASE_URL_Login } from "../../../Config";
+import { toast } from "react-toastify";
 import AdmissionInputs from './AdmissionInputs';
 
-const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
+const ReadmissionDialog = ({ isOpen, onClose,onSave, user }) => {
+    const { authState } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+
+    function getSession() {
+        const currentYear = new Date().getFullYear();
+        const nextYear = currentYear + 1;
+        const session = `${currentYear}-${nextYear.toString().slice(-2)}`;
+        return session;
+    }
+
+    const session = getSession();
+    console.log(session);
+
+    console.log(user);
     if (!isOpen) return null;
 
-    const [streams, setStreams] = useState(['']); // Initialize with one empty input field
 
-    const handleAddStream = () => {
-        setStreams([...streams, '']); // Add a new empty field
+    const getSelectedSubjects = () => {
+        return Object.entries(formData)
+            .filter(([key, value]) =>
+                ['physics', 'chemistry', 'maths', 'biology', 'accountancy', 'businessStudies', 'economics', 'history', 'politicalScience', 'geography', 'english', 'optionalSubject'].includes(key) && value !== ''
+            )
+            .map(([key, value]) => (value));
     };
 
-    const handleStreamChange = (index, value) => {
-        const updatedStreams = streams.map((stream, i) => (i === index ? value : stream));
-        setStreams(updatedStreams);
-    };
 
-    const handleRemoveStream = (index) => {
-        const updatedStreams = streams.filter((_, i) => i !== index);
-        setStreams(updatedStreams);
-    };
+    const handleSave = async (email) => {
+        const selectedSubjects = getSelectedSubjects();
 
-    const handleSave = () => {
-        onSave(user.email, streams);
-        onClose();
+        console.log(authState.accessToken, email, formData.stream, selectedSubjects, session)
+        setLoading(true);
+
+        try {
+            const response = await axios.put(`${BASE_URL_Login}/promote/readmit`,
+                {
+                    email: email,
+                    subjects: selectedSubjects,
+                    stream: formData.stream,
+                    session: session
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`
+                    }
+                }
+            );
+            console.log(response.data);
+            toast.success("Student readmitted successfully");
+            onSave();
+            onClose();
+
+        } catch (error) {
+            console.error("There was an error readmitted the student!", error);
+            toast.error("Failed to readmitted the student");
+        }
+        finally {
+            setLoading(false);
+        }
+
+
     };
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -34,7 +78,6 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
     const [formData, setFormData] = useState(
         {
             stream: '',
-            stream: '',
             physics: '',
             chemistry: '',
             maths: '',
@@ -45,7 +88,7 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
             history: '',
             politicalScience: '',
             geography: '',
-            subject4: '',
+            english: '',
             optionalSubject: '',
         }
     );
@@ -94,7 +137,7 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
 
                 <div className="flex justify-end p-2">
                     <button
-                        onClick={handleSave}
+                        onClick={() => handleSave(user.email)}
                         className="bg-blue-500 text-white px-3 py-1 rounded mr-2"
                     >
                         Save

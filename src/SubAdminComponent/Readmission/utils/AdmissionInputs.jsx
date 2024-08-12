@@ -56,17 +56,17 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
               <div className="w-full rounded-md">
                 <label className="block text-lg mb-2" htmlFor="subject4">
                   English
-                  <select
+                  <input
                     className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="subject4"
-                    name="subject4"
+                    id="english"
+                    type="text"
+                    name="english"
                     placeholder="English"
-                    value={formData.subject4}
+                    value={formData.english}
                     onChange={handleChange}
                     required
-                  >
-                    <option value="English">English</option>
-                  </select>
+                  />
+                    
                 </label>
               </div>
               <div className="w-full rounded-md">
