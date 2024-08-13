@@ -12,11 +12,12 @@ export const AuthProvider = ({ children }) => {
         otpToken: null,
         subject: null,
         ClassDetails: null,
-        Co_scholastic:null
+        Co_scholastic:null,
+        subjects : null
 
     });
 
-    const login = (userDetails, tokens,subject, ClassDetails,Co_scholastic) => {
+    const login = (userDetails, tokens,subject, ClassDetails,Co_scholastic,subjects) => {
         setAuthState({
             userDetails,
             accessToken: tokens.accessToken,
@@ -24,7 +25,8 @@ export const AuthProvider = ({ children }) => {
             otpToken: null,
             subject,
             ClassDetails,
-            Co_scholastic
+            Co_scholastic,
+            subjects
 
         });
         console.log("auth user", userDetails);
@@ -33,6 +35,7 @@ export const AuthProvider = ({ children }) => {
         console.log("auth adhaar", userDetails.aadhaarNumber);
         console.log("auth subject", subject);
         console.log("auth ClassDetails", ClassDetails);
+        console.log("auth student side subjects", subjects);
 
     };
 

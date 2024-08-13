@@ -171,6 +171,7 @@ import NewAdmission from "./AdminComponents/New Admission/NewAdmission.jsx";
 import Readmission from "./SubAdminComponent/Readmission/Readmission.jsx";
 import AllAdmission from "./SubAdminComponent/Readmission/AllAdmission.jsx";
 import TabsStudentFee from "./components/fees/Tabs.jsx";
+import Promotion from "./TeacherComponents/StudentPromotion/Promotion.jsx";
 // import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
 
 
@@ -819,7 +820,6 @@ const router = createBrowserRouter([
             element: <TimeTableStudent />,
             children: []
           },
-
           {
             path: "reportcard",
             element: <AllReport />,
@@ -834,8 +834,6 @@ const router = createBrowserRouter([
               }
             ]
           },
-
-
           {
             path: "/Teacher-Dashboard/class_activity/studentfee",
             element: <StudentFee />,
@@ -854,6 +852,11 @@ const router = createBrowserRouter([
           {
             path: "/Teacher-Dashboard/class_activity/studentleave",
             element: <StudentLeave />,
+            children: []
+          },
+          {
+            path: "/Teacher-Dashboard/class_activity/studentPromotion",
+            element: <Promotion />,
             children: []
           },
         ]

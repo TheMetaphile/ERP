@@ -202,7 +202,7 @@ export default function MyDoubts() {
                                     className=" shadow-md border border-grey-300 rounded-lg p-2 w-full mr-2  mb-2"
                                     onChange={handleModalSubject}
                                 >
-                                    {['Hindi', 'Maths', 'English', 'Computer', 'Science', 'Chemistry', 'Physics', 'Sanskrit'].map(
+                                    {authState.subjects.map(
                                         (subject, index) => (
                                             <option key={index} value={subject}>
                                                 {subject}

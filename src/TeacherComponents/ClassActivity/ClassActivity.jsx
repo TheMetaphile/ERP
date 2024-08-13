@@ -23,6 +23,10 @@ function ClassActivity() {
             title: "Student Leave",
             route: "/Teacher-Dashboard/class_activity/studentleave"
         },
+        {
+            title: "Student Promotion",
+            route: "/Teacher-Dashboard/class_activity/studentPromotion"
+        },
 
     ];
     const [idx, setidx] = useState(0)

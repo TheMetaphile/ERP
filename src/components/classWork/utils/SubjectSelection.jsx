@@ -5,26 +5,26 @@ import { BASE_URL_Subject } from '../../../Config';
 
 function SubjectSelection({ onSubjectSelect }) {
   const { authState } = useContext(AuthContext);
-  const [subjects, setSubjects] = useState([]);
+  const [subjects, setSubjects] = useState(authState.subjects);
   const [selectedSubject, setSelectedSubject] = useState('Maths');
 
-  const fetchSubjects = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL_Subject}/fetch/subjects?class=${authState.userDetails.currentClass}&section=${authState.userDetails.section}`, {
-        headers: {
-          Authorization: `Bearer ${authState.accessToken}`,
-        }
-      });
+  // const fetchSubjects = async () => {
+  //   try {
+  //     const response = await axios.get(`${BASE_URL_Subject}/fetch/subjects?class=${authState.userDetails.currentClass}&section=${authState.userDetails.section}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${authState.accessToken}`,
+  //       }
+  //     });
 
-      setSubjects(response.data.subjects);
-    } catch (error) {
-      console.error("Error fetching subjects:", error);
-    }
-  };
+  //     setSubjects(response.data.subjects);
+  //   } catch (error) {
+  //     console.error("Error fetching subjects:", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchSubjects();
-  }, [authState]);
+  // useEffect(() => {
+  //   fetchSubjects();
+  // }, [authState]);
 
   const handleSubjectChange = (event) => {
     const subject = event.target.value;

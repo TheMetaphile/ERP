@@ -52,7 +52,7 @@ export default function RightCard() {
             }).then(async(response) => {
                 if (response.status == 200) {
                     console.log(response.data, "isuhgaoiud hfguj dsfkgj")
-                    var { userDetails, tokens, subject, ClassDetails } = response.data;
+                    var { userDetails, tokens, subject, ClassDetails, subjects } = response.data;
                     console.log(userDetails, tokens);
                     var date = new Date();
                     if (role==="Teacher-Dashboard"  && date.getHours()<17) {
@@ -118,7 +118,7 @@ export default function RightCard() {
                         
 
                     }
-                    login(userDetails, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : []);
+                    login(userDetails, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : [], subjects ? subjects : []);
                     navigate(`/${role}`);
                 }
             });
