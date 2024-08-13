@@ -11,7 +11,7 @@ import { BASE_URL_TimeTable } from '../../../../Config';
 export default function UploadTimetable({ fetchedTimeTableStructure, handleChange }) {
     const [lectureTimes, setLectureTimes] = useState([]);
 
-    const subjects = ["Select", "Hindi", "English", "Maths", "Science", " Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", " Accounts"];
+    const subjects = [ "Hindi", "English", "Maths", "Science", " Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", " Accounts"];
     const [selectedSubjects, setSelectedSubjects] = useState([]);
     const [selectedTeachers, setSelectedTeachers] = useState([]);
     const { authState } = useContext(AuthContext);
@@ -138,18 +138,18 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
 
         console.log(timetableData);
 
-        try {
-            const response = await axios.post(`${BASE_URL_TimeTable}/timetable/upload`, timetableData);
-            if (response.status === 200) {
-                console.log(response.data);
-                toast.success('Timetable uploaded successfully');
-            } else {
-                toast.error('Failed to upload timetable');
-            }
-        } catch (error) {
-            const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
-            toast.error(errorMessage);
-        }
+        // try {
+        //     const response = await axios.post(`${BASE_URL_TimeTable}/timetable/upload`, timetableData);
+        //     if (response.status === 200) {
+        //         console.log(response.data);
+        //         toast.success('Timetable uploaded successfully');
+        //     } else {
+        //         toast.error('Failed to upload timetable');
+        //     }
+        // } catch (error) {
+        //     const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+        //     toast.error(errorMessage);
+        // }
     };
 
     return (
