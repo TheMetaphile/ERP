@@ -109,7 +109,7 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-5 ">
+        <div className="fixed inset-0 mt-10 flex items-center justify-center bg-black bg-opacity-5 ">
             <div className="flex flex-col rounded bg-white tablet:w-fit tablet:px-5 mobile:w-full mobile:px- mobile:max-tablet:mt-10 justify-center mobile:max-tablet:mx-1">
                 <div className=" p-4 rounded w-auto">
                     <h3 className="text-lg font-bold mb-2">Readmission</h3>
@@ -117,7 +117,7 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
                         {user.name}
                     </div>
                     <div className="w-full rounded-md mobile:max-tablet:w-auto mb-2">
-                        <label className="block text-start mx-2 text-lg mobile:max-laptop:text-sm" htmlFor="stream">
+                        <label className="block mobile:max-tablet:text-start mt-4 mx-2 text-lg mobile:max-laptop:text-sm" htmlFor="stream">
                             Select Stream
                         </label>
                         <select
