@@ -4,13 +4,12 @@ import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../Config";
 
-export default function Notice(props) {
+export default function Notice() {
   const { authState } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState([]);
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(5);
-
 
   useEffect(() => {
     const fetchNotice = async () => {
@@ -22,37 +21,28 @@ export default function Notice(props) {
           }
         });
         setDetails(response.data.notices);
-        console.log('fetch', response.data);
       } catch (error) {
         console.error("Error fetching notice:", error);
-      }
-      finally {
-        setLoading(false)
+      } finally {
+        setLoading(false);
       }
     };
     fetchNotice();
-  }, [authState.accessToken]);
+  }, [authState.accessToken, start, end]);
 
   return (
-    <div className="mt-3 mb-30 ">
-      {/* <div className="mt-3 mb-30 ">
-            <h4 className="font-normal text-sm">{props.title}</h4>
-            <p className="text-gray-500 text-left text-xs">{props.description}</p>
-          </div> */}
+    <div className="space-y-4">
       {loading ? (
         <Loading />
       ) : details.length === 0 ? (
-        <div className="w-full text-center">No notices available</div>
+        <div className="text-center text-gray-500">No notices available</div>
       ) : (
-        <>
-          {details.map((detail, index) => (
-            <div className="mt-3 mb-2 " key={index}>
-              <h4 className="font-medium text-sm">{detail.title}</h4>
-              <p className="text-gray-500 text-xs overflow-hidden text-justify line-clamp-4 text-ellipsis py-1">{detail.description}</p>
-            </div>
-          ))
-          }
-        </>
+        details.map((detail, index) => (
+          <div key={index} className="border-b border-gray-200 pb-3">
+            <h3 className="font-semibold text-base mb-1">{detail.title}</h3>
+            <p className="text-gray-600 text-sm line-clamp-2">{detail.description}</p>
+          </div>
+        ))
       )}
     </div>
   );

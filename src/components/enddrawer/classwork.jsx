@@ -11,10 +11,8 @@ export default function Classwork() {
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(4);
 
-
   useEffect(() => {
     const fetchClassWork = async () => {
-      console.log(authState.userDetails.currentClass, new Date().getMonth() + 1, authState.userDetails.academicYear, authState.userDetails.section)
       setLoading(true);
       try {
         const response = await axios.get(`${BASE_URL_ClassWork}/classwork/fetch/student?class=${authState.userDetails.currentClass}&month=${new Date().getMonth() + 1}&year=${authState.userDetails.academicYear}&section=${authState.userDetails.section}&start=${start}&end=${end}`, {
@@ -23,35 +21,30 @@ export default function Classwork() {
           }
         });
         setDetails(response.data.classwork);
-        console.log('fetch', response.data)
       } catch (error) {
         console.error("Error fetching student classwork:", error);
-      }
-      finally {
-        setLoading(false)
+      } finally {
+        setLoading(false);
       }
     };
     fetchClassWork();
-  }, [authState.accessToken]);
+  }, [authState.accessToken, authState.userDetails, start, end]);
 
   return (
-    <div className="mt-2 mb-30 ">
+    <div className="space-y-4 border-b border-gray-200">
       {loading ? (
         <Loading />
       ) : details.length === 0 ? (
-        <div className="w-full text-center">No classwork available</div>
+        <div className="text-center text-gray-500">No classwork available</div>
       ) : (
-        <>
-          {details.map((detail, index) => (
-            <div className="mt-3 mb-2" key={index}>
-              <h4 className="font-medium text-sm">Chapter : {detail.chapter}</h4>
-              <p className="text-gray-500 text-left text-xs">Topic : {detail.topic}</p>
-              <p className="text-gray-500 text-xs overflow-hidden text-justify line-clamp-4 text-ellipsis py-1">Description : {detail.description}</p>
-              <p className="text-xs text-right">Date : {detail.date}</p>
-            </div>
-          ))
-          }
-        </>
+        details.map((detail, index) => (
+          <div key={index} className="bg-gray-50 rounded-md py-3">
+            <h3 className="font-semibold text-base mb-1">Chapter: {detail.chapter}</h3>
+            <p className="text-gray-600 text-sm mb-1">Topic: {detail.topic}</p>
+            <p className="text-gray-600 text-sm mb-2 line-clamp-2">{detail.description}</p>
+            <p className="text-xs text-right text-gray-500">Date: {detail.date}</p>
+          </div>
+        ))
       )}
     </div>
   );

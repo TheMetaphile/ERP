@@ -1,12 +1,12 @@
 import React, { useEffect, useContext, useState } from 'react';
-import axios from 'axios'
-import ProfileIcon from './../../../../assets/profileIcon.png'
-import NotificationIcon from './../../../../assets/notificationIcon.png'
-import AuthContext from '../../../../Context/AuthContext'
+import axios from 'axios';
+import ProfileIcon from './../../../../assets/profileIcon.png';
+import NotificationIcon from './../../../../assets/notificationIcon.png';
+import AuthContext from '../../../../Context/AuthContext';
 import { Badge } from '@mui/material';
 import { BASE_URL_ClassTeacher } from "../../../../Config";
 
-export default function ProfileCard(props) {
+export default function ProfileCard() {
   const { authState } = useContext(AuthContext);
   const [teacher, setTeacher] = useState('');
 
@@ -14,7 +14,7 @@ export default function ProfileCard(props) {
     if (authState.accessToken) {
       fetchTeacher();
     }
-  }, [authState.accessToken])
+  }, [authState.accessToken]);
 
   const fetchTeacher = async () => {
     try {
@@ -24,8 +24,7 @@ export default function ProfileCard(props) {
         section: authState.userDetails.section
       });
       if (response.status === 200) {
-        setTeacher(response.data.name)
-        console.log(response.data.name);
+        setTeacher(response.data.name);
       }
     } catch (error) {
       console.error("Error searching for teachers:", error);
@@ -33,36 +32,42 @@ export default function ProfileCard(props) {
   }
 
   return (
-    <div className="flex w-full mb-1 shadow-md rounded-lg bg-white p-2 h-fit mobile:max-tablet:mt-2">
-      <img src={authState.userDetails.profileLink || ProfileIcon} alt="ProfileIcon" className="w-24 h-24 mobile:max-tablet:w-20 mobile:max-tablet:h-20 rounded-full" />
-      <div className='ml-3'>
-        <h3 className="mb-1 font-medium mobile:max-tablet:font-normal mobile:max-tablet:text-sm">Hi, <span className="mb-1 font-normal">{authState.userDetails.name}</span></h3>
-        <h5 className="mb-1 font-medium mobile:max-tablet:font-normal mobile:max-tablet:text-sm">Class: <span className="mb-1 font-normal"> {authState.userDetails.currentClass}-{authState.userDetails.section}</span> | Roll No. <span className="mb-1 font-normal">{authState.userDetails.rollNumber}</span></h5>
-        <h3 className="mb-1 font-medium mobile:max-tablet:font-normal mobile:max-tablet:text-sm">Class Teacher : <span className="mb-1 font-normal">{teacher || "Not found"}</span></h3>
-        <p className='px-2 py-1 rounded-md bg-teal-100 w-fit border border-gray-300 shadow-md mobile:max-tablet:text-sm '>{authState.userDetails.session}</p>
-      </div>
-      <div className='ml-auto relative text-center'>
-        <Badge badgeContent={4}
-          color='red'
-          overlap="circular"
-          sx={{
-            "& .MuiBadge-badge": {
-              backgroundColor: "red",
-              color: "white",
-              fontSize: "1rem",
-              paddingY: "0.8rem",
-              paddingX: "0.4rem",
-
-            }
-          }}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}>
-
-          <img src={NotificationIcon} alt="Notifications" className="block w-16 font-medium" />
-        </Badge>
-
+    <div className="bg-gradient-to-r from-blue-50 to-teal-50 w-full rounded-xl shadow-lg p-6 border border-gray-300">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4 mobile:max-tablet:flex-col mobile:max-tablet:text-center">
+          <img 
+            src={authState.userDetails.profileLink || ProfileIcon} 
+            alt="Profile" 
+            className="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover"
+          />
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-1">
+              Hi, {authState.userDetails.name}
+            </h2>
+            <div className="text-sm text-gray-600 space-y-1">
+              <p>Class: {authState.userDetails.currentClass}-{authState.userDetails.section} | Roll No. {authState.userDetails.rollNumber}</p>
+              <p>Class Teacher: {teacher || "Not found"}</p>
+              <span className="inline-block px-3 py-1 bg-teal-100 text-teal-800 rounded-full font-medium">
+                {authState.userDetails.session}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="relative">
+          <Badge 
+            badgeContent={4}
+            color="error"
+            overlap="circular"
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+          >
+            <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors duration-200">
+              <img src={NotificationIcon} alt="Notifications" className="w-8 h-8" />
+            </button>
+          </Badge>
+        </div>
       </div>
     </div>
   );

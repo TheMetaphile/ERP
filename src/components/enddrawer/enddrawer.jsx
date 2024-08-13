@@ -1,37 +1,58 @@
 import { Link } from "react-router-dom";
-import Activities from './activity.jsx';
+import Activities from './activity';
 import Ballroom from "./../../assets/BallroomDance.png";
-import Notice from './notice.jsx';
-import Classwork from "./classwork.jsx";
+import Notice from './notice';
+import Classwork from "./classwork";
 
 export default function Enddrawer() {
   return (
-    <div className="overflow-auto h-full px-2 w-full">
-      <h6 className="flex justify-between text-sm mt-3">Daily Notice
-        <Link to={'/Student-Dashboard/notification/allnotification'}>
-          <span className="text-blue-500">See All</span>
-        </Link>
-      </h6>
-      <div className="dialyNotices w-full  bg-blue-50 rounded-xl p-2 mt-3 mb-3 overflow-auto border border-gray-300">
-        <Notice />
-      </div>
-      {/* <h6 className="flex justify-between text-sm overflow-auto no-scrollbar">Activities
-        <Link to={'/Student-Dashboard/activities/recentactivity'}>
-          <span className="text-blue-500">See All</span>
-        </Link>
-      </h6>
-      <Activities image={Ballroom} title="Rhyme Time: A Night of Poetry" time="24 Jan 21, 09:00 AM" description="April is also a National Poetry Month. Now there is a great theme for a fun family night!" />
-      <Activities image={Ballroom} title="Rhyme Time: A Night of Poetry" time="24 Jan 21, 09:00 AM" description="April is also a National Poetry Month. Now there is a great theme for a fun family night!" />
-      <Activities image={Ballroom} title="Rhyme Time: A Night of Poetry" time="24 Jan 21, 09:00 AM" description="April is also a National Poetry Month. Now there is a great theme for a fun family night!" />
-      <Activities image={Ballroom} title="Rhyme Time: A Night of Poetry" time="24 Jan 21, 09:00 AM" description="April is also a National Poetry Month. Now there is a great theme for a fun family night!" /> */}
-      <h6 className="flex justify-between text-sm mt-3">Classwork
-        <Link to={'/Student-Dashboard/classwork'}>
-          <span className="text-blue-500">See All</span>
-        </Link>
-      </h6>
-      <div className="dialyNotices w-full  bg-blue-50 rounded-xl p-2 mt-3 mb-3 overflow-auto border border-gray-300">
-        <Classwork />
-      </div>
+    <div className="border border-gray-300 roubder-full shadow-md h-full overflow-auto px-4 py-6">
+      <section className="mb-8">
+        <h2 className="flex justify-between items-center text-lg font-semibold mb-4">
+          Daily Notice
+          <Link to="/Student-Dashboard/notification/allnotification" className="text-blue-600 hover:text-blue-800 text-sm">
+            See All
+          </Link>
+        </h2>
+        <div className="bg-white rounded-lg shadow-md p-4 border-l-4 border-blue-500">
+          <Notice />
+        </div>
+      </section>
+
+      {/* <section className="mb-8">
+        <h2 className="flex justify-between items-center text-lg font-semibold mb-4">
+          Activities
+          <Link to="/Student-Dashboard/activities/recentactivity" className="text-blue-600 hover:text-blue-800 text-sm">
+            See All
+          </Link>
+        </h2>
+        <div className="space-y-4">
+          <Activities
+            image={Ballroom}
+            title="Rhyme Time: A Night of Poetry"
+            time="24 Jan 21, 09:00 AM"
+            description="April is also a National Poetry Month. Now there is a great theme for a fun family night!"
+          />
+          <Activities
+            image={Ballroom}
+            title="Dance Extravaganza"
+            time="28 Jan 21, 02:00 PM"
+            description="Join us for an evening of graceful movements and rhythmic beats!"
+          />
+        </div>
+      </section> */}
+
+      <section>
+        <h2 className="flex justify-between items-center text-lg font-semibold mb-4">
+          Classwork
+          <Link to="/Student-Dashboard/classwork" className="text-blue-600 hover:text-blue-800 text-sm">
+            See All
+          </Link>
+        </h2>
+        <div className="bg-white rounded-lg shadow-md p-4 border-l-4 border-green-500">
+          <Classwork />
+        </div>
+      </section>
     </div>
   );
 }
