@@ -17,6 +17,7 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
         )}
         <img src={logo} alt="Metaphile Public School" className="w-10" />
         <span className="tablet:text-lg font-medium mobile:text-sm mr-2">etaphile Public School</span>
+
       </div>
       <h1 className='text-2xl font-medium mobile:max-tablet:text-xl'>
         Sub Admin Panel
@@ -25,6 +26,9 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
         <ul className="flex w-full items-center mobile:max-tablet:text-sm mobile:max-tablet:text-center mobile:max-tablet:px-4">
           <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1">
             <Link to="/Sub-Admin/Students" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Students</Link>
+          </li>
+          <li>
+            <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-laptop:w-7 mobile:max-laptop:h-7 rounded-lg" />
           </li>
           {authState.userDetails.role === 'Certificate' && authState.userDetails.department === 'Certificate' ? (
             <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1">

@@ -7,11 +7,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
         return (
           <>
             <div className=" mobile:max-tablet:flex gap-20 overflow-auto">
-              <div className="w-full rounded-md mobile:max-tablet:flex items-center">
+              <div className="w-full text-left rounded-md mobile:max-tablet:flex items-center">
                 <label className="block text-lg mb-2 mobile:max-tablet:mb-0" htmlFor="physics">
-                  Physics
+                  Physics:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border tablet:w-72 tablet:ml-9 rounded-md py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="physics"
                     type="text"
                     name="physics"
@@ -23,11 +23,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                 </label>
 
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-left rounded-md">
                 <label className="block text-lg mb-2" htmlFor="chemistry">
-                  Chemistry
+                  Chemistry:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-4 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="chemistry"
                     type="text"
                     name="chemistry"
@@ -38,11 +38,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-left rounded-md">
                 <label className="block text-lg mb-2" htmlFor="maths">
-                  Maths
+                  Maths:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-12 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="maths"
                     type="text"
                     name="maths"
@@ -53,11 +53,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-left rounded-md">
                 <label className="block text-lg mb-2" htmlFor="subject4">
-                  English
+                  English:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border tablet:w-72 tablet:ml-10 rounded-md  py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="english"
                     type="text"
                     name="english"
@@ -66,14 +66,14 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                     onChange={handleChange}
                     required
                   />
-                    
+
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-left rounded-md">
                 <label className="block text-lg mb-2" htmlFor="optionalSubject">
-                  Optional Subject
+                  Optional Subject:
                   <select
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border w-80 ml-1 rounded-md  py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="optionalSubject"
                     name="optionalSubject"
                     value={formData.optionalSubject}
@@ -82,9 +82,9 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   >
                     <option value="">Select Optional Subject</option>
                     <option value="Computer Science">Computer Science</option>
-                    <option value="Biology">Biology</option>
-                    <option value="Economics">Economics</option>
+                    {/* <option value="Biology">Biology</option> */}
                     <option value="Economics">Hindi</option>
+                    <option value="Economics">Physical Education</option>
                   </select>
                 </label>
               </div>
@@ -95,11 +95,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
         return (
           <>
             <div className=" mobile:max-tablet:flex gap-20 overflow-auto">
-              <div className="w-full rounded-md">
+              <div className="w-full text-start  rounded-md">
                 <label className="block text-lg mb-2" htmlFor="physics">
-                  Physics
+                  Physics:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="physics"
                     type="text"
                     name="physics"
@@ -111,11 +111,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start  rounded-md">
                 <label className="block text-lg mb-2" htmlFor="chemistry">
-                  Chemistry
+                  Chemistry:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-5 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="chemistry"
                     type="text"
                     name="chemistry"
@@ -126,11 +126,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start  rounded-md">
                 <label className="block text-lg mb-2" htmlFor="biology">
-                  Biology
+                  Biology:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="biology"
                     type="text"
                     name="biology"
@@ -141,11 +141,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start  rounded-md">
                 <label className="block text-lg mb-2" htmlFor="subject4">
-                  English
+                  English:
                   <select
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="subject4"
                     name="subject4"
                     value={formData.subject4}
@@ -158,11 +158,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   </select>
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start  rounded-md">
                 <label className="block text-lg mb-2" htmlFor="optionalSubject">
-                  Optional Subject
+                  Optional Subject:
                   <select
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-2 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="optionalSubject"
                     name="optionalSubject"
                     value={formData.optionalSubject}
@@ -184,11 +184,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
         return (
           <>
             <div className=" mobile:max-tablet:flex gap-20 overflow-auto">
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="physics">
-                  Physics
+                  Physics:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="physics"
                     type="text"
                     name="physics"
@@ -199,11 +199,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="chemistry">
-                  Chemistry
+                  Chemistry:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-5 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="chemistry"
                     type="text"
                     name="chemistry"
@@ -214,11 +214,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="maths">
-                  Maths
+                  Maths:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-12 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="maths"
                     type="text"
                     name="maths"
@@ -229,11 +229,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="biology">
-                  Biology
+                  Biology:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="biology"
                     type="text"
                     name="biology"
@@ -244,11 +244,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="subject4">
-                  English
+                  English:
                   <select
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="subject4"
                     name="subject4"
                     placeholder="English"
@@ -260,11 +260,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   </select>
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="optionalSubject">
-                  Optional Subject
+                  Optional Subject:
                   <select
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-2 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="optionalSubject"
                     name="optionalSubject"
                     value={formData.optionalSubject}
@@ -273,8 +273,7 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   >
                     <option value="">Select Optional Subject</option>
                     <option value="Computer Science">Computer Science</option>
-                    <option value="Biology">Biology</option>
-                    <option value="Economics">Economics</option>
+                    <option value="Physical Education">Physical Education</option>
                     <option value="Economics">Hindi</option>
                   </select>
                 </label>
@@ -286,11 +285,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
         return (
           <>
             <div className=" mobile:max-tablet:flex gap-20 overflow-auto">
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="accountancy">
-                  Accountancy
+                  Accountancy:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="accountancy"
                     type="text"
                     name="accountancy"
@@ -303,9 +302,9 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
               </div>
               <div className="w-full rounded-md">
                 <label className="block text-lg mb-2" htmlFor="businessStudies">
-                  Business Studies
+                  Business Studies:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-2 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="businessStudies"
                     type="text"
                     name="businessStudies"
@@ -316,11 +315,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="economics">
-                  Economics
+                  Economics:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-14 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="economics"
                     type="text"
                     name="economics"
@@ -331,11 +330,12 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="subject4">
-                  English
+                  English:
+                  {"\t"}
                   <select
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-20 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="subject4"
                     name="subject4"
                     value={formData.subject4}
@@ -348,11 +348,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   </select>
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="optionalSubject">
-                  Optional Subject
+                  Optional Subject:
                   <select
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-72 tablet:ml-3 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="optionalSubject"
                     name="optionalSubject"
                     value={formData.optionalSubject}
@@ -375,11 +375,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
         return (
           <>
             <div className=" mobile:max-tablet:flex gap-20 overflow-auto">
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="history">
-                  History
+                  History:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-80 tablet:ml-28 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="history"
                     type="text"
                     name="history"
@@ -390,11 +390,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="politicalScience">
-                  Political Science
+                  Political Science:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-80 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="politicalScience"
                     type="text"
                     name="politicalScience"
@@ -405,11 +405,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="geography">
-                  Geography
+                  Geography:
                   <input
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-80 tablet:ml-20 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="geography"
                     type="text"
                     name="geography"
@@ -420,11 +420,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   />
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="subject4">
-                  English
+                  English:
                   <select
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-80 tablet:ml-28 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="subject4"
                     name="subject4"
                     value={formData.subject4}
@@ -437,11 +437,11 @@ const AdmissionInputs = ({ stream, formData, handleChange }) => {
                   </select>
                 </label>
               </div>
-              <div className="w-full rounded-md">
+              <div className="w-full text-start rounded-md">
                 <label className="block text-lg mb-2" htmlFor="optionalSubject">
-                  Optional Subject
+                  Optional Subject:
                   <select
-                    className="border rounded-md w-full py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
+                    className="border rounded-md tablet:w-80 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
                     id="optionalSubject"
                     name="optionalSubject"
                     value={formData.optionalSubject}

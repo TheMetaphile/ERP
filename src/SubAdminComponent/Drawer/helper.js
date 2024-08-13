@@ -4,6 +4,7 @@ import history from "../../assets/history.png";
 import teacher from "../../assets/teachers.png";
 import student from "../../assets/student.png";
 import fee from "../../assets/Dashboard_fee.png";
+import dashboardLeaveImage from "../../assets/Dashboard_leave.png";
 
 const menuItems = [
   {
@@ -49,7 +50,7 @@ const menuItems = [
     children: [],
   },
   {
-    image: fee,
+    image: dashboardLeaveImage,
     alt: "Notice image",
     title: "Notice",
     route: "/Sub-Admin/Notice",

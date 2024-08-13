@@ -141,13 +141,13 @@ export default function AllAdmission() {
         setUserData((prev) => prev.filter(user => user.email !== student.email));
     };
 
-    console.log("********************************",typeof(handleRemove));
-    
+    console.log("********************************", typeof (handleRemove));
+
     return (
         <>
             <div className="flex  pt-20  items-center  bg-white mb-4">
                 <ToastContainer />
-                <h1 className="text-2xl font-medium px-2 ">All Students Data</h1>
+                <h1 className="text-2xl font-medium px-2 ">Students Re-admission</h1>
                 <div className="block tablet:hidden">
                     <button
                         className="p-2 border rounded"
@@ -188,9 +188,9 @@ export default function AllAdmission() {
                     />
                 </div>
 
-  
+
                 <div className="mobile:max-laptop:overflow-y-auto">
-                    <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap mobile:max-tablet:mt-20" ref={containerRef} onScroll={handleScroll}>
+                    <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap" ref={containerRef} onScroll={handleScroll}>
                         <div className="stutable">
                             <Header headings={['Name', 'Class', 'Section', 'Phone No.', 'E-mail', 'Action']} />
                         </div>
@@ -199,7 +199,7 @@ export default function AllAdmission() {
                         ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
                             <div>No students found</div>
                         ) : Array.isArray(filteredStudents) ? (
-                            <StudentDetailTile userData={filteredStudents} handleRemove={handleRemove}/>
+                            <StudentDetailTile userData={filteredStudents} handleRemove={handleRemove} />
                         ) : (
                             <div>Unexpected data format</div>
                         )}

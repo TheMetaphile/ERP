@@ -162,7 +162,7 @@ export default function AllStudentsList() {
     // State to control the dropdown visibility
     const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-    const handleRemove=(particularUser)=>{
+    const handleRemove = (particularUser) => {
         setUserData((prevData) => prevData.filter(user => user.email !== particularUser.email));
 
     }
@@ -220,7 +220,7 @@ export default function AllStudentsList() {
                     </button>
                 )}
                 <div className="mobile:max-laptop:overflow-y-auto">
-                    <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap mobile:max-tablet:mt-20" ref={containerRef} onScroll={handleScroll}>
+                    <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap" ref={containerRef} onScroll={handleScroll}>
                         <div className="stutable">
                             <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
                         </div>
@@ -229,7 +229,7 @@ export default function AllStudentsList() {
                         ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
                             <div>No students found</div>
                         ) : Array.isArray(filteredStudents) ? (
-                            <StudentDetailTile userData={filteredStudents} handleRemove={handleRemove}/>
+                            <StudentDetailTile userData={filteredStudents} handleRemove={handleRemove} />
                         ) : (
                             <div>Unexpected data format</div>
                         )}
