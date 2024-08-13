@@ -73,13 +73,13 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
     };
 
     const lectures = timetableData[dayStudent] || [];
-
+    console.log(lectures,"isaut ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
     return (
         <div className="w-full rounded-lg border shadow-md">
             {/* <ToastContainer /> */}
             <div className="flex p-3 mb-4 justify-between w-full mobile:max-tablet:mb-0">
                 <Link
-                    to="/Admin-Dashboard/timetablestructure"
+                    to="/Admin-Dashboard/timetable/upload"
                     className="px-4 py-2 rounded-md mr-2 bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white"
                 >
                     Upload

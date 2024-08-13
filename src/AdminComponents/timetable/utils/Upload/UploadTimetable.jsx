@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import TimetableHeader from './timetableHeader';
+import TimetableHeader from './../timetableHeader';
 import TimetableRow from './Timetablerow';
 import axios from 'axios';
-import AuthContext from '../../../Context/AuthContext';
+import AuthContext from '../../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from "react-router-dom";
-import { BASE_URL_TimeTable } from '../../../Config';
+import { BASE_URL_TimeTable } from '../../../../Config';
 
 export default function UploadTimetable({ fetchedTimeTableStructure, handleChange }) {
     const [lectureTimes, setLectureTimes] = useState([]);
@@ -233,13 +233,15 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
                         </select>
                     </div>
                 </div>
-                <div className='rounded-lg shadow-md  border border-gray-300'>
+                <table className='rounded-lg shadow-md w-full border border-gray-300'>
                     <TimetableHeader />
 
-                    {lectureTimes.map((time, index) => (
-                        <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange} day={selectedDay} />
-                    ))}
-                </div>
+                    <tbody>
+                        {lectureTimes.map((time, index) => (
+                            <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange} day={selectedDay} />
+                        ))}
+                    </tbody>
+                </table>
 
             </div>
             <div className="flex items-center justify-between mt-4">
@@ -250,10 +252,10 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
                     Upload
                 </button>
                 <Link
-                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     to={'/Admin-Dashboard/timetable'}
                 >
-                Cancel
+                    Cancel
                 </Link>
             </div>
         </form>

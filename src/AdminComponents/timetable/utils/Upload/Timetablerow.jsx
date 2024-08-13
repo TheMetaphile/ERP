@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import AuthContext from "../../../Context/AuthContext";
-import { toast } from "react-toastify";
-import { BASE_URL_Login,BASE_URL_TimeTable } from "../../../Config";
+import AuthContext from "../../../../Context/AuthContext";
+
+import { BASE_URL_Login, BASE_URL_TimeTable } from "../../../../Config";
+import Switch from "./switch";
 
 export default function TimetableRow({
   index,
@@ -21,6 +22,8 @@ export default function TimetableRow({
   const [temp, setTemp] = useState(Teacher);
   const { authState } = useContext(AuthContext);
   const [suggestions, setSuggestions] = useState([]);
+  const [optional, setOptional] = useState(false);
+
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedTeacherEmail, setSelectedTeacherEmail] = useState("");
 
@@ -64,11 +67,11 @@ export default function TimetableRow({
     setSelectedTeacherEmail(suggestion.email);
     setShowSuggestions(false);
     handleTeacherChange(index, suggestion.email);
-    
+
   };
   useEffect(() => {
     fetchRemark(index + 1, selectedTeacherEmail, day)
-  }, [selectedTeacherEmail,day]);
+  }, [selectedTeacherEmail, day]);
 
   const handleChange = (event) => {
     console.log(index);
@@ -89,8 +92,8 @@ export default function TimetableRow({
         setRemark("Please select a day");
         return;
       }
-      
-  
+
+
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
@@ -105,7 +108,7 @@ export default function TimetableRow({
           'Content-Type': 'application/json',
         }
       };
-  
+
       const response = await axios(config);
       console.log("Success:", response.data);
       setRemark(response.data.remark);
@@ -121,26 +124,35 @@ export default function TimetableRow({
   };
 
   return (
-    <div className="bg-white flex-1 w-full justify-between items-center px-4 py-2" key={index}>
-      {numberOfLeacturesBeforeLunch === index ? (
-        <div className="w-full h-8 bg-secondary text-xl text-center">LUNCH</div>
-      ) : (
-        <></>
+    <>
+      {numberOfLeacturesBeforeLunch === index && (
+        <td colSpan="6" className="h-8 bg-secondary text-xl text-center">
+          LUNCH
+        </td>
       )}
-      <div className="flex w-full text-center items-center justify-between  py-2">
-        <h1 className="w-40 ">{lectureNo}</h1>
-        <h1 className="w-40">{Time}</h1>
-        <select className="w-40" type="text" name="Subject" value={Subject} onChange={handleChange} required>
-        <option value="" disabled>
-          Select a subject
-        </option>
-          {subjects.map((subject, idx) => (
-            <option key={idx} value={subject}>
-              {subject}
-            </option>
-          ))}
-        </select>
-        <div className="relative w-48">
+
+      <tr className={`bg-white  ${!optional ? "border-b border-gray-300" : ""}`}>
+
+        <td className="text-center py-2">{lectureNo}</td>
+        <td className="text-center py-2">{Time}</td>
+        <td className="text-center py-2">
+          {
+            !optional && <select className="w-full" name="Subject" value={Subject} onChange={handleChange} required>
+              <option value="" disabled>
+                Select a subject
+              </option>
+              {subjects.map((subject, idx) => (
+                <option key={idx} value={subject}>
+                  {subject}
+                </option>
+              ))}
+            </select>
+          }
+        </td>
+        <td className="flex justify-center py-2">
+          <Switch checked={optional} changeRole={(optional) => setOptional(optional)} />
+        </td>
+        <td className="relative py-2">
           <input
             type="text"
             className="border border-gray-300 rounded-md px-3 py-2 w-full"
@@ -167,9 +179,40 @@ export default function TimetableRow({
               ))}
             </ul>
           )}
-        </div>
-        <h1 className={` w-48 ${remark.includes("Good") ? "text-green-600" : "text-red-600"}`}>{remark}</h1>
-      </div>
-    </div>
+        </td>
+        <td className={`text-center py-2 ${remark.includes("Good") ? "text-green-600" : "text-red-600"}`}>
+          {remark}
+        </td>
+      </tr>
+
+      {optional && (
+        <tr className="bg-white border-b border-gray-300">
+
+          <td className="text-center py-2"></td>
+          <td className="text-center py-2"></td>
+          <td className="text-center py-2">
+            <select className="w-full" name="Subject" value={Subject} onChange={handleChange} required>
+              <option value="" disabled>
+                Select a subject
+              </option>
+              {subjects.map((subject, idx) => (
+                <option key={idx} value={subject}>
+                  {subject}
+                </option>
+              ))}
+            </select>
+          </td>
+          <td className="flex justify-center py-2">
+
+          </td>
+          <td className="relative py-2">
+
+          </td>
+          <td className={`text-center py-2 ${remark.includes("Good") ? "text-green-600" : "text-red-600"}`}>
+
+          </td>
+        </tr>
+      )}
+    </>
   );
 }

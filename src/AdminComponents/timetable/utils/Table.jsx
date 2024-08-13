@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Table({ teacherEmail, data, Time, numberOfLeacturesBeforeLunch }) {
+function Table({  data, Time, numberOfLeacturesBeforeLunch }) {
 
     const formatTime = (date) => {
         let hours = date.getHours();
