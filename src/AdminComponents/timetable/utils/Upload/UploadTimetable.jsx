@@ -11,9 +11,26 @@ import { BASE_URL_TimeTable } from '../../../../Config';
 export default function UploadTimetable({ fetchedTimeTableStructure, handleChange }) {
     const [lectureTimes, setLectureTimes] = useState([]);
 
-    const subjects = [ "Hindi", "English", "Maths", "Science", " Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", " Accounts"];
+    const subjects = ["Hindi", "English", "Maths", "Science", " Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", " Accounts"];
     const [selectedSubjects, setSelectedSubjects] = useState([]);
     const [selectedTeachers, setSelectedTeachers] = useState([]);
+    const [schedule, setSchedule] = useState(Array(fetchedTimeTableStructure.numberOfLecture).fill(
+        {
+            subject: '',
+            teacher: '',
+            lectureNo: '',
+            optional: false,
+            optionalSubjects: [
+                {
+                    optionalSubject: '',
+                    mergeWithSection: '',
+                    teacher: '',
+                }
+            ]
+        }
+    ));
+
+
     const { authState } = useContext(AuthContext);
 
     const handleSubjectChange = (index, newSubject) => {
@@ -27,7 +44,6 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
         updatedTeachers[index] = newTeacher;
         setSelectedTeachers(updatedTeachers);
     };
-
 
     const convertToDate = (timeString) => {
         const [time, modifier] = timeString.split(' ');
@@ -89,6 +105,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
         return `${hours}:${strMinutes} ${ampm}`;
     };
     const [selectedClass, setSelectedClass] = useState('');
+
     useEffect(() => {
         if (selectedClass != "") {
             const e = { target: { name: "Class", value: selectedClass } };
@@ -98,6 +115,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
 
 
     const [selectedSection, setSection] = useState('');
+
     useEffect(() => {
         if (selectedSection != "") {
             const e = { target: { name: "section", value: selectedSection } };
@@ -106,6 +124,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
     }, [selectedSection]);
 
     const [selectedDay, setDay] = useState('');
+
     useEffect(() => {
         if (selectedDay != "") {
             const e = { target: { name: "day", value: selectedDay } };
@@ -116,27 +135,27 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(schedule);
+        // if (!selectedSubjects.length || !selectedTeachers.length || !selectedClass || !selectedSection || !selectedDay || !authState.accessToken) {
+        //     toast.error("Please ensure all fields are filled out correctly.");
+        //     return;
+        // }
 
-        if (!selectedSubjects.length || !selectedTeachers.length || !selectedClass || !selectedSection || !selectedDay || !authState.accessToken) {
-            toast.error("Please ensure all fields are filled out correctly.");
-            return;
-        }
+        // const schedule = selectedSubjects.map((subject, index) => ({
+        //     subject,
+        //     teacher: selectedTeachers[index],
+        //     lectureNo: index + 1,
+        // }));
 
-        const schedule = selectedSubjects.map((subject, index) => ({
-            subject,
-            teacher: selectedTeachers[index],
-            lectureNo: index + 1,
-        }));
+        // const timetableData = {
+        //     accessToken: authState.accessToken,
+        //     class: selectedClass,
+        //     section: selectedSection,
+        //     day: selectedDay,
+        //     schedule,
+        // };
 
-        const timetableData = {
-            accessToken: authState.accessToken,
-            class: selectedClass,
-            section: selectedSection,
-            day: selectedDay,
-            schedule,
-        };
-
-        console.log(timetableData);
+        // console.log(timetableData);
 
         // try {
         //     const response = await axios.post(`${BASE_URL_TimeTable}/timetable/upload`, timetableData);
@@ -238,7 +257,18 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
 
                     <tbody>
                         {lectureTimes.map((time, index) => (
-                            <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange} day={selectedDay} />
+                            <TimetableRow
+                                key={index}
+                                index={index}
+                                Subject={selectedSubjects[index] || subjects[0]}
+                                lectureNo={`${index + 1} `}
+                                Time={`${formatTime(time.start)}-${formatTime(time.end)}`}
+                                numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}
+                                subjects={subjects}
+                                handleSubjectChange={handleSubjectChange}
+                                handleTeacherChange={handleTeacherChange}
+                                handleSchedule={setSchedule}
+                                day={selectedDay} />
                         ))}
                     </tbody>
                 </table>

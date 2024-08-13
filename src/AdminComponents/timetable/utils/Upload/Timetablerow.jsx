@@ -3,6 +3,7 @@ import axios from "axios";
 import AuthContext from "../../../../Context/AuthContext";
 import { BASE_URL_Login, BASE_URL_TimeTable } from "../../../../Config";
 import Switch from "./switch";
+import OptionalRow from "./OptionalRow";
 
 export default function TimetableRow({
   index,
@@ -13,9 +14,11 @@ export default function TimetableRow({
   Teacher,
   handleSubjectChange,
   handleTeacherChange,
+  handleSchedule,
   subjects,
   day
 }) {
+
   const [rowState, setRowState] = useState({
     teacherInput: Teacher,
     remark: 'Select Teacher',
@@ -25,15 +28,13 @@ export default function TimetableRow({
     selectedTeacherEmail: "",
     selectedSection: '',
   });
+  const [email, setEmail] = useState('');
 
   const [optionalRows, setOptionalRows] = useState([
     {
       subject: '',
       section: '',
       teacher: '',
-      remark: 'Select Teacher',
-      suggestions: [],
-      showSuggestions: false,
     },
   ]);
 
@@ -46,8 +47,6 @@ export default function TimetableRow({
         subject: '',
         section: '',
         teacher: '',
-        suggestions: [],
-        showSuggestions: false,
       },
     ]);
   };
@@ -94,6 +93,7 @@ export default function TimetableRow({
       selectedTeacherEmail: suggestion.email,
       showSuggestions: false,
     }));
+    setEmail(suggestion.email);
     handleTeacherChange(index, suggestion.email);
   };
 
@@ -148,13 +148,32 @@ export default function TimetableRow({
   };
 
   const handleOptionalSuggestionClick = (rowIndex, suggestion) => {
-    const updatedRows = optionalRows.map((row, idx) => 
-      idx === rowIndex 
+    const updatedRows = optionalRows.map((row, idx) =>
+      idx === rowIndex
         ? { ...row, teacher: suggestion.name, showSuggestions: false }
         : row
     );
     setOptionalRows(updatedRows);
   };
+
+  useEffect(() => {
+    handleSchedule(prev => {
+      const updatedRows = [...prev];
+      updatedRows[lectureNo - 1] = {
+        subject: !rowState.optional ? Subject : "",
+        teacher: !rowState.optional ? email : "",
+        lectureNo: lectureNo,
+        optional: rowState.optional,
+        optionalSubjects: optionalRows.map(row => ({
+          optionalSubject: row.subject,
+          mergeWithSection: row.section,
+          teacher: row.teacher,
+        }))
+      }
+      return updatedRows;
+    }
+    );
+  },[Subject,rowState,optionalRows,lectureNo]);
 
   return (
     <>
@@ -171,11 +190,11 @@ export default function TimetableRow({
         <td className="text-center py-2">{Time}</td>
         <td className="text-center py-2">
           {!rowState.optional && (
-            <select 
-              className="w-full" 
-              name="Subject" 
-              value={Subject} 
-              onChange={handleChange} 
+            <select
+              className="w-full"
+              name="Subject"
+              value={Subject}
+              onChange={handleChange}
               required
             >
               <option value="" disabled>Select a subject</option>
@@ -186,9 +205,9 @@ export default function TimetableRow({
           )}
         </td>
         <td className="flex justify-center py-2">
-          <Switch 
-            checked={rowState.optional} 
-            changeRole={(optional) => setRowState(prev => ({ ...prev, optional }))} 
+          <Switch
+            checked={rowState.optional}
+            changeRole={(optional) => setRowState(prev => ({ ...prev, optional }))}
           />
         </td>
         <td className="relative py-2">
@@ -223,81 +242,26 @@ export default function TimetableRow({
           )}
         </td>
         <td className={`text-center py-2 ${rowState.remark.includes("Good") ? "text-green-600" : "text-red-600"}`}>
-        {!rowState.optional && ( 
-          <>{rowState.remark}</>
-        )}
-          
+          {!rowState.optional && (
+            <>{rowState.remark}</>
+          )}
+
         </td>
       </tr>
 
       {rowState.optional && optionalRows.map((data, idx) => (
-        <tr key={idx} className="bg-white border-b border-gray-300">
-          <td className="text-center py-2"></td>
-          <td className="text-center py-2">
-            {idx === optionalRows.length - 1 && (
-              <div 
-                className='px-3 bg-green-300 hover:bg-green-400 w-fit rounded-lg cursor-pointer' 
-                onClick={addNewRow}
-              >
-                Add
-              </div>
-            )}
-          </td>
-          <td className="text-center py-2">
-            <select 
-              className="w-full" 
-              name="Subject" 
-              value={data.subject} 
-              onChange={(e) => handleOptionalRowChange(idx, 'subject', e.target.value)} 
-              required
-            >
-              <option value="" disabled>Select a subject</option>
-              {subjects.map((subject, subIdx) => (
-                <option key={subIdx} value={subject}>{subject}</option>
-              ))}
-            </select>
-          </td>
-          <td className="flex justify-center py-2">
-            <select 
-              className="w-full px-4 py-2 border rounded-md" 
-              value={data.section} 
-              onChange={(e) => handleOptionalRowChange(idx, 'section', e.target.value)}
-            >
-              <option value="">Select Section</option>
-              {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'].map(section => (
-                <option key={section} value={section}>{section}</option>
-              ))}
-            </select>
-          </td>
-          <td className="relative py-2">
-            <input
-              type="text"
-              className="border border-gray-300 rounded-md px-3 py-2 w-full"
-              value={data.teacher}
-              onChange={(e) => handleOptionalRowChange(idx, 'teacher', e.target.value)}
-              required
-            />
-            {data.showSuggestions && data.suggestions.length > 0 && (
-              <ul className="absolute z-10 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto w-full">
-                {data.suggestions.map((suggestion, indx) => (
-                  <li
-                    key={indx}
-                    className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
-                    onClick={() => handleOptionalSuggestionClick(idx, suggestion)}
-                  >
-                    <img
-                      src={suggestion.profileLink}
-                      alt="Profile"
-                      className="w-12 h-12 rounded-full mr-2"
-                    />
-                    {suggestion.name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </td>
-          <td className="text-center py-2">{rowState.remark}</td>
-        </tr>
+        <OptionalRow
+          lectureNo={lectureNo}
+          addNewRow={addNewRow}
+          data={data}
+          handleOptionalRowChange={handleOptionalRowChange}
+          handleOptionalSuggestionClick={handleOptionalSuggestionClick}
+          optionalRows={optionalRows}
+          subjects={subjects}
+          idx={idx}
+          day={day}
+
+        />
       ))}
     </>
   );
