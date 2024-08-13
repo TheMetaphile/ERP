@@ -89,7 +89,7 @@ import NoteBook from "./TeacherComponents/notebook/NoteBook.jsx";
 import TeacherMessage from "./TeacherComponents/message/Message.jsx"
 import TeacherHome from "./TeacherComponents/Home/TeacherHome.jsx";
 import TimeTableAdmin from "./AdminComponents/timetable/TimeTable.jsx"
-import Upload from "./AdminComponents/timetable/utils/Upload.jsx";
+import Upload from "./AdminComponents/timetable/utils/Upload/Upload.jsx";
 import ClassTeacher from "./AdminComponents/Classes/utils/ClassTeacher.jsx";
 import AssignTeacher from "./AdminComponents/Classes/utils/AssignTeacher.jsx";
 import AssignSubject from "./AdminComponents/Subjects/utils/AssignSubject.jsx";
@@ -172,6 +172,8 @@ import Readmission from "./SubAdminComponent/Readmission/Readmission.jsx";
 import AllAdmission from "./SubAdminComponent/Readmission/AllAdmission.jsx";
 import TabsStudentFee from "./components/fees/Tabs.jsx";
 import Promotion from "./TeacherComponents/StudentPromotion/Promotion.jsx";
+import TeachersTimeTable from "./AdminComponents/timetable/utils/Teacher/main.jsx";
+import StudentsTimeTable from "./AdminComponents/timetable/utils/Student/main.jsx";
 // import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
 
 
@@ -655,11 +657,32 @@ const router = createBrowserRouter([
         path: "/Admin-Dashboard/timetable",
         element: <TimeTableAdmin />,
         children: [
+          {
+            path: "",
+            element: <StudentsTimeTable />,
+            children: []
+          },
+          {
+            path: "timetablestructure",
+            element: <Employee />,
+            children: []
+          },
+          {
+            path: "upload",
+            element: <Upload />,
+            children: []
+          },
+          {
+            path: "teacher",
+            element: <TeachersTimeTable />,
+            children: []
+          },
+          {
+            path: "student",
+            element: <StudentsTimeTable />,
+            children: []
+          },
         ]
-      },
-      {
-        path: '/Admin-Dashboard/timetablestructure',
-        element: <Upload />
       },
       {
         path: "/Admin-Dashboard/weekplan",

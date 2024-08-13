@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import AuthContext from '../../../Context/AuthContext';
+import AuthContext from '../../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateTimetableStrucutre from './createTimetableStructure';
 import UploadTimetable from './UploadTimetable';
-import Loading from './../../../LoadingScreen/Loading';
-import { BASE_URL_TimeTableStructure } from '../../../Config';
+import Loading from './../../../../LoadingScreen/Loading';
+import { BASE_URL_TimeTableStructure } from '../../../../Config';
 
 const Upload = () => {
     const { authState } = useContext(AuthContext);
@@ -209,7 +209,7 @@ const Upload = () => {
 
     return (
 
-        <div className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+        <div className="flex flex-col w-full mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
             <ToastContainer />
 
             <div className='w-full flex justify-between '>
