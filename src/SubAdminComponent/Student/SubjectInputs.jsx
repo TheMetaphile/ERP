@@ -354,7 +354,7 @@ const SubjectInputs = ({ stream, formData, handleChange }) => {
                   required
                 >
                   <option value="">Select Optional Subject</option>
-                  <option value="Mathematics">Mathematics</option>
+                  <option value="Maths">Maths</option>
                   <option value="Computer Science">Computer Science</option>
                   <option value="Physical Education">Physical Education</option>
                   <option value="Hindi">Hindi</option>

@@ -17,6 +17,7 @@ export default function StudentRegister() {
     // const [success, setSuccess] = useState('');
     const currentYear = (new Date().getFullYear()).toString();
 
+    const [subjects, setSubjects] = useState([Array(5).fill('')]);
     const [formData, setFormData] = useState(
         {
             name: '',
@@ -50,19 +51,8 @@ export default function StudentRegister() {
             category: '',
             nationality: '',
             stream: '',
-            physics: '',
-            chemistry: '',
-            maths: '',
-            biology: '',
-            accountancy: '',
-            businessStudies: '',
-            economics: '',
-            history: '',
-            politicalScience: '',
-            geography: '',
-            english: '',
-            optionalSubject: '',
-            accessToken: authState.accessToken
+            accessToken: authState.accessToken,
+            percentage: ''
         }
     );
     const handleChange = (e) => {
@@ -112,7 +102,8 @@ export default function StudentRegister() {
             religion: '',
             category: '',
             nationality: '',
-            stream: ''
+            stream: '',
+            percentage: ''
         });
     };
 
@@ -733,11 +724,30 @@ export default function StudentRegister() {
                                 </select>
                             </label>
                         </div>
+
+                        <div className="w-full rounded-md mobile:max-tablet:w-full">
+                            <label className="block text-lg mb-2 mobile:max-laptop:text-sm" htmlFor="percentage">
+                                <div className=" whitespace-nowrap">Percentage</div>
+
+                                <input
+                                    className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
+                                    id="percentage"
+                                    type="number"
+                                    name="percentage"
+                                    value={formData.percentage}
+                                    onChange={handleChange}
+                                    placeholder=""
+                                    required
+                                />
+                            </label>
+                        </div>
                     </div>
 
                 </div>
+
                 <div className=" flex">
                     <SubjectInputs stream={formData.stream} formData={formData} handleChange={handleChange} />
+
                 </div>
                 <div className=" flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4 mobile:max-tablet:mb-0">
                     <div className="w-1/2 rounded-lg mobile:max-tablet:w-full text-lg whitespace-nowrap">
