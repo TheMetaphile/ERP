@@ -14,7 +14,7 @@ export default function FeeStructure({ selectedOption }) {
   const { authState } = useContext(AuthContext);
   const [fees, setFees] = useState({});
   const [loading, setLoading] = useState(true);
-  const { statsDetails, setStatsDetails } = usePaymentContext();
+  const {  setStatsDetails } = usePaymentContext();
 
 
   useEffect(() => {

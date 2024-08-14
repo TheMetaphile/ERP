@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
-import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL_ClassWork } from "../../Config";
+import { motion } from 'framer-motion';
+import { FaBook, FaCalendarAlt, FaSpinner } from 'react-icons/fa';
 
 export default function Classwork() {
   const { authState } = useContext(AuthContext);
@@ -30,22 +31,62 @@ export default function Classwork() {
     fetchClassWork();
   }, [authState.accessToken, authState.userDetails, start, end]);
 
+
+  
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+  
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 }
+  };
+  
   return (
-    <div className="space-y-4 border-b border-gray-200">
+    <motion.div 
+      className="bg-gradient-to-br from-green-50 to-emerald-100  rounded-xl shadow-lg"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {loading ? (
-        <Loading />
+        <div className="flex justify-center items-center h-40">
+          <FaSpinner className="animate-spin text-4xl text-emerald-600" />
+        </div>
       ) : details.length === 0 ? (
-        <div className="text-center text-gray-500">No classwork available</div>
+        <div className="text-center text-emerald-600 py-10">
+          <FaBook className="text-5xl mb-4 mx-auto" />
+          <p className="text-xl font-semibold">No classwork available</p>
+        </div>
       ) : (
         details.map((detail, index) => (
-          <div key={index} className="bg-gray-50 rounded-md py-3">
-            <h3 className="font-semibold text-base mb-1">Chapter: {detail.chapter}</h3>
-            <p className="text-gray-600 text-sm mb-1">Topic: {detail.topic}</p>
-            <p className="text-gray-600 text-sm mb-2 line-clamp-2">{detail.description}</p>
-            <p className="text-xs text-right text-gray-500">Date: {detail.date}</p>
-          </div>
+          <motion.div
+            key={index}
+            className=" rounded-lg shadow-md p-5 mb-6 last:mb-0 hover:shadow-xl transition-shadow duration-300"
+            variants={itemVariants}
+          >
+            <div className="flex flex-col justify-between items-start mb-3">
+              <h3 className="text-xl font-bold text-emerald-800">
+                {detail.chapter}
+              </h3>
+              <div className="flex items-center text-sm text-emerald-600">
+                <FaCalendarAlt className="mr-2" />
+                {detail.date}
+              </div>
+            </div>
+            <p className="text-lg font-semibold text-emerald-700 mb-2">
+              Topic: {detail.topic}
+            </p>
+            <p className="text-emerald-600 text-opacity-80 leading-relaxed">
+              {detail.description}
+            </p>
+          </motion.div>
         ))
       )}
-    </div>
+    </motion.div>
   );
 }

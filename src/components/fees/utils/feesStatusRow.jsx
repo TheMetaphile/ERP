@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
-import FeeStatus from "./feeStatus.jsx";
 import axios from 'axios'
 import Loading from "../../../LoadingScreen/Loading.jsx";
 import AuthContext from "../../../Context/AuthContext.jsx";
 import { BASE_URL_Fee } from "../../../Config.js";
-import { usePaymentContext } from "./PaymentContext.jsx";
+import { motion } from "framer-motion";
 
 export default function FeeStatusRow() {
     const { authState } = useContext(AuthContext);
@@ -42,37 +41,73 @@ export default function FeeStatusRow() {
         }
     }
 
-    return (
-        <div className="flex h-fit pb-4 mobile:max-tablet:grid mobile:max-tablet:grid-cols-1 mobile:max-tablet:w-full w-full gap-2 whitespace-nowrap">
-            {loading ? (
-                <Loading />
-            ) : details === null ? (
-                <div>No data available</div>
-            ) : (
-                <>
-                    <div className={`feeStatus tablet:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md rounded-lg border border-gray-400  flex flex-col items-center justify-center bg-yellow-200 flex-1`}>
-                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.total}</h1>
-                        <p className="text-lg font-medium text-gray-600">Total Fees</p>
-                    </div>
-                    <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md border border-gray-400 rounded-lg  flex flex-col items-center justify-center bg-green-200 flex-1`}>
-                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.discount}</h1>
-                        <p className="text-lg font-medium text-gray-600">Discount</p>
-                    </div>
-                    <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md rounded-lg  flex flex-col items-center justify-center border border-gray-400 bg-orange-200 flex-1`}>
-                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.total - details.discount}</h1>
-                        <p className="text-lg font-medium text-gray-500">Payable</p>
-                    </div>
-                    <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md rounded-lg  flex flex-col items-center justify-center border border-gray-400 bg-green-200 flex-1`}>
-                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.paid}</h1>
-                        <p className="text-lg font-medium text-gray-500">Paid</p>
-                    </div>
-                    <div className={`feeStatus laptop:last:w-48 h-fit p-4 mobile:max-laptop:p-2 shadow-md rounded-lg  flex flex-col items-center justify-center border border-gray-400 bg-orange-200 flex-1`}>
-                        <h1 className="text-2xl mobile:max-laptop:text-lg font-semibold">Rs. {details.total - details.discount - details.paid}</h1>
-                        <p className="text-lg font-medium text-gray-500">Pending</p>
-                    </div>
-                </>
-            )}
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: {
+            staggerChildren: 0.1
+          }
+        }
+      };
+    
+      const cardVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+          y: 0,
+          opacity: 1
+        }
+      };
+    
+      if (loading) return <Loading />;
+      if (details === null) return <div className="text-center text-gray-500 text-lg">No data available</div>;
+    
+      const feeData = [
+        { title: "Total Fees", amount: details.total, color: "bg-yellow-200" },
+        { title: "Discount", amount: details.discount, color: "bg-green-200" },
+        { title: "Payable", amount: details.total - details.discount, color: "bg-orange-200" },
+        { title: "Paid", amount: details.paid, color: "bg-green-200" },
+        { title: "Pending", amount: details.total - details.discount - details.paid, color: "bg-orange-200" }
+      ];
 
-        </div>
-    );
+
+    return (
+        <motion.div
+        className="grid grid-cols-5 mobile:max-tablet:grid-cols-1 tablet:max-laptop:grid-cols-3 gap-4 p-4 w-full border border-gray-300 bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {feeData.map((data, index) => (
+          <motion.div key={index} variants={cardVariants}>
+            <FeeStatusCard {...data} />
+          </motion.div>
+        ))}
+      </motion.div>
+      );
 }
+
+const FeeStatusCard = ({ title, amount, color }) => (
+    <motion.div
+      className={`fee-status h-fit p-6 shadow-lg rounded-xl border border-gray-300 flex flex-col items-center justify-center ${color} flex-1 backdrop-filter backdrop-blur-lg bg-opacity-80`}
+      whileHover={{ scale: 1.05, boxShadow: "0px 10px 20px rgba(0,0,0,0.1)" }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
+      <motion.h1
+        className="text-3xl font-bold mb-2"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        ₹{amount}
+      </motion.h1>
+      <motion.p
+        className="text-lg font-medium text-gray-700"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        {title}
+      </motion.p>
+    </motion.div>
+  );

@@ -3,6 +3,8 @@ import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../Config";
+import { motion } from 'framer-motion';
+import { FaBell, FaSpinner } from 'react-icons/fa';
 
 export default function Notice() {
   const { authState } = useContext(AuthContext);
@@ -30,20 +32,50 @@ export default function Notice() {
     fetchNotice();
   }, [authState.accessToken, start, end]);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { x: -20, opacity: 0 },
+    visible: { x: 0, opacity: 1 }
+  };
+
   return (
-    <div className="space-y-4">
+    <motion.div
+      className="bg-gradient-to-r from-blue-100 to-indigo-50 p-3 border border-gray-200 rounded-xl shadow-lg"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {loading ? (
-        <Loading />
+        <div className="flex justify-center items-center h-40">
+          <FaSpinner className="animate-spin text-4xl text-indigo-600" />
+        </div>
       ) : details.length === 0 ? (
-        <div className="text-center text-gray-500">No notices available</div>
+        <div className="text-center text-indigo-600 py-10">
+          <FaBell className="text-5xl mb-4 mx-auto" />
+          <p className="text-xl font-semibold">No notices available</p>
+        </div>
       ) : (
         details.map((detail, index) => (
-          <div key={index} className="border-b border-gray-200 pb-3">
-            <h3 className="font-semibold text-base mb-1">{detail.title}</h3>
-            <p className="text-gray-600 text-sm line-clamp-2">{detail.description}</p>
-          </div>
+          <motion.div
+            key={index}
+            className="mb-6 last:mb-0"
+            variants={itemVariants}
+          >
+            <h3 className="text-xl font-bold text-indigo-800 mb-2">{detail.title}</h3>
+            <p className="text-indigo-600 text-opacity-80 leading-relaxed line-clamp-4">
+              {detail.description}
+            </p>
+            <div className="mt-3 h-px bg-indigo-200"></div>
+          </motion.div>
         ))
       )}
-    </div>
+    </motion.div>
   );
 }

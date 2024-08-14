@@ -16,7 +16,7 @@ export default function Dashboard() {
     setIsEndDrawerOpen(!isEndDrawerOpen);
   };
   return (
-    <div className="w-screen h-screen overflow-x-auto  no-scrollbar ">
+    <div className="w-screen h-screen overflow-x-auto  no-scrollbar">
       <div className="fixed top-0 left-0 w-full px-2 z-10">
         <Navbar onDrawerToggle={toggleDrawer} onEndDrawerToggle={toggleEndDrawer} />
       </div>
@@ -28,7 +28,7 @@ export default function Dashboard() {
         <div className="flex-grow  overflow-y-auto no-scrollbar ">
           <Outlet />
         </div>
-        <div className={`mobile:max-laptop:absolute mobile:max-laptop:right-0 rounded-lg shadow-md flex-shrink-0 bg-white transition-all duration-300 mobile:max-laptop:${isEndDrawerOpen ? 'w-60 h-full' : 'w-0 h-0'} laptop:w-60 laptop:h-full overflow-y-auto no-scrollbar`}>
+        <div className={`mobile:max-laptop:absolute mobile:max-laptop:right-0 flex-shrink-0 transition-all duration-300 mobile:max-laptop:${isEndDrawerOpen ? 'w-60 h-full' : 'w-0 h-0'} laptop:w-60 laptop:h-full overflow-y-auto no-scrollbar`}>
           <Enddrawer />
         </div>
       </div>

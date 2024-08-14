@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Fees from "./fees";
 import PreviousFee from "./PreviousFee/PreviousFee";
 
@@ -11,26 +12,59 @@ const TabsStudentFee = () => {
         setSelectedTab(tab);
     };
 
+    const tabVariants = {
+        inactive: { backgroundColor: "#E5E7EB", color: "#4B5563" },
+        active: { backgroundColor: "#3B82F6", color: "#FFFFFF" }
+    };
+
+    const contentVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
+
     return (
-        <div>
-            <div className="flex mobile:max-tablet:flex-col-reverse justify-between tablet:items-center mobile:max-tablet:p-1 p-4 pb-0 border-b overflow-auto">
-                <div className="flex">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab}
-                            className={`p-2 mobile:max-tablet:p-1 mx-1 ${selectedTab === tab ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}
-                            onClick={() => handleTabChange(tab)}
-                        >
-                            {tab}
-                        </button>
-                    ))}
-                </div>
+        <div className=" min-h-screen p-3">
+            <div className=" ">
+                <motion.div 
+                    className="flex justify-center"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="flex space-x-2 mb-4">
+                        {tabs.map((tab) => (
+                            <motion.button
+                                key={tab}
+                                className={`px-4 py-2 rounded-full text-sm font-medium focus:outline-none`}
+                                variants={tabVariants}
+                                animate={selectedTab === tab ? "active" : "inactive"}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => handleTabChange(tab)}
+                            >
+                                {tab}
+                            </motion.button>
+                        ))}
+                    </div>
+                </motion.div>
+
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={selectedTab}
+                        variants={contentVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        transition={{ duration: 0.5 }}
+                    >
+                        {selectedTab === 'Current Session' ? (
+                            <Fees />
+                        ) : (
+                            <PreviousFee />
+                        )}
+                    </motion.div>
+                </AnimatePresence>
             </div>
-            {selectedTab === 'Current Session' ? (
-                <Fees />
-            ) : (
-                <PreviousFee />
-            )}
         </div>
     );
 };

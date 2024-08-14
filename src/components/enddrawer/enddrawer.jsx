@@ -1,58 +1,80 @@
+import { motion } from 'framer-motion';
 import { Link } from "react-router-dom";
-import Activities from './activity';
-import Ballroom from "./../../assets/BallroomDance.png";
+import { FaBell, FaBook, FaChevronRight } from 'react-icons/fa';
 import Notice from './notice';
 import Classwork from "./classwork";
 
 export default function Enddrawer() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        when: "beforeChildren",
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { 
+        type: "spring",
+        stiffness: 100
+      }
+    }
+  };
+
   return (
-    <div className="border border-gray-300 roubder-full shadow-md h-full overflow-auto px-4 py-6">
-      <section className="mb-8">
-        <h2 className="flex justify-between items-center text-lg font-semibold mb-4">
-          Daily Notice
-          <Link to="/Student-Dashboard/notification/allnotification" className="text-blue-600 hover:text-blue-800 text-sm">
+    <motion.div 
+      className=" h-full overflow-auto px-2 py-8 "
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <h2 className="flex justify-between items-center text-xl font-bold mb-2 text-gray-800">
+          <div className="flex items-center text-lg whitespace-nowrap">
+            <FaBell className="mr-2 text-blue-500" />
+            Daily Notice
+          </div>
+          <Link to="/Student-Dashboard/notification/allnotification" className="text-blue-600 hover:text-blue-800 text-sm flex items-center">
             See All
+            <FaChevronRight className="ml-1" />
           </Link>
         </h2>
-        <div className="bg-white rounded-lg shadow-md p-4 border-l-4 border-blue-500">
+      <motion.section className="mb-6 h-1/2" variants={itemVariants}>
+        
+        <motion.div 
+          className="bg-white rounded-lg shadow-md h-full overflow-y-auto hover:shadow-xl transition-shadow duration-300"
+          whileHover={{ scale: 1.015 }}
+          transition={{ type: "spring", stiffness: 50 }}
+        >
           <Notice />
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
-      {/* <section className="mb-8">
-        <h2 className="flex justify-between items-center text-lg font-semibold mb-4">
-          Activities
-          <Link to="/Student-Dashboard/activities/recentactivity" className="text-blue-600 hover:text-blue-800 text-sm">
+      <motion.section variants={itemVariants} >
+        <h2 className="flex justify-between items-center text-xl font-bold mb-3 text-gray-800">
+          <div className="flex items-center">
+            <FaBook className="mr-2 text-green-500" />
+            Classwork
+          </div>
+          <Link to="/Student-Dashboard/classwork" className="text-blue-600 hover:text-blue-800 text-sm flex items-center">
             See All
+            <FaChevronRight className="ml-1" />
           </Link>
         </h2>
-        <div className="space-y-4">
-          <Activities
-            image={Ballroom}
-            title="Rhyme Time: A Night of Poetry"
-            time="24 Jan 21, 09:00 AM"
-            description="April is also a National Poetry Month. Now there is a great theme for a fun family night!"
-          />
-          <Activities
-            image={Ballroom}
-            title="Dance Extravaganza"
-            time="28 Jan 21, 02:00 PM"
-            description="Join us for an evening of graceful movements and rhythmic beats!"
-          />
-        </div>
-      </section> */}
-
-      <section>
-        <h2 className="flex justify-between items-center text-lg font-semibold mb-4">
-          Classwork
-          <Link to="/Student-Dashboard/classwork" className="text-blue-600 hover:text-blue-800 text-sm">
-            See All
-          </Link>
-        </h2>
-        <div className="bg-white rounded-lg shadow-md p-4 border-l-4 border-green-500">
+        <motion.div 
+          className="bg-white rounded-lg shadow-md  hover:shadow-xl transition-shadow duration-300"
+          whileHover={{ scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
           <Classwork />
-        </div>
-      </section>
-    </div>
+        </motion.div>
+      </motion.section>
+    </motion.div>
   );
 }
