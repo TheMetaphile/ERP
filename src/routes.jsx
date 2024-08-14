@@ -417,7 +417,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/Admin-Dashboard/StudentsAddmissionForm",
-        element: <AddmissionForm />,
+        element: <StudentRegister />,
         children: []
       },
       {

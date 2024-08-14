@@ -26,9 +26,6 @@ export default function AdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
           <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1">
             <Link to="/Admin-Dashboard/StudentsFee" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Fee</Link>
           </li>
-          <li className="mr-4 mobile:max-tablet:mr-0.5">
-            <Link to="/Teacher-Dashboard" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg mobile:flex">Teacher Panel</Link>
-          </li>
         </ul>
       </nav>
     </div>

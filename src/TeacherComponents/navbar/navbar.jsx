@@ -22,15 +22,6 @@ export default function TeacherNavbar({ onDrawerToggle, onEndDrawerToggle }) {
           <li className="mr-4 mobile:max-tablet:-mr-4 mobile:max-tablet:ml-0.5 mobile:max-tablet:flex-1">
             <Link to="" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Home</Link>
           </li>
-          {
-            authState.userDetails.admin
-              ?
-              <li className="mr-4 mobile:max-tablet:mr-0.5 mobile:max-tablet:flex-1 whitespace-nowrap">
-                <Link to="/Admin-Dashboard" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Admin  </Link>
-              </li>
-              :
-              <div></div>
-          }
           {/* <li className="mr-4">
             <Link to="/Teacher-Dashboard/studentfee" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Fee</Link>
           </li> */}

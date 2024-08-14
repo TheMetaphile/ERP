@@ -45,22 +45,22 @@ export default function RightCard() {
         setIsSubmitting(true);
         setError('');
         try {
-            const endpoint = role === "Teacher-Dashboard" ? "/login/teacher" : role === "Sub-Admin" ? "/login/SubAdmin" : "/login/student";
+            const endpoint = role === "Teacher-Dashboard" ? "/login/teacher" : role === "Sub-Admin" ? "/login/SubAdmin" : role === "Admin-Dashboard" ? "/login/admin" : "/login/student";
             await axios.post(`${BASE_URL_Login}${endpoint}`, {
                 email,
                 password
-            }).then(async(response) => {
+            }).then(async (response) => {
                 if (response.status == 200) {
                     console.log(response.data, "isuhgaoiud hfguj dsfkgj")
                     var { userDetails, tokens, subject, ClassDetails, subjects } = response.data;
                     console.log(userDetails, tokens);
                     var date = new Date();
-                    if (role==="Teacher-Dashboard"  && date.getHours()<17) {
-                       
-                        var month = date.getMonth()+1 < 10 ? `0${date.getMonth()+1}` : date.getMonth()+1; 
+                    if (role === "Teacher-Dashboard" && date.getHours() < 17) {
+
+                        var month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
                         date = `${date.getFullYear()}-${month}-${date.getDate()}`
                         console.log(date);
-                        var [ year1,month1,day] = date.split('-');
+                        var [year1, month1, day] = date.split('-');
                         var session = '';
                         if (parseInt(month1) <= 3) {
                             session = `${parseInt(year1) - 1}-${`${year1}`.substring(2, 4)}`;
@@ -70,7 +70,7 @@ export default function RightCard() {
                             session = `${year1}-${`${(parseInt(year1) + 1)}`.substring(2, 4)}`;
                         }
 
-                        if(Object.keys(ClassDetails).length <= 0){
+                        if (Object.keys(ClassDetails).length <= 0) {
                             let config = {
                                 method: 'get',
                                 maxBodyLength: Infinity,
@@ -79,15 +79,15 @@ export default function RightCard() {
                                     'Authorization': `Bearer ${tokens.accessToken}`
                                 }
                             };
-    
+
                             await axios.request(config)
                                 .then((response) => {
                                     console.log(response, "respose dfh srh rh rfh sdf");
-                                    if(response.data){
+                                    if (response.data) {
                                         ClassDetails = response.data;
                                     }
-                                    
-                                    console.log("dsgsd" , ClassDetails);
+
+                                    console.log("dsgsd", ClassDetails);
                                 })
                                 .catch((error) => {
                                     console.log(error);
@@ -106,16 +106,16 @@ export default function RightCard() {
                         await axios.request(config)
                             .then((response) => {
                                 console.log(response, "respose coordinator");
-                                if(response.data){
+                                if (response.data) {
                                     userDetails.co_ordinator_wing = response.data.wing;
                                 }
-                                
-                                console.log("coordinator respo" , userDetails);
+
+                                console.log("coordinator respo", userDetails);
                             })
                             .catch((error) => {
                                 console.log(error);
                             });
-                        
+
 
                     }
                     login(userDetails, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : [], subjects ? subjects : []);
@@ -193,6 +193,7 @@ export default function RightCard() {
                     <option value="Teacher-Dashboard">Teacher</option>
                     <option value="Student-Dashboard">Student</option>
                     <option value="Sub-Admin">Sub Admin</option>
+                    <option value="Admin-Dashboard">Admin</option>
 
                 </select>
 

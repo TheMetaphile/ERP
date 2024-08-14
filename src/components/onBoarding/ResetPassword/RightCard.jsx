@@ -93,8 +93,6 @@ export default function RightCard() {
             <img src={logo} alt="img" className="mr-4 h-32 self-center" />
 
             <h1 className="tablet:text-2xl mobile:text-xl font-bold self-center whitespace-nowrap">Reset Password</h1>
-            {/* {error && <p className="text-red-500">{error}</p>}
-            {successMessage && <p className="text-green-500 text-center mt-2">{successMessage}</p>} */}
             <h1 className="text-xl font-bold mt-5 ">Login Id</h1>
 
             <div className="flex justify-between mt-3">
@@ -121,9 +119,11 @@ export default function RightCard() {
                     disabled={isSubmitting}
                 >
                     <option value="">Select Role</option>
-                    <option value="Teacher-Dashboard">Teacher</option>
-                    <option value="Student-Dashboard">Student</option>
-                    <option value="Sub-Admin">Sub Admin</option>
+                    <option value="Teacher">Teacher</option>
+                    <option value="Student">Student</option>
+                    <option value="SubAdmin">Sub Admin</option>
+                    <option value="Admin">Admin</option>
+
 
                 </select>
             </div>
