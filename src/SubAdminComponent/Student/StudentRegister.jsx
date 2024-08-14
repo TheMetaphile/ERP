@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import axios from 'axios'
@@ -28,6 +28,7 @@ export default function StudentRegister() {
             admissionClass: '',
             currentClass: '',
             section: '',
+            subjects: [],
             admissionDate: '',
             oldAdmissionNumber: '',
             emergencyContactNumber: '',
@@ -77,6 +78,7 @@ export default function StudentRegister() {
             password: '',
             aadhaarNumber: '',
             academicYear: '',
+            subjects: [],
             admissionClass: '',
             currentClass: '',
             section: '',
@@ -113,18 +115,16 @@ export default function StudentRegister() {
 
         console.log(formData);
         try {
-            console.log(formData, authState.accessToken)
             const [year, month, day] = formData.DOB.split('-');
             const formattedDate = `${day}-${month}-${year}`;
             formData.DOB = formattedDate
-            console.log(formData, authState.accessToken)
-
+            formData.subjects = subjects;
 
             formData.password = formData.aadhaarNumber;
+           
             const response = await axios.post(`${BASE_URL_Login}/signup/student`, formData);
             if (response.status === 200) {
                 toast.success('Student registered successfully!');
-                console.log(formData)
                 handleReset();
             }
 
@@ -158,6 +158,29 @@ export default function StudentRegister() {
         }
     }
 
+    useEffect(() => {
+        console.log("here")
+        switch (formData.stream) {
+            case "PCM":
+                console.log("here2")
+                setSubjects(['Physics', 'Chemistry', 'Mathematics', "English"]);
+                break;
+            case "PCB":
+                setSubjects(['Physics', 'Chemistry', 'Biology', "English"]);
+                break;
+            case "PCMB":
+                setSubjects(['Physics', 'Chemistry', 'Mathematics', "English", 'Biology']);
+                break;
+            case "Commerce":
+                setSubjects(['Accountancy', 'Business Studies', 'Economics', "English"]);
+                break;
+            case "Arts":
+                setSubjects(['History', 'Political Science', "English"]);
+                break;
+            default:
+                setSubjects([]);
+        }
+    }, [formData]);
 
     const handleMultiSignUp = async (data) => {
         setLoading(true);
@@ -351,7 +374,7 @@ export default function StudentRegister() {
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="fatherPhoneNumber"
-                                    type="text"
+                                    type="number"
                                     name="fatherPhoneNumber"
                                     value={formData.fatherPhoneNumber}
                                     onChange={handleChange}
@@ -408,7 +431,7 @@ export default function StudentRegister() {
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="aadhaarNumber"
-                                    type="text"
+                                    type="number"
                                     name="aadhaarNumber"
                                     value={formData.aadhaarNumber}
                                     onChange={handleChange}
@@ -537,7 +560,7 @@ export default function StudentRegister() {
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="motherPhoneNumber"
-                                    type="text"
+                                    type="number"
                                     name="motherPhoneNumber"
                                     value={formData.motherPhoneNumber}
                                     onChange={handleChange}
@@ -602,7 +625,6 @@ export default function StudentRegister() {
                                     name="section"
                                     value={formData.section}
                                     onChange={handleChange}
-                                    required
                                 >
                                     <option value="">Select Section</option>
                                     <option value="A">A</option>
@@ -657,7 +679,7 @@ export default function StudentRegister() {
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="guardiansPhoneNumber"
-                                    type="text"
+                                    type="number"
                                     name="guardiansPhoneNumber"
                                     value={formData.guardiansPhoneNumber}
                                     onChange={handleChange}
@@ -672,7 +694,7 @@ export default function StudentRegister() {
                                 <input
                                     className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
                                     id="emergencyContactNumber"
-                                    type="text"
+                                    type="number"
                                     name="emergencyContactNumber"
                                     value={formData.emergencyContactNumber}
                                     onChange={handleChange}
@@ -745,9 +767,8 @@ export default function StudentRegister() {
 
                 </div>
 
-                <div className=" flex">
-                    <SubjectInputs stream={formData.stream} formData={formData} handleChange={handleChange} />
-
+                <div className="flex">
+                    {formData.stream !=='General' && <SubjectInputs stream={formData.stream} setSubject={setSubjects} subjects={subjects} />}
                 </div>
                 <div className=" flex gap-4 mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mb-4 mobile:max-tablet:mb-0">
                     <div className="w-1/2 rounded-lg mobile:max-tablet:w-full text-lg whitespace-nowrap">
