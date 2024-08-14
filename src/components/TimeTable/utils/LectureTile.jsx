@@ -8,12 +8,10 @@ export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, Time
 
     useEffect(() => {
         setLectures(data && data[day] ? data[day][index] : {})
-    }, [day, data]);
+    }, [day,data]);
 
-    useEffect(() => {
-        console.log(lectures);
 
-    }, [lectures])
+
     return (
         <div className="flex-1 w-full justify-between" key={index}>
             {numberOfLeacturesBeforeLunch === index ? (
@@ -22,7 +20,7 @@ export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, Time
             <div className="w-full border-t border-gray-400">
 
                 <div key={lectures._id}>
-                    {lectures.optionalSubjects?.length > 0 ? (
+                    {lectures.optional ? (
                         lectures.optionalSubjects.map((optSub, optSubIndex) => (
 
                             authState.subjects.includes(optSub.optionalSubject) && (
@@ -39,7 +37,7 @@ export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, Time
 
                         ))
                     ) : (
-                        <div className="w-full flex">
+                        Object.keys(lectures).length >0 && <div className="w-full flex">
                             <h1 className="w-96 px-4 py-2 text-center border-r border-gray-400 bg-green-200">{lectures.lectureNo}</h1>
                             <h1 className="w-full px-4 py-2 text-center border-r border-gray-400 bg-green-200">{lectures.subject}</h1>
                             <div className="w-full px-4 py-2 text-center border-r flex items-center border-gray-400 bg-blue-200">
