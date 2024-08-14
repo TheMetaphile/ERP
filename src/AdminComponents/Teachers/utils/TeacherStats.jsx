@@ -30,9 +30,9 @@ const TeacherStats = () => {
   };
 
   return (
-    <div className="flex gap-4 mobile:max-tablet:gap-2">
-      <div className="flex flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border">
-        <div className="w-20 h-20">
+    <div className="flex gap-4 mobile:max-tablet:gap-2 mobile:max-tablet:flex-col">
+      <div className="flex flex-1 flex-col mobile:max-tablet:flex-row  items-center text-center bg-white rounded-lg shadow p-4 w-60 border mobile:max-tablet:gap-2 mobile:max-tablet:w-auto ">
+        <div className="w-20 h-20 ">
           {/* <Doughnut data={data} options={options} /> */}
           <Doughnut
             data={{
@@ -53,7 +53,7 @@ const TeacherStats = () => {
         <p className="text-2xl font-semibold mt-3 ">184</p>
         <p className="text-lg  font-medium text-gray-400 mt-1">Total Teachers</p>
       </div>
-      <div className="flex flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border">
+      <div className="flex flex-1 mobile:max-tablet:flex-row flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border mobile:max-tablet:gap-2 mobile:max-tablet:w-auto">
         <div className="w-20 h-20">
           <Doughnut
             data={{
@@ -72,7 +72,7 @@ const TeacherStats = () => {
         <p className="text-2xl font-semibold mt-3 ">95</p>
         <p className="text-lg  font-medium text-gray-400 mt-1">Female Teachers</p>
       </div>
-      <div className="flex flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border">
+      <div className="flex flex-1 mobile:max-tablet:flex-row flex-col items-center text-center bg-white rounded-lg shadow p-4 w-60 border mobile:max-tablet:gap-2 mobile:max-tablet:w-auto">
         <div className="w-20 h-20">
           <Doughnut
             data={{

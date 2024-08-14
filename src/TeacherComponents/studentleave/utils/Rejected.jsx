@@ -3,6 +3,8 @@ import RejectedTile from './RejectedTile'
 import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext'
+import { BASE_URL_Student_Leave } from '../../../Config'
+
 export default  function Rejected() {
 
     const { authState } = useContext(AuthContext);
@@ -14,7 +16,7 @@ export default  function Rejected() {
         setLoading(true);
 
         try {
-            const response = await axios.get(`https://studentleaveapi.onrender.com/leave/fetch/classTeacher?start=${0}&end=${20}`, {
+            const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/classTeacher?start=${0}&end=${20}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -51,7 +53,7 @@ export default  function Rejected() {
 
    
     return (
-        <div className='ml-3 mr-3'>
+        <div className='w-full mr-3'>
             <RejectedTile data={data}/>   
         </div>
     )

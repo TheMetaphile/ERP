@@ -1,8 +1,13 @@
+import React, { useState, useEffect, useContext } from 'react'
 import InfoCard from "./utils/InfoCard";
 import profile from './../../assets/Test Account.png'
 import Attendance from "./utils/Attendance";
 import Performance from "./utils/Performance";
+import AuthContext from '../../Context/AuthContext';
+
 export default function Result(){
+    const { authState } = useContext(AuthContext);
+
     const handlePrint = () => {
         window.print();
       };
@@ -10,15 +15,16 @@ export default function Result(){
         <div className="flex flex-col w-full h-screen overflow-y-auto items-start mt-2 px-2 no-scrollbar">
             <h3 className="text-xl font-medium">Result</h3>
             <InfoCard 
-                class='2nd A' 
-                name='Mehika Tegwal' 
-                profileImg={profile}
-                rollnumber='2001270100028'
-                dob='27 Dec 1995'
-                bloodgroup='B+'
-                contactno='+91 8979020025'
-                father='Mr. Raj kumar Tyagi'
-                mother= 'Mrs. Manju Tyagi'
+                class={authState.userDetails.currentClass} 
+                name={authState.userDetails.name} 
+                profileImg={authState.userDetails.profileLink} 
+                rollnumber={authState.userDetails.rollNumber} 
+                dob={authState.userDetails.DOB} 
+                bloodgroup={authState.userDetails.bloodGroup} 
+                contactno={authState.userDetails.fatherPhoneNumber} 
+                father={authState.userDetails.fatherName} 
+                mother= {authState.userDetails.motherName} 
+                section={authState.userDetails.section}
             />
             <Attendance term={[{total:"249", attendance: "235"},{total:"100", attendance: "72"}]}/>
             <Performance />

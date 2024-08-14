@@ -4,12 +4,15 @@ import AuthContext from '../../../Context/AuthContext';
 import Loading from './../../../LoadingScreen/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { BASE_URL_Login, BASE_URL_ClassTeacher } from '../../../Config';
+import { MdEdit, MdDeleteForever, MdCheck, MdCancel } from "react-icons/md";
 
 export default function AssignTeacherRow({ Class }) {
     const [expanded, setExpanded] = useState(false);
     const [sectionsDetails, setSections] = useState([]);
     const [newSection, setNewSection] = useState('');
     const [email, setEmail] = useState('');
+    const [name,setName]=useState('');
     const [temp, setTemp] = useState();
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -17,6 +20,8 @@ export default function AssignTeacherRow({ Class }) {
     const { authState } = useContext(AuthContext);
     const [showNewRow, setShowNewRow] = useState(false);
     const [editingRow, setEditingRow] = useState(null);
+    const [additionalData, setAdditionalData] = useState([]);
+
 
     const handleClick = () => {
         setExpanded(!expanded);
@@ -37,6 +42,7 @@ export default function AssignTeacherRow({ Class }) {
 
     const handleSuggestionClick = (suggestion) => {
         setEmail(suggestion.email);
+        setName(suggestion.name);
         setShowSuggestions(false);
     }
 
@@ -46,7 +52,7 @@ export default function AssignTeacherRow({ Class }) {
                 setShowSuggestions(true);
                 const searchTeacher = async () => {
                     try {
-                        const response = await axios.post('https://loginapi-y0aa.onrender.com/search/teacher', {
+                        const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
                             accessToken: authState.accessToken,
                             searchString: temp,
                             start: 0,
@@ -55,6 +61,7 @@ export default function AssignTeacherRow({ Class }) {
                         console.log(response.data)
                         const teacherEmails = response.data.Teachers.map(teacher => ({
                             email: teacher.email,
+                            name: teacher.name,
                             profileLink: teacher.profileLink
                         }));
                         setSuggestions(teacherEmails);
@@ -84,7 +91,7 @@ export default function AssignTeacherRow({ Class }) {
     const fetchSections = async () => {
         try {
             if (sectionsDetails.length <= 0) {
-                const response = await axios.post('https://class-teacher.onrender.com/classTeacher/fetch/sections', {
+                const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/fetch/sections`, {
                     accessToken: authState.accessToken,
                     class: Class,
                 });
@@ -105,8 +112,13 @@ export default function AssignTeacherRow({ Class }) {
         console.log('section', newSection)
         console.log('teacher', email)
         try {
+            const newData = {
+                section: newSection,
+                name : name
+            }
+            console.log(newData)
             if (email) {
-                const response = await axios.post('https://class-teacher.onrender.com/classTeacher/assign', {
+                const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/assign`, {
                     accessToken: authState.accessToken,
                     class: Class,
                     section: newSection,
@@ -114,7 +126,8 @@ export default function AssignTeacherRow({ Class }) {
                 });
                 if (response.status === 200) {
                     toast.success('Teacher Assigned successfully');
-                    fetchSections();
+                    // fetchSections();
+                    setSections(prevData => [...prevData, newData]);
                     setNewSection('');
                     setEmail('');
                     setShowNewRow(false);
@@ -134,24 +147,66 @@ export default function AssignTeacherRow({ Class }) {
         setEmail(sectionsDetails[index].name);
     };
 
+    const handleCancelEdit = () => {
+        setEmail('');
+        setShowSuggestions(false);
+        setEditingRow(null);
+    };
+
     const handleConfirmClick = async (index) => {
         try {
             if (email) {
-                const response = await axios.post('https://class-teacher.onrender.com/classTeacher/assign', {
+                const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/assign`, {
                     accessToken: authState.accessToken,
                     class: Class,
                     section: sectionsDetails[index].section,
                     teacherEmail: email
                 });
                 if (response.status === 200) {
-                    toast.success('Teacher Updated successfully');
-                    fetchSections();
+                    toast.success('Teacher Updated successfully');     
+                    const updatedSection = {
+                        ...sectionsDetails[index], 
+                        name: name         
+                    };
+            
+                    const updatedSections = [
+                        ...sectionsDetails.slice(0, index), 
+                        updatedSection,                      
+                        ...sectionsDetails.slice(index + 1)  
+                    ];
+            
+                    setSections(updatedSections);
+                    // fetchSections();
                     setEmail('');
                     setEditingRow(null);
                 }
-            } 
+            }
         } catch (error) {
             toast.error('Error updating teacher');
+        }
+        finally{
+            setShowSuggestions(false);
+        }
+    };
+
+    const handleDelete = async (index, section) => {
+        console.log('Deleting ', Class, 'section:', section);
+
+        try {
+            const response = await axios.delete(`${BASE_URL_ClassTeacher}/classTeacher/delete?class=${Class}&section=${section}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`,
+                }
+            });
+
+            if (response.status === 200) {
+                const updatedSecion = sectionsDetails.filter((_, i) => i !== index);
+                setSections(updatedSecion);
+                toast.success('Section Deleted Successfully');
+            }
+        } catch (error) {
+            console.error("Error deleting section:", error);
+            toast.error('Error deleting section');
         }
     };
 
@@ -159,7 +214,7 @@ export default function AssignTeacherRow({ Class }) {
         <div key={Class} className=" w-full mb-4 rounded-lg mt-2 shadow-md border" >
             <div className="flex justify-between items-center p-2  hover:cursor-pointer" onClick={handleClick}>
                 <div className="w-1/4">
-                    <div className="px-4 py-2 ">
+                    <div className="px-3 py-2 whitespace-nowrap">
                         {Class}
                     </div>
                 </div>
@@ -169,24 +224,24 @@ export default function AssignTeacherRow({ Class }) {
             </div>
 
             {expanded && (
-                <div className='mx-3'>
-                    <div className="flex justify-between w-full py-2 pl-2 bg-bg_blue h-fit rounded-t-lg border border-black">
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                <div className='mx-3 border border-black rounded-lg mb-2 overflow-auto'>
+                    <div className="flex justify-between w-full py-2 pl-2 bg-bg_blue h-fit  ">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm mobile:max-tablet:flex-1">
                             Section
                         </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm mobile:max-tablet:flex-1">
                             Class Teacher
                         </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm mobile:max-tablet:flex-1 mobile:max-tablet:text-center">
                             Action
                         </h1>
                     </div>
                     {!loading ?
                         sectionsDetails.length > 0 ?
                             (
-                                <div>
+                                <div className=''>
                                     {sectionsDetails.map((details, index) => (
-                                        <div key={index} className={`flex justify-between w-full py-2 pl-2  h-fit border border-black ${index === sectionsDetails.length - 1 && !showNewRow ? "rounded-b-lg" : ""}`}>
+                                        <div key={index} className={`flex justify-between w-full py-2 px-2  h-fit border ${index === sectionsDetails.length - 1 && !showNewRow ? "rounded-b-lg" : ""}`}>
                                             <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                                                 {details.section}
                                             </h1>
@@ -214,7 +269,7 @@ export default function AssignTeacherRow({ Class }) {
                                                                 onClick={() => handleSuggestionClick(suggest)}
                                                             >
                                                                 <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                                                {suggest.email}
+                                                                {suggest.name}
                                                             </li>
                                                         ))}
                                                     </ul>
@@ -222,9 +277,16 @@ export default function AssignTeacherRow({ Class }) {
                                             </div>
                                             <div className='w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
                                                 {editingRow === index ? (
-                                                    <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleConfirmClick(index)}>Confirm</button>
+                                                    <div className='flex items-center gap-1'>
+                                                        <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleConfirmClick(index)}><MdCheck /></button>
+                                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
+
+                                                    </div>
                                                 ) : (
-                                                    <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={() => handleUpdateClick(index)}>Update</button>
+                                                    <div className='flex items-center gap-1'>
+                                                        <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleUpdateClick(index)}> <MdEdit /></button>
+                                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index, details.section)}><MdDeleteForever /></button>
+                                                    </div>
                                                 )}
                                             </div>
                                         </div>
@@ -238,42 +300,44 @@ export default function AssignTeacherRow({ Class }) {
                             <Loading />
                         )}
                     {showNewRow ? (
-                        <div className={`flex justify-between w-full py-2 px-4  h-fit border border-black ${sectionsDetails.length > 0 ? "rounded-b-lg" : "rounded-lg"}`}>
-                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                                {newSection}
-                            </h1>
-                            <div className='relative'>
-                                <input
-                                    type="text"
-                                    className="w-36 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap"
-                                    placeholder="Teacher"
-                                    value={email}
-                                    onChange={handleEmailChange}
-                                    required
-                                />
-                                {showSuggestions && suggestions.length > 0 && (
-                                    <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
-                                        {suggestions.map((suggest, idx) => (
-                                            <li
-                                                key={idx}
-                                                className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
-                                                onClick={() => handleSuggestionClick(suggest)}
-                                            >
-                                                <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                                {suggest.email}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </div>
-                            <div>
-                                <button className=' px-4 text-green-400 hover:text-green-700 ' onClick={handleAddSection}>
-                                    Save
-                                </button>
-                                {" / "}
-                                <button className=' px-4  text-red-400 hover:text-red-700' onClick={() => { setShowNewRow(false) }}>
-                                    Cancel
-                                </button>
+                        <div className=' overflow-auto'>
+                            <div className={` flex justify-between w-full py-2 px-4  h-fit border border-black ${sectionsDetails.length > 0 ? "rounded-b-lg" : "rounded-lg"}`}>
+                                <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                                    {newSection}
+                                </h1>
+                                <div className='relative'>
+                                    <input
+                                        type="text"
+                                        className="w-36 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap"
+                                        placeholder="Teacher"
+                                        value={email}
+                                        onChange={handleEmailChange}
+                                        required
+                                    />
+                                    {showSuggestions && suggestions.length > 0 && (
+                                        <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                            {suggestions.map((suggest, idx) => (
+                                                <li
+                                                    key={idx}
+                                                    className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                                    onClick={() => handleSuggestionClick(suggest)}
+                                                >
+                                                    <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                                    {suggest.email}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                                <div className=' mobile:max-tablet:text-xs mobile:max-tablet:flex'>
+                                    <button className=' mobile:max-tablet:px-2 px-4 text-green-400 hover:text-green-700 ' onClick={handleAddSection}>
+                                        Save
+                                    </button>
+                                    {" / "}
+                                    <button className=' mobile:max-tablet:text-px-2 px-4  text-red-400 hover:text-red-700' onClick={() => { setShowNewRow(false) }}>
+                                        Cancel
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ) : (

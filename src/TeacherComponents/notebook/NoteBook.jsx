@@ -1,67 +1,55 @@
-import React,{useState} from 'react'
-import { MdEdit } from "react-icons/md";
+import React, { useContext, useEffect, useState } from 'react'
 import Selection from './utils/Selection';
-import Header from '../../AdminComponents/Home/utils/TeachersDetails/LeftCard/Header'
-import { Link } from "react-router-dom";
-import { FaRegCircleCheck, FaRegCircleXmark  } from "react-icons/fa6";
-import NewRecord from './utils/NewRecord';
+import { Outlet, useSearchParams } from "react-router-dom";
+import Tabs from './utils/Tabs';
+import AuthContext from '../../Context/AuthContext';
 
 function NoteBook() {
+    const { authState } = useContext(AuthContext);
+    const [Class, setClass] = useState(authState.subject[0].class);
+    const [Section, setSection] = useState(authState.subject[0].section);
+    const [selectedTab, setSelectedTab] = useState('All');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-    const [isDialogOpen, setIsDialogOpen]=useState(false);
+    const [Subject, setSubject] = useState(authState.subject[0].subject);
 
-    const handleOpen=()=>{
-        setIsDialogOpen(true);
+    const onTabChange = (tab) => {
+        setSelectedTab(tab);
     }
-    const handleClose=()=>{
-        setIsDialogOpen(false);
-    }
-   
-        const details = [
-          
-            { serial: '01', name:'Shailesh', checked:'true' },
-            { serial: '02', name:'Abhishek', checked:'true' },
-            { serial: '03', name:'Shailesh', checked:'false' },
-            { serial: '04', name:'Shailesh', checked:'true' },
-            { serial: '05', name:'Shailesh', checked:'true' },
-            { serial: '06', name:'Shailesh', checked:'false' },   
-            { serial: '07', name:'Shailesh', checked:'true' },   
-            { serial: '08', name:'Shailesh', checked:'true' },   
-            { serial: '09', name:'Shailesh', checked:'false' },   
-            { serial: '10', name:'Shailesh', checked:'true' },   
+    const updateQueryParams = () => {
+        // Update param1 and add a new param3
+        setSearchParams({ Class: Class, Section: Section, Subject: Subject });
+    };
 
-        ];
+    useEffect(() => {
+        updateQueryParams();
+    }, [Class, Section, Subject]);
+
     return (
-        <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar">
-            <div className='w-full flex items-center justify-between px-4 mt-2'>
-                <h1 className="text-2xl font-medium mb-2">Note Book Record</h1>
-                <span className='flex gap-1'>
-                    <h1 className='flex items-center text-sm bg-secondary p-2 rounded-lg shadow-md self-end'>Edit <MdEdit className='ml-1' /></h1>
-                    <h1 className='f text-sm bg-purple-200 p-2 rounded-lg shadow-md self-end cursor-pointer' onClick={handleOpen}>Add New Record</h1>
-                </span>
+        <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar ">
+            <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:py-1 '>
+                <h1 className="text-2xl font-medium mb-2 mobile:max-tablet:text-lg whitespace-nowrap">Note Book Record</h1>
+                <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
+                    <button
+                        className="p-2 border rounded"
+                        onClick={() => setDropdownVisible(!isDropdownVisible)}
+                    >
+                        Filter
+                    </button>
+                    {isDropdownVisible && (
+                        <div className='flex fixed left-0 right-0 bg-white pt-1 p-4 gap-2 justify-between mobile:max-tablet:flex-col '>
+                            <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
+                        </div>
+                    )}
+                </div>
+
+                <div className='mobile:max-tablet:hidden'>
+                    <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
+                </div>
             </div>
-
-            <div className=' mt-4   w-full'>
-                <Selection />
-            </div>
-
-            <div className='  rounded-lg border shadow-md  w-full mb-2'>
-            <Header headings={['Sr. No.', 'Name', 'Checked', 'UnChecked']} />
-            {details.map((detail, index) => (
-               
-                    <div key={index} className='border flex justify-between items-center py-2 pl-2  w-full' >
-                        <div className=' w-40'>{detail.serial}</div>
-                        <div className=' w-40'>{detail.name}</div>
-                        <div className=' w-40'>{detail.checked === 'true' ? <FaRegCircleCheck className="text-green-500" /> : null}</div>
-                        <div className=' w-40'>{detail.checked === 'false' ? <FaRegCircleXmark className="text-red-500" /> : null}</div>
-                    </div>
-                     
-                ))}
-            </div>
-
-                {isDialogOpen && <NewRecord onClose={handleClose}/>}
-            
-
+            <Tabs onTabChange={onTabChange} selectedTab={selectedTab} Class={Class} Section={Section} Subject={Subject} />
+            <Outlet />
         </div>
 
     )

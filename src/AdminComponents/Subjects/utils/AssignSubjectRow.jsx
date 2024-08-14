@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SubjectDetails from './SubjectDetails';
+import { BASE_URL_Login, BASE_URL_ClassTeacher } from '../../../Config';
 
 export default function AssignSubjectRow({ Class }) {
     const [expanded, setExpanded] = useState(false);
@@ -52,7 +53,7 @@ export default function AssignSubjectRow({ Class }) {
         if (temp) {
             const searchTeacher = async () => {
                 try {
-                    const response = await axios.post('https://loginapi-y0aa.onrender.com/search/teacher', {
+                    const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
                         accessToken: authState.accessToken,
                         searchString: temp,
                         start: 0,
@@ -76,7 +77,7 @@ export default function AssignSubjectRow({ Class }) {
 
     const fetchSections = async () => {
         try {
-            const response = await axios.post('https://class-teacher.onrender.com/classTeacher/fetch/sections', {
+            const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/fetch/sections`, {
                 accessToken: authState.accessToken,
                 class: Class,
             });
@@ -103,15 +104,15 @@ export default function AssignSubjectRow({ Class }) {
     };
 
     return (
-        <div key={Class} className="w-full mt-3 mb-4 rounded-lg shadow-md border ">
+        <div key={Class} className="w-full mt-3 mb-4 rounded-lg shadow-md border overflow-auto">
             <ToastContainer />
-            <div className="flex justify-between items-center p-2">
+            <div className="flex justify-between items-center p-2 " onClick={handleClick}>
                 <div className="w-1/4">
-                    <div className="px-4 py-2">
+                    <div className="px-4 py-2 whitespace-nowrap">
                         {Class}
                     </div>
                 </div>
-                <div className="self-center cursor-pointer" onClick={handleClick}>
+                <div className="self-center cursor-pointer" >
                     {expanded ? <FaChevronUp /> : <FaChevronDown />}
                 </div>
             </div>
@@ -123,7 +124,7 @@ export default function AssignSubjectRow({ Class }) {
                             <div>
                                 {sectionsDetails.map((details, index) => (
                                     <div key={index} className="mb-3 rounded-lg shadow-md">
-                                        <div className="px-2 flex justify-between py-2 pl-2 h-fit border">
+                                        <div className="px-2 flex justify-between py-2 pl-2 h-fit border border-gray-300" onClick={() => handleSectionClick(index)}>
                                             <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                                                 {details.section}
                                             </h1>
@@ -144,7 +145,7 @@ export default function AssignSubjectRow({ Class }) {
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center">No section added</div>
+                            <div className="text-center">No section added. Please assign Class Teacher First then assign subjects of that class to other teachers</div>
                         )
                     ) : (
                         <Loading />

@@ -53,7 +53,7 @@ function Quiz() {
     <div className='flex flex-col w-full h-screen overflow-y-auto items-start mt-2 px-2'>
       <h1>{subject}</h1>
       <QuizProgressCard currentQuestionIndex={currentQuestionIndex} len={questions.length} />
-      <div className="w-full rounded-lg shadow-lg px-4 py-2 mt-4">
+      <div className="w-full border border-gray-300 rounded-lg shadow-md px-4 py-2 mt-4">
         <CountDown next={goToNextQuestion} seconds={remainingTimes[currentQuestionIndex]} updateRemainingTime={updateRemainingTime} />
         <hr className='border-t-2 mt-2 mb-3' />
 

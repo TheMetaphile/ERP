@@ -7,14 +7,13 @@ import Border from "./components/event/border.jsx";
 import Profile from "./components/profile/profile.jsx";
 import Quiz from "./components/quiz/quiz.jsx";
 import Receipt from "./components/receipt/receipt.jsx";
-import Result from "./components/Result/Result.jsx";
-import DateSheet  from "./components/DateSheet/datesheet.jsx";
+import Result from "./components/Subresult/Subresult.jsx";
+import DateSheet from "./components/DateSheet/datesheet.jsx";
 // import Palyquiz from "./components/playquiz/firstquizs.jsx";
 import Attendance from "./components/Attendance/Attendance.jsx";
 import TimeTable from "./components/TimeTable/Timetable.jsx";
 import AskDoubt from "./components/askDoubt/Askdoubt.jsx";
-import MyDoubts from './components/askDoubt/MyDoubts.jsx'
-import SubjectClassWork from "./components/classWork/SubjectClassWork.jsx";
+import MyDoubts from './components/askDoubt/MyDoubts.jsx';
 import ClassWork from "./components/classWork/route.jsx";
 import TodayClassWork from "./components/classWork/TodayClassWork.jsx";
 import Login from "./components/onBoarding/Login/Login.jsx";
@@ -45,11 +44,9 @@ import Mediacal from "./components/medical/Medical.jsx";
 import AddmissionForm from "./AdminComponents/Students/AllStudents/AddmissionForm.jsx";
 import StudentPromotion from "./AdminComponents/Students/AllStudents/StudentPromotion.jsx";
 import StudentAttendance from "./AdminComponents/Students/Students Attendance/StudentAttendance.jsx";
-import HomeWork from "./components/homeWork/HomeWork.jsx"
-import SubjectHomeWork from "./components/homeWork/SubjectHomeWork.jsx"
+import HomeWork from "./components/homeWork/HomeWork.jsx";
 
 import Route from './components/homeWork/route.jsx';
-import StudentResult from "./AdminComponents/Students/AllStudents/StudentResult.jsx";
 import AllParents from "./AdminComponents/Parents/AllParents.jsx";
 import AllBooks from "./AdminComponents/Library/AllBooks.jsx";
 import ResultLayout from "./AdminComponents/Students/AllStudents/utils/ResultLayout.jsx";
@@ -81,22 +78,18 @@ import TeacherStudentAttendance from "./TeacherComponents/studentattendence/Stud
 import TakeLeave from "./TeacherComponents/takeleave/TakeLeave.jsx";
 import ReportCard from "./TeacherComponents/reportcard/ReportCard.jsx";
 import AllReport from "./TeacherComponents/reportcard/AllReport.jsx";
-import Performance from "./TeacherComponents/reportcard/utils/performance/PerformanceProfile.jsx"
 import TimeTableTeacher from "./TeacherComponents/timetable/TimeTable.jsx"
 import BirthDay from "./TeacherComponents/birthday/BirthDay.jsx";
 import All from "./TeacherComponents/birthday/utils/All.jsx"
 import TeacherBirthDay from "./TeacherComponents/birthday/utils/Teacher.jsx"
 import StudentBirthDay from "./TeacherComponents/birthday/utils/Student.jsx"
 import StudentLeave from "./TeacherComponents/studentleave/StudentLeave.jsx";
-import New from "./TeacherComponents/studentleave/utils/New.jsx"
-import Approved from "./TeacherComponents/studentleave/utils/Approved.jsx";
-import Rejected from "./TeacherComponents/studentleave/utils/Rejected.jsx";
 import StudentFee from "./TeacherComponents/studentfee/StudentFee.jsx";
 import NoteBook from "./TeacherComponents/notebook/NoteBook.jsx";
 import TeacherMessage from "./TeacherComponents/message/Message.jsx"
 import TeacherHome from "./TeacherComponents/Home/TeacherHome.jsx";
 import TimeTableAdmin from "./AdminComponents/timetable/TimeTable.jsx"
-import Upload from "./AdminComponents/timetable/utils/Upload.jsx";
+import Upload from "./AdminComponents/timetable/utils/Upload/Upload.jsx";
 import ClassTeacher from "./AdminComponents/Classes/utils/ClassTeacher.jsx";
 import AssignTeacher from "./AdminComponents/Classes/utils/AssignTeacher.jsx";
 import AssignSubject from "./AdminComponents/Subjects/utils/AssignSubject.jsx";
@@ -112,6 +105,77 @@ import CharacterCertificate from "./AdminComponents/Students/Character/utils/per
 import FeeDetails from "./AdminComponents/fee/StudentFee/FeeDetails.jsx"
 import FeeStructure from "./AdminComponents/fee/FeeStructure/FeeStructure.jsx"
 import FeeDiscount from "./AdminComponents/fee/Discount/FeeDiscount.jsx"
+import StudentDoubts from "./TeacherComponents/studentDoubt/StudentDoubts.jsx"
+import NewDoubt from "./TeacherComponents/studentDoubt/utils/NewDoubt.jsx"
+import Answered from "./TeacherComponents/studentDoubt/utils/Answered.jsx"
+import ClassActivity from "./TeacherComponents/ClassActivity/ClassActivity.jsx";
+import AllReportAdmin from "./AdminComponents/result/AllReportAdmin.jsx";
+import ReportCardAdmin from "./AdminComponents/result/ReportCardAdmin.jsx";
+import PerformanceProfileAdmin from "./AdminComponents/result/utils/performance/PerformanceProfileAdmin.jsx";
+import UploadResult from "./TeacherComponents/UploadResult/UploadResult.jsx";
+import TimeTableStudent from "./TeacherComponents/timeTableStudent/TimeTableStudent.jsx";
+import TodayHomeWork from "./components/homeWork/TodayHomeWork.jsx";
+import Appraisal from "./TeacherComponents/appraisal/Appraisal.jsx";
+import UploadNotice from "./TeacherComponents/notice/utils/Upload.jsx";
+import Apply from "./TeacherComponents/appraisal/utils/Apply.jsx";
+import Applied from "./TeacherComponents/appraisal/utils/Applied.jsx";
+import Employee from "./AdminComponents/Employee/Employee.jsx";
+import Allcertificate from "./SubAdminComponent/Certificates/Allcertificate.jsx";
+import Certificates from "./SubAdminComponent/Certificates/Certificates.jsx";
+import Transfer from "./SubAdminComponent/Certificates/utils/Transfer.jsx";
+import Character from "./SubAdminComponent/Certificates/utils/Character.jsx";
+import SubAdminDashboard from "./SubAdminComponent/Dashboard.jsx";
+import AllStudentsList from "./SubAdminComponent/AllStudents/AllStudentsList.jsx";
+import AllStudentSubAdmin from "./SubAdminComponent/AllStudents/AllStudentSubAdmin.jsx";
+import AllReportSubAdmin from "./SubAdminComponent/result/AllReportSubAdmin.jsx";
+import ReportCardSubAdmin from "./SubAdminComponent/result/ReportCardSubAdmin.jsx";
+import PerformanceProfileSubAdmin from "./SubAdminComponent/result/utils/performance/PerformanceProfileSubAdmin.jsx";
+import Salary from "./SubAdminComponent/Salary/Salary.jsx";
+import AllSalary from "./SubAdminComponent/Salary/AllSalary.jsx";
+import StudentRegister from "./SubAdminComponent/Student/StudentRegister.jsx";
+import TeacherRegister from "./SubAdminComponent/Teacher/TeacherRegister.jsx";
+import Subresult from "./TeacherComponents/Subresult/Subresult.jsx";
+import AllExReport from "./SubAdminComponent/result/ExReport/AllExReport.jsx";
+import List from "./SubAdminComponent/result/ExReport/List.jsx";
+import ExResult from "./SubAdminComponent/result/ExReport/utils/ExResult.jsx";
+import AllNoteBookRecord from "./TeacherComponents/notebook/utils/AllNotebookRecord.jsx";
+import NewNoteBookRecord from "./TeacherComponents/notebook/utils/NewNotebookRecord.jsx";
+import RecordDetails from "./TeacherComponents/notebook/utils/Details.jsx";
+import FeeSubAdmin from "./SubAdminComponent/SubAdminFee/FeeSubAdmin.jsx";
+import FeeDetailsSubAdmin from "./SubAdminComponent/SubAdminFee/StudentFee/FeeDetailsSubAdmin.jsx";
+import FeeStructureSubAdmin from "./SubAdminComponent/SubAdminFee/FeeStructure/FeeStructureSubAdmin.jsx";
+import FeeDiscountSubAdmin from "./SubAdminComponent/SubAdminFee/Discount/FeeDiscountSubAdmin.jsx";
+import Status from "./components/notebook/Status.jsx";
+import Planner from "./TeacherComponents/Planner/Planner.jsx";
+import StudentDetails from "./SubAdminComponent/SubAdminFee/StudentFee/utils/StudentDetails.jsx";
+import AllExDetails from "./SubAdminComponent/SubAdminFee/StudentFee/AllDetails.jsx";
+import FeeDetail from "./SubAdminComponent/SubAdminFee/StudentFee/utils/FeeDetail.jsx";
+import NoticeSubAdmin from "./SubAdminComponent/notification/utils/NoticeSubAdmin.jsx";
+import FeeDetailAdmin from "./AdminComponents/fee/StudentFee/utils/FeeDetailAdmin.jsx";
+import AllDetailsAdmin from "./AdminComponents/fee/StudentFee/AllDetailsAdmin.jsx";
+import Hod from "./TeacherComponents/HOD/Hod.jsx";
+import NoteBookHOD from "./TeacherComponents/HOD/utils/notebook/NoteBookHOD.jsx";
+import AllNoteBookRecordHOD from "./TeacherComponents/HOD/utils/notebook/utils/AllNotebookRecordHOD.jsx";
+import NewNoteBookRecordHOD from "./TeacherComponents/HOD/utils/notebook/utils/NewNotebookRecordHOD.jsx";
+import RecordDetailsHOD from "./TeacherComponents/HOD/utils/notebook/utils/Details.jsx";
+import PlannerHOD from "./TeacherComponents/HOD/utils/Planner/Planner.jsx";
+import ClassTeacherSubstitute from "./TeacherComponents/HOD/utils/ClassTeacherSubstitute/main.jsx";
+import LectureSubstitute from "./TeacherComponents/HOD/utils/LectureSubstitute/main.jsx";
+import Assigncoordinator from "./AdminComponents/Coordinator/Assigncoordinator.jsx";
+import Substitutecoordinator from "./AdminComponents/SubstituteCoordinator/Substitutecoordinator.jsx";
+import PlannerAdmin from "./AdminComponents/Planner/PlannerAdmin.jsx";
+import AppraisalAdmin from "./AdminComponents/appraisal/AppraisalAdmin.jsx";
+import ApplyAdmin from "./AdminComponents/appraisal/utils/ApplyAdmin.jsx";
+import AppliedAdmin from "./AdminComponents/appraisal/utils/AppliedAdmin.jsx";
+import NewAdmission from "./AdminComponents/New Admission/NewAdmission.jsx";
+import Readmission from "./SubAdminComponent/Readmission/Readmission.jsx";
+import AllAdmission from "./SubAdminComponent/Readmission/AllAdmission.jsx";
+import TabsStudentFee from "./components/fees/Tabs.jsx";
+import Promotion from "./TeacherComponents/StudentPromotion/Promotion.jsx";
+import TeachersTimeTable from "./AdminComponents/timetable/utils/Teacher/main.jsx";
+import StudentsTimeTable from "./AdminComponents/timetable/utils/Student/main.jsx";
+// import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
+
 
 const router = createBrowserRouter([
   {
@@ -148,7 +212,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/Student-Dashboard/fee-due",
-        element: <Fee />,
+        element: <TabsStudentFee />,
       },
       {
         path: "/Student-Dashboard/events",
@@ -164,7 +228,7 @@ const router = createBrowserRouter([
       // },
       {
         path: "/Student-Dashboard/receipt",
-        element: <Receipt/>,
+        element: <Receipt />,
       },
       {
         path: "/Student-Dashboard/quiz",
@@ -174,7 +238,7 @@ const router = createBrowserRouter([
             path: '',
             element: <Panel />
           },
-          
+
           {
             path: ':subject',
             element: <Quiz />
@@ -219,11 +283,11 @@ const router = createBrowserRouter([
             path: '',
             element: <TodayClassWork />
           },
-          
-          {
-            path: ':name',
-            element: <SubjectClassWork />
-          }
+
+          // {
+          //   path: ':name',
+          //   element: <SubjectClassWork />
+          // }
         ]
       },
       {
@@ -232,13 +296,13 @@ const router = createBrowserRouter([
         children: [
           {
             path: '',
-            element: <HomeWork />
+            element: <TodayHomeWork />
           },
-          
-          {
-            path: ':name',
-            element: <SubjectHomeWork />
-          }
+
+          // {
+          //   path: ':name',
+          //   element: <SubjectHomeWork />
+          // }
         ]
       },
       {
@@ -255,7 +319,7 @@ const router = createBrowserRouter([
           },
           {
             path: '',
-            element: <AllDoubts />
+            element: <MyDoubts />
           }
         ]
       },
@@ -273,7 +337,7 @@ const router = createBrowserRouter([
           },
           {
             path: '/Student-Dashboard/notification/archived',
-            element: <Archived/>
+            element: <Archived />
           },
           {
             path: '',
@@ -313,22 +377,26 @@ const router = createBrowserRouter([
       },
       {
         path: "/Student-Dashboard/medical",
-        element: <Mediacal/>,
+        element: <Mediacal />,
       },
       {
         path: "/Student-Dashboard/homework",
         element: <HomeWork />,
+      },
+      {
+        path: "/Student-Dashboard/notebook",
+        element: <Status />,
       },
     ],
   },
   {
     path: "/Admin-Dashboard",
     element: (
-    <PrivateRoute>
-    <AdminDashboard />
-    </PrivateRoute>
+      <PrivateRoute>
+        <AdminDashboard />
+      </PrivateRoute>
     ),
-    children:[
+    children: [
       {
         path: "",
         element: <AdminHome />,
@@ -336,7 +404,7 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/Students",
         element: <AllStudents />,
-        children:[
+        children: [
           {
             path: '',
             element: <StudentsList />
@@ -349,16 +417,26 @@ const router = createBrowserRouter([
       },
       {
         path: "/Admin-Dashboard/StudentsAddmissionForm",
-        element: <AddmissionForm/>,
-        children:[]
+        element: <StudentRegister />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/StudentsFee",
-        element: <FeeAdmin/>,
+        element: <FeeAdmin />,
         children: [
           {
             path: '/Admin-Dashboard/StudentsFee/details',
-            element: <FeeDetails />
+            element: <AllDetailsAdmin />,
+            children: [
+              {
+                path: '',
+                element: <FeeDetails />
+              },
+              {
+                path: ':id',
+                element: <FeeDetailAdmin />
+              }
+            ]
           },
           {
             path: '/Admin-Dashboard/StudentsFee/structure',
@@ -374,179 +452,270 @@ const router = createBrowserRouter([
           },
         ]
       },
+
       {
         path: "/Admin-Dashboard/StudentAttendance",
-        element: <StudentAttendance/>,
-        children:[]
+        element: <StudentAttendance />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/StudentPromotion",
-        element: <StudentPromotion/>,
-        children:[]
+        element: <StudentPromotion />,
+        children: []
       },
       {
-        path: "/Admin-Dashboard/StudentResult",
-        element: <StudentResult/>,
-        children:[]
+        path: "/Admin-Dashboard/Result",
+        element: <AllReportAdmin />,
+        children: [
+          {
+            path: '',
+            element: <ReportCardAdmin />
+          },
+          {
+            path: ':id',
+            element: <Subresult />
+          }
+        ]
       },
+      // {
+      //   path: "/Admin-Dashboard/StudentResult",
+      //   element: <StudentResult/>,
+      //   children:[]
+      // },
       {
         path: "/Admin-Dashboard/transfercertificate",
         element: <AllTC />,
-        children:[
+        children: [
           {
             path: '',
             element: <TC />
           },
           {
             path: ':id',
-            element: <Certificate/>
+            element: <Certificate />
           }
         ]
       },
       {
         path: "/Admin-Dashboard/charactercetificate",
         element: <AllCC />,
-        children:[
+        children: [
           {
             path: '',
             element: <CC />
           },
           {
             path: ':id',
-            element: <CharacterCertificate/>
+            element: <CharacterCertificate />
           }
         ]
       },
-
+      {
+        path: "/Admin-Dashboard/Assigncoordinator",
+        element: <Assigncoordinator />,
+        children: [],
+      },
+      {
+        path: "/Admin-Dashboard/Substitutecoordinator",
+        element: <Substitutecoordinator />,
+        children: [],
+      },
+      // {
+      //   path: "/Admin-Dashboard/Certificates",
+      //   element: <Allcertificate />,
+      //   children: [
+      //     {
+      //       path: '',
+      //       element: <Certificates />
+      //     },
+      //     {
+      //       path: ':tc',
+      //       element: <Transfer />
+      //     },
+      //     {
+      //       path: ':id',
+      //       element: <Character />
+      //     }
+      //   ]
+      // },
+      {
+        path: "/Admin-Dashboard/NewAdmission",
+        element: <NewAdmission />,
+        children: []
+      },
       {
         path: "/Admin-Dashboard/Teachers",
         element: <AllTeachers />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/Teachers/Profile",
         element: <TeacherProfile />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/AddTeachers",
         element: <AddTeacher />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/TeachersAttendance",
         element: <TeacherAttendance />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/TeachersSalary",
         element: <TeachersSalary />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/Parents/AllParents",
         element: <AllParents />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/Parents/AllParents/Details",
         element: <ParentsDetails />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/Library/AllBooks",
         element: <AllBooks />,
-        children:[]
+        children: []
       },
       {
         path: "/Admin-Dashboard/StudentResult/Details",
-        element: <ResultLayout/>,
-        children:[]
+        element: <ResultLayout />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Transport",
-        element: <Transport/>,
-        children:[]
+        element: <Transport />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Notice",
-        element: <Notice/>,
-        children:[]
+        element: <Notice />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Leave",
-        element: <Leaves/>,
-        children:[]
+        element: <Leaves />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Classes",
-        element: <Class/>,
-        children:[]
+        element: <Class />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Classteacher",
-        element: <ClassTeacher/>,
-        children:[]
+        element: <ClassTeacher />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Assignteacher",
-        element: <AssignTeacher/>,
-        children:[]
+        element: <AssignTeacher />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Exam",
-        element: <Exam/>,
-        children:[]
+        element: <Exam />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Message",
-        element: <Message/>,
-        children:[]
+        element: <Message />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Subjects",
-        element: <Subject/>,
-        children:[]
+        element: <Subject />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Assignsubject",
-        element: <AssignSubject/>,
-        children:[]
+        element: <AssignSubject />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Account/Expenses",
-        element: <Expenses/>,
-        children:[]
+        element: <Expenses />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/Account/TeacherStudents",
-        element: <TeacherStudent/>,
-        children:[]
+        element: <TeacherStudent />,
+        children: []
+      },
+      {
+        path: "/Admin-Dashboard/Employee",
+        element: <Employee />,
+        children: []
       },
       {
         path: "/Admin-Dashboard/timetable",
-        element: <TimeTableAdmin/>,
-        children:[ 
+        element: <TimeTableAdmin />,
+        children: [
+          {
+            path: "",
+            element: <StudentsTimeTable />,
+            children: []
+          },
+          {
+            path: "timetablestructure",
+            element: <Employee />,
+            children: []
+          },
+          {
+            path: "upload",
+            element: <Upload />,
+            children: []
+          },
+          {
+            path: "teacher",
+            element: <TeachersTimeTable />,
+            children: []
+          },
+          {
+            path: "student",
+            element: <StudentsTimeTable />,
+            children: []
+          },
         ]
       },
       {
-        path: '/Admin-Dashboard/timetablestructure',
-            element: <Upload />
+        path: "/Admin-Dashboard/weekplan",
+        element: <PlannerAdmin />,
+      },
+      {
+        path: "/Admin-Dashboard/appraisal",
+        element: <AppraisalAdmin />,
+        children: [
+          {
+            path: '',
+            element: <AppliedAdmin />
+          },
+          {
+            path: ':id',
+            element: <ApplyAdmin />
+          }
+        ]
       },
       {
         path: '/Admin-Dashboard/Events',
-            element: <Event />
+        element: <Event />
       },
     ]
   },
   {
     path: "/Teacher-Dashboard",
     element: (
-   
-    <TeacherDashboard />
-   
+
+      <TeacherDashboard />
+
     ),
-    children:[
+    children: [
       {
         path: "",
         element: <TeacherHome />,
@@ -568,59 +737,40 @@ const router = createBrowserRouter([
             element: <Student />
           },
           {
+            path: '/Teacher-Dashboard/noticeboard/upload',
+            element: <UploadNotice />
+          },
+          {
             path: '',
-            element: <AllNotice />
+            element: <Teacher />
           },
         ]
       },
       {
         path: "/Teacher-Dashboard/checkin",
-        element: <CheckIn/>,
-        children:[]
+        element: <CheckIn />,
+        children: []
       },
       {
         path: "/Teacher-Dashboard/classwork",
-        element: <ClassWorkTeacher/>,
-        children:[]
+        element: <ClassWorkTeacher />,
+        children: []
       },
       {
         path: "/Teacher-Dashboard/homework",
-        element: <HomeWorkTeacher/>,
-        children:[]
-      },
-      {
-        path: "/Teacher-Dashboard/studentAttendence",
-        element: <TeacherStudentAttendance/>,
-        children:[]
-      }, 
-      {
-        path: "/Teacher-Dashboard/studentattendence/record",
-        element: <StudentAttendanceRecord/>,
-        children:[]
+        element: <HomeWorkTeacher />,
+        children: []
       },
       {
         path: "/Teacher-Dashboard/takeleave",
-        element: <TakeLeave/>,
-        children:[]
+        element: <TakeLeave />,
+        children: []
       },
-      {
-        path: "/Teacher-Dashboard/reportcard",
-        element: <AllReport/>,
-        children:[
-          {
-            path: '',
-            element: <ReportCard />
-          },
-          {
-            path: ':id',
-            element: <Performance />
-          }
-        ]
-      },
+
       {
         path: "/Teacher-Dashboard/timetable",
-        element: <TimeTableTeacher/>,
-        children:[]
+        element: <TimeTableTeacher />,
+        children: []
       },
       {
         path: "/Teacher-Dashboard/birthday",
@@ -640,50 +790,346 @@ const router = createBrowserRouter([
           },
           {
             path: '',
-            element: <All />
+            element: <StudentBirthDay />
           },
         ]
       },
       {
-        path: "/Teacher-Dashboard/studentleave",
-        element: <StudentLeave />,
+        path: "/Teacher-Dashboard/appraisal",
+        element: <Appraisal />,
         children: [
           {
-            path: '/Teacher-Dashboard/studentleave/new',
-            element: <New />
+            path: '/Teacher-Dashboard/appraisal/apply',
+            element: <Apply />
           },
           {
-            path: '/Teacher-Dashboard/studentleave/approved',
-            element: <Approved />
-          },
-          {
-            path: '/Teacher-Dashboard/studentleave/rejected',
-            element: <Rejected />
+            path: '/Teacher-Dashboard/appraisal/applied',
+            element: <Applied />
           },
           {
             path: '',
-            element: <New/>
+            element: <Apply />
           },
         ]
       },
       {
-        path: "/Teacher-Dashboard/studentfee",
-        element: <StudentFee/>,
-        children:[]
+        path: "/Teacher-Dashboard/studentdoubts",
+        element: <StudentDoubts />,
+        children: [
+          {
+            path: "new",
+            element: <NewDoubt />
+          },
+          {
+            path: "answered",
+            element: <Answered />
+          },
+          {
+            path: "",
+            element: <NewDoubt />
+          }
+        ]
       },
       {
+        path: "/Teacher-Dashboard/class_activity",
+        element: <ClassActivity />,
+        children: [
+          {
+            path: "",
+            element: <TimeTableStudent />
+          },
+          {
+            path: "/Teacher-Dashboard/class_activity/timetablestudent",
+            element: <TimeTableStudent />,
+            children: []
+          },
+          {
+            path: "reportcard",
+            element: <AllReport />,
+            children: [
+              {
+                path: '',
+                element: <ReportCard />
+              },
+              {
+                path: ':id',
+                element: <Subresult />
+              }
+            ]
+          },
+          {
+            path: "/Teacher-Dashboard/class_activity/studentfee",
+            element: <StudentFee />,
+            children: []
+          },
+          {
+            path: "/Teacher-Dashboard/class_activity/studentAttendence",
+            element: <TeacherStudentAttendance />,
+            children: []
+          },
+          {
+            path: "/Teacher-Dashboard/class_activity/studentattendence/record",
+            element: <StudentAttendanceRecord />,
+            children: []
+          },
+          {
+            path: "/Teacher-Dashboard/class_activity/studentleave",
+            element: <StudentLeave />,
+            children: []
+          },
+          {
+            path: "/Teacher-Dashboard/class_activity/studentPromotion",
+            element: <Promotion />,
+            children: []
+          },
+        ]
+      },
+
+      {
         path: "/Teacher-Dashboard/notebook",
-        element: <NoteBook/>,
-        children:[]
+        element: <NoteBook />,
+        children: [
+          {
+            path: "",
+            element: <AllNoteBookRecord />
+          },
+          {
+            path: "All",
+            element: <AllNoteBookRecord />
+          },
+          {
+            path: "New",
+            element: <NewNoteBookRecord />
+          },
+
+        ]
+      },
+      {
+        path: "/Teacher-Dashboard/HOD",
+        element: <Hod />,
+        children: [
+          {
+            path: "",
+            element: <PlannerHOD />
+          },
+          {
+            path: "/Teacher-Dashboard/HOD/planner",
+            element: <PlannerHOD />,
+          },
+          {
+            path: "/Teacher-Dashboard/HOD/notebook",
+            element: <NoteBookHOD />,
+            children: []
+          },
+          {
+            path: "/Teacher-Dashboard/HOD/notebook/details/:id",
+            element: <RecordDetailsHOD />,
+            children: []
+          },
+          {
+            path: "/Teacher-Dashboard/HOD/classTeacherSubstitute",
+            element: <ClassTeacherSubstitute />,
+          },
+          {
+            path: "/Teacher-Dashboard/HOD/lectureSubstitute",
+            element: <LectureSubstitute />,
+          },
+        ]
+      },
+      {
+        path: "/Teacher-Dashboard/planner",
+        element: <Planner />,
+      },
+      {
+        path: "/Teacher-Dashboard/notebook/details/:id",
+        element: <RecordDetails />,
+        children: []
       },
       {
         path: "/Teacher-Dashboard/message",
-        element: <TeacherMessage/>,
-        children:[]
+        element: <TeacherMessage />,
+        children: []
+      },
+      // {
+      //   path: "/Teacher-Dashboard/SubResult",
+      //   element: <Allsubresult />,
+      //   children: [
+      //     {
+      //       path: '',
+      //       element: <Subresult />
+      //     },
+      //     // {
+      //     //   path: ':subject',
+      //     //   element: <Quiz />
+      //     // }
+      //   ]
+      // },
+      {
+        path: "/Teacher-Dashboard/uploadResult",
+        element: <UploadResult />,
+        children: []
+      },
+    ]
+  },
+  {
+    path: "/Sub-Admin",
+    element: (
+      <SubAdminDashboard />
+    ),
+    children: [
+      {
+        path: '',
+        element: <AllStudentsList />
+      },
+      {
+        path: "/Sub-Admin/Certificates",
+        element: <Allcertificate />,
+        children: [
+          {
+            path: '',
+            element: <Certificates />
+          },
+          {
+            path: 'transfer/:tc/:class/:section/:session',
+            element: <Transfer />
+          },
+          {
+            path: 'character/:tc/:class/:section/:session',
+            element: <Character />
+          }
+        ]
+      },
+      {
+        path: "/Sub-Admin/Students",
+        element: <AllStudentSubAdmin />,
+        children: [
+          {
+            path: '',
+            element: <AllStudentsList />
+          },
+          // {
+          //   path: '/Sub-Admin/Students/studentdetails',
+          //   element: <StudentDetailScreen />
+          // },
+        ]
+      },
+      {
+        path: "/Sub-Admin/Readmission",
+        element: <Readmission />,
+        children: [
+          {
+            path: '',
+            element: <AllAdmission />
+          },
+        ]
+      },
+      {
+        path: "/Sub-Admin/Result",
+        element: <AllReportSubAdmin />,
+        children: [
+          {
+            path: '',
+            element: <ReportCardSubAdmin />
+          },
+          {
+            path: ':id',
+            element: <Subresult />
+          },
+          {
+            path: "exStudent",
+            element: <AllExReport />,
+            children: [
+              {
+                path: '',
+                element: <List />
+              },
+              {
+                path: ':id',
+                element: <ExResult />
+              }
+            ]
+          },
+        ]
+      },
+      // {
+      //   path: "/Sub-Admin/exStudent",
+      //   element: <AllExReport />,
+      //   children: [
+      //     {
+      //       path: '',
+      //       element: <List />
+      //     },
+      //     {
+      //       path: ':id',
+      //       element: <ExResult />
+      //     }
+      //   ]
+      // },
+
+      {
+        path: "/Sub-Admin/Salary",
+        element: <AllSalary />,
+        children: [
+          {
+            path: '',
+            element: <Salary />
+          },
+          // {
+          //   path: ':id',
+          //   element: <PerformanceProfileSubAdmin />
+          // }
+        ]
+      },
+      {
+        path: "/Sub-Admin/registerTeacher",
+        element: <TeacherRegister />,
+        children: []
+      },
+      {
+        path: "/Sub-Admin/registerStudent",
+        element: <StudentRegister />,
+        children: []
+      },
+      {
+        path: "/Sub-Admin/StudentsFee",
+        element: <FeeSubAdmin />,
+        children: [
+          {
+            path: '/Sub-Admin/StudentsFee/details',
+            element: <AllExDetails />,
+            children: [
+              {
+                path: '',
+                element: <FeeDetailsSubAdmin />
+              },
+              {
+                path: ':id',
+                element: <FeeDetail />
+              }
+            ]
+          },
+          {
+            path: '/Sub-Admin/StudentsFee/structure',
+            element: <FeeStructureSubAdmin />
+          },
+          {
+            path: '/Sub-Admin/StudentsFee/feediscount',
+            element: <FeeDiscountSubAdmin />
+          },
+          {
+            path: '',
+            element: <FeeDetailsSubAdmin />
+          },
+        ]
+      },
+      {
+        path: "/Sub-Admin/Notice",
+        element: <NoticeSubAdmin />,
+        children: []
       },
     ]
   }
- 
+
 ]);
 
 export default router;

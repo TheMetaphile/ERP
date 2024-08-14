@@ -3,7 +3,7 @@ import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameDay } from '
 import { FaCheck, FaTimes,FaExclamation } from "react-icons/fa";
 
 
-export default function AttendanceStatusGridTile({ data }) {
+export default function AttendanceStatusGridTile({ data, month }) {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedStudent, setSelectedStudent] = useState(null);
 
@@ -15,6 +15,7 @@ export default function AttendanceStatusGridTile({ data }) {
     };
 
     const currentDate = new Date();
+    currentDate.setMonth(month - 1);
     const startDate = startOfMonth(currentDate);
     const endDate = endOfMonth(currentDate);
     const dateRange = eachDayOfInterval({ start: startDate, end: endDate });

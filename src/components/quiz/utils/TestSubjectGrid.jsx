@@ -10,7 +10,7 @@ import Computer from '../../../assets/computer.png';
 
 export default function TestSubjectGrid(){
     return (
-        <div className=" w-full grid grid-cols-2 tablet:grid-cols-4 gap-6 rounded-lg shadow-md p-4">
+        <div className=" w-full grid grid-cols-2 border border-gray-300 tablet:grid-cols-4 gap-6 rounded-lg shadow-md p-4">
             <TestSubjectTile subject='Maths' image={Math}/>
             <TestSubjectTile subject='English' image={English}/>
             <TestSubjectTile subject='Hindi' image={Hindi}/>

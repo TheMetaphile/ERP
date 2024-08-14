@@ -15,7 +15,7 @@ export default function Activity() {
         <p className="text-gray-600 text-base">Monthly Activites</p>
       </div>
       
-      <div className=" mx-2 rounded-lg shadow-md border-2 border-black mt-2">
+      <div className=" mx-2 rounded-lg shadow-md border-2 border-black mt-2 overflow-auto">
         <table className="w-full text-center   ">
           <thead>
             <tr className="rounded-t-lg border-b-2 border-gray-300">

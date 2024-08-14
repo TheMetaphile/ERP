@@ -1,11 +1,39 @@
-export default function SubjectClassWorkTile(props){
+import React, { useState } from "react";
+
+export default function SubjectClassWorkTile({ subject, details }) {
+    const [expanded, setExpanded] = useState(null);
+
+    const handleClick = (index) => {
+        setExpanded(expanded === index ? null : index);
+    }
     return (
-        <div className=" w-full p-3  rounded-lg shadow-md">
-            <div className="flex justify-between mobile:max-tablet:flex-col ">
-                <div className=" px-3 py-1 bg-bg_blue rounded-full w-fit">{props.subject}</div>
-                <h1 className="text-gray-400 px-3">Assigned on: {props.assignedDate}</h1>
-            </div>
-            <div className="pl-2 mt-3 font-medium">{props.classwork}</div>
+        <div className='mt-2 w-full px-3'>
+            {details.map((detail, index) => (
+                <div key={index} className='mt-1 p-3 w-full flex-col rounded-lg shadow-md items-center border  border-gray-300' >
+                    <div className="flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
+
+                        <div className="w-80 pl-2  font-medium">Chapter : <span className="font-normal">{detail.chapter}</span></div>
+
+                        <div className=" px-3 py-1 bg-bg_blue rounded-full w-fit">{subject}</div>
+
+                    </div>
+                    <div className="pl-2 mb-1  font-medium">Topic : <span className="font-normal">{detail.topic}</span></div>
+                    {expanded === index && (
+                        <h1 className="font-medium mx-2 text-justify">Description: <span className="font-normal">{detail.description}</span></h1>
+                    )}
+
+                    <div className='flex pl-2 justify-end gap-1  text-gray-500 mobile:max-tablet:flex-col'>
+                        <h1 className=" text-gray-500">Classwork on <span className="font-medium text-black">{detail.date}</span></h1>
+                        <div className="flex gap-2">
+                            <p>By -</p>
+                            <img src={detail.by.profileLink} alt="img" className='w-8 h-8 rounded-full mobile:max-laptop:h-6 mobile:max-laptop:w-6'></img>
+                            <div className="font-medium text-black">{detail.by.name}</div>
+                        </div>
+
+                    </div>
+                </div>
+            ))}
+
         </div>
     )
 }

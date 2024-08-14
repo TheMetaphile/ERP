@@ -10,20 +10,32 @@ export const AuthProvider = ({ children }) => {
         refreshToken: null,
         email: null,
         otpToken: null,
+        subject: null,
+        ClassDetails: null,
+        Co_scholastic:null,
+        subjects : null
+
     });
 
-    const login = (userDetails, tokens) => {
+    const login = (userDetails, tokens,subject, ClassDetails,Co_scholastic,subjects) => {
         setAuthState({
             userDetails,
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
             otpToken: null,
+            subject,
+            ClassDetails,
+            Co_scholastic,
+            subjects
 
         });
         console.log("auth user", userDetails);
         console.log("auth access", tokens.accessToken);
         console.log("auth refre", tokens.refreshToken);
         console.log("auth adhaar", userDetails.aadhaarNumber);
+        console.log("auth subject", subject);
+        console.log("auth ClassDetails", ClassDetails);
+        console.log("auth student side subjects", subjects);
 
     };
 

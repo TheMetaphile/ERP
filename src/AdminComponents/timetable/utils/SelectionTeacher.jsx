@@ -1,15 +1,34 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
+import { BASE_URL_Login } from '../../../Config';
 
-function SelectionTeacher({ onSearch, onEmailChange, onDayChange }) {
+function SelectionTeacher({ onSearch, onEmailChange, onNameChange, onDayChange }) {
     const { authState } = useContext(AuthContext);
     const [temp, setTemp] = useState();
     const [email, setEmail] = useState('');
     const [day, setDay] = useState('tuesday');
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const inputRef = useRef(null);
+    const suggestionsRef = useRef(null);
 
+    const handleClickOutside = (event) => {
+        if (inputRef.current && !inputRef.current.contains(event.target) && suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
+            setShowSuggestions(false);
+        }
+    };
+    const handleClickInside = () => {
+        console.log("Clicked inside the input field");
+        // Execute your function for inside click here
+        setShowSuggestions(true);
+    };
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
     const handleEmailChange = (event) => {
         const value = event.target.value;
         setEmail(value);
@@ -18,9 +37,11 @@ function SelectionTeacher({ onSearch, onEmailChange, onDayChange }) {
     };
 
     const handleSuggestionClick = (suggestion) => {
+        console.log("suggestion:", suggestion);
         setEmail(suggestion.email);
         onEmailChange(suggestion.email);
         setShowSuggestions(false);
+        onNameChange(suggestion);
     };
 
     const handleDayChange = (event) => {
@@ -43,7 +64,7 @@ function SelectionTeacher({ onSearch, onEmailChange, onDayChange }) {
         if (temp) {
             const searchTeacher = async () => {
                 try {
-                    const response = await axios.post('https://loginapi-y0aa.onrender.com/search/teacher', {
+                    const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
                         accessToken: authState.accessToken,
                         searchString: temp,
                         start: 0,
@@ -52,7 +73,12 @@ function SelectionTeacher({ onSearch, onEmailChange, onDayChange }) {
                     console.log(response.data)
                     const teacherEmails = response.data.Teachers.map(teacher => ({
                         email: teacher.email,
-                        profileLink: teacher.profileLink
+                        profileLink: teacher.profileLink,
+                        employeeId: teacher.employeeId,
+
+                        name: teacher.name,
+
+
                     }));
                     setSuggestions(teacherEmails);
 
@@ -70,17 +96,19 @@ function SelectionTeacher({ onSearch, onEmailChange, onDayChange }) {
             <div className="container p-3">
                 <div className="flex justify-between">
 
-                    <div className="w-1/4">
+                    <div className="w-96">
                         <input
                             type="email"
+                            ref={inputRef}
                             className="w-full px-4 py-2 border rounded-md"
-                            placeholder="bhanu68tyagi@gmail.com"
+                            placeholder="Search by Teacher's name, employee id or email"
                             list={`teacher-suggestions`}
+                            onClick={handleClickInside}
                             value={email}
                             onChange={handleEmailChange}
                         />
                         {showSuggestions && suggestions.length > 0 && (
-                            <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                            <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto" ref={suggestionsRef}>
                                 {suggestions.map((suggestion, idx) => (
                                     <li
                                         key={idx}
@@ -97,14 +125,14 @@ function SelectionTeacher({ onSearch, onEmailChange, onDayChange }) {
                     <div className="w-1/4">
                         <select
                             type="text"
-                            className="w-full px-4 py-2 border rounded-md"
+                            className="w-full px-4 py-2.5 border rounded-md"
                             placeholder="Day"
                             value={day}
                             onChange={handleDayChange}
                         >
                             <option value="">Select Day</option>
                             <option value="monday">Monday</option>
-                            <option value="tuesday">Tuesady</option>
+                            <option value="tuesday">Tuesday</option>
                             <option value="wednesday">Wednesday</option>
                             <option value="thursday">Thursday</option>
                             <option value="friday">Friday</option>
@@ -113,9 +141,9 @@ function SelectionTeacher({ onSearch, onEmailChange, onDayChange }) {
 
                         </select>
                     </div>
-                    <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={onSearch}>
+                    {/* <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={onSearch}>
                         Search
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>

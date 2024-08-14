@@ -1,14 +1,55 @@
-import React from 'react'
-import StudentTile from './StudentTile'
-export default  function Student() {
+import React, { useState, useEffect, useContext } from "react";
+import AuthContext from "../../../Context/AuthContext";
+import axios from "axios";
+import Loading from "../../../LoadingScreen/Loading";
+import StudentTile from './StudentTile';
+import { BASE_URL_Login } from "../../../Config";
+
+export default function Student() {
+    const { authState } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+    const [birthdays, setBirthDays] = useState([]);
+
+    function getFormattedDate() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    }
+
+    useEffect(() => {
+        const fetchBirthday = async () => {
+            console.log(getFormattedDate());
+            setLoading(true);
+            try {
+                const response = await axios.get(`${BASE_URL_Login}/birthday/student?date=${getFormattedDate()}`, {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    }
+                });
+
+                setBirthDays(response.data);
+                console.log('fetch', response.data);
+            } catch (error) {
+                console.error("Error fetching student birthday:", error);
+            }
+            finally {
+                setLoading(false);
+            }
+        }
+        fetchBirthday();
+    }, [authState.accessToken])
+    
     return (
-        <div className='ml-3 mr-3'>
-            <span className='font-medium px-2'>Today</span>
-            <StudentTile name='Yash' class='9th' birthday='9th of May' message='Send a BirthDay wish to'/>
-            <div className='font-medium px-2 mt-3'>Day's To go</div>
-            <StudentTile name='Raju' class='9th' birthday='9th of May' message='9 Days to go.. Set Reminder to Wish happy BirthDay.'/>
-            <StudentTile name='Raju' class='9th' birthday='9th of May' message='9 Days to go.. Set Reminder to Wish happy BirthDay.'/>
-            <StudentTile name='Raju' class='9th' birthday='9th of May' message='9 Days to go.. Set Reminder to Wish happy BirthDay.'/>
+        <div className=''>
+            {loading ? (
+                <Loading />
+            ) :  (
+                <StudentTile birthdays={birthdays} />
+            )
+            }
         </div>
     )
 }

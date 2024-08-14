@@ -10,7 +10,7 @@ import Computer from '../../../assets/computer.png';
 
 export default function HomeSubjectGrid(){
     return (
-        <div className=" w-full grid grid-cols-2 tablet:grid-cols-4 gap-6 rounded-lg shadow-md p-4">
+        <div className=" mt-2 mx-3 grid grid-cols-2 border border-gray-300 tablet:grid-cols-4 gap-6 rounded-lg shadow-md p-4">
             <HomeSubjectTile subject='Maths' image={Math}/>
             <HomeSubjectTile subject='English' image={English}/>
             <HomeSubjectTile subject='Hindi' image={Hindi}/>

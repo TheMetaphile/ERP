@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 
 
-function Selection({selectClass, selectedSection,dayStudent, onClassChange, onSectionChange,onStudentDayChange, onSearch}) {
+function Selection({ selectClass, selectedSection, onClassChange, onSectionChange, onStudentDayChange, onSearch }) {
     const [day, setDay] = useState('tuesday');
     const handleDayChange = (event) => {
         const value = event.target.value;
         setDay(value);
         onStudentDayChange(value);
     };
+
+
     return (
         <div className="border rounded-lg shadow-md w-full flex flex-col px-3 mobile:max-tablet:px-0  overflow-y-auto items-start mt-2  mb-3 no-scrollbar">
             <div className="container p-3  ">
 
-                <div className="flex justify-between">
-                    <div className="w-1/4">
-                        <select className="w-full px-4 py-2 border rounded-md" value={selectClass} onChange={(e)=>onClassChange(e.target.value)}>
+                <div className="flex justify-between mobile:max-tablet:flex-col">
+                    <div className="w-1/4 mobile:max-tablet:w-auto mobile:max-tablet:mb-2">
+                        <select className="w-full px-4 py-2 border rounded-md" value={selectClass} onChange={(e) => onClassChange(e.target.value)}>
                             <option value="">Select Class</option>
                             <option value="Pre-Nursery">Pre-Nursery</option>
                             <option value="Nursery">Nursery</option>
@@ -34,8 +36,8 @@ function Selection({selectClass, selectedSection,dayStudent, onClassChange, onSe
                             <option value="12th">12th</option>
                         </select>
                     </div>
-                    <div className="w-1/4">
-                        <select className="w-full px-4 py-2 border rounded-md" value={selectedSection} onChange={(e)=>onSectionChange(e.target.value)}>
+                    <div className="w-1/4 mobile:max-tablet:w-auto mobile:max-tablet:mb-2">
+                        <select className="w-full px-4 py-2 border rounded-md" value={selectedSection} onChange={(e) => onSectionChange(e.target.value)}>
                             <option value="">Select Section</option>
                             <option value="A">A</option>
                             <option value="B">B</option>
@@ -48,7 +50,7 @@ function Selection({selectClass, selectedSection,dayStudent, onClassChange, onSe
                             <option value="I">I</option>
                         </select>
                     </div>
-                    <div className="w-1/4">
+                    <div className="w-1/4 mobile:max-tablet:w-auto mobile:max-tablet:mb-2">
                         <select
                             type="text"
                             className="w-full px-4 py-2 border rounded-md"
@@ -64,8 +66,8 @@ function Selection({selectClass, selectedSection,dayStudent, onClassChange, onSe
                             <option value="friday">Friday</option>
                             <option value="saturday">Saturday</option>
                             <option value="sunday">Sunday</option>
-  
-                            </select>
+
+                        </select>
                     </div>
 
                     <button className="px-4 py-2 bg-green-500 text-white rounded-md" onClick={onSearch}>

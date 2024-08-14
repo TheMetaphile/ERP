@@ -1,141 +1,126 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { userimg } from "../../Teachers/utils/images/index.js";
+import axios from "axios";
+import AuthContext from "../../../Context/AuthContext.jsx";
+import Loading from "../../../LoadingScreen/Loading.jsx";
+import { BASE_URL_TeacherLeave } from "../../../Config.js";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import TeacherLeavesTile from "./TeacherLeavesTile.jsx";
 
 export default function TeacherLeaves() {
-  const leaves = [
-    {
-      name: "Abhishek",
-      class: "5th",
-      LeaveTakenOn: "26 February 2023",
-      duration: "7 Days",
-      expectedArrival: "5 March 2023",
-    },
-    {
-      name: "Abhishek",
-      class: "5th",
-      LeaveTakenOn: "26 February 2023",
-      duration: "7 Days",
-      expectedArrival: "5 March 2023",
-    },
-    {
-      name: "Abhishek",
-      class: "5th",
-      LeaveTakenOn: "26 February 2023",
-      duration: "7 Days",
-      expectedArrival: "5 March 2023",
-    },
-    {
-      name: "Abhishek",
-      class: "5th",
-      LeaveTakenOn: "26 February 2023",
-      duration: "7 Days",
-      expectedArrival: "5 March 2023",
-    },
-    {
-      name: "Abhishek",
-      class: "5th",
-      LeaveTakenOn: "26 February 2023",
-      duration: "7 Days",
-      expectedArrival: "5 March 2023",
-    },
-    {
-      name: "Abhishek",
-      class: "5th",
-      LeaveTakenOn: "26 February 2023",
-      duration: "7 Days",
-      expectedArrival: "5 March 2023",
-    },
-    {
-      name: "Abhishek",
-      class: "5th",
-      LeaveTakenOn: "26 February 2023",
-      duration: "7 Days",
-      expectedArrival: "5 March 2023",
-    },
-    {
-      name: "Abhishek",
-      class: "5th",
-      LeaveTakenOn: "26 February 2023",
-      duration: "7 Days",
-      expectedArrival: "5 March 2023",
-    },
-    {
-      name: "Abhishek",
-      class: "5th",
-      LeaveTakenOn: "26 February 2023",
-      duration: "7 Days",
-      expectedArrival: "5 March 2023",
-    },
-    {
-      name: "Abhishek",
-      class: "5th",
-      LeaveTakenOn: "26 February 2023",
-      duration: "7 Days",
-      expectedArrival: "5 March 2023",
-    },
-   
-  ];
-
   const [selectedLeave, setSelectedLeave] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const { authState } = useContext(AuthContext);
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(4);
+  const [allDataFetched, setAllDataFetched] = useState(false);
 
-  const handleViewDetails = (leave) => {
-    setSelectedLeave(leave);
+  useEffect(() => {
+    if (authState.accessToken) {
+      setLoading(true);
+      fetchTeacherData();
+    } else {
+      setError('No access token available');
+      setLoading(false);
+    }
+  }, [authState.accessToken]);
+
+  const handleViewMore = () => {
+    setStart(prevStart => prevStart + end);
   };
 
-  const handleClosePopup = () => {
-    setSelectedLeave(null);
+  useEffect(() => {
+    if (start !== 0) {
+      fetchTeacherData();
+    }
+  }, [start]);
+
+  function getCurrentSession() {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+
+    if (currentMonth >= 3) {
+      return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
+    } else {
+      return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
+    }
+  }
+
+  const fetchTeacherData = async () => {
+    const session = getCurrentSession();
+
+    try {
+      const response = await axios.get(`${BASE_URL_TeacherLeave}/teacherleave/fetch/admin?start=${start}&end=${end}&session=${session}`, {
+        headers: {
+          Authorization: `Bearer ${authState.accessToken}`
+        }
+      }
+      );
+
+      const leave = response.data.Leaves.length;
+      console.log("API response:", response.data.Leaves);
+      if (leave < end) {
+        toast.success('All data fetched');
+        console.log('All data fetched')
+        setAllDataFetched(true);
+      }
+      setData(prevData => [...prevData,...response.data.Leaves]);
+      setLoading(false);
+
+    } catch (err) {
+      setError(err.message);
+    }
   };
+
+  const handleAction = async (actionType) => {
+    const id = selectedLeave._id;
+    const session = getCurrentSession();
+    try {
+      const response = await axios.put(
+        `${BASE_URL_TeacherLeave}/leave/update?leaveId=${id}&session=${session}`,
+        { status: actionType },
+        {
+          headers: {
+            Authorization: `Bearer ${authState.accessToken}`
+          }
+        }
+      );
+
+      if (response.status === 200) {
+        const updatedLeaves = data.map((leave) =>
+          leave._id === id ? { ...leave, status: actionType } : leave
+        );
+        setData(updatedLeaves);
+        setSelectedLeave(null);
+        toast.success(`Leave ${actionType === 'Approved' ? 'approved' : 'rejected'}`);
+        console.log(`Leave ${actionType === 'Approved' ? 'approved' : 'rejected'}`);
+      } else {
+        console.error('Unexpected response:', response);
+      }
+    } catch (err) {
+      console.error('Error updating leave:', err.message);
+    }
+  };
+
+
+
 
   return (
     <div className="flex flex-col space-y-4 mb-4">
-      {leaves.map((leave, index) => (
-        <div key={index} className={`rounded-md border p-4 flex flex-col w-full`}>
-          <div className="flex justify-between">
-            <div className="flex">
-              <img src={userimg} alt="" className="h-12 w-12 mobile:max-tablet:hidden" />
-              <p className="text-xl mb-2 mt-2 px-2  mobile:max-tablet:text-lg">{leave.name}</p>
-            </div>
-            <div>
-              <h1 className="text-xl mt-2  mobile:max-tablet:text-lg mobile:max-tablet:px-2">Class: {leave.class}</h1>
-            </div>
-            <div className="mt-2">
-              <button
-                className="rounded-lg bg-blue-400 px-4  mobile:max-tablet:px-2"
-                onClick={() => handleViewDetails(leave)}
-              >
-                View Details
-              </button>
-            </div>
-          </div>
-          <div className="flex justify-between text-gray-900  mobile:max-tablet:flex-col">
-            <span className="text-lg">Leave Taken on: {leave.LeaveTakenOn}</span>
-            <span className="text-lg">Duration: {leave.duration}</span>
-            <span className="text-lg">Expected Arrival: {leave.expectedArrival}</span>
-          </div>
-        </div>
-      ))}
-
-      {selectedLeave && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
-          <div className="bg-white rounded-lg p-6 items-center">
-            <h2 className="text-2xl mb-4 text-center">Confirm Leave</h2>
-            <p className="text-xl">Name of Student: {selectedLeave.name}</p>
-            <p className="text-xl">Duration: {selectedLeave.duration}</p>
-            <p className="text-xl">Class: {selectedLeave.class}</p>
-            <p className="text-xl">Reason for Leave: Illness due to lack of vitamin E in the body</p>
-            <div className="mt-4 flex justify-center">
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded-md mr-2"
-                onClick={handleClosePopup}
-              >
-                Cancel
-              </button>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
-                Confirm
-              </button>
-            </div>
-          </div>
-        </div>
+      {loading ? (
+        <Loading />
+      ) : data === null ? (
+        <div>No data available</div>
+      ) : (
+        <>
+          <TeacherLeavesTile data={data} />
+          {!allDataFetched && (
+            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+          )}
+        </>
       )}
     </div>
   );

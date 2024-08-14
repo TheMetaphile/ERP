@@ -14,12 +14,12 @@ export default function Event() {
   }
 
   return (
-    <div className=" flex flex-col w-full h-screen overflow-y-auto items-start px-2 py-3 no-scrollbar">
+    <div className=" flex flex-col w-full h-screen overflow-y-auto items-start px-2 py-3 no-scrollbar mobile:max-tablet:mt-2">
       <div className='flex justify-between items-center w-full'>
         <h1 className="text-xl font-medium">Events</h1>
         <h1 className="text-base font-medium rounded-lg bg-green-300 p-2 cursor-pointer" onClick={handleOpen}>Create</h1>
       </div>
-      <div className="flex flex-col h-fit w-full mt-2 mb-3 bg-white shadow-lg rounded-lg py-3 px-3">
+      <div className="flex flex-col h-fit w-full mt-2 mb-3 border border-gray-300 bg-white shadow-md rounded-lg py-3 px-3">
         <div className="w-fit px-4 py-2 bg-green-300 rounded-lg shadow-md text-center self-center">
           Upcoming Events
         </div>
@@ -37,7 +37,7 @@ export default function Event() {
 
       <h1 className="pl-1 mt-3 text-xl font-medium">All Events</h1>
 
-      <div className="w-full bg-white shadow-lg rounded-lg   grid grid-cols-2 whitespace-nowrap mobile:max-tablet:grid-cols-1">
+      <div className="w-full bg-white shadow-lg rounded-lg border border-gray-300 mt-2  grid grid-cols-2 mobile:max-tablet:grid-cols-1">
 
         <Allevents color="bg-green-300" img={first} text="School is going for vacation at March." date="10 March 2024" />
         <Allevents color="bg-green-300" img={first} text="School is going for vacation at March." date="10 March 2024" />
@@ -47,7 +47,7 @@ export default function Event() {
         <Allevents color="bg-green-300" img={first} text="School is going for vacation at March." date="10 March 2024" />
       </div>
 
-      {isDialogOpen && <NewEvent onClose={handleClose}/>}
+      {isDialogOpen && <NewEvent onClose={handleClose} />}
     </div>
 
   );

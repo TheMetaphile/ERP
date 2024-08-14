@@ -7,13 +7,14 @@ import AuthContext from "../../../Context/AuthContext";
 import Loading from '../../../LoadingScreen/Loading'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL_Login } from "../../../Config";
 
 export default function RightCard() {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
     const [role, setRole] = useState('');
     // const [otpToken, setOtpToken] = useState('');
-    // const [error, setError] = useState('');
+    const [error, setError] = useState('');
     // const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,10 +26,20 @@ export default function RightCard() {
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
     };
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
     const sendOTP = async () => {
+        if (!validateEmail(email)) {
+            setError("Please enter a valid email address.");
+            toast.error("Please enter a valid email address.");
+            return;
+        }
         setIsSubmitting(true);
+        setError('');
         try {
-            const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/send/${role}`, {
+            const response = await axios.post(`${BASE_URL_Login}/otp/send/${role}`, {
                 email,
             });
             if (response.status === 200) {
@@ -53,7 +64,7 @@ export default function RightCard() {
     const verifyOTP = async () => {
         setIsSubmitting(true);
         try {
-            const response = await axios.post(`https://loginapi-y0aa.onrender.com/otp/verify`, {
+            const response = await axios.post(`${BASE_URL_Login}/otp/verify`, {
                 email: authState.email,
                 otp,
                 otpToken: authState.otpToken
@@ -82,8 +93,6 @@ export default function RightCard() {
             <img src={logo} alt="img" className="mr-4 h-32 self-center" />
 
             <h1 className="tablet:text-2xl mobile:text-xl font-bold self-center whitespace-nowrap">Reset Password</h1>
-            {/* {error && <p className="text-red-500">{error}</p>}
-            {successMessage && <p className="text-green-500 text-center mt-2">{successMessage}</p>} */}
             <h1 className="text-xl font-bold mt-5 ">Login Id</h1>
 
             <div className="flex justify-between mt-3">
@@ -101,32 +110,22 @@ export default function RightCard() {
                     Send OTP
                 </button>
             </div>
-            <div className="flex w-60 px-3 py-2  mt-2 text-lg justify-between">
-                <label className="text-lg font-medium text-center">
-                    <input
-                        type="radio"
-                        name="role"
-                        value="teacher"
-                        checked={role === "teacher"}
-                        onChange={handleRoleChange}
-                        className="mr-3 w-4 h-4"
-                        disabled={isSubmitting}
-                    />
-                    Teacher
-                </label>
+            <div className="flex w-full  py-2  mt-2 text-lg justify-between">
+                <select
+                    name="role"
+                    value={role}
+                    onChange={handleRoleChange}
+                    className="w-full p-2 border rounded"
+                    disabled={isSubmitting}
+                >
+                    <option value="">Select Role</option>
+                    <option value="Teacher">Teacher</option>
+                    <option value="Student">Student</option>
+                    <option value="SubAdmin">Sub Admin</option>
+                    <option value="Admin">Admin</option>
 
-                <label className="text-lg font-medium text-center">
-                    <input
-                        type="radio"
-                        name="role"
-                        value="student"
-                        checked={role === "student"}
-                        onChange={handleRoleChange}
-                        className="mr-3 w-4 h-4"
-                        disabled={isSubmitting}
-                    />
-                    Student
-                </label>
+
+                </select>
             </div>
             <h1 className="text-xl font-bold mt-5 ">Verify OTP</h1>
             <OTPInput
@@ -143,7 +142,7 @@ export default function RightCard() {
 
             <button className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8" onClick={verifyOTP} disabled={isSubmitting}>
 
-            {isSubmitting ? <Loading /> : <h1 className="font-medium text-2xl text-white">Submit</h1>}
+                {isSubmitting ? <Loading /> : <h1 className="font-medium text-2xl text-white">Submit</h1>}
             </button>
         </div>
     )

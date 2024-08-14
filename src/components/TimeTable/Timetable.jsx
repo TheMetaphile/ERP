@@ -5,9 +5,10 @@ import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios';
 import TimeTableHeader from './utils/TimeTableHeader'
+import { BASE_URL_TimeTableStructure, BASE_URL_TimeTable } from '../../Config';
 
 export default function TimeTable() {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [day, setDay] = useState('tuesday');
@@ -100,7 +101,7 @@ export default function TimeTable() {
         console.log(authState.accessToken)
         console.log('classaaa', ClassRange)
         try {
-            const response = await axios.post('https://timetablestructureapi.onrender.com/timeTableStructure/fetch', {
+            const response = await axios.post(`${BASE_URL_TimeTableStructure}/timeTableStructure/fetch`, {
                 accessToken: authState.accessToken,
                 classRange: ClassRange,
             });
@@ -140,7 +141,7 @@ export default function TimeTable() {
         setLoading(true);
         try {
 
-            const response = await axios.post('https://timetableapi-1wfp.onrender.com/timetable/fetch/student', {
+            const response = await axios.post(`${BASE_URL_TimeTable}/timetable/fetch/student`, {
                 accessToken: authState.accessToken,
                 class: authState.userDetails.currentClass,
                 section: authState.userDetails.section,
@@ -160,28 +161,23 @@ export default function TimeTable() {
         finally {
             setLoading(false);
         }
-
     };
 
     return (
-        <div className=" flex flex-col w-full  items-start  py-3 px-3">
+        <div className=" flex flex-col w-full  items-start  pt-2 px-3">
             <div className="flex w-full justify-between ">
-                <h1 className="text-2xl font-medium">
+                <h1 className="text-2xl mobile:max-tablet:text-lg font-medium mt-2">
                     Time Table
                 </h1>
-                <h3 className="text-base">
-                    &lt; November 2024 &gt;
-                </h3>
             </div>
-            <Calendar />
-            <br></br>
-            <div className="flex justify-between w-full items-center p-3">
-                <h1 className="text-xl font-medium">
-                    Today Lectures
+
+            <div className="flex justify-between w-full items-center py-3">
+                <h1 className="text-xl mobile:max-tablet:text-sm font-medium whitespace-nowrap">
+                    Day-wise Lectures
                 </h1>
                 <select
                     type="text"
-                    className=" px-4 py-2 border rounded-md"
+                    className=" px-4 py-2 border rounded-md mobile:max-tablet:text-sm"
                     placeholder="Day"
                     value={day}
                     onChange={handleDayChange}
@@ -197,31 +193,36 @@ export default function TimeTable() {
 
                 </select>
             </div>
-            <TimeTableHeader />
-            <div className=' w-full '>
-                {loading ? (
-                    <Loading />
-                ) : data === null || data.length === 0 ? (
-                    <div>No data available</div>
-                ) : (
-                    <div className='w-full'>
-                        {lectureTimes.map((time, index) => {
-                            return(
-                            <LeactureTile
-                                key={index}
-                                index={index}
-                                lectureNo={`${index + 1} `}
-                                Time={`${formatTime(time.start)}-${formatTime(time.end)}`}
-                                numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}
-                                data={data}
-                                day={day}
-                            />
-                        )
+            <div className="w-full overflow-auto">
+                <div className='w-full tablet:max-laptop:w-fit mobile:max-tablet:w-max rounded-lg border  border-gray-400'>
+                    <TimeTableHeader />
+                    <div className=' w-full '>
+                        {loading ? (
+                            <Loading />
+                        ) : data.length === 0 ? (
+                            <div className=' w-full border border-gray-300 px-4 py-2 text-center'>No data available</div>
+                        ) : (
+                            <div className='w-full mobile:max-tablet:w-max overflow-auto'>
+                                {lectureTimes.map((time, index) => {
+                                    return (
+                                        <LeactureTile
+                                            key={index}
+                                            index={index}
+                                            lectureNo={`${index + 1} `}
+                                            Time={`${formatTime(time.start)}-${formatTime(time.end)}`}
+                                            numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}
+                                            data={data}
+                                            day={day}
+                                        />
+                                    )
 
-                        })}
+                                })}
+                            </div>
+                        )}
                     </div>
-                )}
+                </div>
             </div>
-        </div>
+
+        </div >
     )
 }

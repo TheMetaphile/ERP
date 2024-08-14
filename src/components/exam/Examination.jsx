@@ -20,7 +20,7 @@ export default function Examination() {
   return (
     <div className=" flex flex-col w-full overflow-y-auto items-start px-2 mb-1 pb-4 no-scrollbar">
       <h1 className="text-2xl font-medium px-2">Mock Tests</h1>
-      <div className=' w-full'>
+      <div className=' w-full '>
       <MockGrid showAll={mockAllTiles} />
         <h1
           className="float-right px-6 mb-2 font-medium cursor-pointer "

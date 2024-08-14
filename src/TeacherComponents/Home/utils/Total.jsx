@@ -9,10 +9,10 @@ function Total() {
                 <div className="text-center">
                     <div className="flex items-center justify-center">
                         <FaBook className="text-blue-500 mr-2" />
-                        <span className='text-xl font-medium'>Total Subjects</span>
+                        <span className='text-xl mobile:max-tablet:text-lg font-medium'>Total Subjects</span>
                     </div>
                     <div className="relative inline-block">
-                        <span className="text-3xl font-medium">3</span>
+                        <span className="text-3xl mobile:max-tablet:text-lg font-medium">3</span>
                         <div className="absolute bottom-0 left-0 w-full border-t-4 border-blue-500"></div>
                     </div>
                 </div>
@@ -21,11 +21,11 @@ function Total() {
             <div className="border w-full flex items-center justify-center py-3 rounded-lg shadow-md ">
                 <div className="text-center">
                     <div className="flex items-center justify-center">
-                        <SiGoogleclassroom  className="text-green-500 mr-2" />
-                        <span className='text-xl font-medium'>Total Classes</span>
+                        <SiGoogleclassroom className="text-green-500 mr-2" />
+                        <span className='text-xl font-medium mobile:max-tablet:text-lg'>Total Classes</span>
                     </div>
                     <div className="relative inline-block">
-                        <span className="text-3xl font-medium">3</span>
+                        <span className="text-3xl font-medium mobile:max-tablet:text-lg">3</span>
                         <div className="absolute bottom-0 left-0 w-full border-t-4 border-green-500"></div>
                     </div>
                 </div>
@@ -34,10 +34,10 @@ function Total() {
                 <div className="text-center">
                     <div className="flex items-center justify-center">
                         <PiStudentBold className="text-blue-700 mr-2" />
-                        <span className='text-xl font-medium'>Total Students</span>
+                        <span className='text-xl font-medium mobile:max-tablet:text-lg'>Total Students</span>
                     </div>
                     <div className="relative inline-block">
-                        <span className="text-3xl font-medium">120</span>
+                        <span className="text-3xl font-medium mobile:max-tablet:text-lg">120</span>
                         <div className="absolute bottom-0 left-0 w-full border-t-4 border-blue-700"></div>
                     </div>
                 </div>

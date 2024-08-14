@@ -4,7 +4,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import logo from '../../assets/school logo.png';
 import axios from 'axios';
 import { FaRegCircleXmark } from "react-icons/fa6";
-
+import { BASE_URL_Login } from "../../Config";
 
 export default function ImageTextInRow(props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -15,7 +15,7 @@ export default function ImageTextInRow(props) {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
 
@@ -41,16 +41,16 @@ export default function ImageTextInRow(props) {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    if(oldPassword===newPassword){
+    if (oldPassword === newPassword) {
       setError('Old and New Password must be different ');
       setTimeout(() => {
-          setError('');
+        setError('');
       }, 2000);
       setIsSubmitting(false);
       return;
-  }
+    }
     try {
-      const response = await axios.post(`https://loginapi-y0aa.onrender.com/password/change/student`, {
+      const response = await axios.post(`${BASE_URL_Login}/password/change/student`, {
         email,
         oldPassword,
         newPassword
@@ -84,14 +84,14 @@ export default function ImageTextInRow(props) {
   };
 
   return (
-    <div>
+    <div className="hover:bg-blue-100 rounded-full">
       {props.route ? (
-        <Link to={props.route} className="flex  items-center text-sm no-underline">
+        <Link to={props.route} className="flex px-4 py-2 items-center text-sm no-underline">
           <img src={props.image} alt={props.alternateText} className="w-1/6 " />
           <span className="ml-2">{props.text}</span>
         </Link>
       ) : (
-        <button onClick={handleButtonClick} className="flex items-center  text-sm no-underline">
+        <button onClick={handleButtonClick} className="flex items-center px-4 py-2  text-sm no-underline">
           <img src={props.image} alt={props.alternateText} className="w-1/6 " />
           <span className="ml-2">{props.text}</span>
         </button>
@@ -99,17 +99,17 @@ export default function ImageTextInRow(props) {
 
       {isDialogOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg">
-            <FaRegCircleXmark className="text-red-600 float-right w-5 h-5 cursor-pointer" onClick={handleCloseDialog}/>
-            <div className="flex flex-col bg-white tablet:w-fit tablet:px-10 mobile:w-full mobile:px-7 mobile:max-tablet:mt-10 justify-center">
-              
-              <h1 className="tablet:text-2xl mobile:text-2xl font-bold self-center whitespace-nowrap">Change Your Password</h1>
+          <div className="bg-white p-4 mobile:max-tablet:p-6 rounded-lg shadow-lg z-50 mobile:max-tablet:mx-4">
+            <FaRegCircleXmark className="text-red-600 float-right w-5 h-5 cursor-pointer" onClick={handleCloseDialog} />
+            <div className="flex flex-col bg-white tablet:w-fit tablet:px-5 mobile:w-full mobile:px- mobile:max-tablet:mt-10 justify-center">
+
+              <h1 className="tablet:text-xl mobile:max-tablet:text-lg py-2 mobile:max-tablet:py-0 font-medium self-center whitespace-nowrap ">Change Your Password</h1>
 
 
               {error && <div className="text-red-500 text-center mt-2">{error}</div>}
               {successMessage && <div className="text-green-500 text-center mt-2">{successMessage}</div>}
 
-              <label className="text-xl font-bold mt-3 text-left">Email</label>
+              <label className="text-xl mobile:max-tablet:text-lg mt-3 text-left">Email</label>
               <input
                 type="email"
                 id="email"
@@ -121,7 +121,7 @@ export default function ImageTextInRow(props) {
                 disabled={isSubmitting}
               />
 
-              <label className="text-xl font-bold mt-3 text-left">Old Password</label>
+              <label className="text-xl mobile:max-tablet:text-lg  mt-3 text-left">Old Password</label>
               <input
                 type="password"
                 id="oldPassword"
@@ -132,9 +132,9 @@ export default function ImageTextInRow(props) {
                 className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg"
                 disabled={isSubmitting}
               />
-              
 
-              <label className="text-xl font-bold mt-3 text-left">New Password</label>
+
+              <label className="text-xl mobile:max-tablet:text-lg  mt-3 text-left">New Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -156,14 +156,14 @@ export default function ImageTextInRow(props) {
                 </button>
               </div>
 
-             
+
 
               <button
-                className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-4 justify-center self-center bg-blue-600"
+                className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-4 justify-center border border-gray-300 self-center bg-blue-400"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
               >
-                <h1 className="font-medium text-2xl text-white">Change Password</h1>
+                <h1 className=" text-2xl mobile:max-tablet:text-lg text-white">Change Password</h1>
               </button>
 
             </div>

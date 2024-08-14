@@ -3,6 +3,8 @@ import NewTile from './NewTile'
 import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext'
+import { BASE_URL_Student_Leave } from '../../../Config'
+
 function New() {
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
@@ -13,7 +15,7 @@ function New() {
         setLoading(true);
 
         try {
-            const response = await axios.get(`https://studentleaveapi.onrender.com/leave/fetch/classTeacher?start=${0}&end=${20}`, {
+            const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/classTeacher?start=${0}&end=${20}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -49,7 +51,7 @@ function New() {
     }
 
     return (
-        <div className='ml-3 mr-3'>
+        <div className='w-full mr-3'>
             <NewTile data={data} />
         </div>
     )

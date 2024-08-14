@@ -1,4 +1,5 @@
 import Notice from "../../components/enddrawer/notice";
+import FetchDataComponent from "../loopfor api";
 import HomeCalendar from "./utils/Calender";
 import EarningsChart from "./utils/EarningTile";
 import ExpensesChart from "./utils/ExpansesTile";
@@ -12,23 +13,23 @@ import TotalStudentTile from "./utils/TotalStudentTile";
 export default function AdminHome() {
     return (
         <div className=" overflow-y-auto items-start mb-2 px-2  no-scrollbar">
-
+            {/* <FetchDataComponent /> */}
             <Summary />
-            <div className="flex flex-grow justify-between tablet:h-80 mb-20 mt-16">
-                <div className="flex w-full h-full mobile:max-tablet:flex-col">
-                    <div className="w-3/12 mobile:max-tablet:w-full">
+            <div className="flex flex-grow justify-between laptop:h-96 mb-3 mt-4 tablet:max-laptop:h-fit">
+                <div className="flex w-full gap-2 h-full mobile:max-tablet:flex-col tablet:max-laptop:flex-col tablet:max-laptop:w-full">
+                    <div className="w-3/12 mobile:max-laptop:w-full ">
                         <TotalStudentTile />
                     </div>
-                    <div className="tablet:w-5/12  py-2 mobile:max-tablet:w-full mobile:max-tablet:h-80">
+                    <div className="laptop:w-5/12  mobile:max-laptop:w-full mobile:max-laptop:h-80">
                         <SchoolPerformanceChart />
                     </div>
-                    <div className="tablet:w-4/12 py-2 mobile:max-tablet:w-full mobile:max-tablet:h-80">
+                    <div className="laptop:w-4/12  mobile:max-laptop:w-full mobile:max-laptop:h-80">
                         <ExpensesChart />
                     </div>
                 </div>
             </div>
             <h1 className="text-2xl font-medium mt-8 mobile:max-tablet:-mt-4">School Calender</h1>
-            <div className="flex flex-grow justify-between mobile:max-tablet:flex-col gap-4">
+            <div className="flex flex-grow justify-between mobile:max-tablet:flex-col gap-2">
                 <div className="flex w-2/4 mobile:max-tablet:w-full">
                     <HomeCalendar />
                 </div>
@@ -36,9 +37,9 @@ export default function AdminHome() {
                     <EarningsChart />
                 </div>
             </div>
-            <h1 className="text-2xl font-medium mt-8">Teachers Details</h1>
+            <h1 className="text-2xl font-medium mt-3">Teachers Details</h1>
             <div className="flex flex-row w-full mt-4 justify-center mobile:max-tablet:flex-col gap-4">
-                <div className="w-full rounded-lg shadow-md border-2 border-black overflow-x-auto">
+                <div className="w-full mobile:max-tablet:w-full rounded-lg shadow-md border border-black overflow-x-auto">
                     <Header headings={['Name', 'Subject', 'Qualification', 'Sallery', 'Performance']} />
                     <Middle values={['Abhishek', 'Math', 'B.Tech', 'Rs. 10,000', 'Good']} />
                     <Middle values={['Bhanu', 'Science', 'B.Tech', 'Rs. 10,000', 'Good']} />
@@ -48,19 +49,19 @@ export default function AdminHome() {
                     <Middle values={['Manish', 'Math', 'B.Tech', 'Rs. 10,000', 'Good']} />
                     <Middle values={['Ashish', 'Social Science', 'B.Tech', 'Rs. 10,000', 'Average']} />
                 </div>
-                <div className="tablet:w-80 px-3 py-2 rounded-lg shadow-md tablet:ml-2 border-2 border-black">
+                {/* <div className="tablet:w-80 px-3 py-2 rounded-lg shadow-md tablet:ml-2 border border-black">
                     <h1 className="text-center text-lg font-medium">
                         Notice Board
                     </h1>
                     <Notice title='Meeting' description='Today Is the Meeting at 12:00 in Auditorium.' />
                     <Notice title='Exam schedule' description='From 13 April to 20 April the Exam will be schedule all the teachers complete their syllabus as far as possible.' />
                     <Notice title='Holiday' description='Tomorrow will be a Holiday on the occasion of Holi.' />
-                </div>
+                </div> */}
             </div>
 
             <h1 className="text-2xl font-medium mt-8">Topper Students</h1>
             <div className="flex flex-row w-full mt-4 justify-center mobile:max-tablet:flex-col gap-4">
-                <div className="w-full rounded-lg overflow-x-auto shadow-md border-2 border-black">
+                <div className="w-full rounded-lg overflow-x-auto shadow-md border border-black Home-table">
                     <Header headings={['Name', 'ID', 'Class', 'Rank']} />
                     <TopperMiddle values={['Abhishek', '87482', 'VII-A', 'First']} />
                     <TopperMiddle values={['Bhanu', '87482', 'VII-A', 'First']} />
@@ -70,14 +71,14 @@ export default function AdminHome() {
                     <TopperMiddle values={['Manish', '87482', 'VII-A', 'First']} />
                     <TopperMiddle values={['Ashish', '87482', 'VII-A', 'First']} />
                 </div>
-                <div className="tablet:w-80 px-3 py-2 rounded-lg shadow-md tablet:ml-2 border-2 border-black">
+                {/* <div className="tablet:w-80 px-3 py-2 rounded-lg shadow-md tablet:ml-2 border border-black">
                     <h1 className="text-center text-lg font-medium">
                         Notice Board
                     </h1>
                     <Notice title='Fees' description='All the Student submit your Term I fee before exam .' />
                     <Notice title='Exam schedule' description='From 13 April to 20 April the Exam will be schedule all the teachers complete their syllabus as far as possible.' />
                     <Notice title='Holiday' description='Tomorrow will be a Holiday on the occasion of Holi.' />
-                </div>
+                </div> */}
             </div>
         </div>
     )

@@ -9,7 +9,7 @@ const Attendence = () => {
       labels: ['Class 2nd', 'Class 2nd', 'Class 2nd', 'Class 2nd', 'Class 2nd'],
       datasets: [
         {
-          label: 'Student Attendence',
+          label: 'Student Strength Curve',
           data: [4, 3, 2, 4, 2],
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',

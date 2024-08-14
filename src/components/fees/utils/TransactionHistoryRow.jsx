@@ -6,11 +6,14 @@ import TransactionHistoryHeader from "./TransactionHistoryHeader";
 import TransactionField from "./TransactionField.jsx";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL_Fee } from "../../../Config.js";
+import { usePaymentContext } from "./PaymentContext.jsx";
 
 export default function TransactionRow() {
     const { authState } = useContext(AuthContext);
-    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false)
+    const paymentDetail = usePaymentContext();
+    const {setPaymentDetails} = paymentDetail;
 
     useEffect(() => {
         if (authState.accessToken) {
@@ -23,13 +26,13 @@ export default function TransactionRow() {
 
     const fetchTransaction = async () => {
         try {
-            const response = await axios.get('https://feeapi.onrender.com/fee/fetch/transactions', {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/transactions`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }
             });
             console.log("API response transaction:", response.data);
-            setData(response.data.transactions)
+            setPaymentDetails(response.data.transactions);
         }
         catch (error) {
             const errorMessage = error.response?.data?.error || 'An error occurred';
@@ -41,15 +44,13 @@ export default function TransactionRow() {
     }
 
     return (
-        <div className="w-full h-fit mb-4 shadow-sm rounded-lg overflow-x-auto no-scrollbar">
+        <div className="w-full h-fit mb-4 shadow-md rounded-lg border border-gray-300   overflow-x-auto no-scrollbar">
             <TransactionHistoryHeader />
             {loading ? (
                 <Loading />
-            ) : data === null ? (
-                <div className='text-center'>No data available</div>
             ) : (
                 <div>
-                    <TransactionField data={data} />
+                    <TransactionField />
                 </div>
             )}
 

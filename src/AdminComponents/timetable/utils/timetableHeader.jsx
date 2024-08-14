@@ -1,20 +1,26 @@
-
 export default function TimetableHeader() {
-
     return (
-        <div className="bg-secondary flex w-full justify-between px-4 py-2 border rounded-t-lg text-xl">
-            <h1 className="w-full">
-                Lecture
-            </h1>
-            <h1 className="w-full">
-                Timing
-            </h1>
-            <h1 className="w-full">
-                Subject
-            </h1>
-            <h1 className="w-full">
-                Teacher
-            </h1>
-        </div>
-    )
+        <thead className="bg-secondary border-t border-gray-400 rounded-t-lg text-xl w-full">
+            <tr>
+                <th className="mobile:max-tablet:w-40 px-4 py-2 text-center border-r border-gray-400">
+                    Lecture
+                </th>
+                <th className="mobile:max-tablet:w-40 px-4 py-2 text-center border-r border-gray-400">
+                    Timing
+                </th>
+                <th className="mobile:max-tablet:w-40 px-4 py-2 text-center border-r border-gray-400">
+                    Subject
+                </th>
+                <th className="mobile:max-tablet:w-40 px-4 py-2 text-center border-r border-gray-400">
+                    Optional
+                </th>
+                <th className="mobile:max-tablet:w-40 px-4 py-2 text-center border-r border-gray-400">
+                    Teacher
+                </th>
+                <th className="mobile:max-tablet:w-40 px-4 py-2 text-center border-r border-gray-400">
+                    Remark
+                </th>
+            </tr>
+        </thead>
+    );
 }

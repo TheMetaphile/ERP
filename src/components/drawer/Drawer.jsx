@@ -3,13 +3,13 @@ import logout1 from "../../assets/logout.png";
 import ImageTextInRow from "./ImageTextInRow.jsx";
 import menuItems from "../../helpers/menuItems.js";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext,useState } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../../Context/AuthContext";
 
 export default function Drawer() {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [active,setActive]=useState(null)
+  const [active, setActive] = useState(null)
 
   const handleLogout = async () => {
     try {
@@ -20,31 +20,31 @@ export default function Drawer() {
     }
   };
 
-  const handleClick=(index)=>{
+  const handleClick = (index) => {
     setActive(index)
   }
   return (
-    <div className="w-60 h-full rounded-lg text-center items-center border bg-white py-6 px-4 shadow-md overflow-auto no-scrollbar">
+    <div className="w-60 z-10 h-full rounded-lg text-center items-center border bg-white py-6 px-2 shadow-md overflow-auto mobile:max-tablet:mt-2">
       <div className="flex items-center">
         <img src={schoolImage} alt="school_image" className="w-1/3" />
         <span className="text-black ml-4">Metaphile Public School</span>
       </div>
-      <div className="mt-12 bg-teal-300 px-4 py-4 rounded-2xl shadow-lg">
+      <div className="mt-8 bg-teal-300 px-2 py-4 rounded-2xl shadow-lg">
         <h2 className="text-xl font-semibold">Dashboard</h2>
         <div className="  items-center">
           {menuItems.map((menuItem, index) => (
             <div
-            key={index}
-            onClick={() => handleClick(index)}
-            className={`cursor-pointer rounded-lg p-2 mt-3  ${active === index ? 'bg-secondary' : ''}`}
-          >
-            <ImageTextInRow
               key={index}
-              image={menuItem.image}
-              alternateText={menuItem.alt}
-              text={menuItem.text}
-              route={menuItem.route}
-            />
+              onClick={() => handleClick(index)}
+              className={`cursor-pointer rounded-lg  mt-3  ${active === index ? 'bg-secondary' : ''}`}
+            >
+              <ImageTextInRow
+                key={index}
+                image={menuItem.image}
+                alternateText={menuItem.alt}
+                text={menuItem.text}
+                route={menuItem.route}
+              />
             </div>
           ))}
         </div>

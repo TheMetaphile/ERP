@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import HeadersCard from "./utils/TeachersHeadersCard";
 import SalaryDetails from "./utils/SalaryDetails";
 import SearchBar from "./utils/SearchBar";
@@ -35,24 +35,24 @@ export default function TeachersSalary() {
     ];
     const filteredTeachers = userData.filter(user => {
         const nameMatch = user.name.toLowerCase().includes(name.toLowerCase());
-       
-       return nameMatch;
+
+        return nameMatch;
     });
 
     return (
-        <div className="flex flex-col  px-3 my-3">
-            <div className="mt-8 mobile:max-tablet:mt-0">
+        <div className="flex flex-col  px-3 my-3 ">
+            <div className="mt-8 mobile:max-tablet:mt-2">
                 <HeadersCard data={Cardsdata} />
             </div>
             <div className="mt-8">
-            <SearchBar handleNameChange={handleNameChange} name={name} />
+                <SearchBar handleNameChange={handleNameChange} name={name} />
             </div>
             <div className="mx-1">
-            {
-                filteredTeachers.length===0?(<SalaryDetails teachers={userData} />)
-                :
-                ( <SalaryDetails teachers={filteredTeachers} />)
-            }
+                {
+                    filteredTeachers.length === 0 ? (<SalaryDetails teachers={userData} />)
+                        :
+                        (<SalaryDetails teachers={filteredTeachers} />)
+                }
             </div>
         </div>
     )

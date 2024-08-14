@@ -21,11 +21,11 @@ const DigitalClock = () => {
     };
 
     return (
-        <div className="text-black text-center">
-            <div className="font-medium text-2xl">
+        <div className="text-black text-center mobile:max-tablet:flex gap-2 items-center">
+            <div className="font-medium text-2xl mobile:max-tablet:text-xl">
                 {formatTime(currentTime)}
             </div>
-            <div className="font-medium text-base">
+            <div className="font-medium text-base mobile:max-tablet:flex mobile:max-tablet:flex-col">
                 {formatDate(currentTime)}
             </div>
         </div>

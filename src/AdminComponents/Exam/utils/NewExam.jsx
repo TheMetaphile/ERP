@@ -3,6 +3,7 @@ import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL_Exam } from '../../../Config';
 
 const NewExam = ({ onClose, addExam }) => {
   const { authState } = useContext(AuthContext);
@@ -73,11 +74,11 @@ const NewExam = ({ onClose, addExam }) => {
 
     console.log('examData', examData)
     try {
-      const response = await axios.post('https://examapi-jep8.onrender.com/ScheduleExams', examData);
+      const response = await axios.post(`${BASE_URL_Exam}/ScheduleExams`, examData);
 
       if (response.status === 200) {
         toast.success('Exam Added')
-        addExam(response.data);
+        addExam(examData);
       } else {
         toast.error('Failed to add Exam. Try again after some time.');
 
@@ -90,7 +91,6 @@ const NewExam = ({ onClose, addExam }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 overflow-y-auto no-scrollbar">
-      <ToastContainer />
       <div className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-3xl">
         <button
           className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-700"
@@ -164,8 +164,8 @@ const NewExam = ({ onClose, addExam }) => {
                       <option value="" disabled>Select Class</option>
                       <option value="Pre-Nursery">Pre-Nursery</option>
                       <option value="Nursery">Nursery</option>
-                      <option value="L.K.J">L.K.J</option>
-                      <option value="U.K.J">U.K.J</option>
+                      <option value="L.K.G">L.K.G</option>
+                      <option value="U.K.G">U.K.G</option>
                       <option value="1st">1st</option>
                       <option value="2nd">2nd</option>
                       <option value="3rd">3rd</option>

@@ -26,12 +26,12 @@ function NewEvent({ onClose }) {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
             <div className="bg-white rounded-lg p-4 shadow-lg ">
 
-                <h2 className="text-lg font-semibold mb-3 mt-3 text-blue-500">Event Schedule</h2>
-                <div className="grid grid-cols-3 gap-4">
+                <h2 className="text-lg font-semibold mb-3 mt-3 text-black ">Event Schedule</h2>
+                <div className="grid grid-cols-2 gap-4 mb-2">
                     {[
                         { label: 'Title', name: 'title' },
                         { label: 'Date', name: 'gpa' },
-                        { label: 'Instruction', name: 'instruction' },
+                        
                     ].map((field, idx) => (
                         <div key={idx}>
                             <label className="block text-sm font-medium text-gray-700">{field.label}</label>
@@ -59,7 +59,15 @@ function NewEvent({ onClose }) {
                         </div>
                     ))}
                 </div>
-
+                <label htmlFor="">Instructions</label>
+                <textarea
+                    id="exampleTextArea"
+                    value={formData['instruction']}
+                    onChange={handleChange}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    rows="4"
+                    placeholder="Enter your text here"
+                ></textarea>
                 <div className="flex justify-end space-x-4 mt-6">
                     <button
                         onClick={onClose}

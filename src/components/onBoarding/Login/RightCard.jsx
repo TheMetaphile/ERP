@@ -7,6 +7,7 @@ import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL_Login } from "../../../Config";
 
 export default function RightCard() {
     const [email, setEmail] = useState('');
@@ -30,20 +31,94 @@ export default function RightCard() {
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
 
     const handleSubmit = async () => {
+        if (!validateEmail(email)) {
+            setError("Please enter a valid email address.");
+            toast.error("Please enter a valid email address.");
+            return;
+        }
         setIsSubmitting(true);
+        setError('');
         try {
-            const endpoint = role === "Teacher-Dashboard" ? "/login/teacher" : "/login/student";
-            await axios.post(`https://loginapi-y0aa.onrender.com${endpoint}`, {
+            const endpoint = role === "Teacher-Dashboard" ? "/login/teacher" : role === "Sub-Admin" ? "/login/SubAdmin" : role === "Admin-Dashboard" ? "/login/admin" : "/login/student";
+            await axios.post(`${BASE_URL_Login}${endpoint}`, {
                 email,
                 password
-            }).then((response) => {
+            }).then(async (response) => {
                 if (response.status == 200) {
-                    const { userDetails, tokens } = response.data;
+                    console.log(response.data, "isuhgaoiud hfguj dsfkgj")
+                    var { userDetails, tokens, subject, ClassDetails, subjects } = response.data;
                     console.log(userDetails, tokens);
+                    var date = new Date();
+                    if (role === "Teacher-Dashboard" && date.getHours() < 17) {
 
-                    login(userDetails, tokens);
+                        var month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+                        date = `${date.getFullYear()}-${month}-${date.getDate()}`
+                        console.log(date);
+                        var [year1, month1, day] = date.split('-');
+                        var session = '';
+                        if (parseInt(month1) <= 3) {
+                            session = `${parseInt(year1) - 1}-${`${year1}`.substring(2, 4)}`;
+                        }
+                        else {
+                            console.log("here");
+                            session = `${year1}-${`${(parseInt(year1) + 1)}`.substring(2, 4)}`;
+                        }
+
+                        if (Object.keys(ClassDetails).length <= 0) {
+                            let config = {
+                                method: 'get',
+                                maxBodyLength: Infinity,
+                                url: `${BASE_URL_Login}/classTeacherSubstitute/fetch/checkSubstitute?date=${date}&session=${session}`,
+                                headers: {
+                                    'Authorization': `Bearer ${tokens.accessToken}`
+                                }
+                            };
+
+                            await axios.request(config)
+                                .then((response) => {
+                                    console.log(response, "respose dfh srh rh rfh sdf");
+                                    if (response.data) {
+                                        ClassDetails = response.data;
+                                    }
+
+                                    console.log("dsgsd", ClassDetails);
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        }
+
+                        let config = {
+                            method: 'get',
+                            maxBodyLength: Infinity,
+                            url: `${BASE_URL_Login}/CoordinatorSubstitute/fetch/checkSubstitute?date=${date}&session=${session}`,
+                            headers: {
+                                'Authorization': `Bearer ${tokens.accessToken}`
+                            }
+                        };
+
+                        await axios.request(config)
+                            .then((response) => {
+                                console.log(response, "respose coordinator");
+                                if (response.data) {
+                                    userDetails.co_ordinator_wing = response.data.wing;
+                                }
+
+                                console.log("coordinator respo", userDetails);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+
+
+                    }
+                    login(userDetails, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : [], subjects ? subjects : []);
                     navigate(`/${role}`);
                 }
             });
@@ -106,32 +181,22 @@ export default function RightCard() {
                 <h1 className=" text-lg text-blue-600">Forgot Password?</h1>
             </Link>
 
-            <div className="flex w-60 px-3 py-2  mt-2 text-lg justify-between">
-                <label className="text-lg font-medium text-center">
-                    <input
-                        type="radio"
-                        name="role"
-                        value="Teacher-Dashboard"
-                        checked={role === "Teacher-Dashboard"}
-                        onChange={handleRoleChange}
-                        className="mr-3 w-4 h-4"
-                        disabled={isSubmitting}
-                    />
-                    Teacher
-                </label>
+            <div className="flex w-full   mt-2 text-lg justify-between">
+                <select
+                    name="role"
+                    value={role}
+                    onChange={handleRoleChange}
+                    className="w-full p-2 border rounded"
+                    disabled={isSubmitting}
+                >
+                    <option value="">Select Role</option>
+                    <option value="Teacher-Dashboard">Teacher</option>
+                    <option value="Student-Dashboard">Student</option>
+                    <option value="Sub-Admin">Sub Admin</option>
+                    <option value="Admin-Dashboard">Admin</option>
 
-                <label className="text-lg font-medium text-center">
-                    <input
-                        type="radio"
-                        name="role"
-                        value="Student-Dashboard"
-                        checked={role === "Student-Dashboard"}
-                        onChange={handleRoleChange}
-                        className="mr-3 w-4 h-4"
-                        disabled={isSubmitting}
-                    />
-                    Student
-                </label>
+                </select>
+
             </div>
 
 
