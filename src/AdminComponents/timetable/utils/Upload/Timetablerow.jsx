@@ -164,16 +164,16 @@ export default function TimetableRow({
         teacher: !rowState.optional ? email : "",
         lectureNo: lectureNo,
         optional: rowState.optional,
-        optionalSubjects: optionalRows.map(row => ({
+        optionalSubjects: rowState.optional ? optionalRows.map(row => ({
           optionalSubject: row.subject,
           mergeWithSection: row.section,
           teacher: row.teacher,
-        }))
+        })) : []
       }
       return updatedRows;
     }
     );
-  },[Subject,rowState,optionalRows,lectureNo]);
+  }, [Subject, rowState, optionalRows, lectureNo]);
 
   return (
     <>

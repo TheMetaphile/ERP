@@ -13,8 +13,8 @@ export const StructureProvider = ({ children }) => {
     const [classRange, setClassRange] = useState('1st-12th'); // use state for classRange
     const [selectedSection, setSection] = useState('C');
     const [dayStudent, setDayStudent] = useState('tuesday');
+    const [dayTeacher, setDayTeacher] = useState('tuesday');
 
-    
     useEffect(() => {
         handleTimeFetch();
     }, [classRange]); // Update effect to depend on classRange
@@ -29,7 +29,7 @@ export const StructureProvider = ({ children }) => {
                 accessToken: authState.accessToken,
                 classRange: classRange,
             });
-    
+
             if (response.status === 200) {
                 console.log('response from fetch', response.data);
                 if (response.data) {
@@ -48,7 +48,7 @@ export const StructureProvider = ({ children }) => {
             console.error(err);
         }
     };
-    
+
 
     useEffect(() => {
         if (['Pre-Nursery', 'L.K.G', 'U.K.G', 'U.K.J'].includes(selectClass)) {
@@ -63,7 +63,7 @@ export const StructureProvider = ({ children }) => {
     }, [selectClass, classRange]); // Update effect to depend on both selectClass and classRange
 
     return (
-        <TimetableContext.Provider value={{ structureDetails, selectClass, setClass ,selectedSection, setSection, dayStudent, setDayStudent}}>
+        <TimetableContext.Provider value={{ structureDetails, selectClass, setClass, selectedSection, setSection, dayStudent, setDayStudent, dayTeacher, setDayTeacher }}>
             {children}
         </TimetableContext.Provider>
     );

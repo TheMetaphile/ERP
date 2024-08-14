@@ -75,7 +75,10 @@ function StudentsTimeTable() {
     }, [structureDetails]);
 
     useEffect(() => {
-        if (structureDetails) handleSearch();
+        if (structureDetails) {
+            handleSearch();
+            setData([]);
+        }
     }, [structureDetails, selectClass, dayStudent, selectedSection]);
 
     const handleClass = (value) => setClass(value);
