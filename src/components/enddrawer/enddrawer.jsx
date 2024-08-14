@@ -49,8 +49,8 @@ export default function Enddrawer() {
         
         <motion.div 
           className="bg-white rounded-lg shadow-md h-full overflow-y-auto hover:shadow-xl transition-shadow duration-300"
-          whileHover={{ scale: 1.015 }}
-          transition={{ type: "spring", stiffness: 50 }}
+          whileHover={{ scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 300 }}
         >
           <Notice />
         </motion.div>
