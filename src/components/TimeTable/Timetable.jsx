@@ -8,7 +8,7 @@ import TimeTableHeader from './utils/TimeTableHeader'
 import { BASE_URL_TimeTableStructure, BASE_URL_TimeTable } from '../../Config';
 
 export default function TimeTable() {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [day, setDay] = useState('tuesday');
@@ -161,7 +161,6 @@ export default function TimeTable() {
         finally {
             setLoading(false);
         }
-
     };
 
     return (
@@ -170,11 +169,7 @@ export default function TimeTable() {
                 <h1 className="text-2xl mobile:max-tablet:text-lg font-medium mt-2">
                     Time Table
                 </h1>
-                {/* <h3 className="text-base">
-                    &lt; November 2024 &gt;
-                </h3> */}
             </div>
-            {/* <Calendar /> */}
 
             <div className="flex justify-between w-full items-center py-3">
                 <h1 className="text-xl mobile:max-tablet:text-sm font-medium whitespace-nowrap">
@@ -204,7 +199,7 @@ export default function TimeTable() {
                     <div className=' w-full '>
                         {loading ? (
                             <Loading />
-                        ) : data === null || data.length === 0 ? (
+                        ) : data.length === 0 ? (
                             <div className=' w-full border border-gray-300 px-4 py-2 text-center'>No data available</div>
                         ) : (
                             <div className='w-full mobile:max-tablet:w-max overflow-auto'>

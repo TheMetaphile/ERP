@@ -51,6 +51,10 @@ export default function TimetableRow({
     ]);
   };
 
+  const removeRow = (rowIndex) => {
+    setOptionalRows(prevRows => prevRows.filter((_, index) => index !== rowIndex));
+  };
+
   const searchTeacher = useCallback(async (searchString) => {
     if (!searchString) return [];
     try {
@@ -253,6 +257,7 @@ export default function TimetableRow({
         <OptionalRow
           lectureNo={lectureNo}
           addNewRow={addNewRow}
+          RemoveNewRow={() => removeRow(idx)}
           data={data}
           handleOptionalRowChange={handleOptionalRowChange}
           handleOptionalSuggestionClick={handleOptionalSuggestionClick}

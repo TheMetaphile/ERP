@@ -25,7 +25,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
             ]
         }
     ));
-    const subjects = [ "Hindi", "English", "Maths", "Science", " Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", " Accounts"];
+    const subjects = ["Hindi", "English", "Mathematics", "Science", " Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", " Accounts"];
     const [selectedSubjects, setSelectedSubjects] = useState([]);
     const [selectedTeachers, setSelectedTeachers] = useState([]);
     const { authState } = useContext(AuthContext);
@@ -145,7 +145,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
             schedule,
         };
 
-        console.log(timetableData,'schedule',schedule);
+        console.log(timetableData, 'schedule', schedule);
 
         try {
             const response = await axios.post(`${BASE_URL_TimeTable}/timetable/upload`, timetableData);

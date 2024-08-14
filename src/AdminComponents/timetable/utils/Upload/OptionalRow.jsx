@@ -8,6 +8,7 @@ export default function OptionalRow({
     data,
     optionalRows,
     addNewRow,
+    RemoveNewRow,
     handleOptionalRowChange,
     subjects,
     day,
@@ -121,13 +122,22 @@ export default function OptionalRow({
     return (
         <tr key={idx} className="bg-white border-b border-gray-300">
             <td className="text-center py-2"></td>
-            <td className="text-center py-2">
+            <td className="text-center py-2 flex items-center gap-3">
                 {idx === optionalRows.length - 1 && (
                     <div
                         className='px-3 bg-green-300 hover:bg-green-400 w-fit rounded-lg cursor-pointer'
                         onClick={addNewRow}
                     >
                         Add
+                    </div>
+                )}
+
+                {idx === optionalRows.length - 1 && (
+                    <div
+                        className='px-3 bg-red-300 hover:bg-red-400 w-fit rounded-lg cursor-pointer'
+                        onClick={RemoveNewRow}
+                    >
+                        Remove
                     </div>
                 )}
             </td>
@@ -188,7 +198,7 @@ export default function OptionalRow({
                     </ul>
                 )}
             </td>
-            <td className="text-justify py-2 ">{remark}</td>
+            <td className={`text-center py-2 ${remark === "Good" ? "text-red-600" : "text-green-600"}`}>{remark}</td>
         </tr>
     );
 }
