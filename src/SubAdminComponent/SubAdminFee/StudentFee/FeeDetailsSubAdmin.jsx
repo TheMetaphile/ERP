@@ -6,6 +6,7 @@ import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Fee } from '../../../Config';
 import { Link, Outlet } from 'react-router-dom';
+import { MdSchool } from 'react-icons/md';
 
 const getSessions = () => {
     const currentYear = new Date().getFullYear();
@@ -107,73 +108,36 @@ function FeeDetailsSubAdmin() {
 
 
     return (
-        <div className=" flex flex-col px-3  mobile:max-tablet:px-0   items-start mt-2  mb-3 ">
-            <ToastContainer />
-
-            <div className='flex w-full justify-between whitespace-nowrap mobile:max-tablet:flex-col'>
-                <h1 className="text-2xl p-2">Student Fee Details</h1>
+        <div className="flex flex-col px-6 py-8 bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+        <ToastContainer />
+        <div className='flex justify-between items-center mb-8'>
+            <h1 className="text-3xl font-bold text-indigo-800 flex items-center"><MdSchool className="mr-2" />Student Fee Details</h1>
 
                 <div className='flex justify-end gap-2'>
-                    <select
-                        id="sessionSelector"
-                        value={selectedSession}
-                        onChange={handleChange}
-                        className="mobile:max-tablet:mx-4 border rounded-md w-fit mobile:max-tablet:px-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
-                    >
+                <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-indigo-300 rounded-md py-2 px-4 text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
                         {session.map((session, index) => (
-                            <option key={index} value={session}>
-                                {session}
-                            </option>
+                            <option key={index} value={session}>{session}</option>
                         ))}
                     </select>
-                    <select
-                        className="mobile:max-tablet:mx-4 border rounded-md w-fit  px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
-                        id="Class"
-                        name="Class"
-                        value={selectedClass}
-                        onChange={handleClassChange}
-                        required
-                    >
-                        <option value="" >Select Class</option>
-                        <option value="Pre-Nursery">Pre-Nursery</option>
-                        <option value="Nursery">Nursery</option>
-                        <option value="L.K.G">L.K.G</option>
-                        <option value="U.K.G">U.K.G</option>
-                        <option value="1st">1st</option>
-                        <option value="2nd">2nd</option>
-                        <option value="3rd">3rd</option>
-                        <option value="4th">4th</option>
-                        <option value="5th">5th</option>
-                        <option value="6th">6th</option>
-                        <option value="7th">7th</option>
-                        <option value="8th">8th</option>
-                        <option value="9th">9th</option>
-                        <option value="10th">10th</option>
-                        <option value="11th">11th</option>
-                        <option value="12th">12th</option>
-
+                    <select id="Class" name="Class" value={selectedClass} onChange={handleClassChange} className="bg-white border-2 border-indigo-300 rounded-md py-2 px-4 text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
+                        <option value="">Select Class</option>
+                        {["Pre-Nursery", "Nursery", "L.K.G", "U.K.G", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"].map(cls => (
+                            <option key={cls} value={cls}>{cls}</option>
+                        ))}
+                    </select>
+                    <select id="Section" name="Section" value={section} onChange={handleSectionChange} className="bg-white border-2 border-indigo-300 rounded-md py-2 px-4 text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
+                        <option value="">Select Class</option>
+                        {["A", "B", "C", "D", "E", "F"].map(cls => (
+                            <option key={cls} value={cls}>{cls}</option>
+                        ))}
                     </select>
 
-                    <select
-                        className="mobile:max-tablet:mx-4 border rounded-md w-fit  px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
-                        id="Section"
-                        name="Section"
-                        value={section}
-                        onChange={handleSectionChange}
-                        required
-                    >
-                        <option value="" >Select Section</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-
-                    </select>
                 </div>
             </div>
 
             <div className='overflow-auto w-full'>
-                <div className=' mt-2  border border-black rounded-lg'>
-                    <div className="flex justify-between  py-2  bg-bg_blue  rounded-t-lg border border-b-2  whitespace-nowrap">
+                
+                    <div className="flex justify-between  py-2  bg-gradient-to-r from-indigo-500 to-blue-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap">
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Roll No.
                         </h1>
@@ -206,7 +170,7 @@ function FeeDetailsSubAdmin() {
                             <div>
                                 {details.map((details, index) => (
                                     <Link to={`/Sub-Admin/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}&section=${details.section}`}>
-                                        <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
+                                        <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : 'bg-white'}`} onClick={() => handleClick(index)}>
                                             <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}
                                             </h1>
@@ -251,7 +215,7 @@ function FeeDetailsSubAdmin() {
                             <div className='text-center mt-2'>No Fee Details available</div>
                         )
                     )}
-                </div>
+               
             </div>
             <Outlet />
         </div>

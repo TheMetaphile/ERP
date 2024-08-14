@@ -22,6 +22,9 @@ export default function FeeAdminRow({ Class, session, key }) {
 
     useEffect(() => {
         setLoading(true);
+        setAdmissionFee('');
+        setMonthlyFee('');
+        setQuarterFee('');
         fetchStructure();
     }, [session]);
 
@@ -77,9 +80,9 @@ export default function FeeAdminRow({ Class, session, key }) {
             });
 
             if (response.status === 200) {
-                const updatedStructure = response.data.feeStructure; 
-                setStructure(prevStructure => 
-                    prevStructure.map(item => 
+                const updatedStructure = response.data.feeStructure;
+                setStructure(prevStructure =>
+                    prevStructure.map(item =>
                         item.class.includes(classs[0]) ? { ...item, admissionFee, monthlyfee: monthlyFee, quarterFee } : item
                     )
                 );
@@ -123,9 +126,9 @@ export default function FeeAdminRow({ Class, session, key }) {
     };
 
     return (
-        <tr key={key} className="border-b border-gray-300">
-            <td className="px-4 py-2 whitespace-nowrap">{Class}</td>
-            <td className="px-4 py-2 whitespace-nowrap">
+        <tr key={key} className="border-b border-gray-200 bg-white hover:bg-gray-300">
+            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{Class}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {editMode === key ? (
                     <input
                         className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
@@ -167,18 +170,18 @@ export default function FeeAdminRow({ Class, session, key }) {
                     quarterFee || 'N/A'
                 )}
             </td>
-            
-            <td className="px-4 py-2 whitespace-nowrap">
+
+            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 {editMode === key ? (
                     <>
                         <button
-                            className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded shadow-md ml-2 transition duration-300"
                             onClick={handleConfirmEdit}
                         >
                             <MdCheck />
                         </button>
                         <button
-                            className="bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                            className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded shadow-md ml-2 transition duration-300"
                             onClick={handleCancelEdit}
                         >
                             <MdCancel />
@@ -186,7 +189,7 @@ export default function FeeAdminRow({ Class, session, key }) {
                     </>
                 ) : (
                     <button
-                        className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md"
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow-md transition duration-300"
                         onClick={() => handleEditToggle(key)}
                     >
                         <MdOutlineModeEdit />
