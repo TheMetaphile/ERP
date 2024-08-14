@@ -198,7 +198,7 @@ export default function OptionalRow({
                     </ul>
                 )}
             </td>
-            <td className={`text-center py-2 ${remark === "Good" ? "text-red-600" : "text-green-600"}`}>{remark}</td>
+            <td className={`text-center py-2 ${remark.includes("Good")  ? "text-green-600" : "text-red-600"}`}>{remark}</td>
         </tr>
     );
 }

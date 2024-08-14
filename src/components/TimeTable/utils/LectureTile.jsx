@@ -8,7 +8,7 @@ export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, Time
 
     useEffect(() => {
         setLectures(data && data[day] ? data[day][index] : {})
-    }, [day,data]);
+    }, [day, data]);
 
 
 
@@ -26,7 +26,14 @@ export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, Time
                             authState.subjects.includes(optSub.optionalSubject) && (
                                 <div key={optSubIndex} className="w-full flex">
                                     <h1 className="w-96 px-4 py-2 text-center border-r border-gray-400 bg-green-200">{lectures.lectureNo}</h1>
-                                    <h1 className="w-full px-4 py-2 text-center border-r border-gray-400 bg-green-200">{optSub.optionalSubject}</h1>
+                                    <h1 className="w-full px-4 py-2 text-center border-r border-gray-400 bg-green-200">
+                                        {optSub.optionalSubject}
+                                        {optSub.mergeWithSection !== authState.userDetails.section && (
+                                            <span className="ml-2 text-red-600">
+                                                <strong>Merge With section:</strong> {optSub.mergeWithSection}
+                                            </span>
+                                        )}
+                                    </h1>
                                     <div className="w-full px-4 py-2 text-center border-r flex items-center border-gray-400 bg-blue-200">
                                         <img src={optSub.teacher.profileLink} alt={optSub.teacher.name} className="w-8 h-8 rounded-full" />
                                         <p className="text-sm px-2 whitespace-nowrap">{optSub.teacher.name}</p>
@@ -37,7 +44,7 @@ export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, Time
 
                         ))
                     ) : (
-                        Object.keys(lectures).length >0 && <div className="w-full flex">
+                        Object.keys(lectures).length > 0 && <div className="w-full flex">
                             <h1 className="w-96 px-4 py-2 text-center border-r border-gray-400 bg-green-200">{lectures.lectureNo}</h1>
                             <h1 className="w-full px-4 py-2 text-center border-r border-gray-400 bg-green-200">{lectures.subject}</h1>
                             <div className="w-full px-4 py-2 text-center border-r flex items-center border-gray-400 bg-blue-200">
