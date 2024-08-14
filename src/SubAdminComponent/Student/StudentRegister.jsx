@@ -278,7 +278,7 @@ export default function StudentRegister() {
 
 const InputField = ({ icon, label, name, type = "text", value, onChange, required }) => (
     <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2 flex items-center">
+        <label className=" text-gray-700 text-sm font-bold mb-2 flex items-center">
             {icon} <span className="ml-2">{label}</span>
         </label>
         <input
@@ -295,7 +295,7 @@ const InputField = ({ icon, label, name, type = "text", value, onChange, require
 
 const SelectField = ({ icon, label, name, value, onChange, options, required }) => (
     <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2 flex items-center">
+        <label className=" text-gray-700 text-sm font-bold mb-2 flex items-center">
             {icon} <span className="ml-2">{label}</span>
         </label>
         <select
