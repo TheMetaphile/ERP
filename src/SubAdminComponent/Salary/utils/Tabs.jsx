@@ -20,10 +20,10 @@ const Tabs = ({ selectedTab, onTabChange }) => {
             </button>
           ))}
         </div>
-        <div className="">
+        {/* <div className="">
           <button className="bg-purple-500 text-white p-2 rounded flex gap-2 items-center whitespace-nowrap">
             <FiUpload /> Export Data</button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

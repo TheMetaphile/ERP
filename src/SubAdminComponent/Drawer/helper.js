@@ -17,7 +17,7 @@ const menuItems = [
   {
     image: salary,
     alt: "Salary image",
-    title: "Salary History",
+    title: "Transaction History",
     route: "/Sub-Admin/Salary",
     children: [],
   },

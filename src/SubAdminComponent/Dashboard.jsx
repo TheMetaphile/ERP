@@ -18,7 +18,7 @@ export default function SubAdminDashboard() {
     setIsEndDrawerOpen(!isEndDrawerOpen);
   };
   return (
-    <div className="w-screen h-screen overflow-x-auto  no-scrollbar ">
+    <div className="w-screen h-screen overflow-x-auto  no-scrollbar pt-4 ">
       <div className="fixed top-0 left-0 w-full px-2 z-50">
         <SubAdminNavbar onDrawerToggle={toggleDrawer} onEndDrawerToggle={toggleEndDrawer} />
       </div>

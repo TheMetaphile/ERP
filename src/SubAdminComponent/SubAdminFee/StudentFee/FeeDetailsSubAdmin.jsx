@@ -108,13 +108,13 @@ function FeeDetailsSubAdmin() {
 
 
     return (
-        <div className="flex flex-col px-6 py-8 bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
-        <ToastContainer />
-        <div className='flex justify-between items-center mb-8'>
-            <h1 className="text-3xl font-bold text-indigo-800 flex items-center"><MdSchool className="mr-2" />Student Fee Details</h1>
+        <div className="flex flex-col px-6 py-8">
+            <ToastContainer />
+            <div className='flex justify-between items-center mb-8'>
+                <h1 className="text-3xl font-bold text-indigo-800 flex items-center"><MdSchool className="mr-2" />Student Fee Details</h1>
 
                 <div className='flex justify-end gap-2'>
-                <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-indigo-300 rounded-md py-2 px-4 text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
+                    <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-indigo-300 rounded-md py-2 px-4 text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
                         {session.map((session, index) => (
                             <option key={index} value={session}>{session}</option>
                         ))}
@@ -136,86 +136,86 @@ function FeeDetailsSubAdmin() {
             </div>
 
             <div className='overflow-auto w-full'>
-                
-                    <div className="flex justify-between  py-2  bg-gradient-to-r from-indigo-500 to-blue-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap">
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Roll No.
-                        </h1>
-                        <h1 className="w-44 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Name
-                        </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Section
-                        </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Session
-                        </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Total Fee
-                        </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Discount
-                        </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Paid
-                        </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                            Payable
-                        </h1>
-                    </div>
-                    {loading ? (
-                        <Loading />
-                    ) : (
-                        details.length > 0 ? (
-                            <div>
-                                {details.map((details, index) => (
-                                    <Link to={`/Sub-Admin/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}&section=${details.section}`}>
-                                        <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : 'bg-white'}`} onClick={() => handleClick(index)}>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.rollNumber}
-                                            </h1>
-                                            <h1 className="w-44 text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                <img src={details.profileLink} alt="profile pic" className='w-10 h-10 rounded-full ' />
-                                                <div className='w-32'>
-                                                    {details.name}
-                                                </div>
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.section}
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.session}
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.totalfee}
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.discountAmount}
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.fine}
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.paid}
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.payableFee}
-                                            </h1>
-                                        </div>
-                                    </Link>
 
-                                ))}
-                                {!allDataFetched && (
-                                    <div colSpan="4" className="text-center">
-                                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer' onClick={handleViewMore}>View More</h1>
+                <div className="flex justify-between  py-2  bg-gradient-to-r from-indigo-500 to-blue-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap">
+                    <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        Roll No.
+                    </h1>
+                    <h1 className="w-44 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        Name
+                    </h1>
+                    <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        Section
+                    </h1>
+                    <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        Session
+                    </h1>
+                    <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        Total Fee
+                    </h1>
+                    <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        Discount
+                    </h1>
+                    <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        Paid
+                    </h1>
+                    <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        Payable
+                    </h1>
+                </div>
+                {loading ? (
+                    <Loading />
+                ) : (
+                    details.length > 0 ? (
+                        <div>
+                            {details.map((details, index) => (
+                                <Link to={`/Sub-Admin/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}&section=${details.section}`}>
+                                    <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : 'bg-white'}`} onClick={() => handleClick(index)}>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.rollNumber}
+                                        </h1>
+                                        <h1 className="w-44 text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            <img src={details.profileLink} alt="profile pic" className='w-10 h-10 rounded-full ' />
+                                            <div className='w-32'>
+                                                {details.name}
+                                            </div>
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.section}
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.session}
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.totalfee}
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.discountAmount}
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.fine}
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.paid}
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.payableFee}
+                                        </h1>
                                     </div>
-                                )}
-                            </div>
-                        ) : (
-                            <div className='text-center mt-2'>No Fee Details available</div>
-                        )
-                    )}
-               
+                                </Link>
+
+                            ))}
+                            {!allDataFetched && (
+                                <div colSpan="4" className="text-center">
+                                    <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer' onClick={handleViewMore}>View More</h1>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className='text-center mt-2'>No Fee Details available</div>
+                    )
+                )}
+
             </div>
             <Outlet />
         </div>

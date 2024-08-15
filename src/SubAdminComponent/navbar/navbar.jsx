@@ -4,10 +4,26 @@ import { Link } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import { FaBell } from 'react-icons/fa';
 import AuthContext from '../../Context/AuthContext';
+// import { useContext } from "react";
+import { useNavigate } from 'react-router-dom';
+import logout1 from "../../assets/logout.png"
+
+
 
 export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
-  const { authState } = useContext(AuthContext);
+  const { logout, authState } = useContext(AuthContext);
   console.log(authState.userDetails.role, authState.userDetails.department);
+
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
+
 
   return (
     <div className="flex flex-grow mobile:max-tablet:flex-col h-full  px-2 py-3 mb-2 mobile:max-tablet:mb-0 items-center justify-between bg-purple-300 rounded-lg shadow-md">
@@ -45,8 +61,17 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
           ) : (
             <></>
           )}
-
+          <div className="flex h-fit justify-center my-2">
+            <button
+              onClick={handleLogout}
+              className="bg-purple-200 border border-transparent rounded-xl px-4 py-2 flex items-center shadow-md"
+            >
+              <img src={logout1} alt="logout" className="w-6 mr-2" />
+              <span className="text-black">Log out</span>
+            </button>
+          </div>
         </ul>
+
       </nav>
     </div>
   );

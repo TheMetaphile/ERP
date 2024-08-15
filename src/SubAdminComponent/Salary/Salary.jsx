@@ -82,18 +82,18 @@ function Salary() {
                     <p className="text-sm">{authState.userDetails.department}</p>
                 </div>
                 <div className=" flex tablet:items-center">
-                    <div className="">
+                    {/* <div className="">
 
                         <input
                             type="text"
                             placeholder="Search Accounts"
                             className="tablet:max-laptop:px-8 desktop:px-12 mobile:max-tablet:py-1 mt-2 tablet-py-2 rounded-md border tablet:mx-10"
                         />
-                    </div>
-                    <div className="icons flex items-center gap-4 mobile:max-tablet:hidden">
+                    </div> */}
+                    {/* <div className="icons flex items-center gap-4 mobile:max-tablet:hidden">
                         <div className="bell"><GoBell className=" h-9 w-9 mobile:max-tablet:h-4 mobile:max-laptop:w-4 cursor-pointer" /></div>
                         <div className="message"><IoChatbubbleOutline className=" h-9 w-9 mobile:max-tablet:h-4 mobile:max-laptop:w-4 cursor-pointer" /></div>
-                    </div>
+                    </div> */}
                     <div className="flex items-center ml-4 mobile:max-tablet:hidden">
                         <div>
                             <img src={profile} alt="profile.jpg" className=" h-10 w-10 rounded mr-2" />
