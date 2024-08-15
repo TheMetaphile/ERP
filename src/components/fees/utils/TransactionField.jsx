@@ -49,7 +49,7 @@ export default function TransactionField() {
         transition={{ duration: 2 }}
         className="w-full bg-white rounded-xl overflow-hidden"
       >
-        <thead className="bg-gradient-to-r from-blue-200 to-teal-100 text-black">
+        <thead className="bg-gradient-to-r from-blue-200 to-blue-100 text-black">
           <tr>
             {["No.", "Installment ID", "Order ID", "Payment ID", "Date", "Amount", "Status", "Action"].map((header, index) => (
               <motion.th

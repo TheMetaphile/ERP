@@ -116,7 +116,7 @@ export default function FeeStructureField({ fees }) {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="bg-gradient-to-r from-blue-200 to-teal-100 text-black "
+                    className="bg-gradient-to-r from-blue-300 to-blue-100 text-black "
                 >
                     <tr>
                         <th className="py-3 px-4 text-center">Class</th>
@@ -145,7 +145,7 @@ export default function FeeStructureField({ fees }) {
                             <td className="py-3 px-4 text-center">{data.month}</td>
                             <td className="py-3 px-4 text-center">₹ {data.amount}</td>
                             <td className="py-3 px-4 text-center">₹ {data.discount}</td>
-                            <td className="py-3 px-4 text-center">
+                            <td className="py-3 px-4 text-center flex justify-center">
                                 {data.status === 'Submitted' ? (
                                     <motion.div
                                         className="flex items-center text-green-500"
