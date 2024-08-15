@@ -22,7 +22,7 @@ class NoticeBoardAPI{
 
         return data["notices"] ;
       } else {
-        throw Exception('Failed to load notices: ${response.statusCode}');
+        throw Exception('Failed to load notices: ${response.body}');
       }
     } catch (e) {
       throw Exception('Error fetching notices: $e');

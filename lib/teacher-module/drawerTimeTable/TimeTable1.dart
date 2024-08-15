@@ -93,7 +93,7 @@ class _DrawerTimeTableState extends State<DrawerTimeTable> {
           overrideLectures();
 
         }else{
-          showRedSnackBar("Something  went wrong $fetchData", context);
+          showRedSnackBar("No Time Table Data Found", context);
         }
 
 
@@ -263,7 +263,7 @@ class _DrawerTimeTableState extends State<DrawerTimeTable> {
               ),
             ) : errorMessage.isNotEmpty
                 ? Center(child: Text(errorMessage)):
-            timeTableData!.isEmpty ? Expanded(child: Center(child: Text("No Time Table Found on $selectday"),)):Expanded(
+            timeTableData==null ||  timeTableData!.isEmpty ? Expanded(child: Center(child: Text("No Time Table Found on $selectday"),)):Expanded(
                 child: allTable()),
           ],
         )

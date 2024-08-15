@@ -31,7 +31,7 @@ class SubstituteClassTeacherApi{
     print(date);
     print(session);
 
-    final url = Uri.parse('$baseUrl/classTeacherSubstitute/fetch/checkLeave?date=2024-07-30&session=$session');
+    final url = Uri.parse('$baseUrl/classTeacherSubstitute/fetch/checkLeave?date=$date&session=$session');
 
     try {
       final response = await http.get(

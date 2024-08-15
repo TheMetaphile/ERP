@@ -23,7 +23,7 @@ class ResultApi {
 
         return data ;
       } else {
-        throw Exception('Failed to load result: ${response.statusCode}');
+        throw Exception( '${response.body}');
       }
     } catch (e) {
       throw Exception('Error fetching result: $e');

@@ -703,28 +703,7 @@ class _ReportCardState extends State<ReportCard> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: themeObj.textWhite,
-      // appBar: AppBar(
-      //   backgroundColor: themeObj.primayColor,
-      //   leading: IconButton(
-      //     onPressed: (){
-      //       Navigator.pop(context);
-      //     },
-      //     icon: Icon(Icons.arrow_back_ios),
-      //   ),
-      //   title: Text("Report Card",style: GoogleFonts.openSans(color: themeObj.textBlack,fontWeight: FontWeight.w400,fontSize: size.width*0.05),),
-      //   actions: [
-      //     ElevatedButton.icon(
-      //       icon: Icon(Icons.edit, size: 18,color: themeObj.textBlack,),
-      //       label: Text("Edit",style: GoogleFonts.openSans(color: themeObj.textBlack,fontWeight: FontWeight.w400,fontSize: size.width*0.05),),
-      //       style: ElevatedButton.styleFrom(
-      //         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      //         backgroundColor: themeObj.secondayColor,
-      //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      //       ), onPressed: () {  },
-      //     )
-      //
-      //   ],
-      // ),
+
       body:studentList==null?
       Center(
         child: LoadingAnimationWidget.threeArchedCircle(

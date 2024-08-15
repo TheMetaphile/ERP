@@ -133,6 +133,15 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    Final = [];
+    finalCoScholastic = [];
+    halfYearly = [];
+    halfYearlyCoScholastic = [];
+    term1 = [];
+    term1CoScholastic = [];
+    term2 = [];
+    term2CoScholastic = [];
+    studentDetail = [];
     fetchResultData();
     fetchStudentDetails();
   }
@@ -190,7 +199,7 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
                     SizedBox(
                       width: size.width*0.6,
                       child: AutoSizeText(
-                        '${studentDetail[0]["name"] ?? "Name"} Progress Report',overflow: TextOverflow.ellipsis,
+                        '${studentDetail.isNotEmpty ? (studentDetail[0]["name"] ?? "Name") : "Name"} Progress Report',overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.openSans(
                           color: themeObj.textBlack,
                           fontWeight: FontWeight.w500,

@@ -93,12 +93,11 @@ class _NoteBookRecordHodState extends State<NoteBookRecordHod> {
       String? accessToken = pref.getString("accessToken");
       if (accessToken == null) throw Exception("Access token is null");
 
-      List<dynamic> noteBookData = await apiObj.notebookRecord(
+      List<dynamic> noteBookData = await apiObj.fetchNoteBookRecord(
         accessToken,
         _selectedClass,
         _selectedSection,
         _selectedSubject,
-        session,
         0,
       );
       print("notebookdata $noteBookData");

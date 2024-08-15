@@ -237,10 +237,9 @@ class FeeListScreen extends StatelessWidget {
                 DataColumn(label: Center(child: Text('Roll No.', style: _headerStyle(size)))),
                 DataColumn(label: Center(child: Text('Name', style: _headerStyle(size)))),
                 DataColumn(label: Center(child: Text('Total Fee', style: _headerStyle(size)))),
-                DataColumn(label: Center(child: Text('Fine', style: _headerStyle(size)))),
                 DataColumn(label: Center(child: Text('Discount', style: _headerStyle(size)))),
-                DataColumn(label: Center(child: Text('Paid', style: _headerStyle(size)))),
                 DataColumn(label: Center(child: Text('Payable', style: _headerStyle(size)))),
+                DataColumn(label: Center(child: Text('Paid', style: _headerStyle(size)))),
                 DataColumn(label: Center(child: Text('Pending', style: _headerStyle(size)))),
               ],
               rows: filteredStudents.asMap().entries.map((entry) {
@@ -255,10 +254,10 @@ class FeeListScreen extends StatelessWidget {
                     DataCell(Text(student['rollNumber'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
                     DataCell(_buildNameCell(student, size), onTap: () => onRowTap(index)),
                     DataCell(Text(student['totalfee'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
-                    DataCell(Text(student['fine'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
                     DataCell(Text(student['discountAmount'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
-                    DataCell(Text(student['paid'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
                     DataCell(Text(student['payableFee'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
+                    DataCell(Text(student['paid'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
+                 //   DataCell(Text(student['payableFee'].toString(), style: _cellStyle(size)), onTap: () => onRowTap(index)),
                     DataCell(
                       Text(
                         (student['payableFee'] - student['paid']).toString(),

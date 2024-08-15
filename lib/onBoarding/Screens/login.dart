@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
         print("user details $userDetails");
         print("subject details $subject");
         print("class details $classDetails");
-
+   print("/////////////////////////userdetails");
         if(userDetails.isNotEmpty) {
 
           var tokens = data["tokens"];
@@ -75,9 +75,9 @@ class _LoginState extends State<Login> {
           final name = userDetails["name"] ?? "UserName";
           final profileLink = userDetails["profileLink"] ??
               "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-          final employeeId = userDetails["employeeId"] ?? "ID123";
-          final phoneNumber = userDetails["phoneNumber"] ?? "+91 ********";
-          final dob = userDetails["DOB"] ?? "DD-MM-YYYY";
+          final employeeId = userDetails["employeeId"].toString() ?? "ID123";
+          final phoneNumber = userDetails["phoneNumber"].toString() ?? "+91 ********";
+          final dob = userDetails["DOB"].toString() ?? "DD-MM-YYYY";
           final permanentAddress = userDetails["permanentAddress"] ??
               "DD-MM-YYYY";
 
@@ -99,6 +99,7 @@ class _LoginState extends State<Login> {
 
 
         }
+        print("/////////////////////////token");
         if(tokens.isNotEmpty){
 
           final accessToken = tokens["accessToken"];

@@ -243,11 +243,12 @@ class _TimeTableState extends State<TimeTable> {
         // Add lunch break
         String lunchTiming = "${formatTime(currentTime)} - ${formatTime(currentTime.add(lunchDuration))}";
         rows.add(TableRow(
+          decoration: BoxDecoration(color: Colors.amber[100]),
           children: [
-            newTableCell("Lunch"),
-            newTableCell(""),
-            newTableCell(""),
-            newTableCell(lunchTiming),
+            newTableCell("Lunch", isHeader: true),
+            newTableCell("Break", isHeader: true),
+            newTableCell("", isHeader: true),
+            newTableCell(lunchTiming, isHeader: true),
           ],
         ));
         currentTime = currentTime.add(lunchDuration);
@@ -257,19 +258,50 @@ class _TimeTableState extends State<TimeTable> {
       String timing = "${formatTime(currentTime)} - ${formatTime(endTime)}";
       currentTime = endTime;
 
-      rows.add(TableRow(
-        children: [
-          newTableCell(item["lectureNo"]?.toString() ?? ""),
-          newTableCell(item['subject']?.toString() ?? ""),
-          newTableCell(item['teacher']["name"]?.toString() ?? ""),
-          newTableCell(timing),
-        ],
-      ));
+      if (item["optional"] == false) {
+        rows.add(TableRow(
+          children: [
+            newTableCell(item["lectureNo"]?.toString() ?? ""),
+            newTableCell(item['subject']?.toString() ?? ""),
+            newTableCell(item['teacher']["name"]?.toString() ?? ""),
+            newTableCell(timing),
+          ],
+        ));
+      } else if (item["optional"] == true) {
+        for (var optSubject in item['optionalSubjects']) {
+          rows.add(TableRow(
+            decoration: BoxDecoration(color: Colors.green[50]),
+            children: [
+              newTableCell("*${item["lectureNo"]}"),
+              newTableCell("${optSubject["optionalSubject"]} (${optSubject["mergeWithSection"]})"),
+              newTableCell(optSubject["teacher"]["name"]?.toString() ?? ""),
+              newTableCell(timing),
+            ],
+          ));
+        }
+      }
 
       lectureCount++;
     }
 
     return rows;
+  }
+
+  Widget newTableCell(String text, {bool isHeader = false}) {
+    return TableCell(
+      child: Container(
+        height: 60,
+        padding: const EdgeInsets.all(8),
+        alignment: Alignment.center,
+        child: Text(
+          text,
+          style: TextStyle(
+            fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
   }
   Duration parseDuration(String durationString) {
     int minutes = int.parse(durationString.split(' ')[0]);
@@ -296,14 +328,5 @@ class _TimeTableState extends State<TimeTable> {
     return DateFormat("h:mm a").format(time);
   }
 
-  Widget newTableCell(String text) {
-    return TableCell(
-      child: Container(
-        height: 60, // Set your desired height here
-        padding: EdgeInsets.all(8),
-        alignment: Alignment.center, // This centers the content vertically
-        child: Text(text),
-      ),
-    );
-  }
+
 }
