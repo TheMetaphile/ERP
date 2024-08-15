@@ -64,7 +64,7 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
                 }
                 setLoading(false);
             } catch (err) {
-                console.log(err.response.data.error);
+                console.log(err);
                 setDetails(defaultPlan());
                 setError(err.response.data.error);
                 setLoading(false);

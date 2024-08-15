@@ -25,7 +25,7 @@ export default function SubadminDrawer({ isOpen }) {
         setActive(index)
     }
     return (
-        <div className={` ${isOpen ? 'h-screen  py-6 px-2' : ''} w-full overflow-y-auto rounded-sm text-center items-center border bg-white shadow-md no-scrollbar`}>
+        <div className={` ${isOpen ? 'h-screen  py-6 px-2' : ''} w-full overflow-y-auto rounded-xl shadow-lg text-center items-center border border-gray-300 bg-white  no-scrollbar`}>
             <div className="flex items-center justify-center">
                 <span className="text-black font-semibold text-2xl">Accounts</span>
             </div>

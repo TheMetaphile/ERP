@@ -105,7 +105,7 @@ export default function FeeAdminRow({ Class, session, key }) {
                 return ['6th', '7th', '8th'];
             case '9th-10th':
                 return ['9th', '10th'];
-            case '11th-12th Commerce':
+            case '11th-12th Com./Huma':
                 return ['11th', '12th'];
             case '11th-12th Science':
                 return ['11th', '12th'];
@@ -133,7 +133,7 @@ export default function FeeAdminRow({ Class, session, key }) {
                     <input
                         className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
                         id="admissionFee"
-                        type="text"
+                        type="number"
                         value={admissionFee}
                         onChange={(e) => setAdmissionFee(e.target.value)}
                         required
@@ -147,7 +147,7 @@ export default function FeeAdminRow({ Class, session, key }) {
                     <input
                         className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
                         id="monthlyFee"
-                        type="text"
+                        type="number"
                         value={monthlyFee}
                         onChange={(e) => setMonthlyFee(e.target.value)}
                         required
@@ -161,7 +161,7 @@ export default function FeeAdminRow({ Class, session, key }) {
                     <input
                         className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
                         id="quarterFee"
-                        type="text"
+                        type="number"
                         value={quarterFee}
                         onChange={(e) => setQuarterFee(e.target.value)}
                         required

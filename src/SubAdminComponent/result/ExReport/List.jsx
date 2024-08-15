@@ -160,7 +160,7 @@ const List = () => {
                         ) : (
                             <>
                                 {data.map((item, index) => (
-                                    <tr key={index} className={`border border-gray-300 text-center ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
+                                    <tr key={index} className={`border border-gray-300 text-center ${clickedIndex === index ? 'bg-purple-100' : ''}`} onClick={() => handleClick(index)}>
                                         <td className="p-2">{item.rollNumber}</td>
                                         <td className="p-2">15</td>
                                         <td className="flex items-center">

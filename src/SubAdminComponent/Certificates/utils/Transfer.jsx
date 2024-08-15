@@ -324,11 +324,11 @@ const Transfer = () => {
             <div className=" w-full  justify-center">
                 {!loading ? <div className='flex justify-between items-center'>
 
-                    <div className="text-xl font-medium mb-4 justify-center w-fit rounded-lg shadow-md py-1 px-3 mt-3 bg-secondary text-black hover:bg-blue-400 cursor-pointer hover:text-white" onClick={handleDownload}>
+                    <div className="text-xl font-medium mb-4 justify-center w-fit rounded-lg shadow-md py-1 px-3 mt-3 bg-purple-200 text-black hover:bg-purple-200 cursor-pointer hover:text-white" onClick={handleDownload}>
                         Download
                     </div>
 
-                    <div className="text-xl font-medium mb-4 justify-center w-fit rounded-lg shadow-md py-1 px-3 mt-3 bg-secondary text-black hover:bg-blue-400 cursor-pointer hover:text-white" onClick={handleReset}>
+                    <div className="text-xl font-medium mb-4 justify-center w-fit rounded-lg shadow-md py-1 px-3 mt-3 bg-purple-200 text-black hover:bg-purple-200 cursor-pointer hover:text-white" onClick={handleReset}>
                         Reset
                     </div>
 

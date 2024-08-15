@@ -6,6 +6,8 @@ import { BASE_URL_Fee } from "../../../../Config";
 import { useLocation, useParams } from "react-router-dom";
 import FeeStructureHeader from "../../../../components/fees/utils/feestructureheader";
 import QuarterFeeHeader from "../../../../components/fees/utils/QuarterFeeHeader";
+import { motion } from 'framer-motion';
+import { FaMoneyBillWave, FaCalendarAlt, FaPercent, FaCheckCircle, FaCreditCard, FaUser, FaChalkboardTeacher, FaSchool } from 'react-icons/fa';
 
 export default function FeeStructureField({ fees, selectedOption, setFees }) {
     const [Razorpay] = useRazorpay();
@@ -17,6 +19,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
     const location = useLocation();
     const { id } = useParams();
     const [clickedIndex, setClickedIndex] = useState(null);
+
 
     const handleClick = (index) => {
         setClickedIndex(index);
@@ -31,10 +34,11 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
     const Name = query.get('name');
     const Section = query.get('section');
 
-    const handleModeChange = (e, student) => {
+    const handleModeChange = (e, student, index) => {
         setMode(e.target.value);
         setSelectedStudent(student);
         setIsModalOpen(true);
+
     };
 
     const handleConfirm = () => {
@@ -151,6 +155,28 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
                 }
             );
             console.log('Payment details posted successfully:', response.data);
+
+            setFees((prev) => {
+                const field = selectedOption === 'monthlyfee' ? 'monthlyStatus' : 'quarterlyStatus';
+
+                // Create a deep copy of the 'fees' object
+                const updatedFees = {
+                    ...prev,
+                    [field]: prev[field].map((item, index) => {
+                        if (index === clickedIndex) {
+                            return {
+                                ...item,
+                                status: 'Submitted', // Update the specific field you want
+                            };
+                        }
+                        return item;
+                    })
+                };
+
+                return updatedFees; // Return the updated fees object
+            });
+
+
         } catch (error) {
             console.error('Error posting payment details:', error);
         }
@@ -160,120 +186,195 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
         setIsModalOpen(false);
     };
 
+
+
+
+
+    // Animation variants
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+    };
+
+    const rowVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
+
+    const FeeStructureHeader = () => (
+        <motion.thead  className="bg-purple-200 rounded-t-lg w-full">
+            <tr className="w-full flex">
+                <th className="flex-1 p-4 text-center">Month</th>
+                <th className="flex-1 p-4 text-center">Amount</th>
+                <th className="flex-1 p-4 text-center">Discount</th>
+                <th className="flex-1 p-4 text-center">Status</th>
+                <th className="flex-1 p-4 text-center">Payment Mode</th>
+            </tr>
+        </motion.thead>
+    );
+
+    const QuarterFeeHeader = () => (
+        <motion.thead variants={rowVariants} className="bg-purple-200 rounded-t-lg w-full">
+            <tr className="w-full flex">
+                <th className="flex-1 p-4 text-center">Months</th>
+                <th className="flex-1 p-4 text-center">Quarter</th>
+                <th className="flex-1 p-4 text-center">Amount</th>
+                <th className="flex-1 p-4 text-center">Discount</th>
+                <th className="flex-1 p-4 text-center">Pending Fee</th>
+                <th className="flex-1 p-4 text-center">Status</th>
+                <th className="flex-1 p-4 text-center">Payment Mode</th>
+            </tr>
+        </motion.thead>
+    );
+
+    const Cell = ({ icon: Icon, content }) => (
+        <td className="flex-1 p-4 text-center flex items-center justify-center">
+            {/* <Icon className="mr-2 text-blue-500" /> */}
+            <span>{content}</span>
+        </td>
+    );
+
+
     return (
-        <>
-            {selectedOption === 'monthlyfee' ? (
+        <motion.table
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="container mx-auto p-4 "
+        >
+            {selectedOption === 'monthlyfee' && (
                 <>
                     <FeeStructureHeader />
                     {fees.monthlyStatus.map((data, index) => (
-                        <tbody key={index} className={`w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
-                            <tr className=" w-full flex ">
-                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">{data.month}</td>
-                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">{data.amount}</td>
-                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">{data.discountApplied}</td>
-                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">{data.status}</td>
-
-                                <td className="text-gray-500 border-r w-full  border-gray-300 py-2 font-normal  text-center my-2">
-
+                        <motion.tbody
+                            key={index}
+                            variants={rowVariants}
+                            className={`w-full rounded-lg shadow-md my-2 ${clickedIndex === index ? 'bg-blue-100' : 'bg-white'}`}
+                            onClick={() => handleClick(index)}
+                        >
+                            <tr className="w-full flex">
+                                <Cell icon={FaCalendarAlt} content={data.month} />
+                                <Cell icon={FaMoneyBillWave} content={data.amount} />
+                                <Cell icon={FaPercent} content={data.discountApplied} />
+                                <Cell icon={FaCheckCircle} content={data.status} />
+                                <td className="flex-1 p-4 text-center">
                                     {data.status === 'Submitted' ? (
-                                        <>Paid</>
+                                        <span className="text-green-500 font-semibold">Paid</span>
                                     ) : (
-                                        <select
-                                            className=" text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-full bg-aquamarine py-2"
+                                        <motion.select
+                                            whileHover={{ scale: 1.05 }}
+                                            className="w-full p-2 rounded-full bg-gradient-to-r from-blue-200 to-purple-300 text-black"
                                             value={mode}
                                             onChange={(e) => handleModeChange(e, data)}
                                         >
-                                            <option value="none">None</option>
+                                            <option value="none">Select Payment Mode</option>
                                             <option value="Cash">Cash</option>
                                             <option value="Online">Online</option>
                                             <option value="RTGS">RTGS</option>
                                             <option value="Cheque">Cheque</option>
                                             <option value="Demand Draft">Demand Draft</option>
-                                        </select>
+                                        </motion.select>
                                     )}
                                 </td>
                             </tr>
-                        </tbody>
+                        </motion.tbody>
                     ))}
                 </>
-            ) : selectedOption === 'quarterFee' ? (
-                <>
-                    <QuarterFeeHeader />
-                    {
-                        fees.quarterlyStatus.map((data, index) => (
-                            <tbody key={index} className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
-                                <tr className=" w-full flex">
-                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center"> {data.months.join(', ')}</td>
-                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.quarter}</td>
-                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
-                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.discountApplied}</td>
-                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.pendingFee}</td>
-                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.status}</td>
-                                    <td className=" w-full text-center">
-                                        {data.status === 'Submitted' ? (
-                                            <>Paid</>
-                                        ) : (
-                                            <select
-                                                className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm rounded-full bg-aquamarine py-2 my-2 mx-2"
-                                                value={mode}
-                                                onChange={(e) => handleModeChange(e, data)}
-                                            >
-                                                <option value="none">None</option>
-                                                <option value="Cash">Cash</option>
-                                                <option value="Online">Online</option>
-                                                <option value="RTGS">RTGS</option>
-                                                <option value="Cheque">Cheque</option>
-                                                <option value="Demand Draft">Demand Draft</option>
-                                            </select>
-                                        )}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        ))
-                    }
-                </>
-            ) : (
-                <tbody className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
-                    <tr className=" w-full flex">
-
-                        <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{fees.admissionFee}</td>
-                        <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{fees.monthlyfee}</td>
-                        <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{fees.quarterFee}</td>
-
-
-
-                        <td className=" w-36 text-center">
-                            <button className=" my-2 mx-1 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer" onClick={() => handlePayment({ amount: data.payableAmount, order_id: data.id, title: data.title, deadline: data.deadline })}>Pay</button>
-                        </td>
-                    </tr>
-                </tbody>
             )}
 
+            {selectedOption === 'quarterFee' && (
+                <>
+                    <QuarterFeeHeader />
+                    {fees.quarterlyStatus.map((data, index) => (
+                        <motion.tbody
+                            key={index}
+                            variants={rowVariants}
+                            className="w-full rounded-lg shadow-md my-2 bg-white"
+                        >
+                            <tr className="w-full flex">
+                                <Cell icon={FaCalendarAlt} content={data.months.join(', ')} />
+                                <Cell icon={FaMoneyBillWave} content={data.quarter} />
+                                <Cell icon={FaMoneyBillWave} content={data.amount} />
+                                <Cell icon={FaPercent} content={data.discountApplied} />
+                                <Cell icon={FaMoneyBillWave} content={data.pendingFee} />
+                                <Cell icon={FaCheckCircle} content={data.status} />
+                                <td className="flex-1 p-4 text-center">
+                                    {data.status === 'Submitted' ? (
+                                        <span className="text-green-500 font-semibold">Paid</span>
+                                    ) : (
+                                        <motion.select
+                                            whileHover={{ scale: 1.05 }}
+                                            className="w-full p-2 rounded-full bg-gradient-to-r from-blue-200 to-purple-300 text-black"
+                                            value={mode}
+                                            onChange={(e) => handleModeChange(e, data)}
+                                        >
+                                            <option value="none">Select Payment Mode</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="Online">Online</option>
+                                            <option value="RTGS">RTGS</option>
+                                            <option value="Cheque">Cheque</option>
+                                            <option value="Demand Draft">Demand Draft</option>
+                                        </motion.select>
+                                    )}
+                                </td>
+                            </tr>
+                        </motion.tbody>
+                    ))}
+                </>
+            )}
 
+            {!selectedOption && (
+                <motion.tbody
+                    variants={rowVariants}
+                    className="w-full rounded-lg shadow-md my-2 bg-white"
+                >
+                    <tr className="w-full flex">
+                        <Cell icon={FaMoneyBillWave} content={fees.admissionFee} />
+                        <Cell icon={FaMoneyBillWave} content={fees.monthlyfee} />
+                        <Cell icon={FaMoneyBillWave} content={fees.quarterFee} />
+                        <td className="flex-1 p-4 text-center">
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="px-6 py-2 rounded-full bg-gradient-to-r from-green-400 to-blue-500 text-white"
+                                onClick={() => handlePayment({ amount: fees.payableAmount, order_id: fees.id, title: fees.title, deadline: fees.deadline })}
+                            >
+                                <FaCreditCard className="inline mr-2" /> Pay
+                            </motion.button>
+                        </td>
+                    </tr>
+                </motion.tbody>
+            )}
 
             {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="fixed inset-0 flex items-center justify-center z-50"
+                >
                     <div className="fixed inset-0 bg-black opacity-50"></div>
-                    <div className="bg-white p-4 rounded-lg z-10 w-2/5">
-                        <h2 className="text-xl mb-4">Confirm Payment</h2>
+                    <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="bg-white p-8 rounded-lg z-10 w-2/5 shadow-2xl"
+                    >
+                        <h2 className="text-2xl mb-6 font-bold text-blue-600">Confirm Payment</h2>
                         {selectedStudent && (
                             <div className='flex gap-20 items-center'>
                                 <div>
-                                    <p><strong>Name:</strong> {Name}</p>
-                                    <p><strong>Class:</strong> {Class}</p>
-                                    <p><strong>Section:</strong> {Section}</p>
-                                    <p><strong>Month:</strong> {selectedStudent.month}</p>
+                                    <p className="mb-2"><FaUser className="inline mr-2 text-blue-500" /><strong>Name:</strong> {Name}</p>
+                                    <p className="mb-2"><FaChalkboardTeacher className="inline mr-2 text-blue-500" /><strong>Class:</strong> {Class}</p>
+                                    <p className="mb-2"><FaSchool className="inline mr-2 text-blue-500" /><strong>Section:</strong> {Section}</p>
+                                    <p className="mb-2"><FaCalendarAlt className="inline mr-2 text-blue-500" /><strong>Month:</strong> {selectedStudent.month}</p>
                                 </div>
                                 <div>
-                                    <p><strong>Discount:</strong> {selectedStudent.discountApplied}</p>
-                                    <p><strong>Payable:</strong> {selectedStudent.amount}</p>
-                                    <p><strong>Mode:</strong> {mode}</p>
+                                    <p className="mb-2"><FaPercent className="inline mr-2 text-blue-500" /><strong>Discount:</strong> {selectedStudent.discountApplied}</p>
+                                    <p className="mb-2"><FaMoneyBillWave className="inline mr-2 text-blue-500" /><strong>Payable:</strong> {selectedStudent.amount}</p>
+                                    <p className="mb-2"><FaCreditCard className="inline mr-2 text-blue-500" /><strong>Mode:</strong> {mode}</p>
                                 </div>
                             </div>
                         )}
-                        {mode === 'Online' || mode === 'Cash' ? (
-                            <></>
-                        ) : (
+                        {mode !== 'Online' && mode !== 'Cash' && (
                             <input
                                 type="text"
                                 placeholder="Enter Document Number"
@@ -282,24 +383,29 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
                                 className="border rounded p-2 w-full mb-4"
                             />
                         )}
-                        <div className="flex justify-end gap-2">
-                            <button
-                                className="px-4 py-2 bg-green-500 text-white rounded"
+                        <div className="flex justify-end gap-4 mt-6">
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="px-6 py-2 bg-green-500 text-white rounded-full"
                                 onClick={handleConfirm}
                             >
                                 Confirm
-                            </button>
-                            <button
-                                className="px-4 py-2 bg-red-500 text-white rounded"
+                            </motion.button>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="px-6 py-2 bg-red-500 text-white rounded-full"
                                 onClick={handleCancel}
                             >
                                 Cancel
-                            </button>
+                            </motion.button>
                         </div>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
             )}
-        </>
+        </motion.table>
     );
 }
+
 

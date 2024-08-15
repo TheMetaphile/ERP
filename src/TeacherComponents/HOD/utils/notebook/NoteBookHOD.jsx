@@ -57,7 +57,7 @@ function NoteBookHOD() {
     )
 }
 
-export default NoteBookHOD
+export default React.memo(NoteBookHOD);
 
 
 

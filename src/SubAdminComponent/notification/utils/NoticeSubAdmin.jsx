@@ -5,6 +5,8 @@ import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../../Config";
 import { ToastContainer, toast } from "react-toastify";
+import { motion } from "framer-motion";
+import { FaCalendarAlt, FaEye } from "react-icons/fa";
 
 function NoticeSubAdmin() {
     const { authState } = useContext(AuthContext);
@@ -30,7 +32,6 @@ function NoticeSubAdmin() {
         }
     }, [start, selectedSession]);
 
-
     const fetchNotice = async () => {
         setLoading(true);
         try {
@@ -52,12 +53,12 @@ function NoticeSubAdmin() {
 
         } catch (error) {
             console.error("Error fetching notice:", error);
+            toast.error("Failed to fetch notices");
         }
         finally {
             setLoading(false)
         }
     };
-
 
     const handleChange = (event) => {
         setStart(0);
@@ -67,37 +68,53 @@ function NoticeSubAdmin() {
     };
 
     return (
-        <div className='px-3 w-full pt-20'>
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className='px-3 w-full pt-20 max-w-7xl mx-auto'
+        >
             <ToastContainer />
-            <div className=" flex  mx-3 items-center justify-between">
-                <h1 className='text-2xl mobile:max-tablet:text-xl mt-2'>Notice</h1>
-                <select
-                    id="sessionSelector"
-                    value={selectedSession}
-                    onChange={handleChange}
-                    className="mobile:max-tablet:mx-4 border rounded-md py-1 w-fit mobile:max-tablet:px-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
-                >
-                    {sessions.map((session, index) => (
-                        <option key={index} value={session}>
-                            {session}
-                        </option>
-                    ))}
-                </select>
+            <div className="flex mx-3 items-center justify-between bg-white ">
+                <h1 className='text-2xl mobile:max-tablet:text-xl font-bold text-gray-800'>Notice Board</h1>
+                <div className="flex items-center">
+                    <FaCalendarAlt className="text-gray-600 mr-2" />
+                    <select
+                        id="sessionSelector"
+                        value={selectedSession}
+                        onChange={handleChange}
+                        className="mobile:max-tablet:mx-4 border rounded-md py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-100 hover:bg-gray-200 transition duration-300"
+                    >
+                        {sessions.map((session, index) => (
+                            <option key={index} value={session}>
+                                {session}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
 
             {loading ? (
                 <Loading />
             ) : details.length === 0 ? (
-                <div className="w-full text-center">No data available</div>
+                <div className="w-full text-center mt-10 text-gray-600 text-lg">No notices available for this session</div>
             ) : (
                 <>
                     <AllNotificationTile details={details} />
                     {!allDataFetched && (
-                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className='flex items-center justify-center mx-auto mt-6 px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-300'
+                            onClick={handleViewMore}
+                        >
+                            <FaEye className="mr-2" />
+                            View More
+                        </motion.button>
                     )}
                 </>
             )}
-        </div>
+        </motion.div>
     )
 }
 

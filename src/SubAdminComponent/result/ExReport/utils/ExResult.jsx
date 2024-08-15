@@ -239,7 +239,7 @@ const ExResult = () => {
       {loading ? (<Loading />) : (
         <div className="report-card border border-black " ref={ref} >
 
-          <div className=' border-b border-black py-3 items-center bg-teal-200 text-center'>
+          <div className=' border-b border-black py-3 items-center bg-purple-100 text-center'>
             <h1 className={`text-3xl  font-semibold mb-2`}>{selectedTermlabel} : {profile.session || "2024-25"}</h1>
             <h6 className="text-2xl mb-2">Report Card</h6>
           </div>
@@ -265,7 +265,7 @@ const ExResult = () => {
                 <div className='font-medium text-center text-red-500'> No Scholastic Data Available</div>
               ) : (
                 <table className="min-w-full border border-gray-200">
-                  <thead className=' bg-teal-200 text-xl font-medium '>
+                  <thead className=' bg-purple-100 text-xl font-medium '>
                     <tr className='text-center'>
                       <th className="px-4 py-2 border">Scholastic Areas</th>
                       <th className="px-4 py-2 border">
@@ -309,7 +309,7 @@ const ExResult = () => {
                   <div className='font-medium text-center text-red-500'> No Co-Scholastic Data Available</div>
                 ) : (
                   <table className="min-w-full bg-white border border-gray-200">
-                    <thead className=' bg-teal-200 text-xl font-medium'>
+                    <thead className=' bg-purple-100 text-xl font-medium'>
                       <tr>
                         <th className="px-4 pb-4 border text-start">Co-Scholastic Areas:</th>
                         <th className="px-4 pb-4 border text-end">Grade</th>
@@ -334,7 +334,7 @@ const ExResult = () => {
 
 
           <div className=' border-b border-black'>
-            <div className="flex bg-teal-200 text-xl items-center justify-between px-4 pb-4">
+            <div className="flex bg-purple-100 text-xl items-center justify-between px-4 pb-4">
               <h2 className='  font-semibold'>Attendance:</h2>
               <p><strong className='  font-medium'>Total:</strong> {attendance.total}</p>
               <p><strong className=' font-medium'>Present:</strong> {attendance.present}</p>
@@ -355,7 +355,7 @@ const ExResult = () => {
             <div className="flex-1">
               <h1 className=' text-center text-xl my-2'>SCHOLASTIC</h1>
               <table className="w-full bg-white border border-gray-200">
-                <thead className=' bg-teal-200'>
+                <thead className=' bg-purple-100'>
                   <tr>
                     <th className="px-4 pb-4 border">MARKS RANGE</th>
                     <th className="px-4 pb-4 border">GRADE</th>
@@ -374,7 +374,7 @@ const ExResult = () => {
             <div className="flex-1 h-full">
               <h1 className=' text-center text-xl my-2'>CO-SCHOLASTIC AND DISCIPLINE</h1>
               <table className="w-full bg-white border border-gray-200">
-                <thead className=' bg-teal-200'>
+                <thead className=' bg-purple-100'>
                   <tr>
                     <th className="px-4 pb-4 border whitespace-nowrap">PERFOMANCE INDICATORS</th>
                     <th className="px-4 pb-4 border">GRADE</th>

@@ -22,7 +22,7 @@ function AdmissionTileRow({ data, index, clickedIndex, setClickedIndex,  handleR
     return (
         <div
             key={index}
-            className={`flex text-center mobile:max-tablet:gap-2 items-center justify-evenly border rounded-lg py-2 pl-2 mb-2 tablet:max-laptop:w-fit ${clickedIndex === index ? 'bg-secondary' : ''}`}
+            className={`flex text-center mobile:max-tablet:gap-2 items-center justify-evenly border rounded-lg py-2 pl-2 mb-2 tablet:max-laptop:w-fit ${clickedIndex === index ? 'bg-purple-100' : ''}`}
             onClick={handleClick}
         >
             <div className="w-40 flex justify-center">

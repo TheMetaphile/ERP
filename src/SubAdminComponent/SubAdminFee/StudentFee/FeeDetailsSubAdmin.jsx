@@ -109,11 +109,6 @@ function FeeDetailsSubAdmin() {
 
     return (
 
-        <div className="flex flex-col px-6 py-8  min-h-screen">
-        <ToastContainer />
-        <div className='flex justify-between items-center mb-8'>
-            <h1 className="text-3xl font-bold text-indigo-800 flex items-center"><MdSchool className="mr-2" />Student Fee Details</h1>
-
         <div className="flex flex-col px-6 py-8">
             <ToastContainer />
             <div className='flex justify-between items-center mb-8'>

@@ -58,7 +58,7 @@ const Status = () => {
                 <div className="w-full overflow-x-auto rounded-lg mt-4">
                     <table className="min-w-full bg-white border border-gray-300 rounded-lg">
                         <thead>
-                            <tr className="bg-secondary text-gray-600 text-lg leading-normal">
+                            <tr className="bg-gradient-to-r from-blue-300 to-blue-100 text-gray-600 text-lg leading-normal">
 
                                 <th className="py-2 px-6 text-center whitespace-nowrap">Notebook Checked By</th>
                                 <th className="py-2 px-6 text-center">Date</th>

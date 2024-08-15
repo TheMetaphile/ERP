@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import AuthContext from "../../../../Context/AuthContext.jsx";
 import axios from 'axios'
 import Loading from "../../../../LoadingScreen/Loading.jsx";
-import TransactionHistoryHeader from "./TransactionHistoryHeader";
 import TransactionField from "./TransactionField.jsx";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -52,7 +51,7 @@ export default function TransactionRow() {
 
     return (
         <div className="w-full h-fit mb-4 shadow-md rounded-lg border border-gray-300   overflow-x-auto no-scrollbar">
-            <TransactionHistoryHeader />
+            
             {loading ? (
                 <Loading />
             ) : data.length === 0 ? (

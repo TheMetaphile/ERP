@@ -23,8 +23,7 @@ function StudentDetails({ selectedOption }) {
 
   const query = useQuery();
   const session = query.get('session');
-  const Class = query.get('Class');
-  const name = query.get('name');
+
 
   useEffect(() => {
     if (authState.accessToken) {
@@ -36,7 +35,7 @@ function StudentDetails({ selectedOption }) {
   }, [authState.accessToken]);
 
   const today = new Date();
-  const formattedDate = today.toISOString().split('T')[0];
+
 
   const fetchFees = async () => {
 

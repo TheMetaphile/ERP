@@ -10,7 +10,7 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [subject, Setselectedsubject] = useState([])
-    const [stream, Setselectedstream] = useState([])
+    const [stream, Setselectedstream] = useState('')
 
     useEffect(() => {
         console.log("here")
@@ -63,11 +63,11 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
 
         setLoading(true);
 
-        if (stream || subject.length < 1) {
+        if (!stream || subject.length < 1) {
             toast.error("Select stream and subject first");
             return;
         }
-
+        console.log(email,session);
         try {
             const response = await axios.put(`${BASE_URL_Login}/promote/readmit`,
                 {
@@ -166,7 +166,7 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
 
                 <div className="flex justify-end p-2">
                     <button
-                        onClick={() => handleSave()}
+                        onClick={() => handleSave(user.email)}
                         className="bg-blue-500 text-white px-3 py-1 rounded mr-2"
                     >
                         Save

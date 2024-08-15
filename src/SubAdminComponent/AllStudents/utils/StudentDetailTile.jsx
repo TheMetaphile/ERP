@@ -44,7 +44,7 @@ export default function StudentDetailTile({ userData }) {
 
         <div className=" w-full ">
             {newData.map((user, index) => (
-                <div key={index} className={`flex  text-center mobile:max-tablet:gap-2 items-center justify-evenly border rounded-lg py-2 pl-2 mb-2 tablet:max-laptop:w-fit  ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
+                <div key={index} className={`flex  text-center mobile:max-tablet:gap-2 items-center justify-evenly border rounded-lg py-2 pl-2 mb-2 tablet:max-laptop:w-fit  ${clickedIndex === index ? 'bg-purple-100' : ''}`} onClick={() => handleClick(index)}>
                     <div className="w-40 flex justify-center">
 
                         <img src={user.profileLogo || userimg} alt="" className="h-8 w-8 rounded-full" />
