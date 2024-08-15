@@ -55,7 +55,7 @@ const TabsStudentFee = () => {
                         initial="hidden"
                         animate="visible"
                         exit="hidden"
-                        transition={{ duration: 0.5 }}
+                        transition={{ duration: 0.1 }}
                     >
                         {selectedTab === 'Current Session' ? (
                             <Fees />
