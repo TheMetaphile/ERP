@@ -163,7 +163,6 @@ export default function StudentRegister() {
         console.log("here")
         switch (formData.stream) {
             case "PCM":
-                console.log("here2")
                 setSubjects(['Physics', 'Chemistry', 'Mathematics', "English"]);
                 break;
             case "PCB":
