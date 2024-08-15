@@ -108,10 +108,17 @@ function FeeDetailsSubAdmin() {
 
 
     return (
+
+        <div className="flex flex-col px-6 py-8  min-h-screen">
+        <ToastContainer />
+        <div className='flex justify-between items-center mb-8'>
+            <h1 className="text-3xl font-bold text-indigo-800 flex items-center"><MdSchool className="mr-2" />Student Fee Details</h1>
+
         <div className="flex flex-col px-6 py-8">
             <ToastContainer />
             <div className='flex justify-between items-center mb-8'>
                 <h1 className="text-3xl font-bold text-indigo-800 flex items-center"><MdSchool className="mr-2" />Student Fee Details</h1>
+
 
                 <div className='flex justify-end gap-2'>
                     <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-indigo-300 rounded-md py-2 px-4 text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import FeeAdminRows from './FeeAdminRows';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -59,9 +59,9 @@ function FeeStructure() {
                     </select>
                 </div>
             </div>
-            <table className="min-w-full divide-y divide-gray-200 rounded-lg">
+            <table className="w-full mt-3  rounded-lg shadow-lg border border-gray-300 ">
                 <Header headings={['Classes', 'Admission Fee', 'Monthly Fee', 'Quarter Fee', 'Action']} />
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white divide-y divide-gray-200 last:rounded-b-lg last:border-b-gray-300">
                     {content.map((con, index) => (
                         <FeeAdminRows
                             Class={con.class}

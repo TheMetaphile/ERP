@@ -175,8 +175,8 @@ function FeeDetails() {
 
                     </select>
 
-                    <select id="section" value={sectionsDetails} onChange={handleSectionChange} className="w-full px-4 py-2 border rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2">
-                        <option value="">Search by Section</option>
+                    <select id="section" value={section} onChange={handleSectionChange} className="w-full px-4 py-2 border rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2">
+                        <option value=''>Search by Section</option>
                         {sectionsDetails.map((section, index) => (
                             <option key={index} value={section}>{section}</option>
                         ))}
@@ -218,8 +218,10 @@ function FeeDetails() {
                         details.length > 0 ? (
                             <div>
                                 {details.map((details, index) => (
-                                    <Link to={`/Admin-Dashboard/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}&section=${details.section}`}>
-                                        <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
+                                    // <Link to={`/Admin-Dashboard/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}&section=${details.section}`}>
+                                        <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`}
+                                        //  onClick={() => handleClick(index)}
+                                         >
                                             <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}
                                             </h1>
@@ -248,7 +250,7 @@ function FeeDetails() {
                                                 {details.payableFee || 'NA'}
                                             </h1>
                                         </div>
-                                    </Link>
+                                    // {/* </Link> */}
 
                                 ))}
                                 {!allDataFetched && (

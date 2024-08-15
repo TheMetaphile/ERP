@@ -7,7 +7,7 @@ export default function FeeStructureHeader() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 2 }}
-            className="bg-gradient-to-r from-blue-200 to-teal-100 text-black"
+            className="bg-gradient-to-r from-blue-200 to-blue-100 text-black"
         >
             <tr>
                 {["Month", "Amount", "Discount", "Status", "Action"].map((header, index) => (

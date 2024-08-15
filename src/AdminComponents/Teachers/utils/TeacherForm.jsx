@@ -80,7 +80,7 @@ export default function TeacherForm() {
                 handleReset();
             }
 
-        } catch (err) {
+        } catch (error) {
             console.error(error);
             const errorMessage = error.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
