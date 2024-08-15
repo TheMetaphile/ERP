@@ -23,6 +23,8 @@ import '../Ask_Doubts/ask_doubts.dart';
 import '../Attendance/studentAttendance.dart';
 import '../Dashboard/dashboard.dart';
 import '../Datesheet/datesheet.dart';
+import '../Fees/Fee_Due.dart';
+import '../Fees/fees.dart';
 import '../Result/result.dart';
 import '../StudentLeave/student_leave.dart';
 import '../TimeTable/timeTable.dart';
@@ -436,7 +438,7 @@ class _StudentHomeState extends State<StudentHome> {
                         leading: Image.asset("assets/DashboardImages/fees.png",color: CustomTheme.blackColor,width: size.width*0.1,height: size.height*0.04,fit: BoxFit.contain),
                         title: Text("Fee Due",overflow: TextOverflow.ellipsis,style: GoogleFonts.openSans(fontSize:size.width*0.04,color: CustomTheme.blackColor,fontWeight:FontWeight.w400),),
                         onTap: (){
-                          Navigator.pop(context);
+                          Navigator.push(context, MaterialPageRoute(builder: (context) =>  FeesDue(email: email,),));
 
                         },
                       ),

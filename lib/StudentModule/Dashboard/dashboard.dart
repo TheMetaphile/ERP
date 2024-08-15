@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student/APIs/Fees/fees_Stats.dart';
 
@@ -109,7 +110,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildFeeSection(context),
+            _buildFeeOverview(size,themeObj),
             _buildAttendanceSection(context),
           ],
         ),
@@ -118,67 +119,55 @@ class _StudentDashboardState extends State<StudentDashboard> {
   }
 
 
-  Widget _buildFeeSection(BuildContext context) {
-    String totalFees = feeStats["total"]?.toString() ?? "0";
-    String paid = feeStats["paid"]?.toString() ?? "0";
-    String discount = feeStats["discount"]?.toString() ?? "0";
-    Size size = MediaQuery.of(context).size;
-    CustomTheme themeObj = CustomTheme(size);
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8,vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-
-          Text(
-            'Fee Statistics',
-            style:themeObj.bigNormalText.copyWith(fontSize:size.width*0.045,fontWeight: FontWeight.w500),
-          ),
-          SizedBox(height: size.height*0.02),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            childAspectRatio: 1.0,
-            mainAxisSpacing: 15,
-            crossAxisSpacing: 15,
-            children: [
-              _buildFeeCard("Total Payable", totalFees, Icons.monetization_on, Colors.indigo),
-              _buildFeeCard("Total Paid", paid, Icons.account_balance_wallet, Colors.green),
-              _buildFeeCard("Total Discount", discount, Icons.discount, Colors.orange),
-              _buildFeeCard("Pending", "${int.parse(totalFees)-int.parse(paid)-int.parse(discount)}", Icons.pending_actions, Colors.red),
-            ],
-          ),
-        ],
-      ),
+  Widget _buildFeeOverview(Size size, CustomTheme themeObj) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0,top: 8),
+          child: Text("Fee Overview", style: themeObj.bigNormalText.copyWith(fontSize: size.width*0.055, fontWeight: FontWeight.w500)),
+        ),
+        SizedBox(height: size.height * 0.01),
+        GridView.count(
+          crossAxisCount: 2,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          childAspectRatio: 1.3,
+          mainAxisSpacing: 15,
+          crossAxisSpacing: 15,
+          children: [
+            _buildFeeCard("Total Payable", feeStats["total"]?.toString() ?? "0", Icons.monetization_on, Colors.indigo, size),
+            _buildFeeCard("Total Paid", feeStats["paid"]?.toString() ?? "0", Icons.account_balance_wallet, Colors.green, size),
+            _buildFeeCard("Total Discount", feeStats["discount"]?.toString() ?? "0", Icons.discount, Colors.orange, size),
+            _buildFeeCard("Pending", "${int.parse(feeStats["total"]?.toString() ?? "0") - int.parse(feeStats["paid"]?.toString() ?? "0") - int.parse(feeStats["discount"]?.toString() ?? "0")}", Icons.pending_actions, Colors.red, size),
+          ],
+        ),
+      ],
     );
   }
 
-  Widget _buildFeeCard(String title, String amount, IconData icon, Color color) {
+  Widget _buildFeeCard(String title, String amount, IconData icon, Color color, Size size) {
     return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          gradient: LinearGradient(
-            colors: [color.withOpacity(0.7), color.withOpacity(0.9)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 40, color: Colors.white),
-              SizedBox(height: 10),
-              Text('₹ $amount', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
-              SizedBox(height: 5),
-              Text(title, style: TextStyle(fontSize: 14, color: Colors.white70)),
-            ],
-          ),
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(20),
+        //   gradient: LinearGradient(
+        //     colors: [color.withOpacity(0.7), color.withOpacity(0.9)],
+        //     begin: Alignment.topLeft,
+        //     end: Alignment.bottomRight,
+        //   ),
+        // ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: size.width * 0.08, color: Colors.black),
+            SizedBox(height: size.height * 0.01),
+            Text('₹ $amount', style: GoogleFonts.poppins(fontSize: size.width*0.045, fontWeight: FontWeight.w600, color: Colors.black)),
+            SizedBox(height: size.height * 0.01),
+            Text(title, style: GoogleFonts.poppins(fontSize: size.width*0.035, color: Colors.black)),
+          ],
         ),
       ),
     );

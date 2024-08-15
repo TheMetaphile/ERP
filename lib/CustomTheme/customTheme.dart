@@ -16,7 +16,8 @@ class CustomTheme{
    CustomTheme(this.size);
    final Size size;
 
-  static Color primaryColor=Color.fromRGBO(94, 234, 212, 1);
+  // static Color primaryColor=Color.fromRGBO(94, 234, 212, 1);
+  static  Color primaryColor=Colors.blue.shade300;
   static Color secondaryColor=Color.fromRGBO(219, 234, 254, 1);
 
   static Color whiteColor=Colors.white;
