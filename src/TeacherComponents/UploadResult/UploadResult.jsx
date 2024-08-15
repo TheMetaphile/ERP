@@ -15,9 +15,9 @@ function UploadResult() {
   const { authState } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const end = 100;
-  const [Class, setClass] = useState(authState.subject[0].class);
-  const [Section, setSection] = useState(authState.subject[0].section);
-  const [Subject, setSubject] = useState(authState.subject[0].subject);
+  const [Class, setClass] = useState(authState.subject ? authState.subject[0].class : '');
+  const [Section, setSection] = useState(authState.subject ?authState.subject[0].section :"");
+  const [Subject, setSubject] = useState(authState.subject ?authState.subject[0].subject : "");
   const [scholastic, setScholastic] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState('term1');
 
@@ -56,13 +56,14 @@ function UploadResult() {
 
 
   const fetchStudents = async () => {
-    setLoading(true);
+    if(!Class || !Section ) return ;
 
+    setLoading(true);
     try {
       const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
         accessToken: authState.accessToken,
-        currentClass: authState.ClassDetails.class,
-        section: authState.ClassDetails.section,
+        currentClass: Class,
+        section: Section,
         end: end
       });
       if (response.status == 200) {

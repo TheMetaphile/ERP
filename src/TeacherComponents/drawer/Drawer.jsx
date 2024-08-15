@@ -19,7 +19,7 @@ export default function TeacherDrawer({ isOpen }) {
       console.error("Logout failed", error);
     }
   };
-
+  console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ${authState.userDetails.co_ordinator_wing}", authState.userDetails);
   const handleClick = (index) => {
     setActive(index)
   }
@@ -36,7 +36,7 @@ export default function TeacherDrawer({ isOpen }) {
             if (menuItem.title === 'Class Activity' && Object.keys(authState.ClassDetails).length === 0) {
               return null;
             }
-            if (menuItem.title === 'HOD' && authState.userDetails.co_ordinator_wing === "") {
+            if (menuItem.title === 'Coordinator' && authState.userDetails.co_ordinator_wing === "") {
               return null;
             }
             return (

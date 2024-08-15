@@ -46,6 +46,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(!Class || !section || !subject) return ;
         const data = {
             accessToken: authState.accessToken,
             class: Class,
@@ -77,7 +78,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
     console.log(selectedTab)
     useEffect(() => {
         const fetchPlan = async () => {
-
+            if(!Class || !section || !subject) return ;
             try {
                 const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/teacher?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${nextWeekFormattedDate}`, {
                     headers: {

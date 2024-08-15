@@ -38,6 +38,7 @@ function NewDoubt({ Class, Section, Subject }) {
 
     const fetchUserData = async () => {
         console.log(Subject, start, end)
+        if(!Class || !Section || !Subject) {setLoading(false); return ;} ;
         try {
             const response = await axios.get(`${BASE_URL_AskDoubt}/doubts/fetch/teacher?class=${Class}&section=${Section}&subject=${Subject}&start=${start}&end=${end}&status=${'Pending'}`, {
                 headers: {
