@@ -45,7 +45,7 @@ function ClassWork() {
     }, [selectedSection, selectedClass]);
 
     const handleOpen = () => {
-        if(!authState.subject ) {toast.error("No subject is assigned. Please contanct Admin");return ;}
+        if(!authState.subject ) {toast.error("No subject is assigned. Please contact Admin");return ;}
         setIsDialogOpen(true);
         
     }
