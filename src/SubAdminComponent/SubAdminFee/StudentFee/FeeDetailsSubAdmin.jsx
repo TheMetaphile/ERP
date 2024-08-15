@@ -108,7 +108,7 @@ function FeeDetailsSubAdmin() {
 
 
     return (
-        <div className="flex flex-col px-6 py-8 bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+        <div className="flex flex-col px-6 py-8  min-h-screen">
         <ToastContainer />
         <div className='flex justify-between items-center mb-8'>
             <h1 className="text-3xl font-bold text-indigo-800 flex items-center"><MdSchool className="mr-2" />Student Fee Details</h1>

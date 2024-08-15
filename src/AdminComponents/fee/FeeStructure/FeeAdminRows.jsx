@@ -123,7 +123,7 @@ export default function FeeAdminRows({ Class, session, key }) {
     };
 
     return (
-        <tr key={key} className="bg-white border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
+        <tr key={key} className="bg-white border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200 ">
         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{Class}</td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             {editMode === key ? (
