@@ -7,9 +7,9 @@ import Classwork from "./classwork";
 export default function Enddrawer() {
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
       opacity: 1,
-      transition: { 
+      transition: {
         when: "beforeChildren",
         staggerChildren: 0.2
       }
@@ -18,10 +18,10 @@ export default function Enddrawer() {
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
-    visible: { 
-      y: 0, 
+    visible: {
+      y: 0,
       opacity: 1,
-      transition: { 
+      transition: {
         type: "spring",
         stiffness: 100
       }
@@ -29,25 +29,25 @@ export default function Enddrawer() {
   };
 
   return (
-    <motion.div 
-      className=" h-full overflow-auto px-2 py-8 "
+    <motion.div
+      className=" h-full overflow-auto px-2 py-8 bg-white "
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       <h2 className="flex justify-between items-center text-xl font-bold mb-2 text-gray-800">
-          <div className="flex items-center text-lg whitespace-nowrap">
-            <FaBell className="mr-2 text-blue-500" />
-            Daily Notice
-          </div>
-          <Link to="/Student-Dashboard/notification/allnotification" className="text-blue-600 hover:text-blue-800 text-sm flex items-center">
-            See All
-            <FaChevronRight className="ml-1" />
-          </Link>
-        </h2>
+        <div className="flex items-center text-lg whitespace-nowrap">
+          <FaBell className="mr-2 text-blue-500" />
+          Daily Notice
+        </div>
+        <Link to="/Student-Dashboard/notification/allnotification" className="text-blue-600 hover:text-blue-800 text-sm flex items-center">
+          See All
+          <FaChevronRight className="ml-1" />
+        </Link>
+      </h2>
       <motion.section className="mb-6 h-1/2" variants={itemVariants}>
-        
-        <motion.div 
+
+        <motion.div
           className="bg-white rounded-lg shadow-md h-full overflow-y-auto hover:shadow-xl transition-shadow duration-300"
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300 }}
@@ -67,7 +67,7 @@ export default function Enddrawer() {
             <FaChevronRight className="ml-1" />
           </Link>
         </h2>
-        <motion.div 
+        <motion.div
           className="bg-white rounded-lg shadow-md  hover:shadow-xl transition-shadow duration-300"
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300 }}
