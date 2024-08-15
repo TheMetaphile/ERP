@@ -4,22 +4,22 @@ import ExpansionTile from "../utils/ExpansionTile.jsx";
 import menuItems from "./helper.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import AuthContext from "../../Context/AuthContext.jsx";
+// import AuthContext from "../../Context/AuthContext.jsx";
 
 export default function SubadminDrawer({ isOpen }) {
-    const { logout, authState } = useContext(AuthContext);
-    const navigate = useNavigate();
+    // const { logout, authState } = useContext(AuthContext);
+    // const navigate = useNavigate();
     const [active, setActive] = useState(null)
 
 
-    const handleLogout = async () => {
-        try {
-            await logout();
-            navigate("/");
-        } catch (error) {
-            console.error("Logout failed", error);
-        }
-    };
+    // const handleLogout = async () => {
+    //     try {
+    //         await logout();
+    //         navigate("/");
+    //     } catch (error) {
+    //         console.error("Logout failed", error);
+    //     }
+    // };
 
     const handleClick = (index) => {
         setActive(index)
@@ -51,7 +51,7 @@ export default function SubadminDrawer({ isOpen }) {
                 ))}
             </div>
             {/* </div> */}
-            <div className="flex h-fit justify-center my-2">
+            {/* <div className="flex h-fit justify-center my-2">
                 <button
                     onClick={handleLogout}
                     className="bg-purple-200 border border-transparent rounded-xl px-4 py-2 flex items-center shadow-md"
@@ -59,7 +59,7 @@ export default function SubadminDrawer({ isOpen }) {
                     <img src={logout1} alt="logout" className="w-6 mr-2" />
                     <span className="text-black">Log out</span>
                 </button>
-            </div>
+            </div> */}
         </div>
     );
 }

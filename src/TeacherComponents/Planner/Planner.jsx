@@ -16,7 +16,7 @@ function Planner() {
     return (
         <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar">
             <ToastContainer />
-            <div className='w-full flex items-center justify-between px-4 '>
+            <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:pl-1'>
                 <h1 className="text-2xl mobile:max-tablet:text-lg whitespace-nowrap font-medium mb-2">Weekly Plan</h1>
                 <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
                     <button

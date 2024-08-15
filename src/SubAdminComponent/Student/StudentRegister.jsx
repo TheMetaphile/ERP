@@ -218,7 +218,7 @@ export default function StudentRegister() {
 
 
     return (
-        <div className="bg-gray-100 p-6 rounded-lg shadow-lg h-screen overflow-y-auto bg-gradient-to-r from-teal-100 to-purple-100">
+        <div className="bg-gray-100 p-6 rounded-lg shadow-lg h-screen overflow-y-auto mt-6">
             <ToastContainer />
             <h1 className="text-3xl font-bold mb-6 text-center text-indigo-700 mt-12">Add New Student</h1>
             <form onSubmit={handleSubmit} className="grid grid-cols-3  mobile:max-tablet:grid-cols-1 gap-6">
@@ -252,7 +252,7 @@ export default function StudentRegister() {
                 <InputField icon={<FaPercentage />} label="Percentage" name="percentage" type="number" value={formData.percentage} onChange={handleChange} required />
                 <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} />
                 <SelectField icon={<FaStream />} label="Stream" name="stream" value={formData.stream} onChange={handleChange} options={['General', 'PCM', 'PCB', 'PCMB', 'Commerce', 'Arts']} required />
-                
+
                 <div className="col-span-full flex justify-center gap-4 mt-6">
                     <SubjectInputs stream={formData.stream} setSubject={setSubjects} subjects={subjects} />
                 </div>

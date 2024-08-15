@@ -1,470 +1,89 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
+import { FaBook } from 'react-icons/fa';
 
-const AdmissionInputs = ({ stream, formData, handleChange }) => {
+const AdmissionInputs = ({ stream, subjects, setSubject }) => {
+  const [subjectList, setSubjectList] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("");
+
   const renderSubjectInputs = () => {
-    switch (stream) {
-      case "PCM":
-        return (
-          <>
-            <div className=" mobile:max-tablet:flex gap-20 overflow-auto">
-              <div className="w-full text-left rounded-md mobile:max-tablet:flex items-center">
-                <label className="block text-lg mb-2 mobile:max-tablet:mb-0" htmlFor="physics">
-                  Physics:
-                  <input
-                    className="border tablet:w-72 tablet:ml-9 rounded-md py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="physics"
-                    type="text"
-                    name="physics"
-                    placeholder="Physics"
-                    value={formData.physics}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
+    const streamSubjects = {
+      "PCM": ["Computer Science", "Physical Education", "Informatics Practices"],
+      "PCB": ["Computer Science", "Physical Education", "Informatics Practices", "Biotechnology"],
+      "PCMB": ["Computer Science", "Physical Education", "Informatics Practices", "Biotechnology", "Psychology"],
+      "Commerce": ["Mathematics", "Informatics Practices", "Physical Education", "Entrepreneurship", "Computer Science", "Fine Arts"],
+      "Arts": ["Geography", "Economics", "Sociology", "Psychology", "Philosophy", "Physical Education", "Fine Arts", "Home Science", "Music", "Informatics Practices", "Mathematics"]
+    };
+    setSubjectList(streamSubjects[stream] || []);
+  };
 
-              </div>
-              <div className="w-full text-left rounded-md">
-                <label className="block text-lg mb-2" htmlFor="chemistry">
-                  Chemistry:
-                  <input
-                    className="border rounded-md tablet:w-72 tablet:ml-4 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="chemistry"
-                    type="text"
-                    name="chemistry"
-                    placeholder="Chemisty"
-                    value={formData.chemistry}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-left rounded-md">
-                <label className="block text-lg mb-2" htmlFor="maths">
-                  Maths:
-                  <input
-                    className="border rounded-md tablet:w-72 tablet:ml-12 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="maths"
-                    type="text"
-                    name="maths"
-                    placeholder="Maths"
-                    value={formData.maths}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-left rounded-md">
-                <label className="block text-lg mb-2" htmlFor="subject4">
-                  English:
-                  <input
-                    className="border tablet:w-72 tablet:ml-10 rounded-md  py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="english"
-                    type="text"
-                    name="english"
-                    placeholder="English"
-                    value={formData.english}
-                    onChange={handleChange}
-                    required
-                  />
-
-                </label>
-              </div>
-              <div className="w-full text-left rounded-md">
-                <label className="block text-lg mb-2" htmlFor="optionalSubject">
-                  Optional Subject:
-                  <select
-                    className="border w-80 ml-1 rounded-md  py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="optionalSubject"
-                    name="optionalSubject"
-                    value={formData.optionalSubject}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select Optional Subject</option>
-                    <option value="Computer Science">Computer Science</option>
-                    {/* <option value="Biology">Biology</option> */}
-                    <option value="Economics">Hindi</option>
-                    <option value="Economics">Physical Education</option>
-                  </select>
-                </label>
-              </div>
-            </div>
-          </>
-        );
-      case "PCB":
-        return (
-          <>
-            <div className=" mobile:max-tablet:flex gap-20 overflow-auto">
-              <div className="w-full text-start  rounded-md">
-                <label className="block text-lg mb-2" htmlFor="physics">
-                  Physics:
-                  <input
-                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="physics"
-                    type="text"
-                    name="physics"
-                    placeholder="Physics"
-                    defaultValue="Physics"
-                    value={formData.physics}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-start  rounded-md">
-                <label className="block text-lg mb-2" htmlFor="chemistry">
-                  Chemistry:
-                  <input
-                    className="border rounded-md tablet:w-72 tablet:ml-5 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="chemistry"
-                    type="text"
-                    name="chemistry"
-                    placeholder="Chemistry"
-                    value={formData.chemistry}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-start  rounded-md">
-                <label className="block text-lg mb-2" htmlFor="biology">
-                  Biology:
-                  <input
-                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="biology"
-                    type="text"
-                    name="biology"
-                    placeholder="Biology"
-                    value={formData.biology}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-start  rounded-md">
-                <label className="block text-lg mb-2" htmlFor="subject4">
-                  English:
-                  <select
-                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="subject4"
-                    name="subject4"
-                    value={formData.subject4}
-                    onChange={handleChange}
-                    required
-                  >
-
-                    <option value="English">English</option>
-
-                  </select>
-                </label>
-              </div>
-              <div className="w-full text-start  rounded-md">
-                <label className="block text-lg mb-2" htmlFor="optionalSubject">
-                  Optional Subject:
-                  <select
-                    className="border rounded-md tablet:w-72 tablet:ml-2 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="optionalSubject"
-                    name="optionalSubject"
-                    value={formData.optionalSubject}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select Optional Subject</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Phyical Education">Phyical Education</option>
-                    <option value="Hindi">Hindi</option>
-                  </select>
-                </label>
-              </div>
-            </div>
-          </>
-        );
-      case "PCMB":
-        return (
-          <>
-            <div className=" mobile:max-tablet:flex gap-20 overflow-auto">
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="physics">
-                  Physics:
-                  <input
-                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="physics"
-                    type="text"
-                    name="physics"
-                    placeholder="Physics"
-                    value={formData.physics}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="chemistry">
-                  Chemistry:
-                  <input
-                    className="border rounded-md tablet:w-72 tablet:ml-5 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="chemistry"
-                    type="text"
-                    name="chemistry"
-                    placeholder="Chemistry"
-                    value={formData.chemistry}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="maths">
-                  Maths:
-                  <input
-                    className="border rounded-md tablet:w-72 tablet:ml-12 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="maths"
-                    type="text"
-                    name="maths"
-                    placeholder="Maths"
-                    value={formData.maths}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="biology">
-                  Biology:
-                  <input
-                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="biology"
-                    type="text"
-                    name="biology"
-                    placeholder="Biology"
-                    value={formData.biology}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="subject4">
-                  English:
-                  <select
-                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="subject4"
-                    name="subject4"
-                    placeholder="English"
-                    value={formData.subject4}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="English">English</option>
-                  </select>
-                </label>
-              </div>
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="optionalSubject">
-                  Optional Subject:
-                  <select
-                    className="border rounded-md tablet:w-72 tablet:ml-2 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="optionalSubject"
-                    name="optionalSubject"
-                    value={formData.optionalSubject}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select Optional Subject</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Physical Education">Physical Education</option>
-                    <option value="Economics">Hindi</option>
-                  </select>
-                </label>
-              </div>
-            </div>
-          </>
-        );
-      case "Commerce":
-        return (
-          <>
-            <div className=" mobile:max-tablet:flex gap-20 overflow-auto">
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="accountancy">
-                  Accountancy:
-                  <input
-                    className="border rounded-md tablet:w-72 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="accountancy"
-                    type="text"
-                    name="accountancy"
-                    placeholder="Accountancy"
-                    value={formData.accountancy}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full rounded-md">
-                <label className="block text-lg mb-2" htmlFor="businessStudies">
-                  Business Studies:
-                  <input
-                    className="border rounded-md tablet:w-72 tablet:ml-2 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="businessStudies"
-                    type="text"
-                    name="businessStudies"
-                    placeholder="Business Studies"
-                    value={formData.businessStudies}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="economics">
-                  Economics:
-                  <input
-                    className="border rounded-md tablet:w-72 tablet:ml-14 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="economics"
-                    type="text"
-                    name="economics"
-                    placeholder=" Economics"
-                    value={formData.economics}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="subject4">
-                  English:
-                  {"\t"}
-                  <select
-                    className="border rounded-md tablet:w-72 tablet:ml-20 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="subject4"
-                    name="subject4"
-                    value={formData.subject4}
-                    onChange={handleChange}
-                    required
-                  >
-
-                    <option value="English">English</option>
-
-                  </select>
-                </label>
-              </div>
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="optionalSubject">
-                  Optional Subject:
-                  <select
-                    className="border rounded-md tablet:w-72 tablet:ml-3 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="optionalSubject"
-                    name="optionalSubject"
-                    value={formData.optionalSubject}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select Optional Subject</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Physical Education">Physical Education</option>
-                    <option value="Hindi">Hindi</option>
-                  </select>
-                </label>
-              </div>
-            </div>
-          </>
-
-        );
-      case "Arts":
-        return (
-          <>
-            <div className=" mobile:max-tablet:flex gap-20 overflow-auto">
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="history">
-                  History:
-                  <input
-                    className="border rounded-md tablet:w-80 tablet:ml-28 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="history"
-                    type="text"
-                    name="history"
-                    placeholder="History"
-                    value={formData.history}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="politicalScience">
-                  Political Science:
-                  <input
-                    className="border rounded-md tablet:w-80 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="politicalScience"
-                    type="text"
-                    name="politicalScience"
-                    placeholder="Political Science"
-                    value={formData.politicalScience}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="geography">
-                  Geography:
-                  <input
-                    className="border rounded-md tablet:w-80 tablet:ml-20 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="geography"
-                    type="text"
-                    name="geography"
-                    placeholder="Geography"
-                    value={formData.geography}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-              </div>
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="subject4">
-                  English:
-                  <select
-                    className="border rounded-md tablet:w-80 tablet:ml-28 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="subject4"
-                    name="subject4"
-                    value={formData.subject4}
-                    onChange={handleChange}
-                    required
-                  >
-
-                    <option value="English">English</option>
-
-                  </select>
-                </label>
-              </div>
-              <div className="w-full text-start rounded-md">
-                <label className="block text-lg mb-2" htmlFor="optionalSubject">
-                  Optional Subject:
-                  <select
-                    className="border rounded-md tablet:w-80 tablet:ml-10 py-2 px-3 text-gray-500 focus:outline-none focus:shadow-outline mt-2"
-                    id="optionalSubject"
-                    name="optionalSubject"
-                    value={formData.optionalSubject}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select Optional Subject</option>
-                    <option value="Psychology">Psychology</option>
-                    <option value="Sociology">Sociology</option>
-                    <option value="Physical Education">Physical Education</option>
-                    <option value="Hindi">Hindi</option>
-                  </select>
-                </label>
-              </div>
-            </div>
-          </>
-        );
-      default:
-        return null;
+  const handleCancel = (subjectToRemove) => {
+    if (subjectList.includes(subjectToRemove)) {
+      setSubject(subjects.filter(subject => subject !== subjectToRemove));
     }
   };
 
-  return <div>{renderSubjectInputs()}</div>;
+  const handleAddSubject = () => {
+    if (selectedSubject && !subjects.includes(selectedSubject)) {
+      setSubject([...subjects, selectedSubject]);
+      setSelectedSubject("");
+    }
+  };
+
+  useEffect(() => {
+    renderSubjectInputs();
+  }, [stream]);
+
+  console.log(subjects)
+
+  return (
+    <div className="w-full bg-white rounded-lg shadow-md p-6 mb-6">
+      <h3 className="text-xl font-semibold mb-4 flex items-center">
+        <FaBook className="mr-2 text-indigo-600" />
+        Applied Subjects
+      </h3>
+      <div className="flex flex-wrap mb-4">
+        {subjects.map((subject, index) => (
+          <div key={index} className="flex items-center mr-3 mb-3 rounded-full bg-indigo-100 text-indigo-800 shadow-sm border border-indigo-200 pl-4 pr-2 py-1 transition-all duration-300 hover:bg-indigo-200">
+            <span className="mr-2 text-sm font-medium">{subject}</span>
+            <div
+              className="flex items-center justify-center w-5 h-5 rounded-full text-indigo-600 hover:bg-indigo-200 focus:outline-none transition-colors duration-300"
+              onClick={() => handleCancel(subject)}
+              aria-label={`Remove ${subject}`}
+            >
+              <AiOutlineClose size={12} />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-end">
+        <div className="flex-grow mr-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="selectSubject">
+            Select Subject
+          </label>
+          <select
+            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            id="selectSubject"
+            value={selectedSubject}
+            onChange={(e) => setSelectedSubject(e.target.value)}
+          >
+            <option value="">Select Subject</option>
+            {subjectList.map((subject, index) => (
+              <option key={index} value={subject}>{subject}</option>
+            ))}
+          </select>
+        </div>
+        <div
+          className="inline-flex items-center px-4 py-2 border border-transparent cursor-pointer text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300"
+          onClick={handleAddSubject}
+          disabled={!selectedSubject}
+        >
+          <AiOutlinePlus className="mr-2" />
+          Add Subject
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default AdmissionInputs;

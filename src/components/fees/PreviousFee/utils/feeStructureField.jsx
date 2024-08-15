@@ -131,7 +131,7 @@ export default function FeeStructureField({ fees }) {
                     {fees.map((data, index) => (
                         <motion.tr
                             key={index}
-                            className="border-b border-gray-200  transition-all hover:bg-gray-200 duration-300 ease-in-out "
+                            className="border-b border-gray-200  transition-all hover:bg-gray-200 duration-300 ease-in-out whitespace-nowrap "
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.3, delay: index * 0.1 }}

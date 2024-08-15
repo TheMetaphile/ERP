@@ -18,8 +18,8 @@ export default function TeacherNavbar({ onDrawerToggle, onEndDrawerToggle }) {
       </div>
       <h1 className='text-2xl font-medium mobile:max-tablet:text-xl items-center flex'>Teacher Panel</h1>
       <nav className=' mobile:max-tablet:w-full mobile:max-tablet:py-1'>
-        <ul className="flex w-full items-center mobile:max-tablet:text-sm">
-          <li className="mr-4 mobile:max-tablet:-mr-4 mobile:max-tablet:ml-0.5 mobile:max-tablet:flex-1">
+        <ul className="flex w-full justify-around items-center mobile:max-tablet:text-sm">
+          <li className=" mobile:max-tablet:flex-1">
             <Link to="" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Home</Link>
           </li>
           {/* <li className="mr-4">

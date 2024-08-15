@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
@@ -9,6 +9,31 @@ import AdmissionInputs from './AdmissionInputs';
 const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
+    const [subject, Setselectedsubject] = useState([])
+    const [stream, Setselectedstream] = useState([])
+
+    useEffect(() => {
+        console.log("here")
+        switch (stream) {
+            case "PCM":
+                Setselectedsubject(['Physics', 'Chemistry', 'Mathematics', "English"]);
+                break;
+            case "PCB":
+                Setselectedsubject(['Physics', 'Chemistry', 'Biology', "English"]);
+                break;
+            case "PCMB":
+                Setselectedsubject(['Physics', 'Chemistry', 'Mathematics', "English", 'Biology']);
+                break;
+            case "Commerce":
+                Setselectedsubject(['Accountancy', 'Business Studies', 'Economics', "English"]);
+                break;
+            case "Arts":
+                Setselectedsubject(['History', 'Political Science', "English"]);
+                break;
+            default:
+                Setselectedsubject([]);
+        }
+    }, [stream]);
 
     function getSession() {
         const currentYear = new Date().getFullYear();
@@ -24,22 +49,21 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
     if (!isOpen) return null;
 
 
-    const getSelectedSubjects = () => {
-        return Object.entries(formData)
-            .filter(([key, value]) =>
-                ['physics', 'chemistry', 'maths', 'biology', 'accountancy', 'businessStudies', 'economics', 'history', 'politicalScience', 'geography', 'english', 'optionalSubject'].includes(key) && value !== ''
-            )
-            .map(([key, value]) => (value));
-    };
+    // const getSelectedSubjects = () => {
+    //     return Object.entries(formData)
+    //         .filter(([key, value]) =>
+    //             ['physics', 'chemistry', 'maths', 'biology', 'accountancy', 'businessStudies', 'economics', 'history', 'politicalScience', 'geography', 'english', 'optionalSubject'].includes(key) && value !== ''
+    //         )
+    //         .map(([key, value]) => (value));
+    // };
 
 
     const handleSave = async (email) => {
-        const selectedSubjects = getSelectedSubjects();
+        // const selectedSubjects = getSelectedSubjects();
 
-        console.log(authState.accessToken, email, formData.stream, selectedSubjects, session)
         setLoading(true);
 
-        if (formData.stream || selectedSubjects.length < 1) {
+        if (stream || subject.length < 1) {
             toast.error("Select stream and subject first");
             return;
         }
@@ -48,8 +72,8 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
             const response = await axios.put(`${BASE_URL_Login}/promote/readmit`,
                 {
                     email: email,
-                    subjects: selectedSubjects,
-                    stream: formData.stream,
+                    subjects: subject,
+                    stream: stream,
                     session: session
                 },
                 {
@@ -74,38 +98,34 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
 
     };
 
-    const handleChange = (e) => {
-        const { name, value, files } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: name === 'photo' ? files[0] : value,
-        }));
-    };
+    // const handleChange = (e) => {
+    //     const { name, value, files } = e.target;
+    //     setFormData((prevData) => ({
+    //         ...prevData,
+    //         [name]: name === 'photo' ? files[0] : value,
+    //     }));
+    // };
 
-    const [formData, setFormData] = useState(
-        {
-            stream: '',
-            physics: '',
-            chemistry: '',
-            maths: '',
-            biology: '',
-            accountancy: '',
-            businessStudies: '',
-            economics: '',
-            history: '',
-            politicalScience: '',
-            geography: '',
-            english: '',
-            optionalSubject: '',
-        }
-    );
+    // const [formData, setFormData] = useState(
+    //     {
+    //         stream: '',
+    //         physics: '',
+    //         chemistry: '',
+    //         maths: '',
+    //         biology: '',
+    //         accountancy: '',
+    //         businessStudies: '',
+    //         economics: '',
+    //         history: '',
+    //         politicalScience: '',
+    //         geography: '',
+    //         english: '',
+    //         optionalSubject: '',
+    //     }
+    // );
 
     const handleSubject = (event) => {
-        const { name, value } = event.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }));
+        Setselectedstream(event.target.value)
     };
 
     return (
@@ -125,7 +145,7 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
                             id="stream"
                             type="text"
                             name="stream"
-                            value={formData.stream}
+                            value={stream}
                             onChange={handleSubject}
                             required
                         >
@@ -139,7 +159,7 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
                         </select>
                     </div>
                     <div className="">
-                        <AdmissionInputs stream={formData.stream} formData={formData} handleChange={handleChange} />
+                        <AdmissionInputs stream={stream} setSubject={Setselectedsubject} subjects={subject} />
                     </div>
 
                 </div>

@@ -14,8 +14,8 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
                 accessToken: authState.accessToken,
                 class: selectedClass,
             });
-            console.log(response.data,'section')
-            const sectionsDetail = response.data.sections.map(sectionObj => sectionObj.section); 
+            console.log(response.data, 'section')
+            const sectionsDetail = response.data.sections.map(sectionObj => sectionObj.section);
             setSectionsDetails(sectionsDetail);
         } catch (error) {
             console.error("Error while fetching section:", error);
@@ -24,9 +24,9 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
 
     const handleClassChangeWithFetch = (e) => {
         const selectedClass = e.target.value;
-        handleClassChange(e); 
+        handleClassChange(e);
         if (selectedClass) {
-            fetchSections(selectedClass); 
+            fetchSections(selectedClass);
         } else {
             setSectionsDetails([]);
         }
@@ -42,7 +42,7 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
                     name="rollNumber"
                     value={rollNumber}
                     onChange={handleRollNumberChange}
-                    placeholder="Search by ID"
+                    placeholder="Search by Roll No"
                     className="rounded-lg shadow-md mr-3 mobile:max-tablet:mr-0 px-3 py-1 border-2 border-gray-200 text-lg flex-1"
                 />
                 <input

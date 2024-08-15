@@ -25,7 +25,7 @@ function Hod() {
     return (
         <div className=" flex flex-col px-3  items-center mobile:max-tablet:px-0 h-screen rounded-lg  py-2 ml-2 mr-3">
             <nav className='w-full'>
-                <ul className="flex w-full overflow-x-auto   py-2 px-5 border-b pb-0 items-center mobile:max-tablet:text-sm mobile:max-tablet:justify-normal justify-center">
+                <ul className="flex w-full overflow-x-auto   py-2 px-5 border-b pb-0 items-center mobile:max-tablet:text-sm mobile:max-tablet:justify-normal justify-center mobile:max-tablet:pl-0">
                     {
                         menuItems.map((item, index) => {
                             return (

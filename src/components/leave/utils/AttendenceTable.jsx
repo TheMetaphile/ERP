@@ -190,13 +190,15 @@ export default function AttendenceTable({ additionalData, status }) {
       ) : (
         <div className='px-4'>
           {data.map((leave, index) => (
-            <div key={index} className='border w-full flex mobile:max-tablet:justify-center border-gray-400 cursor-pointer rounded-lg shadow-md mt-2 mb-2' onClick={editRowIndex === index ? '' : () => handleClick(`${index}`)}>
-              <div className="font-normal px-4 py-1 text-justify ">
+            <div key={index} className='border w-full flex border-gray-400 cursor-pointer rounded-lg shadow-md mt-2 mb-2 justify-center' onClick={editRowIndex === index ? '' : () => handleClick(`${index}`)}>
+              <div className="font-normal px-4 py-1 text-justify tablet:flex items-center ">
                 <div className='flex items-center justify-between py-2'>
                   <div className='flex items-center mobile:max-tablet:flex-col justify-evenly tablet:gap-10'>
-                    <img src={authState.userDetails.profileLink} alt="" className='w-10 h-10 rounded-full'></img>
-                    <span className='px-2 font-normal'>Leave request from</span>
-                    <div className='flex '>
+                    <div className='flex items-center justify-start'>
+                      <img src={authState.userDetails.profileLink} alt="" className='w-10 h-10 rounded-full'></img>
+                      <span className='px-2 font-normal whitespace-nowrap'>Leave request from</span>
+                    </div>
+                    <div className='flex mobile:max-tablet:whitespace-nowrap '>
                       <div className="font-medium  ">
                         {editRowIndex === index ? (
                           <input
@@ -206,13 +208,15 @@ export default function AttendenceTable({ additionalData, status }) {
                         }
                       </div>
                       <div className="font-medium">
-                        <span className='font-norma'>&nbsp;To </span>{editRowIndex === index ?
+                        <span className='font-norma'>&nbsp;To&nbsp;
+                        </span>{editRowIndex === index ?
                           (
                             <input type="date" name='endDate' value={editData.endDate} onChange={handleInputChange} className='border' />
                           ) :
                           (leave.endDate)
                         }
                       </div>
+
                     </div>
                     <div className={`${leave.status === "Pending" ? "text-orange-300" :
                       leave.status === "Rejected" ? "text-red-400" :
@@ -220,23 +224,24 @@ export default function AttendenceTable({ additionalData, status }) {
                       } font-medium `}>&nbsp; {leave.status}
                     </div>
                   </div>
-                  <div>
-                    {editRowIndex === index ? (
+
+                </div>
+                <div>
+                  {editRowIndex === index ? (
+                    <div className='flex justify-center items-center my-2 gap-1'>
+                      <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={(event) => handleUpdate(index, event)}><MdCheck /></button>
+                      <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
+                    </div>
+                  ) : (
+                    leave.status === 'Pending' ? (
                       <div className='flex justify-center items-center my-2 gap-1'>
-                        <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={(event) => handleUpdate(index, event)}><MdCheck /></button>
-                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
+                        <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={(event) => handleEditClick(index, event)}><CiEdit /></button>
+                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={(event) => handleDelete(index, event)}><MdDeleteForever /></button>
                       </div>
                     ) : (
-                      leave.status === 'Pending' ? (
-                        <div className='flex justify-center items-center my-2 gap-1'>
-                          <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={(event) => handleEditClick(index, event)}><CiEdit /></button>
-                          <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={(event) => handleDelete(index, event)}><MdDeleteForever /></button>
-                        </div>
-                      ) : (
-                        <div></div>
-                      )
-                    )}
-                  </div>
+                      <div></div>
+                    )
+                  )}
                 </div>
                 {expanded === `${index}` && (
                   <div >

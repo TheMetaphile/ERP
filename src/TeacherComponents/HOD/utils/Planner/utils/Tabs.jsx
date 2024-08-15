@@ -14,7 +14,7 @@ const Tabs = ({ Class, section, subject }) => {
 
     return (
         <div>
-            <div className="flex mobile:max-tablet:flex-col-reverse justify-between tablet:items-center mobile:max-tablet:p-1 p-4 pb-0 border-b overflow-auto">
+            <div className="flex mobile:max-tablet:flex-col-reverse justify-between tablet:items-center mobile:max-tablet:p-1 p-4 pb-0 border-b overflow-auto mobile:max-tablet:pl-0">
                 <div className="flex">
                     {tabs.map((tab) => (
                         <button

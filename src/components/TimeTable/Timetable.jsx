@@ -166,55 +166,55 @@ export default function TimeTable() {
 
     return (
         <motion.div
-          className="flex flex-col w-full bg-gray-50 rounded-lg shadow-lg p-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+            className="flex flex-col w-full bg-gray-50 rounded-lg shadow-lg p-6 mobile:max-tablet:px-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
         >
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-800 mb-4 sm:mb-0">
-              Time Table
-            </h1>
-            <div className="flex items-center">
-              <FaCalendarAlt className="text-blue-600 mr-2" />
-              <select
-                className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
-                value={day}
-                onChange={handleDayChange}
-              >
-                <option value="">Select Day</option>
-                {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((d) => (
-                  <option key={d.toLowerCase()} value={d.toLowerCase()}>{d}</option>
-                ))}
-              </select>
-             
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-3xl mobile:max-laptop:text-lg font-bold text-gray-800 mb-4 mobile:max-laptop:mb-0">
+                    Time Table
+                </h1>
+                <div className="flex items-center">
+                    <FaCalendarAlt className="text-blue-600 mr-2" />
+                    <select
+                        className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+                        value={day}
+                        onChange={handleDayChange}
+                    >
+                        <option value="">Select Day</option>
+                        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((d) => (
+                            <option key={d.toLowerCase()} value={d.toLowerCase()}>{d}</option>
+                        ))}
+                    </select>
+
+                </div>
             </div>
-          </div>
-    
-          <div className="w-full bg-white rounded-lg shadow">
-            <table className='w-full'>
-              <TimeTableHeader />
-              <tbody>
-                {loading ? (
-                  <tr><td colSpan="4"><Loading /></td></tr>
-                ) : data.length === 0 ? (
-                  <tr><td colSpan="4" className="px-4 py-8 text-center text-gray-500">No data available</td></tr>
-                ) : (
-                  lectureTimes.map((time, index) => (
-                    <LeactureTile
-                      key={index}
-                      index={index}
-                      lectureNo={`${index + 1}`}
-                      Time={`${formatTime(time.start)}-${formatTime(time.end)}`}
-                      numberOfLecturesBeforeLunch={fetchedTimeTableStructure.numberOfLecturesBeforeLunch}
-                      data={data}
-                      day={day}
-                    />
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+
+            <div className="w-full bg-white rounded-lg shadow overflow-auto">
+                <table className='w-full'>
+                    <TimeTableHeader />
+                    <tbody>
+                        {loading ? (
+                            <tr><td colSpan="4"><Loading /></td></tr>
+                        ) : data.length === 0 ? (
+                            <tr><td colSpan="4" className="px-4 py-8 text-center text-gray-500">No data available</td></tr>
+                        ) : (
+                            lectureTimes.map((time, index) => (
+                                <LeactureTile
+                                    key={index}
+                                    index={index}
+                                    lectureNo={`${index + 1}`}
+                                    Time={`${formatTime(time.start)}-${formatTime(time.end)}`}
+                                    numberOfLecturesBeforeLunch={fetchedTimeTableStructure.numberOfLecturesBeforeLunch}
+                                    data={data}
+                                    day={day}
+                                />
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </motion.div>
-      );
+    );
 }

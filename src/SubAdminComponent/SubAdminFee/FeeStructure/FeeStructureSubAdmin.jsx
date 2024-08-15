@@ -29,7 +29,7 @@ function FeeStructureSubAdmin() {
     ];
 
     return (
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen p-8">
+        <div className=" min-h-screen p-8">
             <ToastContainer />
 
 
@@ -49,8 +49,8 @@ function FeeStructureSubAdmin() {
                 </div>
             </div>
 
-            <div className="overflow-x-auto mt-4 ">
-                <table className="w-full">
+            <div className="overflow-x-auto mt-4 rounded-md ">
+                <table className="w-full border ">
                     <Header headings={['Class Group', 'Admission Fee', 'Monthly Fee', 'Quarterly Fee', 'Actions']} />
                     <tbody className="divide-y divide-gray-200">
                         {content.map((con, index) => (

@@ -63,7 +63,7 @@ const Transactions = ({ transactions }) => {
 
     const fetchTransaction = async () => {
         setLoading(true);
-        console.log(start, 'start', end, 'end',status)
+        console.log(start, 'start', end, 'end', status)
 
         try {
             const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/allTransactions?start=${start}&end=${end}&status=${status}&session=${selectedSession}`, {
@@ -93,19 +93,19 @@ const Transactions = ({ transactions }) => {
         <div>
             <div className="flex gap-2 items-center justify-end mb-4">
                 <ToastContainer />
-                <div className="flex items-center mobile:max-tablet:flex-col mobile:max-tablet:items-baseline">
+                {/* <div className="flex items-center mobile:max-tablet:flex-col mobile:max-tablet:items-baseline">
                     <label className="mr-2">From</label>
                     <input type="date" className="mr-2 p-1 border rounded" />
                     <label className="mr-2">To</label>
                     <input type="date" className="p-1 border rounded" />
-                </div>
+                </div> */}
                 <select id="status" value={status} onChange={handleStatusChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200  mr-3 ">
                     <option value="">Search Filter</option>
                     <option value="Success">Success</option>
                     <option value="Failed">Failed</option>
                 </select>
 
-                <select
+                {/* <select
                     id="sessionSelector"
                     value={selectedSession}
                     onChange={handleChange}
@@ -116,11 +116,11 @@ const Transactions = ({ transactions }) => {
                             {session}
                         </option>
                     ))}
-                </select>
+                </select> */}
             </div>
-            <div className=" overflow-x-auto">
-                <table className="w-full border-collapse whitespace-nowrap">
-                    <thead>
+            <div className=" overflow-x-auto rounded-md">
+                <table className="w-full border border-collapse whitespace-nowrap">
+                    <thead className=" bg-purple-200">
                         <tr className="">
                             <th className=" border-y p-2 text-start">S.No.</th>
                             <th className=" border-y p-2 text-start">Name</th>
