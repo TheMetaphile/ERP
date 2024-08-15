@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../../../../../Context/AuthContext";
+import { BASE_URL_ClassTeacher } from "../../../../../Config";
+import axios from "axios";
 
 function Selection({ setClass, setSection, setSubject }) {
     const { authState } = useContext(AuthContext);
@@ -21,26 +23,74 @@ function Selection({ setClass, setSection, setSubject }) {
         setSubject(event.target.value);
     }
 
-    const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
-
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
     useEffect(() => {
-        setUniqueSections(Array.from(new Set(
-            authState.subject
-                .filter(subj => subj.class === selectedClass)
-                .map(subj => subj.section)
-        )));
+
+
+        if (selectedClass) {
+            fetchSections();
+        }
+
+
+
+
     }, [selectedClass]);
 
-
     useEffect(() => {
-        setUniqueSubjects(Array.from(new Set(
-            authState.subject
-                .filter(subj => subj.section === selectedSection && subj.class === selectedClass)
-                .map(subj => subj.subject)
-        )));
+        if(selectedClass && selectedSection){
+            fetchSubjects();
+        }
     }, [selectedSection, selectedClass]);
+
+    const fetchSections = async () => {
+        let data = JSON.stringify({
+            "accessToken": authState.accessToken,
+            "class": selectedClass
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: `${BASE_URL_ClassTeacher}/classTeacher/fetch/sections`,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        await axios.request(config)
+            .then((response) => {
+                setUniqueSections(response.data.sections.map(sectionObj => sectionObj.section));
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const fetchSubjects = async () => {
+
+        let data = '';
+
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `${BASE_URL_ClassTeacher}/fetch/subjects?section=${selectedSection}&class=${selectedClass}`,
+            headers: {
+                'Authorization': `Bearer ${authState.accessToken}`
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                setUniqueSubjects(response.data.subjects);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    }
 
 
 

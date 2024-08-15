@@ -2,7 +2,7 @@ import schoolImage from "../../assets/School.png";
 import logout1 from "../../assets/logout.png";
 import ImageTextInRow from "./ImageTextInRow.jsx";
 import menuItems from "../../helpers/menuItems.js";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import AuthContext from "../../Context/AuthContext";
 
@@ -24,7 +24,7 @@ export default function Drawer() {
     setActive(index)
   }
   return (
-    <div className="w-60 z-10 h-full rounded-lg text-center items-center border bg-white py-6 px-2 shadow-md overflow-auto mobile:max-tablet:mt-2">
+    <div className="w-60 z-10 h-full text-center items-center  py-6 px-2  overflow-auto no-scrollbar mobile:max-tablet:mt-2">
       <div className="flex items-center">
         <img src={schoolImage} alt="school_image" className="w-1/3" />
         <span className="text-black ml-4">Metaphile Public School</span>

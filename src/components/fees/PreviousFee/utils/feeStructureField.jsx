@@ -4,7 +4,8 @@ import axios from 'axios';
 import AuthContext from "../../../../Context/AuthContext.jsx";
 import { BASE_URL_Fee } from "../../../../Config";
 import Header from './feestructureheader.jsx';
-
+import { motion } from 'framer-motion';
+import { FaCheckCircle, FaCreditCard } from 'react-icons/fa';
 
 export default function FeeStructureField({ fees }) {
     const [Razorpay] = useRazorpay();
@@ -97,33 +98,81 @@ export default function FeeStructureField({ fees }) {
         }
     };
 
-
-
     return (
-        <>
-            <Header />
-            {
-                fees.map((data, index) => (
-                    <tbody key={index} className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
-                        <tr className=" w-full flex">
-                            <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.class}</td>
-                            <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.session}</td>
-                            <td className="text-gray-500 border-r w-full   border-gray-300 py-2 font-normal  text-center">{data.month}</td>
-                            <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
-                            <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.discount}</td>
-                            <td className=" w-full text-center">
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+
+        >
+
+            <motion.table
+                className="w-full bg-white shadow-lg rounded-lg overflow-hidden"
+                initial={{ y: 20 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+            >
+                <motion.thead
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-gradient-to-r from-blue-200 to-teal-100 text-black "
+                >
+                    <tr>
+                        <th className="py-3 px-4 text-center">Class</th>
+                        <th className="py-3 px-4 text-center">Session</th>
+                        <th className="py-3 px-4 text-center">Month</th>
+                        <th className="py-3 px-4 text-center">Amount</th>
+                        <th className="py-3 px-4 text-center">Discount</th>
+                        <th className="py-3 px-4 text-center">Action</th>
+                    </tr>
+                </motion.thead>
+                <tbody>
+                    {fees.map((data, index) => (
+                        <motion.tr
+                            key={index}
+                            className="border-b border-gray-200  transition-all hover:bg-gray-200 duration-300 ease-in-out "
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: index * 0.1 }}
+                            whileHover={{
+                                scale: 1.05,
+                                transition: { duration: 0.0 }
+                            }}
+                        >
+                            <td className="py-3 px-4 text-center">{data.class}</td>
+                            <td className="py-3 px-4 text-center">{data.session}</td>
+                            <td className="py-3 px-4 text-center">{data.month}</td>
+                            <td className="py-3 px-4 text-center">₹ {data.amount}</td>
+                            <td className="py-3 px-4 text-center">₹ {data.discount}</td>
+                            <td className="py-3 px-4 text-center">
                                 {data.status === 'Submitted' ? (
-                                    <>Paid</>
+                                    <motion.div
+                                        className="flex items-center text-green-500"
+                                        initial={{ scale: 0.8 }}
+                                        animate={{ scale: 1 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <FaCheckCircle className="mr-2" />
+                                        Paid
+                                    </motion.div>
                                 ) : (
-                                    <button className=" my-2 mx-1 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer" onClick={() => handlePayment({ amount: data.amount, order_id: `pending/${data.class}/${data.month}`, title: data.month, pendingId: data._id })}>Pay</button>
+                                    <motion.button
+                                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full flex items-center transition-colors duration-200"
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={() => handlePayment({ amount: data.amount, order_id: `pending/${data.class}/${data.month}`, title: data.month, pendingId: data._id })}
+                                    >
+                                        <FaCreditCard className="mr-2" />
+                                        Pay Now
+                                    </motion.button>
                                 )}
                             </td>
-                        </tr>
-                    </tbody>
-                ))
-            }
-
-        </>
+                        </motion.tr>
+                    ))}
+                </tbody>
+            </motion.table>
+        </motion.div>
     );
 }
 

@@ -2,13 +2,17 @@ import React, { useState, useEffect, useContext } from "react";
 import Loading from "../../LoadingScreen/Loading";
 import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
-import ClassWorkGrid from "./utils/ClassWorkGrid";
-import SubjectGrid from "./utils/SubjectGrid";
 import { BASE_URL_ClassWork } from "../../Config";
 import SubjectClassWorkTile from "./utils/SubjectClassworkTile";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SubjectSelection from "./utils/SubjectSelection";
+
+import { motion } from "framer-motion";
+
+import { FaBook, FaChevronDown } from "react-icons/fa";
+
+
 
 export default function TodayClassWork() {
     const [selectedSubject, setSelectedSubject] = useState('Maths');
@@ -70,25 +74,54 @@ export default function TodayClassWork() {
     };
 
 
-    return (
-        <div className="flex flex-col mobile:max-tablet:mt-4  ">
-            <ToastContainer />
-            <div className="flex justify-between items-center px-3">
-                <h1 className="text-xl mobile:max-tablet:text-lg font-medium px-2">Classwork</h1>
-                <SubjectSelection onSubjectSelect={handleSubjectSelect} />
-            </div>
-            {loading ? (
-                <Loading />
-            ) : details.length === 0 ? (
-                <div className="text-center w-full mt-2">No classwork found</div>
-            ) : (
-                <>
-                    <SubjectClassWorkTile subject={selectedSubject} details={details} />
-                    {!allDataFetched && (
-                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                    )}
-                </>
-            )}
-        </div>
-    )
+  return (
+    <motion.div 
+      className="flex flex-col mobile:max-tablet:mt-4 p-4 bg-gray-50"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <ToastContainer />
+      <motion.div 
+        className="flex justify-between items-center mb-3"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+      >
+        <h1 className="text-2xl mobile:max-tablet:text-xl font-semibold text-gray-800 flex items-center">
+          <FaBook className="mr-2 text-indigo-600" />
+          Classwork
+        </h1>
+        <SubjectSelection onSubjectSelect={handleSubjectSelect} />
+      </motion.div>
+
+      {loading ? (
+        <Loading />
+      ) : details.length === 0 ? (
+        <motion.div 
+          className="text-center w-full mt-8 text-gray-600 text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
+          No classwork found
+        </motion.div>
+      ) : (
+        <>
+          <SubjectClassWorkTile subject={selectedSubject} details={details} />
+          {!allDataFetched && (
+            <motion.button
+              className='mt-6 text-indigo-600 hover:text-indigo-800 font-medium flex items-center justify-center mx-auto'
+              onClick={handleViewMore}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              View More
+              <FaChevronDown className="ml-1" />
+            </motion.button>
+          )}
+        </>
+      )}
+    </motion.div>
+  );
 }

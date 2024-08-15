@@ -45,7 +45,6 @@ export default function TransactionRow() {
 
     return (
         <div className="w-full h-fit mb-4 shadow-md rounded-lg border border-gray-300   overflow-x-auto no-scrollbar">
-            <TransactionHistoryHeader />
             {loading ? (
                 <Loading />
             ) : (

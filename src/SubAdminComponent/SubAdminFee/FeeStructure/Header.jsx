@@ -1,11 +1,13 @@
 export default function Header({ headings }) {
     return (
-        <thead className="bg-bg_blue ">
-            <tr>
-                {headings.map((heading, index) => (
-                    <th key={index} className="px-4 py-2 text-left">{heading}</th>
-                ))}
-            </tr>
-        </thead>
+        <thead className="bg-gradient-to-r from-indigo-500 to-blue-500">
+        <tr>
+            {headings.map((heading, index) => (
+                <th key={index} className="px-6 py-3 text-left text-sm font-semibold text-white uppercase tracking-wider">
+                    {heading}
+                </th>
+            ))}
+        </tr>
+    </thead>
     )
 }

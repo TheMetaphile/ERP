@@ -77,6 +77,7 @@ export default function CoScholasticTable({ students, term, Class }) {
             grade: studentGrades[subject]
         }));
 
+        if(!email || !Class  ) return;
         const resultData = {
             email,
             class: Class,

@@ -6,13 +6,13 @@ import AuthContext from '../../Context/AuthContext';
 
 function NoteBook() {
     const { authState } = useContext(AuthContext);
-    const [Class, setClass] = useState(authState.subject[0].class);
-    const [Section, setSection] = useState(authState.subject[0].section);
+    const [Class, setClass] = useState(authState.subject ? authState.subject[0].class : '');
+    const [Section, setSection] = useState(authState.subject ?authState.subject[0].section: "");
     const [selectedTab, setSelectedTab] = useState('All');
     const [searchParams, setSearchParams] = useSearchParams();
     const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-    const [Subject, setSubject] = useState(authState.subject[0].subject);
+    const [Subject, setSubject] = useState(authState.subject ? authState.subject[0].subject : "");
 
     const onTabChange = (tab) => {
         setSelectedTab(tab);

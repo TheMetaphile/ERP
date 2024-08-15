@@ -12,23 +12,23 @@ function StudentDoubts() {
     const [Subject, setSubject] = useState('');
     const [selectedLink, setSelectedLink] = useState(`/Teacher-Dashboard/studentdoubts/new`);
 
-    const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
+    const uniqueClasses = Array.from(new Set(authState.subject ? authState.subject.map(subj => subj.class) : []));
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
 
     useEffect(() => {
         setUniqueSections(Array.from(new Set(
-            authState.subject
+            authState.subject ? authState.subject
                 .filter(subj => subj.class === Class)
-                .map(subj => subj.section)
+                .map(subj => subj.section) : []
         )));
     }, [Class]);
 
     useEffect(() => {
         setUniqueSubjects(Array.from(new Set(
-            authState.subject
+            authState.subject ? authState.subject
                 .filter(subj => subj.section === Section && subj.class === Class)
-                .map(subj => subj.subject)
+                .map(subj => subj.subject) : []
         )));
     }, [Section, Class]);
 

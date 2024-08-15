@@ -7,13 +7,13 @@ import AllNoteBookRecordHOD from './utils/AllNotebookRecordHOD';
 
 function NoteBookHOD() {
     const { authState } = useContext(AuthContext);
-    const [Class, setClass] = useState(authState.subject[0].class);
-    const [Section, setSection] = useState(authState.subject[0].section);
+    const [Class, setClass] = useState('');
+    const [Section, setSection] = useState('');
     const [selectedTab, setSelectedTab] = useState('All');
     const [searchParams, setSearchParams] = useSearchParams();
     const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-    const [Subject, setSubject] = useState(authState.subject[0].subject);
+    const [Subject, setSubject] = useState('');
 
     const onTabChange = (tab) => {
         setSelectedTab(tab);

@@ -1,35 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import FeeAdminRow from './FeeAdminRow'
+import FeeAdminRow from './FeeAdminRow';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from './Header';
+import { FaGraduationCap, FaChevronDown } from 'react-icons/fa';
 
 const getSessions = () => {
     const currentYear = new Date().getFullYear();
-    const newSessions = [];
-
-    for (let i = 0; i < 5; i++) {
+    return Array.from({ length: 5 }, (_, i) => {
         const startYear = currentYear - i;
-        const endYear = startYear + 1;
-        newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
-    }
-
-    return newSessions;
-}
+        return `${startYear}-${(startYear + 1).toString().slice(-2)}`;
+    });
+};
 
 function FeeStructureSubAdmin() {
-
-    const session = getSessions();
-    const [selectedSession, setSelectedSession] = useState(session[0]);
-
-
-
+    const sessions = getSessions();
+    const [selectedSession, setSelectedSession] = useState(sessions[0]);
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
     };
-
-    console.log(selectedSession)
-
     const content = [
         { class: 'Pre-Nursery-U.K.G' },
         { class: '1st-5th' },
@@ -40,42 +29,43 @@ function FeeStructureSubAdmin() {
     ];
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0  overflow-auto items-start mt-2  mb-3 no-scrollbar">
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen p-8">
             <ToastContainer />
-            <div className='flex w-full justify-between'>
-                <h1 className="text-2xl p-2">Fee Structure</h1>
-                <div className='border border-gray-300 rounded-lg'>
-                    <select
-                        id="sessionSelector"
-                        value={selectedSession}
-                        onChange={handleChange}
-                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                    >
-                        {session.map((session, index) => (
-                            <option key={index} value={session}>
-                                {session}
-                            </option>
+
+
+            <div className='flex justify-between items-center'>
+                <h1 className="text-3xl font-bold text-indigo-800 flex items-center ">
+                    <FaGraduationCap className="mr-4 text-4xl" />
+                    Fee Structure Management
+                </h1>
+                <div className='relative'>
+
+                    <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-indigo-300 rounded-md py-2 px-4 text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
+                        {sessions.map((session, index) => (
+                            <option key={index} value={session}>{session}</option>
                         ))}
                     </select>
+                    <FaChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white pointer-events-none" />
                 </div>
             </div>
-            <table className="w-full  mt-3">
-                <Header headings={['Classes', 'Admission Fee', 'Monthly Fee', 'Quarter Fee',  'Action']} />
-                <tbody>
-                    {content.map((con, index) => (
-                        <FeeAdminRow
-                            Class={con.class}
-                            key={index}
-                            session={selectedSession}
-                        />
-                    ))}
-                </tbody>
-            </table>
+
+            <div className="overflow-x-auto mt-4 ">
+                <table className="w-full">
+                    <Header headings={['Class Group', 'Admission Fee', 'Monthly Fee', 'Quarterly Fee', 'Actions']} />
+                    <tbody className="divide-y divide-gray-200">
+                        {content.map((con, index) => (
+                            <FeeAdminRow
+                                Class={con.class}
+                                key={index}
+                                session={selectedSession}
+                            />
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     );
 }
 
-
-
 export default FeeStructureSubAdmin;
-

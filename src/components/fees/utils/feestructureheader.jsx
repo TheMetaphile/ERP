@@ -1,15 +1,27 @@
+import React from "react";
+import { motion } from "framer-motion";
+
 export default function FeeStructureHeader() {
     return (
-        <>
-            <thead className="  bg-aquamarine w-full flex rounded-t-lg border-b border-gray-300   whitespace-nowrap">
-                <tr className=" w-full flex">
-                    <th className=" text-center w-full  border-r border-gray-300  py-2">Month</th>
-                    <th className=" text-center w-full border-r border-gray-300  py-2">Amount</th>
-                    <th className=" text-center w-full border-r border-gray-300  py-2">Discount</th>
-                    <th className=" text-center w-full border-r border-gray-300  py-2">Status</th>
-                    <th className=" text-center  w-full  py-2">Action</th>
-                </tr>
-            </thead>
-        </>
+        <motion.thead 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 2 }}
+            className="bg-gradient-to-r from-blue-200 to-teal-100 text-black"
+        >
+            <tr>
+                {["Month", "Amount", "Discount", "Status", "Action"].map((header, index) => (
+                    <motion.th 
+                        key={header}
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="p-3 text-center "
+                    >
+                        {header}
+                    </motion.th>
+                ))}
+            </tr>
+        </motion.thead>
     );
 }

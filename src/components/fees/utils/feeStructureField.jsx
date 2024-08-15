@@ -6,13 +6,14 @@ import { BASE_URL_Fee } from "../../../Config";
 import Header from './feestructureheader.jsx';
 import QuarterFeeHeader from "./QuarterFeeHeader.jsx";
 import { usePaymentContext } from "./PaymentContext.jsx";
+import { motion } from "framer-motion";
 
 export default function FeeStructureField({ fees, selectedOption, setFees }) {
     const [Razorpay] = useRazorpay();
     const { authState } = useContext(AuthContext);
     const { paymentDetails, setPaymentDetails } = usePaymentContext();
 
-console.log(fees);
+    console.log(fees);
 
     const handlePayment = async (params) => {
         // const order = await createOrder(params); //  Create order on your backend
@@ -122,77 +123,126 @@ console.log(fees);
     };
 
     return (
-        <>
-            {selectedOption === 'monthlyfee' ? (
+        <div className="bg-gray-100  rounded-lg shadow-lg">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5  }}
+                className="bg-white rounded-xl overflow-hidden"
+            >
+                {selectedOption === 'monthlyfee' ? (
 
-                <>
-                    <Header />
-                    {
-                        fees.monthlyStatus.map((data, index) => (
-                            <tbody key={index} className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
-                                <tr className=" w-full flex">
-                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.month}</td>
-                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
-                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.discountApplied}</td>
-                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.status}</td>
-                                    <td className=" w-full text-center">
+
+                    <table className="w-full">
+                        <Header />
+
+                        <tbody>
+                            {fees.monthlyStatus.map((data, index) => (
+                                <motion.tr
+                                    key={index}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: index * 0.1 }}
+                                    whileHover={{
+                                        scale: 1.02,
+                                        transition: { duration: 0.2 }
+                                    }}
+                                    className="border-b border-gray-200  transition-all hover:bg-gray-200 duration-300 ease-in-out"
+                                >
+                                    <td className="py-3 px-4 text-center">{data.month}</td>
+                                    <td className="py-3 px-4 text-center">{data.amount}</td>
+                                    <td className="py-3 px-4 text-center">{data.discountApplied}</td>
+                                    <td className="py-3 px-4 text-center">
+                                        <span className={`px-2 py-1 rounded-full text-xs ${data.status === 'Submitted' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'}`}>
+                                            {data.status}
+                                        </span>
+                                    </td>
+                                    <td className="py-3 px-4 text-center">
                                         {data.status === 'Submitted' ? (
-                                            <>Paid</>
+                                            <span className="text-green-600 font-semibold">Paid</span>
                                         ) : (
-                                            <button className=" my-2 mx-1 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer" onClick={() => handlePayment({ amount: data.amount, order_id: data.month, title: selectedOption })}>Pay</button>
+                                            <button
+                                                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300"
+                                                onClick={() => handlePayment({ amount: data.amount, order_id: data.month, title: selectedOption })}
+                                            >
+                                                Pay Now
+                                            </button>
                                         )}
                                     </td>
-                                </tr>
-                            </tbody>
-                        ))
-                    }
-                </>
-            ) : selectedOption === 'quarterFee' ? (
-                <>
-                    <QuarterFeeHeader />
-                    {
-                        fees.quarterlyStatus.map((data, index) => (
-                            <tbody key={index} className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
-                                <tr className=" w-full flex">
-                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center"> {data.months.join(', ')}</td>
-                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.quarter}</td>
-                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.amount}</td>
-                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.discountApplied}</td>
-                                    <td className="text-gray-500 border-r  w-full   border-gray-300 py-2 font-normal  text-center">{data.pendingFee}</td>
-                                    <td className="text-gray-500 border-r w-full    border-gray-300 py-2 font-normal  text-center">{data.status}</td>
-                                    <td className=" w-full text-center">
-                                        {data.status === 'Submitted' ? (
-                                            <>Paid</>
-                                        ) : (
-                                            <button className=" my-2 mx-1 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer" onClick={() => handlePayment({ amount: data.pendingFee, order_id: data.quarter, title: selectedOption })}>Pay</button>
-                                        )}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        ))
-                    }
-                </>
-            ) : (
-                <tbody className=" w-full rounded-t-lg  whitespace-nowrap  flex items-center border-b border-gray-300 ">
-                    <tr className=" w-full flex">
-
-                        <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{fees.admissionFee}</td>
-                        <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{fees.monthlyfee}</td>
-                        <td className="text-gray-500 border-r  w-64   border-gray-300 py-2 font-normal  text-center">{fees.quarterFee}</td>
+                                </motion.tr>
+                            ))}
+                        </tbody>
+                    </table>
 
 
+                ) : selectedOption === 'quarterFee' ? (
+                    
+                            <table className="w-full">
+                                <QuarterFeeHeader />
 
-                        <td className=" w-36 text-center">
-                            <button className=" my-2 mx-1 text-lg rounded-full bg-secondary px-6 py-1  border border-gray-300 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap hover:cursor-pointer" onClick={() => handlePayment({ amount: data.payableAmount, order_id: data.id, title: data.title, deadline: data.deadline })}>Pay</button>
-                        </td>
-                    </tr>
-                </tbody>
-            )}
+                                <tbody>
+                                    {fees.quarterlyStatus.map((data, index) => (
+                                        <motion.tr
+                                            key={index}
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: index * 0.1 }}
+                                            whileHover={{
+                                                scale: 1.02,
+                                                transition: { duration: 0.2 }
+                                            }}
+                                            className="border-b border-gray-200 hover:bg-gray-50 transition-all duration-300 ease-in-out"
+                                        >
+                                            <td className="py-3 px-4 text-center">{data.months.join(', ')}</td>
+                                            <td className="py-3 px-4 text-center">{data.quarter}</td>
+                                            <td className="py-3 px-4 text-center">{data.amount}</td>
+                                            <td className="py-3 px-4 text-center">{data.discountApplied}</td>
+                                            <td className="py-3 px-4 text-center">{data.pendingFee}</td>
+                                            <td className="py-3 px-4 text-center">
+                                                <span className={`px-2 py-1 rounded-full text-xs ${data.status === 'Submitted' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'}`}>
+                                                    {data.status}
+                                                </span>
+                                            </td>
+                                            <td className="py-3 px-4 text-center">
+                                                {data.status === 'Submitted' ? (
+                                                    <span className="text-green-600 font-semibold">Paid</span>
+                                                ) : (
+                                                    <button
+                                                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300"
+                                                        onClick={() => handlePayment({ amount: data.pendingFee, order_id: data.quarter, title: selectedOption })}
+                                                    >
+                                                        Pay Now
+                                                    </button>
+                                                )}
+                                            </td>
+                                        </motion.tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                    
+                ) : (
+                    <div className="p-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <FeeCard title="Admission Fee" amount={fees.admissionFee} />
+                            <FeeCard title="Monthly Fee" amount={fees.monthlyfee} />
+                            <FeeCard title="Quarterly Fee" amount={fees.quarterFee} />
+                        </div>
+                    </div>
+                )}
+            </motion.div>
+        </div>
+    );
+}
 
-
-
-
-        </>
+function FeeCard({ title, amount }) {
+    return (
+        <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
+            <h3 className="text-xl font-semibold mb-2">{title}</h3>
+            <p className="text-3xl font-bold text-blue-600 mb-4">{amount}</p>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                Pay Now
+            </button>
+        </div>
     );
 }
 

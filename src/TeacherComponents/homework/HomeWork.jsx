@@ -14,9 +14,9 @@ function HomeWork() {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [selectedClass, setSelectedClass] = useState("9th");
-    const [selectedSection, setSelectedSection] = useState("A");
-    const [selectedSubject, setSelectedSubject] = useState("Maths");
+    const [selectedClass, setSelectedClass] = useState("");
+    const [selectedSection, setSelectedSection] = useState("");
+    const [selectedSubject, setSelectedSubject] = useState("");
     const [additionalData, setAdditionalData] = useState([]);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
@@ -24,26 +24,27 @@ function HomeWork() {
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
 
-    const uniqueClasses = Array.from(new Set(authState.subject.map(subj => subj.class)));
+    const uniqueClasses = Array.from(new Set(authState.subject ? authState.subject.map(subj => subj.class) : []));
 
     useEffect(() => {
         setUniqueSections(Array.from(new Set(
-            authState.subject
+            authState.subject ? authState.subject
                 .filter(subj => subj.class === selectedClass)
-                .map(subj => subj.section)
+                .map(subj => subj.section) : []
         )));
     }, [selectedClass]);
 
 
     useEffect(() => {
         setUniqueSubjects(Array.from(new Set(
-            authState.subject
+            authState.subject ? authState.subject
                 .filter(subj => subj.section === selectedSection && subj.class === selectedClass)
-                .map(subj => subj.subject)
+                .map(subj => subj.subject) : []
         )));
     }, [selectedSection, selectedClass]);
 
     const handleOpen = () => {
+        if(!authState.subject ) {toast.error("No subject is assigned. Please contanct Admin");return ;}
         setIsDialogOpen(true);
     }
     const handleClose = () => {
@@ -89,6 +90,7 @@ function HomeWork() {
 
     const fetchHomework = async () => {
         console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
+        if(!selectedClass || !selectedSection || !selectedSubject ) return ;
         setLoading(true);
         try {
             const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/teacher?class=${selectedClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${selectedSection}&subject=${selectedSubject}&start=${start}&end=${end}`, {

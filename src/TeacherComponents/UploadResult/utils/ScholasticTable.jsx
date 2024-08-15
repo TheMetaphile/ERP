@@ -37,6 +37,7 @@ export default function ScholasticTable({ students, term, Class, subject }) {
 
     const fetchLastNoteBookChecked = async () => {
         try {
+            if(!subject) return ;
             const responses = await Promise.all(
                 students.map(student =>
                     axios.get(`${BASE_URL_Result}/notebook/fetch/student/last?subject=${subject}&email=${student.email}`, {
@@ -156,6 +157,7 @@ export default function ScholasticTable({ students, term, Class, subject }) {
             console.error('Error saving result:', error.response?.data?.error);
         }
     };
+    
     return (
         <div className="w-full overflow-x-auto rounded-lg">
             <div className="flex gap-3 ml-2 overflow-auto">
