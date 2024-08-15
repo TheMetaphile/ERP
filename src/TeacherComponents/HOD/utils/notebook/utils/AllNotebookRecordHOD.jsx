@@ -67,7 +67,7 @@ const AllNoteBookRecordHOD = ({ Class, Section, Subject }) => {
   }
 
   return (
-    <div className="flex-col mobile:max-tablet:flex-col-reverse justify-between tablet:items-center px-4 pb-0  mb-2 overflow-auto ">
+    <div className="flex-col mobile:max-tablet:flex-col-reverse justify-between tablet:items-center px-4 pb-0  mb-2 overflow-auto mobile:max-tablet:px-0 ">
       <ToastContainer />
       <div className="overflow-x-auto rounded-lg">
         <table className="min-w-full bg-white border border-gray-300 rounded-lg">

@@ -40,7 +40,7 @@ export default function ClassTeacherOnLeaveTable() {
     }, [authState])
 
     return (
-        <div className="  rounded-lg">
+        <div className="  rounded-lg overflow-auto">
             <table className="min-w-fit bg-white border border-gray-300 rounded-lg">
                 <thead>
                     <tr className="bg-secondary text-gray-600 text-lg">

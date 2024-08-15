@@ -28,8 +28,8 @@ function NoteBookHOD() {
     }, [Class, Section, Subject]);
 
     return (
-        <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar ">
-            <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:py-1 '>
+        <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar  ">
+            <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:py-1 mobile:max-tablet:px-0 '>
                 <h1 className="text-2xl font-medium mb-2 mobile:max-tablet:text-lg whitespace-nowrap">Note Book Record</h1>
                 <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
                     <button
@@ -49,7 +49,7 @@ function NoteBookHOD() {
                     <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
                 </div>
             </div>
-            <AllNoteBookRecordHOD Class={Class} Section={Section} Subject={Subject}/>
+            <AllNoteBookRecordHOD Class={Class} Section={Section} Subject={Subject} />
             {/* <Tabs onTabChange={onTabChange} selectedTab={selectedTab} Class={Class} Section={Section} Subject={Subject} /> */}
             <Outlet />
         </div>
