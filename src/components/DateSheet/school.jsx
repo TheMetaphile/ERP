@@ -16,11 +16,11 @@ export default function School(props) {
           whileHover={{ rotate: 360 }}
           transition={{ duration: 1 }}
           src={props.img}
-          className='w-20 h-20 mt-3 mobile:max-tablet:h-16 mobile:max-tablet:w-16'
+          className='w-20 h-20 mt-3 mobile:max-tablet:h-10 mobile:max-tablet:w-10'
           alt="School Logo"
         />
         <div className='text-center mt-5 px-3 font-semibold'>
-          <h2 className='text-2xl flex items-center justify-center'>
+          <h2 className='text-2xl mobile:max-tablet:text-lg flex items-center justify-center'>
             <FaSchool className='mr-2 text-primary' />
             {props.schoolname}
           </h2>
@@ -30,7 +30,7 @@ export default function School(props) {
           </span>
         </div>
       </div>
-      <div className='border-t-2 border-solid border-gray-300 mt-4'></div>
+      {/* <div className='border-t-2 border-solid border-gray-300 mt-4'></div> */}
       <Term />
     </motion.div>
   )

@@ -63,11 +63,11 @@ export default function MyDoubts() {
                 date: datee,
                 subject: modalSubject
             },
-            {
-                headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    }
                 }
-            }
             );
             if (response.status === 200) {
                 console.log(response.data);
@@ -133,11 +133,11 @@ export default function MyDoubts() {
     };
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col w-full mobile:max-tablet:mt-4 bg-gradient-to-br from-purple-100 to-blue-100 p-6 rounded-lg shadow-lg"
+            className="flex flex-col w-full mobile:max-tablet:mt-4 bg-gradient-to-br from-purple-100 to-blue-100 p-2 rounded-lg shadow-lg"
         >
             <ToastContainer />
             <div className='flex justify-between bg-white p-4 rounded-lg shadow-md mobile:max-tablet:flex-col'>
@@ -146,7 +146,7 @@ export default function MyDoubts() {
                     My Doubts
                 </Link>
                 <div className='flex items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start mt-4 tablet:mt-0'>
-                    <div className="flex md:order-2 md:w-full lg:w-fit md:ml-2 gap-2">
+                    <div className="flex md:order-2 mobile:max-tablet:w-full md:w-full lg:w-fit md:ml-2 gap-2 mobile:max-tablet:flex-col">
                         <SubjectSelection onSubjectSelect={handleSubjectSelect} />
                         <select
                             value={status}
@@ -169,7 +169,7 @@ export default function MyDoubts() {
                     </div>
                 </div>
             </div>
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
@@ -183,7 +183,7 @@ export default function MyDoubts() {
                     <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
                         <MyDoubtTile data={data} />
                         {!allDataFetched && (
-                            <motion.h1 
+                            <motion.h1
                                 whileHover={{ scale: 1.05 }}
                                 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center col-span-full'
                                 onClick={handleViewMore}
@@ -196,12 +196,12 @@ export default function MyDoubts() {
             </motion.div>
 
             {isModalOpen && (
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center mobile:max-tablet:z-50"
                 >
-                    <motion.div 
+                    <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -229,10 +229,10 @@ export default function MyDoubts() {
 
                         <h1 className="mb-2 mt-2 font-semibold text-gray-700">Your Question</h1>
 
-                        <textarea 
-                            className="w-full px-3 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-300" 
-                            placeholder="Write your question here..." 
-                            rows={4} 
+                        <textarea
+                            className="w-full px-3 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-300"
+                            placeholder="Write your question here..."
+                            rows={4}
                             value={doubtDescription}
                             onChange={(e) => setDoubtDescription(e.target.value)}
                         ></textarea>
@@ -242,7 +242,7 @@ export default function MyDoubts() {
                                 <IoCameraOutline className='w-6 h-6 mobile:max-tablet:w-5 mobile:max-tablet:h-5 text-purple-500 cursor-pointer' />
                             </div>
                             <div>
-                                <motion.button 
+                                <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     className="bg-gray-300 rounded-lg mobile:max-tablet:px-2 mobile:max-tablet:py-1 px-4 py-2 mr-2 hover:bg-gray-400 transition-colors duration-300"
@@ -250,7 +250,7 @@ export default function MyDoubts() {
                                 >
                                     Cancel
                                 </motion.button>
-                                <motion.button 
+                                <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     className="bg-purple-600 text-white rounded-lg mobile:max-tablet:px-2 mobile:max-tablet:py-1 px-4 py-2 hover:bg-purple-700 transition-colors duration-300"

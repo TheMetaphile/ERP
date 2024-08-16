@@ -25,13 +25,13 @@ const TabsStudentFee = () => {
     return (
         <div className=" min-h-screen p-3">
             <div className=" ">
-                <motion.div 
+                <motion.div
                     className="flex justify-center"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <div className="flex space-x-2 mb-4">
+                    <div className="flex space-x-2 my-2">
                         {tabs.map((tab) => (
                             <motion.button
                                 key={tab}

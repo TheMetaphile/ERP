@@ -127,7 +127,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5  }}
+                transition={{ duration: 0.5 }}
                 className="bg-white rounded-xl overflow-hidden"
             >
                 {selectedOption === 'monthlyfee' ? (
@@ -153,7 +153,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
                                     <td className="py-3 px-4 text-center">{data.amount}</td>
                                     <td className="py-3 px-4 text-center">{data.discountApplied}</td>
                                     <td className="py-3 px-4 text-center">
-                                        <span className={`px-2 py-1 rounded-full text-xs ${data.status === 'Submitted' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'}`}>
+                                        <span className={`px-2 py-1 rounded-full whitespace-nowrap text-xs ${data.status === 'Submitted' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'}`}>
                                             {data.status}
                                         </span>
                                     </td>
@@ -162,7 +162,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
                                             <span className="text-green-600 font-semibold">Paid</span>
                                         ) : (
                                             <button
-                                                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300"
+                                                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300 whitespace-nowrap mobile:max-tablet:text-sm"
                                                 onClick={() => handlePayment({ amount: data.amount, order_id: data.month, title: selectedOption })}
                                             >
                                                 Pay Now
@@ -176,50 +176,50 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
 
 
                 ) : selectedOption === 'quarterFee' ? (
-                    
-                            <table className="w-full">
-                                <QuarterFeeHeader />
 
-                                <tbody>
-                                    {fees?.quarterlyStatus?.map((data, index) => (
-                                        <motion.tr
-                                            key={index}
-                                            initial={{ opacity: 0, x: -20 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: index * 0.1 }}
-                                            whileHover={{
-                                                scale: 1.02,
-                                                transition: { duration: 0.2 }
-                                            }}
-                                            className="border-b border-gray-200 hover:bg-gray-50 transition-all duration-300 ease-in-out"
-                                        >
-                                            <td className="py-3 px-4 text-center">{data.months.join(', ')}</td>
-                                            <td className="py-3 px-4 text-center">{data.quarter}</td>
-                                            <td className="py-3 px-4 text-center">{data.amount}</td>
-                                            <td className="py-3 px-4 text-center">{data.discountApplied}</td>
-                                            <td className="py-3 px-4 text-center">{data.pendingFee}</td>
-                                            <td className="py-3 px-4 text-center">
-                                                <span className={`px-2 py-1 rounded-full text-xs ${data.status === 'Submitted' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'}`}>
-                                                    {data.status}
-                                                </span>
-                                            </td>
-                                            <td className="py-3 px-4 text-center">
-                                                {data.status === 'Submitted' ? (
-                                                    <span className="text-green-600 font-semibold">Paid</span>
-                                                ) : (
-                                                    <button
-                                                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300"
-                                                        onClick={() => handlePayment({ amount: data.pendingFee, order_id: data.quarter, title: selectedOption })}
-                                                    >
-                                                        Pay Now
-                                                    </button>
-                                                )}
-                                            </td>
-                                        </motion.tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                    
+                    <table className="w-full">
+                        <QuarterFeeHeader />
+
+                        <tbody>
+                            {fees?.quarterlyStatus?.map((data, index) => (
+                                <motion.tr
+                                    key={index}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: index * 0.1 }}
+                                    whileHover={{
+                                        scale: 1.02,
+                                        transition: { duration: 0.2 }
+                                    }}
+                                    className="border-b border-gray-200 hover:bg-gray-50 transition-all duration-300 ease-in-out"
+                                >
+                                    <td className="py-3 px-4 text-center">{data.months.join(', ')}</td>
+                                    <td className="py-3 px-4 text-center">{data.quarter}</td>
+                                    <td className="py-3 px-4 text-center">{data.amount}</td>
+                                    <td className="py-3 px-4 text-center">{data.discountApplied}</td>
+                                    <td className="py-3 px-4 text-center">{data.pendingFee}</td>
+                                    <td className="py-3 px-4 text-center">
+                                        <span className={`px-2 py-1 rounded-full text-xs ${data.status === 'Submitted' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'}`}>
+                                            {data.status}
+                                        </span>
+                                    </td>
+                                    <td className="py-3 px-4 text-center">
+                                        {data.status === 'Submitted' ? (
+                                            <span className="text-green-600 font-semibold">Paid</span>
+                                        ) : (
+                                            <button
+                                                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300 whitespace-nowrap mobile:max-tablet:text-sm"
+                                                onClick={() => handlePayment({ amount: data.pendingFee, order_id: data.quarter, title: selectedOption })}
+                                            >
+                                                Pay Now
+                                            </button>
+                                        )}
+                                    </td>
+                                </motion.tr>
+                            ))}
+                        </tbody>
+                    </table>
+
                 ) : (
                     <div className="p-4">
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -239,7 +239,7 @@ function FeeCard({ title, amount }) {
         <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
             <h3 className="text-xl font-semibold mb-2">{title}</h3>
             <p className="text-3xl font-bold text-blue-600 mb-4">{amount}</p>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+            <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300 whitespace-nowrap mobile:max-tablet:text-sm">
                 Pay Now
             </button>
         </div>

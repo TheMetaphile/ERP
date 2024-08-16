@@ -33,9 +33,9 @@ function SubjectSelection({ onSubjectSelect }) {
   };
 
   return (
-    <div>
+    <div className=" mobile:max-tablet:w-full">
       <select id="subject" value={selectedSubject} onChange={handleSubjectChange}
-      className="mt-1 border block py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        className="mt-1 mobile:w-full border block py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
       >
         {subjects.map((subject, index) => (
           <option key={index} value={subject}>{subject}</option>

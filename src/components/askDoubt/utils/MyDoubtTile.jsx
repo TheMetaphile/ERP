@@ -96,7 +96,7 @@ export default function MyDoubtTile({ data }) {
                         transition={{ duration: 0.3 }}
                         className="border border-gray-300 py-4 px-5 mt-4 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300"
                     >
-                        <div className="flex justify-between items-center cursor-pointer" onClick={() => handleClick(index)}>
+                        <div className="flex justify-between items-center cursor-pointer mobile:max-tablet:flex-col gap-2 mobile:max-tablet:items-start" onClick={() => handleClick(index)}>
                             <div className='flex items-center gap-3'>
                                 {editMode === index ? (
                                     <input
@@ -112,11 +112,10 @@ export default function MyDoubtTile({ data }) {
                                 <div className="text-gray-500 px-3">Question No. {index + 1}</div>
                             </div>
 
-                            <div className={`flex items-center ${
-                                item.status === "Pending" ? "text-orange-500" :
+                            <div className={`flex items-center ${item.status === "Pending" ? "text-orange-500" :
                                 item.status === "Rejected" ? "text-red-500" :
-                                "text-green-500"
-                            } font-medium gap-2 mobile:flex-wrap`}>
+                                    "text-green-500"
+                                } font-medium gap-2 mobile:flex-wrap`}>
                                 <div className='flex items-center gap-2'>
                                     {item.status === 'Pending' && (
                                         editMode === index ? (

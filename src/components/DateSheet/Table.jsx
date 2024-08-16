@@ -46,9 +46,9 @@ export default function Table() {
 
   const tableVariants = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
       opacity: 1,
-      transition: { 
+      transition: {
         staggerChildren: 0.1,
         delayChildren: 0.3
       }
@@ -57,10 +57,10 @@ export default function Table() {
 
   const rowVariants = {
     hidden: { opacity: 1, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         type: "spring",
         stiffness: 100
       }
@@ -81,7 +81,7 @@ export default function Table() {
             <FaSpinner className="animate-spin text-4xl text-blue-500" />
           </div>
         ) : (
-          <table className="w-full bg-white rounded-lg overflow-hidden">
+          <table className="w-full bg-white rounded-lg overflow-hidden whitespace-nowrap">
             <thead>
               <tr className="bg-gradient-to-r from-blue-300 to-purple-200 text-black">
                 <th className="py-3 px-6 text-left"><FaCalendarAlt className="inline mr-2" />Date</th>
@@ -97,7 +97,7 @@ export default function Table() {
                   <motion.tr
                     key={index}
                     variants={rowVariants}
-                    className={`${'bg-gray-50' } text-black`}
+                    className={`${'bg-gray-50'} text-black`}
                     whileHover={{ scale: 1.02, backgroundColor: "#f0f9ff" }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
@@ -113,7 +113,7 @@ export default function Table() {
           </table>
         )}
       </motion.div>
-      
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
