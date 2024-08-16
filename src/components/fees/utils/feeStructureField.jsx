@@ -137,7 +137,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
                         <Header />
 
                         <tbody>
-                            {fees.monthlyStatus.map((data, index) => (
+                            {fees?.monthlyStatus?.map((data, index) => (
                                 <motion.tr
                                     key={index}
                                     initial={{ opacity: 0, x: -20 }}
@@ -181,7 +181,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
                                 <QuarterFeeHeader />
 
                                 <tbody>
-                                    {fees.quarterlyStatus.map((data, index) => (
+                                    {fees?.quarterlyStatus?.map((data, index) => (
                                         <motion.tr
                                             key={index}
                                             initial={{ opacity: 0, x: -20 }}
