@@ -7,7 +7,7 @@ export default function QuarterFeeHeader() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-gradient-to-r from-blue-200 to-teal-100 text-black"
+            className="bg-gradient-to-r from-blue-200 to-blue-100 text-black"
         >
             <tr>
                 <th className="p-3 text-center ">Month</th>
