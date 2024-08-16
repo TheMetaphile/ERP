@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import logo from '../../assets/school logo.png';
 import axios from 'axios';
 import { FaRegCircleXmark } from "react-icons/fa6";
+import { motion, AnimatePresence } from 'framer-motion';
+import {  FaEye, FaEyeSlash, FaLock, FaEnvelope } from 'react-icons/fa';
 import { BASE_URL_Login } from "../../Config";
 
 export default function ImageTextInRow(props) {
@@ -82,7 +83,19 @@ export default function ImageTextInRow(props) {
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
   };
+  const dialogVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { type: 'spring', damping: 25, stiffness: 500 }
+    },
+    exit: { opacity: 0, scale: 0.8, transition: { duration: 0.2 } }
+  };
 
+  const inputVariants = {
+    focus: { scale: 1.02, boxShadow: "0px 0px 8px rgb(59,130,246)" }
+  };
   return (
     <div className="hover:bg-blue-100 rounded-full">
       {props.route ? (
@@ -97,79 +110,109 @@ export default function ImageTextInRow(props) {
         </button>
       )}
 
+<AnimatePresence>
       {isDialogOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 mobile:max-tablet:p-6 rounded-lg shadow-lg z-50 mobile:max-tablet:mx-4">
-            <FaRegCircleXmark className="text-red-600 float-right w-5 h-5 cursor-pointer" onClick={handleCloseDialog} />
-            <div className="flex flex-col bg-white tablet:w-fit tablet:px-5 mobile:w-full mobile:px- mobile:max-tablet:mt-10 justify-center">
-
-              <h1 className="tablet:text-xl mobile:max-tablet:text-lg py-2 mobile:max-tablet:py-0 font-medium self-center whitespace-nowrap ">Change Your Password</h1>
-
-
-              {error && <div className="text-red-500 text-center mt-2">{error}</div>}
-              {successMessage && <div className="text-green-500 text-center mt-2">{successMessage}</div>}
-
-              <label className="text-xl mobile:max-tablet:text-lg mt-3 text-left">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={handleEmailChange}
-                placeholder="Enter your email"
-                className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg"
-                disabled={isSubmitting}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+        >
+          <motion.div
+            variants={dialogVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="bg-white p-6 rounded-lg shadow-2xl z-50 w-full max-w-md"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h1 className="text-2xl font-bold text-gray-800">Change Your Password</h1>
+              <FaRegCircleXmark 
+                className="text-red-600 w-6 h-6 cursor-pointer transition-transform hover:scale-110" 
+                onClick={handleCloseDialog} 
               />
+            </div>
 
-              <label className="text-xl mobile:max-tablet:text-lg  mt-3 text-left">Old Password</label>
-              <input
-                type="password"
-                id="oldPassword"
-                name="oldPassword"
-                value={oldPassword}
-                onChange={handleOldPasswordChange}
-                placeholder="Enter your old password"
-                className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg"
-                disabled={isSubmitting}
-              />
+            {error && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-500 text-center mb-4">{error}</motion.div>}
+            {successMessage && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-green-500 text-center mb-4">{successMessage}</motion.div>}
 
-
-              <label className="text-xl mobile:max-tablet:text-lg  mt-3 text-left">New Password</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="newPassword"
-                  name="newPassword"
-                  value={newPassword}
-                  onChange={handleNewPasswordChange}
-                  placeholder="Enter your new password"
-                  className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg pr-10"
-                  disabled={isSubmitting}
-                />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                  disabled={isSubmitting}
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                  Email
+                </label>
+                <motion.div variants={inputVariants} whileFocus="focus" className="relative">
+                  <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    placeholder="Enter your email"
+                    className="w-full pl-10 pr-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                    disabled={isSubmitting}
+                  />
+                </motion.div>
               </div>
 
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="oldPassword">
+                  Old Password
+                </label>
+                <motion.div variants={inputVariants} whileFocus="focus" className="relative">
+                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="password"
+                    id="oldPassword"
+                    value={oldPassword}
+                    onChange={handleOldPasswordChange}
+                    placeholder="Enter your old password"
+                    className="w-full pl-10 pr-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                    disabled={isSubmitting}
+                  />
+                </motion.div>
+              </div>
 
+              <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="newPassword">
+                  New Password
+                </label>
+                <motion.div variants={inputVariants} whileFocus="focus" className="relative">
+                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="newPassword"
+                    value={newPassword}
+                    onChange={handleNewPasswordChange}
+                    placeholder="Enter your new password"
+                    className="w-full pl-10 pr-10 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                    disabled={isSubmitting}
+                  />
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    disabled={isSubmitting}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </motion.div>
+              </div>
 
-              <button
-                className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-4 justify-center border border-gray-300 self-center bg-blue-400"
-                onClick={handleSubmit}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out"
+                type="submit"
                 disabled={isSubmitting}
               >
-                <h1 className=" text-2xl mobile:max-tablet:text-lg text-white">Change Password</h1>
-              </button>
-
-            </div>
-          </div>
-        </div>
+                {isSubmitting ? 'Changing...' : 'Change Password'}
+              </motion.button>
+            </form>
+          </motion.div>
+        </motion.div>
       )}
+    </AnimatePresence>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { motion } from "framer-motion";
 import AttendenceTable from './utils/AttendenceTable';
 import ApplyLeave from './utils/ApplyLeave'
 import ProgressCard from '../assignment_report/utils/progressCard';
@@ -8,12 +9,15 @@ import axios from 'axios';
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL_Student_Leave } from "../../Config";
+import { FaCalendarAlt } from "react-icons/fa";
+import Calendar from "../Attendance/utils/CalendarTile";
+
 ChartJS.register(Tooltip, Legend, ArcElement);
 
 export default function Leave() {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
-    const [details, setDetails] = useState([]);
+    const [details, setDetails] = useState({ approved: 0, pending: 0, rejected: 0 });
     const [additionalData, setAdditionalData] = useState([]);
     const [status, setStatus] = useState('Pending');
 
@@ -27,20 +31,18 @@ export default function Leave() {
                     }
                 });
                 setDetails(response.data);
-                console.log('fetch', response.data)
+                console.log('fetch', response.data);
             } catch (error) {
                 console.error("Error fetching student stats:", error);
-            }
-            finally {
-                setLoading(false)
+            } finally {
+                setLoading(false);
             }
         };
         fetchStats();
     }, [authState.accessToken]);
 
-
     const handleNewLeave = (newLeave) => {
-        console.log('leave.jsx')
+        console.log('leave.jsx');
         setAdditionalData([newLeave]);
     };
 
@@ -49,21 +51,14 @@ export default function Leave() {
         plugins: {
             legend: {
                 display: false,
-
             }
         }
     };
 
     const chartData = {
-
         datasets: [{
             data: [details.approved, details.pending, details.rejected],
-            backgroundColor: [
-                '#4caf50',
-                '#FE8D01',
-                '#ff0000'
-            ],
-            bg: ['text-red-600', 'text-green-600', 'text-yellow-400'],
+            backgroundColor: ['#4caf50', '#FE8D01', '#ff0000'],
             hoverOffset: 4,
             cutout: "82%",
             borderRadius: 20,
@@ -76,63 +71,90 @@ export default function Leave() {
     };
 
     return (
-        <div className=" flex flex-col px-3 overflow-y-auto items-start mt-2 ml-2 mr-3 mobile:max-tablet:mx-0 pb-4 no-scrollbar">
-            <h1 className='text-xl font-medium'>Your Leave</h1>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col px-3 overflow-y-auto items-start mt-2 ml-2 mr-3 mobile:max-tablet:mx-0 pb-4 no-scrollbar"
+        >
+            <h1 className='text-2xl font-bold mb-6 text-indigo-700'>Your Leave Dashboard</h1>
             {loading ? (
                 <Loading />
             ) : (
-                <div className='flex mobile:max-tablet:grid mobile:max-tablet:grid-cols-2 items-center gap-3 mb-4 h-fit px-5 py-3 w-full rounded-lg mobile:max-tablet:px-2.5'>
-                    <div className='flex   flex-col w-52  mobile:max-laptop:h-52 desktop:h-52 justify-center px-2  border border-gray-300 mobile:max-tablet:w-full  rounded-lg shadow-lg  text-center font-medium text-lg '>
-                        <div className='mx-2 h-32 '>
-                            <Doughnut data={chartData} options={options} className=' ' />
+                <div className='grid grid-cols-4 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-8'>
+                    <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        className='bg-white rounded-xl shadow-md p-6 border border-gray-200 flex flex-col items-center justify-center'
+                    >
+                        <div className='w-40 h-40 mb-4'>
+                            <Doughnut data={chartData} options={options} />
                         </div>
-                        <h1 className="">Total Leave Status</h1>
-                    </div>
-                    <ProgressCard
-                        title='Approved'
-                        percent={details.approved}
-                        centerText={details.approved}
-                        trailColor='#c8ebc9'
-                        strokeColor='#4caf50'
-                    />
-                    <ProgressCard
-                        title='Pending'
-                        percent={details.pending}
-                        centerText={details.pending}
-                        trailColor='#FFD8B2'
-                        strokeColor='#FE8D01'
-                    />
-                    <ProgressCard
-                        title='Rejected'
-                        percent={details.rejected}
-                        centerText={details.rejected}
-                        trailColor='#ffd6d6'
-                        strokeColor='#ff0000'
-
-                    />
+                        <h2 className="text-lg font-semibold text-gray-800">Total Leave Status</h2>
+                    </motion.div>
+                    <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        className='bg-white rounded-xl shadow-md p-6 border border-gray-200 flex flex-col items-center justify-center'
+                    >
+                        <ProgressCard
+                            title='Approved'
+                            percent={details.approved}
+                            centerText={details.approved}
+                            trailColor='#c8ebc9'
+                            strokeColor='#4caf50'
+                        />
+                    </motion.div>
+                    <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        className='bg-white rounded-xl shadow-md p-6 border border-gray-200 flex flex-col items-center justify-center'
+                    >
+                        <ProgressCard
+                            title='Pending'
+                            percent={details.pending}
+                            centerText={details.pending}
+                            trailColor='#FFD8B2'
+                            strokeColor='#FE8D01'
+                        /></motion.div>
+                    <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        className='bg-white rounded-xl shadow-md p-6 border border-gray-200 flex flex-col items-center justify-center'
+                    >
+                        <ProgressCard
+                            title='Rejected'
+                            percent={details.rejected}
+                            centerText={details.rejected}
+                            trailColor='#ffd6d6'
+                            strokeColor='#ff0000'
+                        />
+                    </motion.div>
                 </div>
             )}
 
-            <div className="gap-2 overflow-x-auto flex w-full tablet:justify-evenly my-4 mobile:max-tablet:flex-col items-center">
-                <div className=" tablet:w-fit  py-3 mobile:max-tablet:w-full flex-grow">
-                    <ApplyLeave onNewLeave={handleNewLeave} />
+            <div className="flex w-full mb-8 gap-3">
+                <div className="flex-1">
+                <Calendar month={new Date().getMonth()+1} year={new Date().getFullYear()}/>
+                </div>
+                <div className="flex-1 ">
+                <ApplyLeave onNewLeave={handleNewLeave} />
                 </div>
             </div>
-            <div className="flex items-center justify-between w-full">
-                <h1 className="text-xl font-medium">Old Leave</h1>
-                <select
-                    value={status}
-                    onChange={handleStatusChange}
-                    className="border border-gray-300 rounded-lg px-2 py-1"
-                >
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
-                </select>
-            </div>
-            <AttendenceTable additionalData={additionalData} status={status} />
 
-        </div>
+            <div className="flex items-center justify-between w-full mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">Leave History</h2>
+                <div className="flex items-center space-x-2">
+                    <FaCalendarAlt className="text-indigo-500" />
+                    <select
+                        value={status}
+                        onChange={handleStatusChange}
+                        className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+            </div>
+
+            <AttendenceTable additionalData={additionalData} status={status} />
+        </motion.div>
     )
 }
-

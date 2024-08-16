@@ -1,145 +1,141 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameMonth, isSunday, } from 'date-fns';
+import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameMonth, isSunday, isToday, getDay } from 'date-fns';
+import { motion } from 'framer-motion';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import { BASE_URL_Attendence } from '../../../Config';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-const Calendar = ( {month,year}) => {
+const Calendar = ({ month, year }) => {
   const { authState } = useContext(AuthContext);
-  const [data, setData] = useState('');
+  const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date(`${year}-${month}-01`));
+  const [selectedDate, setSelectedDate] = useState(null);
+
   useEffect(() => {
-    const fetchStudents = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/student?month=${month}&year=${year}`, {
-          headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
-          }
-        });
-        setData(response.data)
-      } catch (error) {
-        console.error("Error fetching student month attendance:", error);
-      }
-      finally {
-        setLoading(false)
-      }
-    };
+    fetchStudentAttendance();
+  }, [currentDate, authState.accessToken]);
 
-    fetchStudents();
-  }, [authState.accessToken]);
-  const currentDate = new Date(`${year}-${month}-01`);
-  const [selectedDate, setSelectedDate] = useState(currentDate);
-
-  const handleClick = (date) => {
-    setSelectedDate(date);
-  };
-
-
-  // Calculate the year and month for the previous month
-  const prevMonthYear = month === 1 ? year - 1 : year;
-  const prevMonth = month === 1 ? 12 : month -1;
-  // Create a new Date object for the first day of the previous month
-  const prevMonthDate = new Date(`${prevMonthYear}-${prevMonth}-1`);
-
-  const getDateRange = (date) => {
-    const startDate = startOfMonth(date);
-    const endDate = endOfMonth(date);
-    return eachDayOfInterval({ start: startDate, end: endDate });
-  }
-
-
-  const currentMonthRange = getDateRange(currentDate);
-  const prevMonthRange = getDateRange(prevMonthDate);
-  const startDateDay = currentMonthRange[0].getDay();
-  console.log('startDateDAy',startDateDay)
-  const monthName = format(currentDate, 'MMMM yyyy');
-  const weekdayShortNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  var negativeNum;
-  switch (startDateDay){
-    case 0:
-      negativeNum=-6;
-      break;
-    case 1:
-      negativeNum=0;
-      break;
-      case 2:
-      negativeNum=-1;
-      break;
-      case 3:
-      negativeNum=-2;
-      break;
-      case 4:
-      negativeNum=-3;
-      break;
-      case 5:
-      negativeNum=-4;
-      break;
-      case 6:
-      negativeNum=-5;
-      break;
-  }
-  const finalDateRange = negativeNum==0 ? currentMonthRange : [...prevMonthRange.slice(negativeNum), ...currentMonthRange];
-  //console.log("final range",finalDateRange);
-  const getStatusDotColor = (date) => {
-    // const formattedDate =  format(date, 'yyyy-MM-dd') ;
-    const formattedDate1 = format(date, 'dd/MM/yyyy');
-    const formattedDate2 = format(date, 'yyyy-MM-dd');
-    // Check if the key exists in the data object
-    const status = data[`${formattedDate1}`] || data[`${formattedDate2}`] || 'defaultValue';
-    switch (status) {
-      case 'Absent':
-        return 'bg-red-300';
-      case 'Present':
-        return 'bg-green-300';
-      case 'Leave':
-        return 'bg-yellow-300';
-      default:
-        return 'bg-gray-200';
+  const fetchStudentAttendance = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/student`, {
+        params: {
+          month: currentDate.getMonth() + 1,
+          year: currentDate.getFullYear(),
+        },
+        headers: {
+          Authorization: `Bearer ${authState.accessToken}`,
+        }
+      });
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching student month attendance:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  const handleDateClick = (date) => setSelectedDate(date);
+
+  const changeMonth = (increment) => {
+    setCurrentDate(prevDate => {
+      const newDate = new Date(prevDate);
+      newDate.setMonth(newDate.getMonth() + increment);
+      return newDate;
+    });
+  };
+
+  const getDateRange = () => {
+    const startDate = startOfMonth(currentDate);
+    const endDate = endOfMonth(currentDate);
+    return eachDayOfInterval({ start: startDate, end: endDate });
+  };
+
+  const currentMonthRange = getDateRange();
+  const monthName = format(currentDate, 'MMMM yyyy');
+  const weekdayShortNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+  const getStatusDotColor = (date) => {
+    const formattedDate = format(date, 'yyyy-MM-dd');
+    const status = data[formattedDate] || 'defaultValue';
+    switch (status) {
+      case 'Absent': return 'bg-red-500';
+      case 'Present': return 'bg-green-500';
+      case 'Leave': return 'bg-yellow-500';
+      default: return 'bg-gray-300';
+    }
+  };
+
+  const calendarAnimation = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } }
+  };
+
+  const firstDayOfMonth = getDay(startOfMonth(currentDate)); // Get the weekday of the first day
+  const blankDays = [...Array((firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1))].map((_, i) => (
+    <div key={`blank-${i}`} className="flex justify-center items-center p-2" />
+  ));
+
   return (
-    <div className="flex flex-col w-full h-full flex-grow px-3 py-4 bg-white border border-gray-300 rounded-lg shadow-md ">
-      <div className="flex justify-between items-center mb-4 text-lg font-semibold">
-        {monthName}
+    <motion.div 
+      className="flex flex-col w-full h-full flex-grow p-6 bg-white border border-gray-300 rounded-lg shadow-lg"
+      initial="hidden"
+      animate="visible"
+      variants={calendarAnimation}
+    >
+      <div className="flex justify-between items-center mb-6 text-xl font-bold text-gray-800">
+        <button onClick={() => changeMonth(-1)} className="text-gray-600 hover:text-gray-800">
+          <FaChevronLeft />
+        </button>
+        <span>{monthName}</span>
+        <button onClick={() => changeMonth(1)} className="text-gray-600 hover:text-gray-800">
+          <FaChevronRight />
+        </button>
       </div>
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-2 mb-4">
         {weekdayShortNames.map((day, index) => (
-          <div key={index} className={`font-normal text-center ${index === 6 ? "text-gray-400" : "text-black  rounded-lg bg-secondary"}`}>
+          <div key={index} className={`font-medium text-center py-2 ${index === 6 ? "text-red-500" : "text-gray-600"}`}>
             {day}
           </div>
         ))}
-        {finalDateRange.map((date, index) => {
+      </div>
+      <div className="grid grid-cols-7 gap-2">
+        {blankDays}
+        {currentMonthRange.map((date, index) => {
           const isCurrentMonth = isSameMonth(date, currentDate);
-          const isSelectedDate = selectedDate.getTime() === date.getTime() && !isSunday(selectedDate);
-          const isDateSunday = isSunday(date);
+          const isSelected = selectedDate && date.getTime() === selectedDate.getTime();
+          const checkSunday = isSunday(date);
+          const isCurrentDate = isToday(date);
           const dotColor = getStatusDotColor(date);
 
           return (
-            <div
+            <motion.div
               key={index}
-              className={`flex justify-center text-center py-2 rounded-full relative ${!isCurrentMonth
-                ? 'text-gray-400'
-                : isSelectedDate
-                  ? 'text-black bg-blue-100'
-                  : isDateSunday
-                    ? 'text-red-500 hover:bg-gray-200 cursor-pointer'
-                    : 'text-black hover:bg-gray-200 cursor-pointer'
-                }`}
-              onClick={() => handleClick(date)}
+              className={`
+                flex flex-col items-center justify-center p-2 rounded-lg relative
+                ${!isCurrentMonth ? 'text-gray-400' : ''}
+                ${isSelected ? 'bg-blue-100 text-blue-800' : ''}
+                ${checkSunday ? 'text-red-500' : ''}
+                ${isCurrentDate ? 'border-2 border-blue-500' : ''}
+                ${isCurrentMonth && !isSelected && !checkSunday ? 'hover:bg-gray-100' : ''}
+                cursor-pointer
+              `}
+              onClick={() => handleDateClick(date)}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <div className={`${isCurrentMonth ? dotColor : "bg-white text-gray-400"}  rounded-full w-8 h-8 text-center `}>{format(date, 'dd')}</div>
-              {dotColor && (
-                <span
-                  className={`absolute bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 rounded-full ${dotColor}`}
-                ></span>
-              )}
-            </div>
+              <span className={`${isCurrentMonth ? 'font-semibold' : 'font-normal'}`}>
+                {format(date, 'd')}
+              </span>
+              <span className={`w-2 h-2 mt-1 rounded-full ${dotColor}`}></span>
+            </motion.div>
           );
         })}
       </div>
-    </div>
+      {loading && <div className="text-center mt-4 text-gray-600">Loading...</div>}
+    </motion.div>
   );
 };
 
