@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
-import { FaUser, FaEnvelope, FaBirthdayCake, FaIdCard, FaGraduationCap, FaCalendarAlt, FaBookOpen, FaAddressCard, FaPhone, FaBriefcase, FaFlag, FaPray, FaTint } from 'react-icons/fa';
+import {  FaEnvelope, FaBirthdayCake, FaIdCard, FaGraduationCap, FaCalendarAlt, FaTint } from 'react-icons/fa';
 import { IoMdSchool } from 'react-icons/io';
 import { GiIndiaGate } from 'react-icons/gi';
 import AuthContext from '../../Context/AuthContext';
