@@ -7,6 +7,7 @@ import AuthContext from '../../../Context/AuthContext';
 import CreateDiscount from './CreateDiscount';
 import { MdDeleteForever, MdAdd, MdRemove, MdSchool, MdRefresh } from "react-icons/md";
 import { BASE_URL_Fee } from '../../../Config';
+import { motion } from "framer-motion";
 
 const getSessions = () => {
     const currentYear = new Date().getFullYear();
@@ -101,29 +102,29 @@ function FeeDiscountSubAdmin() {
         <div className="flex flex-col px-6 py-8 min-h-screen">
             <ToastContainer />
             <div className='flex justify-between items-center mb-6'>
-                <h1 className="text-3xl font-bold text-indigo-800 flex items-center"><MdSchool className="mr-2" /> Student Fee Discount</h1>
+                <h1 className="text-3xl font-bold text-purple-500 flex items-center"><MdSchool className="mr-2" /> Student Fee Discount</h1>
                 <div className='flex gap-4 items-center'>
-                    <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-indigo-300 rounded-md py-2 px-4 text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
+                    <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
                         {session.map((session, index) => (
                             <option key={index} value={session}>{session}</option>
                         ))}
                     </select>
-                    <select id="Class" name="Class" value={selectedClass} onChange={handleClassChange} className="bg-white border-2 border-indigo-300 rounded-md py-2 px-4 text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300">
+                    <select id="Class" name="Class" value={selectedClass} onChange={handleClassChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
                         <option value="">Select Class</option>
                         {["Pre-Nursery", "Nursery", "L.K.G", "U.K.G", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"].map(cls => (
                             <option key={cls} value={cls}>{cls}</option>
                         ))}
                     </select>
-                    <button className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-indigo-500 hover:bg-indigo-600'}`} onClick={() => setShowDiscountStructure(!showDiscountStructure)}>
+                    <button className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'}`} onClick={() => setShowDiscountStructure(!showDiscountStructure)}>
                         {showDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Add</>}
                     </button>
                 </div>
             </div>
             <div className='w-full'>
                 {showDiscountStructure && <CreateDiscount selectedSession={selectedSession} />}
-                <div className='mt-3 bg-white border border-indigo-200 rounded-lg shadow-lg overflow-hidden'>
+                <div className='mt-3 bg-white border border-purple-200 rounded-lg shadow-lg overflow-hidden'>
                     <table className="w-full">
-                        <thead className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white">
+                        <thead className="bg-purple-200">
                             <tr>
                                 {["Roll No.", "Student Name", "Current Class", "Session", "Discount", "By", "Employee ID", "Action"].map(header => (
                                     <th key={header} className="py-3 px-4 text-left">{header}</th>
@@ -135,7 +136,13 @@ function FeeDiscountSubAdmin() {
                                 <tr><td colSpan="8" className="text-center py-4"><Loading /></td></tr>
                             ) : details.length > 0 ? (
                                 details.map((detail, index) => (
-                                    <tr key={index} className="border-b hover:bg-indigo-50 transition duration-200">
+                                    <motion.tr
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                                    className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
+                                  >
+                               
                                         <td className="py-3 px-4">{detail.to.rollNumber}</td>
                                         <td className="py-3 px-4 flex items-center">
                                             <img src={detail.to.profileLink} alt="profile" className="h-8 w-8 rounded-full mr-3 border-2 border-indigo-300" />
@@ -151,7 +158,8 @@ function FeeDiscountSubAdmin() {
                                                 <MdDeleteForever size={20} />
                                             </button>
                                         </td>
-                                    </tr>
+                                        </motion.tr>
+
                                 ))
                             ) : (
                                 <tr><td colSpan="8" className="text-center py-4 text-gray-500">No Fee Discount available</td></tr>

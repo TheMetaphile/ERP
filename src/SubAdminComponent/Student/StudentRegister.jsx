@@ -9,7 +9,26 @@ import { BASE_URL_Login } from "../../Config";
 import AuthContext from "../../Context/AuthContext";
 import SubjectInputs from "./SubjectInputs";
 import { FaUser, FaHome, FaVenusMars, FaGraduationCap, FaIdCard, FaEnvelope, FaAddressCard, FaBriefcase, FaPhone, FaStream, FaCalendarAlt, FaTint, FaUsers, FaGlobe, FaPercentage, FaCloudUploadAlt } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
+
+const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { type: 'spring', stiffness: 50 }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { type: 'spring', stiffness: 50 }
+    }
+};
 
 export default function StudentRegister() {
     const { authState } = useContext(AuthContext);
@@ -218,10 +237,20 @@ export default function StudentRegister() {
 
 
     return (
-        <div className="bg-gray-100 p-6 rounded-lg shadow-lg h-screen overflow-y-auto mt-6">
+        <motion.div
+            className=" p-6 rounded-lg shadow-lg h-screen overflow-y-auto "
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
             <ToastContainer />
-            <h1 className="text-3xl font-bold mb-6 text-center text-indigo-700 mt-12">Add New Student</h1>
-            <form onSubmit={handleSubmit} className="grid grid-cols-3  mobile:max-tablet:grid-cols-1 gap-6">
+            <h1
+                className="text-3xl font-bold mb-6 text-center text-purple-700 "
+
+            >
+                Add New Student
+            </h1>
+            <form onSubmit={handleSubmit} className="grid grid-cols-3 mobile:max-tablet:grid-cols-1 gap-6">
                 <InputField icon={<FaUser />} label="Name" name="name" value={formData.name} onChange={handleChange} required />
                 <InputField icon={<FaHome />} label="Permanent Address" name="permanentAddress" value={formData.permanentAddress} onChange={handleChange} required />
                 <SelectField icon={<FaVenusMars />} label="Gender" name="gender" value={formData.gender} onChange={handleChange} options={['male', 'female', 'other']} required />
@@ -253,62 +282,85 @@ export default function StudentRegister() {
                 <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} />
                 <SelectField icon={<FaStream />} label="Stream" name="stream" value={formData.stream} onChange={handleChange} options={['General', 'PCM', 'PCB', 'PCMB', 'Commerce', 'Arts']} required />
 
-                <div className="col-span-full flex justify-center gap-4 mt-6">
+                <motion.div className="col-span-full flex justify-center gap-4 mt-6" variants={itemVariants}>
                     <SubjectInputs stream={formData.stream} setSubject={setSubjects} subjects={subjects} />
-                </div>
+                </motion.div>
 
                 <div className="col-span-full flex justify-center gap-4 mt-6">
-                    <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded transition duration-300 ease-in-out transform hover:scale-105" type="reset" onClick={handleReset}>Reset</button>
-                    <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition duration-300 ease-in-out transform hover:scale-105" type="submit">Save</button>
+                    <motion.button
+                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded transition duration-300 ease-in-out transform hover:scale-105"
+                        type="reset"
+                        onClick={handleReset}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        Reset
+                    </motion.button>
+                    <motion.button
+                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition duration-300 ease-in-out transform hover:scale-105"
+                        type="submit"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        Save
+                    </motion.button>
                 </div>
 
-                <div className="col-span-full flex justify-center mt-6">
-                    <label className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 flex items-center">
+                <motion.div className="col-span-full flex justify-center mt-6" variants={itemVariants}>
+                    <motion.label
+                        className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 flex items-center"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
                         Upload CSV <FaCloudUploadAlt className="ml-2" />
                         <input type="file" accept=".csv" className="hidden" onChange={handleUpload} />
-                    </label>
-                </div>
+                    </motion.label>
+                </motion.div>
             </form>
-        </div>
+        </motion.div>
+
 
 
     );
 }
 
 const InputField = ({ icon, label, name, type = "text", value, onChange, required }) => (
-    <div className="mb-4">
-        <label className=" text-gray-700 text-sm font-bold mb-2 flex items-center">
+    <motion.div className="mb-4" variants={itemVariants}>
+        <label className="flex items-center text-lg mb-2 text-purple-700 font-semibold">
             {icon} <span className="ml-2">{label}</span>
         </label>
-        <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
+        <motion.input
+            className="border-2 border-purple-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
             id={name}
             type={type}
             name={name}
             value={value}
             onChange={onChange}
             required={required}
+            whileFocus={{ scale: 1.02 }}
         />
-    </div>
+    </motion.div>
 );
 
 const SelectField = ({ icon, label, name, value, onChange, options, required }) => (
-    <div className="mb-4">
-        <label className=" text-gray-700 text-sm font-bold mb-2 flex items-center">
+    <motion.div className="mb-4" variants={itemVariants}>
+        <label className="flex items-center text-lg mb-2 text-purple-700 font-semibold">
             {icon} <span className="ml-2">{label}</span>
         </label>
-        <select
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
+        <motion.select
+            className="border-2 border-purple-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
             id={name}
             name={name}
             value={value}
             onChange={onChange}
             required={required}
+            whileFocus={{ scale: 1.02 }}
         >
             <option value="">Select {label}</option>
             {options.map(option => (
                 <option key={option} value={option}>{option}</option>
             ))}
-        </select>
-    </div>
+        </motion.select>
+    </motion.div>
 );
+

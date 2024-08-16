@@ -5,6 +5,7 @@ import AuthContext from "../../../Context/AuthContext";
 import { BASE_URL_Login } from '../../../Config';
 import Loading from "../../../LoadingScreen/Loading";
 import { ToastContainer, toast } from 'react-toastify';
+import { motion } from 'framer-motion';
 
 const List = () => {
     const [data, setData] = useState([]);
@@ -104,7 +105,7 @@ const List = () => {
 
                 <h1 className='text-xl font-medium mb-2 '>Ex Student Result</h1>
                 <div className="flex items-center gap-2">
-                    <select id="class" value={Class} onChange={handleClassChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
+                    <select id="class" value={Class} onChange={handleClassChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
                         <option value="">Search by Class</option>
                         <option value="Pre-Nursery">Pre-Nursery</option>
                         <option value="Nursery">Nursery</option>
@@ -125,7 +126,7 @@ const List = () => {
                     </select>
 
                     <div>
-                        <select id="school-sessions" value={selectedSession} onChange={handleSessionChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
+                        <select id="school-sessions" value={selectedSession} onChange={handleSessionChange} className="rounded-lg shadow-md px-3 py-1 border-2  border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
                             <option value="">Select Session</option>
                             {sessions.map((session, index) => (
                                 <option key={index} value={session}>
@@ -139,13 +140,12 @@ const List = () => {
             <div className="overflow-x-auto border-1 rounded-lg pt-2">
                 <table className="table w-full border-2">
                     <thead className=" bg-purple-200">
-                        <tr className="border border-gray-300 table-row whitespace-nowrap rounded-md ">
-                            <th className=" font-normal mobile:max-laptop:text-base text-xl p-2">Roll No.</th>
-                            <th className=" font-normal mobile:max-laptop:text-base text-xl p-2">Admission No</th>
-                            <th className=" font-normal mobile:max-laptop:text-base text-xl p-2">Name</th>
-                            <th className=" font-normal mobile:max-laptop:text-base text-xl p-2">Class</th>
-                            <th className=" font-normal mobile:max-laptop:text-base text-xl p-2">Section</th>
-                            <th className=" font-normal mobile:max-laptop:text-base text-xl p-2">Action</th>
+                        <tr>
+                            <th className="py-3 px-4 text-center ">Roll No.</th>
+                            <th className="py-3 px-4 text-center">Name</th>
+                            <th className="py-3 px-4 text-center">Class</th>
+                            <th className="py-3 px-4 text-center">Section</th>
+                            <th className="py-3 px-4 text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody className="table-row-group">
@@ -160,30 +160,53 @@ const List = () => {
                         ) : (
                             <>
                                 {data.map((item, index) => (
-                                    <tr key={index} className={`border border-gray-300 text-center ${clickedIndex === index ? 'bg-purple-100' : ''}`} onClick={() => handleClick(index)}>
-                                        <td className="p-2">{item.rollNumber}</td>
-                                        <td className="p-2">15</td>
-                                        <td className="flex items-center">
-                                            <img src={item.profileLink} alt="" className="w-8 h-8 rounded-full" />
-                                            <div className="p-2">{item.name}</div>
+                                    <motion.tr
+                                        key={index}
+                                        className='border-b hover:bg-purple-100 transition-colors'
+                                        onClick={() => handleClick(index)}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.3, delay: index * 0.05 }}
+                                        whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+                                    >
+                                        <td className="py-3 px-4 text-center">{item.rollNumber}</td>
+                                        <td className="py-3 px-4 text-center">
+                                            <div className="flex items-center space-x-3">
+                                                <img src={item.profileLink} alt="" className="w-10 h-10 rounded-full object-cover border-2 border-purple-300" />
+                                                <span>{item.name}</span>
+                                            </div>
                                         </td>
-                                        <td className="p-2 whitespace-nowrap">{item.currentClass}</td>
-                                        <td className="p-2 whitespace-nowrap">{item.section}</td>
-
-                                        <td className="p-2 whitespace-nowrap">
+                                        <td className="py-3 px-4 text-center whitespace-nowrap">{item.currentClass}</td>
+                                        <td className="py-3 px-4 text-center whitespace-nowrap">{item.section}</td>
+                                        <td className="py-3 px-4 text-center whitespace-nowrap">
                                             <Link to={`/Sub-Admin/Result/exStudent/${item._id}?Class=${item.currentClass}&session=${selectedSession}`}>
-                                                <button className="bg-purple-100 text-purple-500 px-2 py-0.5 mr-2 rounded">Result</button>
+                                                <motion.button
+                                                    className="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-purple-600 transition-colors duration-200"
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                >
+                                                    Result
+                                                </motion.button>
                                             </Link>
-
                                         </td>
-                                    </tr>
+                                    </motion.tr>
                                 ))}
                                 {!allDataFetched && (
-                                    <tr>
-                                        <td colSpan="5" className="text-center">
-                                            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer' onClick={handleViewMore}>View More</h1>
-                                        </td>
-                                    </tr>
+                                    <motion.div
+                                        className="text-center py-4"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 0.5 }}
+                                    >
+                                        <motion.button
+                                            className="text-purple-500 hover:text-purple-700 font-medium focus:outline-none"
+                                            onClick={handleViewMore}
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                        >
+                                            View More
+                                        </motion.button>
+                                    </motion.div>
                                 )}
                             </>
                         )}
@@ -191,7 +214,7 @@ const List = () => {
 
                 </table>
             </div>
-        </div>
+        </div >
     );
 };
 
