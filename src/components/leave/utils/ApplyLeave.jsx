@@ -71,7 +71,7 @@ export default function ApplyLeave({ onNewLeave }) {
             transition={{ duration: 0.5 }}
             className="flex flex-col border border-gray-300 items-center p-6  rounded-xl shadow-lg bg-gradient-to-br from-blue-50 to-purple-50"
         >
-            <ToastContainer position="top-right" autoClose={3000} />
+            {/* <ToastContainer position="top-right" autoClose={3000} /> */}
             <motion.h1
                 initial={{ scale: 0.9 }}
                 animate={{ scale: 1 }}

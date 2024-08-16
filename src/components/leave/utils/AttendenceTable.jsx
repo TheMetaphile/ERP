@@ -156,7 +156,7 @@ export default function AttendenceTable({ additionalData, status }) {
 
   return (
     <div className=' mt-1 border-gray-300 w-full bg-white '>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       {loading ? (
         <Loading />
       ) : data.length === 0 ? (
@@ -197,11 +197,10 @@ export default function AttendenceTable({ additionalData, status }) {
                         `${leave.startDate} to ${leave.endDate}`
                       )}
                     </div>
-                    <div className={`${
-                      leave.status === "Pending" ? "text-yellow-500" :
-                      leave.status === "Rejected" ? "text-red-500" :
-                      "text-green-500"
-                    } font-medium`}>
+                    <div className={`${leave.status === "Pending" ? "text-yellow-500" :
+                        leave.status === "Rejected" ? "text-red-500" :
+                          "text-green-500"
+                      } font-medium`}>
                       {leave.status}
                     </div>
                   </div>

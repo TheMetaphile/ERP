@@ -11,6 +11,7 @@ import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL_Student_Leave } from "../../Config";
 import { FaCalendarAlt } from "react-icons/fa";
 import Calendar from "../Attendance/utils/CalendarTile";
+import { ToastContainer } from "react-toastify";
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
@@ -71,12 +72,14 @@ export default function Leave() {
     };
 
     return (
+
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
             className="flex flex-col px-3 overflow-y-auto items-start mt-2 ml-2 mr-3 mobile:max-tablet:mx-0 pb-4 no-scrollbar"
         >
+            <ToastContainer />
             <h1 className='text-2xl font-bold mb-6 text-indigo-700'>Your Leave Dashboard</h1>
             {loading ? (
                 <Loading />
@@ -131,10 +134,10 @@ export default function Leave() {
 
             <div className="flex w-full mb-8 gap-3">
                 <div className="flex-1">
-                <Calendar month={new Date().getMonth()+1} year={new Date().getFullYear()}/>
+                    <Calendar month={new Date().getMonth() + 1} year={new Date().getFullYear()} />
                 </div>
                 <div className="flex-1 ">
-                <ApplyLeave onNewLeave={handleNewLeave} />
+                    <ApplyLeave onNewLeave={handleNewLeave} />
                 </div>
             </div>
 
