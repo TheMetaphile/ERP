@@ -94,7 +94,7 @@ export default function TransactionField({ data }) {
               <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500"><FaMoneyBillWave className="inline mr-2" />₹ {value.amount}</td>
               <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500"><FaSignature className="inline mr-2" />{value.signature}</td>
               <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                <span className={`px-2 inline-flex text-xs leading-5 font-semibold items-center rounded-full ${value.payment_status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                <span className={`px-2 inline-flex text-xs leading-5 font-semibold items-center rounded-full ${value.payment_status === 'Success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                   <FaCheckCircle className="inline mr-1" />{value.payment_status}
                 </span>
               </td>

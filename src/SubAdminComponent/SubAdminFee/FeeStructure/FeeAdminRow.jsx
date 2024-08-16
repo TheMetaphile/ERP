@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { BASE_URL_Fee } from '../../../Config';
 import { MdCheck, MdCancel, MdOutlineModeEdit } from 'react-icons/md';
+import { motion } from "framer-motion";
 
 export default function FeeAdminRow({ Class, session, key }) {
     const [structure, setStructure] = useState([]);
@@ -126,7 +127,13 @@ export default function FeeAdminRow({ Class, session, key }) {
     };
 
     return (
-        <tr key={key} className="border-b border-gray-200 bg-white hover:bg-gray-300">
+        <motion.tr
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: key * 0.1 }}
+            className="border-b border-gray-200 hover:bg-gray-300 transition-colors"
+        >
+
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{Class}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {editMode === key ? (
@@ -189,13 +196,15 @@ export default function FeeAdminRow({ Class, session, key }) {
                     </>
                 ) : (
                     <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow-md transition duration-300"
+                        className="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded shadow-md transition duration-300"
                         onClick={() => handleEditToggle(key)}
                     >
                         <MdOutlineModeEdit />
                     </button>
                 )}
             </td>
-        </tr>
+
+        </motion.tr>
+
     );
 }

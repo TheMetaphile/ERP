@@ -4,6 +4,7 @@ import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL_Login } from "../../../Config";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 export default function StudentDetailTile({ userData }) {
     const { authState } = useContext(AuthContext);
@@ -40,10 +41,16 @@ export default function StudentDetailTile({ userData }) {
     };
 
     return (
-
+        
 
         <div className=" w-full ">
             {newData.map((user, index) => (
+                <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
+              >
                 <div key={index} className={`flex  text-center mobile:max-tablet:gap-2 items-center justify-evenly border rounded-lg py-2 pl-2 mb-2 tablet:max-laptop:w-fit  ${clickedIndex === index ? 'bg-purple-100' : ''}`} onClick={() => handleClick(index)}>
                     <div className="w-40 flex justify-center">
 
@@ -63,9 +70,10 @@ export default function StudentDetailTile({ userData }) {
 
 
                 </div>
+        </motion.div>
+
             ))}
         </div>
-
 
 
     );

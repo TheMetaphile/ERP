@@ -4,6 +4,7 @@ import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
 import { ToastContainer, toast } from "react-toastify";
 import { BASE_URL_Fee } from "../../../Config";
+import { motion } from "framer-motion";
 
 const getSessions = () => {
     const currentYear = new Date().getFullYear();
@@ -134,7 +135,14 @@ const Transactions = ({ transactions }) => {
                     </thead>
                     <tbody className="text-center">
                         {data.map((transaction, index) => (
-                            <tr key={transaction.id} className={`${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
+                            <motion.tr
+                                key={transaction.id}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.3, delay: index * 0.1 }}
+                                className={`${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}
+                            >
+
                                 <td className=" border-y p-2 text-start">{index + 1}</td>
                                 <td className=" border-y p-2 text-start">{transaction.student.name}</td>
                                 <td className=" border-y p-2">{transaction.date}</td>
@@ -143,7 +151,8 @@ const Transactions = ({ transactions }) => {
                                 <td className=" border-y p-2">{transaction.student.fatherPhoneNumber}</td>
                                 <td className=" border-y p-2 ">{transaction.signature}</td>
                                 <td className={`border-y p-2  ${transaction.payment_status === 'Success' ? 'text-green-500' : 'text-red-500'}`} >{transaction.payment_status}</td>
-                            </tr>
+                            </motion.tr>
+
                         ))}
                         {!allDataFetched && (
                             <tr>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ReadmissionDialog from "./Dialogadmit";
+import { motion } from "framer-motion";
 
 function AdmissionTileRow({ data, index, clickedIndex, setClickedIndex,  handleRemove }) {
     const [loadinfIndex, setLoadingIndex] = useState('');
@@ -20,6 +21,12 @@ function AdmissionTileRow({ data, index, clickedIndex, setClickedIndex,  handleR
     };
 
     return (
+        <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3, delay: index * 0.1 }}
+        className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
+      >
         <div
             key={index}
             className={`flex text-center mobile:max-tablet:gap-2 items-center justify-evenly border rounded-lg py-2 pl-2 mb-2 tablet:max-laptop:w-fit ${clickedIndex === index ? 'bg-purple-100' : ''}`}
@@ -46,6 +53,7 @@ function AdmissionTileRow({ data, index, clickedIndex, setClickedIndex,  handleR
             )}
 
         </div>
+        </motion.div>
     )
 }
 

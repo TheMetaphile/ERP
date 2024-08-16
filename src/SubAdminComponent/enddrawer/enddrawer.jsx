@@ -1,23 +1,61 @@
+import { motion } from 'framer-motion';
 import { Link } from "react-router-dom";
-import Ballroom from "./../../assets/BallroomDance.png";
+import { FaBell, FaBook, FaChevronRight } from 'react-icons/fa';
 import Notice from './notice.jsx';
 
 
 export default function Enddrawer() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100
+      }
+    }
+  };
 
 
   return (
-    <div className="overflow-auto h-full px-2 w-full">
-      <h6 className="flex justify-between text-sm mt-3">Notice
-        <Link to={'/Sub-Admin/Notice'}>
-          <span className="text-blue-500">See All</span>
+    <motion.div
+      className=" h-full overflow-auto px-2 py-8 bg-white "
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <h2 className="flex justify-between items-center text-xl font-bold mb-2 text-gray-800">
+        <div className="flex items-center text-lg whitespace-nowrap">
+          <FaBell className="mr-2 text-blue-500" />
+          Daily Notice
+        </div>
+        <Link to="/Sub-Admin/Notice" className="text-blue-600 hover:text-blue-800 text-sm flex items-center">
+          See All
+          <FaChevronRight className="ml-1" />
         </Link>
-      </h6>
-      <div className="dialyNotices w-full  bg-blue-50 rounded-xl p-2 mt-3 mb-3 overflow-auto border border-gray-300">
-        <Notice />
-      </div>
+      </h2>
+      <motion.section className="mb-6 h-1/2" variants={itemVariants}>
 
-
-    </div>
+        <motion.div
+          className="bg-white rounded-lg shadow-md h-full overflow-y-auto hover:shadow-xl transition-shadow duration-300"
+          whileHover={{ scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <Notice />
+        </motion.div>
+      </motion.section>
+    </motion.div>
   );
 }
