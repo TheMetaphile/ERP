@@ -190,7 +190,7 @@ const Result = () => {
             </div>
             {details ? <div className="report-card border border-black " ref={ref} >
 
-                <div className=' border-b border-black py-3 items-center bg-teal-200 text-center'>
+                <div className=' border-b border-black py-3 items-center bg-gradient-to-r from-blue-200 to-blue-100 text-center'>
                     <h1 className={`text-3xl mobile:max-tablet:text-xl font-semibold mb-2`}>{selectedTermlabel} : {profile.session || "2024-25"}</h1>
                     <h6 className="text-2xl mobile:max-tablet:text-lg mb-2">Report Card</h6>
                 </div>
@@ -210,7 +210,7 @@ const Result = () => {
                 </div>
                 <div className=' overflow-auto'>
                     <table className="min-w-full border border-gray-200">
-                        <thead className=' bg-teal-200 text-xl font-medium '>
+                        <thead className=' bg-gradient-to-r from-blue-200 to-blue-100 text-xl font-medium '>
                             <tr className='text-center'>
                                 <th className="px-4 py-2 border mobile:max-tablet:text-sm">Scholastic Areas</th>
                                 <th className="px-4 py-2 border mobile:max-tablet:text-sm">
@@ -249,7 +249,7 @@ const Result = () => {
 
                 <div className=" overflow-auto">
                     <table className="min-w-full bg-white border border-gray-200">
-                        <thead className=' bg-teal-200 text-xl font-medium'>
+                        <thead className=' bg-gradient-to-r from-blue-200 to-blue-100 text-xl font-medium'>
                             <tr>
                                 <th className="px-4 py-4 mobile:max-tablet:py-2 border text-start mobile:max-tablet:text-lg">Co-Scholastic Areas:</th>
                                 <th className="px-4 py-4 mobile:max-tablet:py-2 border text-end mobile:max-tablet:text-lg">Grade</th>
@@ -268,7 +268,7 @@ const Result = () => {
 
 
                 <div className=' border-b border-black'>
-                    <div className="flex bg-teal-200 text-xl items-center justify-between px-4 py-4 mobile:max-tablet:py-2 mobile:max-tablet:flex-col mobile:max-tablet:items-start">
+                    <div className="flex bg-gradient-to-r from-blue-200 to-blue-100 text-xl items-center justify-between px-4 py-4 mobile:max-tablet:py-2 mobile:max-tablet:flex-col mobile:max-tablet:items-start">
                         <h2 className='  font-semibold mobile:max-tablet:text-lg'>Attendance:</h2>
                         <p><strong className='  font-medium mobile:max-tablet:text-sm'>Total:</strong> {attendance.total}</p>
                         <p><strong className=' font-medium mobile:max-tablet:text-sm'>Present:</strong> {attendance.present}</p>
@@ -289,7 +289,7 @@ const Result = () => {
                     <div className="flex-1">
                         <h1 className=' text-center text-xl my-2'>SCHOLASTIC</h1>
                         <table className="w-full bg-white border border-gray-200">
-                            <thead className=' bg-teal-200'>
+                            <thead className=' bg-gradient-to-r from-blue-200 to-blue-100'>
                                 <tr>
                                     <th className="px-4 py-4 mobile:max-tablet:py-2 border">MARKS RANGE</th>
                                     <th className="px-4 py-4 mobile:max-tablet:py-2 border">GRADE</th>
@@ -308,7 +308,7 @@ const Result = () => {
                     <div className="flex-1 h-full">
                         <h1 className=' text-center text-xl my-2 whitespace-nowrap mobile:max-tablet:text-lg'>CO-SCHOLASTIC AND DISCIPLINE</h1>
                         <table className="w-full bg-white border border-gray-200">
-                            <thead className=' bg-teal-200'>
+                            <thead className=' bg-gradient-to-r from-blue-200 to-blue-100'>
                                 <tr>
                                     <th className="px-4 mobile:max-tablet:px-2 py-4 mobile:max-tablet:py-2 border">PERFOMANCE INDICATORS</th>
                                     <th className="px-4 mobile:max-tablet:px-2 py-4 mobile:max-tablet:py-2 border">GRADE</th>

@@ -40,13 +40,12 @@ export default function Fees() {
                 <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 
                 <motion.section variants={sectionVariants} transition={{ delay: 0.1 }}>
-                    <h1 className="text-3xl font-bold text-gray-800 mb-4">Fee Status</h1>
+                    <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-gray-800 mb-4">Fee Status</h1>
                     <FeeStatusRow />
                 </motion.section>
-
                 <motion.section variants={sectionVariants} transition={{ delay: 0.2 }} >
                     <div className='flex items-center justify-between w-full mb-4'>
-                        <h2 className="text-3xl font-bold text-gray-800">Fees Structure</h2>
+                        <h2 className="text-3xl mobile:max-tablet:text-lg font-bold text-gray-800">Fees Structure</h2>
                         <MotionSelect
                             value={selectedOption}
                             onChange={handleDropdownChange}

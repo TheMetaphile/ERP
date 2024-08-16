@@ -15,17 +15,17 @@ export default function Datesheet() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className='mobile:max-tablet:mt-4 p-4'
+      className=' p-4'
     >
       <motion.h1
         initial={{ x: -50 }}
         animate={{ x: 0 }}
         transition={{ type: 'spring', stiffness: 120 }}
-        className='px-7 text-3xl font-bold text-primary '
+        className=' text-3xl mobile:max-tablet:text-lg font-bold text-primary '
       >
         Datesheet
       </motion.h1>
-      <div className='flex flex-col px-3 overflow-y-auto items-center justify-center ml-2 mr-2 mb-2 no-scrollbar'>
+      <div className='flex flex-col overflow-y-auto items-center justify-center mb-2 no-scrollbar'>
         <School img={logo} schoolname="Metaphile Public School" address="Noida sector 62, Block A23" />
         <motion.button
           whileHover={{ scale: 1.05 }}

@@ -28,7 +28,7 @@ export default function Navbar({ onDrawerToggle, onEndDrawerToggle }) {
   return (
     <div className="flex flex-grow mobile:max-tablet:flex-col h-full mt-1 px-2 py-3 mb-2 items-center justify-between bg-gradient-to-r from-blue-300 to-blue-200 rounded-lg shadow-md z-10">
       <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-3">
-        <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-secondary shadow-lg cursor-pointer' />
+        <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-blue-100 shadow-lg cursor-pointer' />
         <div className='flex items-center'>
           <img src={logo} alt="Metaphile Public School" className="w-10" />
           <span className=" mobile:max-tablet:text-sm font-medium text-text_blue mobile:text-xl">etaphile Public School</span>
@@ -80,9 +80,23 @@ export default function Navbar({ onDrawerToggle, onEndDrawerToggle }) {
               )}
             </div>
           </li>
+
           <li>
             <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-laptop:w-9 mobile:max-laptop:h-9 rounded-lg ml-auto" />
           </li>
+
+          <li className="mr-4">
+            <Link to="/Student-Dashboard/profile" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Events</Link>
+          </li>
+          <li>
+            <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-laptop:w-9 mobile:max-laptop:h-9 rounded-lg ml-auto" />
+          </li>
+          {/* <li>
+            <Link to="/Student-Dashboard/exam" className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 rounded-lg">Examination</Link>
+          </li> */}
+          <li>
+          </li>
+
         </ul>
       </nav>
     </div>
