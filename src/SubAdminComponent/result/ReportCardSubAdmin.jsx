@@ -7,6 +7,7 @@ import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Login } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
+import { motion } from 'framer-motion';
 
 function ReportCardSubAdmin() {
     const { authState } = useContext(AuthContext);
@@ -52,7 +53,7 @@ function ReportCardSubAdmin() {
     };
 
     useEffect(() => {
-        if(start!==0){
+        if (start !== 0) {
             fetchStudents();
         }
     }, [start]);
@@ -117,12 +118,7 @@ function ReportCardSubAdmin() {
                 <div className="flex items-center justify-between px-3 py-2">
 
                     <h1 className="text-xl font-medium mb-2 ">Report Card</h1>
-
-
                     <span className='w-fit flex items-center gap-2 mobile:max-laptop:hidden'>
-                        {/* <Link to={`/Sub-Admin/exStudent`}>
-                        <h1 className="p-2 rounded-lg bg-purple-300 hover:bg-purple-500 ">Ex Student</h1>
-                    </Link> */}
                         <Selection
                             Class={Class}
                             Section={Section}
@@ -142,31 +138,54 @@ function ReportCardSubAdmin() {
                 ) : userData.length === 0 ? (
                     <>No student found</>
                 ) : (
-                    <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 h-fit  report-header' ref={containerRef} >
+                    <motion.div
+                        className='rounded-lg shadow-lg border border-purple-200 w-full mb-4 overflow-hidden bg-white'
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        ref={containerRef}
+                    >
                         <Header headings={['Name', 'Class', 'Section', 'Email']} />
+
                         {userData.map((detail, index) => (
                             <Link to={`/Sub-Admin/Result/${detail.email}?session=${selectedSession}&Class=${Class}`} key={index}>
-                                <div key={index} className='flex justify-between border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
-                                    <div className='  flex flex-1 justify-center whitespace-nowrap  mobile:max-tablet:text-sm'>{detail.name}</div>
-                                    <div className='  flex flex-1 justify-center whitespace-nowrap  mobile:max-tablet:text-sm'>{detail.currentClass}</div>
-                                    <div className='  flex flex-1 justify-center whitespace-nowrap  mobile:max-tablet:text-sm'>{detail.section}</div>
-                                    <div className=' flex flex-1 justify-center gap-1 mobile:max-tablet:text-sm '>
-                                        <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full mobile:max-tablet:hidden'></img>
-                                        <div >{detail.email}</div>
-                                    </div>
-                                </div>
+                                <motion.div
+                                    className='flex justify-between border-b border-purple-100 items-center py-3 px-4 hover:bg-purple-100 transition-colors duration-200'
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                                    whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+                                >
+                                    <motion.div className='flex-1 text-center whitespace-nowrap text-gray-800'>{detail.name}</motion.div>
+                                    <motion.div className='flex-1 text-center whitespace-nowrap text-gray-800'>{detail.currentClass}</motion.div>
+                                    <motion.div className='flex-1 text-center whitespace-nowrap text-gray-800'>{detail.section}</motion.div>
+                                    <motion.div className='flex-1 flex items-center justify-center gap-3'>
+                                        <img src={detail.profileLink} alt={detail.name} className='w-8 h-8 rounded-full object-cover border-2 border-purple-300 mobile:max-tablet:hidden' />
+                                        <span className='text-purple-600 truncate max-w-[150px]'>{detail.email}</span>
+                                    </motion.div>
+                                </motion.div>
                             </Link>
                         ))}
+
                         {!allDataFetched && (
-
-                            <div colSpan="4" className="text-center">
-                                <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer' onClick={handleViewMore}>View More</h1>
-                            </div>
-
+                            <motion.div
+                                className="text-center py-3"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.5 }}
+                            >
+                                <motion.button
+                                    className='text-purple-500 hover:text-purple-700 font-medium focus:outline-none'
+                                    onClick={handleViewMore}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    View More
+                                </motion.button>
+                            </motion.div>
                         )}
-                    </div>
-                )
-                }
+                    </motion.div>
+                )}
 
             </div>
         </>

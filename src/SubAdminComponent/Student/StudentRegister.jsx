@@ -17,12 +17,7 @@ const containerVariants = {
     visible: {
         opacity: 1,
         y: 0,
-        transition: {
-            type: 'spring',
-            stiffness: 100,
-            when: "beforeChildren",
-            staggerChildren: 0.1
-        }
+        transition: { type: 'spring', stiffness: 50 }
     }
 };
 
@@ -31,7 +26,7 @@ const itemVariants = {
     visible: {
         opacity: 1,
         y: 0,
-        transition: { type: 'spring', stiffness: 100 }
+        transition: { type: 'spring', stiffness: 50 }
     }
 };
 
@@ -243,18 +238,18 @@ export default function StudentRegister() {
 
     return (
         <motion.div
-            className="bg-gray-100 p-6 rounded-lg shadow-lg h-screen overflow-y-auto mt-6"
+            className=" p-6 rounded-lg shadow-lg h-screen overflow-y-auto "
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
             <ToastContainer />
-            <motion.h1
-                className="text-3xl font-bold mb-6 text-center text-indigo-700 mt-12"
-                variants={itemVariants}
+            <h1
+                className="text-3xl font-bold mb-6 text-center text-purple-700 "
+
             >
                 Add New Student
-            </motion.h1>
+            </h1>
             <form onSubmit={handleSubmit} className="grid grid-cols-3 mobile:max-tablet:grid-cols-1 gap-6">
                 <InputField icon={<FaUser />} label="Name" name="name" value={formData.name} onChange={handleChange} required />
                 <InputField icon={<FaHome />} label="Permanent Address" name="permanentAddress" value={formData.permanentAddress} onChange={handleChange} required />
@@ -291,7 +286,7 @@ export default function StudentRegister() {
                     <SubjectInputs stream={formData.stream} setSubject={setSubjects} subjects={subjects} />
                 </motion.div>
 
-                <motion.div className="col-span-full flex justify-center gap-4 mt-6" variants={itemVariants}>
+                <div className="col-span-full flex justify-center gap-4 mt-6">
                     <motion.button
                         className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded transition duration-300 ease-in-out transform hover:scale-105"
                         type="reset"
@@ -309,7 +304,7 @@ export default function StudentRegister() {
                     >
                         Save
                     </motion.button>
-                </motion.div>
+                </div>
 
                 <motion.div className="col-span-full flex justify-center mt-6" variants={itemVariants}>
                     <motion.label

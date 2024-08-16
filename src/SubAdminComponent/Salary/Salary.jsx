@@ -75,7 +75,7 @@ function Salary() {
     };
 
     return (
-        <div className="pt-20">
+        <div className="pt-4">
             <header className="p-4 mobile:max-tablet:p-2 flex justify-between items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start">
                 <div>
                     <h1 className="text-3xl font-semibold mb-2 mobile:max-laptop:text-lg whitespace-nowrap">Welcome {authState.userDetails.name}</h1>

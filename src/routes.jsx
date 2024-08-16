@@ -175,6 +175,7 @@ import Promotion from "./TeacherComponents/StudentPromotion/Promotion.jsx";
 import TeachersTimeTable from "./AdminComponents/timetable/utils/Teacher/main.jsx";
 import StudentsTimeTable from "./AdminComponents/timetable/utils/Student/main.jsx";
 import UserProfile from "./components/StudentProfile/Profile.jsx";
+import ProfileSubAdmin from "./SubAdminComponent/profile/profileSubAdmin.jsx";
 // import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
 
 
@@ -1131,6 +1132,10 @@ const router = createBrowserRouter([
         path: "/Sub-Admin/Notice",
         element: <NoticeSubAdmin />,
         children: []
+      },
+      {
+        path: "/Sub-Admin/Profile",
+        element: <ProfileSubAdmin />,
       },
     ]
   }

@@ -320,7 +320,7 @@ const Transfer = () => {
 
 
     return (
-        <div className=" mobile:max-tablet:mt-4  rounded-lg shadow-md mb-2 mx-3 py-20 px-52">
+        <div className=" mobile:max-tablet:mt-4  rounded-lg shadow-md mb-2 mx-3 pt-4 px-52">
             <div className=" w-full  justify-center">
                 {!loading ? <div className='flex justify-between items-center'>
 

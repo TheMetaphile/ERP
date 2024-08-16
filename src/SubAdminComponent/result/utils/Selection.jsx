@@ -55,7 +55,7 @@ function Selection({ handleClassChange, handleSectionChange, handleSessionChange
 
   return (
     <div className="w-fit flex items-center gap-2 mobile:max-tablet:flex-col mobile:max-tablet:w-full mobile:max-tablet:px-4">
-      <select id="class" value={Class} className="w-full px-4 py-2 border rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2" onChange={handleClassChangeWithFetch}>
+      <select id="class" value={Class} className="w-full px-4 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2" onChange={handleClassChangeWithFetch}>
         <option value="">Search by Class</option>
         <option value="Pre-Nursery">Pre-Nursery</option>
         <option value="Nursery">Nursery</option>
@@ -75,7 +75,7 @@ function Selection({ handleClassChange, handleSectionChange, handleSessionChange
         <option value="12th">12th</option>
       </select>
 
-      <select id="section" value={Section} onChange={handleSectionChange} className="w-full px-4 py-2 border rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2">
+      <select id="section" value={Section} onChange={handleSectionChange} className="w-full px-4 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2">
         <option value="">Search by Section</option>
         {sectionsDetails.map((section, index) => (
           <option key={index} value={section}>{section}</option>
@@ -86,7 +86,7 @@ function Selection({ handleClassChange, handleSectionChange, handleSessionChange
         id="session"
         value={Session}
         onChange={handleSessionChangeInternal}
-        className="w-full px-4 py-2 border rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2"
+        className="w-full px-4 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2"
       >
         <option value="">Select Session</option>
         {sessions.map((session, index) => (

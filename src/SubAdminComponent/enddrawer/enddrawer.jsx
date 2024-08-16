@@ -31,7 +31,7 @@ export default function Enddrawer() {
 
   return (
     <motion.div
-      className=" h-full overflow-auto px-2 py-8 bg-white "
+      className=" h-full overflow-auto px-2 py-1 bg-white "
       variants={containerVariants}
       initial="hidden"
       animate="visible"

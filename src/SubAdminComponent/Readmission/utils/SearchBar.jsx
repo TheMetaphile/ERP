@@ -43,7 +43,7 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
                     value={rollNumber}
                     onChange={handleRollNumberChange}
                     placeholder="Search by ID"
-                    className="rounded-lg shadow-md mr-3 mobile:max-tablet:mr-0 px-3 py-1 border-2 border-gray-200 text-lg flex-1"
+                    className="rounded-lg shadow-md mr-3 mobile:max-tablet:mr-0 px-3 py-1  bg-white border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg flex-1"
                 />
                 <input
                     type="text"
@@ -52,7 +52,7 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
                     value={name}
                     onChange={handleNameChange}
                     placeholder="Search by Name"
-                    className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg mr-3 mobile:max-tablet:mr-0 flex-1"
+                    className="rounded-lg shadow-md px-3 py-1 bg-white border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1"
                 />
                 {/* <select id="class" value={Class} onChange={handleClassChangeWithFetch} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
                     <option value="">Search by Class</option>
@@ -74,7 +74,7 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
                     <option value="12th">12th</option>
                 </select> */}
 
-                <select id="section" value={Section} onChange={handleSectionChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
+                <select id="section" value={Section} onChange={handleSectionChange} className="rounded-lg shadow-md px-3 py-1 bg-white border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
                     <option value="">Search by Section</option>
                     {sectionsDetails.map((section, index) => (
                         <option key={index} value={section}>{section}</option>

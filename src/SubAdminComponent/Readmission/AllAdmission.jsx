@@ -145,7 +145,7 @@ export default function AllAdmission() {
 
     return (
         <>
-            <div className="flex  pt-20  items-center  bg-white mb-4">
+            <div className="flex  pt-6  items-center  bg-white mb-4">
                 <ToastContainer />
                 <h1 className="text-2xl font-medium px-2 ">Students Re-admission</h1>
                 <div className="block tablet:hidden">

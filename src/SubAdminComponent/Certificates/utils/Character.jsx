@@ -150,7 +150,7 @@ const Character = () => {
         if(!editing){handlePrint();}
     }, [download]);
     return (
-        <div className="tablet:max-laptop:max-w-xl pt-20 px-60 w-full">
+        <div className="tablet:max-laptop:max-w-xl pt-4 px-60 w-full">
             <div className="w-full justify-center">
 
                 <div className='flex justify-between'>
