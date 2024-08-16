@@ -174,6 +174,7 @@ import TabsStudentFee from "./components/fees/Tabs.jsx";
 import Promotion from "./TeacherComponents/StudentPromotion/Promotion.jsx";
 import TeachersTimeTable from "./AdminComponents/timetable/utils/Teacher/main.jsx";
 import StudentsTimeTable from "./AdminComponents/timetable/utils/Student/main.jsx";
+import UserProfile from "./components/StudentProfile/Profile.jsx";
 // import Doubts from "./TeacherComponents/hoddoubts/Doubts.jsx";
 
 
@@ -205,6 +206,10 @@ const router = createBrowserRouter([
       {
         path: "/Student-Dashboard/home",
         element: <Home />,
+      },
+      {
+        path: "/Student-Dashboard/profile",
+        element: <UserProfile />,
       },
       {
         path: "/Student-Dashboard/assignment",
