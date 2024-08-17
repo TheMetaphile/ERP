@@ -31,7 +31,7 @@ export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session })
             setShowSuggestions(false);
         }
     };
-    
+
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
@@ -54,7 +54,7 @@ export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session })
 
     const SubstituteTeacher = (classTeacherEmail) => {
         let data = JSON.stringify({
-            "wing":Teacher.wing,
+            "wing": Teacher.wing,
             "coordinatorEmail": Teacher.email,
             "substituteEmail": classTeacherEmail.email,
             "date": date,
@@ -80,8 +80,9 @@ export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session })
                 console.log(JSON.stringify(response.data));
                 toast.success("Coordinator substituted successfully");
                 setSubstitute(classTeacherEmail);
+                handleSendNotice(Teacher.email, classTeacherEmail.email, Teacher.wing);
                 setEditingRow(false);
-                
+
             })
             .catch((error) => {
                 console.log(error);
@@ -89,6 +90,38 @@ export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session })
             });
 
     }
+
+    const handleSendNotice = async (currentTeacher, SubstituteEmail, wing) => {
+        console.log('in send notice')
+        const payload = {
+            title: 'Substitute Co-ordinator ',
+            type: 'Particular Teachers',
+            description: `You have be assigned coordinator for wing ${wing}`,
+            session: session,
+            date: date,
+            emailIds: SubstituteEmail
+        };
+
+        console.log('payload', payload);
+
+        try {
+            const response = await axios.post(`${BASE_URL_Login}/notice/upload/teacher`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    }
+                }
+            );
+            if (response.status === 200) {
+                toast.success('Notice send to substitute teacher');
+                console.log('fetch', response.data);
+            }
+        } catch (error) {
+            toast.error(error.message);
+            console.error("Error in posting notice:", error);
+        }
+    };
 
     useEffect(() => {
         const handler = setTimeout(() => {

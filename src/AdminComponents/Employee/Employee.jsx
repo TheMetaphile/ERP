@@ -20,6 +20,7 @@ function Employee() {
         dob: '',
         bloodGroup: '',
         aadhaarNumber : '',
+        profileLink : '',
         permanentAddress : '',
         permanentState : '',
         permanentDistrict : '',

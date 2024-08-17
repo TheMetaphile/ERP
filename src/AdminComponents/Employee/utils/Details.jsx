@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { FaUser, FaGraduationCap, FaSchool, FaPhone, FaEnvelope, FaBirthdayCake, FaTint, FaRegIdCard } from 'react-icons/fa';
+import { FaLink } from "react-icons/fa6";
 
 function Details({ nextStep, handleChange, formData }) {
 
 
     const handleProceed = () => {
-        if (!formData.name || !formData.qualification || !formData.institute || !formData.phoneNumber || !formData.emergencyContactNumber || !formData.email || !formData.dob || !formData.bloodGroup || !formData.aadhaarNumber) {
+        if (!formData.name || !formData.qualification || !formData.institute || !formData.phoneNumber || !formData.emergencyContactNumber || !formData.email || !formData.dob || !formData.bloodGroup || !formData.aadhaarNumber || !formData.profileLink) {
             alert('Please fill in all fields.');
         } else {
             nextStep();
@@ -108,6 +109,16 @@ function Details({ nextStep, handleChange, formData }) {
                         className="w-full p-2 border rounded"
                         value={formData.aadhaarNumber}
                         onChange={handleChange('aadhaarNumber')}
+                    />
+                </div>
+                <div className="flex items-center space-x-2">
+                    <FaLink />
+                    <input
+                        type="text"
+                        placeholder="Profile Link"
+                        className="w-full p-2 border rounded"
+                        value={formData.profileLink}
+                        onChange={handleChange('profileLink')}
                     />
                 </div>
                 <button onClick={handleProceed} className="w-full bg-blue-500 text-white p-2 rounded">

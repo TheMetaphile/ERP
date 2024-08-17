@@ -19,7 +19,7 @@ function NewNotice({ setShowModal }) {
     const [searchResultsStudent, setSearchResultsStudent] = useState([]);
     const [searchInputSubAdmin, setSearchInputSubAdmin] = useState('');
     const [searchResultsSubAdmin, setSearchResultsSubAdmin] = useState([]);
-    const [classOptions] = useState(['Pre-Nursery', 'Nursery', 'KG', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']);
+    const [classOptions] = useState(['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']);
     const [selectedClass, setSelectedClass] = useState('');
     const [sectionOptions, setSectionOptions] = useState([]);
     const [selectedSection, setSelectedSection] = useState('');

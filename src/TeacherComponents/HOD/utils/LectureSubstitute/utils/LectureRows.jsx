@@ -79,6 +79,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
                 console.log(JSON.stringify(response.data));
                 toast.success("Lecture Teacher substituted successfully");
                 setSubstitute(classTeacherEmail);
+                handleSendNotice(Teacher.email, classTeacherEmail.email, classs, section, subject, lectureNo);
                 setEditingRow(false);
             })
             .catch((error) => {
@@ -86,6 +87,38 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
                 toast.error(error.response.data.error);
             });
     }
+
+    const handleSendNotice = async (currentTeacher, SubstituteEmail, classs, sectionn, subject, lecture) => {
+        console.log('in send notice')
+        const payload = {
+            title: 'Substitute Subject Teacher',
+            type: 'Particular Teachers',
+            description: `You have be assigned class ${classs} ${sectionn} as a substitute subject teacher for today for subject ${subject} and it's lecture no. is ${lecture}`,
+            session: session,
+            date: date,
+            emailIds: SubstituteEmail
+        };
+
+        console.log('payload', payload);
+
+        try {
+            const response = await axios.post(`${BASE_URL_Login}/notice/upload/teacher`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    }
+                }
+            );
+            if (response.status === 200) {
+                toast.success('Notice send to substitute teacher');
+                console.log('fetch', response.data);
+            }
+        } catch (error) {
+            toast.error(error.message);
+            console.error("Error in posting notice:", error);
+        }
+    };
 
     useEffect(() => {
         const handler = setTimeout(() => {

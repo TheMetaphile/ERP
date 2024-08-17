@@ -100,7 +100,7 @@ const Transactions = ({ transactions }) => {
                     <label className="mr-2">To</label>
                     <input type="date" className="p-1 border rounded" />
                 </div> */}
-                <select id="status" value={status} onChange={handleStatusChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200  mr-3 ">
+                <select id="status" value={status} onChange={handleStatusChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 mr-3 ">
                     <option value="">Search Filter</option>
                     <option value="Success">Success</option>
                     <option value="Failed">Failed</option>
