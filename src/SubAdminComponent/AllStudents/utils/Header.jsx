@@ -1,6 +1,6 @@
 export default function Header(props) {
     return (
-        <div className="flex justify-evenly items-center py-3 pl-2 rounded-t-lg w-full tablet:max-laptop:w-fit gap-2 tablet:max-laptop:gap-3 overflow-hidden bg-gradient-to-br from-purple-600 via-purple-400 to-purple-200 shadow-md">
+        <div className="flex justify-evenly items-center py-3 pl-2 rounded-t-lg w-full tablet:max-laptop:w-fit gap-2 tablet:max-laptop:gap-3 overflow-hidden bg-purple-200 shadow-md">
             {props.headings.map((heading, index) => (
                 <h1
                     key={index}
@@ -12,7 +12,7 @@ export default function Header(props) {
                                 : "mobile:max-tablet:w-20 w-32 tablet:max-laptop:w-40"
                         } 
             text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-normal
-            text-white transition-all duration-300 ease-in-out transform hover:scale-105
+         transition-all duration-300 ease-in-out transform hover:scale-105
           `}
                 >
                     {heading}

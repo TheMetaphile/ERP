@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 import Loading from "./LoadingScreen/Loading.jsx";
+import TeacherDashboardProfile from "./TeacherComponents/profile/TeacherProfile.jsx";
+import AdminProfile from "./AdminComponents/profile/AdminProfile.jsx";
 
 const ProfileSubAdmin = lazy(() => import("./SubAdminComponent/profile/profileSubAdmin.jsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
@@ -455,6 +457,11 @@ const router = createBrowserRouter([
           <AdminHome /></Suspense>,
       },
       {
+        path: '/Admin-Dashboard/Profile',
+        element: <Suspense fallback={Loading}>
+          <AdminProfile /></Suspense>
+      },
+      {
         path: "/Admin-Dashboard/Students",
         element: <Suspense fallback={Loading}>
           <AllStudents /></Suspense>,
@@ -829,6 +836,11 @@ const router = createBrowserRouter([
         path: "",
         element: <Suspense fallback={Loading}>
           <TeacherHome /></Suspense>,
+      },
+      {
+        path: '/Teacher-Dashboard/Profile',
+        element: <Suspense fallback={Loading}>
+          <TeacherDashboardProfile /></Suspense>
       },
       {
         path: "/Teacher-Dashboard/noticeboard",

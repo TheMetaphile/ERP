@@ -19,6 +19,7 @@ const Preview = ({ prevStep, formData }) => {
         dob,
         bloodGroup,
         aadhaarNumber,
+        profileLink,
         permanentAddress,
         permanentState,
         permanentDistrict,
@@ -39,7 +40,7 @@ const Preview = ({ prevStep, formData }) => {
             !aadhaarNumber || !permanentAddress || !permanentState ||
             !permanentDistrict || !permanentPincode || !residentialAddress ||
             !residentialState || !residentialDistrict || !residentialPincode ||
-            !department || !role
+            !department || !role || !profileLink
         ) {
             alert('Please fill all fields.');
             return;
@@ -55,6 +56,7 @@ const Preview = ({ prevStep, formData }) => {
             dob,
             bloodGroup,
             aadhaarNumber,
+            profileLink,
             permanentAddress,
             permanentState,
             permanentDistrict,
@@ -112,6 +114,7 @@ const Preview = ({ prevStep, formData }) => {
                     <p><strong>Residential Pincode:</strong> {residentialPincode}</p>
                     <p><strong>Department:</strong> {department}</p>
                     <p><strong>Role:</strong> {role}</p>
+                    <p><strong>Profile Link:</strong> Available</p>
                     {/* <p><strong>In hand salary:</strong> {inHandSalary}</p> */}
                     {/* <p><strong>Instruments:</strong></p>
                     <ul>

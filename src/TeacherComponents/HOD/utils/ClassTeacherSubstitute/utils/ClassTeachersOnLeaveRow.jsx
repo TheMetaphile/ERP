@@ -31,7 +31,7 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
             setShowSuggestions(false);
         }
     };
-    
+
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
@@ -79,15 +79,48 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
                 console.log(JSON.stringify(response.data));
                 toast.success("Class Teacher substituted successfully");
                 setSubstitute(classTeacherEmail);
+                handleSendNotice(Teacher.email, classTeacherEmail.email, Teacher.class, Teacher.section);
                 setEditingRow(false);
-                
+
             })
             .catch((error) => {
-                console.log(error.response.data.error,"...............................error");
+                console.log(error.response.data.error, "...............................error");
                 toast.error(error.response.data.error);
             });
 
     }
+
+    const handleSendNotice = async (currentTeacher, SubstituteEmail, classs, sectionn) => {
+        console.log('in send notice')
+        const payload = {
+            title: 'Substitute Class Teacher',
+            type: 'Particular Teachers',
+            description: `You have be assigned class ${classs} ${sectionn} as a substitute class teacher for today`,
+            session: session,
+            date: date,
+            emailIds: SubstituteEmail
+        };
+
+        console.log('payload', payload);
+
+        try {
+            const response = await axios.post(`${BASE_URL_Login}/notice/upload/teacher`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    }
+                }
+            );
+            if (response.status === 200) {
+                toast.success('Notice send to substitute teacher');
+                console.log('fetch', response.data);
+            }
+        } catch (error) {
+            toast.error(error.message);
+            console.error("Error in posting notice:", error);
+        }
+    };
 
     useEffect(() => {
         const handler = setTimeout(() => {

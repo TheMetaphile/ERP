@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
-import {  FaEnvelope, FaBirthdayCake, FaIdCard, FaGraduationCap, FaCalendarAlt, FaTint } from 'react-icons/fa';
+import { FaEnvelope, FaBirthdayCake, FaIdCard, FaGraduationCap, FaCalendarAlt, FaTint } from 'react-icons/fa';
 import { IoMdSchool } from 'react-icons/io';
 import { GiIndiaGate } from 'react-icons/gi';
 import AuthContext from '../../Context/AuthContext';
@@ -16,24 +16,24 @@ const itemVariants = {
   visible: { y: 0, opacity: 1 },
 };
 
-const ProfileSubAdmin = () => {
-  const {authState} = useContext(AuthContext)
-  const { userDetails } = authState;
+const TeacherDashboardProfile = () => {
+  const { authState } = useContext(AuthContext)
+  const { userDetails, ClassDetails } = authState;
 
 
   return (
     <motion.div
-      className="bg-gradient-to-br from-purple-100 to-blue-100 min-h-screen tablet:p-8 mobile:max-tablet:p-2 p-4"
+      className="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen tablet:p-8 mobile:max-tablet:p-2 p-4"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       <motion.div className=" mx-auto bg-white rounded-lg shadow-lg overflow-hidden" variants={itemVariants}>
         <div className="relative">
-          <div className="h-32 bg-gradient-to-r from-purple-300 to-blue-300"></div>
-          <img 
+          <div className="h-32 bg-gradient-to-r from-blue-300 to-purple-300"></div>
+          <img
             className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 h-32 w-32 rounded-full border-4 border-white object-cover"
-            src={userDetails.profileLink} 
+            src={userDetails.profileLink}
             alt={userDetails.name}
           />
         </div>
@@ -47,14 +47,25 @@ const ProfileSubAdmin = () => {
           <motion.h2 className="text-2xl font-bold mb-4" variants={itemVariants}>Personal Information</motion.h2>
           <motion.div className="grid laptop:grid-cols-3 mobile:max-tablet:grid-cols-1 tablet:grid-cols-2 gap-4" variants={containerVariants}>
             <InfoItem icon={<FaEnvelope />} label="Email" value={userDetails.email} />
-            <InfoItem icon={<FaBirthdayCake />} label="Date of Birth" value={userDetails.dob} />
-            <InfoItem icon={<FaIdCard />} label="Role" value={userDetails.role} />
-            <InfoItem icon={<FaTint />} label="Blood Group" value={userDetails.bloodGroup} />
-            <InfoItem icon={<IoMdSchool />} label="Department" value={userDetails.department} />
-            <InfoItem icon={<FaGraduationCap />} label="Qualification" value={userDetails.qualification} />
-            <InfoItem icon={<FaCalendarAlt />} label="Institute" value={userDetails.institute} />
+            <InfoItem icon={<FaEnvelope />} label="Employee Id" value={userDetails.employeeId} />
+            <InfoItem icon={<FaEnvelope />} label="Education" value={userDetails.education} />
+            {ClassDetails?.class && ClassDetails?.section ? (
+              <InfoItem
+                icon={<FaEnvelope />}
+                label="Class Teacher"
+                value={`${ClassDetails.class} ${ClassDetails.section}`}
+              />
+            ) : null}
+            {userDetails.co_ordinator ? (
+              <InfoItem icon={<FaEnvelope />} label="Co-Ordnator Wing" value={userDetails.co_ordinator_wing} />
+            ) : null}
+            <InfoItem icon={<FaBirthdayCake />} label="Date of Birth" value={userDetails.DOB} />
+            <InfoItem icon={<FaIdCard />} label="Gender" value={userDetails.gender} />
+            <InfoItem icon={<FaTint />} label="Aadhaar Number" value={userDetails.aadhaarNumber} />
+            <InfoItem icon={<IoMdSchool />} label="Religion" value={userDetails.religion} />
+            <InfoItem icon={<FaGraduationCap />} label="Experience" value={userDetails.experience} />
             <InfoItem icon={<GiIndiaGate />} label="Permanent Address" value={userDetails.permanentAddress} />
-           
+
           </motion.div>
         </div>
 
@@ -65,7 +76,7 @@ const ProfileSubAdmin = () => {
 };
 
 const InfoItem = ({ icon, label, value }) => (
-  <motion.div 
+  <motion.div
     className="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300"
     variants={itemVariants}
     whileHover={{ scale: 1.03 }}
@@ -81,4 +92,4 @@ const InfoItem = ({ icon, label, value }) => (
   </motion.div>
 );
 
-export default ProfileSubAdmin;
+export default TeacherDashboardProfile;

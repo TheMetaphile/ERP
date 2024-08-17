@@ -22,7 +22,7 @@ function FeeSubAdmin() {
 
     return (
         <motion.div 
-            className="flex flex-col px-6 overflow-auto items-start mt-2 mb-3 no-scrollbar pt-4 bg-gradient-to-br from-purple-100 to-white min-h-screen"
+            className="flex flex-col px-6 overflow-auto items-start  no-scrollbar pt-4  min-h-screen"
             initial="initial"
             animate="animate"
             exit="exit"
@@ -30,12 +30,12 @@ function FeeSubAdmin() {
             transition={{ duration: 0.5 }}
         >
             <motion.div 
-                className="mt-4 rounded-lg w-full bg-white shadow-lg p-6"
+                className=" rounded-lg w-full bg-white shadow-lg p-2"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5 }}
             >
-                <div className="flex mt-4 items-center justify-between">
+                <div className="flex  items-center justify-between">
                     <div className="flex gap-4 w-full">
                         {[
                             { path: '/Sub-Admin/StudentsFee/structure', label: 'Fee Structure' },
