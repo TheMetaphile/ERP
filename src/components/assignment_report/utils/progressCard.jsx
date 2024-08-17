@@ -30,7 +30,7 @@ export default function ProgressCard(props) {
           )}
         />}
       </ProgressProvider>
-      <p className="text-base font-medium mt-3 text-center">{props.title}</p>
+      <p className="text-base font-medium mt-3 text-center mobile:max-tablet:text-sm">{props.title}</p>
     </div>
   );
 }

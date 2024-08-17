@@ -175,7 +175,7 @@ export default function AttendenceTable({ additionalData, status }) {
                 <div className='flex items-center space-x-4'>
                   <img src={authState.userDetails.profileLink} alt="" className='w-12 h-12 rounded-full' />
                   <div>
-                    <div className="font-medium text-gray-800">
+                    <div className="font-medium text-gray-800 mobile:max-sm:text-xs">
                       {editRowIndex === index ? (
                         <>
                           <input
@@ -198,8 +198,8 @@ export default function AttendenceTable({ additionalData, status }) {
                       )}
                     </div>
                     <div className={`${leave.status === "Pending" ? "text-yellow-500" :
-                        leave.status === "Rejected" ? "text-red-500" :
-                          "text-green-500"
+                      leave.status === "Rejected" ? "text-red-500" :
+                        "text-green-500"
                       } font-medium`}>
                       {leave.status}
                     </div>
