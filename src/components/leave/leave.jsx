@@ -84,19 +84,19 @@ export default function Leave() {
             {loading ? (
                 <Loading />
             ) : (
-                <div className='grid grid-cols-4 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-8'>
+                <div className='grid grid-cols-4 mobile:max-tablet:grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-8'>
                     <motion.div
                         whileHover={{ scale: 1.05 }}
                         className='bg-white rounded-xl shadow-md p-6 border border-gray-200 flex flex-col items-center justify-center'
                     >
-                        <div className='w-40 h-40 mb-4'>
+                        <div className='w-40 mobile:max-tablet:w-24 mobile:max-tablet:h-24 h-40 mb-4'>
                             <Doughnut data={chartData} options={options} />
                         </div>
-                        <h2 className="text-lg font-semibold text-gray-800">Total Leave Status</h2>
+                        <h2 className="text-lg font-semibold text-gray-800 whitespace-nowrap mobile:max-tablet:text-sm">Total Leave Status</h2>
                     </motion.div>
                     <motion.div
                         whileHover={{ scale: 1.05 }}
-                        className='bg-white rounded-xl shadow-md p-6 border border-gray-200 flex flex-col items-center justify-center'
+                        className='bg-white rounded-xl shadow-md  p-6 border border-gray-200 flex flex-col items-center justify-center'
                     >
                         <ProgressCard
                             title='Approved'
@@ -132,7 +132,7 @@ export default function Leave() {
                 </div>
             )}
 
-            <div className="flex w-full mb-8 gap-3">
+            <div className="flex w-full mb-8 gap-3 mobile:max-tablet:flex-col">
                 <div className="flex-1">
                     <Calendar month={new Date().getMonth() + 1} year={new Date().getFullYear()} />
                 </div>

@@ -34,6 +34,10 @@ export default function Navbar({ onDrawerToggle, onEndDrawerToggle }) {
           <span className=" mobile:max-tablet:text-sm font-medium text-text_blue mobile:text-xl">etaphile Public School</span>
 
         </div>
+        <div className='laptop:hidden '>
+          <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-laptop:w-9 mobile:max-laptop:h-9 rounded-lg ml-auto" />
+        </div>
+
       </div>
       <nav>
         <ul className="flex w-full items-center mobile:max-tablet:text-sm gap-3">
@@ -81,9 +85,6 @@ export default function Navbar({ onDrawerToggle, onEndDrawerToggle }) {
             </div>
           </li>
 
-          <li className='laptop:hidden '>
-            <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-laptop:w-9 mobile:max-laptop:h-9 rounded-lg ml-auto" />
-          </li>
 
 
           <li>
