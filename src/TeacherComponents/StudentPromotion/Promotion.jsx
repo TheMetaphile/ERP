@@ -6,7 +6,6 @@ import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Login } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Switch from './utils/switch';
 import PromotionRow from './utils/PromotionRow';
 
 function Promotion() {
@@ -14,7 +13,7 @@ function Promotion() {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false)
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(10);
+    const end = 10;
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [selectedStudents, setSelectedStudents] = useState([]);
 
@@ -129,7 +128,7 @@ function Promotion() {
             });
             if (response.status === 200) {
                 console.log(response.data);
-                setStudents(students.filter((_, i) => i !== index));
+                setStudents(students.filter((student, i) => student.email !== selectedStudents.email));
                 toast.success('Students promoted successfully!');
             }
         } catch (error) {

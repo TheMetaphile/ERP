@@ -22,21 +22,21 @@ export default function FeeStructure({ selectedOption }) {
     fetchFees();
   }, [authState.accessToken]);
 
-  const today = new Date();
-  // const formattedDate = today.toISOString().split('T')[0];
-  const getCurrentSession = () => {
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth();
-    return currentMonth >= 3 ? `${currentYear}-${(currentYear + 1).toString().slice(-2)}` : `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
-  };
+  // const today = new Date();
+  // // const formattedDate = today.toISOString().split('T')[0];
+  // const getCurrentSession = () => {
+  //   const now = new Date();
+  //   const currentYear = now.getFullYear();
+  //   const currentMonth = now.getMonth();
+  //   return currentMonth >= 3 ? `${currentYear}-${(currentYear + 1).toString().slice(-2)}` : `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
+  // };
 
-  const session = getCurrentSession();
+  // const session = getCurrentSession();
 
   const fetchFees = async () => {
     console.log(authState.userDetails.currentClass, 'Class')
     try {
-      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student?session=${session}`, {
+      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student?session=${authState.userDetails.session}`, {
         headers: {
           'Authorization': `Bearer ${authState.accessToken}`
         }
