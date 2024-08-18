@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { startOfMonth, endOfMonth, eachDayOfInterval, format } from 'date-fns';
+import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSunday } from 'date-fns';
 import { FaCheck, FaTimes, FaExclamation, FaUser, FaCalendarAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -23,12 +23,12 @@ export default function AttendanceStatusGridTile({ data, month }) {
 
     const students = Object.values(data.output).filter(item => item.name);
 
-    const getStatusColor = (status) => {
+    const getStatusColor = (status,date) => {
         switch (status) {
             case 'Present': return 'bg-green-500';
             case 'Absent': return 'bg-red-500';
             case 'Leave': return 'bg-yellow-500';
-            default: return 'bg-gray-300';
+            default: return isSunday(date) ?  'bg-red-100': 'bg-gray-200';
         }
     };
 
@@ -60,7 +60,7 @@ export default function AttendanceStatusGridTile({ data, month }) {
                         </div>
                         <div className="flex">
                             {dateRange.map((date, index) => (
-                                <div key={index} className="flex flex-col">
+                                <div key={index} className={`flex flex-col`}>
                                     <motion.div 
                                         className={`flex flex-col w-16 items-center h-16 border-b border-gray-200 py-2 hover:cursor-pointer ${selectedDate === index ? "bg-indigo-200" : "bg-indigo-100"}`}
                                         onClick={() => handleDateClick(index)}
@@ -84,12 +84,12 @@ export default function AttendanceStatusGridTile({ data, month }) {
                                                             initial={{ scale: 0 }}
                                                             animate={{ scale: 1 }}
                                                             exit={{ scale: 0 }}
-                                                            className={`w-8 h-8 rounded-full flex items-center justify-center ${getStatusColor(status)}`}
+                                                            className={`w-8 h-8 rounded-full flex items-center justify-center ${getStatusColor(status,date)} `}
                                                         >
                                                             {status === 'Present' && <FaCheck className="text-white" />}
                                                             {status === 'Absent' && <FaTimes className="text-white" />}
                                                             {status === 'Leave' && <FaExclamation className="text-white" />}
-                                                            {!status && <span className="text-gray-500">--</span>}
+                                                            {!status && <span className={` ${isSunday(date) ? 'text-red-600' : "text-gray-500 " }`}>--</span>}
                                                         </motion.div>
                                                     )
                                                 })()}
