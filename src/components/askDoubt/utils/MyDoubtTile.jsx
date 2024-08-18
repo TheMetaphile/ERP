@@ -97,7 +97,7 @@ export default function MyDoubtTile({ data }) {
                         className="border border-gray-300 py-4 px-5 mt-4 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300"
                     >
                         <div className="flex justify-between items-center cursor-pointer mobile:max-tablet:flex-col gap-2 mobile:max-tablet:items-start" onClick={() => handleClick(index)}>
-                            <div className='flex items-center gap-3'>
+                            <div className='flex items-center gap-3 mobile:max-sm:flex-col mobile:max-sm:items-start'>
                                 {editMode === index ? (
                                     <input
                                         type="text"

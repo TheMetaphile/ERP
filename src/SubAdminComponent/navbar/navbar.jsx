@@ -51,14 +51,17 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
           <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-white shadow-lg cursor-pointer' />
         )}
         <img src={logo} alt="Metaphile Public School" className="w-10" />
-        <span className="tablet:text-lg font-medium mobile:text-sm mr-2">etaphile Public School</span>
-
+        <span className="tablet:text-lg font-medium mobile:text-sm ">etaphile Public School</span>
+        <div>
+          <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white  py-1 mobile:max-laptop:w-9 mobile:max-laptop:h-9 rounded-lg " />
+        </div>
       </div>
+
       <h1 className='text-2xl font-medium mobile:max-tablet:text-xl'>
         Sub Admin Panel
       </h1>
       <nav className='mobile:max-tablet:w-full mobile:max-tablet:py-1'>
-        <ul className="flex w-full items-center mobile:max-tablet:text-sm gap-3">
+        <ul className="flex w-full items-center mobile:max-tablet:text-sm gap-3 mobile:max-tablet:justify-center mobile:max-tablet:gap-20">
 
 
           <li className="flex items-center space-x-4">
@@ -107,9 +110,7 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
               )}
             </div>
           </li>
-          <li>
-            <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-laptop:w-9 mobile:max-laptop:h-9 rounded-lg ml-auto" />
-          </li>
+
         </ul>
 
       </nav>

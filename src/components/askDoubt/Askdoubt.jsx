@@ -9,8 +9,8 @@ export default function Askdoubt() {
     };
 
     return (
-        <div className="flex flex-col px-3 h-screen overflow-y-auto items-start mr-3 mb-3 no-scrollbar">
-            
+        <div className="flex flex-col px-3 h-screen overflow-y-auto items-start mb-3 no-scrollbar">
+
             <Outlet />
         </div>
     );

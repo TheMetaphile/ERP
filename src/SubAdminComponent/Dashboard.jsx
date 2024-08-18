@@ -18,13 +18,13 @@ export default function SubAdminDashboard() {
     setIsEndDrawerOpen(!isEndDrawerOpen);
   };
   return (
-    <div className="w-screen h-screen overflow-x-auto  no-scrollbar  pt-20">
-      <div className="fixed top-0 left-0 w-full px-2 z-10">
+    <div className="w-screen h-screen overflow-x-auto  no-scrollbar  pt-20 mobile:max-tablet:mt-16">
+      <div className="fixed top-0 left-0 w-full px-2 z-50">
         <SubAdminNavbar onDrawerToggle={toggleDrawer} onEndDrawerToggle={toggleEndDrawer} />
       </div>
       <div className="flex flex-grow h-screen">
         {authState.userDetails.role === 'Accountant' && (
-          <div className={`mobile:max-tablet:absolute z-5 flex-shrink-0 transition-all duration-300 mobile:max-tablet:mt-2. ${isDrawerOpen ? 'w-60 h-full' : 'w-0'} overflow-y-auto no-scrollbar`}>
+          <div className={`mobile:max-tablet:absolute z-10 mt-2 flex-shrink-0 transition-all duration-300 mobile:max-tablet:mt-2. ${isDrawerOpen ? 'w-60 h-full' : 'w-0'} overflow-y-auto no-scrollbar`}>
             <SubadminDrawer isOpen={isDrawerOpen} />
           </div>
         )}

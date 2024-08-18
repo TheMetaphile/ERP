@@ -122,9 +122,9 @@ const Transactions = ({ transactions }) => {
             <div className=" overflow-x-auto rounded-md">
                 <table className="w-full border border-collapse whitespace-nowrap">
                     <thead className=" bg-purple-200">
-                        <tr className="">
+                        <tr className=" text-center">
                             <th className=" border-y p-2 text-start">S.No.</th>
-                            <th className=" border-y p-2 text-start">Name</th>
+                            <th className=" border-y p-2 text-center">Name</th>
                             <th className=" border-y p-2">Date & Time</th>
                             <th className=" border-y p-2">Transaction ID</th>
                             <th className=" border-y p-2">Amount</th>
@@ -140,10 +140,10 @@ const Transactions = ({ transactions }) => {
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.3, delay: index * 0.1 }}
-                                className={`${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}
+                                className={`${clickedIndex === index ? 'bg-secondary text-center' : ''}`} onClick={() => handleClick(index)}
                             >
 
-                                <td className=" border-y p-2 text-start">{index + 1}</td>
+                                <td className=" text-center border-y p-2">{index + 1}</td>
                                 <td className=" border-y p-2 text-start">{transaction.student.name}</td>
                                 <td className=" border-y p-2">{transaction.date}</td>
                                 <td className=" border-y p-2">{transaction.payment_id}</td>

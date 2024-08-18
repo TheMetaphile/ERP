@@ -102,7 +102,7 @@ function FeeDiscountSubAdmin() {
         <div className="flex flex-col px-6 py-8 min-h-screen">
             <ToastContainer />
             <div className='flex justify-between items-center mb-6'>
-                <h1 className="text-3xl font-bold text-purple-500 flex items-center"><MdSchool className="mr-2" /> Student Fee Discount</h1>
+                <h1 className="text-3xl font-bold text-purple-500 flex items-center mobile:max-tablet:text-lg"><MdSchool className="mr-2" /> Student Fee Discount</h1>
                 <div className='flex gap-4 items-center'>
                     <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
                         {session.map((session, index) => (
@@ -137,12 +137,12 @@ function FeeDiscountSubAdmin() {
                             ) : details.length > 0 ? (
                                 details.map((detail, index) => (
                                     <motion.tr
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                                    className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
-                                  >
-                               
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ duration: 0.3, delay: index * 0.1 }}
+                                        className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
+                                    >
+
                                         <td className="py-3 px-4">{detail.to.rollNumber}</td>
                                         <td className="py-3 px-4 flex items-center">
                                             <img src={detail.to.profileLink} alt="profile" className="h-8 w-8 rounded-full mr-3 border-2 border-indigo-300" />
@@ -158,7 +158,7 @@ function FeeDiscountSubAdmin() {
                                                 <MdDeleteForever size={20} />
                                             </button>
                                         </td>
-                                        </motion.tr>
+                                    </motion.tr>
 
                                 ))
                             ) : (

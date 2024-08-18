@@ -113,7 +113,7 @@ function FeeDetailsSubAdmin() {
         <div className="flex flex-col px-6 py-8">
             <ToastContainer />
             <div className='flex justify-between items-center mb-8'>
-                <h1 className="text-3xl font-bold text-purple-500 flex items-center"><MdSchool className="mr-2" />Student Fee Details</h1>
+                <h1 className="text-3xl font-bold text-purple-500 flex items-center mobile:max-tablet:text-lg whitespace-nowrap"><MdSchool className="mr-2" />Student Fee Details</h1>
 
 
                 <div className='flex justify-end gap-2'>

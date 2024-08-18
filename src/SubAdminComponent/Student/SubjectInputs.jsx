@@ -56,7 +56,7 @@ const SubjectInputs = ({ stream, subjects, setSubject }) => {
       </div>
       <div className="flex items-end">
         <div className="flex-grow mr-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="selectSubject">
+          <label className="block text-sm font-medium text-gray-700 mb-1 whitespace-nowrap" htmlFor="selectSubject">
             Select Subject
           </label>
           <select
@@ -72,7 +72,7 @@ const SubjectInputs = ({ stream, subjects, setSubject }) => {
           </select>
         </div>
         <div
-          className="inline-flex items-center px-4 py-2 border border-transparent cursor-pointer text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300"
+          className="inline-flex items-center mobile:max-tablet:px-1 mobile:max-tablet:py-1 whitespace-nowrap px-4 py-2 border border-transparent cursor-pointer text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300"
           onClick={handleAddSubject}
           disabled={!selectedSubject}
         >
