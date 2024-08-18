@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
-import Logo from '../../../assets/Test Account.png'
-import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
-import axios from 'axios'
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaChevronUp, FaChevronDown, FaUserGraduate, FaCalendarAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Student_Leave } from '../../../Config';
 
@@ -47,147 +47,210 @@ export default function NewTile({ data }) {
         }
     };
 
+    const containerVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    };
+
+    const expandVariants = {
+        hidden: { opacity: 0, height: 0 },
+        visible: { opacity: 1, height: 'auto', transition: { duration: 0.3 } }
+    };
+
     return (
-        <div className="w-full">
+        <motion.div 
+            className="w-full space-y-4"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+        >
             {data.length > 0 ? (
                 data.filter(student => student.status === "Pending").map((student, studentIndex) => (
-                    <div key={studentIndex} className=" border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center " onClick={() => handleClick(`${studentIndex}`)}>
-                        <div className='w-full'>
-                            <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
-                                <div className='flex gap-2 items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
-                                    <div className=' flex items-center'>
-                                        <img src={student.profileLink} alt="" className='w-10 h-10 mobile:max-tablet:w-8 mobile:max-tablet:h-8 rounded-full mr-3' />
-                                        <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span>
+                    <motion.div 
+                        key={studentIndex} 
+                        className="border border-indigo-200 p-4 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300"
+                        whileHover={{ scale: 1.02 }}
+                        layout
+                    >
+                        <div className="flex justify-between items-center cursor-pointer" onClick={() => handleClick(`${studentIndex}`)}>
+                            <div className="flex items-center space-x-4">
+                                <img src={student.profileLink} alt="" className="w-12 h-12 rounded-full border-2 border-indigo-300" />
+                                <div>
+                                    <h3 className="text-lg font-semibold text-indigo-700">{student.name}</h3>
+                                    <div className="flex items-center text-sm text-indigo-600">
+                                        <FaUserGraduate className="mr-2" />
+                                        Class {authState.ClassDetails.class} {authState.ClassDetails.section}
                                     </div>
-                                    <div>
-                                        Class &nbsp;
-                                        <span className='text-red-500 whitespace-nowrap'>{authState.ClassDetails.class} {authState.ClassDetails.section}&nbsp;</span>
-                                    </div>
-                                    Leave Request
-                                    <div className=' flex gap-1'>
-                                        <p>From: </p>
-                                        <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span>
-                                        <p>To </p>
-                                        <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
-                                    </div>
-                                </div>
-                                <div className='items-center px-3 mobile:max-tablet:pl-0 cursor-pointer'>
-                                    {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}
                                 </div>
                             </div>
-                            {expanded === `${studentIndex}` && (
-                                <div className='font-medium text-base ml-2 mt-2'>
-                                    <span className='text-gray-400 text-xl'>Reason</span>
-                                    <div className='mt-2 text-gray-700 font-normal text-justify'>
-                                        {student.reason}
-                                    </div>
+                            <div className="flex items-center space-x-4">
+                                <div className="text-sm text-indigo-600">
+                                    <FaCalendarAlt className="inline mr-2" />
+                                    {student.startDate} - {student.endDate}
                                 </div>
-                            )}
-                            <div className='flex gap-2 font-medium text-base ml-2 mt-2'>
-                                <>
-                                    <button
-                                        className='p-1 rounded-lg border border-gray-300 text-black px-2 bg-green-300'
-                                        onClick={() => handleStatusUpdate(student._id, 'Approved', student.email)}
-                                        disabled={loading}
-                                    >
-                                        Approve
-                                    </button>
-                                    <button
-                                        className='p-1 rounded-lg text-black border border-gray-300 px-2 bg-red-300'
-                                        onClick={() => handleStatusUpdate(student._id, 'Rejected', student.email)}
-                                        disabled={loading}
-                                    >
-                                        Reject
-                                    </button>
-                                </>
+                                <motion.div
+                                    initial={false}
+                                    animate={{ rotate: expanded === `${studentIndex}` ? 180 : 0 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <FaChevronDown className="text-indigo-500" />
+                                </motion.div>
                             </div>
                         </div>
-
-                    </div>
+                        <AnimatePresence>
+                            {expanded === `${studentIndex}` && (
+                                <motion.div
+                                    variants={expandVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit="hidden"
+                                    className="mt-4"
+                                >
+                                    <h4 className="text-lg font-medium text-indigo-600 mb-2">Reason</h4>
+                                    <p className="text-gray-700 bg-indigo-50 p-3 rounded-lg">{student.reason}</p>
+                                    <div className="mt-4 flex space-x-4">
+                                        <motion.button
+                                            className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition-colors duration-300"
+                                            onClick={() => handleStatusUpdate(student._id, 'Approved', student.email)}
+                                            disabled={loading}
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                        >
+                                            <FaCheckCircle className="inline mr-2" /> Approve
+                                        </motion.button>
+                                        <motion.button
+                                            className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition-colors duration-300"
+                                            onClick={() => handleStatusUpdate(student._id, 'Rejected', student.email)}
+                                            disabled={loading}
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                        >
+                                            <FaTimesCircle className="inline mr-2" /> Reject
+                                        </motion.button>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
                 ))
             ) : (
-                <div>No new leave</div>
+                <motion.div 
+                    className="text-center text-indigo-600 text-lg"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                >
+                    No new leave requests
+                </motion.div>
             )}
-            {data.filter(student => student.status === 'Approved').map((student, studentIndex) => (
-                <div key={student._id} className="border border-gray-300 p-2 justify-between rounded-lg shadow-md mt-3  items-center" onClick={() => handleClick(studentIndex)}>
 
-                    <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
-                        <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
-                            <div className='flex gap-2 items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
-                                <div className='flex items-center'>
-                                    <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mobile:max-tablet:w-8 mobile:max-tablet:h-8 mr-3' />
-                                    <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span>
-                                </div>
-                                <div>
-                                    Class:
-                                    <span className='text-red-500 whitespace-nowrap'>{authState.ClassDetails.class}
-                                        {authState.ClassDetails.section}</span> </div>
-                                Leave Request
-                                <div className=' flex gap-1'>
-                                    <p>From :</p>
-                                    <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span>
-                                    <p>To</p>
-                                    <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
+            {data.filter(student => student.status === 'Approved').map((student, studentIndex) => (
+                <motion.div 
+                    key={student._id} 
+                    className="border border-green-200 p-4 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300"
+                    whileHover={{ scale: 1.02 }}
+                    layout
+                >
+                    <div className="flex justify-between items-center cursor-pointer" onClick={() => handleClick(studentIndex)}>
+                        <div className="flex items-center space-x-4">
+                            <img src={student.profileLink} alt="" className="w-12 h-12 rounded-full border-2 border-green-300" />
+                            <div>
+                                <h3 className="text-lg font-semibold text-green-700">{student.name}</h3>
+                                <div className="flex items-center text-sm text-green-600">
+                                    <FaUserGraduate className="mr-2" />
+                                    Class {authState.ClassDetails.class} {authState.ClassDetails.section}
                                 </div>
                             </div>
                         </div>
-                        <div className='items-center px-3  mobile:max-tablet:pl-0 cursor-pointer'>
-                            {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}
-                        </div>
-                    </div>
-                    {expanded === studentIndex && (
-                        <div className='font-medium text-base ml-2 mt-2'>
-                            <span className='text-gray-400 text-xl'>Reason</span>
-                            <div className='border rounded-lg shadow-md p-3'>
-                                <span className='text-gray-700'>{student.reason}</span>
+                        <div className="flex items-center space-x-4">
+                            <div className="text-sm text-green-600">
+                                <FaCalendarAlt className="inline mr-2" />
+                                {student.startDate} - {student.endDate}
                             </div>
+                            <motion.div
+                                initial={false}
+                                animate={{ rotate: expanded === studentIndex ? 180 : 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <FaChevronDown className="text-green-500" />
+                            </motion.div>
                         </div>
-                    )}
-                    <div className='flex gap-2 font-medium text-base ml-2 mt-2'>
-                        <span className='p-1 rounded-lg text-green-500 '>{student.status}</span>
                     </div>
-                </div>
+                    <AnimatePresence>
+                        {expanded === studentIndex && (
+                            <motion.div
+                                variants={expandVariants}
+                                initial="hidden"
+                                animate="visible"
+                                exit="hidden"
+                                className="mt-4"
+                            >
+                                <h4 className="text-lg font-medium text-green-600 mb-2">Reason</h4>
+                                <p className="text-gray-700 bg-green-50 p-3 rounded-lg">{student.reason}</p>
+                                <div className="mt-4">
+                                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full font-medium">
+                                        {student.status}
+                                    </span>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </motion.div>
             ))}
 
             {data.filter(student => student.status === 'Rejected').map((student, studentIndex) => (
-                <div key={student._id} className="border border-gray-300 p-2 justify-between rounded-lg shadow-md mt-3 items-center" onClick={() => handleClick(studentIndex)}>
-                    <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
-                        <div className='flex gap-2 items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
-                            <div className='flex items-center'>
-                                <img src={student.profileLink} alt="" className='w-10 h-10 rounded-full mr-3' />
-                                <span className='text-red-500 whitespace-nowrap'>{student.name}&nbsp;</span>
-                            </div>
+                <motion.div 
+                    key={student._id} 
+                    className="border border-red-200 p-4 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300"
+                    whileHover={{ scale: 1.02 }}
+                    layout
+                >
+                    <div className="flex justify-between items-center cursor-pointer" onClick={() => handleClick(studentIndex)}>
+                        <div className="flex items-center space-x-4">
+                            <img src={student.profileLink} alt="" className="w-12 h-12 rounded-full border-2 border-red-300" />
                             <div>
-                                Class:
-                                <span className='text-red-500 whitespace-nowrap'>{authState.ClassDetails.class} {authState.ClassDetails.section}&nbsp;</span>
-                            </div>
-                            Leave Request
-                            <div className=' flex gap-1'>
-                                <p> From</p>
-                                <span className='text-red-500 whitespace-nowrap'>{student.startDate}&nbsp;</span>
-                                <p>To</p>
-                                <span className='text-red-500 whitespace-nowrap'>{student.endDate}</span>
+                                <h3 className="text-lg font-semibold text-red-700">{student.name}</h3>
+                                <div className="flex items-center text-sm text-red-600">
+                                    <FaUserGraduate className="mr-2" />
+                                    Class {authState.ClassDetails.class} {authState.ClassDetails.section}
+                                </div>
                             </div>
                         </div>
-                        <div className='items-center px-3 cursor-pointer'>
-                            {expanded === `${studentIndex}` ? <FaChevronUp /> : <FaChevronDown />}
+                        <div className="flex items-center space-x-4">
+                            <div className="text-sm text-red-600">
+                                <FaCalendarAlt className="inline mr-2" />
+                                {student.startDate} - {student.endDate}
+                            </div>
+                            <motion.div
+                                initial={false}
+                                animate={{ rotate: expanded === studentIndex ? 180 : 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <FaChevronDown className="text-red-500" />
+                            </motion.div>
                         </div>
                     </div>
-                    {expanded === studentIndex && (
-                        <div className='font-medium text-base ml-2 mt-2'>
-                            <span className='text-gray-400 text-xl'>Reason</span>
-                            <div className='border rounded-lg shadow-md p-3'>
-                                <span className='text-gray-700'>{student.reason}</span>
-                            </div>
-                        </div>
-                    )}
-                    <div className='flex gap-2 font-medium text-base ml-2 mt-2'>
-                        <span className='p-1 rounded-lg text-red-500 '>{student.status}</span>
-                    </div>
-                </div>
+                    <AnimatePresence>
+                        {expanded === studentIndex && (
+                            <motion.div
+                                variants={expandVariants}
+                                initial="hidden"
+                                animate="visible"
+                                exit="hidden"
+                                className="mt-4"
+                            >
+                                <h4 className="text-lg font-medium text-red-600 mb-2">Reason</h4>
+                                <p className="text-gray-700 bg-red-50 p-3 rounded-lg">{student.reason}</p>
+                                <div className="mt-4">
+                                    <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full font-medium">
+                                        {student.status}
+                                    </span>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </motion.div>
             ))}
-        </div>
-
-    )
+        </motion.div>
+    );
 }
-

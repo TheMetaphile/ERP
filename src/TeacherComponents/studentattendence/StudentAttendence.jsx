@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import Profile from '../../assets/Test Account.png';
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
-import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Attendence } from "../../Config";
+import { motion } from "framer-motion";
+import {  FaCheckCircle, FaTimesCircle, FaUserGraduate, FaCalendarAlt } from "react-icons/fa";
+import { IoMdRefresh } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 function StudentAttendance() {
     const [students, setStudents] = useState([]);
@@ -139,63 +141,122 @@ function StudentAttendance() {
             console.error("Error marking attendance:", error);
         }
     };
-
+    
+    
     return (
-        <div className="w-full flex flex-col mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mb-3 no-scrollbar" >
-            <ToastContainer />
-            <div className=" w-full">
-                <div className="flex justify-between mobile:max-tablet:items-start items-center mb-4 mobile:max-tablet:flex-col mt-3">
-                    <h1 className="text-2xl mobile:max-tablet:text-lg font-medium">Student Attendance</h1>
-                    <div className="mobile:max-tablet:flex items-end">
-                        <Link
-                            to="/Teacher-Dashboard/class_activity/studentattendence/record"
-                            className="text-lg mobile:max-tablet:text-sm px-2 py-1 mr-2 bg-green-500 text-white rounded-md hover:cursor-pointer"
-                        >
-                            Previous Record
-                        </Link>
-                        <button className="px-2 py-1 bg-green-500 text-white rounded-md  mobile:max-tablet:text-sm hover:cursor-pointer" onClick={handleMark}>
-                            {markLoading ? <Loading /> : 'Mark Attendance'}
-                        </button>
-                    </div>
-                </div>
-                {error}
-                <div className="border rounded-lg shadow-md mt-2 overflow-auto h-screen" onScroll={handleScroll} ref={containerRef}>
-                    {loading && students.length == 0 ? (
-                        <Loading />
-                    ) : (
-                        <>
-                            {studentClone.map((student, index) => (
-                                <div key={index} className="p-4 items-center">
-                                    <div className="flex w-full items-center">
-                                        <span className="mr-2">{student.name[0]}</span>
-                                        <div className="bg-gray-300 h-1 w-full"></div>
-                                    </div>
-                                    <div className="flex w-full justify-between mobile:max-tablet:gap-2 items-center border p-2 rounded-lg mobile:max-tablet:flex-col mobile:max-tablet:items-start">
-                                        <div className="flex items-center px-3">
-                                            <span className="mr-3 text-xl">{student.rollNumber}</span>
-                                            <img src={student.profileLink} alt="User image" className="w-12 h-12 mobile:max-tablet:w-8 mobile:max-tablet:h-8 rounded-full"></img>
-                                            <span className="ml-2">{student.name}</span>
-                                        </div>
-                                        <div className="flex items-center mobile:ml-32 space-x-2">
-                                            <button className={`px-2 rounded-full ${student.present ? "bg-green-500 text-white" : "bg-gray-300"}`} onClick={() => handleAttendance(index, "Present")}>
-                                                P
-                                            </button>
-                                            <button className={`px-2 rounded-full ${student.absent ? "bg-red-500 text-white" : "bg-gray-300"}`} onClick={() => handleAttendance(index, "Absent")}>
-                                                A
-                                            </button>
-                                            <button className={`px-2 rounded-full ${student.leave ? "bg-yellow-500 text-white" : "bg-gray-300"}`} onClick={() => handleAttendance(index, "Leave")}>
-                                                L
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </>
-                    )}
-                </div>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6"
+      >
+        <ToastContainer />
+        <div className="max-w-6xl mx-auto">
+          <motion.div 
+            initial={{ y: -20 }}
+            animate={{ y: 0 }}
+            className="flex justify-between items-center mb-8"
+          >
+            <h1 className="text-4xl font-extrabold text-indigo-500 tracking-tight">Student Attendance</h1>
+            <div className="flex space-x-4">
+              <Link
+                to="/Teacher-Dashboard/class_activity/studentattendence/record"
+                className="flex items-center px-6 py-3 bg-indigo-500 text-white rounded-full hover:bg-indigo-700 transition duration-300 shadow-lg"
+              >
+                <IoMdRefresh className="mr-2" />
+                Previous Record
+              </Link>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center px-6 py-3 bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-300 shadow-lg"
+                onClick={handleMark}
+              >
+                {markLoading ? <Loading /> : 'Mark Attendance'}
+              </motion.button>
             </div>
+          </motion.div>
+          
+          {error && <div className="text-red-500 mb-4 text-center font-semibold">{error}</div>}
+          
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div className="p-6 bg-indigo-500 text-white flex justify-between items-center">
+              <div className="flex items-center">
+                <FaUserGraduate className="text-3xl mr-3" />
+                <span className="text-xl font-semibold">Class Roster</span>
+              </div>
+              <FaCalendarAlt className="text-2xl" />
+            </div>
+            <div className="max-h-[calc(100vh-250px)] overflow-y-auto" onScroll={handleScroll} ref={containerRef}>
+              {loading && students.length === 0 ? (
+                <div className="flex justify-center items-center h-64">
+                  <Loading />
+                </div>
+              ) : (
+                <div className="divide-y divide-gray-200">
+                  {studentClone.map((student, index) => (
+                    <motion.div 
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      className="p-4 hover:bg-gray-50 transition duration-150 ease-in-out"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                          <div className="flex-shrink-0">
+                            <img className="h-12 w-12 rounded-full object-cover border-2 border-indigo-500" src={student.profileLink} alt={student.name} />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">{student.name}</p>
+                            <p className="text-sm text-gray-500">Roll: {student.rollNumber}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <AttendanceButton
+                            active={student.present}
+                            onClick={() => handleAttendance(index, "Present")}
+                            icon={<FaCheckCircle />}
+                            activeColor="bg-green-500"
+                            inactiveColor="bg-gray-200"
+                          />
+                          <AttendanceButton
+                            active={student.absent}
+                            onClick={() => handleAttendance(index, "Absent")}
+                            icon={<FaTimesCircle />}
+                            activeColor="bg-red-500"
+                            inactiveColor="bg-gray-200"
+                          />
+                          <AttendanceButton
+                            active={student.leave}
+                            onClick={() => handleAttendance(index, "Leave")}
+                            icon={<FaCalendarAlt />}
+                            activeColor="bg-yellow-500"
+                            inactiveColor="bg-gray-200"
+                          />
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-    );
+      </motion.div>
+    ); 
 }
+    
+    // AttendanceButton component
+    const AttendanceButton = ({ active, onClick, icon, activeColor, inactiveColor }) => (
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        className={`p-2 rounded-full text-white ${active ? activeColor : inactiveColor}`}
+        onClick={onClick}
+      >
+        {icon}
+      </motion.button>
+    );
 
 export default StudentAttendance;

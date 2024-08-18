@@ -1,8 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FaUserGraduate, FaCalendarAlt, FaClipboardList } from 'react-icons/fa';
 import { Link, Outlet } from "react-router-dom";
 import NewTile from './utils/NewTile';
 import Loading from '../../LoadingScreen/Loading';
-import axios from 'axios'
+import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Student_Leave } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
@@ -29,7 +31,6 @@ function StudentLeave() {
         setAllDataFetched(false);
     };
 
-
     useEffect(() => {
         setLoading(true);
         fetchUserData();
@@ -47,7 +48,6 @@ function StudentLeave() {
 
     const fetchUserData = async () => {
         setLoading(true);
-        console.log(status)
         try {
             const today = new Date();
             var month = today.getMonth()+1 < 10 ? `0${today.getMonth()+1}` : today.getMonth()+1; 
@@ -57,90 +57,75 @@ function StudentLeave() {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
             });
-            // console.log("API response:", response.data);
-            // setData(response.data || []);
 
             const leaves = response.data.StudentsLeaves.length;
-            console.log("API response:", response.data.StudentsLeaves, leaves);
             if (leaves < end) {
                 toast.success('All data fetched');
-                console.log('All data fetched');
                 setAllDataFetched(true);
             }
             setData(prevData => [...prevData, ...response.data.StudentsLeaves]);
-            console.log("API responserrrrrr:", data);
-
-            // setData(response.data || []);
-
         } catch (err) {
             setError(err.message);
-
-        }
-        finally {
+        } finally {
             setLoading(false);
-
         }
     };
-
 
     if (loading) {
         return <Loading />;
     }
 
-
     return (
-        <div className=" w-full flex flex-col px-2 mobile:max-tablet:px-0 h-screen  items-start  mb-3">
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full flex flex-col px-4 h-screen items-start mb-3 bg-indigo-50"
+        >
             <ToastContainer />
-            <div className='flex items-center justify-between w-full mobile:max-tablet:px-2 mt-3'>
-                <h1 className='container mx-auto py-3  font-medium text-2xl mobile:max-tablet:text-lg'>Student Leave</h1>
-                <select
+            <motion.div 
+                className='flex items-center justify-between w-full mt-6 mb-8'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+            >
+                <h1 className='text-3xl font-bold text-indigo-800 flex items-center'>
+                    <FaUserGraduate className="mr-3" />
+                    Student Leave
+                </h1>
+                <motion.select
                     value={status}
                     onChange={handleStatusChange}
-                    className="border border-gray-300 rounded-lg shadow-md px-2 py-2 mb-2 mobile:max-tablet:text-sm"
+                    className="bg-white border-2 border-indigo-300 text-indigo-700 rounded-lg shadow-md px-4 py-2 outline-none focus:border-indigo-500 transition duration-300"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                 >
                     <option value="Pending">Pending</option>
                     <option value="Approved">Approved</option>
                     <option value="Rejected">Rejected</option>
-                </select>
-            </div>
-            {/* <div className=" flex  mr-3 items-center justify-between">
-                <div className=" flex  gap-2 ">
-                    <Link
-                        to={'/Teacher-Dashboard/class_activity/studentleave/new'}
-                        className={`text-xl font-medium px-2 rounded-lg border border-gray-300 py-1 ${selectedLink === '/Teacher-Dashboard/studentleave/new' ? 'bg-secondary ' : 'bg-gray-200'}`}
-                        onClick={() => handleLinkSelect('/Teacher-Dashboard/studentleave/new')}
-                    >
-                        New Leave
-                    </Link>
-                    <Link
-                        to={'/Teacher-Dashboard/class_activity/studentleave/approved'}
-                        className={`text-xl font-medium px-2 rounded-lg border border-gray-300 py-1 ${selectedLink === '/Teacher-Dashboard/studentleave/approved' ? 'bg-secondary ' : 'bg-gray-200'}`}
-                        onClick={() => handleLinkSelect('/Teacher-Dashboard/studentleave/approved')}
-                    >
-                        Approved Leave
-                    </Link>
-                    <Link
-                        to={'/Teacher-Dashboard/class_activity/studentleave/rejected'}
-                        className={`text-xl font-medium px-2 rounded-lg border border-gray-300 py-1 ${selectedLink === '/Teacher-Dashboard/studentleave/rejected' ? 'bg-secondary ' : 'bg-gray-200'}`}
-                        onClick={() => handleLinkSelect('/Teacher-Dashboard/studentleave/rejected')}
-                    >
-                        Rejected Leave
-                    </Link>
-                </div>
-
-
-            </div> */}
-            <div className='w-full mr-3'>
+                </motion.select>
+            </motion.div>
+            
+            <motion.div 
+                className='w-full'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+            >
                 <NewTile data={data} />
                 {!allDataFetched && (
-                    <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                    <motion.h1 
+                        className='text-indigo-600 hover:text-indigo-800 mt-6 cursor-pointer text-center font-semibold'
+                        onClick={handleViewMore}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        View More
+                    </motion.h1>
                 )}
-            </div>
-            {/* <hr className=' bg-gray-300 h-1 w-full rounded-full mt-2' />
-            <Outlet /> */}
-
-        </div>
+            </motion.div>
+        </motion.div>
     )
 }
 
-export default StudentLeave
+export default StudentLeave;

@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
-import axios from 'axios'
+import axios from 'axios';
 import Selection from './utils/Selection';
-import Header from '../../AdminComponents/Home/utils/TeachersDetails/LeftCard/Header'
 import { BASE_URL_Fee } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
+import { motion } from 'framer-motion';
+import { FaUserGraduate, FaMoneyBillWave, FaPercent, FaWallet, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 
 function StudentFee() {
     const [loading, setLoading] = useState(false);
@@ -15,11 +16,6 @@ function StudentFee() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(10);
     const [allDataFetched, setAllDataFetched] = useState(false);
-    const [clickedIndex, setClickedIndex] = useState(null);
-
-    const handleClick = (index) => {
-        setClickedIndex(index);
-    };
 
     useEffect(() => {
         setStart(0);
@@ -51,7 +47,6 @@ function StudentFee() {
     const fetchDetails = async () => {
         setLoading(true);
         try {
-            console.log(start, "-", end);
             const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/classTeacher?&start=${start}&end=${end}&session=${session}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
@@ -59,155 +54,123 @@ function StudentFee() {
             });
             if (response.status === 200) {
                 const output = response.data.students;
-                console.log("API response:", response.data);
                 if (output < end) {
                     toast.success('All data fetched');
-                    console.log('All data fetched')
                     setAllDataFetched(true);
                 }
                 setDetails(prevStudents => [...prevStudents, ...response.data.students]);
             }
-
         } catch (err) {
-            console.log("r", err);
-
-        }
-        finally {
+            console.log("Error:", err);
+        } finally {
             setLoading(false);
         }
     }
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.5 } }
+    };
 
+    const tableVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    };
 
     return (
-        <div className=" w-full items-start  px-2 ">
+        <motion.div
+            className="w-full items-start px-4 py-6 bg-gradient-to-r from-indigo-100 to-indigo-50"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+        >
             <ToastContainer />
-            <div className=' my-3 flex  w-full justify-between'>
-                <h1 className="text-2xl mobile:max-tablet:text-lg font-medium mb-2">Student Fee</h1>
+            <div className='my-6 flex w-full justify-between items-center'>
+                <h1 className="text-3xl font-bold text-indigo-800 mb-2">Student Fee</h1>
                 <Selection setFilter={setFilter} />
             </div>
-            <div className=' overflow-auto'>
-                <div className='  rounded-lg border shadow-md border-gray-300 mobile:max-tablet:h-auto  w-full mobile:max-tablet:w-fit  overflow-x-auto'  >
-                    <Header headings={['Roll Number', 'Name', 'Total Fee', 'Discount', 'Payable', 'Paid', 'Pending']} />
+            <motion.div 
+                className='overflow-hidden rounded-lg shadow-lg bg-white'
+                variants={tableVariants}
+            >
+                <div className='overflow-x-auto'>
+                    <table className='w-full min-w-max'>
+                        <thead>
+                            <tr className='bg-indigo-600 text-white'>
+                                <th className='py-3 px-4 text-left'>Roll Number</th>
+                                <th className='py-3 px-4 text-left'>Name</th>
+                                <th className='py-3 px-4 text-left'>Total Fee</th>
+                                <th className='py-3 px-4 text-left'>Discount</th>
+                                <th className='py-3 px-4 text-left'>Payable</th>
+                                <th className='py-3 px-4 text-left'>Paid</th>
+                                <th className='py-3 px-4 text-left'>Pending</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loading && details.length === 0 ? (
+                                <tr>
+                                    <td colSpan="7" className='text-center py-4'>
+                                        <Loading />
+                                    </td>
+                                </tr>
+                            ) : details.length > 0 ? (
+                                details.map((detail, index) => {
+                                    const shouldRender = (filter === 'Paid' && detail.payableFee - detail.paid === 0) ||
+                                        (filter === 'Pending' && detail.payableFee - detail.paid > 0) ||
+                                        filter === '';
 
-                    {loading && details.length == 0 ? (
-                        <Loading />
-                    ) : (
-                        details.length > 0 ? (
+                                    if (!shouldRender) return null;
 
-                            <div className='tablet:max-laptop:w-fit ' >
-                                {details.map((details, index) => (
-                                    filter === 'Paid'
-                                        ?
-                                        details.payableFee - details.paid == 0
-                                            ?
-                                            <div key={index} className={`flex justify-evenly  py-2 pl-2 h-fit mobile:max-laptop:w-fit border ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
-
-                                                <h1 className="w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                    {details.rollNumber}
-                                                </h1>
-                                                <div className="w-52 mobile:max-tablet:w-48 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
-                                                    <img src={details.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
-                                                    <h1 >
-                                                        {details.name}
-                                                    </h1>
+                                    return (
+                                        <motion.tr
+                                            key={index}
+                                            className='border-b hover:bg-indigo-50 transition-colors duration-200'
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                                        >
+                                            <td className='py-3 px-4'><FaUserGraduate className="inline mr-2 text-indigo-600" />{detail.rollNumber}</td>
+                                            <td className='py-3 px-4'>
+                                                <div className="flex items-center gap-2">
+                                                    <img src={detail.profileLink} alt="Profile" className='w-8 h-8 rounded-full' />
+                                                    <span className="font-medium text-indigo-800">{detail.name}</span>
                                                 </div>
-                                                <h1 className="w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                    {details.totalfee}
-                                                </h1>
-                                                <h1 className="w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                    {details.discountAmount}
-                                                </h1>
-                                                <h1 className="w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                    {details.payableFee}
-                                                </h1>
-                                                <h1 className={`w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap`}>
-                                                    {details.paid}
-                                                </h1>
-                                                <h1 className={`w-40 text-lg mobile:max-tablet:w-20 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap ${(details.payableFee - details.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
-                                                    {details.payableFee - details.paid}
-                                                </h1>
-
-                                            </div>
-                                            :
-                                            <div></div>
-                                        :
-                                        filter === 'Pending'
-                                            ?
-                                            details.payableFee - details.paid > 0
-                                                ?
-                                                <div key={index} className={`flex justify-evenly  py-2 pl-2 h-fit border mobile:max-laptop:w-fit ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
-
-                                                    <h1 className="w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                        {details.rollNumber}
-                                                    </h1>
-                                                    <div className="w-52 mobile:max-tablet:w-44 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
-                                                        <img src={details.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
-                                                        <h1 >
-                                                            {details.name}
-                                                        </h1>
-                                                    </div>
-                                                    <h1 className="w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                        {details.totalfee}
-                                                    </h1>
-                                                    <h1 className="w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                        {details.discountAmount}
-                                                    </h1>
-                                                    <h1 className={`w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap`}>
-                                                        {details.paid}
-                                                    </h1>
-                                                    <h1 className="w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                        {details.payableFee}
-                                                    </h1>
-                                                    <h1 className={`w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap ${(details.payableFee - details.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
-                                                        {details.payableFee - details.paid}
-                                                    </h1>
-                                                </div>
-                                                :
-                                                <div></div>
-                                            :
-                                            <div key={index} className={`flex justify-evenly  py-2 pl-2 h-fit border ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
-
-                                                <h1 className="w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                    {details.rollNumber}
-                                                </h1>
-                                                <div className="w-52 mobile:max-tablet:w-48 overflow-hidden text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap flex items-center gap-1">
-                                                    <img src={details.profileLink} alt="img" className='w-8 h-8 rounded-full'></img>
-                                                    <h1 >
-                                                        {details.name}
-                                                    </h1>
-                                                </div>
-                                                <h1 className="w-40 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                    {details.totalfee}
-                                                </h1>
-                                                <h1 className="w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                    {details.discountAmount}
-                                                </h1>
-                                                <h1 className="w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                    {details.payableFee}
-                                                </h1>
-                                                <h1 className={`w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap`}>
-                                                    {details.paid}
-                                                </h1>
-                                                
-                                                <h1 className={`w-40 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap ${(details.payableFee - details.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
-                                                    {details.payableFee - details.paid}
-                                                </h1>
-                                            </div>
-                                ))}
-                            </div>
-
-                        ) : (
-                            <div className='text-center mt-2'>No Fee Details available</div>
-                        )
-                    )}
-                    {!allDataFetched && (
-                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                    )}
+                                            </td>
+                                            <td className='py-3 px-4'><FaMoneyBillWave className="inline mr-2 text-indigo-600" />₹ {detail.totalfee}</td>
+                                            <td className='py-3 px-4'>₹ {detail.discountAmount}</td>
+                                            <td className='py-3 px-4'><FaWallet className="inline mr-2 text-indigo-600" />₹ {detail.payableFee}</td>
+                                            <td className='py-3 px-4 text-green-600'><FaCheckCircle className="inline mr-2" />₹ {detail.paid}</td>
+                                            <td className={`py-3 px-4 ${(detail.payableFee - detail.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
+                                                <FaExclamationCircle className="inline mr-2" />₹ {detail.payableFee - detail.paid}
+                                            </td>
+                                        </motion.tr>
+                                    );
+                                })
+                            ) : (
+                                <tr>
+                                    <td colSpan="7" className='text-center py-8 text-indigo-600'>No Fee Details available</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-        </div>
+                {!allDataFetched && (
+                    <motion.div
+                        className='text-center py-4'
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <button 
+                            className='px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300'
+                            onClick={handleViewMore}
+                        >
+                            View More
+                        </button>
+                    </motion.div>
+                )}
+            </motion.div>
+        </motion.div>
     )
 }
 
-export default StudentFee
+export default StudentFee;

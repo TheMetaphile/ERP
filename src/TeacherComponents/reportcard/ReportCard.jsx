@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react'
-import Selection from './utils/Selection';
-import Header from './utils/Header'
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from "react-router-dom";
-import NewReport from './utils/NewReport';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+import { FaUserGraduate, FaChalkboardTeacher, FaBookOpen } from 'react-icons/fa';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Login } from '../../Config';
@@ -11,18 +10,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function ReportCard() {
-    const [students, setStudents] = useState([])
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [students, setStudents] = useState([]);
     const { authState } = useContext(AuthContext);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(10);
     const [allDataFetched, setAllDataFetched] = useState(false);
-
-
-    const handleClose = () => {
-        setIsDialogOpen(false);
-    }
 
     useEffect(() => {
         fetchStudents();
@@ -38,7 +31,6 @@ function ReportCard() {
         }
     }, [start]);
 
-
     const fetchStudents = async () => {
         setLoading(true);
         try {
@@ -48,86 +40,114 @@ function ReportCard() {
                 section: authState.ClassDetails.section,
                 start: start,
                 end: end
-
             });
-            if (response.status == 200) {
+            if (response.status === 200) {
                 const student = response.data.Students.length;
-                console.log("API response:", response.data.Students);
                 if (student < end) {
                     toast.success('All data fetched');
-                    console.log('All data fetched')
                     setAllDataFetched(true);
                 }
                 setStudents(prevData => [...prevData, ...response.data.Students]);
-                console.log("API responserrrrrr:", response.data.Students);
-
             }
-
         } catch (error) {
             console.error("Error fetching student:", error);
-        }
-        finally {
-            setLoading(false)
+            toast.error("Failed to fetch students");
+        } finally {
+            setLoading(false);
         }
     };
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.5 } }
+    };
 
+    const tableVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    };
 
     return (
-        <div className="overflow-y-auto w-full items-start  px-2 py-1 no-scrollbar">
+        <motion.div 
+            className="w-full px-4 py-6 bg-gradient-to-r from-indigo-100 to-indigo-50"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+        >
             <ToastContainer />
-
-            <div className='w-full flex items-center justify-between  my-2'>
-                <h1 className="text-2xl mobile:max-tablet:text-lg font-medium mb-2">Search Report Card</h1>
-
-                {/* <span className='flex gap-2 w-fit'>
-                    <Selection />
-                </span> */}
-            </div>
-            <div className=' overflow-auto'>
-                {loading ? (
-                    <Loading />
-                ) : students.length === 0 ? (
-                    <>No student found</>
-                ) : (
-                    <div className=' rounded-lg shadow-md border border-gray-300 mb-2 overflow-auto'>
-                        <Header headings={['Roll No.', 'Name', "Class", "Section"]} />
-                        {students.map((detail, index) => (
-                            <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`} key={index}>
-                                <div key={index} className='flex justify-between items-center py-2 pl-2  h-fit  border border-gray-300 text-center w-fit mobilemedium:w-full laptop:w-full  gap-2' >
-                                    <div className=' w-40 mobile:max-tablet:w-20 text-center'>{detail.rollNumber}</div>
-                                    <div className=' w-48 mobile:max-tablet:w-40 text-center flex justify-center'>
-                                        <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full mr-2'></img>
-                                        <div className='w-52 text-center'>{detail.name}</div>
-                                    </div>
-                                    <div className=' w-40 mobile:max-tablet:w-20 text-center'>{authState.ClassDetails.class}</div>
-                                    <div className=' w-40 mobile:max-tablet:w-20 text-center'>{authState.ClassDetails.section}</div>
-
-                                </div>
-                            </Link>
-                        ))}
-                        {!allDataFetched && (
-                            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                        )}
+            <h1 className="text-3xl font-bold text-indigo-800 mb-6">Search Report Card</h1>
+            
+            {loading ? (
+                <Loading />
+            ) : students.length === 0 ? (
+                <div className="text-center text-indigo-600 text-xl">No students found</div>
+            ) : (
+                <motion.div 
+                    className="overflow-hidden rounded-lg shadow-lg bg-white"
+                    variants={tableVariants}
+                >
+                    <div className="overflow-x-auto">
+                        <table className="w-full min-w-max">
+                            <thead>
+                                <tr className="bg-indigo-600 text-white">
+                                    <th className="py-3 px-4 text-left">Roll No.</th>
+                                    <th className="py-3 px-4 text-left">Name</th>
+                                    <th className="py-3 px-4 text-left">Class</th>
+                                    <th className="py-3 px-4 text-left">Section</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {students.map((detail, index) => (
+                                    <motion.tr 
+                                        key={index}
+                                        className="border-b hover:bg-indigo-50 transition-colors duration-200"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.3, delay: index * 0.05 }}
+                                    >
+                                        <td className="py-3 px-4">
+                                            <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`}>
+                                                <FaUserGraduate className="inline mr-2 text-indigo-600" />
+                                                {detail.rollNumber}
+                                            </Link>
+                                        </td>
+                                        <td className="py-3 px-4">
+                                            <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`} className="flex items-center">
+                                                <img src={detail.profileLink} alt="Profile" className="w-8 h-8 rounded-full mr-2" />
+                                                <span>{detail.name}</span>
+                                            </Link>
+                                        </td>
+                                        <td className="py-3 px-4">
+                                            <FaChalkboardTeacher className="inline mr-2 text-indigo-600" />
+                                            {authState.ClassDetails.class}
+                                        </td>
+                                        <td className="py-3 px-4">
+                                            <FaBookOpen className="inline mr-2 text-indigo-600" />
+                                            {authState.ClassDetails.section}
+                                        </td>
+                                    </motion.tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
-                )
-                }
-            </div>
-            {isDialogOpen && <NewReport onClose={handleClose} />}
-        </div>
-
-    )
+                    {!allDataFetched && (
+                        <motion.div 
+                            className="text-center py-4"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <button 
+                                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300"
+                                onClick={handleViewMore}
+                            >
+                                View More
+                            </button>
+                        </motion.div>
+                    )}
+                </motion.div>
+            )}
+        </motion.div>
+    );
 }
 
-export default ReportCard
-
-
-
-
-
-
-
-
-
-
-
+export default ReportCard;

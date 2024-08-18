@@ -1,9 +1,10 @@
 import React, { useEffect, useContext, useState } from "react";
+import { motion } from "framer-motion";
 import AttendanceStatusGridTile from "./utils/AttendanceStatusGridTile";
 import SearchBar from "./utils/SearchBar";
-import Loading from "../../../LoadingScreen/Loading"
-import axios from 'axios'
-import AuthContext from "../../../Context/AuthContext"
+import Loading from "../../../LoadingScreen/Loading";
+import axios from 'axios';
+import AuthContext from "../../../Context/AuthContext";
 import { BASE_URL_Attendence } from "../../../Config";
 
 export default function StudentAttendanceRecord() {
@@ -11,27 +12,24 @@ export default function StudentAttendanceRecord() {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const todayDate = new Date();
-    const [month, setMonth] = useState(todayDate.getMonth() + 1)
-
+    const [month, setMonth] = useState(todayDate.getMonth() + 1);
 
     useEffect(() => {
         const fetchStudents = async () => {
             setLoading(true);
             try {
-                var month1 = todayDate.getMonth()+1 < 10 ? `0${todayDate.getMonth()+1}` : todayDate.getMonth()+1; 
+                const month1 = todayDate.getMonth() + 1 < 10 ? `0${todayDate.getMonth() + 1}` : todayDate.getMonth() + 1;
                 const formattedDate = `${todayDate.getFullYear()}-${month1}-${todayDate.getDate()}`;
                 const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/classTeacher?month=${month}&year=${todayDate.getFullYear()}&date=${formattedDate}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }
                 });
-                console.log('data', response.data)
-                setData(response.data)
+                setData(response.data);
             } catch (error) {
                 console.error("Error fetching student month attendance:", error);
-            }
-            finally {
-                setLoading(false)
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -39,40 +37,54 @@ export default function StudentAttendanceRecord() {
     }, [authState.accessToken, month]);
 
     const handleMonthChange = (month) => {
-        console.log('cc', month)
-        setMonth(month);
+        setMonth(Number(month));
     }
 
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
     return (
-        <div className="w-full flex flex-col  mobile:max-tablet:px-0 h-screen  items-start  mb-3">
-            <div className="container mx-auto py-3 px-2">
-                <div className=" flex justify-between items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start  mb-4">
-                    <h1 className="text-2xl mobile:max-tablet:text-lg whitespace-nowrap  font-medium"> Student's Attendance Details</h1>
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-full flex flex-col h-screen items-start mb-3 bg-gray-50"
+        >
+            <div className="container mx-auto py-6 px-4">
+                <div className="flex justify-between items-center mb-6 flex-wrap">
+                    <h1 className="text-3xl font-bold text-gray-800">Student's Attendance Details</h1>
                     <SearchBar handleMonthChange={handleMonthChange} month={month} />
-
                 </div>
 
+                {loading ? (
+                    <Loading />
+                ) : !data ? (
+                    <motion.div 
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        className="bg-white p-6 rounded-lg shadow-md"
+                    >
+                        <p className="text-xl text-gray-600">No data available</p>
+                    </motion.div>
+                ) : (
+                    <motion.div 
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden"
+                    >
+                        <div className="p-6 border-b border-gray-200">
+                            <h2 className="text-2xl font-semibold text-gray-800">
+                                Attendance Sheet of Class {data.output.class} {data.output.section}
+                            </h2>
+                            <p className="text-lg text-gray-600 mt-2">
+                                {monthNames[month - 1]} {todayDate.getFullYear()}
+                            </p>
+                        </div>
+                        <div className="p-6 overflow-x-auto">
+                            <AttendanceStatusGridTile data={data} month={month} />
+                        </div>
+                    </motion.div>
+                )}
             </div>
-
-
-            {loading ? (
-                <Loading />
-            ) : !data ? (
-                <div className="flex flex-col shadow-lg rounded-lg overflow-y-auto border-gray-200 mb-4">
-                    <div className="mx-4 text-xl px-4 mt-4">
-                        No data available
-                    </div>
-                </div>
-            ) : (
-                <div className="flex flex-col w-full shadow-md rounded-lg border border-gray-400 mb-4 ">
-                    <div className="mx-2 text-xl px-2 mt-2">
-                        Attendance Sheet Of Class {data.output.class} {data.output.section} {month == 1 ? 'January' : month == 2 ? 'February' : month == 3 ? 'March' : month == 4 ? 'April' : month == 5 ? 'May' : month == 6 ? 'June' : month == 7 ? 'July' : month == 8 ? 'August' : month == 9 ? 'September' : month == 10 ? 'October' : month == 11 ? 'November' : 'December'}, 2024
-                    </div>
-                    <div className="px-3 w-full overflow-x-auto ">
-                        <AttendanceStatusGridTile data={data} month={month} />
-                    </div>
-                </div>
-            )}
-        </div>
-    )
+        </motion.div>
+    );
 }

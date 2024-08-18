@@ -1,57 +1,37 @@
-import React from 'react'
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FaFilter } from 'react-icons/fa';
 
-function Selection({setFilter}) {
-    const handleChange=(e)=>{
+function Selection({ setFilter }) {
+    const handleChange = (e) => {
         setFilter(e.target.value);
     }
-  return (
-    <div className="w-1/4">
-                        <select className="w-full px-4 py-2 border rounded-md" onChange={handleChange}>
-                            <option value="">Select Status</option>
-                            <option value="Paid">Paid</option>
-                            <option value="Pending">Pending</option>
-                        </select>
-                    </div>
-    // <div className="border rounded-lg shadow-md w-fit flex flex-col px-3 mobile:max-tablet:px-0  overflow-y-auto items-start mt-2  mb-3 no-scrollbar">
-    //         <div className="container p-3  ">
-        
-    //     <div className="flex justify-between">
-    //                 {/* <div className="w-1/4">
-    //                     <select className="w-full px-4 py-2 border rounded-md">
-    //                         <option value="">Select Class</option>
-    //                         <option value="Pre-Nursery">Pre-Nursery</option>
-    //                         <option value="Nursery">Nursery</option>
-    //                         <option value="L.K.J">L.K.J</option>
-    //                         <option value="U.K.J">U.K.J</option>
-    //                         <option value="1st">1st</option>
-    //                         <option value="2nd">2nd</option>
-    //                         <option value="3rd">3rd</option>
-    //                         <option value="4th">4th</option>
-    //                         <option value="5th">5th</option>
-    //                         <option value="6th">6th</option>
-    //                         <option value="7th">7th</option>
-    //                         <option value="8th">8th</option>
-    //                         <option value="9th">9th</option>
-    //                         <option value="10th">10th</option>
-    //                         <option value="11th">11th</option>
-    //                         <option value="12th">12th</option>
-    //                     </select>
-    //                 </div>
-    //                 <div className="w-1/4">
-    //                     <select className="w-full px-4 py-2 border rounded-md">
-    //                         <option value="">Select Session</option>
-    //                         <option value="2025">2025</option>
-    //                         <option value="2024">2024</option>
-    //                         <option value="2023">2023</option>
-    //                     </select>
-    //                 </div> */}
-                    
-                  
-    //             </div>
-    //             </div>
 
-    // </div>
-  )
+    return (
+        <motion.div
+            className="w-1/4 relative"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
+            <FaFilter className="absolute top-3 left-3 text-indigo-600" />
+            <motion.select
+                className="w-full px-10 py-2 border-2 border-indigo-300 rounded-md bg-white text-indigo-700 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300"
+                onChange={handleChange}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+            >
+                <option value="">All Status</option>
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+            </motion.select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-indigo-700">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+            </div>
+        </motion.div>
+    )
 }
 
-export default Selection
+export default Selection;

@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react'
-import Header from './utils/Header'
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+import { FaUserGraduate, FaChalkboardTeacher, FaBookOpen, FaSave } from 'react-icons/fa';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Login } from '../../Config';
@@ -9,9 +10,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import PromotionRow from './utils/PromotionRow';
 
 function Promotion() {
-    const [students, setStudents] = useState([])
+    const [students, setStudents] = useState([]);
     const { authState } = useContext(AuthContext);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
     const [start, setStart] = useState(0);
     const end = 10;
     const [allDataFetched, setAllDataFetched] = useState(false);
@@ -48,23 +49,19 @@ function Promotion() {
     function getSession() {
         const currentYear = new Date().getFullYear();
         const prevYear = currentYear - 1;
-        const session = `${prevYear}-${currentYear.toString().slice(-2)}`;
-        return session;
+        return `${prevYear}-${currentYear.toString().slice(-2)}`;
     }
-
-    const session = getSession();
 
     function getNextSession() {
         const currentYear = new Date().getFullYear();
         const nextYear = currentYear + 1;
-        const session = `${currentYear}-${nextYear.toString().slice(-2)}`;
-        return session;
+        return `${currentYear}-${nextYear.toString().slice(-2)}`;
     }
 
+    const session = getSession();
     const nextSession = getNextSession();
 
     const fetchStudents = async () => {
-        console.log(session);
         setLoading(true);
         try {
             const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
@@ -74,36 +71,27 @@ function Promotion() {
                 start: start,
                 end: end,
                 session: session
-
             });
-            if (response.status == 200) {
+            if (response.status === 200) {
                 const student = response.data.Students.length;
-                console.log("API response:", response.data.Students);
                 if (student < end) {
                     toast.success('All data fetched');
-                    console.log('All data fetched')
                     setAllDataFetched(true);
                 }
                 setStudents(prevData => [...prevData, ...response.data.Students]);
-                console.log("API responserrrrrr:", response.data.Students);
-
             }
         } catch (error) {
             console.error("Error fetching student:", error);
-        }
-        finally {
-            setLoading(false)
+            toast.error('Failed to fetch students');
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleSwitchChange = (studentId, checked) => {
         if (checked) {
-            setSelectedStudents(prev => ([
-                ...prev,
-                studentId
-            ]));
-        }
-        else {
+            setSelectedStudents(prev => ([...prev, studentId]));
+        } else {
             setSelectedStudents(prev => prev.filter(item => item !== studentId));
         }
     };
@@ -119,7 +107,6 @@ function Promotion() {
             nextSession: nextSession
         };
 
-        console.log(payload)
         try {
             const response = await axios.put(`${BASE_URL_Login}/promote/student?session=${session}&class=${currentClass}&section=${authState.ClassDetails.section}`, payload, {
                 headers: {
@@ -127,51 +114,97 @@ function Promotion() {
                 }
             });
             if (response.status === 200) {
-                console.log(response.data);
-                setStudents(students.filter((student, i) => student.email !== selectedStudents.email));
+                setStudents(students.filter(student => !selectedStudents.includes(student.email)));
                 toast.success('Students promoted successfully!');
             }
         } catch (error) {
             console.error("Error saving students:", error);
             toast.error('Failed to promote students.');
         }
-    }
+    };
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.5 } }
+    };
+
+    const tableVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    };
+
     return (
-        <div className="overflow-y-auto w-full items-start  px-2 py-1 no-scrollbar">
+        <motion.div 
+            className="w-full px-4 py-6 bg-gradient-to-r from-indigo-100 to-indigo-50"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+        >
             <ToastContainer />
-            <div className='w-full flex items-center justify-between  my-2'>
-                <h1 className="text-2xl mobile:max-tablet:text-lg font-medium mb-2">Promotion</h1>
-                <button className="text-xl text-green-500 border border-green-500 px-4  rounded-md shadow-md font-medium mb-2 hover:bg-green-600 hover:text-white hover:border-white" onClick={handleSave}>
+            <div className='flex items-center justify-between mb-6'>
+                <h1 className="text-3xl font-bold text-indigo-800">Promotion</h1>
+                <motion.button
+                    className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-colors duration-300"
+                    onClick={handleSave}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    <FaSave className="mr-2" />
                     Save
-                </button>
+                </motion.button>
             </div>
-            <div className=' overflow-auto'>
-                {loading ? (
-                    <Loading />
-                ) : students.length === 0 ? (
-                    <>No student found</>
-                ) : (
-                    <div className=' rounded-lg shadow-md border border-gray-300 mb-2 overflow-auto'>
-                        <Header headings={['Roll No.', 'Name', "Class", "Section", "Action"]} />
-                        {students.map((detail, index) => (
-                            <PromotionRow
-                                key={detail._id}
-                                detail={detail}
-                                index={index}
-                                authState={authState}
-                                selectedStudents={selectedStudents}
-                                handleSwitchChange={handleSwitchChange}
-                            />
-                        ))}
-                        {!allDataFetched && (
-                            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                        )}
+            {loading ? (
+                <Loading />
+            ) : students.length === 0 ? (
+                <div className="text-center text-indigo-600 text-xl">No students found</div>
+            ) : (
+                <motion.div 
+                    className="overflow-hidden rounded-lg shadow-lg bg-white"
+                    variants={tableVariants}
+                >
+                    <div className="overflow-x-auto">
+                        <table className="w-full min-w-max">
+                            <thead>
+                                <tr className="bg-indigo-600 text-white">
+                                    <th className="py-3 px-4 text-left">Roll No.</th>
+                                    <th className="py-3 px-4 text-left">Name</th>
+                                    <th className="py-3 px-4 text-left">Class</th>
+                                    <th className="py-3 px-4 text-left">Section</th>
+                                    <th className="py-3 px-4 text-left">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {students.map((detail, index) => (
+                                    <PromotionRow
+                                        key={detail._id}
+                                        detail={detail}
+                                        index={index}
+                                        authState={authState}
+                                        selectedStudents={selectedStudents}
+                                        handleSwitchChange={handleSwitchChange}
+                                    />
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
-                )}
-            </div>
-        </div>
-    )
+                    {!allDataFetched && (
+                        <motion.div 
+                            className="text-center py-4"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <button 
+                                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300"
+                                onClick={handleViewMore}
+                            >
+                                View More
+                            </button>
+                        </motion.div>
+                    )}
+                </motion.div>
+            )}
+        </motion.div>
+    );
 }
 
-export default Promotion
-
+export default Promotion;
