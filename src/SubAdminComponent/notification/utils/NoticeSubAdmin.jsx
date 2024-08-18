@@ -68,7 +68,7 @@ function NoticeSubAdmin() {
     };
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -76,7 +76,7 @@ function NoticeSubAdmin() {
         >
             <ToastContainer />
             <div className="flex mx-3 items-center justify-between bg-white ">
-                <h1 className='text-2xl mobile:max-tablet:text-xl font-bold text-purple-600'>Notice Board</h1>
+                <h1 className='text-2xl mobile:max-tablet:text-xl font-bold text-purple-600 whitespace-nowrap'>Notice Board</h1>
                 <div className="flex items-center">
                     <FaCalendarAlt className="text-purple-600 mr-2" />
                     <select

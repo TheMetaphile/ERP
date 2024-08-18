@@ -286,7 +286,7 @@ export default function StudentRegister() {
                     <SubjectInputs stream={formData.stream} setSubject={setSubjects} subjects={subjects} />
                 </motion.div>
 
-                <div className="col-span-full flex justify-center gap-4 mt-6">
+                <div className="col-span-full flex justify-center gap-4 mt-2">
                     <motion.button
                         className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded transition duration-300 ease-in-out transform hover:scale-105"
                         type="reset"
