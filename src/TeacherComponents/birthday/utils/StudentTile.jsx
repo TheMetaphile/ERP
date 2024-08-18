@@ -1,71 +1,92 @@
+import React from 'react';
+import { motion } from 'framer-motion';
 import { IoLogoWhatsapp } from "react-icons/io";
+import { FaBirthdayCake, FaUserGraduate, FaCalendarAlt } from "react-icons/fa";
+
+const BirthdayCard = ({ detail, isToday }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full flex items-center mb-4 p-4 bg-indigo-50 rounded-lg shadow-lg justify-between"
+    >
+        <div className="flex items-center space-x-4">
+            <motion.img
+                whileHover={{ scale: 1.1 }}
+                src={detail.profileLink}
+                alt="Profile"
+                className="h-12 w-12 rounded-full border-2 border-indigo-300"
+            />
+            <div className="flex flex-col">
+                <span className="font-semibold text-indigo-800">{detail.name}</span>
+                <div className="flex items-center text-sm text-indigo-600">
+                    <FaUserGraduate className="mr-1" />
+                    <span>Class: {detail.currentClass}</span>
+                </div>
+                <div className="flex items-center text-sm text-indigo-600">
+                    <FaCalendarAlt className="mr-1" />
+                    <span>DOB: {detail.DOB}</span>
+                </div>
+            </div>
+        </div>
+        <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center bg-indigo-600 text-white px-3 py-2 rounded-lg shadow-md cursor-pointer"
+        >
+            <IoLogoWhatsapp className="mr-2" />
+            <span>Message</span>
+        </motion.div>
+    </motion.div>
+);
+
+const BirthdaySection = ({ title, birthdays, isToday }) => (
+    <div className="mb-6">
+        <motion.h2
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center font-bold text-xl text-indigo-800 mb-4"
+        >
+            <FaBirthdayCake className="mr-2 text-indigo-600" />
+            {title}
+        </motion.h2>
+        {birthdays.length === 0 ? (
+            <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-indigo-500 italic"
+            >
+                {isToday ? "Today is no one's birthday" : "No upcoming birthdays"}
+            </motion.p>
+        ) : (
+            birthdays.map((detail, index) => (
+                <BirthdayCard key={index} detail={detail} isToday={isToday} />
+            ))
+        )}
+    </div>
+);
 
 export default function StudentTile({ birthdays }) {
     const todayBirthday = birthdays?.todayBirthday || [];
     const upcomingBirthdays = birthdays?.upcomingBirthdays || [];
 
     return (
-        <div className="w-full flex flex-col border-gray-300 border p-2 rounded-lg shadow-md ">
-            {todayBirthday.length === 0 ? (
-                <div>Today is no one's birthday</div>
-            ) : (
-                <>
-                    <span className='font-medium text-lg px-2'>Today</span>
-                    {todayBirthday.map((detail, index) => (
-                        <div key={index} className='w-full flex   items-center mb-2 p-3 mt-2 border-gray-300 border rounded-lg shadow-md justify-between '>
-                            <div className='flex mobile:max-tablet:gap-2 gap-2 items-center mobile:max-laptop:flex-col mobile:max-laptop:items-start'>
-                                <div className=" gap-1 flex whitespace-nowrap items-center">
-                                    <img src={detail.profileLink} alt="Profile" className='h-10 w-10 rounded-full' />
-                                    <span>{detail.name}</span>
-                                </div>
-                                <span className=" mobile:max-laptop:hidden mx-2">|</span>
-                                <div className='flex gap-2 font-normal mobile:max-laptop:ml-0'>
-                                    <span>Class: {detail.currentClass}</span>
-                                </div>
-                                <span className=" mobile:max-laptop:hidden mx-2">|</span>
-                                <div>
-                                    <span>DOB: {detail.DOB}</span>
-                                </div>
-                            </div>
-                            <div className='flex items-center bg-green-800 text-white p-2 gap-1 rounded-lg shadow-md'>
-                                <IoLogoWhatsapp className='text-green-600' />
-                                <span>Message</span>
-                            </div>
-                        </div>
-                    ))}
-                </>
-            )}
-
-            {upcomingBirthdays.length === 0 ? (
-                <div>No upcoming birthday</div>
-            ) : (
-                <>
-                    <span className='font-medium text-lg px-2'>Upcoming Birthdays</span>
-                    {upcomingBirthdays.map((detail, index) => (
-                        <div key={index} className='w-full flex   items-center mb-2 p-3 mt-2 border-gray-300 border rounded-lg shadow-md justify-between'>
-                            <div className='flex mobile:max-tablet:gap-2 gap-2 items-center mobile:max-laptop:flex-col mobile:max-laptop:items-start'>
-                                <div className=" gap-1 flex whitespace-nowrap items-center">
-                                    <img src={detail.profileLink} alt="Profile" className='h-10 w-10 rounded-full' />
-                                    <span>{detail.name}</span>
-                                </div>
-                                <span className=" mobile:max-laptop:hidden mx-2">|</span>
-                                <div className='flex gap-2 font-normal mobile:max-laptop:ml-0'>
-                                    <span>Class: {detail.currentClass}</span>
-                                </div>
-                                <span className=" mobile:max-laptop:hidden mx-2">|</span>
-                                <div>
-                                    <span>DOB: {detail.DOB}</span>
-                                </div>
-                            </div>
-                            <div className='flex items-center bg-green-800 text-white p-2 gap-1 rounded-lg shadow-md'>
-                                <IoLogoWhatsapp className='text-green-600' />
-                                <span>Message</span>
-                            </div>
-                        </div>
-                    ))}
-                </>
-            )}
-        </div>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-full flex flex-col p-6 bg-white rounded-xl shadow-xl"
+        >
+            <BirthdaySection
+                title="Today's Birthdays"
+                birthdays={todayBirthday}
+                isToday={true}
+            />
+            <BirthdaySection
+                title="Upcoming Birthdays"
+                birthdays={upcomingBirthdays}
+                isToday={false}
+            />
+        </motion.div>
     );
 }
-

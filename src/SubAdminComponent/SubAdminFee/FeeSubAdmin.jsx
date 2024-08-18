@@ -40,7 +40,8 @@ function FeeSubAdmin() {
                         {[
                             { path: '/Sub-Admin/StudentsFee/structure', label: 'Fee Structure' },
                             { path: '/Sub-Admin/StudentsFee/details', label: 'Fee Status' },
-                            { path: '/Sub-Admin/StudentsFee/feediscount', label: 'Fee Discount' }
+                            { path: '/Sub-Admin/StudentsFee/feediscount', label: 'Fee Discount' },
+                            { path: '/Sub-Admin/StudentsFee/PreviousFeeSubAdmin', label: 'Previous Session' }
                         ].map((item) => (
                             <motion.div
                                 key={item.path}

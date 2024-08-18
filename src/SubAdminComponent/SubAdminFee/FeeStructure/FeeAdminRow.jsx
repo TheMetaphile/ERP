@@ -131,7 +131,7 @@ export default function FeeAdminRow({ Class, session, key }) {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: key * 0.1 }}
-            className="border-b border-gray-200 hover:bg-gray-300 transition-colors"
+            className="border-b border-gray-200 hover:bg-purple-100 transition-colors"
         >
 
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{Class}</td>

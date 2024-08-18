@@ -1,64 +1,83 @@
-import Logo from '../../../assets/Test Account.png'
-import { IoLogoWhatsapp } from "react-icons/io";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { IoLogoWhatsapp } from 'react-icons/io';
+import { FaBirthdayCake } from 'react-icons/fa';
+import Logo from '../../../assets/Test Account.png';
+
+const BirthdayCard = ({ name, currentClass, DOB, isToday }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-indigo-100 rounded-lg p-4 mb-4 shadow-md"
+    >
+        <div className="flex items-center justify-between">
+            <div>
+                <h3 className="text-lg font-semibold text-indigo-800">{name}</h3>
+                <p className="text-sm text-indigo-600">Class: {currentClass}</p>
+                <p className="text-sm text-indigo-600">DOB: {DOB}</p>
+            </div>
+            <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="bg-indigo-500 text-white p-2 rounded-full cursor-pointer"
+            >
+                <IoLogoWhatsapp size={24} />
+            </motion.div>
+        </div>
+        {isToday && (
+            <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.5, type: 'spring', stiffness: 500 }}
+                className="mt-2 text-center text-indigo-500 font-bold"
+            >
+                🎉 Happy Birthday! 🎉
+            </motion.div>
+        )}
+    </motion.div>
+);
+
+const BirthdaySection = ({ title, birthdays, isToday }) => (
+    <div className="mb-8">
+        <h2 className="text-2xl font-bold text-indigo-700 mb-4 flex items-center">
+            <FaBirthdayCake className="mr-2" />
+            {title}
+        </h2>
+        {birthdays.length === 0 ? (
+            <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-indigo-500 italic"
+            >
+                {isToday ? "Today is no one's birthday" : "No upcoming birthdays"}
+            </motion.p>
+        ) : (
+            birthdays.map((detail, index) => (
+                <BirthdayCard key={index} {...detail} isToday={isToday} />
+            ))
+        )}
+    </div>
+);
 
 export default function TeacherTile({ birthdays }) {
     const todayBirthday = birthdays?.todayBirthday || [];
     const upcomingBirthdays = birthdays?.upcomingBirthdays || [];
 
     return (
-        <div className="w-full flex flex-col border-gray-300 border p-2 rounded-lg shadow-md ">
-            {todayBirthday.length === 0 ? (
-                <div>Today is no one's birthday</div>
-            ) : (
-                <>
-                    <span className='font-medium text-lg px-2'>Today</span>
-                    {todayBirthday.map((detail, index) => (
-                        <div key={index} className='w-full flex   items-center mb-2 p-3 mt-2 border-gray-300 border rounded-lg shadow-md justify-between'>
-                            <div className='flex items-center'>
-                                <img src={detail.profileLink} alt="Profile" className='h-10 w-10 rounded-full' />
+        <div className=" mx-auto p-6 bg-indigo-50 rounded-xl shadow-lg">
 
-                                <div className='flex gap-2 font-normal ml-3'>
-                                    <span>{detail.name}</span> |
-                                    <span>Class: {detail.currentClass}</span> |
-                                    <span>DOB: {detail.DOB}</span>
-                                </div>
+            <BirthdaySection
+                title="Today's Birthdays"
+                birthdays={todayBirthday}
+                isToday={true}
+            />
 
-                            </div>
-                            <div className='flex items-center bg-green-800 text-white p-2 gap-1 rounded-lg shadow-md'>
-                                <IoLogoWhatsapp className='text-green-600' />
-                                <span>Message</span>
-                            </div>
-                        </div>
-                    ))}
-                </>
-            )}
-
-            {upcomingBirthdays.length === 0 ? (
-                <div>No upcoming birthday</div>
-            ) : (
-                <>
-                    <span className='font-medium text-lg px-2'>Upcoming Birthdays</span>
-                    {upcomingBirthdays.map((detail, index) => (
-                        <div key={index} className='w-full flex   items-center mb-2 p-3 mt-2 border-gray-300 border rounded-lg shadow-md justify-between'>
-                            <div className='flex items-center'>
-                                <img src={detail.profileLink} alt="Profile" className='h-10 w-10 rounded-full' />
-
-                                <div className='flex gap-2 font-normal ml-3'>
-                                    <span>{detail.name}</span>|
-                                    <span>Class: {detail.currentClass}</span>|
-                                    <span>DOB: {detail.DOB}</span>
-                                </div>
-
-                            </div>
-                            <div className='flex items-center bg-green-800 text-white p-2 gap-1 rounded-lg shadow-md'>
-                                <IoLogoWhatsapp className='text-green-600' />
-                                <span>Message</span>
-                            </div>
-                        </div>
-                    ))}
-                </>
-            )}
+            <BirthdaySection
+                title="Upcoming Birthdays"
+                birthdays={upcomingBirthdays}
+                isToday={false}
+            />
         </div>
     );
 }
-

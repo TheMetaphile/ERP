@@ -1,65 +1,62 @@
-import schoolImage from "../../assets/School.png";
-import logout1 from "../../assets/logout.png";
-import ExpansionTile from "../utils/ExpansionTile.jsx";
+import { motion } from "framer-motion";
 import menuItems from "./helper.js";
-import { Link, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
-// import AuthContext from "../../Context/AuthContext.jsx";
+import { useState } from "react";
+import { Link } from 'react-router-dom';
 
 export default function SubadminDrawer({ isOpen }) {
-    // const { logout, authState } = useContext(AuthContext);
-    // const navigate = useNavigate();
-    const [active, setActive] = useState(null)
-
-
-    // const handleLogout = async () => {
-    //     try {
-    //         await logout();
-    //         navigate("/");
-    //     } catch (error) {
-    //         console.error("Logout failed", error);
-    //     }
-    // };
+    const [active, setActive] = useState(null);
 
     const handleClick = (index) => {
-        setActive(index)
-    }
-    return (
-        <div className={` ${isOpen ? 'h-screen  py-6 px-2' : ''} w-full overflow-y-auto rounded-xl shadow-lg text-center items-center border border-gray-300 bg-white  no-scrollbar`}>
-            <div className="flex items-center justify-center">
-                <span className="text-black font-semibold text-2xl">Accounts</span>
-            </div>
-            {/* <div className="mt-5 bg-teal-300 px-2 py-4 rounded-2xl shadow-lg"> */}
-            {/* <h2 className="text-xl font-semibold">Accounts</h2> */}
-            <div className="mt-4">
+        setActive(index === active ? null : index);
+    };
 
+    const drawerVariants = {
+        open: { opacity: 1, x: 0 },
+        closed: { opacity: 0, x: "-100%" },
+    };
+
+    return (
+        <motion.div
+            className={`${isOpen ? "h-screen py-6 px-4" : "w-0"
+                } overflow-y-auto rounded-xl shadow-lg text-center items-center border border-gray-300 bg-white no-scrollbar`}
+            variants={drawerVariants}
+            initial="closed"
+            animate={isOpen ? "open" : "closed"}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
+            <motion.div
+                className="flex items-center justify-center mb-8"
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+            >
+                <span className="text-purple-700 font-bold text-3xl">Accounts</span>
+            </motion.div>
+
+            <div className="space-y-2 ">
                 {menuItems.map((menuItem, index) => (
-                    <div
+                    <motion.div
                         key={index}
                         onClick={() => handleClick(index)}
-                        className={`cursor-pointer rounded-lg ${active === index ? 'bg-purple-200' : ''}`}
+                        className={`cursor-pointer rounded-lg  overflow-hidden ${active === index ? "bg-purple-100" : "hover:bg-purple-50"
+                            }`}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                     >
-                        <ExpansionTile
+                        <Link to={menuItem.route} className="flex items-center space-x-3 py-3 px-1">
+                            <img
+                                src={menuItem.image}
+                                alt={menuItem.alt}
+                                className="w-6 h-6"
+                            />
+                            <span className="text-lg font-medium text-gray-800">
+                                {menuItem.title}
+                            </span>
+                        </Link>
 
-                            image={menuItem.image}
-                            alternateText={menuItem.alt}
-                            title={menuItem.title}
-                            childrens={menuItem.children}
-                            route={menuItem.route}
-                        />
-                    </div>
+                    </motion.div>
                 ))}
             </div>
-            {/* </div> */}
-            {/* <div className="flex h-fit justify-center my-2">
-                <button
-                    onClick={handleLogout}
-                    className="bg-purple-200 border border-transparent rounded-xl px-4 py-2 flex items-center shadow-md"
-                >
-                    <img src={logout1} alt="logout" className="w-6 mr-2" />
-                    <span className="text-black">Log out</span>
-                </button>
-            </div> */}
-        </div>
+        </motion.div>
     );
 }

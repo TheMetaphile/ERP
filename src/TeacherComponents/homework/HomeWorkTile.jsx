@@ -5,6 +5,9 @@ import axios from 'axios';
 import { BASE_URL_Homework } from '../../Config';
 import { toast } from 'react-toastify';
 import { FaTimes } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { IoMdBook, IoMdCalendar, IoMdTime, IoMdCreate, IoMdTrash, IoMdCheckmark, IoMdClose } from 'react-icons/io';
+
 
 export default function HomeWorkTile({ details, Class, additionalData, selectedSubject }) {
     const { authState } = useContext(AuthContext);
@@ -85,122 +88,148 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
     };
 
     return (
-        <div className="mb-4 mt-3 mobile:max-tablet:mx-2 items-center justify-between">
+        <div className="space-y-4 mt-3 mobile:max-tablet:mx-2">
             {editedDetails.map((detail, index) => (
-                <div key={index} className='w-full flex-col border border-gray-200 px-1 py-2 rounded-lg shadow-md mt-3'>
-                    <div className="flex mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mobile:max-tablet:items-start items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
-                        {editingRow === index ? (
-                            <>
-                                <div className="pl-2 mobile:max-tablet:gap-1 mobile:max-tablet:pl-0 flex items-center font-medium">
-                                    Chapter:
-                                    <input
-                                        className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                        value={detail.chapter}
-                                        onChange={(e) => handleInputChange(index, 'chapter', e.target.value)}
-                                    />
-                                </div>
-                                <div className='flex gap-2 justify-end mobile:max-tablet:flex-col'>
-                                    <div className='mobile:max-tablet:gap-2 flex items-center'>
-                                        Subject:
+                <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className='bg-white border border-indigo-100 rounded-lg shadow-lg overflow-hidden'
+                >
+                    <div
+                        className="p-4 cursor-pointer hover:bg-indigo-50 transition-colors duration-200"
+                        onClick={() => handleClick(index)}
+                    >
+                        <div className="flex justify-between items-center mb-2">
+                            <div className="flex items-center space-x-2">
+                                <IoMdBook className="text-indigo-600 text-xl" />
+                                <h3 className="font-semibold text-lg text-indigo-900">
+                                    {editingRow === index ? (
                                         <input
-                                            className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                            value={detail.subject}
-                                            onChange={(e) => handleInputChange(index, 'subject', e.target.value)}
+                                            className="border-b border-indigo-300 bg-transparent focus:outline-none focus:border-indigo-500"
+                                            value={detail.chapter}
+                                            onChange={(e) => handleInputChange(index, 'chapter', e.target.value)}
                                         />
-                                    </div>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <div className="pl-2 font-medium whitespace-nowrap mobile:max-tablet:text-lg">
-                                    Chapter: <span className='font-normal'>{detail.chapter}</span>
-                                </div>
-                                <div className='flex items-center gap-1 mobile:max-tablet:flex-col'>
-                                    <div className="px-3 py-1 bg-bg_blue rounded-full w-fit">
-                                        {detail.subject}
-                                    </div>
-                                </div>
-                            </>
-                        )}
-                    </div>
-                    <div>
-                        {editingRow === index ? (
-                            <div className="flex flex-col">
-                                <div className="pl-2 font-medium">Topic: </div>
+                                    ) : (
+                                        detail.chapter
+                                    )}
+                                </h3>
+                            </div>
+                            <div className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
+                                {editingRow === index ? (
+                                    <input
+                                        className="bg-transparent border-b border-indigo-300 focus:outline-none focus:border-indigo-500"
+                                        value={detail.subject}
+                                        onChange={(e) => handleInputChange(index, 'subject', e.target.value)}
+                                    />
+                                ) : (
+                                    detail.subject
+                                )}
+                            </div>
+                        </div>
+                        <div className="text-indigo-700 font-medium mb-2">
+                            Topic: {' '}
+                            {editingRow === index ? (
                                 <input
-                                    className="font-normal my-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
+                                    className="border-b border-indigo-300 bg-transparent focus:outline-none focus:border-indigo-500"
                                     value={detail.topic}
                                     onChange={(e) => handleInputChange(index, 'topic', e.target.value)}
                                 />
-                                <div className="pl-2 font-medium">Task: </div>
-                                <textarea
-                                    rows={6}
-                                    className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                    value={detail.description}
-                                    onChange={(e) => handleInputChange(index, 'description', e.target.value)}
-                                />
-                            </div>
-                        ) : (
-                            <div>
-                                <div className="pl-2 font-medium text-justify">Topic: <span className='font-normal'>{detail.topic}</span></div>
-                                {expanded === index && (
-                                    <h1 className="pl-2 font-medium text-justify">Task: <span className='font-normal'>{detail.description}</span></h1>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                    <div className='flex justify-between mobile:max-tablet:justify-start px-2 mobile:max-tablet:flex-col'>
-                        <div className='text-right mobile:max-tablet:text-left'>
-                            <h1 className="font-medium mobile:max-tablet:text-sm">Date: {detail.date}</h1>
+                            ) : (
+                                <span className="font-normal text-indigo-600">{detail.topic}</span>
+                            )}
                         </div>
-                        <div className='text-left mobile:max-tablet:text-sm'>
-                            {editingRow === index ? (
-                                <>
-                                    <div className="pl-2 mobile:max-tablet:p-0 font-medium mobile:max-tablet:text-sm">Deadline: </div>
+                        <AnimatePresence>
+                            {expanded === index && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="overflow-hidden"
+                                >
+                                    <div className="text-indigo-700 font-medium mt-2">
+                                        Task: {' '}
+                                        {editingRow === index ? (
+                                            <textarea
+                                                rows={4}
+                                                className="w-full mt-1 border border-indigo-300 rounded p-2 focus:outline-none focus:border-indigo-500"
+                                                value={detail.description}
+                                                onChange={(e) => handleInputChange(index, 'description', e.target.value)}
+                                            />
+                                        ) : (
+                                            <span className="font-normal text-indigo-600">{detail.description}</span>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                        <div className="flex justify-between items-center mt-4 text-sm text-indigo-500">
+                            <div className="flex items-center space-x-2">
+                                <IoMdCalendar />
+                                <span>Date: {detail.date}</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <IoMdTime />
+                                {editingRow === index ? (
                                     <input
-                                        className="font-normal mt-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
+                                        className="border-b border-indigo-300 bg-transparent focus:outline-none focus:border-indigo-500"
                                         value={detail.deadline}
                                         onChange={(e) => handleInputChange(index, 'deadline', e.target.value)}
                                     />
-                                </>
-                            ) : (
-                                <h1 className="font-medium">Deadline: {detail.deadline}</h1>
-                            )}
+                                ) : (
+                                    <span>Deadline: {detail.deadline}</span>
+                                )}
+                            </div>
                         </div>
                     </div>
-                    {editingRow === index ? (
-                        <div className='flex gap-1 justify-end mt-2'>
-                            <button
-                                className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                onClick={() => handleConfirmClick(index)}
-                            >
-                                <MdCheck />
-                            </button>
-                            <button
-                                className='bg-red-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                onClick={() => setEditingRow(null)}
-                            >
-                                <FaTimes />
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="flex justify-end gap-1">
-                            <button
-                                className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                onClick={() => handleUpdateClick(index)}
-                            >
-                                <MdEdit />
-                            </button>
-                            <button
-                                className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                onClick={() => handleDelete(index)}
-                            >
-                                <MdDeleteForever />
-                            </button>
-                        </div>
-                    )}
-
-                </div>
+                    <div className="px-4 py-2 bg-indigo-50 flex justify-end space-x-2">
+                        {editingRow === index ? (
+                            <>
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="bg-green-500 text-white px-3 py-1 rounded-md shadow-md flex items-center space-x-1"
+                                    onClick={() => handleConfirmClick(index)}
+                                >
+                                    <IoMdCheckmark />
+                                    <span>Save</span>
+                                </motion.button>
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="bg-red-500 text-white px-3 py-1 rounded-md shadow-md flex items-center space-x-1"
+                                    onClick={() => setEditingRow(null)}
+                                >
+                                    <IoMdClose />
+                                    <span>Cancel</span>
+                                </motion.button>
+                            </>
+                        ) : (
+                            <>
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="bg-indigo-500 text-white px-3 py-1 rounded-md shadow-md flex items-center space-x-1"
+                                    onClick={() => handleUpdateClick(index)}
+                                >
+                                    <IoMdCreate />
+                                    <span>Edit</span>
+                                </motion.button>
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="bg-red-500 text-white px-3 py-1 rounded-md shadow-md flex items-center space-x-1"
+                                    onClick={() => handleDelete(index)}
+                                >
+                                    <IoMdTrash />
+                                    <span>Delete</span>
+                                </motion.button>
+                            </>
+                        )}
+                    </div>
+                </motion.div>
             ))}
         </div>
     );

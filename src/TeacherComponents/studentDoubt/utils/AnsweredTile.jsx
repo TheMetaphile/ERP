@@ -1,83 +1,119 @@
-import React, { useState, useContext, useEffect } from 'react';
-import Logo from '../../../assets/Test Account.png'
-import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaChevronUp, FaChevronDown, FaUserGraduate, FaQuestionCircle, FaBookOpen } from "react-icons/fa";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 
+const DoubtCard = ({ doubt, index, expanded, handleClick }) => {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="border border-indigo-200 p-4 rounded-lg shadow-lg mt-4 bg-white"
+        >
+            <div className="flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
+                <div className="flex items-center space-x-4">
+                    <motion.img
+                        whileHover={{ scale: 1.1 }}
+                        src={doubt.student[0].profileLink}
+                        alt=""
+                        className="w-12 h-12 rounded-full border-2 border-indigo-300"
+                    />
+                    <div>
+                        <h3 className="font-semibold text-indigo-800">{doubt.student[0].name}</h3>
+                        <div className="flex items-center text-sm text-indigo-600">
+                            <FaUserGraduate className="mr-1" />
+                            <span>Roll: {doubt.student[0].rollNumber}</span>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                    <span className="text-indigo-600 font-medium">{doubt.subject}</span>
+                    <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="bg-indigo-100 p-2 rounded-full"
+                    >
+                        {expanded === index ? <FaChevronUp className="text-indigo-600" /> : <FaChevronDown className="text-indigo-600" />}
+                    </motion.div>
+                </div>
+            </div>
 
+            <AnimatePresence>
+                {expanded === index && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="mt-4"
+                    >
+                        <div className="bg-indigo-50 p-4 rounded-lg">
+                            <h4 className="font-medium text-indigo-800 flex items-center mb-2">
+                                <FaQuestionCircle className="mr-2 text-indigo-600" />
+                                Question:
+                            </h4>
+                            <p className="text-indigo-700 mb-4">{doubt.question}</p>
+                            {doubt.imageUrl && (
+                                <img src={doubt.imageUrl} alt="Doubt" className="mt-2 max-w-xs rounded-lg shadow-md" />
+                            )}
+                        </div>
+                        <div className="mt-4 bg-indigo-50 p-4 rounded-lg">
+                            <h4 className="font-medium text-indigo-800 flex items-center mb-2">
+                                <FaBookOpen className="mr-2 text-indigo-600" />
+                                Answer:
+                            </h4>
+                            <p className="text-indigo-700">{doubt.solution}</p>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
+};
 
 export default function AnsweredTile({ data }) {
     const [expanded, setExpanded] = useState(null);
-    const [answers, setAnswers] = useState({});
+    const [resolvedDoubts, setResolvedDoubts] = useState([]);
 
     useEffect(() => {
-        if (data && data.StudentsLeaves) {
-            setLeaves(data.StudentsLeaves);
+        if (data) {
+            setResolvedDoubts(data.filter(doubt => doubt.status === "Resolved"));
         }
     }, [data]);
 
-    const handleAnswerChange = (index, value) => {
-        setAnswers(prevAnswers => ({
-            ...prevAnswers,
-            [index]: value
-        }));
-    };
-
     const handleClick = (index) => {
         setExpanded(expanded === index ? null : index);
-    }
-
-    const handleStatusUpdate = async (id, status, email, index) => {
-        if (status === 'Approved' && !answers[index]) {
-            alert("Please provide an answer before sending.");
-            return;
-        }
-        console.log(answers[index])
     };
 
     return (
-        <div className="w-full">
-            {
-                data.filter(doubt => doubt.status === "Resolved").map((doubt, index) => (
-                    <div key={index} className="border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center">
-                        <div className='w-full flex items-center'>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-full mx-auto p-6 bg-indigo-50 rounded-xl shadow-xl"
+        >
+            <motion.div
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                className="flex items-center justify-between mb-6"
+            >
+                <h2 className="text-2xl font-bold text-indigo-800">Resolved Doubts</h2>
+                <div className="flex items-center bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-md">
+                    <IoMdCheckmarkCircleOutline className="mr-2" />
+                    <span>{resolvedDoubts.length} Resolved</span>
+                </div>
+            </motion.div>
 
-                            <div className='w-full'>
-                                <div className='font-medium text-base ml-2 flex justify-between items-center' onClick={() => handleClick(index)}>
-                                    <div className='flex items-center gap-2 mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
-                                        <div className=' flex items-center gap-1'>
-                                            <img src={doubt.student[0].profileLink} alt="" className='w-10 h-10 rounded-full' />
-                                            <span className='text-red-500 whitespace-nowrap '>{doubt.student[0].name}</span>
-                                        </div>
-                                        <div className=' flex'>
-                                            <p>Roll number</p>- <span className='text-red-500 whitespace-nowrap'>{doubt.student[0].rollNumber}</span></div>
-                                        <div className=' flex'> <p>Doubt</p> - <span className='text-red-500 whitespace-nowrap'>{doubt.subject}</span></div>
-                                    </div>
-                                    <div className='items-center px-3 cursor-pointer'>
-                                        {expanded === index ? <FaChevronUp /> : <FaChevronDown />}
-                                    </div>
-                                </div>
-                                {expanded === index && (
-                                    <div className='font-medium text-base ml-2 mt-2'>
-                                        <div className='mt-2'>
-                                            <span className='text-gray-700'>Question: {doubt.question}</span>
-                                            {doubt.imageUrl && <img src={doubt.imageUrl} alt="Doubt" className="mt-2 max-w-xs rounded-lg" />}
-                                        </div>
-                                    </div>
-                                )}
-                                <div className='flex gap-2 font-medium text-base ml-2 mt-2 text-justify'>
-                                    {expanded === index && (
-                                        <>
-                                            Answer : <span className='font-normal text-justify'>{doubt.solution}</span></>
-                                    )}
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                ))
-           }
-        </div>
-
-    )
+            {resolvedDoubts.map((doubt, index) => (
+                <DoubtCard
+                    key={index}
+                    doubt={doubt}
+                    index={index}
+                    expanded={expanded}
+                    handleClick={handleClick}
+                />
+            ))}
+        </motion.div>
+    );
 }
-

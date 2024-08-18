@@ -1,9 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 import Loading from "./LoadingScreen/Loading.jsx";
-import TeacherDashboardProfile from "./TeacherComponents/profile/TeacherProfile.jsx";
-import AdminProfile from "./AdminComponents/profile/AdminProfile.jsx";
 
+const AllPreviousDetailsAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/AllDetailsAdmin.jsx"));
+const PreviousFeeDetailAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/utils/PreviousFeeDetailAdmin.jsx"));
+const PreviousFeeDetailsAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/PreviousFeeDetails.jsx"));
+const TeacherDashboardProfile = lazy(() => import("./TeacherComponents/profile/TeacherProfile.jsx"));
+const AdminProfile = lazy(() => import("./AdminComponents/profile/AdminProfile.jsx"));
+const AllPreviousDetails = lazy(() => import("./SubAdminComponent/SubAdminFee/PreviousFee/AllDetails.jsx"));
+const PreviousFeeDetailsSubAdmin = lazy(() => import("./SubAdminComponent/SubAdminFee/PreviousFee/FeeDetailsSubAdmin.jsx"));
+const PreviousFeeDetail = lazy(() => import("./SubAdminComponent/SubAdminFee/PreviousFee/utils/FeeDetail.jsx"));
 const ProfileSubAdmin = lazy(() => import("./SubAdminComponent/profile/profileSubAdmin.jsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
 const Home = lazy(() => import("./components/Home/Home.jsx"));
@@ -520,6 +526,22 @@ const router = createBrowserRouter([
             element: <Suspense fallback={Loading}>
               <FeeDetails /></Suspense>
           },
+          {
+            path: '/Admin-Dashboard/StudentsFee/PreviousFee',
+            element: <Suspense fallback={Loading}>
+              <AllPreviousDetailsAdmin /></Suspense>,
+            children: [
+              {
+                path: '',
+                element: <Suspense fallback={Loading}>
+                  <PreviousFeeDetailsAdmin /></Suspense>
+              },
+              {
+                path: ':id',
+                element: <Suspense fallback={Loading}><PreviousFeeDetailAdmin /></Suspense>
+              }
+            ]
+          }
         ]
       },
 
@@ -1314,6 +1336,23 @@ const router = createBrowserRouter([
             path: '/Sub-Admin/StudentsFee/feediscount',
             element: <Suspense fallback={Loading}>
               <FeeDiscountSubAdmin /></Suspense>
+          },
+          {
+            path: '/Sub-Admin/StudentsFee/PreviousFeeSubAdmin',
+            element: <Suspense fallback={Loading}>
+              <AllPreviousDetails /></Suspense>,
+            children: [
+              {
+                path: '',
+                element: <Suspense fallback={Loading}>
+                  <PreviousFeeDetailsSubAdmin /></Suspense>
+              },
+              {
+                path: ':id',
+                element: <Suspense fallback={Loading}>
+                  <PreviousFeeDetail /></Suspense>
+              }
+            ]
           },
           {
             path: '',

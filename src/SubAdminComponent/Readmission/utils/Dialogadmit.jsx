@@ -5,6 +5,8 @@ import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL_Login } from "../../../Config";
 import { toast } from "react-toastify";
 import AdmissionInputs from './AdmissionInputs';
+import { motion } from "framer-motion";
+import { FaUserGraduate, FaStream, FaSave, FaTimes } from "react-icons/fa";
 
 const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
     const { authState } = useContext(AuthContext);
@@ -67,7 +69,7 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
             toast.error("Select stream and subject first");
             return;
         }
-        console.log(email,session);
+        console.log(email, session);
         try {
             const response = await axios.put(`${BASE_URL_Login}/promote/readmit`,
                 {
@@ -128,22 +130,41 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
         Setselectedstream(event.target.value)
     };
 
+    const modalVariants = {
+        hidden: { opacity: 0, scale: 0.8 },
+        visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+    };
+
+    const contentVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { delay: 0.2, duration: 0.3 } },
+    };
     return (
-        <div className="fixed inset-0 mt-10 flex items-center justify-center bg-black bg-opacity-5 ">
-            <div className="flex flex-col rounded bg-white tablet:w-fit tablet:px-5 mobile:w-full mobile:px- mobile:max-tablet:mt-10 justify-center mobile:max-tablet:mx-1">
-                <div className=" p-4 rounded w-auto">
-                    <h3 className="text-lg font-bold mb-2">Readmission</h3>
-                    <div>
-                        {user.name}
-                    </div>
-                    <div className="w-full rounded-md mobile:max-tablet:w-auto mb-2">
-                        <label className="block mobile:max-tablet:text-start mt-4 mx-2 text-lg mobile:max-laptop:text-sm" htmlFor="stream">
+        <motion.div
+            className="fixed inset-0 mt-10 flex items-center justify-center bg-black bg-opacity-50"
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            variants={modalVariants}
+        >
+            <motion.div
+                className="flex flex-col rounded-lg bg-white shadow-lg tablet:w-1/2 tablet:px-8 mobile:w-full mobile:px-4 mobile:max-tablet:mt-10 justify-center mobile:max-tablet:mx-4"
+                variants={contentVariants}
+            >
+                <motion.div className="p-6 rounded w-auto" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
+                    <h3 className="text-2xl font-bold mb-4 text-purple-700 flex items-center">
+                        <FaUserGraduate className="mr-2" />
+                        Readmission
+                    </h3>
+                    <div className="text-lg font-semibold text-gray-700 mb-4">{user.name}</div>
+                    <div className="w-full rounded-md mobile:max-tablet:w-auto mb-4">
+                        <label className="block mobile:max-tablet:text-start mt-4 mx-2 text-lg mobile:max-laptop:text-sm font-medium text-gray-700" htmlFor="stream">
+                            <FaStream className="inline mr-2 text-purple-600" />
                             Select Stream
                         </label>
                         <select
-                            className="border rounded-md w-full py-2 px-3 text-gray-500  focus:outline-none focus:shadow-outline mt-2"
+                            className="border rounded-md w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 mt-2"
                             id="stream"
-                            type="text"
                             name="stream"
                             value={stream}
                             onChange={handleSubject}
@@ -155,31 +176,45 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
                             <option value="PCMB">PCMB</option>
                             <option value="Commerce">Commerce</option>
                             <option value="Arts">Arts</option>
-
                         </select>
                     </div>
-                    <div className="">
+                    <motion.div
+                        className="mb-4"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.6 }}
+                    >
                         <AdmissionInputs stream={stream} setSubject={Setselectedsubject} subjects={subject} />
-                    </div>
+                    </motion.div>
+                </motion.div>
 
-                </div>
-
-                <div className="flex justify-end p-2">
-                    <button
+                <motion.div
+                    className="flex justify-end p-4 border-t border-gray-200"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                >
+                    <motion.button
                         onClick={() => handleSave(user.email)}
-                        className="bg-blue-500 text-white px-3 py-1 rounded mr-2"
+                        className="bg-purple-600 text-white px-4 py-2 rounded-md mr-3 flex items-center hover:bg-purple-700 transition duration-300"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                     >
+                        <FaSave className="mr-2" />
                         Save
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
                         onClick={onClose}
-                        className="bg-gray-500 text-white px-3 py-1 rounded"
+                        className="bg-gray-500 text-white px-4 py-2 rounded-md flex items-center hover:bg-gray-600 transition duration-300"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                     >
+                        <FaTimes className="mr-2" />
                         Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
+                    </motion.button>
+                </motion.div>
+            </motion.div>
+        </motion.div>
     );
 };
 

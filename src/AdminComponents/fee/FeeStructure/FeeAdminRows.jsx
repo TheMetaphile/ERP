@@ -19,9 +19,12 @@ export default function FeeAdminRows({ Class, session, key }) {
     const handleEditToggle = (index) => {
         setEditMode(index);
     };
-
+console.log(session)
     useEffect(() => {
         setLoading(true);
+        setAdmissionFee('');
+        setMonthlyFee('');
+        setQuarterFee('');
         fetchStructure();
     }, [session]);
 

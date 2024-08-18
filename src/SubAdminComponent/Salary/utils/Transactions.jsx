@@ -140,7 +140,7 @@ const Transactions = ({ transactions }) => {
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.3, delay: index * 0.1 }}
-                                className={`${clickedIndex === index ? 'bg-secondary text-center' : ''}`} onClick={() => handleClick(index)}
+                                className={`${clickedIndex === index ? 'bg-purple-100 text-center' : ''}`} onClick={() => handleClick(index)}
                             >
 
                                 <td className=" text-center border-y p-2">{index + 1}</td>

@@ -1,24 +1,14 @@
-import { useState } from "react";
-import ReadmissionDialog from "./Dialogadmit";
+
 import { motion } from "framer-motion";
 
-function AdmissionTileRow({ data, index, clickedIndex, setClickedIndex, handleRemove }) {
-    const [loadinfIndex, setLoadingIndex] = useState('');
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+function AdmissionTileRow({ data, index, setClickedIndex, setIsDialogOpen }) {
 
-    const handleClick = () => {
+    const handleReadmit = (index) => {
         setClickedIndex(index);
-    };
-
-
-    const handleReadmit = (email, index) => {
         setIsDialogOpen(true);
-        setLoadingIndex(index);
+
     };
 
-    const handleSave = () => {
-        handleRemove(data);
-    };
 
     return (
         <motion.div
@@ -40,18 +30,12 @@ function AdmissionTileRow({ data, index, clickedIndex, setClickedIndex, handleRe
                 <h1 className="text-base  w-40">{data.section}</h1>
                 <h1 className="text-base  w-40">{data.fatherPhoneNumber}</h1>
                 <h1 className="text-base  w-52">{data.email}</h1>
-                <button className="bg-purple-100 text-purple-500 px-2 py-0.5 mr-2 rounded" onClick={() => handleReadmit(data.email, data.name, index)}>Readmission</button>
+                <button className="bg-purple-100 text-purple-500 px-2 py-0.5 mr-2 rounded" onClick={() => handleReadmit(index)}>Readmission</button>
 
-                {isDialogOpen && (
-                    <ReadmissionDialog
-                        isOpen={isDialogOpen}
-                        onClose={() => setIsDialogOpen(false)}
-                        user={data}
-                        onSave={handleSave}
-                    />
-                )}
+
 
             </div>
+
         </motion.div>
     )
 }

@@ -29,6 +29,11 @@ function FeeAdmin() {
                                 Fee Discount
                             </h1>
                         </Link>
+                        <Link to={`/Admin-Dashboard/StudentsFee/PreviousFee`} onClick={() => handleLinkSelect('/Admin-Dashboard/StudentsFee/PreviousFee')}>
+                            <h1 className={`p-2 mx-1 ${selectedLink === '/Admin-Dashboard/StudentsFee/PreviousFee' ? "text-gray-600 border-b-2 border-secondarysecond" : "text-gray-600"}`}>
+                                Previous Fee
+                            </h1>
+                        </Link>
                     </div>
                 </div>
                 <hr className='border-t-2 bg-slate-500 mt-2 mb-3  ' />
