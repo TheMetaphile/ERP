@@ -3,9 +3,10 @@ import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../Config";
+import { motion } from "framer-motion";
+import { FaCalendarAlt, FaInfoCircle } from "react-icons/fa";
 
 export default function Notices() {
-
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
@@ -45,25 +46,55 @@ export default function Notices() {
         fetchNotice();
     }, [authState.accessToken]);
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: { y: 0, opacity: 1 }
+    };
+
     return (
-        <div className="mt-3 mb-30">
+        <motion.div
+            className="mt-3 mb-30 space-y-4"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+        >
             {loading ? (
                 <Loading />
             ) : details.length === 0 ? (
-                <div className="w-full text-center">No notices available</div>
+                <motion.div
+                    className="w-full text-center text-gray-500"
+                    variants={itemVariants}
+                >
+                    No notices available
+                </motion.div>
             ) : (
                 <>
                     {details.map((detail, index) => (
-                        <div key={index} className="mt-3 mb-2 ">
-                            <h4 className="font-medium text-sm overflow-hidden ">{detail.title}</h4>
-                            <p className="text-gray-500 text-xs overflow-hidden text-justify line-clamp-4 text-ellipsis py-1">{detail.description}</p>
-                            <h4 className="font-normal text-right text-xs overflow-hidden ">Date : {detail.date}</h4>
-
-                        </div>
+                        <motion.div
+                            key={index}
+                            className="bg-white p-4 rounded-lg shadow-md"
+                            variants={itemVariants}
+                        >
+                            <h4 className="font-medium text-lg mb-2 flex items-center gap-2">
+                                <FaInfoCircle className="text-blue-500" />
+                                {detail.title}
+                            </h4>
+                            <p className="text-gray-600 text-sm truncate overflow-hidden text-justify line-clamp-4 text-ellipsis py-2">
+                                {detail.description}
+                            </p>
+                            <div className="flex justify-end items-center text-gray-500 text-xs mt-2">
+                                <FaCalendarAlt className="mr-1" />
+                                Date: {detail.date}
+                            </div>
+                        </motion.div>
                     ))}
-
                 </>
             )}
-        </div>
+        </motion.div>
     );
 }

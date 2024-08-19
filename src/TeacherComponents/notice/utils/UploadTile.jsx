@@ -8,75 +8,75 @@ import { motion } from 'framer-motion';
 import { MdEdit, MdDeleteForever, MdCheck, MdCancel, MdExpandMore, MdExpandLess } from 'react-icons/md';
 
 export default function UploadTile({ details }) {
-    const { authState } = useContext(AuthContext);
-    const [newDetails, setDetails] = useState(details);
-    const [editingIndex, setEditingIndex] = useState(null);
-    const [editedNotice, setEditedNotice] = useState({});
-    const [expanded, setExpanded] = useState(null);
+  const { authState } = useContext(AuthContext);
+  const [newDetails, setDetails] = useState(details);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editedNotice, setEditedNotice] = useState({});
+  const [expanded, setExpanded] = useState(null);
 
-    const handleClick = (index) => {
-        setExpanded(expanded === index ? null : index);
+  const handleClick = (index) => {
+    setExpanded(expanded === index ? null : index);
+  }
+
+  const handleEdit = (index) => {
+    setEditingIndex(index);
+    setEditedNotice({ ...newDetails[index] });
+  };
+
+  function getCurrentSession() {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+
+    if (currentMonth >= 3) {
+      return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
+    } else {
+      return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
     }
+  }
+  const session = getCurrentSession();
 
-    const handleEdit = (index) => {
-        setEditingIndex(index);
-        setEditedNotice({ ...newDetails[index] });
-    };
-
-    function getCurrentSession() {
-        const now = new Date();
-        const currentYear = now.getFullYear();
-        const currentMonth = now.getMonth();
-
-        if (currentMonth >= 3) {
-            return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
-        } else {
-            return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
+  const handleSave = async (index) => {
+    try {
+      const response = await axios.put(`${BASE_URL_Notice}/notice/update?noticeId=${details[index]._id}&session=${session}`, editedNotice, {
+        headers: {
+          Authorization: `Bearer ${authState.accessToken}`
         }
+      });
+      console.log("API response after update:", response.data);
+      toast.success('Updated Successfully');
+      newDetails[index] = editedNotice;
+      setEditingIndex(null);
+    } catch (err) {
+      console.log(err);
     }
-    const session = getCurrentSession();
+  };
 
-    const handleSave = async (index) => {
-        try {
-            const response = await axios.put(`${BASE_URL_Notice}/notice/update?noticeId=${details[index]._id}&session=${session}`, editedNotice, {
-                headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
-                }
-            });
-            console.log("API response after update:", response.data);
-            toast.success('Updated Successfully');
-            newDetails[index] = editedNotice;
-            setEditingIndex(null);
-        } catch (err) {
-            console.log(err);
+  const handleCancel = () => {
+    setEditingIndex(null);
+  };
+
+  const handleDelete = async (index) => {
+    try {
+      await axios.delete(`${BASE_URL_Notice}/notice/delete?id=${details[index]._id}&session=${session}`, {
+        headers: {
+          Authorization: `Bearer ${authState.accessToken}`
         }
-    };
+      });
+      toast.success('Deleted Successfully');
+      const newDetail = details.filter((_, i) => i !== index);
+      setDetails(newDetail);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    const handleCancel = () => {
-        setEditingIndex(null);
-    };
+  const handleInputChange = (e, field) => {
+    setEditedNotice({ ...editedNotice, [field]: e.target.value });
+  };
 
-    const handleDelete = async (index) => {
-        try {
-            await axios.delete(`${BASE_URL_Notice}/notice/delete?id=${details[index]._id}&session=${session}`, {
-                headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
-                }
-            });
-            toast.success('Deleted Successfully');
-            const newDetail = details.filter((_, i) => i !== index);
-            setDetails(newDetail);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    const handleInputChange = (e, field) => {
-        setEditedNotice({ ...editedNotice, [field]: e.target.value });
-    };
-
-    return (
-        <motion.div className="w-full space-y-4">
+  return (
+    <motion.div className="w-full space-y-4">
       {newDetails.map((detail, index) => (
         <motion.div
           key={index}
@@ -86,7 +86,6 @@ export default function UploadTile({ details }) {
           transition={{ duration: 0.3 }}
         >
           <div className='flex items-center space-x-4'>
-            <img src={Logo} alt="" className='h-12 hidden sm:block' />
             <div className='flex-grow'>
               <div className="flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
                 <motion.div className="font-medium text-indigo-700">
@@ -150,7 +149,7 @@ export default function UploadTile({ details }) {
         </motion.div>
       ))}
     </motion.div>
-    )
+  )
 }
 
 

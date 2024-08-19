@@ -1,9 +1,10 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { BASE_URL_Result } from '../../../Config'; // Make sure to add the notebook API URL to your Config file
+import { BASE_URL_Result } from '../../../Config';
 import AuthContext from "../../../Context/AuthContext";
-
+import { motion } from "framer-motion";
+import { FaSave, FaUserGraduate, FaBook, FaPencilAlt, FaFlask, FaClipboardCheck } from "react-icons/fa";
 
 export default function ScholasticTable({ students, term, Class, subject }) {
     const { authState } = useContext(AuthContext);
@@ -13,18 +14,16 @@ export default function ScholasticTable({ students, term, Class, subject }) {
         subjectEnrichment: "",
         theory: ""
     });
-
     const [marks, setMarks] = useState(students.reduce((acc, student) => {
         acc[student.email] = {
             noteBook: '',
             subjectEnrichment: '',
             practical: '',
             theory: '',
-            lastNoteBookChecked: '' // New field for last notebook checked
+            lastNoteBookChecked: ''
         };
         return acc;
     }, {}));
-
     const [clickedIndex, setClickedIndex] = useState(null);
 
     const handleClick = (index) => {
@@ -37,7 +36,7 @@ export default function ScholasticTable({ students, term, Class, subject }) {
 
     const fetchLastNoteBookChecked = async () => {
         try {
-            if(!subject) return ;
+            if(!subject) return;
             const responses = await Promise.all(
                 students.map(student =>
                     axios.get(`${BASE_URL_Result}/notebook/fetch/student/last?subject=${subject}&email=${student.email}`, {
@@ -47,12 +46,10 @@ export default function ScholasticTable({ students, term, Class, subject }) {
                     })
                 )
             );
-
             const lastNoteBookCheckedData = responses.reduce((acc, response, index) => {
                 acc[students[index].email] = response.data;
                 return acc;
             }, {});
-
             setMarks(prevMarks => ({
                 ...prevMarks,
                 ...Object.keys(lastNoteBookCheckedData).reduce((acc, email) => {
@@ -63,12 +60,12 @@ export default function ScholasticTable({ students, term, Class, subject }) {
                     return acc;
                 }, {})
             }));
-
         } catch (error) {
             toast.error('Error fetching last notebook checked data');
             console.error('Error fetching last notebook checked data:', error);
         }
     };
+
     const handleInputChange = (email, type, value) => {
         setMarks(prevMarks => ({
             ...prevMarks,
@@ -78,6 +75,7 @@ export default function ScholasticTable({ students, term, Class, subject }) {
             }
         }));
     };
+
     const handletotalMarksChange = (type, value) => {
         setTotalMarks(prevMarks => ({
             ...prevMarks,
@@ -86,40 +84,23 @@ export default function ScholasticTable({ students, term, Class, subject }) {
     };
 
     const handleSave = async (email) => {
-        if (!term) {
-            toast.error("Term is not selected");
-            return;
-        }
-        if (!Class) {
-            toast.error("Class is not selected");
-            return;
-        }
-        if (!subject) {
-            toast.error("Subject is not selected");
+        if (!term || !Class || !subject) {
+            toast.error("Term, Class, or Subject is not selected");
             return;
         }
         const studentMarks = marks[email];
-        console.log('total', Number(totalTheoryMarks.noteBook), 'aaye', Number(studentMarks.noteBook));
-        if (Number(studentMarks.noteBook) <= 0 || Number(studentMarks.noteBook) > Number(totalTheoryMarks.noteBook)) {
-            toast.error('Obtained notebook marks cannot be less then zero and more then total');
+        const validationErrors = [];
+        ['noteBook', 'theory', 'practical', 'subjectEnrichment'].forEach(field => {
+            const obtainedMarks = Number(studentMarks[field]);
+            const totalMarks = Number(totalTheoryMarks[field]);
+            if (obtainedMarks < 0 || obtainedMarks > totalMarks) {
+                validationErrors.push(`Obtained ${field} marks should be between 0 and ${totalMarks}`);
+            }
+        });
+        if (validationErrors.length > 0) {
+            validationErrors.forEach(error => toast.error(error));
             return;
         }
-
-        if (Number(studentMarks.theory) <= 0 || Number(studentMarks.theory) > Number(totalTheoryMarks.theory)) {
-            toast.error('Obtained theory marks cannot be less then zero and more then total');
-            return;
-        }
-
-        if (Number(studentMarks.practical) <= 0 || Number(studentMarks.practical) > Number(totalTheoryMarks.practical)) {
-            toast.error('Obtained practical marks cannot be less then zero and more then total');
-            return;
-        }
-
-        if (Number(studentMarks.subjectEnrichment) <= 0 || Number(studentMarks.subjectEnrichment) > Number(totalTheoryMarks.subjectEnrichment)) {
-            toast.error('Obtained subject enrichment marks cannot be less then zero and more then total');
-            return;
-        }
-        console.log(studentMarks);
         const schedules = {
             subject,
             marksObtained: Number(studentMarks.theory),
@@ -130,16 +111,13 @@ export default function ScholasticTable({ students, term, Class, subject }) {
             obtainedNoteBookMarks: Number(studentMarks.noteBook),
             totalSubjectEnrichmentMarks: Number(totalTheoryMarks.subjectEnrichment),
             obtainedSubjectEnrichmentMarks: Number(studentMarks.subjectEnrichment),
-        }
-        console.log(schedules);
+        };
         const resultData = {
             email,
             class: Class,
             result: schedules,
             term: term,
         };
-        console.log(resultData);
-
         try {
             const response = await axios.put(`${BASE_URL_Result}/result/update/addSubject`,
                 resultData,
@@ -159,132 +137,91 @@ export default function ScholasticTable({ students, term, Class, subject }) {
     };
     
     return (
-        <div className="w-full overflow-x-auto rounded-lg">
-            <div className="flex gap-3 ml-2 overflow-auto">
-                <div className="flex flex-col mb-4">
-                    <label className="mb-2 text-gray-700">
-                        Total Theory Marks
-                    </label>
-                    <input
-                        type="number"
-                        value={totalTheoryMarks.theory}
-                        onChange={(e) => handletotalMarksChange("theory", e.target.value)}
-                        className="border rounded-md py-2 px-4 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                        placeholder="Enter total theory marks"
-                    />
-                </div>
-                <div className="flex flex-col mb-4">
-                    <label className="mb-2 text-gray-700 whitespace-nowrap">
-                        Total Subject Enrichment Marks
-                    </label>
-                    <input
-                        type="number"
-                        value={totalTheoryMarks.subjectEnrichment}
-                        onChange={(e) => handletotalMarksChange("subjectEnrichment", e.target.value)}
-                        className="border rounded-md py-2 px-4 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                        placeholder="Enter total subject enrichment marks"
-                    />
-                </div>
-                <div className="flex flex-col mb-4">
-                    <label className="mb-2 text-gray-700">
-                        Total Note Book Marks
-                    </label>
-                    <input
-                        type="number"
-                        value={totalTheoryMarks.noteBook}
-                        onChange={(e) => handletotalMarksChange("noteBook", e.target.value)}
-
-                        className="border rounded-md py-2 px-4 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                        placeholder="Enter total note book marks"
-                    />
-                </div>
-                <div className="flex flex-col mb-4">
-                    <label className="mb-2 text-gray-700">
-                        Total Practical Marks
-                    </label>
-                    <input
-                        type="number"
-                        value={totalTheoryMarks.practical}
-                        onChange={(e) => handletotalMarksChange("practical", e.target.value)}
-
-                        className="border rounded-md py-2 px-4 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                        placeholder="Enter total practical marks"
-                    />
-                </div>
+        <motion.div 
+            className="w-full overflow-x-auto rounded-lg shadow-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
+            <div className="flex gap-3 ml-2 overflow-auto p-4 bg-gray-100 rounded-t-lg">
+                {['theory', 'subjectEnrichment', 'noteBook', 'practical'].map((field) => (
+                    <motion.div key={field} className="flex flex-col mb-4" whileHover={{ scale: 1.05 }}>
+                        <label className="mb-2 text-gray-700 font-semibold">
+                            Total {field.charAt(0).toUpperCase() + field.slice(1)} Marks
+                        </label>
+                        <motion.input
+                            type="number"
+                            value={totalTheoryMarks[field]}
+                            onChange={(e) => handletotalMarksChange(field, e.target.value)}
+                            className="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder={`Enter total ${field} marks`}
+                            whileFocus={{ scale: 1.05 }}
+                        />
+                    </motion.div>
+                ))}
             </div>
-            <div className=" overflow-auto">
-                <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+            <div className="overflow-auto">
+                <table className="min-w-full bg-white border border-gray-300 rounded-lg text-center">
                     <thead>
-                        <tr className="bg-secondary text-gray-600 text-lg ">
-                            <th className="py-2 px-2 text-center whitespace-nowrap rounded-t-r">Roll No.</th>
-                            <th className="py-2 px-2 text-center whitespace-nowrap">Name</th>
-                            <th className="py-2 px-2 text-center whitespace-nowrap">Last Note Book Checked</th>
-                            <th className="py-2 px-2 text-center whitespace-nowrap">Note Book</th>
-                            <th className="py-2 px-2 text-center whitespace-nowrap">Subject Enrichment</th>
-                            <th className="py-2 px-2 text-center whitespace-nowrap">Practical Marks</th>
-                            <th className="py-2 px-2 text-center whitespace-nowrap">Theory Marks</th>
-                            <th className="py-2 px-2 text-center whitespace-nowrap rounded-t-l mr-2">Action</th>
+                        <tr className="bg-gradient-to-r from-blue-500 to-purple-500 text-white ">
+                            <th className="py-3 px-2 text-center  rounded-tl-lg"><FaUserGraduate className="inline mr-2" />Roll No.</th>
+                            <th className="py-3 px-2 text-center "><FaUserGraduate className="inline mr-2" />Name</th>
+                            <th className="py-3 px-2 text-center "><FaBook className="inline mr-2" />Last Note Book Checked</th>
+                            <th className="py-3 px-2 text-center "><FaBook className="inline mr-2" />Note Book</th>
+                            <th className="py-3 px-2 text-center "><FaPencilAlt className="inline mr-2" />Subject Enrichment</th>
+                            <th className="py-3 px-2 text-center "><FaFlask className="inline mr-2" />Practical Marks</th>
+                            <th className="py-3 px-2 text-center "><FaClipboardCheck className="inline mr-2" />Theory Marks</th>
+                            <th className="py-3 px-2 text-center  rounded-tr-lg">Action</th>
                         </tr>
                     </thead>
-                    <tbody className="text-gray-600 text-md font-normal">
+                    <tbody className="text-gray-600 text-md font-normal ">
                         {students.map((student, index) => (
-                            <tr key={index} className={`border-b border-gray-200 last:border-none ${clickedIndex === index ? 'bg-secondary' : ''}`} onClick={() => handleClick(index)}>
-                                <td className="py-2 px-2 text-center whitespace-nowrap rounded-t-r">{student.rollNumber}</td>
-                                <td className="py-2 px-2 text-center whitespace-nowrap">{student.name}</td>
-                                <td className="py-2 px-2 text-center whitespace-nowrap">
+                            <motion.tr 
+                                key={index} 
+                                className={`border-b border-gray-200 hover:bg-gray-100 transition-colors duration-200 ${clickedIndex === index ? 'bg-blue-100' : ''}`}
+                                onClick={() => handleClick(index)}
+                                whileHover={{ scale: 1.01 }}
+                                transition={{ type: "spring", stiffness: 300 }}
+                            >
+                                <td className="py-3 px-2 text-center ">
+                                    
+                                    {student.rollNumber}</td>
+                                <td className="py-3 px-2 text-center flex gap-2 items-center">
+                                <img src={student.profileLink} alt="" className="h-10 w-10 rounded-full"/>
+                                    {student.name}</td>
+                                <td className="py-3 px-2 text-center ">
                                     {marks[student.email]?.lastNoteBookChecked?.topic || 'No data'}
                                 </td>
-
-                                <td className="py-2 px-2 text-center whitespace-nowrap">
-                                    <input
-                                        type="number"
-                                        value={marks[student.email]?.noteBook || ''}
-                                        onChange={(e) => handleInputChange(student.email, 'noteBook', e.target.value)}
-                                        className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                                        placeholder="Note Book Marks"
-                                    />
-                                </td>
-                                <td className="py-2 px-2 text-center whitespace-nowrap">
-                                    <input
-                                        type="number"
-                                        value={marks[student.email]?.subjectEnrichment || ''}
-                                        onChange={(e) => handleInputChange(student.email, 'subjectEnrichment', e.target.value)}
-                                        className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                                        placeholder="Subject Enrichment Marks"
-                                    />
-                                </td>
-                                <td className="py-2 px-2 text-center whitespace-nowrap">
-                                    <input
-                                        type="number"
-                                        value={marks[student.email]?.practical || ''}
-                                        onChange={(e) => handleInputChange(student.email, 'practical', e.target.value)}
-                                        className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                                        placeholder="Practical Marks"
-                                    />
-                                </td>
-                                <td className="py-2 px-2 text-center whitespace-nowrap">
-                                    <input
-                                        type="number"
-                                        value={marks[student.email]?.theory || ''}
-                                        onChange={(e) => handleInputChange(student.email, 'theory', e.target.value)}
-                                        className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                                        placeholder="Theory Marks"
-                                    />
-                                </td>
-                                <td className="py-4 px-2 mr-2 flex justify-center items-center">
-                                    <button
+                                {['noteBook', 'subjectEnrichment', 'practical', 'theory'].map((field) => (
+                                    <td key={field} className="py-3 px-2 text-center ">
+                                        <motion.input
+                                            type="number"
+                                            value={marks[student.email]?.[field] || ''}
+                                            onChange={(e) => handleInputChange(student.email, field, e.target.value)}
+                                            className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                                            placeholder={`${field.charAt(0).toUpperCase() + field.slice(1)} Marks`}
+                                            whileHover={{ scale: 1.05 }}
+                                            whileFocus={{ scale: 1.05 }}
+                                        />
+                                    </td>
+                                ))}
+                                <td className="py-3 px-2 text-center ">
+                                    <motion.button
                                         type="button"
                                         onClick={() => handleSave(student.email)}
-                                        className="text-green-600 rounded-md border border-green-500 w-fit px-4 hover:bg-green-500 hover:text-white hover:cursor-pointer hover:shadow-md hover:border-black"
+                                        className="bg-green-500 text-white rounded-md px-4 py-2 flex items-center justify-center hover:bg-green-600 transition-colors duration-200"
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
                                     >
+                                        <FaSave className="mr-2" />
                                         Save
-                                    </button>
+                                    </motion.button>
                                 </td>
-                            </tr>
+                            </motion.tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-        </div>
+        </motion.div>
     );
 }

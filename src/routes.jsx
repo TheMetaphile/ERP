@@ -76,9 +76,9 @@ const TeacherStudent = lazy(() => import("./AdminComponents/Accounts/TeacherStud
 const PrivateRoute = lazy(() => import("./components/PrivateRoutes.jsx"));
 const TeacherDashboard = lazy(() => import('./TeacherComponents/Dashboard.jsx'));
 const NoticeBoard = lazy(() => import("./TeacherComponents/notice/NoticeBoard.jsx"));
-const AllNotice = lazy(() => import("./TeacherComponents/notice/utils/AllNotice.jsx"));
+// const AllNotice = lazy(() => import("./TeacherComponents/notice/utils/AllNotice.jsx"));
 const Teacher = lazy(() => import("./TeacherComponents/notice/utils/Teacher.jsx"));
-const Student = lazy(() => import("./TeacherComponents/notice/utils/Student.jsx"));
+// const Student = lazy(() => import("./TeacherComponents/notice/utils/Student.jsx"));
 const CheckIn = lazy(() => import("./TeacherComponents/checkin/CheckIn.jsx"));
 const ClassWorkTeacher = lazy(() => import("./TeacherComponents/classwork/ClassWork.jsx"));
 const HomeWorkTeacher = lazy(() => import("./TeacherComponents/homework/HomeWork.jsx"));
@@ -868,21 +868,21 @@ const router = createBrowserRouter([
         path: "/Teacher-Dashboard/noticeboard",
         element: <Suspense fallback={Loading}><NoticeBoard /></Suspense>,
         children: [
-          {
-            path: '/Teacher-Dashboard/noticeboard/allnotice',
-            element: <Suspense fallback={Loading}>
-              <AllNotice /></Suspense>
-          },
+          // {
+          //   path: '/Teacher-Dashboard/noticeboard/allnotice',
+          //   element: <Suspense fallback={Loading}>
+          //     <AllNotice /></Suspense>
+          // },
           {
             path: '/Teacher-Dashboard/noticeboard/teacher',
             element: <Suspense fallback={Loading}>
               <Teacher /></Suspense>
           },
-          {
-            path: '/Teacher-Dashboard/noticeboard/student',
-            element: <Suspense fallback={Loading}>
-              <Student /></Suspense>
-          },
+          // {
+          //   path: '/Teacher-Dashboard/noticeboard/student',
+          //   element: <Suspense fallback={Loading}>
+          //     <Student /></Suspense>
+          // },
           {
             path: '/Teacher-Dashboard/noticeboard/upload',
             element: <Suspense fallback={Loading}>

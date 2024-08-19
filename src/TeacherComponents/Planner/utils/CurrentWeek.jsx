@@ -45,7 +45,7 @@ const CurrentWeek = ({ selectedTab, Class, section, subject }) => {
             } catch (err) {
                 console.log(err.response.data.error);
                 setError(err.response.data.error);
-                toast.error("Failed to fetch plan");
+                toast.error(err.response.data.error);
             } finally {
                 setLoading(false);
             }
@@ -65,7 +65,7 @@ const CurrentWeek = ({ selectedTab, Class, section, subject }) => {
                 animate={{ opacity: 1 }}
                 className="text-center py-10 text-indigo-600 font-semibold"
             >
-                No Data Available
+                {error ? error :'No Data Available'}
             </motion.div>
         );
     }

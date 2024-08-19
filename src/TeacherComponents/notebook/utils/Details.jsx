@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import AuthContext from "../../../Context/AuthContext";
 import axios from "axios";
 import Switch from "./switch";
+import { motion } from 'framer-motion';
+import { FaSave, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { toast, ToastContainer } from "react-toastify";
 import { BASE_URL_Login } from '../../../Config'
 
@@ -86,39 +88,61 @@ const RecordDetails = () => {
   }
 
   return (
-    <div className=" items-center  px-4 py-1 mb-2">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="items-center px-4 py-1 mb-2"
+    >
       <ToastContainer />
-      <div className="flex justify-between">
+      <motion.div
+        initial={{ y: -20 }}
+        animate={{ y: 0 }}
+        className="flex justify-between"
+      >
         <h1 className="text-xl font-medium mb-2 mobile:max-tablet:text-lg">Pending Notebooks</h1>
-        <button className="text-xl mobile:max-tablet:text-sm text-green-500 border border-green-500 px-4  rounded-md shadow-md font-medium mb-2 hover:bg-green-600 hover:text-white hover:border-white" onClick={handleSave}>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="text-xl mobile:max-tablet:text-sm text-green-500 border border-green-500 px-4 rounded-md shadow-md font-medium mb-2 hover:bg-green-600 hover:text-white hover:border-white flex items-center"
+          onClick={handleSave}
+        >
+          <FaSave className="mr-2" />
           Save
-        </button>
-      </div>
-      <div className="w-full overflow-x-auto rounded-lg">
+        </motion.button>
+      </motion.div>
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className="w-full overflow-x-auto rounded-lg"
+      >
         <table className="min-w-full bg-white border border-gray-300 rounded-lg">
           <thead>
             <tr className="bg-secondary text-gray-600 text-lg leading-normal">
-
               <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Roll No.</th>
               <th className="py-2 px-6 text-center">Name</th>
-
               <th className="py-2 px-6 text-center">Date</th>
-
               <th className="py-2 px-6 text-center">Chapter</th>
-              <th className="py-2 px-6 text-center ">Topic</th>
+              <th className="py-2 px-6 text-center">Topic</th>
               <th className="py-2 px-6 text-center rounded-t-l whitespace-nowrap">Notebook Checked</th>
               <th className="py-2 px-6 text-center rounded-t-l">Checked</th>
-
-
             </tr>
           </thead>
-          <tbody className="text-gray-600 text-md font-normal ">
+          <tbody className="text-gray-600 text-md font-normal">
             {notSubmittedBy.map((Student, index) => (
-
-              <tr key={index} className="border-b border-gray-200  last:border-none">
-
+              <motion.tr
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: index * 0.1 }}
+                className="border-b border-gray-200 last:border-none"
+              >
                 <td className="py-3 px-6 text-center whitespace-nowrap">{Student.rollNumber}</td>
-                <td className="flex py-3 px-6 text-center items-center gap-2 whitespace-nowrap"><img src={Student.profileLink} alt="img" className="rounded-full h-10 w-10" />{Student.name}</td>
+                <td className="flex py-3 px-6 text-center items-center gap-2 whitespace-nowrap">
+                  <img src={Student.profileLink} alt="img" className="rounded-full h-10 w-10" />
+                  {Student.name}
+                </td>
                 <td className="py-3 px-6 text-center whitespace-nowrap">{new Date(date).toDateString()}</td>
                 <td className="py-3 px-6 text-center">{chapter}</td>
                 <td className="py-3 px-6 text-center whitespace-nowrap">{topic}</td>
@@ -126,57 +150,66 @@ const RecordDetails = () => {
                 <td className="flex py-3 px-6 justify-center">
                   <Switch checked={checkedStudents.includes(Student.email)} addEmail={addEmail} removeEmail={removeEmail} email={Student.email} />
                 </td>
-
-
-
-              </tr>
-
+              </motion.tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </motion.div>
 
-      <h1 className="text-xl font-medium my-3">Checked Notebooks</h1>
+      <motion.h1
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="text-xl font-medium my-3"
+      >
+        Checked Notebooks
+      </motion.h1>
 
-      <div className="w-full overflow-x-auto rounded-lg">
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.7 }}
+        className="w-full overflow-x-auto rounded-lg"
+      >
         <table className="min-w-full bg-white border border-gray-300 rounded-lg">
           <thead>
             <tr className="bg-secondary text-gray-600 text-lg leading-normal">
-
               <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Roll No.</th>
               <th className="py-2 px-6 text-center">Name</th>
-
               <th className="py-2 px-6 text-center">Date</th>
-
               <th className="py-2 px-6 text-center">Chapter</th>
-              <th className="py-2 px-6 text-center ">Topic</th>
+              <th className="py-2 px-6 text-center">Topic</th>
               <th className="py-2 px-6 text-center rounded-t-l whitespace-nowrap">Notebook Checked</th>
               <th className="py-2 px-6 text-center rounded-t-l">Checked</th>
-
-
             </tr>
           </thead>
-          <tbody className="text-gray-600 text-md font-normal ">
+          <tbody className="text-gray-600 text-md font-normal">
             {submittedBy.map((Student, index) => (
-
-              <tr key={index} className="border-b border-gray-200  last:border-none">
-
+              <motion.tr
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: index * 0.1 }}
+                className="border-b border-gray-200 last:border-none"
+              >
                 <td className="py-3 px-6 text-center whitespace-nowrap">{Student.rollNumber}</td>
-                <td className="flex py-3 px-6 text-center items-center gap-2 whitespace-nowrap"><img src={Student.profileLink} alt="img" className="rounded-full h-10 w-10" />{Student.name}</td>
+                <td className="flex py-3 px-6 text-center items-center gap-2 whitespace-nowrap">
+                  <img src={Student.profileLink} alt="img" className="rounded-full h-10 w-10" />
+                  {Student.name}
+                </td>
                 <td className="py-3 px-6 text-center whitespace-nowrap">{new Date(date).toDateString()}</td>
                 <td className="py-3 px-6 text-center">{chapter}</td>
                 <td className="py-3 px-6 text-center whitespace-nowrap">{topic}</td>
                 <td className="py-3 px-6 text-center">{chapter}</td>
                 <td className="flex py-3 px-6 justify-center">
-                  <Switch checked={true} addEmail={addEmail} />
+                  <FaCheckCircle className="text-green-500 text-xl" />
                 </td>
-              </tr>
-
+              </motion.tr>
             ))}
           </tbody>
         </table>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

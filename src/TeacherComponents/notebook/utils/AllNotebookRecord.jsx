@@ -4,6 +4,9 @@ import { Link, useLocation } from 'react-router-dom';
 import AuthContext from "../../../Context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
 import { BASE_URL_Login } from '../../../Config'
+import { motion } from "framer-motion";
+import { FaEye, FaComment } from "react-icons/fa";
+
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -66,48 +69,78 @@ const AllNoteBookRecord = () => {
   }
 
   return (
-    <div className="flex-col mobile:max-tablet:flex-col-reverse justify-between tablet:items-center px-4 pb-0  mb-2 overflow-auto ">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="flex-col mobile:max-tablet:flex-col-reverse justify-between tablet:items-center px-4 pb-0 mb-2 overflow-auto"
+    >
       <ToastContainer />
       <div className="overflow-x-auto rounded-lg">
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+        <motion.table
+          initial={{ y: 20 }}
+          animate={{ y: 0 }}
+          transition={{ type: "spring", stiffness: 100 }}
+          className="min-w-full bg-white border border-gray-300 rounded-lg"
+        >
           <thead>
             <tr className="bg-secondary text-gray-600 text-lg leading-normal">
               <th className="py-2 px-6 text-center rounded-t-r">Date</th>
               <th className="py-2 px-6 text-center">Chapter</th>
-              <th className="py-2 px-6 text-center ">Topic</th>
+              <th className="py-2 px-6 text-center">Topic</th>
               <th className="py-2 px-6 text-center rounded-t-l whitespace-nowrap">Notebook Checked</th>
               <th className="py-2 px-6 text-center rounded-t-l">Action</th>
               <th className="py-2 px-6 text-center rounded-t-l">Remark</th>
-
-
             </tr>
           </thead>
-          <tbody className="text-gray-600 text-md font-normal ">
+          <tbody className="text-gray-600 text-md font-normal">
             {records.map((record, index) => (
-
-              <tr className="border-b border-gray-200  last:border-none">
-
+              <motion.tr
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: index * 0.1 }}
+                className="border-b border-gray-200 last:border-none"
+              >
                 <td className="py-3 px-6 text-center whitespace-nowrap">{new Date(record.date).toDateString()}</td>
                 <td className="py-3 px-6 text-center">{record.chapter}</td>
                 <td className="py-3 px-6 text-center whitespace-nowrap">{record.topic}</td>
                 <td className="py-3 px-6 text-center">{record.checked}</td>
                 <td className="py-3 px-6 text-center whitespace-nowrap">
-                  <Link to={`/Teacher-Dashboard/notebook/details/${record._id}?session=${session}&date=${record.date}&chapter=${record.chapter}&topic=${record.topic}`} className="block w-full text-blue-500 underline hover:text-blue-700">
+                  <Link
+                    to={`/Teacher-Dashboard/notebook/details/${record._id}?session=${session}&date=${record.date}&chapter=${record.chapter}&topic=${record.topic}`}
+                    className=" w-full text-blue-500 hover:text-blue-700 flex items-center justify-center"
+                  >
+                    <FaEye className="mr-2" />
                     Show Details
                   </Link>
                 </td>
                 <td className="py-3 px-6 text-center whitespace-nowrap">
-                  {record.remark ? record.remark : 'NA'}
+                  {record.remark ? (
+                    <div className="flex items-center justify-center">
+                      <FaComment className="mr-2 text-gray-500" />
+                      {record.remark}
+                    </div>
+                  ) : (
+                    'NA'
+                  )}
                 </td>
-
-              </tr>
-
+              </motion.tr>
             ))}
           </tbody>
-        </table>
+        </motion.table>
       </div>
-      <h1 className={`text-blue-400 text-center text-lg hover:text-blue-600 hover:cursor-pointer ${records.length < start + end ? "hidden" : ""}`} onClick={handleViewMore}>View more</h1>
-    </div>
+      {records.length >= start + end && (
+        <motion.h1
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="text-blue-400 text-center text-lg hover:text-blue-600 hover:cursor-pointer mt-4"
+          onClick={handleViewMore}
+        >
+          View more
+        </motion.h1>
+      )}
+    </motion.div>
   );
 };
 

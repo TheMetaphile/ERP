@@ -25,7 +25,6 @@ export default function TeacherTile({ details }) {
                 className='p-4 border border-indigo-200 rounded-lg shadow-md mt-4 bg-white hover:shadow-lg transition-shadow duration-300'
             >
                 <div className='flex items-center w-full'>
-                    <motion.img whileHover={{ scale: 1.1 }} src={Logo} alt="" className='h-16 w-16 object-cover rounded-full border-2 border-indigo-300'/>
                     <div className='ml-4 flex-grow'>
                         <motion.div
                             className="font-semibold text-lg text-indigo-700 cursor-pointer flex items-center justify-between"
