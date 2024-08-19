@@ -1,9 +1,8 @@
-import React from 'react'
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FaEdit } from 'react-icons/fa';
 
 function NextWeekRow({ details, index, setDetails, status }) {
-
-    console.log(details);
-
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
@@ -14,86 +13,91 @@ function NextWeekRow({ details, index, setDetails, status }) {
         );
     }
 
-    console.log(status)
+    const cellVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
+
     return (
-        <>
+        <motion.tr
+            initial="hidden"
+            animate="visible"
+            transition={{ staggerChildren: 0.1 }}
+            className={'bg-white'}
+        >
+            <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                {details.date}
+            </motion.td>
+            
             {status ? (
-                <tr key={index}>
-                    <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                        {details.date}
-                    </td>
-                    <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
+                <>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
                         {details.chapter}
-                    </td>
-                    <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
+                    </motion.td>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
                         {details.topic}
-                    </td>
-                    <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
+                    </motion.td>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
                         {details.teachingAids}
-                    </td>
-                    <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
+                    </motion.td>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
                         {details.Activity}
-                    </td>
-                </tr>
+                    </motion.td>
+                </>
             ) : (
-                <tr key={index}>
-                    <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                        {details.date}
-                    </td>
-
-                    <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                        <input
-                            className='border-secondary border-2 rounded-md p-2'
-                            type="text"
-                            name='chapter'
-                            value={details.chapter}
-                            onChange={(e) => handleChange(e)}
-
-                        />
-                    </td>
-                    <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                        <input
-                            className='border-secondary border-2 rounded-md p-2'
-                            type="text"
-                            name='topic'
-                            value={details.topic}
-                            onChange={(e) => handleChange(e)}
-
-                        />
-                    </td>
-                    <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                        <input
-                            className='border-secondary border-2 rounded-md p-2'
-                            type="text"
-                            name='teachingAids'
-                            value={details.teachingAids}
-                            onChange={(e) => handleChange(e)}
-
-                        />
-                    </td>
-                    <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                        <input
-                            className='border-secondary border-2 rounded-md p-2'
-                            type="text"
-                            name='Activity'
-                            value={details.Activity}
-                            onChange={(e) => handleChange(e)}
-
-                        />
-                    </td>
-                </tr>
+                <>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                        <motion.div className="relative" whileHover={{ scale: 1.05 }}>
+                            <input
+                                className='w-full border-2 border-indigo-300 rounded-md p-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-300'
+                                type="text"
+                                name='chapter'
+                                value={details.chapter}
+                                onChange={handleChange}
+                            />
+                            <FaEdit className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                        </motion.div>
+                    </motion.td>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                        <motion.div className="relative" whileHover={{ scale: 1.05 }}>
+                            <input
+                                className='w-full border-2 border-indigo-300 rounded-md p-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-300'
+                                type="text"
+                                name='topic'
+                                value={details.topic}
+                                onChange={handleChange}
+                            />
+                            <FaEdit className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                        </motion.div>
+                    </motion.td>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                        <motion.div className="relative" whileHover={{ scale: 1.05 }}>
+                            <input
+                                className='w-full border-2 border-indigo-300 rounded-md p-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-300'
+                                type="text"
+                                name='teachingAids'
+                                value={details.teachingAids}
+                                onChange={handleChange}
+                            />
+                            <FaEdit className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                        </motion.div>
+                    </motion.td>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                        <motion.div className="relative" whileHover={{ scale: 1.05 }}>
+                            <input
+                                className='w-full border-2 border-indigo-300 rounded-md p-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-300'
+                                type="text"
+                                name='Activity'
+                                value={details.Activity}
+                                onChange={handleChange}
+                            />
+                            <FaEdit className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                        </motion.div>
+                    </motion.td>
+                </>
             )}
-        </>
-    )
+        </motion.tr>
+    );
 }
 
-export default NextWeekRow
-
-// editable ? (
-//     <input
-//         className='border-secondary border-2 rounded-md p-2'
-//         type="text"
-//         value={nextWeekActivities[index]}
-//         onChange={(e) => handleInputChange(index, 'activity', e.target.value)}
-//     />
-// ) :
+export default NextWeekRow;

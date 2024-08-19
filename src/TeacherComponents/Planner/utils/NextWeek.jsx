@@ -6,6 +6,8 @@ import Loading from '../../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NextWeekRow from './NextWeekRow';
+import { motion } from 'framer-motion';
+import { FaSave, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
 const NextWeek = ({ selectedTab, Class, section, subject }) => {
     const { authState } = useContext(AuthContext);
@@ -115,72 +117,86 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
 
 
     return (
-        <div className='rounded-md overflow-auto'>
+        <motion.div 
+            className='rounded-md overflow-auto bg-indigo-50 p-6'
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
             {loading ? (
                 <Loading />
             ) : details.length === 0 && selectedTab === 'Next Week' ? (
-                <>No Data Available</>
+                <motion.div
+                    className="text-2xl text-indigo-600 font-semibold text-center"
+                    initial={{ scale: 0.9 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    No Data Available
+                </motion.div>
             ) : (
-
                 <form onSubmit={handleSubmit}>
-                    <table className='w-full rounded-md border border-black'>
-                        <thead className='bg-secondary border-b border-black'>
+                    <motion.table 
+                        className='w-full rounded-lg border-2 border-indigo-300 overflow-hidden'
+                        initial={{ scale: 0.95 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <thead className='bg-indigo-600 text-white'>
                             <tr className='p-4 text-center'>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Date</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Chapter</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Topic</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Teaching Aids</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Activity (if any)</th>
+                                <th className='py-3 px-4 text-xl font-semibold'>Date</th>
+                                <th className='py-3 px-4 text-xl font-semibold'>Chapter</th>
+                                <th className='py-3 px-4 text-xl font-semibold'>Topic</th>
+                                <th className='py-3 px-4 text-xl font-semibold'>Teaching Aids</th>
+                                <th className='py-3 px-4 text-xl font-semibold'>Activity (if any)</th>
                             </tr>
                         </thead>
-                        <tbody className='text-center whitespace-nowrap'>
+                        <tbody className='text-center'>
                             {details.map((data, index) => (
-                                status === "Accept" ? (
-                                    <>
-                                        <NextWeekRow details={data} index={index} setDetails={setDetails} status={true} />
-                                    </>
-                                ) : (
-                                    <>
-                                        <NextWeekRow details={data} index={index} setDetails={setDetails} status={false} />
-                                    </>
-
-                                )
+                                <NextWeekRow key={index} details={data} index={index} setDetails={setDetails} status={status === "Accept"} />
                             ))}
                         </tbody>
-                    </table>
-                    <div className='flex justify-center items-center py-4'>
+                    </motion.table>
+                    <motion.div 
+                        className='flex justify-center items-center py-6'
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                    >
                         {status === "Accept" ? (
-                            <div className='flex flex-col text-lg'>
-                                <div className='flex items-center'>
-                                    Status : {status}
+                            <div className='flex flex-col text-lg bg-white p-4 rounded-lg shadow-md'>
+                                <div className='flex items-center text-indigo-700'>
+                                    <FaCheckCircle className="mr-2" />
+                                    Status: {status}
                                 </div>
-                                <div className='flex items-center'>
-                                    Remark : {remark}
+                                <div className='flex items-center mt-2 text-indigo-600'>
+                                    Remark: {remark}
                                 </div>
                             </div>
                         ) : (
-                            <div className='flex flex-col text-lg'>
-                                <div className='flex items-center'>
-                                    Status : {status}
+                            <div className='flex flex-col text-lg bg-white p-4 rounded-lg shadow-md'>
+                                <div className='flex items-center text-indigo-700'>
+                                    <FaTimesCircle className="mr-2" />
+                                    Status: {status}
                                 </div>
-                                <div className='flex items-center'>
-                                    Remark : {remark}
+                                <div className='flex items-center mt-2 text-indigo-600'>
+                                    Remark: {remark}
                                 </div>
-                                <button
+                                <motion.button
                                     type="submit"
-                                    className='p-1 px-4 rounded-md bg-secondary font-semibold border-black border hover:bg-white hover:text-black hover:border-black hover:border-2'>
+                                    className='mt-4 px-6 py-2 rounded-md bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-colors duration-300 flex items-center justify-center'
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    <FaSave className="mr-2" />
                                     SAVE
-                                </button>
+                                </motion.button>
                             </div>
-
                         )}
-
-                    </div>
+                    </motion.div>
                 </form>
-
-            )
-            }
-        </div >
+            )}
+        </motion.div>
     );
 };
 

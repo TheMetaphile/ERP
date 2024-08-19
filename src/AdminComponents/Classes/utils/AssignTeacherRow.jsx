@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
+import { FaChevronUp, FaChevronDown ,FaUserGraduate } from "react-icons/fa6";
 import AuthContext from '../../../Context/AuthContext';
 import Loading from './../../../LoadingScreen/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { BASE_URL_Login, BASE_URL_ClassTeacher } from '../../../Config';
-import { MdEdit, MdDeleteForever, MdCheck, MdCancel } from "react-icons/md";
-
+import { MdEdit, MdDeleteForever, MdCheck, MdCancel,MdAdd  } from "react-icons/md";
+import { motion, AnimatePresence } from 'framer-motion'; 
 export default function AssignTeacherRow({ Class }) {
     const [expanded, setExpanded] = useState(false);
     const [sectionsDetails, setSections] = useState([]);
@@ -211,61 +211,76 @@ export default function AssignTeacherRow({ Class }) {
     };
 
     return (
-        <div key={Class} className=" w-full mb-4 rounded-lg mt-2 shadow-md border" >
-            <div className="flex justify-between items-center p-2  hover:cursor-pointer" onClick={handleClick}>
-                <div className="w-1/4">
-                    <div className="px-3 py-2 whitespace-nowrap">
-                        {Class}
-                    </div>
+        <motion.div 
+            key={Class} 
+            className="w-full mb-4 rounded-lg mt-2 shadow-md border border-secondary-200 overflow-hidden"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            transition={{ duration: 0.3 }}
+        >
+            <motion.div 
+                className="flex justify-between items-center p-3 bg-secondary-100 hover:bg-secondary-200 cursor-pointer" 
+                onClick={handleClick}
+        
+            >
+                <div className="flex items-center">
+                    <FaUserGraduate className="text-secondary-600 mr-2" />
+                    <div className="text-lg font-semibold text-secondary-800">{Class}</div>
                 </div>
-                <div className="self-center cursor-pointer" >
-                    {expanded ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-            </div>
-
-            {expanded && (
-                <div className='mx-3 border border-black rounded-lg mb-2 overflow-auto'>
-                    <div className="flex justify-between w-full py-2 pl-2 bg-bg_blue h-fit  ">
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm mobile:max-tablet:flex-1">
-                            Section
-                        </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm mobile:max-tablet:flex-1">
-                            Class Teacher
-                        </h1>
-                        <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm mobile:max-tablet:flex-1 mobile:max-tablet:text-center">
-                            Action
-                        </h1>
-                    </div>
-                    {!loading ?
-                        sectionsDetails.length > 0 ?
-                            (
-                                <div className=''>
+                <motion.div 
+                    animate={{ rotate: expanded ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    {expanded ? <FaChevronUp className="text-secondary-600" /> : <FaChevronDown className="text-secondary-600" />}
+                </motion.div>
+            </motion.div>
+    
+            <AnimatePresence>
+                {expanded && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className='mx-3 border border-secondary-300 rounded-lg mb-2 mt-3 overflow-hidden'
+                    >
+                        <div className="flex justify-between w-full py-2 pl-2 bg-secondary-600 text-white">
+                            <h1 className="w-36 text-lg font-medium">Section</h1>
+                            <h1 className="w-36 text-lg font-medium">Class Teacher</h1>
+                            <h1 className="w-36 text-lg font-medium text-center">Action</h1>
+                        </div>
+                        
+                        {!loading ? (
+                            sectionsDetails.length > 0 ? (
+                                <div>
                                     {sectionsDetails.map((details, index) => (
-                                        <div key={index} className={`flex justify-between w-full py-2 px-2  h-fit border ${index === sectionsDetails.length - 1 && !showNewRow ? "rounded-b-lg" : ""}`}>
-                                            <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
-                                                {details.section}
-                                            </h1>
+                                        <motion.div 
+                                            key={index} 
+                                            className={`flex justify-between w-full py-2 px-2 h-fit border-b border-secondary-200 ${index % 2 === 0 ? 'bg-secondary-50' : 'bg-white'}`}
+                                            initial={{ opacity: 0, y: -20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: index * 0.1 }}
+                                        >
+                                            <h1 className="w-36 text-lg font-medium text-secondary-800">{details.section}</h1>
                                             <div className='relative'>
                                                 {editingRow === index ? (
                                                     <input
                                                         type="text"
-                                                        className="w-36 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap"
+                                                        className="w-36 px-2 border border-secondary-300 rounded-lg text-lg font-medium"
                                                         placeholder="Teacher"
                                                         value={email}
                                                         onChange={handleEmailChange}
                                                         required
                                                     />
                                                 ) : (
-                                                    <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                        {details.name}
-                                                    </h1>
+                                                    <h1 className="w-36 text-lg font-medium text-secondary-700">{details.name}</h1>
                                                 )}
                                                 {showSuggestions && suggestions.length > 0 && (
-                                                    <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                                    <ul className="absolute z-10 w-72 bg-white border border-secondary-300 rounded-md mt-1 max-h-40 overflow-y-auto">
                                                         {suggestions.map((suggest, idx) => (
                                                             <li
                                                                 key={idx}
-                                                                className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                                                className="flex items-center p-2 cursor-pointer hover:bg-secondary-100"
                                                                 onClick={() => handleSuggestionClick(suggest)}
                                                             >
                                                                 <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
@@ -275,51 +290,81 @@ export default function AssignTeacherRow({ Class }) {
                                                     </ul>
                                                 )}
                                             </div>
-                                            <div className='w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'>
+                                            <div className='w-36 text-lg font-medium flex justify-center'>
                                                 {editingRow === index ? (
-                                                    <div className='flex items-center gap-1'>
-                                                        <button className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleConfirmClick(index)}><MdCheck /></button>
-                                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md' onClick={handleCancelEdit}><MdCancel /></button>
-
+                                                    <div className='flex items-center gap-2'>
+                                                        <motion.button 
+                                                            whileHover={{ scale: 1.1 }} 
+                                                            whileTap={{ scale: 0.9 }}
+                                                            className='bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center' 
+                                                            onClick={() => handleConfirmClick(index)}
+                                                        >
+                                                            <MdCheck />
+                                                        </motion.button>
+                                                        <motion.button 
+                                                            whileHover={{ scale: 1.1 }} 
+                                                            whileTap={{ scale: 0.9 }}
+                                                            className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md' 
+                                                            onClick={handleCancelEdit}
+                                                        >
+                                                            <MdCancel />
+                                                        </motion.button>
                                                     </div>
                                                 ) : (
-                                                    <div className='flex items-center gap-1'>
-                                                        <button className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleUpdateClick(index)}> <MdEdit /></button>
-                                                        <button className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index, details.section)}><MdDeleteForever /></button>
+                                                    <div className='flex items-center gap-2'>
+                                                        <motion.button 
+                                                            whileHover={{ scale: 1.1 }} 
+                                                            whileTap={{ scale: 0.9 }}
+                                                            className='bg-secondary-500 hover:bg-secondary-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center' 
+                                                            onClick={() => handleUpdateClick(index)}
+                                                        >
+                                                            <MdEdit />
+                                                        </motion.button>
+                                                        <motion.button 
+                                                            whileHover={{ scale: 1.1 }} 
+                                                            whileTap={{ scale: 0.9 }}
+                                                            className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center' 
+                                                            onClick={() => handleDelete(index, details.section)}
+                                                        >
+                                                            <MdDeleteForever />
+                                                        </motion.button>
                                                     </div>
                                                 )}
                                             </div>
-                                        </div>
+                                        </motion.div>
                                     ))}
                                 </div>
+                            ) : (
+                                <div className='text-center py-4 text-secondary-600'>No section added</div>
                             )
-                            :
-                            <div className='text-center'>No section added</div>
-                        :
-                        (
+                        ) : (
                             <Loading />
                         )}
-                    {showNewRow ? (
-                        <div className=' overflow-auto'>
-                            <div className={` flex justify-between w-full py-2 px-4  h-fit border border-black ${sectionsDetails.length > 0 ? "rounded-b-lg" : "rounded-lg"}`}>
-                                <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        
+                        {showNewRow && (
+                            <motion.div 
+                                initial={{ opacity: 0, y: -20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className={`flex justify-between w-full py-2 px-4 h-fit border border-secondary-300 ${sectionsDetails.length > 0 ? "rounded-b-lg" : "rounded-lg"} bg-secondary-50`}
+                            >
+                                <h1 className="w-36 text-lg font-medium text-secondary-800">
                                     {newSection}
                                 </h1>
                                 <div className='relative'>
                                     <input
                                         type="text"
-                                        className="w-36 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap"
+                                        className="w-36 px-2 border border-secondary-300 rounded-lg text-lg font-medium"
                                         placeholder="Teacher"
                                         value={email}
                                         onChange={handleEmailChange}
                                         required
                                     />
                                     {showSuggestions && suggestions.length > 0 && (
-                                        <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                        <ul className="absolute z-10 w-72 bg-white border border-secondary-300 rounded-md mt-1 max-h-40 overflow-y-auto">
                                             {suggestions.map((suggest, idx) => (
                                                 <li
                                                     key={idx}
-                                                    className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                                    className="flex items-center p-2 cursor-pointer hover:bg-secondary-100"
                                                     onClick={() => handleSuggestionClick(suggest)}
                                                 >
                                                     <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
@@ -329,27 +374,43 @@ export default function AssignTeacherRow({ Class }) {
                                         </ul>
                                     )}
                                 </div>
-                                <div className=' mobile:max-tablet:text-xs mobile:max-tablet:flex'>
-                                    <button className=' mobile:max-tablet:px-2 px-4 text-green-400 hover:text-green-700 ' onClick={handleAddSection}>
+                                <div className='flex items-center gap-2'>
+                                    <motion.button 
+                                        whileHover={{ scale: 1.1 }} 
+                                        whileTap={{ scale: 0.9 }}
+                                        className='bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md'
+                                        onClick={handleAddSection}
+                                    >
                                         Save
-                                    </button>
-                                    {" / "}
-                                    <button className=' mobile:max-tablet:text-px-2 px-4  text-red-400 hover:text-red-700' onClick={() => { setShowNewRow(false) }}>
+                                    </motion.button>
+                                    <motion.button 
+                                        whileHover={{ scale: 1.1 }} 
+                                        whileTap={{ scale: 0.9 }}
+                                        className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md'
+                                        onClick={() => setShowNewRow(false)}
+                                    >
                                         Cancel
-                                    </button>
+                                    </motion.button>
                                 </div>
-                            </div>
-                        </div>
-                    ) : (
-                        <div></div>
-                    )}
-                    <div className="flex justify-center w-full px-3 py-1  h-fit ">
-                        <button className='mt-2 px-4 py-2 bg-green-400 hover:bg-green-500 text-white rounded-lg' onClick={() => getNextAsciiValues(sectionsDetails.length > 0 ? sectionsDetails[sectionsDetails.length - 1].section : '@')}>
-                            Add section
-                        </button>
-                    </div>
-                </div>
-            )}
-        </div>
+                            </motion.div>
+                        )}
+                        
+                        <motion.div 
+                            className="flex justify-center w-full px-3 py-3 h-fit bg-secondary-100"
+                            whileHover={{ backgroundColor: '#E9D8FD' }}
+                        >
+                            <motion.button 
+                                className='px-4 py-2 bg-secondary-500 hover:bg-secondary-600 text-white rounded-lg flex items-center'
+                                onClick={() => getNextAsciiValues(sectionsDetails.length > 0 ? sectionsDetails[sectionsDetails.length - 1].section : '@')}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <MdAdd className="mr-2" /> Add section
+                            </motion.button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
     );
 }

@@ -1,6 +1,7 @@
-import Tabs from "./utils/Tabs";
 import React, { useState } from "react";
-// import { useState } from "react";
+import { motion } from "framer-motion";
+import { FaFilter } from "react-icons/fa";
+import Tabs from "./utils/Tabs";
 import Selection from "./utils/Selection";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,41 +15,56 @@ function Planner() {
     console.log(selectedClass, selectedSection, selectedSubject)
 
     return (
-        <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar">
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="overflow-y-auto w-full items-start px-2 no-scrollbar bg-indigo-50"
+        >
             <ToastContainer />
-            <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:pl-1'>
-                <h1 className="text-2xl mobile:max-tablet:text-lg whitespace-nowrap font-medium mb-2">Weekly Plan</h1>
+            <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:pl-1 py-4'>
+                <motion.h1 
+                    initial={{ y: -20 }}
+                    animate={{ y: 0 }}
+                    className="text-3xl mobile:max-tablet:text-2xl whitespace-nowrap font-bold mb-2 text-indigo-700"
+                >
+                    Weekly Plan
+                </motion.h1>
                 <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
-                    <button
-                        className="p-2 border rounded"
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="p-2 border rounded bg-indigo-600 text-white flex items-center"
                         onClick={() => setDropdownVisible(!isDropdownVisible)}
                     >
-                        Filter
-                    </button>
+                        <FaFilter className="mr-2" /> Filter
+                    </motion.button>
                     {isDropdownVisible && (
-                        <div className='flex fixed left-0 right-0 bg-white pt-1 p-4 gap-2 justify-between mobile:max-tablet:flex-col '>
+                        <motion.div 
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className='flex fixed left-0 right-0 bg-white pt-1 p-4 gap-2 justify-between mobile:max-tablet:flex-col shadow-lg'
+                        >
                             <Selection
                                 setClass={setSelectedClass}
                                 setSection={setSelectedSection}
-                                setSubject={setSelectedSubject} />
-                        </div>
+                                setSubject={setSelectedSubject} 
+                            />
+                        </motion.div>
                     )}
                 </div>
 
-
-
-                <div className=" mobile:max-tablet:hidden">
+                <div className="mobile:max-tablet:hidden">
                     <Selection
                         setClass={setSelectedClass}
                         setSection={setSelectedSection}
-                        setSubject={setSelectedSubject} />
+                        setSubject={setSelectedSubject} 
+                    />
                 </div>
             </div>
             <Tabs Class={selectedClass} section={selectedSection} subject={selectedSubject} />
-            {/* <Outlet /> */}
-        </div>
-
+        </motion.div>
     )
 }
 
-export default Planner
+export default Planner;

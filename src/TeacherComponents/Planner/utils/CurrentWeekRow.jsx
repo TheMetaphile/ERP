@@ -4,6 +4,7 @@ import axios from 'axios';
 import { MdCheck, MdCancel, MdOutlineModeEdit } from 'react-icons/md';
 import { BASE_URL_Login } from '../../../Config';
 import { toast } from 'react-toastify';
+import { motion } from 'framer-motion';
 
 function CurrentWeekRow({ details, index, mapId }) {
     const { authState } = useContext(AuthContext);
@@ -24,14 +25,12 @@ function CurrentWeekRow({ details, index, mapId }) {
         try {
             const { description, status } = editedData;
 
-            // API call to update data
             await axios.put(`${BASE_URL_Login}/lessonPlan/update/teacher/${formattedYear}/${mapId}/${id}`, { description, status }, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`,
                 },
             });
 
-            // Directly update local state with new data
             setLocalUserData(prevData => ({
                 ...prevData,
                 description,
@@ -60,75 +59,94 @@ function CurrentWeekRow({ details, index, mapId }) {
         }));
     };
 
-    return (
-        <tr key={index}>
-            <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                {details.date}
-            </td>
+    const rowVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.5 } }
+    };
 
-            <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                {details.chapter}
-            </td>
-            <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                {details.topic}
-            </td>
-            <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                {details.teachingAids}
-            </td>
-            <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
-                {details.Activity}
-            </td>
-            <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
+    return (
+        <motion.tr
+            variants={rowVariants}
+            initial="hidden"
+            animate="visible"
+            className={ 'bg-white'}
+        >
+            <td className='border-y p-4 border-indigo-200'>{details.date}</td>
+            <td className='border-y p-4 border-indigo-200'>{details.chapter}</td>
+            <td className='border-y p-4 border-indigo-200'>{details.topic}</td>
+            <td className='border-y p-4 border-indigo-200'>{details.teachingAids}</td>
+            <td className='border-y p-4 border-indigo-200'>{details.Activity}</td>
+            <td className='border-y p-4 border-indigo-200'>
                 {editMode === index ? (
-                    <>
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="flex flex-col space-y-2"
+                    >
                         <input
                             type="text"
                             name="description"
                             value={editedData.description || ''}
                             onChange={handleInputChange}
-                            className="border border-gray-300 rounded-lg p-2"
+                            className="border border-indigo-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                             placeholder="Description"
                         />
                         <select
                             name="status"
                             value={editedData.status || ''}
                             onChange={handleInputChange}
-                            className="p-2 border border-gray-300 rounded-md ml-2"
+                            className="p-2 border border-indigo-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                         >
                             <option value="">Select status</option>
                             <option value="On Time">On Time</option>
                             <option value="Lagging">Lagging</option>
                         </select>
-                        <button
-                            className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                            onClick={() => handleConfirmEdit(index, details._id)}
-                        >
-                            <MdCheck />
-                        </button>
-                        <button
-                            className="bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                            onClick={handleCancelEdit}
-                        >
-                            <MdCancel />
-                        </button>
-                    </>
+                        <div className="flex justify-end space-x-2">
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md"
+                                onClick={() => handleConfirmEdit(index, details._id)}
+                            >
+                                <MdCheck />
+                            </motion.button>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="bg-gray-400 hover:bg-gray-500 text-white px-3 py-1 rounded-lg shadow-md"
+                                onClick={handleCancelEdit}
+                            >
+                                <MdCancel />
+                            </motion.button>
+                        </div>
+                    </motion.div>
                 ) : (
-                    <div className='flex items-center gap-2'>
-                        {localUserData.description ? (
-                            <>  {localUserData.description}, {localUserData.status}</>
-                        ) : (
-                            <>No data available</>
-                        )}
-                        <button
-                            className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
+                    <motion.div 
+                        className='flex items-center justify-between'
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <span className="text-indigo-700">
+                            {localUserData.description ? (
+                                <>  {localUserData.description}, <span className={`font-semibold ${localUserData.status === 'On Time' ? 'text-green-600' : 'text-red-600'}`}>{localUserData.status}</span></>
+                            ) : (
+                                <>No data available</>
+                            )}
+                        </span>
+                        <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
                             onClick={() => handleEditToggle(index, details)}
                         >
                             <MdOutlineModeEdit />
-                        </button>
-                    </div>
+                        </motion.button>
+                    </motion.div>
                 )}
             </td>
-        </tr>
+        </motion.tr>
     );
 }
 
