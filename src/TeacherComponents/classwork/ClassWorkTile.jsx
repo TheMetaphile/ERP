@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { MdEdit, MdDeleteForever, MdCheck } from "react-icons/md";
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_ClassWork } from '../../Config';
 import { toast } from 'react-toastify';
-import { FaTimes } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { IoMdCheckmark, IoMdClose, IoMdCreate, IoMdTrash, IoMdCalendar } from 'react-icons/io';
 
 
 export default function ClassWorkTile({ details, Class, additionalData, selectedSubject }) {
@@ -93,149 +93,154 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
     };
 
     return (
-        <div className="mb-4 mt-3 items-center justify-between">
-            {editedDetails.map((detail, index) => (
-                <div key={index} className='w-full  flex-col border border-gray-200 p-2 rounded-lg shadow-md mt-3'>
-                    <div className="flex mobile:max-tablet:flex-col items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
-                        {editingRow === index ? (
-                            <>
-                                <div className='flex gap-2 items-center w-full'>
-                                    <div className="pl-2 font-medium">Chapter: </div>
+        <div className="mb-4  space-y-4">
+            <AnimatePresence>
+                {editedDetails.map((detail, index) => (
+                    <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
+                        className='bg-white border border-indigo-200 rounded-lg shadow-lg overflow-hidden'
+                    >
+                        <div className='w-full flex-col p-4 space-y-3'>
+                            <motion.div
+                                className="flex flex-col mobile:max-tablet:flex-col items-start justify-between cursor-pointer"
+                                onClick={() => handleClick(index)}
+                                whileHover={{ scale: 1.01 }}
+                            >
+                                {editingRow === index ? (
+                                    <>
+                                        <div className='flex gap-2 items-center w-full'>
+                                            <div className="pl-2 font-medium text-indigo-700">Chapter: </div>
+                                            <input
+                                                className="font-normal border border-indigo-300 shadow-md rounded-lg px-3 py-2 text-justify flex-grow"
+                                                value={detail.chapter}
+                                                onChange={(e) => handleInputChange(index, 'chapter', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className='flex gap-3 items-center w-full mt-2'>
+                                            <div className="pl-2 font-medium text-indigo-700">Subject: </div>
+                                            <input
+                                                className="font-normal border border-indigo-300 shadow-md rounded-lg px-3 py-2 text-justify flex-grow"
+                                                value={detail.subject}
+                                                onChange={(e) => handleInputChange(index, 'subject', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className='flex gap-3 items-center w-full mt-2'>
+                                            <div className="pl-2 font-medium text-indigo-700">Topic: </div>
+                                            <input
+                                                className="font-normal border border-indigo-300 shadow-md rounded-lg px-3 py-2 text-justify flex-grow"
+                                                value={detail.topic}
+                                                onChange={(e) => handleInputChange(index, 'topic', e.target.value)}
+                                            />
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className='flex flex-col w-full space-y-2'>
+                                            <div className='flex justify-between items-center'>
+                                                <div className="pl-2 font-medium text-indigo-700">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
 
-                                    <input
-                                        className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                        value={detail.chapter}
-                                        onChange={(e) => handleInputChange(index, 'chapter', e.target.value)}
-                                    />
-                                </div>
-                                {/* <div className='flex gap-2 justify-end'> */}
-                                {/* <button
-                                        className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                        onClick={() => handleConfirmClick(index)}
-                                    >
-                                        <MdCheck />
-                                    </button>
-                                    <button
-                                        className='bg-red-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                        onClick={() => handleUpdateClick(-1)}
-                                    >
-                                        <FaTimes />
-                                    </button> */}
-                                <div className='flex gap-3 items-center w-full mt-2'>
-                                    <div className="pl-2 font-medium">Subject: </div>
-                                    <input
-                                        className="font-normal  border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                        value={detail.subject}
-                                        onChange={(e) => handleInputChange(index, 'subject', e.target.value)}
-                                    />
-                                </div>
-                                {/* </div> */}
-
-
-                            </>
-                        ) : (
-                            <>
-                                <div className='flex gap-2 items-center justify-between w-full'>
-                                    <div className="pl-2 font-medium">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
-                                    {/* <div className='flex items-center gap-1'> */}
-
-                                    {/* <button
-                                        className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                        onClick={() => handleUpdateClick(index)}
-                                    >
-                                        <MdEdit />
-                                    </button>
-
-                                    <button
-                                        className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                        onClick={() => handleDelete(index)}
-                                    >
-                                        <MdDeleteForever />
-                                    </button> */}
-                                    <div className="px-3 py-1 bg-bg_blue rounded-full w-fit">
-
-                                        {detail.subject}
-
-                                    </div>
-                                    {/* </div> */}
-
-                                </div>
-
-                            </>
-                        )}
-
-                    </div>
-                    <div>
-                        {editingRow === index ? (
-                            <div className="flex flex-col">
-                                <div className="pl-2 font-medium">Topic: </div>
-
-                                <input
-                                    className="font-normal my-2 border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                    value={detail.topic}
-                                    onChange={(e) => handleInputChange(index, 'topic', e.target.value)}
-                                />
-                                <div className="pl-2 font-medium">Task: </div>
-
-                                <textarea
-                                    rows={6}
-                                    className="font-normal border border-gray-300 shadow-md rounded-lg px-2 py-1 text-justify"
-                                    value={detail.description}
-                                    onChange={(e) => handleInputChange(index, 'description', e.target.value)}
-                                />
-                            </div>
-                        ) : (
-                            <div>
-                                <div className="pl-2 font-medium text-justify">Topic: <span className='font-normal'>{detail.topic}</span></div>
-                                {expanded === index && (
-                                    <h1 className="pl-2 font-medium text-justify">Task: <span className='font-normal'>{detail.description}</span></h1>
+                                                <motion.div
+                                                    className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full"
+                                                    whileHover={{ scale: 1.05 }}
+                                                >
+                                                    {detail.subject}
+                                                </motion.div>
+                                            </div>
+                                            <div className="pl-2 font-medium text-indigo-700">Topic: <span className='font-normal'>{detail.topic}</span></div>
+                                        </div>
+                                    </>
                                 )}
+                            </motion.div>
+
+                            <AnimatePresence>
+                                {(editingRow === index || expanded === index) && (
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        {editingRow === index ? (
+                                            <div className="flex flex-col space-y-2">
+                                                <div className="font-medium text-indigo-700">Task: </div>
+                                                <textarea
+                                                    rows={6}
+                                                    className="font-normal border border-indigo-300 shadow-md rounded-lg px-3 py-2 text-justify resize-none"
+                                                    value={detail.description}
+                                                    onChange={(e) => handleInputChange(index, 'description', e.target.value)}
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-2">
+                                                <div className="font-medium text-indigo-700">Task: <span className='font-normal'>{detail.description}</span></div>
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
+                            <div className='text-right text-indigo-500 font-medium'>
+                                <span className='flex items-center space-x-2 justify-end'><IoMdCalendar /> {detail.date}</span>
                             </div>
-                        )}
 
-                    </div>
-                    <div className='text-right'>
-                        <h1 className="font-medium">Date: {detail.date}</h1>
-                    </div>
-                    <div className='mt-2'>
-                        {editingRow === index ? (
-                            <div className='flex gap-2 justify-end'>
-                                <button
-                                    className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                    onClick={() => handleConfirmClick(index)}
-                                >
-                                    <MdCheck />
-                                </button>
-                                <button
-                                    className='bg-red-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                    onClick={() => handleUpdateClick(-1)}
-                                >
-                                    <FaTimes />
-                                </button>
-                            </div>
-                        ) : (
-                            <div className='flex items-center gap-1 justify-end'>
-                                <button
-                                    className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                    onClick={() => handleUpdateClick(index)}
-                                >
-                                    <MdEdit />
-                                </button>
-
-                                <button
-                                    className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                    onClick={() => handleDelete(index)}
-                                >
-                                    <MdDeleteForever />
-                                </button>
-                            </div>
-                        )}
-                    </div>
-
-
-                </div>
-            ))}
-
+                            <motion.div
+                                className='px-4 py-2 bg-indigo-50 flex justify-end space-x-2'
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.2 }}
+                            >
+                                {editingRow === index ? (
+                                    <>
+                                        <motion.button
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md flex items-center space-x-2"
+                                            onClick={() => handleConfirmClick(index)}
+                                        >
+                                            <IoMdCheckmark className="text-xl" />
+                                            <span>Save</span>
+                                        </motion.button>
+                                        <motion.button
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md flex items-center space-x-2"
+                                            onClick={() => handleUpdateClick(-1)}
+                                        >
+                                            <IoMdClose className="text-xl" />
+                                            <span>Cancel</span>
+                                        </motion.button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <motion.button
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="bg-indigo-500 text-white px-4 py-2 rounded-md shadow-md flex items-center space-x-2"
+                                            onClick={() => handleUpdateClick(index)}
+                                        >
+                                            <IoMdCreate className="text-xl" />
+                                            <span>Edit</span>
+                                        </motion.button>
+                                        <motion.button
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md flex items-center space-x-2"
+                                            onClick={() => handleDelete(index)}
+                                        >
+                                            <IoMdTrash className="text-xl" />
+                                            <span>Delete</span>
+                                        </motion.button>
+                                    </>
+                                )}
+                            </motion.div>
+                        </div>
+                    </motion.div>
+                ))}
+            </AnimatePresence>
         </div>
     )
 }

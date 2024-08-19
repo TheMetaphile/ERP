@@ -5,6 +5,9 @@ import axios from 'axios';
 import Loading from '../../../LoadingScreen/Loading'
 import { toast } from 'react-toastify';
 import HistoryTile from './HistoryTile';
+import { motion } from 'framer-motion';
+import { FaHistory, FaChevronDown } from 'react-icons/fa';
+import { MdRefresh } from 'react-icons/md';
 
 function History({ additionalData }) {
     const { authState } = useContext(AuthContext);
@@ -82,22 +85,72 @@ function History({ additionalData }) {
 
 
     return (
-        <div className=''>
-            <h1 className='text-2xl mobile:max-tablet:text-lg'>Leave History</h1>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className=' mx-auto p-6 bg-indigo-50 '
+        >
+            <motion.div
+                className='flex items-center justify-between mb-6'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+            >
+                <h1 className='text-3xl font-bold text-indigo-700 flex items-center mobile:max-tablet:text-2xl'>
+                    <FaHistory className="mr-2" />
+                    Leave History
+                </h1>
+            </motion.div>
+
             {loading ? (
-                <Loading />
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    <Loading />
+                </motion.div>
             ) : details.length === 0 ? (
-                <>No data available</>
-            ) :
-                (
-                    <>
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-center py-12 text-indigo-600 font-medium"
+                >
+                    No data available
+                </motion.div>
+            ) : (
+                <>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
                         <HistoryTile details={details} />
-                        {!allDataFetched && (
-                            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                        )}
-                    </>
-                )}
-        </div>
+                    </motion.div>
+
+                    {!allDataFetched && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="mt-6 text-center"
+                        >
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition duration-300"
+                                onClick={handleViewMore}
+                            >
+                                View More
+                                <FaChevronDown className="ml-2" />
+                            </motion.button>
+                        </motion.div>
+                    )}
+                </>
+            )}
+        </motion.div>
     )
 }
 

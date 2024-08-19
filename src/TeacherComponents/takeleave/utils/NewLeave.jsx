@@ -4,6 +4,9 @@ import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import Loading from '../../../LoadingScreen/Loading'
 import { toast } from 'react-toastify';
+import { motion } from 'framer-motion';
+import { FiCalendar, FiType, FiMessageSquare } from 'react-icons/fi';
+import { IoClose } from 'react-icons/io5';
 
 function NewLeave({ onClose, onNewLeave }) {
   const { authState } = useContext(AuthContext);
@@ -103,77 +106,115 @@ function NewLeave({ onClose, onNewLeave }) {
 
 
   return (
-    <div className="fixed z-50  inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-      <div className="bg-white mobile:max-tablet:mx-4 rounded-lg p-6 shadow-lg w-96">
-        <h2 className="text-lg font-semibold mb-4">Apply for Leave</h2>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed z-50 inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50"
+    >
+      <motion.div
+        initial={{ scale: 0.9, y: 50 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.9, y: 50 }}
+        className="bg-white rounded-lg p-6 shadow-2xl w-96 max-w-full mx-4"
+      >
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold text-indigo-700">Apply for Leave</h2>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={onClose}
+            className="text-indigo-500 hover:text-indigo-700"
+          >
+            <IoClose size={24} />
+          </motion.button>
+        </div>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">From Date</label>
-            <input
-              type="date"
-              value={fromDate}
-              min={getTodayDate()}
-              onChange={handleFromDateChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
+          <div className="space-y-4">
+            <div>
+              <label className="block text-indigo-700 mb-2 font-medium">From Date</label>
+              <div className="relative">
+                <FiCalendar className="absolute top-3 left-3 text-indigo-500" />
+                <input
+                  type="date"
+                  value={fromDate}
+                  min={getTodayDate()}
+                  onChange={handleFromDateChange}
+                  className="w-full pl-10 pr-3 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-indigo-700 mb-2 font-medium">To Date</label>
+              <div className="relative">
+                <FiCalendar className="absolute top-3 left-3 text-indigo-500" />
+                <input
+                  type="date"
+                  value={toDate}
+                  min={getTodayDate()}
+                  onChange={handleToDateChange}
+                  className="w-full pl-10 pr-3 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-indigo-700 mb-2 font-medium">Choose Leave Type</label>
+              <div className="relative">
+                <FiType className="absolute top-3 left-3 text-indigo-500" />
+                <select
+                  value={leaveType}
+                  onChange={handleLeaveTypeChange}
+                  className="w-full pl-10 pr-3 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none"
+                  required
+                >
+                  <option value="">Select Type</option>
+                  <option value="Medical Leave">Medical Leave (ML)</option>
+                  <option value="Casual Leave">Casual Leave (CL)</option>
+                  <option value="Complementry Off">Complementry Off (CO)</option>
+                  <option value="Duty Leave">Duty Leave (DL)</option>
+                  <option value="Restricted">Restricted (RH)</option>
+                  <option value="Maternity">Maternity (MTR)</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="block text-indigo-700 mb-2 font-medium">Reason</label>
+              <div className="relative">
+                <FiMessageSquare className="absolute top-3 left-3 text-indigo-500" />
+                <textarea
+                  value={reason}
+                  onChange={handleReasonChange}
+                  className="w-full pl-10 pr-3 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  rows={3}
+                  required
+                ></textarea>
+              </div>
+            </div>
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">To Date</label>
-            <input
-              type="date"
-              value={toDate}
-              min={getTodayDate()}
-              onChange={handleToDateChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Choose Leave Type</label>
-            <select
-              value={leaveType}
-              onChange={handleLeaveTypeChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            >
-              <option value="">Select Type</option>
-              <option value="Medical Leave">Medical Leave (ML)</option>
-              <option value="Casual Leave">Casual Leave (CL)</option>
-              <option value="Complementry Off">Complementry Off(CO)</option>
-              <option value="Duty Leave">Duty Leave (DL)</option>
-              <option value="Restricted">Restricted (RH)</option>
-              <option value="Maternity">Maternity (MTR)</option>
-
-            </select>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Reason</label>
-            <textarea
-              value={reason}
-              onChange={handleReasonChange}
-              className="w-full px-3 py-2 border rounded-md"
-              required
-            ></textarea>
-          </div>
-          <div className="flex justify-end">
-            <button
+          <div className="flex justify-end mt-6 space-x-3">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               type="button"
-              className="bg-gray-300 mobile:max-tablet:text-sm mobile:max-tablet:px-2 mobile:max-tablet:py-1 text-gray-700 px-4 py-2 rounded-md mr-2 hover:bg-gray-500"
+              className="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-md hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
               onClick={onClose}
             >
               Cancel
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               type="submit"
-              className="bg-blue-500 mobile:max-tablet:text-sm mobile:max-tablet:px-2 mobile:max-tablet:py-1 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
             >
               {loading ? <Loading /> : 'Submit'}
-            </button>
+            </motion.button>
           </div>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 

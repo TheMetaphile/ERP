@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import ProgressCard from "../../../components/assignment_report/utils/progressCard"
-import axios from "axios"
-import AuthContext from "../../../Context/AuthContext"
-import Loading from "../../../LoadingScreen/Loading"
-import { BASE_URL_TeacherLeave } from "../../../Config"
-import Doughnut from "../../../components/Home/utils/AttendanceCard/PieChart";
+import axios from "axios";
+import { motion } from "framer-motion";
+import { FaChartBar, FaSpinner } from "react-icons/fa";
+import AuthContext from "../../../Context/AuthContext";
+import { BASE_URL_TeacherLeave } from "../../../Config";
 import DoughnutSecond from "./DoughnutSecond";
 
 export default function Progress() {
@@ -25,20 +24,12 @@ export default function Progress() {
     }
 
     const chartData = {
-        labels: [
-            'Accepted',
-            'Rejected',
-            'Pending'
-        ],
+        labels: ['Accepted', 'Rejected', 'Pending'],
         datasets: [{
             label: 'Attendance',
             data: [details.accepted, details.rejected, details.pending],
-            backgroundColor: [
-                '#EB3232',
-                '#7BD850',
-                '#F8EE00'
-            ],
-            bg: ['text-red-600', 'text-green-600', 'text-yellow-400'],
+            backgroundColor: ['#4F46E5', '#EF4444', '#FBBF24'],
+            bg: ['text-indigo-600', 'text-red-600', 'text-yellow-500'],
             hoverOffset: 4,
             cutout: "80%",
             borderRadius: 60,
@@ -47,28 +38,12 @@ export default function Progress() {
     };
 
     const chartData2 = {
-        labels: [
-            'Casual',
-            'Complimentry',
-            'Duty',
-            'Earned',
-            'Maternity',
-            'Medical',
-            'Restricted'
-        ],
+        labels: ['Casual', 'Complimentry', 'Duty', 'Earned', 'Maternity', 'Medical', 'Restricted'],
         datasets: [{
             label: 'Attendance',
             data: [details.casual, details.complimentary, details.duty, details.earned, details.maternity, details.medical, details.restricted],
-            backgroundColor: [
-                '#EB3232',
-                '#7BD850',
-                '#F8EE00',
-                '#ffce8a',
-                '#76c6f5',
-                '#de98fa',
-                '#fc8beb'
-            ],
-            bg: ['text-red-600', 'text-green-600', 'text-yellow-400', 'text-orange-300', 'text-blue-400', 'text-purple-400', 'text-pink-400'],
+            backgroundColor: ['#4F46E5', '#10B981', '#FBBF24', '#F97316', '#3B82F6', '#8B5CF6', '#EC4899'],
+            bg: ['text-indigo-600', 'text-green-600', 'text-yellow-500', 'text-orange-500', 'text-blue-500', 'text-purple-500', 'text-pink-500'],
             hoverOffset: 4,
             cutout: "80%",
             borderRadius: 60,
@@ -78,7 +53,6 @@ export default function Progress() {
 
     useEffect(() => {
         const fetchStats = async () => {
-            console.log(getCurrentSession());
             setLoading(true);
             try {
                 const response = await axios.get(`${BASE_URL_TeacherLeave}/teacherleave/fetch/stats?session=${getCurrentSession()}`, {
@@ -87,74 +61,41 @@ export default function Progress() {
                     }
                 });
                 setDetails(response.data);
-                console.log('fetch', response.data)
             } catch (error) {
                 console.error("Error fetching teacher stats:", error);
-            }
-            finally {
-                setLoading(false)
+            } finally {
+                setLoading(false);
             }
         };
         fetchStats();
     }, [authState.accessToken]);
 
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 mobile:max-tablet:mx-0  items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar">
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col px-3 mobile:max-tablet:px-0 mobile:max-tablet:mx-0 items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar"
+        >
             {loading ? (
-                <Loading />
+                <div className="flex items-center justify-center w-full h-72">
+                    <FaSpinner className="animate-spin text-4xl text-indigo-600" />
+                </div>
             ) : (
-                <div className=" flex mobile:max-tablet:flex-col items-center gap-3 w-full py-2 mobile:max-laptop:gap-3  justify-start overflow-auto">
-                    <div className=" tablet:flex-1 h-72 mobile:max-tablet:text-lg  mobile:max-tablet:w-full ">
+                <motion.div
+                    initial={{ y: 20 }}
+                    animate={{ y: 0 }}
+                    transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
+                    className="flex mobile:max-tablet:flex-col items-center gap-6 w-full py-4 mobile:max-laptop:gap-6 justify-start overflow-auto"
+                >
+                    <div className="tablet:flex-1 h-80 mobile:max-tablet:text-lg mobile:max-tablet:w-full">
                         <DoughnutSecond chartData={chartData} title='Leave Status' />
                     </div>
-
-                    <div className="tablet:flex-1 h-72 mobile:max-tablet:text-lg  w-full ">
-                        <DoughnutSecond chartData={chartData2} title='Leave Status' />
+                    <div className="tablet:flex-1 h-80 mobile:max-tablet:text-lg w-full">
+                        <DoughnutSecond chartData={chartData2} title='Leave Types' />
                     </div>
-
-
-                    {/* <ProgressCard
-                        title={`Leave Balance`}
-                        percent='40'
-                        centerText='05'
-                        trailColor='#c8ccc9'
-                        strokeColor='#7dc5f5'
-                    />
-                    <ProgressCard
-                        title={`Casual Leave`}
-                        percent='60'
-                        centerText='2'
-                        trailColor='#c8ccc9'
-                        strokeColor='#2196F3'
-                    />
-                    <ProgressCard
-                        title={`Medical Leave`}
-                        percent='70'
-                        centerText='4'
-                        trailColor='#c8ccc9'
-                        strokeColor='#fa70fa'
-                    />
-                    <ProgressCard
-                        title={`Annual Leave`}
-                        percent='70'
-                        centerText='7'
-                        trailColor='#c8ccc9'
-                        strokeColor='#ffb259'
-                    />
-                    <ProgressCard
-                        title={`Unpaid Leave`}
-                        percent='70'
-                        centerText='0'
-                        trailColor='#c8ccc9'
-                        strokeColor='#9100ec'
-                    /> */}
-
-                </div>
-            )
-            }
-
-
-        </div >
-
-    )
+                </motion.div>
+            )}
+        </motion.div>
+    );
 }

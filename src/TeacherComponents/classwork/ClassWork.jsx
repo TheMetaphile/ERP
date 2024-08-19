@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import ClassWorkTile from './ClassWorkTile';
-import Upload from "../../assets/upload.png"
 import NewUpload from './NewUpload';
 import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
@@ -8,6 +7,8 @@ import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL_ClassWork } from "../../Config";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiFilter, FiUpload, FiBook, FiUsers, FiLayers } from 'react-icons/fi';
 
 function ClassWork() {
     const { authState } = useContext(AuthContext);
@@ -45,9 +46,9 @@ function ClassWork() {
     }, [selectedSection, selectedClass]);
 
     const handleOpen = () => {
-        if(!authState.subject ) {toast.error("No subject is assigned. Please contact Admin");return ;}
+        if (!authState.subject) { toast.error("No subject is assigned. Please contact Admin"); return; }
         setIsDialogOpen(true);
-        
+
     }
     const handleClose = () => {
         setIsDialogOpen(false);
@@ -89,7 +90,7 @@ function ClassWork() {
 
 
     const fetchClassWork = async () => {
-        if(!selectedClass || !selectedSection || !selectedSubject ) return ;
+        if (!selectedClass || !selectedSection || !selectedSubject) return;
 
         console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
         setLoading(true);
@@ -118,93 +119,144 @@ function ClassWork() {
 
     const [isDropdownVisible, setDropdownVisible] = useState(false);
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.5 } }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: { y: 0, opacity: 1, transition: { duration: 0.5 } }
+    };
+
 
     return (
-        <div className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-laptop:">
+        <motion.div
+            className="w-full flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-laptop:"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
             <ToastContainer />
-            <div className='w-full flex items-center justify-between tablet:max-laptop:flex-col tablet:max-laptop:items-start mobile:max-tablet:px-3'>
-                <h1 className='text-2xl mobile:max-tablet:text-lg whitespace-nowrap'>All ClassWork</h1>
-                <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
-                    <button
-                        className="p-2 border rounded"
-                        onClick={() => setDropdownVisible(!isDropdownVisible)}
-                    >
-                        Filter
-                    </button>
-                    {isDropdownVisible && (
+            <motion.div
+                className='w-full flex items-center justify-between tablet:max-laptop:flex-col tablet:max-laptop:items-start mobile:max-tablet:px-3 mb-6'
+                variants={itemVariants}
+            >
+                <h1 className='text-3xl font-bold text-indigo-700 mobile:max-tablet:text-2xl whitespace-nowrap'>All ClassWork</h1>
 
-                        <div className='flex absolute left-0 right-0 bg-white p-2 items-center gap-2 flex-col'>
-                            <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange} >
-                                <option value=""> Class</option>
+                <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
+                    <motion.button
+                        className="p-2 border rounded-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition-colors duration-300"
+                        onClick={() => setDropdownVisible(!isDropdownVisible)}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <FiFilter className="inline-block mr-2" />
+                        Filter
+                    </motion.button>
+                    <AnimatePresence>
+                        {isDropdownVisible && (
+                            <motion.div
+                                className='flex absolute left-0 right-0 bg-white p-4 items-center gap-3 flex-col shadow-lg rounded-md'
+                                initial={{ opacity: 0, y: -20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                            >
+                                <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange}>
+                                    <option value="">Class</option>
+                                    {uniqueClasses.map((classOption, index) => (
+                                        <option key={index} value={classOption}>{classOption}</option>
+                                    ))}
+                                </select>
+                                <select id="section" className="w-full px-4 py-2 border rounded-md" onChange={handleSectionChange}>
+                                    <option value="">Section</option>
+                                    {uniqueSections.map((sectionOption, index) => (
+                                        <option key={index} value={sectionOption}>{sectionOption}</option>
+                                    ))}
+                                </select>
+                                <select id="subject" className="w-full px-4 py-2 border rounded-md" onChange={handleSubjectChange}>
+                                    <option value="">Subject</option>
+                                    {uniqueSubjects.map((subjectOption, index) => (
+                                        <option key={index} value={subjectOption}>{subjectOption}</option>
+                                    ))}
+                                </select>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                <div className="flex items-center space-x-4 mt-3">
+                    <div className='flex mobile:max-tablet:hidden items-center gap-3'>
+                        <div className="relative">
+                            <FiBook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500" />
+                            <select id="class" className="w-full pl-10 pr-4 py-2 border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent rounded-md" onChange={handleClassChange}>
+                                <option value="">Class</option>
                                 {uniqueClasses.map((classOption, index) => (
                                     <option key={index} value={classOption}>{classOption}</option>
                                 ))}
                             </select>
-                            <select id="section" className="w-full px-4 py-2 border rounded-md" onChange={handleSectionChange}>
-                                <option value=""> Section</option>
+                        </div>
+                        <div className="relative">
+                            <FiUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500" />
+                            <select id="section" className="w-full pl-10 pr-4 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" onChange={handleSectionChange}>
+                                <option value="">Section</option>
                                 {uniqueSections.map((sectionOption, index) => (
                                     <option key={index} value={sectionOption}>{sectionOption}</option>
                                 ))}
                             </select>
-
-                            <select id="subject" className="w-full px-4 py-2 border rounded-md" onChange={handleSubjectChange}>
-                                <option value=""> Subject</option>
+                        </div>
+                        <div className="relative">
+                            <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500" />
+                            <select id="subject" className="w-full pl-10 pr-4 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" onChange={handleSubjectChange}>
+                                <option value="">Subject</option>
                                 {uniqueSubjects.map((subjectOption, index) => (
                                     <option key={index} value={subjectOption}>{subjectOption}</option>
                                 ))}
                             </select>
-
                         </div>
+                    </div>
+                    <motion.button
+                        className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300 flex items-center"
+                        onClick={handleOpen}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <FiUpload className="mr-2" />
+                        Upload
+                    </motion.button>
+                </div>
+            </motion.div>
+
+            {loading ? (
+                <Loading />
+            ) : details.length === 0 ? (
+                <motion.div
+                    className="text-center w-full mt-6 text-indigo-600"
+                    variants={itemVariants}
+                >
+                    No Classwork found
+                </motion.div>
+            ) : (
+                <motion.div
+                    className='w-full mt-2 rounded-lg  px-2'
+                    variants={containerVariants}
+                >
+                    <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
+                    {!allDataFetched && (
+                        <motion.button
+                            className='text-indigo-500 hover:text-indigo-800 mt-3 cursor-pointer text-center w-full'
+                            onClick={handleViewMore}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            View More
+                        </motion.button>
                     )}
-
-
-                </div>
-                <div className=" flex">
-                    <div className='flex mobile:max-tablet:hidden items-center gap-2'>
-                        <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange} >
-                            <option value=""> Class</option>
-                            {uniqueClasses.map((classOption, index) => (
-                                <option key={index} value={classOption}>{classOption}</option>
-                            ))}
-                        </select>
-                        <select id="section" className="w-full px-4 py-2 border rounded-md" onChange={handleSectionChange}>
-                            <option value=""> Section</option>
-                            {uniqueSections.map((sectionOption, index) => (
-                                <option key={index} value={sectionOption}>{sectionOption}</option>
-                            ))}
-                        </select>
-
-                        <select id="subject" className="w-full px-4 py-2 border rounded-md" onChange={handleSubjectChange}>
-                            <option value=""> Subject</option>
-                            {uniqueSubjects.map((subjectOption, index) => (
-                                <option key={index} value={subjectOption}>{subjectOption}</option>
-                            ))}
-                        </select>
-
-                    </div>
-                    <div>
-                        <h1 className="bg-purple-300 px-2 py-2 ml-2 rounded-md cursor-pointer" onClick={handleOpen}>Upload</h1>
-                    </div>
-                </div>
-
-            </div>
-            {
-                loading ? (
-                    <Loading />
-                ) : details.length === 0 ? (
-                    <div className="text-center w-full mt-6">No Classwork found</div>
-                ) : (
-                    <div className='w-full mt-2 rounded-lg mb px-2'>
-                        <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
-                        {!allDataFetched && (
-                            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                        )}
-                    </div>
-                )
-            }
+                </motion.div>
+            )}
 
             {isDialogOpen && <NewUpload onClose={handleClose} onNewWork={handleNewWork} />}
-        </div >
+        </motion.div>
 
     )
 }
