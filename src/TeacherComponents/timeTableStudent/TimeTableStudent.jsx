@@ -164,20 +164,13 @@ export default function TimeTableStudent() {
     };
 
     return (
-        <div className=" flex flex-col w-full  items-start  py-3 px-3">
-            <div className="flex w-full justify-between ">
-                <h1 className="text-2xl mobile:max-tablet:text-lg font-medium">
-                    Time Table
-                </h1>
+        <div className=" flex flex-col w-full  items-start  py-3 px-3 bg-gradient-to-r from-indigo-100 to-indigo-50">
+            <div className="flex w-full justify-between mb-3">
+                <h1 className="text-3xl font-bold text-indigo-800 mb-2"> Time Table</h1>
 
-            </div>
-            <div className="flex justify-between w-full items-center p-3 gap-2">
-                <h1 className="text-xl mobile:max-tablet:text-sm whitespace-nowrap font-medium">
-                    Day-wise Lectures
-                </h1>
                 <select
                     type="text"
-                    className=" px-4 py-2 border rounded-md mobile:max-tablet:text-sm"
+                    className=" px-4 py-2  border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent mobile:max-tablet:text-sm"
                     placeholder="Day"
                     value={day}
                     onChange={handleDayChange}
@@ -193,6 +186,7 @@ export default function TimeTableStudent() {
 
                 </select>
             </div>
+
 
             <div className='w-full rounded-lg border border-gray-400 '>
                 <table className='w-full'>

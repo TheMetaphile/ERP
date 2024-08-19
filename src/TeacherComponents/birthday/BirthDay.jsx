@@ -1,51 +1,62 @@
-
 import React, { useState } from 'react';
 import { Link, Outlet } from "react-router-dom";
+import { motion } from "framer-motion";
+import { FaChalkboardTeacher, FaUserGraduate } from "react-icons/fa";
 
 function BirthDay() {
     const [selectedLink, setSelectedLink] = useState('/Teacher-Dashboard/birthday/student');
-
     const handleLinkSelect = (link) => {
         setSelectedLink(link);
     };
-
-
     return (
-        <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-laptop:">
-            <h1 className='text-3xl font-semibold mobile:max-tablet:text-xl'>Birthday</h1>
-            <div className='  mt-3  w-full'>
-                <div className=" flex items-center justify-between border-b mb-3 ">
-                    <div className=" flex  gap-2 -mb-0.5 ">
-                        {/* <Link
-                            to={'/Teacher-Dashboard/birthday/all'}
-                            className={`text-xl font-medium px-2 border border-gray-300 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/birthday/all' ? 'bg-secondary ' : 'bg-gray-200'}`}
-                            onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/all')}
-                        >
-                            All
-                        </Link> */}
-                        <Link
-                            to={'/Teacher-Dashboard/birthday/teacher'}
-                            className={`text-xl mobile:max-tablet:text-lg font-medium px-2  py-1 ${selectedLink === '/Teacher-Dashboard/birthday/teacher' ? 'text-purple-600 border-b-2 border-purple-600 ' : ' '}`}
-                            onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/teacher')}
-                        >
-                            Teacher
-                        </Link>
-                        <Link
-                            to={'/Teacher-Dashboard/birthday/student'}
-                            className={`text-xl mobile:max-tablet:text-lg font-medium px-2 py-1  ${selectedLink === '/Teacher-Dashboard/birthday/student' ? 'text-purple-600 border-b-2 border-purple-600 ' : ''}`}
-                            onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/student')}
-                        >
-                            Student
-                        </Link>
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-laptop: bg-indigo-50"
+        >
+            <motion.h1 
+                initial={{ y: -20 }}
+                animate={{ y: 0 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className='text-3xl font-semibold mobile:max-tablet:text-xl text-indigo-800'
+            >
+                Birthday Celebrations
+            </motion.h1>
+            <div className='mt-6 w-full'>
+                <div className="flex items-center justify-between mb-3 ">
+                    <div className="flex gap-2 -mb-0.5">
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                            <Link
+                                to={'/Teacher-Dashboard/birthday/teacher'}
+                                className={`text-xl mobile:max-tablet:text-lg font-medium px-4 py-2 rounded-t-lg flex items-center gap-2 transition-colors duration-300 ${selectedLink === '/Teacher-Dashboard/birthday/teacher' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-600'}`}
+                                onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/teacher')}
+                            >
+                                <FaChalkboardTeacher />
+                                Teacher
+                            </Link>
+                        </motion.div>
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                            <Link
+                                to={'/Teacher-Dashboard/birthday/student'}
+                                className={`text-xl mobile:max-tablet:text-lg font-medium px-4 py-2 rounded-t-lg flex items-center gap-2 transition-colors duration-300 ${selectedLink === '/Teacher-Dashboard/birthday/student' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-600'}`}
+                                onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/student')}
+                            >
+                                <FaUserGraduate />
+                                Student
+                            </Link>
+                        </motion.div>
                     </div>
-
-
                 </div>
-                {/* <hr className='border-t-2 bg-slate-500 mt-2 mb-3 ml-3 mr-3' /> */}
-                <Outlet />
-                <br></br>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <Outlet />
+                </motion.div>
             </div>
-        </div>
+        </motion.div>
     )
 }
 

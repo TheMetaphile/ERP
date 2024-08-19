@@ -91,7 +91,7 @@ export default function AnsweredTile({ data }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="w-full mx-auto p-6 bg-indigo-50 rounded-xl shadow-xl"
+            className="w-full mx-auto"
         >
             <motion.div
                 initial={{ y: -20, opacity: 0 }}

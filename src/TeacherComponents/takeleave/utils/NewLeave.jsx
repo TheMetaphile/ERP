@@ -96,14 +96,20 @@ function NewLeave({ onClose, onNewLeave }) {
   };
 
   const getTodayDate = () => {
-    const today = new Date(fromDate);
+    const today = new Date();
     const year = today.getFullYear();
     const month = (today.getMonth() + 1).toString().padStart(2, '0');
     const day = today.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
 
-
+  const getFromDate = () => {
+    const today = new Date(fromDate);
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   return (
     <motion.div
@@ -152,7 +158,7 @@ function NewLeave({ onClose, onNewLeave }) {
                 <input
                   type="date"
                   value={toDate}
-                  min={getTodayDate()}
+                  min={getFromDate()}
                   onChange={handleToDateChange}
                   className="w-full pl-10 pr-3 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   required

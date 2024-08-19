@@ -25,7 +25,7 @@ export default function DoughnutSecond({ chartData, title }) {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col h-full w-full mobile:max-tablet:w-full justify-evenly items-center shadow-lg bg-indigo-100 border border-indigo-300 rounded-lg px-4 py-6"
+      className="flex flex-col h-full w-full mobile:max-tablet:w-full justify-evenly items-center shadow-lg bg-white border border-indigo-300 rounded-lg px-4 py-6"
     >
       <motion.div
         initial={{ y: -20 }}

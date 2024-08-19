@@ -13,7 +13,7 @@ export default function TimetableHeader() {
     return (
 
             <motion.thead 
-                className="bg-gradient-to-r from-teal-400 to-teal-200 text-black rounded-t-lg overflow-hidden"
+                className="bg-gradient-to-r from-indigo-400  to-indigo-200 text-black rounded-t-lg overflow-hidden"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}

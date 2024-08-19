@@ -2,10 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import TeacherTile from './TeacherTile';
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
-import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../../Config";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { motion } from 'framer-motion';
+import { FaSpinner } from 'react-icons/fa';
 
 export default function Teacher() {
     const { authState } = useContext(AuthContext);
@@ -45,7 +46,7 @@ export default function Teacher() {
 
     const fetchNotice = async () => {
         setLoading(true);
-        console.log(start,'start',end,'end')
+        console.log(start, 'start', end, 'end')
         try {
             const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/teacher?start=${start}&limit=${end}&session=${getCurrentSession()}&type=${'for'}`, {
                 headers: {
@@ -74,9 +75,21 @@ export default function Teacher() {
     return (
         <div className='mx-3'>
             {loading ? (
-                <Loading />
+                <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="flex justify-center items-center h-40"
+                >
+                    <FaSpinner className="text-4xl text-indigo-600" />
+                </motion.div>
             ) : details.length === 0 ? (
-                <div className="w-full text-center">No data available</div>
+                <motion.div
+                    initial={{ scale: 0.9 }}
+                    animate={{ scale: 1 }}
+                    className="w-full text-center text-indigo-800 font-semibold py-10"
+                >
+                    No data available
+                </motion.div>
             ) : (
                 <>
                     <TeacherTile details={details} />
@@ -85,10 +98,7 @@ export default function Teacher() {
                     )}
                 </>
             )}
-            {/* <TeacherTile date='March 1,2024' description='Please confirm your email address by clicking on the link we just emailed you. If you cannnot find the email, you can request a new confirmation email or change your email adddress.' by='Principal'/>
-            <TeacherTile date='March 1,2024' description='Please confirm your email address by clicking on the link we just emailed you. If you cannnot find the email, you can request a new confirmation email or change your email adddress.' by='Principal'/>
-            <TeacherTile date='March 1,2024' description='Please confirm your email address by clicking on the link we just emailed you. If you cannnot find the email, you can request a new confirmation email or change your email adddress.' by='Principal'/>
-            <TeacherTile date='March 1,2024' description='Please confirm your email address by clicking on the link we just emailed you. If you cannnot find the email, you can request a new confirmation email or change your email adddress.' by='Principal'/> */}
+
         </div>
     )
 }

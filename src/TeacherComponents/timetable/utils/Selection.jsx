@@ -14,7 +14,7 @@ function Selection({ onSearch, onDayChange }) {
         <div className="w-1/4">
             <select
                 type="text"
-                className="w-full px-4 py-2 border rounded-md"
+                className="w-full px-4 py-2  border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 placeholder="Day"
                 value={day}
                 onChange={handleDayChange}

@@ -186,9 +186,10 @@ function TimeTable() {
     };
 
     return (
-        <div className=" flex w-full flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2  mb-3 no-scrollbar mobile:max-laptop:">
-            <div className='w-full flex justify-between mobile:max-tablet:px-3'>
-                <h1 className=' text-2xl mobile:max-tablet:text-lg'>Time Table</h1>
+        <div className=" flex w-full flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2  mb-3 no-scrollbar ">
+            <div className='w-full items-center flex justify-between mobile:max-tablet:px-3 pt-3'>
+                <h1 className="text-3xl font-bold text-indigo-800 mb-2 ">Time Table</h1>
+
                 <Selection onDayChange={handleDayChange} />
             </div>
 
@@ -217,7 +218,7 @@ function TimeTable() {
                     ) :
                     (
                         <>
-                            <h1 className=' text-2xl mobile:max-tablet:text-lg mb-3'>Today Substitute Time Table</h1>
+                           <h1 className="text-3xl font-bold text-indigo-800 mb-3">Today Substitute Time Table</h1>
 
                             <TableSubstitute
                                 data={subsData}
