@@ -179,6 +179,7 @@ const Promotion = lazy(() => import("./TeacherComponents/StudentPromotion/Promot
 const TeachersTimeTable = lazy(() => import("./AdminComponents/timetable/utils/Teacher/main.jsx"));
 const StudentsTimeTable = lazy(() => import("./AdminComponents/timetable/utils/Student/main.jsx"));
 const UserProfile = lazy(() => import("./components/StudentProfile/Profile.jsx"));
+const TakeLeaveSubAdmin = lazy(() => import("./SubAdminComponent/takeleave/TakeLeaveSubAdmin.jsx"));
 
 
 
@@ -1366,6 +1367,11 @@ const router = createBrowserRouter([
         element: <Suspense fallback={Loading}> <NoticeSubAdmin /> </Suspense>
         ,
         children: []
+      },
+      {
+        path: '/Sub-Admin/TakeLeave',
+        element: <Suspense fallback={Loading}>
+          <TakeLeaveSubAdmin /></Suspense>
       },
     ]
   }

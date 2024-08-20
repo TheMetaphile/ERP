@@ -109,7 +109,7 @@ function UploadResult() {
         <div className='w-full flex items-center justify-between my-2'>
           <div className='flex-1'>
             <motion.h1
-              className="text-xl font-medium mb-2 mobile:max-tablet:text-lg whitespace-nowrap"
+              className="mb-2 text-3xl font-bold text-indigo-700 mobile:max-tablet:text-2xl whitespace-nowrap"
               whileHover={{ scale: 1.05 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
@@ -152,7 +152,7 @@ function UploadResult() {
           <div className='flex items-end mobile:max-laptop:hidden'>
             <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
             <div className="w-36 mr-3 self-center">
-              <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleTermChange}>
+              <select id="section" className="w-full px-2 py-2 border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent rounded-md" onChange={handleTermChange}>
                 <option value="">Select Term</option>
                 {terms.map((sectionOption, index) => (
                   <option key={index} value={sectionOption.value}>{sectionOption.label}</option>

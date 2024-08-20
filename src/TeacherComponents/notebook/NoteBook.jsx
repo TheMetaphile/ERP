@@ -40,10 +40,11 @@ function NoteBook() {
               initial={{ x: -50 }}
               animate={{ x: 0 }}
               transition={{ type: 'spring', stiffness: 120 }}
-              className="text-2xl font-medium mb-2 mobile:max-tablet:text-lg whitespace-nowrap"
+              className="text-3xl font-bold text-indigo-700 mobile:max-tablet:text-2xl whitespace-nowrap"
             >
               Note Book Record
             </motion.h1>
+            
             <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
               <motion.button
                 whileHover={{ scale: 1.05 }}

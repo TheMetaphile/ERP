@@ -17,8 +17,8 @@ const LeaveCard = () => {
                     onClick={() => selectRole('student')}>Student</button>
                 <button className={`p-2 mx-1 ${selectedRole === 'teacher' ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}
                     onClick={() => selectRole('teacher')}>Teacher</button>
-                {/* <button className={`text-xl border border-gray-300 ${selectedRole === 'employee' ? 'bg-blue-300' : 'bg-gray-200'} rounded-lg px-4`}
-                    onClick={() => selectRole('employee')}>Employee</button> */}
+                <button className={`p-2 mx-1 ${selectedRole === 'employee' ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}
+                    onClick={() => selectRole('employee')}>Employee</button>
             </div>
 
 

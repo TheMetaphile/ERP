@@ -53,16 +53,16 @@ const RecordDetailsHOD = () => {
 
 
   return (
-    <div className=" items-center  px-4 py-1 mb-2">
+    <div className=" items-center w-full  px-4 py-3 mb-2">
       <ToastContainer />
       <div className="flex justify-between">
-        <h1 className="text-xl font-medium mb-2 mobile:max-tablet:text-lg">Pending Notebooks</h1>
+        <h1 className="text-3xl font-bold text-indigo-700 mobile:max-tablet:text-2xl whitespace-nowrap mb-2 ">Pending Notebooks</h1>
 
       </div>
       <div className="w-full overflow-x-auto rounded-lg">
         <table className="min-w-full bg-white border border-gray-300 rounded-lg">
           <thead>
-            <tr className="bg-secondary text-gray-600 text-lg leading-normal">
+            <tr className="bg-gradient-to-r from-indigo-400  to-indigo-200 text-lg leading-normal">
 
               <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Roll No.</th>
               <th className="py-2 px-6 text-center">Name</th>
@@ -94,12 +94,12 @@ const RecordDetailsHOD = () => {
         </table>
       </div>
 
-      <h1 className="text-xl font-medium my-3">Checked Notebooks</h1>
+      <h1 className="text-3xl font-bold text-indigo-700 mobile:max-tablet:text-2xl whitespace-nowrap my-3">Checked Notebooks</h1>
 
       <div className="w-full overflow-x-auto rounded-lg">
         <table className="min-w-full bg-white border border-gray-300 rounded-lg">
           <thead>
-            <tr className="bg-secondary text-gray-600 text-lg leading-normal">
+            <tr className="bg-gradient-to-r from-indigo-400  to-indigo-200 text-lg leading-normal">
 
               <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Roll No.</th>
               <th className="py-2 px-6 text-center">Name</th>

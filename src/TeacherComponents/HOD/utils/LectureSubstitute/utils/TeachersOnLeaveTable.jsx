@@ -40,10 +40,10 @@ export default function ClassTeacherOnLeaveTable() {
     }, [authState])
 
     return (
-        <div className="  rounded-lg overflow-auto">
+        <div className="  rounded-lg overflow-auto pt-3">
             <table className="min-w-fit bg-white border border-gray-300 rounded-lg">
                 <thead>
-                    <tr className="bg-secondary text-gray-600 text-lg">
+                    <tr className="bg-gradient-to-r from-indigo-400  to-indigo-200 text-lg">
                         <th className="py-2 px-6 text-center">Lecture</th>
                         <th className="py-2 px-6 text-center">Date</th>
                         <th className="py-2 px-6 text-center">Class</th>

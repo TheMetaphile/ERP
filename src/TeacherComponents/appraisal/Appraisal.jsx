@@ -5,6 +5,8 @@ import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { motion } from 'framer-motion';
+import { FaClipboardCheck, FaPencilAlt } from 'react-icons/fa';
 
 function Appraisal() {
   const { authState } = useContext(AuthContext);
@@ -17,41 +19,69 @@ function Appraisal() {
 
 
   return (
-    <div className=" flex flex-col px-3 mobile:max-tablet:px-0  items-start mobile:max-tablet:mt-0 mobile:max-tablet:mx-3 mt-2 mb-3">
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="flex flex-col px-6 items-start mt-6 mb-8 mx-auto"
+    >
       <ToastContainer />
-      <h1 className='text-3xl mobile:max-tablet:text-lg'>Appraisal</h1>
-      <div className=' border shadow-md mt-4 rounded-lg w-full '>
-        <div className=" flex   ml-3 mr-3 items-center justify-between">
-          <div className=" flex  gap-2 mt-2">
-            {/* <Link
-                            to={'/Teacher-Dashboard/noticeboard/allnotice'}
-                            className={`text-xl font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/noticeboard/allnotice' ? 'bg-secondary ' : 'bg-gray-300'}`}
-                            onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/allnotice')}
-                        >
-                            All
-                        </Link> */}
-            <Link
-              to={'/Teacher-Dashboard/appraisal/applied'}
-              className={`text-xl mobile:max-tablet:text-sm font-medium px-2 rounded-lg py-1 ${selectedLink === '/Teacher-Dashboard/appraisal/applied' ? 'bg-secondary ' : 'bg-gray-300'}`}
+      <motion.h1
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="text-4xl font-bold text-indigo-700 mb-6"
+      >
+        Appraisal
+      </motion.h1>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.4, duration: 0.5 }}
+        className="border border-indigo-200 shadow-lg rounded-xl w-full overflow-hidden bg-white"
+      >
+        <div className="flex items-center justify-between px-6 py-4 bg-indigo-50">
+          <div className="flex gap-4">
+            <LinkButton
+              to="/Teacher-Dashboard/appraisal/applied"
+              icon={<FaClipboardCheck />}
+              label="Applied"
+              isSelected={selectedLink === '/Teacher-Dashboard/appraisal/applied'}
               onClick={() => handleLinkSelect('/Teacher-Dashboard/appraisal/applied')}
-            >
-              Applied
-            </Link>
-            <Link
-              to={'/Teacher-Dashboard/appraisal/apply'}
-              className={`text-xl mobile:max-tablet:text-sm font-medium px-2 rounded-lg  py-1 ${selectedLink === '/Teacher-Dashboard/appraisal/apply' ? 'bg-secondary ' : 'bg-gray-300'}`}
+            />
+            <LinkButton
+              to="/Teacher-Dashboard/appraisal/apply"
+              icon={<FaPencilAlt />}
+              label="Apply"
+              isSelected={selectedLink === '/Teacher-Dashboard/appraisal/apply'}
               onClick={() => handleLinkSelect('/Teacher-Dashboard/appraisal/apply')}
-            >
-              Apply
-            </Link>
-
+            />
           </div>
         </div>
-        <Outlet />
-        <br></br>
-      </div>
-    </div>
+        <div className="p-6">
+          <Outlet />
+        </div>
+      </motion.div>
+    </motion.div>
+
   )
 }
 
 export default Appraisal
+
+
+const LinkButton = ({ to, icon, label, isSelected, onClick }) => (
+  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+    <Link
+      to={to}
+      className={`flex items-center gap-2 text-lg font-medium px-4 py-2 transition-colors duration-200 ${isSelected
+        ? 'text-indigo-600 border-b-2 border-indigo-600'
+        : 'bg-white text-indigo-600 hover:bg-indigo-100'
+        }`}
+      onClick={onClick}
+    >
+      {icon}
+      {label}
+    </Link>
+  </motion.div>
+);

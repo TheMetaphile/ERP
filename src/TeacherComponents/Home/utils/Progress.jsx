@@ -20,7 +20,7 @@ function Progress() {
 
                 {details.map((detail, index) => (
 
-                    <div key={index} className='mx-3 rounded-lg bg-blue-100 mt-1 flex justify-between items-center mb-2  '>
+                    <div key={index} className='mx-3 rounded-lg bg-indigo-100 mt-1 flex justify-between items-center mb-2  '>
                         <div className='px-6  '>
                             <div className='font- text-xl mobile:max-tablet:text-lg whitespace-nowrap'>Class : {detail.class}</div>
                             <div className='font- text-xl text-gray-500 mobile:max-tablet:text-lg'>{detail.subject}</div>

@@ -20,7 +20,7 @@ const Tabs = ({ selectedTab, onTabChange, Class, Section, Subject }) => {
             key={tab}
             className={`p-2 mx-1 font-medium flex items-center ${
               selectedTab === tab
-                ? "text-purple-600 border-y-2 border-purple-600"
+                ? "text-indigo-600 border-y-2 border-indigo-600"
                 : "text-gray-600"
             }`}
             onClick={() => onTabChange(tab)}

@@ -120,7 +120,7 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
             ) : (
                 <form onSubmit={handleSubmit}>
                     <table className='w-full rounded-md border border-black'>
-                        <thead className='bg-secondary border-b border-black'>
+                        <thead className='bg-gradient-to-r from-indigo-400  to-indigo-200'>
                             <tr className='p-4 text-center'>
                                 <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Date</th>
                                 <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Chapter</th>

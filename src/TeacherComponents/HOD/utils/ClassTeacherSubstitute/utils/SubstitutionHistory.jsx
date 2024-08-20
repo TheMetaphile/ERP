@@ -63,7 +63,7 @@ export default function ClassTeacherSubstitutionHistory() {
         <div className="w-full overflow-x-auto rounded-lg">
             <table className="min-w-full bg-white border border-gray-300 rounded-lg">
                 <thead>
-                    <tr className="bg-secondary text-gray-600 text-lg ">
+                    <tr className="bg-gradient-to-r from-indigo-400  to-indigo-200 text-lg ">
 
                         <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Employee Id</th>
                         <th className="py-2 px-6 ">Name</th>
