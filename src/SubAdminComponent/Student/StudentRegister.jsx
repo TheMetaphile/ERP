@@ -245,7 +245,7 @@ export default function StudentRegister() {
         >
             <ToastContainer />
             <h1
-                className="text-3xl font-bold mb-6 text-center text-purple-700 "
+                className="text-3xl mobile:max-tablet:text-lg font-bold mb-6 text-center text-purple-700 "
 
             >
                 Add New Student

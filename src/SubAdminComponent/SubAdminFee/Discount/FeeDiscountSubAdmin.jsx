@@ -99,39 +99,42 @@ function FeeDiscountSubAdmin() {
     };
 
     return (
-        <div className="flex flex-col px-6 py-8 min-h-screen">
+        <div className="flex flex-col px-6 py-8 min-h-screen mobile:max-tablet:p-2">
             <ToastContainer />
-            <div className='flex justify-between items-center mb-6'>
+            <div className='flex justify-between items-center mb-6 mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
                 <h1 className="text-3xl font-bold text-purple-500 flex items-center mobile:max-tablet:text-lg"><MdSchool className="mr-2" /> Student Fee Discount</h1>
-                <div className='flex gap-4 items-center'>
-                    <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
-                        {session.map((session, index) => (
-                            <option key={index} value={session}>{session}</option>
-                        ))}
-                    </select>
-                    <select id="Class" name="Class" value={selectedClass} onChange={handleClassChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
-                        <option value="">Select Class</option>
-                        {["Pre-Nursery", "Nursery", "L.K.G", "U.K.G", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"].map(cls => (
-                            <option key={cls} value={cls}>{cls}</option>
-                        ))}
-                    </select>
-                    <button className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'}`} onClick={() => setShowDiscountStructure(!showDiscountStructure)}>
+                <div className='flex gap-4 items-center mobile:max-tablet:flex-col'>
+                    <div className=' flex gap-2'>
+                        <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                            {session.map((session, index) => (
+                                <option key={index} value={session}>{session}</option>
+                            ))}
+                        </select>
+                        <select id="Class" name="Class" value={selectedClass} onChange={handleClassChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                            <option value="">Select Class</option>
+                            {["Pre-Nursery", "Nursery", "L.K.G", "U.K.G", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"].map(cls => (
+                                <option key={cls} value={cls}>{cls}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <button className={`flex items-center mobile:max-tablet:justify-start gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'}`} onClick={() => setShowDiscountStructure(!showDiscountStructure)}>
                         {showDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Add</>}
                     </button>
                 </div>
             </div>
             <div className='w-full'>
                 {showDiscountStructure && <CreateDiscount selectedSession={selectedSession} />}
-                <div className='mt-3 bg-white border border-purple-200 rounded-lg shadow-lg overflow-hidden'>
+                <div className='mt-3 bg-white border border-purple-200 rounded-lg shadow-lg overflow-auto'>
                     <table className="w-full">
-                        <thead className="bg-purple-200">
+                        <thead className="bg-purple-200 whitespace-nowrap">
                             <tr>
                                 {["Roll No.", "Student Name", "Current Class", "Session", "Discount", "By", "Employee ID", "Action"].map(header => (
                                     <th key={header} className="py-3 px-4 text-left">{header}</th>
                                 ))}
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className=' whitespace-nowrap'>
                             {loading ? (
                                 <tr><td colSpan="8" className="text-center py-4"><Loading /></td></tr>
                             ) : details.length > 0 ? (

@@ -31,13 +31,12 @@ function FeeStructureSubAdmin() {
 
   return (
     <motion.div
-    initial={{ opacity: 0, x: -20 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ duration: 0.3}}
-      className="min-h-screen p-8 bg-gradient-to-br from-purple-50 to-white"
-    >
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3 }}
+      className="min-h-screen p-2 bg-gradient-to-br from-purple-50 to-white">
       <ToastContainer />
-      <div className='flex justify-between items-center mb-8'>
+      <div className='flex justify-between items-center mb-8 mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
         <PageTitle icon={FaGraduationCap} title="Fee Structure Management" />
         <SessionSelector
           sessions={sessions}
@@ -45,22 +44,20 @@ function FeeStructureSubAdmin() {
           setSelectedSession={setSelectedSession}
         />
       </div>
-     
-        <table className="w-full border-collapse bg-white">
+      <div className=' overflow-auto'>
+        <table className="w-full border-collapse bg-white rounded-lg">
           <Header headings={['Class Group', 'Admission Fee', 'Monthly Fee', 'Quarterly Fee', 'Actions']} />
           <tbody className="divide-y divide-gray-200">
             {content.map((con, index) => (
-              
-                <FeeAdminRow
-                  Class={con.class}
-                  session={selectedSession}
-                  key={index}
-                />
-         
+              <FeeAdminRow
+                Class={con.class}
+                session={selectedSession}
+                key={index}
+              />
             ))}
           </tbody>
         </table>
-      
+      </div>
     </motion.div>
   );
 }

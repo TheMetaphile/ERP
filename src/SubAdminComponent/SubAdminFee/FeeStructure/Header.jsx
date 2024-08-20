@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 function Header({ headings }) {
   return (
-    <thead className="bg-purple-200">
+    <thead className="bg-purple-200 whitespace-nowrap">
       <motion.tr
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

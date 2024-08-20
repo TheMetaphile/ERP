@@ -170,9 +170,8 @@ export default function TeacherRegister() {
       className="mx-4 pt-4 bg-gradient-to-br from-purple-50 to-white rounded-lg shadow-xl p-8 mobile:max-tablet:p-2"
     >
       <ToastContainer />
-      <h1 className="text-3xl font-bold text-purple-700 mb-8 text-center">Add New Teacher</h1>
-
-      <form onSubmit={handleSubmit} className="grid grid-cols-3 mobile:max-tablet:grid-cols-2 gap-6">
+      <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-purple-700 mb-8 text-center">Add New Teacher</h1>
+      <form onSubmit={handleSubmit} className="grid grid-cols-3 mobile:max-tablet:grid-cols-1 gap-6">
         {formFields.map((field, index) => (
           <motion.div
             key={field.name}

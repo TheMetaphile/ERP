@@ -76,7 +76,7 @@ function Salary() {
 
     return (
         <div className="pt-4">
-            <header className="p-4 mobile:max-tablet:p-2 flex justify-between items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start">
+            <header className="p-4 mobile:max-tablet:p-2 flex justify-between items-center ">
                 <div>
                     <h1 className="text-3xl font-semibold mb-2 mobile:max-laptop:text-lg whitespace-nowrap">Welcome {authState.userDetails.name}</h1>
                     <p className="text-sm">{authState.userDetails.department}</p>
@@ -94,7 +94,7 @@ function Salary() {
                         <div className="bell"><GoBell className=" h-9 w-9 mobile:max-tablet:h-4 mobile:max-laptop:w-4 cursor-pointer" /></div>
                         <div className="message"><IoChatbubbleOutline className=" h-9 w-9 mobile:max-tablet:h-4 mobile:max-laptop:w-4 cursor-pointer" /></div>
                     </div> */}
-                    <div className="flex items-center ml-4 mobile:max-tablet:hidden">
+                    <div className="flex items-center ml-4">
                         <div>
                             <img src={profile} alt="profile.jpg" className=" h-10 w-10 rounded mr-2" />
                         </div>

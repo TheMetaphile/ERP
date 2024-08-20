@@ -145,31 +145,33 @@ export default function AllAdmission() {
 
     return (
         <>
-            <div className="flex  pt-6  items-center  bg-white mb-4">
+            <div className="flex pt-4 items-center bg-white mb-4 px-2 ">
                 <ToastContainer />
-                <h1 className="text-2xl font-medium px-2 ">Students Re-admission</h1>
-                <div className="block tablet:hidden">
-                    <button
-                        className="p-2 border rounded"
-                        onClick={() => setDropdownVisible(!isDropdownVisible)}
-                    >
-                        Filter
-                    </button>
-                    {isDropdownVisible && (
-                        <div className="absolute bg-white shadow-lg px-2 rounded mt-2 right-2 left-2 z-20 justify-center flex tablet:w-4/6 py-2">
-                            <SearchBar
-                                rollNumber={rollNumber}
-                                name={name}
-                                Class={Class}
-                                Section={Section}
-                                handleRollNumberChange={handleRollNumberChange}
-                                handleNameChange={handleNameChange}
-                                // handleClassChange={handleClassChange}
-                                handleSectionChange={handleSectionChange}
-                                handlebothEventsCalled={handlebothEventsCalled}
-                            />
-                        </div>
-                    )}
+                <div className=" flex mobile:max-tablet:justify-between items-center w-full">
+                    <h1 className="text-2xl mobile:max-tablet:-ml mobile:max-tablet:text-xl font-medium ">Students Re-admission</h1>
+                    <div className="block tablet:hidden">
+                        <button
+                            className="p-2 border rounded"
+                            onClick={() => setDropdownVisible(!isDropdownVisible)}
+                        >
+                            Filter
+                        </button>
+                        {isDropdownVisible && (
+                            <div className="absolute bg-white shadow-lg px-2 rounded mt-2 right-2 left-2 z-20 justify-center flex tablet:w-4/6 py-2">
+                                <SearchBar
+                                    rollNumber={rollNumber}
+                                    name={name}
+                                    Class={Class}
+                                    Section={Section}
+                                    handleRollNumberChange={handleRollNumberChange}
+                                    handleNameChange={handleNameChange}
+                                    // handleClassChange={handleClassChange}
+                                    handleSectionChange={handleSectionChange}
+                                    handlebothEventsCalled={handlebothEventsCalled}
+                                />
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
             <div className="h-fit w-full items-start mb-3 px-2 ">

@@ -110,37 +110,39 @@ function FeeDetailsSubAdmin() {
 
     return (
 
-        <div className="flex flex-col px-6 py-8">
+        <div className="flex flex-col px-6 py-8 mobile:max-tablet:p-2">
             <ToastContainer />
-            <div className='flex justify-between items-center mb-8'>
+            <div className='flex justify-between items-center mb-8 mobile:max-tablet:flex-col'>
                 <h1 className="text-3xl font-bold text-purple-500 flex items-center mobile:max-tablet:text-lg whitespace-nowrap"><MdSchool className="mr-2" />Student Fee Details</h1>
+                <div className=' overflow-auto'>
+                    <div className='flex justify-end gap-2 mobile:max-tablet:flex-col'>
+                        <div className=' flex gap-2'>
+                            <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                                {session.map((session, index) => (
+                                    <option key={index} value={session}>{session}</option>
+                                ))}
+                            </select>
+                            <select id="Class" name="Class" value={selectedClass} onChange={handleClassChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                                <option value="">Select Class</option>
+                                {["Pre-Nursery", "Nursery", "L.K.G", "U.K.G", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"].map(cls => (
+                                    <option key={cls} value={cls}>{cls}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <select id="Section" name="Section" value={section} onChange={handleSectionChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                            <option value="">Select Class</option>
+                            {["A", "B", "C", "D", "E", "F"].map(cls => (
+                                <option key={cls} value={cls}>{cls}</option>
+                            ))}
+                        </select>
 
-
-                <div className='flex justify-end gap-2'>
-                    <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
-                        {session.map((session, index) => (
-                            <option key={index} value={session}>{session}</option>
-                        ))}
-                    </select>
-                    <select id="Class" name="Class" value={selectedClass} onChange={handleClassChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
-                        <option value="">Select Class</option>
-                        {["Pre-Nursery", "Nursery", "L.K.G", "U.K.G", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"].map(cls => (
-                            <option key={cls} value={cls}>{cls}</option>
-                        ))}
-                    </select>
-                    <select id="Section" name="Section" value={section} onChange={handleSectionChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
-                        <option value="">Select Class</option>
-                        {["A", "B", "C", "D", "E", "F"].map(cls => (
-                            <option key={cls} value={cls}>{cls}</option>
-                        ))}
-                    </select>
-
+                    </div>
                 </div>
             </div>
 
             <div className='overflow-auto w-full'>
 
-                <div className="flex justify-between  py-2  bg-purple-200 rounded-t-lg border border-b-2  whitespace-nowrap">
+                <div className="flex justify-between  py-2  bg-purple-200 rounded-t-lg border border-b-2  whitespace-nowrap mobile:max-tablet:w-fit">
                     <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                         Roll No.
                     </h1>
@@ -180,8 +182,8 @@ function FeeDetailsSubAdmin() {
                                     className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
                                 >
                                     <Link to={`/Sub-Admin/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}&section=${details.section}`}>
-                                        <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : 'bg-white'}`} onClick={() => handleClick(index)}>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                        <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center mobile:max-tablet:w-fit ${clickedIndex === index ? 'bg-secondary' : 'bg-white'}`} onClick={() => handleClick(index)}>
+                                            <h1 className="w-32 mobile:max-tablet:w-28 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}
                                             </h1>
                                             <h1 className="w-44 text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
@@ -190,7 +192,7 @@ function FeeDetailsSubAdmin() {
                                                     {details.name}
                                                 </div>
                                             </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            <h1 className="w-32 mobile:max-tablet:w-16 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.section}
                                             </h1>
                                             <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
@@ -199,12 +201,12 @@ function FeeDetailsSubAdmin() {
                                             <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.totalfee}
                                             </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            <h1 className="w-32 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.discountAmount}
                                             </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {/* <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.fine}
-                                            </h1>
+                                            </h1> */}
                                             <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.paid}
                                             </h1>

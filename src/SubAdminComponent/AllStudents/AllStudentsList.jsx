@@ -100,7 +100,7 @@ export default function AllStudentsList() {
         }
     };
 
-    
+
 
     const filteredStudents = userData.filter(student => {
         return (
@@ -110,37 +110,36 @@ export default function AllStudentsList() {
             student.section.toLowerCase().includes(Section.toLowerCase())
         );
     });
-
-
     const [isDropdownVisible, setDropdownVisible] = useState(false);
-
     return (
         <>
-            <div className="flex pt-6 items-center  bg-white mb-4">
+            <div className="flex pt-3 items-center  bg-white mb-3 px-2">
                 <ToastContainer />
-                <h1 className="text-2xl font-medium px-2 ">All Students Data</h1>
-                <div className="block tablet:hidden">
-                    <button
-                        className="p-2 border rounded"
-                        onClick={() => setDropdownVisible(!isDropdownVisible)}
-                    >
-                        Filter
-                    </button>
-                    {isDropdownVisible && (
-                        <div className="absolute bg-white shadow-lg px-2 rounded mt-2 right-2 left-2 z-20 justify-center flex tablet:w-4/6 py-2">
-                            <SearchBar
-                                rollNumber={rollNumber}
-                                name={name}
-                                Class={Class}
-                                Section={Section}
-                                handleRollNumberChange={handleRollNumberChange}
-                                handleNameChange={handleNameChange}
-                                handleClassChange={handleClassChange}
-                                handleSectionChange={handleSectionChange}
-                                handlebothEventsCalled={handlebothEventsCalled}
-                            />
-                        </div>
-                    )}
+                <div className=" flex mobile:max-tablet:justify-between w-full items-center">
+                    <h1 className="text-2xl mobile:max-tablet:text-lg font-medium px-2 ">All Students Data</h1>
+                    <div className="block tablet:hidden">
+                        <button
+                            className="p-2 border rounded"
+                            onClick={() => setDropdownVisible(!isDropdownVisible)}
+                        >
+                            Filter
+                        </button>
+                        {isDropdownVisible && (
+                            <div className="absolute bg-white shadow-lg px-2 rounded mt-2 right-2 left-2 z-20 justify-center flex tablet:w-4/6 py-2">
+                                <SearchBar
+                                    rollNumber={rollNumber}
+                                    name={name}
+                                    Class={Class}
+                                    Section={Section}
+                                    handleRollNumberChange={handleRollNumberChange}
+                                    handleNameChange={handleNameChange}
+                                    handleClassChange={handleClassChange}
+                                    handleSectionChange={handleSectionChange}
+                                    handlebothEventsCalled={handlebothEventsCalled}
+                                />
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
             <div className="h-fit w-full items-start mb-3 px-2 ">

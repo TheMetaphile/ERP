@@ -46,14 +46,16 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
 
   return (
     <div className="flex flex-grow mobile:max-tablet:flex-col h-full  px-2 py-3 mb-2 mobile:max-tablet:mb-0 items-center justify-between bg-purple-300 rounded-lg shadow-md">
-      <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-3 mobile:max-tablet:justify-center">
+      <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-3 mobile:max-tablet:justify-between">
         {authState.userDetails.role === 'Accountant' && (
           <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-white shadow-lg cursor-pointer' />
         )}
-        <img src={logo} alt="Metaphile Public School" className="w-10" />
-        <span className="tablet:text-lg font-medium mobile:text-sm ">etaphile Public School</span>
+        <div className=' flex items-center'>
+          <img src={logo} alt="Metaphile Public School" className="w-10" />
+          <span className="tablet:text-lg font-medium mobile:text-sm ">etaphile Public School</span>
+        </div>
         <div>
-          <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white  py-1 mobile:max-laptop:w-9 mobile:max-laptop:h-9 rounded-lg " />
+          <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white  py-1 mobile:max-laptop:w-6 mobile:max-laptop:h-6 rounded-lg tablet:hidden " />
         </div>
       </div>
 

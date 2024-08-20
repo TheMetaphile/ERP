@@ -9,7 +9,7 @@ function PageTitle({ icon: Icon, title }) {
       transition={{ duration: 0.5 }}
       className="text-3xl font-bold text-purple-500 flex items-center mobile:max-tablet:text-lg whitespace-nowrap"
     >
-      <Icon className="mr-4 text-4xl" />
+      <Icon className="mr-4 text-4xl mobile:max-tablet:mr-2" />
       {title}
     </motion.h1>
   );

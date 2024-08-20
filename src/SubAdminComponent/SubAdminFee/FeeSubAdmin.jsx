@@ -21,22 +21,22 @@ function FeeSubAdmin() {
     };
 
     return (
-        <motion.div 
-            className="flex flex-col px-6 overflow-auto items-start  no-scrollbar pt-4  min-h-screen"
+        <motion.div
+            className="flex flex-col px-2 overflow-auto items-start  no-scrollbar pt-4  min-h-screen"
             initial="initial"
             animate="animate"
             exit="exit"
             variants={pageTransition}
             transition={{ duration: 0.5 }}
         >
-            <motion.div 
+            <motion.div
                 className=" rounded-lg w-full bg-white shadow-lg p-2"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5 }}
             >
                 <div className="flex  items-center justify-between">
-                    <div className="flex gap-4 w-full">
+                    <div className="flex gap-4 w-full overflow-auto whitespace-nowrap">
                         {[
                             { path: '/Sub-Admin/StudentsFee/structure', label: 'Fee Structure' },
                             { path: '/Sub-Admin/StudentsFee/details', label: 'Fee Status' },
@@ -50,12 +50,11 @@ function FeeSubAdmin() {
                                 whileTap="tap"
                             >
                                 <Link to={item.path} onClick={() => handleLinkSelect(item.path)}>
-                                    <motion.h1 
-                                        className={`p-2 mx-1 font-semibold text-lg transition-colors duration-300 ${
-                                            selectedLink === item.path 
-                                                ? "text-purple-600 border-b-2 border-purple-600" 
-                                                : "text-gray-600 hover:text-purple-400"
-                                        }`}
+                                    <motion.h1
+                                        className={`p-2 mx-1 font-semibold text-lg transition-colors duration-300 ${selectedLink === item.path
+                                            ? "text-purple-600 border-b-2 border-purple-600"
+                                            : "text-gray-600 hover:text-purple-400"
+                                            }`}
                                     >
                                         {item.label}
                                     </motion.h1>
@@ -64,7 +63,7 @@ function FeeSubAdmin() {
                         ))}
                     </div>
                 </div>
-                <motion.hr 
+                <motion.hr
                     className='border-t-2 bg-purple-200 mt-2 mb-3'
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
