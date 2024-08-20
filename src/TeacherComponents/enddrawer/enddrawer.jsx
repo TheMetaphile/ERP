@@ -36,7 +36,7 @@ export default function TeacherEnddrawer() {
         </h6>
       </motion.div>
       <motion.div 
-        className="dialyNotices w-full  rounded-xl  mb-6 overflow-auto no-scrollbar shadow-inner"
+        className=" w-full  rounded-xl  mb-6 overflow-auto h-1/2"
         variants={itemVariants}
       >
         <Notices />
@@ -55,7 +55,7 @@ export default function TeacherEnddrawer() {
         </h6>
       </motion.div>
       <motion.div 
-        className="dialyNotices w-full  rounded-xl  overflow-auto no-scrollbar shadow-inner"
+        className="dialyNotices w-full  rounded-xl  overflow-auto "
         variants={itemVariants}
       >
         <Leave />

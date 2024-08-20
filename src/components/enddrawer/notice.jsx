@@ -4,7 +4,7 @@ import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../Config";
 import { motion } from 'framer-motion';
-import { FaBell, FaSpinner } from 'react-icons/fa';
+import { FaBell, FaCalendarAlt, FaSpinner } from 'react-icons/fa';
 
 export default function Notice() {
   const { authState } = useContext(AuthContext);
@@ -72,7 +72,10 @@ export default function Notice() {
             <p className="text-indigo-600 text-opacity-80 leading-relaxed line-clamp-4">
               {detail.description}
             </p>
-            <div className="mt-3 h-px bg-indigo-200"></div>
+            <div className="flex justify-end items-center text-indigo-600 border-t border-gray-400 text-xs mt-2">
+              <FaCalendarAlt className="mr-1" />
+              Date: {detail.date}
+            </div>
           </motion.div>
         ))
       )}

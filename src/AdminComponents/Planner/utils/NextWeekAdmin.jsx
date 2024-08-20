@@ -33,7 +33,7 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
-    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
+    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 2));
     const nextWeekStart = new Date();
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
@@ -56,8 +56,8 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
                 if (response.data.plan && response.data.plan.length > 0) {
                     setDetails(response.data.plan);
                     setId(response.data._id);
-                    setRemark(response.data.coordinatorRemark);
-                    setStatus(response.data.coordinatorStatus);
+                    setRemark(response.data.adminRemark);
+                    setStatus(response.data.adminStatus);
                 } else {
                     setDetails(defaultPlan());
                     setId('');

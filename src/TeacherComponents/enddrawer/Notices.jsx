@@ -84,7 +84,7 @@ export default function Notices() {
                                 <FaInfoCircle className="text-blue-500" />
                                 {detail.title}
                             </h4>
-                            <p className="text-gray-600 text-sm truncate overflow-hidden text-justify line-clamp-4 text-ellipsis py-2">
+                            <p className="text-gray-600 leading-relaxed line-clamp-4">
                                 {detail.description}
                             </p>
                             <div className="flex justify-end items-center text-gray-500 text-xs mt-2">

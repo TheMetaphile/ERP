@@ -13,8 +13,10 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [status, setStatus] = useState('');
-    const [remark, setRemark] = useState('');
+    const [HODStatus, setHODStatus] = useState('');
+    const [HODRemark, setHODRemark] = useState('');
+    const [adminStatus, setadminStatus] = useState('');
+    const [adminRemark, setadminRemark] = useState('');
 
     const getCurrentSession = () => {
         const now = new Date();
@@ -32,7 +34,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
-    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
+    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 2));
     const nextWeekStart = new Date();
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
@@ -48,7 +50,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(!Class || !section || !subject) return ;
+        if (!Class || !section || !subject) return;
         const data = {
             accessToken: authState.accessToken,
             class: Class,
@@ -80,7 +82,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
     console.log(selectedTab)
     useEffect(() => {
         const fetchPlan = async () => {
-            if(!Class || !section || !subject) return ;
+            if (!Class || !section || !subject) return;
             try {
                 const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/teacher?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${nextWeekFormattedDate}`, {
                     headers: {
@@ -90,19 +92,25 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                 console.log("API response:", response.data);
                 if (response.data.plan && response.data.plan.length > 0) {
                     setDetails(response.data.plan);
-                    setStatus(response.data.coordinatorStatus);
-                    setRemark(response.data.coordinatorRemark);
+                    setHODStatus(response.data.coordinatorStatus);
+                    setHODRemark(response.data.coordinatorRemark);
+                    setadminStatus(response.data.adminStatus);
+                    setadminRemark(response.data.adminRemark);
                 } else {
                     setDetails(defaultPlan());
-                    setStatus('');
-                    setRemark('');
+                    setHODStatus('');
+                    setHODRemark('');
+                    setadminStatus('');
+                    setadminRemark('');
                 }
                 setLoading(false);
             } catch (err) {
                 console.log(err.response.data.error);
                 setDetails(defaultPlan());
-                setStatus('');
-                setRemark('');
+                setHODStatus('');
+                setHODRemark('');
+                setadminStatus('');
+                setadminRemark('');
                 setError(err.response.data.error);
                 setLoading(false);
             }
@@ -117,7 +125,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
 
 
     return (
-        <motion.div 
+        <motion.div
             className='rounded-md overflow-auto bg-indigo-50 p-6'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -136,7 +144,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                 </motion.div>
             ) : (
                 <form onSubmit={handleSubmit}>
-                    <motion.table 
+                    <motion.table
                         className='w-full rounded-lg border-2 border-indigo-300 overflow-hidden'
                         initial={{ scale: 0.95 }}
                         animate={{ scale: 1 }}
@@ -153,47 +161,91 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                         </thead>
                         <tbody className='text-center'>
                             {details.map((data, index) => (
-                                <NextWeekRow key={index} details={data} index={index} setDetails={setDetails} status={status === "Accept"} />
+                                <NextWeekRow key={index} details={data} index={index} setDetails={setDetails} status={(HODStatus === "Accept" && adminStatus==='Accept')} />
                             ))}
                         </tbody>
                     </motion.table>
-                    <motion.div 
-                        className='flex justify-center items-center py-6'
+                    <motion.div
+                        className="flex justify-evenly items-center py-6"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.3 }}
                     >
-                        {status === "Accept" ? (
-                            <div className='flex flex-col text-lg bg-white p-4 rounded-lg shadow-md'>
-                                <div className='flex items-center text-indigo-700'>
+                        {HODStatus === "Accept" ? (
+                            <div className="flex flex-col bg-white p-6 rounded-lg shadow-lg text-green-500">
+                                <div className="flex items-center mb-4 text-lg font-medium">
                                     <FaCheckCircle className="mr-2" />
-                                    Status: {status}
+                                    HOD Response
                                 </div>
-                                <div className='flex items-center mt-2 text-indigo-600'>
-                                    Remark: {remark}
+                                <div className="flex items-center mb-4">
+                                    <span className="font-medium">Status:</span>
+                                    <span className="ml-2">{HODStatus}</span>
+                                </div>
+                                <div className="flex items-center">
+                                    <span className="font-medium">Remark:</span>
+                                    <span className="ml-2">{HODRemark}</span>
                                 </div>
                             </div>
                         ) : (
-                            <div className='flex flex-col text-lg bg-white p-4 rounded-lg shadow-md'>
-                                <div className='flex items-center text-indigo-700'>
+                            <div className="flex flex-col bg-white p-6 rounded-lg shadow-lg text-red-500">
+                                <div className="flex items-center mb-4 text-lg font-medium">
                                     <FaTimesCircle className="mr-2" />
-                                    Status: {status}
+                                    HOD Response
                                 </div>
-                                <div className='flex items-center mt-2 text-indigo-600'>
-                                    Remark: {remark}
+                                <div className="flex items-center mb-4">
+                                    <span className="font-medium">Status:</span>
+                                    <span className="ml-2">{HODStatus}</span>
                                 </div>
-                                <motion.button
-                                    type="submit"
-                                    className='mt-4 px-6 py-2 rounded-md bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-colors duration-300 flex items-center justify-center'
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    <FaSave className="mr-2" />
-                                    SAVE
-                                </motion.button>
+                                <div className="flex items-center">
+                                    <span className="font-medium">Remark:</span>
+                                    <span className="ml-2">{HODRemark}</span>
+                                </div>
+                            </div>
+                        )}
+
+                        {adminStatus === "Accept" ? (
+                            <div className="flex flex-col bg-white p-6 rounded-lg shadow-lg text-green-500">
+                                <div className="flex items-center mb-4 text-lg font-medium">
+                                    <FaCheckCircle className="mr-2" />
+                                    Admin Response
+                                </div>
+                                <div className="flex items-center mb-4">
+                                    <span className="font-medium">Status:</span>
+                                    <span className="ml-2">{adminStatus}</span>
+                                </div>
+                                <div className="flex items-center">
+                                    <span className="font-medium">Remark:</span>
+                                    <span className="ml-2">{adminRemark}</span>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col bg-white p-6 rounded-lg shadow-lg text-red-500">
+                                <div className="flex items-center mb-4 text-lg font-medium">
+                                    <FaTimesCircle className="mr-2" />
+                                    Admin Response
+                                </div>
+                                <div className="flex items-center mb-4">
+                                    <span className="font-medium">Status:</span>
+                                    <span className="ml-2">{adminStatus}</span>
+                                </div>
+                                <div className="flex items-center">
+                                    <span className="font-medium">Remark:</span>
+                                    <span className="ml-2">{adminRemark}</span>
+                                </div>
                             </div>
                         )}
                     </motion.div>
+                    {
+                        adminStatus=='Reject' || HODStatus =='Reject' && <motion.button
+                        type="submit"
+                        className="px-8 py-3 w-full rounded-md bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-colors duration-300 flex items-center justify-center"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <FaSave className="mr-2" />
+                        <span className="text-lg">SAVE</span>
+                    </motion.button>
+                    }
                 </form>
             )}
         </motion.div>

@@ -25,7 +25,7 @@ const CurrentWeek = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
-    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
+    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 2));
     const currentWeekFormattedDate = currentWeekStart.toISOString().split('T')[0];
 
     useEffect(() => {
@@ -52,7 +52,7 @@ const CurrentWeek = ({ selectedTab, Class, section, subject }) => {
         };
 
         fetchPlan();
-    }, [Class, section, subject, currentWeekFormattedDate]);
+    }, [Class, section, subject]);
 
     if (loading) {
         return <Loading />;

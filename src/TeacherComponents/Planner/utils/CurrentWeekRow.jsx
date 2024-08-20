@@ -21,7 +21,7 @@ function CurrentWeekRow({ details, index, mapId }) {
         setEditedData(item);
     };
 
-    const handleConfirmEdit = async (index, id) => {
+    const handleConfirmEdit = async ( id) => {
         try {
             const { description, status } = editedData;
 
