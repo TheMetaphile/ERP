@@ -80,8 +80,7 @@ export default function Notices() {
                             className="bg-white p-4 rounded-lg shadow-md"
                             variants={itemVariants}
                         >
-                            <h4 className="font-medium text-lg mb-2 flex items-center gap-2">
-                                <FaInfoCircle className="text-blue-500" />
+                            <h4 className="flex w-full justify-start font-medium text-lg mb-2 items-start gap-2">
                                 {detail.title}
                             </h4>
                             <p className="text-gray-600 leading-relaxed line-clamp-4">

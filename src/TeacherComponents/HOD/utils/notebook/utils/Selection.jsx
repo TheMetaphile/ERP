@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../../../../../Context/AuthContext";
 import { BASE_URL_ClassTeacher } from "../../../../../Config";
 import axios from "axios";
+import { Rect } from "face-api.js";
 
 function Selection({ setClass, setSection, setSubject }) {
     const { authState } = useContext(AuthContext);
@@ -133,4 +134,4 @@ const wingMap = {
     '6th-8th': ['6th', '7th', '8th'],
     '9th-12th': ['9th', '10th', '11th', '12th'],
 }
-export default Selection
+export default React.memo(Selection)
