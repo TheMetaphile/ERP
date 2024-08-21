@@ -102,15 +102,9 @@ const CurrentWeekAdmin = ({ selectedTab, Class, section, subject }) => {
                     </thead>
                     <tbody className="text-center">
                         {details.map((data, index) => (
-                            <motion.tr
-                                key={index}
-                                className="border-b border-purple-500"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, delay: index * 0.1 }}
-                            >
-                                <CurrentWeekAdminRow details={data} index={index} />
-                            </motion.tr>
+
+                            <CurrentWeekAdminRow details={data} index={index} />
+
                         ))}
                     </tbody>
                 </motion.table>
