@@ -3,7 +3,6 @@ import { BASE_URL_Login } from '../../../../../Config';
 import axios from 'axios';
 import AuthContext from '../../../../../Context/AuthContext';
 import Loading from '../../../../../LoadingScreen/Loading';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CurrentWeekHODRow from './CurrentWeekHODRow';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -23,7 +22,7 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
-    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 2));
+    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
     const nextWeekStart = new Date();
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
@@ -68,18 +67,7 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
         }
     };
 
-    const rowVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: {
-                type: 'spring',
-                stiffness: 100,
-                damping: 12
-            }
-        }
-    };
+
 
     return (
         <div className='rounded-md overflow-auto'>
@@ -114,12 +102,9 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
                     <AnimatePresence>
                         <motion.tbody className='text-center'>
                             {details.map((data, index) => (
-                                <motion.tr
-                                    key={index}
-                                    variants={rowVariants}
-                                >
-                                    <CurrentWeekHODRow details={data} index={index} />
-                                </motion.tr>
+
+                                <CurrentWeekHODRow details={data} index={index} />
+
                             ))}
                         </motion.tbody>
                     </AnimatePresence>

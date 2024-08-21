@@ -143,8 +143,7 @@ export default function ClassTeacherSubstitutionHistory() {
                 <motion.h1
                     className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center'
                     onClick={handleViewMore}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    
                 >
                     View More
                 </motion.h1>
