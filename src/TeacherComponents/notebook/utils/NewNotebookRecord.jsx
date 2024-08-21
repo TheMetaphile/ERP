@@ -160,7 +160,7 @@ const NewNoteBookRecord = () => {
               name="chapter"
               value={chapter}
               onChange={handleChapterChange}
-              className="mt-1 block w-full px-3 mobile:max-tablet:py-1 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+              className="mt-1 block w-full px-3 mobile:max-tablet:py-1 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
             />
           </div>
           <div className="w-2/5 ml-2 mobile:max-tablet:w-1/3">
@@ -172,7 +172,7 @@ const NewNoteBookRecord = () => {
               name="topic"
               value={topic}
               onChange={handleTopicChange}
-              className="mt-1 block mobile:max-tablet:py-1 w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+              className="mt-1 block mobile:max-tablet:py-1 w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
             />
           </div>
         </div>
@@ -196,7 +196,7 @@ const NewNoteBookRecord = () => {
       >
         <table className="min-w-full bg-white border border-gray-300 rounded-lg">
           <thead>
-            <tr className="bg-gradient-to-r from-indigo-400  to-indigo-200 text-lg leading-normal">
+            <tr className="bg-gradient-to-r from-blue-400  to-blue-200 text-lg leading-normal">
               <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Roll No.</th>
               <th className="py-2 px-6 text-center">Name</th>
               <th className="py-2 px-6 text-center">Date</th>

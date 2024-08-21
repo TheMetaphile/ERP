@@ -8,22 +8,22 @@ const BirthdayCard = ({ detail, isToday }) => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full flex items-center mb-4 p-4 bg-indigo-50 rounded-lg shadow-lg justify-between"
+        className="w-full flex items-center mb-4 p-4 bg-blue-50 rounded-lg shadow-lg justify-between"
     >
         <div className="flex items-center space-x-4">
             <motion.img
                 whileHover={{ scale: 1.1 }}
                 src={detail.profileLink}
                 alt="Profile"
-                className="h-12 w-12 rounded-full border-2 border-indigo-300"
+                className="h-12 w-12 rounded-full border-2 border-blue-300"
             />
             <div className="flex flex-col">
-                <span className="font-semibold text-indigo-800">{detail.name}</span>
-                <div className="flex items-center text-sm text-indigo-600">
+                <span className="font-semibold text-blue-800">{detail.name}</span>
+                <div className="flex items-center text-sm text-blue-600">
                     <FaUserGraduate className="mr-1" />
                     <span>Class: {detail.currentClass}</span>
                 </div>
-                <div className="flex items-center text-sm text-indigo-600">
+                <div className="flex items-center text-sm text-blue-600">
                     <FaCalendarAlt className="mr-1" />
                     <span>DOB: {detail.DOB}</span>
                 </div>
@@ -32,7 +32,7 @@ const BirthdayCard = ({ detail, isToday }) => (
         <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center bg-indigo-600 text-white px-3 py-2 rounded-lg shadow-md cursor-pointer"
+            className="flex items-center bg-blue-600 text-white px-3 py-2 rounded-lg shadow-md cursor-pointer"
         >
             <IoLogoWhatsapp className="mr-2" />
             <span>Message</span>
@@ -45,16 +45,16 @@ const BirthdaySection = ({ title, birthdays, isToday }) => (
         <motion.h2
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center font-bold text-xl text-indigo-800 mb-4"
+            className="flex items-center font-bold text-xl text-blue-800 mb-4"
         >
-            <FaBirthdayCake className="mr-2 text-indigo-600" />
+            <FaBirthdayCake className="mr-2 text-blue-600" />
             {title}
         </motion.h2>
         {birthdays.length === 0 ? (
             <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-indigo-500 italic"
+                className="text-blue-500 italic"
             >
                 {isToday ? "Today is no one's birthday" : "No upcoming birthdays"}
             </motion.p>

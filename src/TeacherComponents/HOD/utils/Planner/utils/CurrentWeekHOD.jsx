@@ -6,7 +6,7 @@ import Loading from '../../../../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CurrentWeekHODRow from './CurrentWeekHODRow';
-
+import { motion, AnimatePresence } from 'framer-motion';
 
 const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
     const { authState } = useContext(AuthContext);
@@ -54,20 +54,54 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
             setDetails([]);
             fetchPlan();
         }
-    }, [Class, section, subject,  currentWeekFormattedDate]);
+    }, [Class, section, subject, currentWeekFormattedDate]);
 
-  
 
+    const tableVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                when: "beforeChildren",
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const rowVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: 'spring',
+                stiffness: 100,
+                damping: 12
+            }
+        }
+    };
 
     return (
         <div className='rounded-md overflow-auto'>
             {loading ? (
                 <Loading />
             ) : details.length === 0 && selectedTab === 'Current Week' ? (
-                <>No Data Available</>
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-center py-4 text-blue-500"
+                >
+                    No Data Available
+                </motion.div>
             ) : (
-                <table className='w-full rounded-md border border-black'>
-                    <thead className='bg-gradient-to-r from-indigo-400  to-indigo-200'>
+                <motion.table
+                    className='w-full rounded-md border border-black'
+                    variants={tableVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    <thead className='bg-gradient-to-r from-blue-400 to-blue-200'>
                         <tr className='p-4 text-center'>
                             <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 font-semibold'>Date</th>
                             <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Chapter</th>
@@ -77,14 +111,22 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
                             <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Progress</th>
                         </tr>
                     </thead>
-                    <tbody className='text-center'>
-                        {details.map((data, index) => (
-                            <CurrentWeekHODRow details={data} index={index}/>
-                        ))}
-                    </tbody>
-                </table>
+                    <AnimatePresence>
+                        <motion.tbody className='text-center'>
+                            {details.map((data, index) => (
+                                <motion.tr
+                                    key={index}
+                                    variants={rowVariants}
+                                >
+                                    <CurrentWeekHODRow details={data} index={index} />
+                                </motion.tr>
+                            ))}
+                        </motion.tbody>
+                    </AnimatePresence>
+                </motion.table>
             )}
         </div>
+
     );
 };
 

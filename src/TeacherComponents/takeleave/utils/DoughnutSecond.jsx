@@ -25,7 +25,7 @@ export default function DoughnutSecond({ chartData, title }) {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col h-full w-full mobile:max-tablet:w-full justify-evenly items-center shadow-lg bg-white border border-indigo-300 rounded-lg px-4 py-6"
+      className="flex flex-col h-full w-full mobile:max-tablet:w-full justify-evenly items-center shadow-lg bg-white border border-blue-300 rounded-lg px-4 py-6"
     >
       <motion.div
         initial={{ y: -20 }}
@@ -33,8 +33,8 @@ export default function DoughnutSecond({ chartData, title }) {
         transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
         className="w-11/12"
       >
-        <h2 className="mb-4 whitespace-nowrap mobile:max-tablet:text-xl text-2xl text-center font-semibold text-indigo-800 flex items-center justify-center">
-          <FaChartPie className="mr-2 text-indigo-600" />
+        <h2 className="mb-4 whitespace-nowrap mobile:max-tablet:text-xl text-2xl text-center font-semibold text-blue-800 flex items-center justify-center">
+          <FaChartPie className="mr-2 text-blue-600" />
           {title}
         </h2>
         <motion.div
@@ -54,7 +54,7 @@ export default function DoughnutSecond({ chartData, title }) {
           <motion.div
             key={index}
             whileHover={{ scale: 1.1 }}
-            className={`text-center ${chartData.datasets[0].bg[index]} text-xl mr-3 bg-indigo-200 rounded-lg p-2`}
+            className={`text-center ${chartData.datasets[0].bg[index]} text-xl mr-3 bg-blue-200 rounded-lg p-2`}
           >
             <h4 className="mobile:max-laptop:text-sm font-medium">
               {label}

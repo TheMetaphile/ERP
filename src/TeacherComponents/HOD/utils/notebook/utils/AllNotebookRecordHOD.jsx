@@ -73,7 +73,7 @@ const AllNoteBookRecordHOD = ({ Class, Section, Subject }) => {
       <div className="overflow-x-auto rounded-lg">
         <table className="min-w-full bg-white border border-gray-300 rounded-lg">
           <thead>
-            <tr className="bg-gradient-to-r from-indigo-400 to-indigo-200 text-lg leading-normal">
+            <tr className="bg-gradient-to-r from-blue-400 to-blue-200 text-lg leading-normal">
               <th className="py-2 px-6 text-center rounded-t-r">Date</th>
               <th className="py-2 px-6 text-center">Chapter</th>
               <th className="py-2 px-6 text-center ">Topic</th>

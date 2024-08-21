@@ -69,18 +69,18 @@ function ReportCard() {
 
     return (
         <motion.div 
-            className="w-full px-4 py-6 bg-gradient-to-r from-indigo-100 to-indigo-50"
+            className="w-full px-4 py-6 bg-gradient-to-r from-blue-100 to-blue-50"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
         >
             <ToastContainer />
-            <h1 className="text-3xl font-bold text-indigo-800 mb-6">Search Report Card</h1>
+            <h1 className="text-3xl font-bold text-blue-600 mb-6">Search Report Card</h1>
             
             {loading ? (
                 <Loading />
             ) : students.length === 0 ? (
-                <div className="text-center text-indigo-600 text-xl">No students found</div>
+                <div className="text-center text-blue-600 text-xl">No students found</div>
             ) : (
                 <motion.div 
                     className="overflow-hidden rounded-lg shadow-lg bg-white"
@@ -89,7 +89,7 @@ function ReportCard() {
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-max">
                             <thead>
-                                <tr className="bg-indigo-600 text-white">
+                                <tr className="bg-blue-600 text-white">
                                     <th className="py-3 px-4 text-left">Roll No.</th>
                                     <th className="py-3 px-4 text-left">Name</th>
                                     <th className="py-3 px-4 text-left">Class</th>
@@ -100,14 +100,14 @@ function ReportCard() {
                                 {students.map((detail, index) => (
                                     <motion.tr 
                                         key={index}
-                                        className="border-b hover:bg-indigo-50 transition-colors duration-200"
+                                        className="border-b hover:bg-blue-50 transition-colors duration-200"
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.3, delay: index * 0.05 }}
                                     >
                                         <td className="py-3 px-4">
                                             <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`}>
-                                                <FaUserGraduate className="inline mr-2 text-indigo-600" />
+                                                <FaUserGraduate className="inline mr-2 text-blue-600" />
                                                 {detail.rollNumber}
                                             </Link>
                                         </td>
@@ -118,11 +118,11 @@ function ReportCard() {
                                             </Link>
                                         </td>
                                         <td className="py-3 px-4">
-                                            <FaChalkboardTeacher className="inline mr-2 text-indigo-600" />
+                                            <FaChalkboardTeacher className="inline mr-2 text-blue-600" />
                                             {authState.ClassDetails.class}
                                         </td>
                                         <td className="py-3 px-4">
-                                            <FaBookOpen className="inline mr-2 text-indigo-600" />
+                                            <FaBookOpen className="inline mr-2 text-blue-600" />
                                             {authState.ClassDetails.section}
                                         </td>
                                     </motion.tr>
@@ -137,7 +137,7 @@ function ReportCard() {
                             whileTap={{ scale: 0.95 }}
                         >
                             <button 
-                                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300"
+                                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300"
                                 onClick={handleViewMore}
                             >
                                 View More

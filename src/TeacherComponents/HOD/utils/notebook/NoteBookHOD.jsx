@@ -32,7 +32,7 @@ function NoteBookHOD() {
         <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar">
             <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:py-1 mobile:max-tablet:px-0'>
                 <motion.h1
-                    className="text-3xl font-bold text-indigo-700 mobile:max-tablet:text-2xl whitespace-nowrap mb-2"
+                    className="text-3xl font-bold text-blue-600 mobile:max-tablet:text-2xl whitespace-nowrap mb-2"
                     initial={{ y: -50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
@@ -41,7 +41,7 @@ function NoteBookHOD() {
                 </motion.h1>
                 <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
                     <motion.button
-                        className="p-2 border rounded bg-indigo-700 text-white hover:bg-indigo-800 transition-colors duration-300"
+                        className="p-2 border rounded bg-blue-700 text-white hover:bg-blue-800 transition-colors duration-300"
                         onClick={() => setDropdownVisible(!isDropdownVisible)}
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}

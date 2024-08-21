@@ -19,7 +19,7 @@ const Tabs = ({ Class, section, subject }) => {
                     {tabs.map((tab) => (
                         <button
                             key={tab}
-                            className={`p-2 mobile:max-tablet:p-1 mx-1 ${selectedTab === tab ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}
+                            className={`p-2 mobile:max-tablet:p-1 mx-1 ${selectedTab === tab ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
                             onClick={() => handleTabChange(tab)}
                         >
                             {tab}

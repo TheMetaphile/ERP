@@ -1,6 +1,7 @@
 import { ToastContainer } from "react-toastify";
 import ClassTeacherOnLeaveTable from "./utils/TeachersOnLeaveTable";
 import ClassTeacherSubstitutionHistory from "./utils/SubstitutionHistory";
+import { motion } from 'framer-motion';
 
 export default function LectureSubstitute() {
 
@@ -8,12 +9,26 @@ export default function LectureSubstitute() {
     <div className="w-full items-center   py-1 mb-2">
       <ToastContainer />
       <div className="flex justify-between">
-        <h1 className="text-3xl font-bold text-indigo-700 mobile:max-tablet:text-2xl whitespace-nowrap mb-2 ">Subject teachers on leave (Today)</h1>
+        <motion.h1
+          className="text-3xl font-bold text-blue-700 mobile:max-tablet:text-2xl whitespace-nowrap mb-2"
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >Subject teachers on leave (Today)
+        </motion.h1>
+
       </div>
       <ClassTeacherOnLeaveTable />
 
       <div className="flex justify-between pt-3">
-        <h1 className="text-3xl font-bold text-indigo-700 mobile:max-tablet:text-2xl whitespace-nowrap mt-3 mb-2 ">Subject teachers substitution history</h1>
+        <motion.h1
+          className="text-3xl font-bold text-blue-700 mobile:max-tablet:text-2xl whitespace-nowrap mb-2"
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >Subject teachers substitution history
+        </motion.h1>
+
       </div>
       <ClassTeacherSubstitutionHistory />
 

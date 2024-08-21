@@ -80,7 +80,7 @@ function StudentLeave() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="w-full flex flex-col px-4 h-screen items-start mb-3 bg-indigo-50"
+            className="w-full flex flex-col px-4 h-screen items-start mb-3 bg-blue-50"
         >
             <ToastContainer />
             <motion.div 
@@ -89,14 +89,14 @@ function StudentLeave() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
             >
-                <h1 className='text-3xl font-bold text-indigo-800 flex items-center'>
+                <h1 className='text-3xl font-bold text-blue-600 flex items-center'>
                     <FaUserGraduate className="mr-3" />
                     Student Leave
                 </h1>
                 <motion.select
                     value={status}
                     onChange={handleStatusChange}
-                    className="bg-white border-2 border-indigo-300 text-indigo-700 rounded-lg shadow-md px-4 py-2 outline-none focus:border-indigo-500 transition duration-300"
+                    className="bg-white border-2 border-blue-300 text-blue-700 rounded-lg shadow-md px-4 py-2 outline-none focus:border-blue-500 transition duration-300"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 >
@@ -115,7 +115,7 @@ function StudentLeave() {
                 <NewTile data={data} />
                 {!allDataFetched && (
                     <motion.h1 
-                        className='text-indigo-600 hover:text-indigo-800 mt-6 cursor-pointer text-center font-semibold'
+                        className='text-blue-600 hover:text-blue-800 mt-6 cursor-pointer text-center font-semibold'
                         onClick={handleViewMore}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}

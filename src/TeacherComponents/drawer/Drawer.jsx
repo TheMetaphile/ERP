@@ -27,9 +27,9 @@ export default function TeacherDrawer({ isOpen }) {
     <div className={` ${isOpen ? '  py-6 px-2' : ''} w-full overflow-y-auto rounded-lg text-center items-center border bg-white shadow-md no-scrollbar`}>
       <div className="flex items-center">
         <img src={schoolImage} alt="school_image" className="w-1/3" />
-        <span className="text-black ml-4">Metaphile Public School</span>
+        <span className="text-blue-600 font-medium ml-2">Metaphile Public School</span>
       </div>
-      <div className="mt-5 bg-indigo-300 px-2 py-4 rounded-2xl shadow-lg">
+      <div className="mt-5 bg-gradient-to-br from-blue-300 to-blue-100 px-2 py-4 rounded-2xl shadow-lg">
         <h2 className="text-xl font-semibold">Dashboard</h2>
         <div className="mt-4">
           {menuItems.map((menuItem, index) => {
@@ -43,7 +43,7 @@ export default function TeacherDrawer({ isOpen }) {
               <div
                 key={index}
                 onClick={() => handleClick(index)}
-                className={`cursor-pointer rounded-lg ${active === index ? 'bg-indigo-200' : ''}`}
+                className={`cursor-pointer rounded-lg ${active === index ? 'bg-blue-400' : ''}`}
               >
                 <ExpansionTile
 

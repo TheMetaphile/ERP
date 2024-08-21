@@ -25,73 +25,73 @@ function NextWeekRow({ details, index, setDetails, status }) {
             transition={{ staggerChildren: 0.1 }}
             className={'bg-white'}
         >
-            <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+            <motion.td variants={cellVariants} className='border-y p-4 border-blue-200'>
                 {details.date}
             </motion.td>
             
             {status ? (
                 <>
-                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-blue-200'>
                         {details.chapter}
                     </motion.td>
-                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-blue-200'>
                         {details.topic}
                     </motion.td>
-                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-blue-200'>
                         {details.teachingAids}
                     </motion.td>
-                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-blue-200'>
                         {details.Activity}
                     </motion.td>
                 </>
             ) : (
                 <>
-                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-blue-200'>
                         <motion.div className="relative" whileHover={{ scale: 1.05 }}>
                             <input
-                                className='w-full border-2 border-indigo-300 rounded-md p-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-300'
+                                className='w-full border-2 border-blue-300 rounded-md p-2 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all duration-300'
                                 type="text"
                                 name='chapter'
                                 value={details.chapter}
                                 onChange={handleChange}
                             />
-                            <FaEdit className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                            <FaEdit className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400" />
                         </motion.div>
                     </motion.td>
-                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-blue-200'>
                         <motion.div className="relative" whileHover={{ scale: 1.05 }}>
                             <input
-                                className='w-full border-2 border-indigo-300 rounded-md p-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-300'
+                                className='w-full border-2 border-blue-300 rounded-md p-2 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all duration-300'
                                 type="text"
                                 name='topic'
                                 value={details.topic}
                                 onChange={handleChange}
                             />
-                            <FaEdit className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                            <FaEdit className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400" />
                         </motion.div>
                     </motion.td>
-                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-blue-200'>
                         <motion.div className="relative" whileHover={{ scale: 1.05 }}>
                             <input
-                                className='w-full border-2 border-indigo-300 rounded-md p-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-300'
+                                className='w-full border-2 border-blue-300 rounded-md p-2 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all duration-300'
                                 type="text"
                                 name='teachingAids'
                                 value={details.teachingAids}
                                 onChange={handleChange}
                             />
-                            <FaEdit className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                            <FaEdit className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400" />
                         </motion.div>
                     </motion.td>
-                    <motion.td variants={cellVariants} className='border-y p-4 border-indigo-200'>
+                    <motion.td variants={cellVariants} className='border-y p-4 border-blue-200'>
                         <motion.div className="relative" whileHover={{ scale: 1.05 }}>
                             <input
-                                className='w-full border-2 border-indigo-300 rounded-md p-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-300'
+                                className='w-full border-2 border-blue-300 rounded-md p-2 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all duration-300'
                                 type="text"
                                 name='Activity'
                                 value={details.Activity}
                                 onChange={handleChange}
                             />
-                            <FaEdit className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-400" />
+                            <FaEdit className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400" />
                         </motion.div>
                     </motion.td>
                 </>

@@ -43,13 +43,13 @@ export default function AttendanceStatusGridTile({ data, month }) {
                 <div className="inline-block min-w-full bg-white rounded-xl shadow-2xl">
                     <div className="flex">
                         <div className="sticky left-0 z-10 bg-white">
-                            <div className="font-bold h-16 text-xl border-b border-gray-200 px-6 py-4 bg-indigo-100 flex items-center">
-                                <FaUser className="mr-2 text-indigo-600" /> Students
+                            <div className="font-bold h-16 text-xl border-b border-gray-200 px-6 py-4 bg-blue-100 flex items-center">
+                                <FaUser className="mr-2 text-blue-600" /> Students
                             </div>
                             {students.map((student, index) => (
                                 <motion.div 
                                     key={index}
-                                    className={`font-medium text-lg h-16 flex items-center border-b border-gray-200 px-6 hover:cursor-pointer ${selectedStudent === index ? 'bg-indigo-100' : "bg-white"}`} 
+                                    className={`font-medium text-lg h-16 flex items-center border-b border-gray-200 px-6 hover:cursor-pointer ${selectedStudent === index ? 'bg-blue-100' : "bg-white"}`} 
                                     onClick={() => handleStudentClick(index)}
                                     whileHover={{ backgroundColor: "#E0E7FF" }}
                                     transition={{ duration: 0.2 }}
@@ -62,7 +62,7 @@ export default function AttendanceStatusGridTile({ data, month }) {
                             {dateRange.map((date, index) => (
                                 <div key={index} className={`flex flex-col`}>
                                     <motion.div 
-                                        className={`flex flex-col w-16 items-center h-16 border-b border-gray-200 py-2 hover:cursor-pointer ${selectedDate === index ? "bg-indigo-200" : "bg-indigo-100"}`}
+                                        className={`flex flex-col w-16 items-center h-16 border-b border-gray-200 py-2 hover:cursor-pointer ${selectedDate === index ? "bg-blue-200" : "bg-blue-100"}`}
                                         onClick={() => handleDateClick(index)}
                                         whileHover={{ scale: 1.05 }}
                                         transition={{ type: "spring", stiffness: 300 }}
@@ -73,7 +73,7 @@ export default function AttendanceStatusGridTile({ data, month }) {
                                     {students.map((student, studentIndex) => (
                                         <AnimatePresence key={studentIndex}>
                                             <motion.div 
-                                                className={`flex justify-center items-center h-16 w-16 border-b border-gray-200 ${selectedDate === index ? "bg-indigo-50" : ""} ${selectedStudent === studentIndex ? "bg-indigo-50" : ""} ${selectedStudent === studentIndex && selectedDate === index ? "bg-indigo-100" : ""}`}
+                                                className={`flex justify-center items-center h-16 w-16 border-b border-gray-200 ${selectedDate === index ? "bg-blue-50" : ""} ${selectedStudent === studentIndex ? "bg-blue-50" : ""} ${selectedStudent === studentIndex && selectedDate === index ? "bg-blue-100" : ""}`}
                                                 whileHover={{ scale: 1.1 }}
                                                 transition={{ type: "spring", stiffness: 300 }}
                                             >

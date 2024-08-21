@@ -82,11 +82,11 @@ function NewUpload({ onClose, onNewWork }) {
                 animate={{ scale: 1, y: 0 }}
                 className="bg-white rounded-lg p-6 shadow-lg max-w-2xl w-full"
             >
-                <h2 className="text-2xl font-bold text-indigo-700 mb-6">Create New Classwork</h2>
+                <h2 className="text-2xl font-bold text-blue-700 mb-6">Create New Classwork</h2>
 
                 <div className='grid grid-cols-2 gap-4'>
                     <div>
-                        <label className="flex items-center text-sm font-medium text-indigo-600 mb-1">
+                        <label className="flex items-center text-sm font-medium text-blue-600 mb-1">
                             <FiBook className="mr-2" />
                             Select Class
                         </label>
@@ -95,7 +95,7 @@ function NewUpload({ onClose, onNewWork }) {
                             variants={inputVariants}
                             value={classLevel}
                             onChange={(e) => setClassLevel(e.target.value)}
-                            className="w-full px-3 py-2 border border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="">Select Class</option>
                             {uniqueClasses.map((classOption, index) => (
@@ -105,7 +105,7 @@ function NewUpload({ onClose, onNewWork }) {
                     </div>
 
                     <div>
-                        <label className="flex items-center text-sm font-medium text-indigo-600 mb-1">
+                        <label className="flex items-center text-sm font-medium text-blue-600 mb-1">
                             <FiBookOpen className="mr-2" />
                             Select Section
                         </label>
@@ -114,7 +114,7 @@ function NewUpload({ onClose, onNewWork }) {
                             variants={inputVariants}
                             value={section}
                             onChange={(e) => setSection(e.target.value)}
-                            className="w-full px-3 py-2 border border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="">Select Section</option>
                             {uniqueSections.map((sectionOption, index) => (
@@ -124,7 +124,7 @@ function NewUpload({ onClose, onNewWork }) {
                     </div>
 
                     <div>
-                        <label className="flex items-center text-sm font-medium text-indigo-600 mb-1">
+                        <label className="flex items-center text-sm font-medium text-blue-600 mb-1">
                             <FiClipboard className="mr-2" />
                             Select Subject
                         </label>
@@ -133,7 +133,7 @@ function NewUpload({ onClose, onNewWork }) {
                             variants={inputVariants}
                             value={subject}
                             onChange={(e) => setSubject(e.target.value)}
-                            className="w-full px-3 py-2 border border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="">Select Subject</option>
                             {uniqueSubjects.map((subjectOption, index) => (
@@ -143,7 +143,7 @@ function NewUpload({ onClose, onNewWork }) {
                     </div>
 
                     <div>
-                        <label className="flex items-center text-sm font-medium text-indigo-600 mb-1">
+                        <label className="flex items-center text-sm font-medium text-blue-600 mb-1">
                             <FiFileText className="mr-2" />
                             Chapter
                         </label>
@@ -153,12 +153,12 @@ function NewUpload({ onClose, onNewWork }) {
                             type="text"
                             value={chapter}
                             onChange={(e) => setChapter(e.target.value)}
-                            className="w-full px-3 py-2 border border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
 
                     <div className="md:col-span-2">
-                        <label className="flex items-center text-sm font-medium text-indigo-600 mb-1">
+                        <label className="flex items-center text-sm font-medium text-blue-600 mb-1">
                             <FiMessageSquare className="mr-2" />
                             Topic
                         </label>
@@ -168,13 +168,13 @@ function NewUpload({ onClose, onNewWork }) {
                             type="text"
                             value={topic}
                             onChange={(e) => setTopic(e.target.value)}
-                            className="w-full px-3 py-2 border border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
                 </div>
 
                 <div className='mt-4'>
-                    <label className="flex items-center text-sm font-medium text-indigo-600 mb-1">
+                    <label className="flex items-center text-sm font-medium text-blue-600 mb-1">
                         <FiMessageSquare className="mr-2" />
                         Question
                     </label>
@@ -183,7 +183,7 @@ function NewUpload({ onClose, onNewWork }) {
                         variants={inputVariants}
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
-                        className="w-full px-3 py-2 border border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows="4"
                     ></motion.textarea>
                 </div>
@@ -202,7 +202,7 @@ function NewUpload({ onClose, onNewWork }) {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         type="submit"
-                        className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
                         onClick={handleSave}
                     >
                         {loading ? <Loading /> : 'Submit'}

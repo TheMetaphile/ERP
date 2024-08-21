@@ -8,7 +8,7 @@ function Apply() {
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-                <div className="bg-gradient-to-r from-purple-500 to-indigo-600 py-6">
+                <div className="bg-gradient-to-r from-purple-300 to-blue-300 py-6">
                     <h1 className='text-3xl font-bold text-white text-center'>Employee Profile</h1>
                 </div>
 
@@ -28,7 +28,7 @@ function Apply() {
                                 { icon: <FaCalendarAlt />, label: "Last Increment", value: "10-07-2024" },
                             ].map((item, index) => (
                                 <div key={index} className="flex items-center space-x-3 bg-gray-100 p-3 rounded-lg">
-                                    <div className="text-purple-600">{item.icon}</div>
+                                    <div className="text-blue-600">{item.icon}</div>
                                     <div>
                                         <p className="text-sm text-gray-600">{item.label}</p>
                                         <p className="font-medium text-gray-800">{item.value}</p>
@@ -56,7 +56,7 @@ function Apply() {
                                             <td key={i} className="px-6 py-4 whitespace-nowrap">
                                                 <input
                                                     type="text"
-                                                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-full border border-gray-300 sm:text-sm  rounded-md px-2 py-1"
+                                                    className="focus:ring-blue-500 focus:border-blue-500 block w-full border border-gray-300 sm:text-sm  rounded-md px-2 py-1"
                                                 />
                                             </td>
                                         ))}
@@ -82,7 +82,7 @@ function Apply() {
                                         <td key={i} className="px-6 py-4 whitespace-nowrap">
                                             <input
                                                 type="text"
-                                                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md px-2 py-1"
+                                                className="focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border border-gray-300 rounded-md px-2 py-1"
                                             />
                                         </td>
                                     ))}
@@ -112,7 +112,7 @@ function Apply() {
                                         <td key={i} className="px-6 py-4 whitespace-nowrap">
                                             <input
                                                 type="text"
-                                                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md px-2 py-1"
+                                                className="focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border border-gray-300 rounded-md px-2 py-1"
                                             />
                                         </td>
                                     ))}
@@ -139,7 +139,7 @@ function Apply() {
                                             <td key={i} className="px-6 py-4 whitespace-nowrap">
                                                 <input
                                                     type="text"
-                                                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md px-2 py-1"
+                                                    className="focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border border-gray-300 rounded-md px-2 py-1"
                                                 />
                                             </td>
                                         ))}
@@ -152,7 +152,7 @@ function Apply() {
                     <Section title="About Yourself" icon={<FaUser />}>
                         <textarea
                             rows="4"
-                            className="w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                            className="w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Tell us about yourself..."
                         />
                     </Section>
@@ -160,7 +160,7 @@ function Apply() {
                     <Section title="Outstanding Contributions" icon={<FaGraduationCap />}>
                         <textarea
                             rows="4"
-                            className="w-full border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                            className="w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Describe your contributions..."
                         />
                     </Section>
@@ -170,20 +170,20 @@ function Apply() {
                             <label className="block text-sm font-medium text-gray-700">Present Salary</label>
                             <input
                                 type="text"
-                                className="focus:ring-indigo-500 focus:border-indigo-500 block w-40 sm:text-sm border border-gray-300 rounded-md px-2 py-1"
+                                className="focus:ring-blue-500 focus:border-blue-500 block w-40 sm:text-sm border border-gray-300 rounded-md px-2 py-1"
                             />
                         </div>
                         <div className="flex items-center space-x-4">
                             <label className="block text-sm font-medium text-gray-700">Expected Salary</label>
                             <input
                                 type="text"
-                                className="focus:ring-indigo-500 focus:border-indigo-500 block w-40 sm:text-sm border border-gray-300 rounded-md px-2 py-1"
+                                className="focus:ring-blue-500 focus:border-blue-500 block w-40 sm:text-sm border border-gray-300 rounded-md px-2 py-1"
                             />
                         </div>
                     </div>
 
                     <div className="mt-8 flex justify-end">
-                        <button className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white py-2 px-4 rounded-lg shadow-md hover:from-purple-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300">
+                        <button className="bg-gradient-to-r from-purple-500 to-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
                             Submit Application
                         </button>
                     </div>
@@ -197,7 +197,7 @@ function Section({ title, icon, children }) {
     return (
         <div className="mt-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                <span className="mr-2 text-purple-600">{icon}</span>
+                <span className="mr-2 text-blue-600">{icon}</span>
                 {title}
             </h2>
             {children}

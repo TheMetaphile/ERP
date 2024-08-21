@@ -99,7 +99,7 @@ function Selection({ setClass, setSection, setSubject }) {
 
             <div className="flex justify-between gap-3 mobile:max-tablet:flex-col">
                 <div className="w-36 mobile:max-tablet:w-full">
-                    <select id="class" className="w-full px-2 py-2 border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent rounded-md" value={selectedClass} onChange={handleClassChange}>
+                    <select id="class" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" value={selectedClass} onChange={handleClassChange}>
                         <option value="">Select Class</option>
                         {wingClasses.map((classOption, index) => (
                             <option key={index} value={classOption}>{classOption}</option>
@@ -107,7 +107,7 @@ function Selection({ setClass, setSection, setSubject }) {
                     </select>
                 </div>
                 <div className="w-36 mobile:max-tablet:w-full">
-                    <select id="section" className="w-full px-2 py-2 border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent rounded-md" value={selectedSection} onChange={handleSectionChange}>
+                    <select id="section" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" value={selectedSection} onChange={handleSectionChange}>
                         <option value="">Select Section</option>
                         {uniqueSections.map((sectionOption, index) => (
                             <option key={index} value={sectionOption}>{sectionOption}</option>
@@ -115,7 +115,7 @@ function Selection({ setClass, setSection, setSubject }) {
                     </select>
                 </div>
                 <div className="w-36 mobile:max-tablet:w-full">
-                    <select id="subject" className="w-full px-2 py-2 border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent rounded-md" onChange={handleSubjectChange}>
+                    <select id="subject" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" onChange={handleSubjectChange}>
                         <option value="">Select Subject</option>
                         {uniqueSubjects.map((subjectOption, index) => (
                             <option key={index} value={subjectOption}>{subjectOption}</option>

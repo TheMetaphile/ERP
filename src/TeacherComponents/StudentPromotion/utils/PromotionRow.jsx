@@ -6,13 +6,13 @@ import Switch from './switch';
 function PromotionRow({ detail, index, authState, selectedStudents, handleSwitchChange }) {
     return (
         <motion.tr
-            className="border-b hover:bg-indigo-50 transition-colors duration-200"
+            className="border-b hover:bg-blue-50 transition-colors duration-200"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
         >
             <td className="py-3 px-4">
-                <FaUserGraduate className="inline mr-2 text-indigo-600" />
+                <FaUserGraduate className="inline mr-2 text-blue-600" />
                 {detail.rollNumber}
             </td>
             <td className="py-3 px-4">
@@ -22,11 +22,11 @@ function PromotionRow({ detail, index, authState, selectedStudents, handleSwitch
                 </div>
             </td>
             <td className="py-3 px-4">
-                <FaChalkboardTeacher className="inline mr-2 text-indigo-600" />
+                <FaChalkboardTeacher className="inline mr-2 text-blue-600" />
                 {authState.ClassDetails.class}
             </td>
             <td className="py-3 px-4">
-                <FaBookOpen className="inline mr-2 text-indigo-600" />
+                <FaBookOpen className="inline mr-2 text-blue-600" />
                 {authState.ClassDetails.section}
             </td>
             <td className="py-3 px-4">

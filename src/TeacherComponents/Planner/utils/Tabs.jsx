@@ -27,7 +27,7 @@ const Tabs = ({ Class, section, subject }) => {
                     {tabs.map((tab) => (
                         <motion.button
                             key={tab.name}
-                            className={`p-2 mobile:max-tablet:pl-0 mobile:max-tablet:p-1 mx-1 flex items-center ${selectedTab === tab.name ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-600"}`}
+                            className={`p-2 mobile:max-tablet:pl-0 mobile:max-tablet:p-1 mx-1 flex items-center ${selectedTab === tab.name ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
                             onClick={() => handleTabChange(tab.name)}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}

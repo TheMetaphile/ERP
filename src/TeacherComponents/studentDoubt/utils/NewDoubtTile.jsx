@@ -14,7 +14,7 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="border border-indigo-200 p-4 rounded-lg shadow-lg mt-4 bg-white"
+      className="border border-blue-200 p-4 rounded-lg shadow-lg mt-4 bg-white"
     >
       <div className="flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
         <div className="flex items-center space-x-4">
@@ -22,24 +22,24 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
             whileHover={{ scale: 1.1 }}
             src={doubt.student[0].profileLink}
             alt=""
-            className="w-12 h-12 rounded-full border-2 border-indigo-300"
+            className="w-12 h-12 rounded-full border-2 border-blue-300"
           />
           <div>
-            <h3 className="font-semibold text-indigo-800">{doubt.student[0].name}</h3>
-            <div className="flex items-center text-sm text-indigo-600">
+            <h3 className="font-semibold text-blue-800">{doubt.student[0].name}</h3>
+            <div className="flex items-center text-sm text-blue-600">
               <FaUserGraduate className="mr-1" />
               <span>Roll: {doubt.student[0].rollNumber}</span>
             </div>
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          <span className="text-indigo-600 font-medium">{doubt.subject}</span>
+          <span className="text-blue-600 font-medium">{doubt.subject}</span>
           <motion.div
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="bg-indigo-100 p-2 rounded-full"
+            className="bg-blue-100 p-2 rounded-full"
           >
-            {expanded === index ? <FaChevronUp className="text-indigo-600" /> : <FaChevronDown className="text-indigo-600" />}
+            {expanded === index ? <FaChevronUp className="text-blue-600" /> : <FaChevronDown className="text-blue-600" />}
           </motion.div>
         </div>
       </div>
@@ -53,23 +53,23 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
             transition={{ duration: 0.3 }}
             className="mt-4"
           >
-            <div className="bg-indigo-50 p-4 rounded-lg">
-              <h4 className="font-medium text-indigo-800 flex items-center mb-2">
-                <FaQuestionCircle className="mr-2 text-indigo-600" />
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h4 className="font-medium text-blue-800 flex items-center mb-2">
+                <FaQuestionCircle className="mr-2 text-blue-600" />
                 Question:
               </h4>
-              <p className="text-indigo-700 mb-4">{doubt.question}</p>
+              <p className="text-blue-700 mb-4">{doubt.question}</p>
               {doubt.imageUrl && (
                 <img src={doubt.imageUrl} alt="Doubt" className="mt-2 max-w-xs rounded-lg shadow-md" />
               )}
             </div>
             <div className="mt-4">
-              <h4 className="font-medium text-indigo-800 flex items-center mb-2">
-                <FaPen className="mr-2 text-indigo-600" />
+              <h4 className="font-medium text-blue-800 flex items-center mb-2">
+                <FaPen className="mr-2 text-blue-600" />
                 Your Answer:
               </h4>
               <textarea
-                className="w-full px-3 py-2 mb-2 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 mb-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Type your answer here..."
                 rows={3}
                 value={answers[index] || ''}
@@ -78,7 +78,7 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center justify-center w-full p-2 bg-indigo-600 text-white rounded-lg shadow-md"
+                className="flex items-center justify-center w-full p-2 bg-blue-600 text-white rounded-lg shadow-md"
                 onClick={() => handleStatusUpdate(doubt._id, index)}
                 disabled={loading}
               >
@@ -159,8 +159,8 @@ export default function NewDoubtTile({ data, Class }) {
         animate={{ y: 0, opacity: 1 }}
         className="flex items-center justify-between mb-6"
       >
-        <h2 className="text-2xl font-bold text-indigo-800">Pending Doubts</h2>
-        <div className="flex items-center bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-blue-600">Pending Doubts</h2>
+        <div className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md">
           <FaQuestionCircle className="mr-2" />
           <span>{pendingDoubts.length} Pending</span>
         </div>

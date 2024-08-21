@@ -80,7 +80,7 @@ export default function UploadTile({ details }) {
       {newDetails.map((detail, index) => (
         <motion.div
           key={index}
-          className='p-4 border border-indigo-200 rounded-lg shadow-lg bg-white'
+          className='p-4 border border-blue-200 rounded-lg shadow-lg bg-white'
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
@@ -88,13 +88,13 @@ export default function UploadTile({ details }) {
           <div className='flex items-center space-x-4'>
             <div className='flex-grow'>
               <div className="flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
-                <motion.div className="font-medium text-indigo-700">
+                <motion.div className="font-medium text-blue-700">
                   {editingIndex === index ? (
                     <input
                       type="text"
                       value={editedNotice.title}
                       onChange={(e) => handleInputChange(e, 'title')}
-                      className="border-b border-indigo-300 focus:border-indigo-500 outline-none px-1"
+                      className="border-b border-blue-300 focus:border-blue-500 outline-none px-1"
                     />
                   ) : (
                     detail.title
@@ -108,11 +108,11 @@ export default function UploadTile({ details }) {
                     </>
                   ) : (
                     <>
-                      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="text-indigo-500" onClick={() => handleEdit(index)}><MdEdit size={20} /></motion.button>
+                      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="text-blue-500" onClick={() => handleEdit(index)}><MdEdit size={20} /></motion.button>
                       <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="text-red-500" onClick={() => handleDelete(index)}><MdDeleteForever size={20} /></motion.button>
                     </>
                   )}
-                  {expanded === index ? <MdExpandLess size={20} className="text-indigo-500" /> : <MdExpandMore size={20} className="text-indigo-500" />}
+                  {expanded === index ? <MdExpandLess size={20} className="text-blue-500" /> : <MdExpandMore size={20} className="text-blue-500" />}
                 </div>
               </div>
               <motion.div
@@ -128,7 +128,7 @@ export default function UploadTile({ details }) {
                         rows={4}
                         value={editedNotice.description}
                         onChange={(e) => handleInputChange(e, 'description')}
-                        className="w-full border border-indigo-300 rounded p-2 focus:border-indigo-500 outline-none"
+                        className="w-full border border-blue-300 rounded p-2 focus:border-blue-500 outline-none"
                       />
                     ) : (
                       detail.description

@@ -19,14 +19,14 @@ function Planner() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="overflow-y-auto w-full items-start px-2 no-scrollbar bg-indigo-50"
+            className="overflow-y-auto w-full items-start px-2 no-scrollbar bg-blue-50"
         >
             <ToastContainer />
             <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:pl-1 py-4'>
                 <motion.h1 
                     initial={{ y: -20 }}
                     animate={{ y: 0 }}
-                    className="text-3xl mobile:max-tablet:text-2xl whitespace-nowrap font-bold mb-2 text-indigo-700"
+                    className="text-3xl mobile:max-tablet:text-2xl whitespace-nowrap font-bold mb-2 text-blue-700"
                 >
                     Weekly Plan
                 </motion.h1>
@@ -34,7 +34,7 @@ function Planner() {
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="p-2 border rounded bg-indigo-600 text-white flex items-center"
+                        className="p-2 border rounded bg-blue-600 text-white flex items-center"
                         onClick={() => setDropdownVisible(!isDropdownVisible)}
                     >
                         <FaFilter className="mr-2" /> Filter

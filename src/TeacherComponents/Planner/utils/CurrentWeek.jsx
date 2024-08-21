@@ -63,7 +63,7 @@ const CurrentWeek = ({ selectedTab, Class, section, subject }) => {
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-center py-10 text-indigo-600 font-semibold"
+                className="text-center py-10 text-blue-600 font-semibold"
             >
                 {error ? error :'No Data Available'}
             </motion.div>
@@ -77,15 +77,15 @@ const CurrentWeek = ({ selectedTab, Class, section, subject }) => {
             transition={{ duration: 0.5 }}
             className='rounded-md overflow-auto bg-white shadow-lg'
         >
-            <table className='w-full rounded-md border border-indigo-200'>
-                <thead className='bg-indigo-100 border-b border-indigo-200'>
+            <table className='w-full rounded-md border border-blue-200'>
+                <thead className='bg-blue-100 border-b border-blue-200'>
                     <tr className='p-4 text-center'>
-                        <th className='border-y border-indigo-200 py-3 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 font-semibold text-indigo-700'>Date</th>
-                        <th className='border-y border-indigo-200 py-3 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-indigo-700'>Chapter</th>
-                        <th className='border-y border-indigo-200 py-3 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-indigo-700'>Topic</th>
-                        <th className='border-y border-indigo-200 py-3 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-indigo-700'>Teaching Aids</th>
-                        <th className='border-y border-indigo-200 py-3 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-indigo-700'>Activity (if any)</th>
-                        <th className='border-y border-indigo-200 py-3 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-indigo-700'>Status</th>
+                        <th className='border-y border-blue-200 py-3 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 font-semibold text-blue-700'>Date</th>
+                        <th className='border-y border-blue-200 py-3 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-blue-700'>Chapter</th>
+                        <th className='border-y border-blue-200 py-3 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-blue-700'>Topic</th>
+                        <th className='border-y border-blue-200 py-3 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-blue-700'>Teaching Aids</th>
+                        <th className='border-y border-blue-200 py-3 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-blue-700'>Activity (if any)</th>
+                        <th className='border-y border-blue-200 py-3 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-blue-700'>Status</th>
                     </tr>
                 </thead>
                 <tbody className='text-center'>

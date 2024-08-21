@@ -9,18 +9,18 @@ const BirthdayCard = ({ name, currentClass, DOB, isToday }) => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-indigo-100 rounded-lg p-4 mb-4 shadow-md"
+        className="bg-blue-100 rounded-lg p-4 mb-4 shadow-md"
     >
         <div className="flex items-center justify-between">
             <div>
-                <h3 className="text-lg font-semibold text-indigo-800">{name}</h3>
-                <p className="text-sm text-indigo-600">Class: {currentClass}</p>
-                <p className="text-sm text-indigo-600">DOB: {DOB}</p>
+                <h3 className="text-lg font-semibold text-blue-800">{name}</h3>
+                <p className="text-sm text-blue-600">Class: {currentClass}</p>
+                <p className="text-sm text-blue-600">DOB: {DOB}</p>
             </div>
             <motion.div
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="bg-indigo-500 text-white p-2 rounded-full cursor-pointer"
+                className="bg-blue-500 text-white p-2 rounded-full cursor-pointer"
             >
                 <IoLogoWhatsapp size={24} />
             </motion.div>
@@ -30,7 +30,7 @@ const BirthdayCard = ({ name, currentClass, DOB, isToday }) => (
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.5, type: 'spring', stiffness: 500 }}
-                className="mt-2 text-center text-indigo-500 font-bold"
+                className="mt-2 text-center text-blue-500 font-bold"
             >
                 🎉 Happy Birthday! 🎉
             </motion.div>
@@ -40,7 +40,7 @@ const BirthdayCard = ({ name, currentClass, DOB, isToday }) => (
 
 const BirthdaySection = ({ title, birthdays, isToday }) => (
     <div className="mb-8">
-        <h2 className="text-2xl font-bold text-indigo-700 mb-4 flex items-center">
+        <h2 className="text-2xl font-bold text-blue-700 mb-4 flex items-center">
             <FaBirthdayCake className="mr-2" />
             {title}
         </h2>
@@ -48,7 +48,7 @@ const BirthdaySection = ({ title, birthdays, isToday }) => (
             <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-indigo-500 italic"
+                className="text-blue-500 italic"
             >
                 {isToday ? "Today is no one's birthday" : "No upcoming birthdays"}
             </motion.p>
@@ -65,7 +65,7 @@ export default function TeacherTile({ birthdays }) {
     const upcomingBirthdays = birthdays?.upcomingBirthdays || [];
 
     return (
-        <div className=" mx-auto p-6 bg-indigo-50 rounded-xl shadow-lg">
+        <div className=" mx-auto p-6 bg-blue-50 rounded-xl shadow-lg">
 
             <BirthdaySection
                 title="Today's Birthdays"

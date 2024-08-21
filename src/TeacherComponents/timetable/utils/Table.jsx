@@ -23,7 +23,7 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
       transition={{ duration: 0.5 }}
     >
       <table className="mobile:max-tablet:w-fit w-full items-center rounded-lg">
-        <thead className="w-fit bg-gradient-to-r from-indigo-400 to-indigo-200">
+        <thead className="w-fit bg-gradient-to-r from-blue-400 to-blue-200">
           <tr className="w-fit">
             <th className="w-32 px-4 py-2 font-medium border-r border-gray-400">
               <FaCalendarAlt className="inline-block mr-2" /> Lecture
@@ -49,7 +49,7 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
                 <React.Fragment key={item._id}>
                   {(numberOfLeacturesBeforeLunch === item.lectureNo || (idx > 0 && timetable[idx - 1].lectureNo < numberOfLeacturesBeforeLunch && timetable[idx].lectureNo > numberOfLeacturesBeforeLunch)) && (
                     <motion.tr
-                      className="w-full h-8 border-t border-gray-400 bg-indigo-200 text-xl text-center"
+                      className="w-full h-8 border-t border-gray-400 bg-blue-200 text-xl text-center"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
@@ -91,7 +91,7 @@ function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
             })
           ) : (
             <tr>
-              <td colSpan="5" className="text-center py-4">
+              <td colSpan="5" className="text-center py-4 text-blue-500">
                 No data available
               </td>
             </tr>

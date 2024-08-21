@@ -80,13 +80,13 @@ export default function Teacher() {
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     className="flex justify-center items-center h-40"
                 >
-                    <FaSpinner className="text-4xl text-indigo-600" />
+                    <FaSpinner className="text-4xl text-blue-600" />
                 </motion.div>
             ) : details.length === 0 ? (
                 <motion.div
                     initial={{ scale: 0.9 }}
                     animate={{ scale: 1 }}
-                    className="w-full text-center text-indigo-800 font-semibold py-10"
+                    className="w-full text-center text-blue-800 font-semibold py-10"
                 >
                     No data available
                 </motion.div>
