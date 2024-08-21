@@ -5,6 +5,7 @@ import { BASE_URL_Login } from "../../../Config";
 import { FaTimes } from "react-icons/fa";
 import { MdCheck, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
+import { motion } from 'framer-motion';
 
 
 export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session }) {
@@ -179,86 +180,137 @@ export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session })
     }
 
     return (
-        <tr key={index} className="border-b border-gray-200  last:border-none">
-            <td className="py-3 px-6 text-center whitespace-nowrap">{Teacher.employeeId}</td>
-            <td className="flex py-3 px-6   items-center gap-2 whitespace-nowrap"><img src={Teacher.profileLink} alt="img" className="rounded-full h-12 w-12" />{Teacher.name}</td>
-            <td className="py-3 px-6 text-center whitespace-nowrap">{date}</td>
-            <td className="py-3 px-6 text-center whitespace-nowrap">{Teacher.wing}</td>
-
-            <td className=" py-3 px-6 text-center  items-center  whitespace-nowrap">
-                {
-                    originalSubstitute ? <div className="flex justify-start gap-2 items-center">
-                        <img src={originalSubstitute.profileLink} alt="img" className="rounded-full h-12 w-12" />
-                        <div className="text-start">
-                            <p> {originalSubstitute.name}</p>
-                            {originalSubstitute.employeeId}
-
-                        </div>
-                    </div>
-                        :
-                        <div >
-                            <input
-                                type="email"
-                                ref={inputRef}
-                                className="w-full px-4 py-2 border rounded-md"
-                                placeholder="Search Teacher"
-                                list={`teacher-suggestions`}
-                                onClick={handleClickInside}
-                                value={email}
-                                onChange={handleEmailChange}
-                            />
-                            {showSuggestions && suggestions.length > 0 && (
-                                <ul className="absolute z-10 bg-white border rounded-md mt-1 max-h-70 overflow-y-auto" ref={suggestionsRef}>
-                                    {suggestions.map((suggestion, idx) => (
-                                        <li
-                                            key={idx}
-                                            className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
-                                            onClick={() => handleSuggestionClick(suggestion)}
-                                        >
-                                            <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                            {suggestion.name}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-                }
-            </td>
-
-
-
-            <td className="py-3 px-6 text-center whitespace-nowrap">
-                {editingRow ? (
-                    <div className='flex gap-1 justify-center'>
-                        <button
-                            className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                            onClick={() => handleConfirmClick()}
-                        >
-                            <MdCheck />
-                        </button>
-                        <button
-                            className='bg-red-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                            onClick={() => handleCancelClick()}
-                        >
-                            <FaTimes />
-                        </button>
-                    </div>
-                ) : (
-                    <div className="flex justify-center gap-1">
-                        <button
-                            className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                            onClick={() => handleUpdateClick()}
-                        >
-                            <MdEdit />
-                        </button>
-
-                    </div>
-                )}
-
-            </td>
-
-
-
-        </tr>
+        <motion.tr
+        key={index}
+        className="border-b border-gray-200 last:border-none"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+      >
+        <td className="py-3 px-6 text-center whitespace-nowrap">
+          {Teacher.employeeId}
+        </td>
+        <td className="flex py-3 px-6 items-center gap-2 whitespace-nowrap">
+          <motion.img
+            src={Teacher.profileLink}
+            alt="img"
+            className="rounded-full h-12 w-12"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+          />
+          {Teacher.name}
+        </td>
+        <td className="py-3 px-6 text-center whitespace-nowrap">
+          {date}
+        </td>
+        <td className="py-3 px-6 text-center whitespace-nowrap">
+          {Teacher.wing}
+        </td>
+        <td className=" py-3 px-6 text-center items-center whitespace-nowrap">
+          {originalSubstitute ? (
+            <motion.div
+              className="flex justify-start gap-2 items-center"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
+            >
+              <motion.img
+                src={originalSubstitute.profileLink}
+                alt="img"
+                className="rounded-full h-12 w-12"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
+              />
+              <div className="text-start">
+                <p> {originalSubstitute.name}</p>
+                {originalSubstitute.employeeId}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
+            >
+              <input
+                type="email"
+                ref={inputRef}
+                className="w-full px-4 py-2 border rounded-md"
+                placeholder="Search Teacher"
+                list={`teacher-suggestions`}
+                onClick={handleClickInside}
+                value={email}
+                onChange={handleEmailChange}
+              />
+              {showSuggestions && suggestions.length > 0 && (
+                <motion.ul
+                  className="absolute z-10 bg-white border rounded-md mt-1 max-h-70 overflow-y-auto"
+                  ref={suggestionsRef}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
+                >
+                  {suggestions.map((suggestion, idx) => (
+                    <motion.li
+                      key={idx}
+                      className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.6 + (index + idx) * 0.1 }}
+                    >
+                      <img
+                        src={suggestion.profileLink}
+                        alt="Profile"
+                        className="w-6 h-6 rounded-full mr-2"
+                      />
+                      {suggestion.name}
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              )}
+            </motion.div>
+          )}
+        </td>
+        <td className="py-3 px-6 text-center whitespace-nowrap">
+          {editingRow ? (
+            <motion.div
+              className="flex gap-1 justify-center"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
+            >
+              <button
+                className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
+                onClick={() => handleConfirmClick()}
+              >
+                <MdCheck className="text-white" />
+              </button>
+              <button
+                className="bg-red-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
+                onClick={() => handleCancelClick()}
+              >
+                <FaTimes className="text-white" />
+              </button>
+            </motion.div>
+          ) : (
+            <motion.div
+              className="flex justify-center gap-1"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
+            >
+              <button
+                className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
+                onClick={() => handleUpdateClick()}
+              >
+                <MdEdit className="text-white" />
+              </button>
+            </motion.div>
+          )}
+        </td>
+      </motion.tr>
     )
 }

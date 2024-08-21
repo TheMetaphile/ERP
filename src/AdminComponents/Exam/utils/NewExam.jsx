@@ -4,6 +4,7 @@ import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Exam } from '../../../Config';
+import { motion } from 'framer-motion';
 
 const NewExam = ({ onClose, addExam }) => {
   const { authState } = useContext(AuthContext);
@@ -90,19 +91,46 @@ const NewExam = ({ onClose, addExam }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 overflow-y-auto no-scrollbar">
-      <div className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-3xl">
-        <button
+    <motion.div
+      className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 overflow-y-auto no-scrollbar"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div
+        className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-3xl"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.button
           className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-700"
           onClick={onClose}
+          whileHover={{ scale: 1.2 }}
+          whileTap={{ scale: 0.9 }}
         >
-          ✖
-        </button>
-        <h2 className="text-2xl mb-4">Schedule New Exams</h2>
+          {/* <FaTimes className="text-purple-600" /> */}
+        </motion.button>
+        <motion.h2
+          className="text-2xl mb-4 text-purple-600 font-bold"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          Schedule New Exams
+        </motion.h2>
         <form onSubmit={handleSubmit}>
-          <div className='flex gap-3'>
+          <motion.div
+            className="flex gap-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             <div className="mb-4 w-full">
-              <label htmlFor="term" className="block text-gray-700 font-bold mb-2">
+              <label
+                htmlFor="term"
+                className="block  font-bold mb-2 text-purple-600"
+              >
                 Select Term
               </label>
               <select
@@ -110,16 +138,21 @@ const NewExam = ({ onClose, addExam }) => {
                 name="term"
                 value={selectedTerm}
                 onChange={handleTermChange}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-purple-400 rounded-md"
                 required
               >
-                <option value="" disabled>Select Term</option>
+                <option value="" disabled>
+                  Select Term
+                </option>
                 <option value="1">Term 1</option>
                 <option value="2">Term 2</option>
               </select>
             </div>
             <div className="mb-4 w-full">
-              <label htmlFor="stream" className="block text-gray-700 font-bold mb-2">
+              <label
+                htmlFor="stream"
+                className="block  font-bold mb-2 text-purple-600"
+              >
                 Stream
               </label>
               <select
@@ -127,32 +160,42 @@ const NewExam = ({ onClose, addExam }) => {
                 name="stream"
                 value={stream}
                 onChange={handleStreamChange}
-                className="w-full p-2 border border-gray-300 rounded-md"
-
+                className="w-full p-2 border border-purple-400 rounded-md"
               >
-                <option value="" disabled>Select Stream (optional)</option>
+                <option value="" disabled>
+                  Select Stream (optional)
+                </option>
                 <option value="PCM">PCM</option>
                 <option value="PCB">PCB</option>
                 <option value="Commerce">Commerce</option>
                 <option value="Arts">Arts</option>
-
               </select>
-
             </div>
-          </div>
-          <table className=" bg-white ">
+          </motion.div>
+          <motion.table
+            className="bg-white"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
             <thead>
               <tr>
-                <th className="py-2">Class</th>
-                <th className="py-2">Subject</th>
-                <th className="py-2">Date</th>
-                <th className="py-2">Time</th>
-                <th className="py-2">Duration</th>
+                <th className="py-2 text-purple-600 font-medium">Class</th>
+                <th className="py-2 text-purple-600 font-medium">Subject</th>
+                <th className="py-2 text-purple-600 font-medium">Date</th>
+                <th className="py-2 text-purple-600 font-medium">Time</th>
+                <th className="py-2 text-purple-600 font-medium">Duration</th>
               </tr>
             </thead>
             <tbody>
               {exams.map((exam, index) => (
-                <tr key={index} className=' '>
+                <motion.tr
+                  key={index}
+                  className="border-b border-gray-200 last:border-none"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+                >
                   <td className="border px-4 py-2">
                     <select
                       className="w-full"
@@ -161,7 +204,9 @@ const NewExam = ({ onClose, addExam }) => {
                       onChange={(e) => handleChange(index, e)}
                       required
                     >
-                      <option value="" disabled>Select Class</option>
+                      <option value="" disabled>
+                        Select Class
+                      </option>
                       <option value="Pre-Nursery">Pre-Nursery</option>
                       <option value="Nursery">Nursery</option>
                       <option value="L.K.G">L.K.G</option>
@@ -188,7 +233,9 @@ const NewExam = ({ onClose, addExam }) => {
                       onChange={(e) => handleChange(index, e)}
                       required
                     >
-                      <option value="" disabled>Select Subject</option>
+                      <option value="" disabled>
+                        Select Subject
+                      </option>
                       <option value="Hindi">Hindi</option>
                       <option value="English">English</option>
                       <option value="Maths">Maths</option>
@@ -232,7 +279,9 @@ const NewExam = ({ onClose, addExam }) => {
                       onChange={(e) => handleChange(index, e)}
                       required
                     >
-                      <option value="" disabled>Select Duration</option>
+                      <option value="" disabled>
+                        Select Duration
+                      </option>
                       <option value="1:00 hr">1:00 hr</option>
                       <option value="1:30 hr">1:30 hr</option>
                       <option value="2:00 hr">2:00 hr</option>
@@ -240,35 +289,46 @@ const NewExam = ({ onClose, addExam }) => {
                       <option value="3:00 hr">3:00 hr</option>
                     </select>
                   </td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
-          </table>
-          <div className="flex items-center justify-between mt-4">
-            <button
+          </motion.table>
+          <motion.div
+            className="flex items-center justify-between mt-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <motion.button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
               onClick={addNewExam}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               Add New
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               Save
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
               onClick={onClose}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               Cancel
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

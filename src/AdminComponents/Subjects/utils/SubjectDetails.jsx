@@ -185,7 +185,7 @@ function SubjectDetails({ Class, section }) {
             {scholastic === 'Scholistics' ? (
                 <div>
                     <div className="border border-black rounded-lg mobile:max-laptop:w-fit w-full">
-                        <div className="flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border bg-blue-200">
+                        <div className="flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border bg-purple-200">
                             <h1 className="w-48 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm">
                                 Teacher
                             </h1>
@@ -273,7 +273,7 @@ function SubjectDetails({ Class, section }) {
             ) : (
                 <div>
                     <div className="border border-black rounded-lg mobile:max-laptop:w-fit w-full">
-                        <div className="flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border bg-blue-200">
+                        <div className="flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border bg-purple-200">
                             <h1 className="w-48 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm">
                                 Teacher
                             </h1>

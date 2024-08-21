@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
+import { FaChevronUp, FaChevronDown, FaUserGraduate } from "react-icons/fa6";
 import AuthContext from '../../../Context/AuthContext';
 import Loading from './../../../LoadingScreen/Loading';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SubjectDetails from './SubjectDetails';
 import { BASE_URL_Login, BASE_URL_ClassTeacher } from '../../../Config';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AssignSubjectRow({ Class }) {
     const [expanded, setExpanded] = useState(false);
@@ -104,13 +105,19 @@ export default function AssignSubjectRow({ Class }) {
     };
 
     return (
-        <div key={Class} className="w-full mt-3 mb-4 rounded-lg shadow-md border overflow-auto">
+        <motion.div
+            key={Class}
+            className="w-full mt-3 mb-4 rounded-lg shadow-md border overflow-auto"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            transition={{ duration: 0.3 }}
+        >
+
             <ToastContainer />
             <div className="flex justify-between items-center p-2 " onClick={handleClick}>
-                <div className="w-1/4">
-                    <div className="px-4 py-2 whitespace-nowrap">
-                        {Class}
-                    </div>
+                <div className="flex items-center py-2">
+                    <FaUserGraduate className="text-secondary-600 mr-2" />
+                    <div className="text-lg font-semibold text-secondary-800">{Class}</div>
                 </div>
                 <div className="self-center cursor-pointer" >
                     {expanded ? <FaChevronUp /> : <FaChevronDown />}
@@ -153,6 +160,7 @@ export default function AssignSubjectRow({ Class }) {
                 </div>
             )}
 
-        </div>
+        </motion.div>
+
     );
 }

@@ -11,7 +11,7 @@ function ExpansionTile({ title, childrens, image, alternateText, route }) {
   };
 
   return (
-    <div className={`${expanded ? 'bg-secondary rounded-xl px-2 py-3 mb-2' : 'px-2 py-3'}`}>
+    <div className={`${expanded ? 'bg-purple-100 rounded-xl px-2 py-3 mb-2' : 'px-2 py-3'}`}>
       {childrens.length > 0
         ?
         (
