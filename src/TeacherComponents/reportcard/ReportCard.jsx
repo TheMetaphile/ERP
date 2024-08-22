@@ -68,21 +68,21 @@ function ReportCard() {
     };
 
     return (
-        <motion.div 
+        <motion.div
             className="w-full px-4 py-6 bg-gradient-to-r from-indigo-100 to-indigo-50"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
         >
             <ToastContainer />
-            <h1 className="text-3xl font-bold text-indigo-800 mb-6">Search Report Card</h1>
-            
+            <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-indigo-800 mb-6">Search Report Card</h1>
+
             {loading ? (
                 <Loading />
             ) : students.length === 0 ? (
                 <div className="text-center text-indigo-600 text-xl">No students found</div>
             ) : (
-                <motion.div 
+                <motion.div
                     className="overflow-hidden rounded-lg shadow-lg bg-white"
                     variants={tableVariants}
                 >
@@ -98,7 +98,7 @@ function ReportCard() {
                             </thead>
                             <tbody>
                                 {students.map((detail, index) => (
-                                    <motion.tr 
+                                    <motion.tr
                                         key={index}
                                         className="border-b hover:bg-indigo-50 transition-colors duration-200"
                                         initial={{ opacity: 0, y: 20 }}
@@ -131,12 +131,12 @@ function ReportCard() {
                         </table>
                     </div>
                     {!allDataFetched && (
-                        <motion.div 
+                        <motion.div
                             className="text-center py-4"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            <button 
+                            <button
                                 className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300"
                                 onClick={handleViewMore}
                             >

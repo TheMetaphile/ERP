@@ -80,7 +80,7 @@ function NewUpload({ onClose, onNewWork }) {
             <motion.div
                 initial={{ scale: 0.9, y: 50 }}
                 animate={{ scale: 1, y: 0 }}
-                className="bg-white rounded-lg p-6 shadow-lg max-w-2xl w-full"
+                className="bg-white rounded-lg p-6 shadow-lg max-w-2xl w-full mobile:max-tablet:mx-2"
             >
                 <h2 className="text-2xl font-bold text-indigo-700 mb-6">Create New Classwork</h2>
 

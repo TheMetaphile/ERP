@@ -37,14 +37,14 @@ const TeacherDashboardProfile = () => {
             alt={userDetails.name}
           />
         </div>
-        <div className="mt-16 p-8 text-center">
-          <motion.h1 className="text-3xl font-bold text-gray-800" variants={itemVariants}>
+        <div className="mt-16 p-8 mobile:max-tablet:p-4 text-center">
+          <motion.h1 className="text-3xl mobile:max-tablet:text-xl font-bold text-gray-800" variants={itemVariants}>
             {userDetails.name}
           </motion.h1>
         </div>
 
         <div className="tablet:px-8 py-2 mobile:max-tablet:px-2 mb-3">
-          <motion.h2 className="text-2xl font-bold mb-4" variants={itemVariants}>Personal Information</motion.h2>
+          <motion.h2 className="text-2xl mobile:max-tablet:text-lg font-bold mb-4" variants={itemVariants}>Personal Information</motion.h2>
           <motion.div className="grid laptop:grid-cols-3 mobile:max-tablet:grid-cols-1 tablet:grid-cols-2 gap-4" variants={containerVariants}>
             <InfoItem icon={<FaEnvelope />} label="Email" value={userDetails.email} />
             <InfoItem icon={<FaEnvelope />} label="Employee Id" value={userDetails.employeeId} />

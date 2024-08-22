@@ -62,10 +62,10 @@ function StudentDoubts() {
                 initial={{ y: -20 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="flex justify-between w-full items-center mb-4 py-2"
+                className="flex justify-between mobile:max-tablet:flex-col w-full items-center mb-4 py-2"
             >
-                <h1 className="text-3xl font-bold text-indigo-800">Student Doubts</h1>
-                <div className="flex justify-between gap-3">
+                <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-indigo-800">Student Doubts</h1>
+                <div className="flex justify-between gap-3 mobile:max-tablet: ">
                     <select id="class" value={Class} onChange={handleClassChange} className="shadow-md px-3 py-1  border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg">
                         <option value="">Search by Class</option>
                         {uniqueClasses.map((classOption, index) => (

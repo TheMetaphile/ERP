@@ -116,7 +116,7 @@ export default function HistoryTile({ details }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="relative w-full p-4 border rounded-lg border-indigo-300 shadow-lg mt-3 bg-indigo-50"
+            className="relative w-full p-4 mobile:max-tablet:p-2 border rounded-lg border-indigo-300 shadow-lg mt-3 bg-indigo-50"
         >
             {data.map((item, index) => (
                 <motion.div
@@ -203,7 +203,7 @@ export default function HistoryTile({ details }) {
                             </div>
                         )}
                     </div>
-                    <div className='w-full flex items-center justify-between mt-2 text-indigo-600'>
+                    <div className='w-full mobile:max-tablet:text-xs flex items-center justify-between mt-2 text-indigo-600'>
                         <div>
                             From: {editRowIndex === index ? (
                                 <input

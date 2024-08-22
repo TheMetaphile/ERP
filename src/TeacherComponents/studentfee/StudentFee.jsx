@@ -79,17 +79,17 @@ function StudentFee() {
 
     return (
         <motion.div
-            className="w-full items-start px-4 py-6 bg-gradient-to-r from-indigo-100 to-indigo-50"
+            className="w-full items-start px-4 py-6 mobile:max-tablet:p-3 bg-gradient-to-r from-indigo-100 to-indigo-50"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
         >
             <ToastContainer />
-            <div className='my-6 flex w-full justify-between items-center'>
-                <h1 className="text-3xl font-bold text-indigo-800 mb-2">Student Fee</h1>
+            <div className='my-6 mobile:max-tablet:px-6 mobile:max-tablet:m-0 flex w-full justify-between items-center'>
+                <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-indigo-800 mb-2">Student Fee</h1>
                 <Selection setFilter={setFilter} />
             </div>
-            <motion.div 
+            <motion.div
                 className='overflow-hidden rounded-lg shadow-lg bg-white'
                 variants={tableVariants}
             >
@@ -160,7 +160,7 @@ function StudentFee() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >
-                        <button 
+                        <button
                             className='px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300'
                             onClick={handleViewMore}
                         >

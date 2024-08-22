@@ -16,7 +16,7 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
       transition={{ duration: 0.5 }}
       className="border border-indigo-200 p-4 rounded-lg shadow-lg mt-4 bg-white"
     >
-      <div className="flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
+      <div className="flex mobile:max-sm:flex-col mobile:max-sm:items-start  items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
         <div className="flex items-center space-x-4">
           <motion.img
             whileHover={{ scale: 1.1 }}
@@ -24,9 +24,10 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
             alt=""
             className="w-12 h-12 rounded-full border-2 border-indigo-300"
           />
+          <h3 className="font-semibold text-indigo-800">{doubt.student[0].name}</h3>
           <div>
-            <h3 className="font-semibold text-indigo-800">{doubt.student[0].name}</h3>
-            <div className="flex items-center text-sm text-indigo-600">
+
+            <div className="flex items-center text-sm text-indigo-600 whitespace-nowrap">
               <FaUserGraduate className="mr-1" />
               <span>Roll: {doubt.student[0].rollNumber}</span>
             </div>
@@ -43,7 +44,7 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
           </motion.div>
         </div>
       </div>
-      
+
       <AnimatePresence>
         {expanded === index && (
           <motion.div
@@ -159,8 +160,8 @@ export default function NewDoubtTile({ data, Class }) {
         animate={{ y: 0, opacity: 1 }}
         className="flex items-center justify-between mb-6"
       >
-        <h2 className="text-2xl font-bold text-indigo-800">Pending Doubts</h2>
-        <div className="flex items-center bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-md">
+        <h2 className="text-2xl mobile:max-tablet:text-sm font-bold text-indigo-800">Pending Doubts</h2>
+        <div className="flex items-center bg-indigo-600 mobile:max-tablet:p-2 mobile:max-tablet:text-xs text-white px-4 py-2 rounded-lg shadow-md">
           <FaQuestionCircle className="mr-2" />
           <span>{pendingDoubts.length} Pending</span>
         </div>

@@ -40,7 +40,7 @@ const BirthdayCard = ({ name, currentClass, DOB, isToday }) => (
 
 const BirthdaySection = ({ title, birthdays, isToday }) => (
     <div className="mb-8">
-        <h2 className="text-2xl font-bold text-indigo-700 mb-4 flex items-center">
+        <h2 className="text-2xl mobile:max-tablet:text-lg font-bold text-indigo-700 mb-4 flex items-center">
             <FaBirthdayCake className="mr-2" />
             {title}
         </h2>
