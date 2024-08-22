@@ -149,7 +149,7 @@ function StudentAttendance() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
 
-      className="w-full min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-6 mobile:max-tablet:p-2"
+      className="w-full min-h-screen p-6 mobile:max-tablet:p-2"
 
     >
       <ToastContainer />
@@ -160,7 +160,7 @@ function StudentAttendance() {
           className="flex justify-between items-center mb-8 mobile:max-tablet:flex-col mobile:max-tablet:justify-start"
         >
 
-          <h1 className="text-4xl mobile:max-tablet:text-lg font-extrabold text-blue-500 tracking-tight">Student Attendance</h1>
+          <h1 className="text-4xl mobile:max-tablet:text-lg font-medium text-black tracking-tight">Student Attendance</h1>
           <div className="flex space-x-4 mobile:max-tablet:text-sm mobile:max-tablet:flex-col mobile:max-tablet:gap-1 mobile:max-tablet:space-x-0">
 
             <Link
@@ -184,7 +184,7 @@ function StudentAttendance() {
         {error && <div className="text-red-500 mb-4 text-center font-semibold">{error}</div>}
 
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="p-6 bg-blue-500 text-white flex justify-between items-center">
+          <div className="p-6 bg-gradient-to-r from-blue-100 to-blue-50 text-black flex justify-between items-center">
             <div className="flex items-center">
               <FaUserGraduate className="text-3xl mr-3" />
               <span className="text-xl mobile:max-tablet:text-lg font-semibold">Class Roster</span>

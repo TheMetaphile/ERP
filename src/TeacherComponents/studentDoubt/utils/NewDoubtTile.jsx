@@ -163,7 +163,7 @@ export default function NewDoubtTile({ data, Class }) {
         className="flex items-center justify-between mb-6"
       >
 
-        <h2 className="text-2xl mobile:max-tablet:text-sm font-bold text-blue-600">Pending Doubts</h2>
+        <h2 className="text-2xl mobile:max-tablet:text-sm font-medium text-black">Pending Doubts</h2>
         <div className="flex items-center bg-blue-600 mobile:max-tablet:p-2 mobile:max-tablet:text-xs text-white px-4 py-2 rounded-lg shadow-md">
 
 

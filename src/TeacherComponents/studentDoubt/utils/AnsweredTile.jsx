@@ -101,7 +101,7 @@ export default function AnsweredTile({ data }) {
                 className="flex items-center justify-between mb-6"
             >
 
-                <h2 className="text-2xl mobile:max-sm:text-sm font-bold text-blue-600">Resolved Doubts</h2>
+                <h2 className="text-2xl mobile:max-sm:text-sm font-medium text-black">Resolved Doubts</h2>
                 <div className="flex items-center mobile:max-sm:text-xs bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md">
 
                     <IoMdCheckmarkCircleOutline className="mr-2" />

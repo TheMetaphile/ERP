@@ -90,7 +90,7 @@ function History({ additionalData }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
 
-            className=' mx-auto p-6 bg-blue-50 mobile:max-tablet:p-2 '
+            className=' mx-auto   '
 
         >
             <motion.div
@@ -100,7 +100,7 @@ function History({ additionalData }) {
                 transition={{ delay: 0.2 }}
             >
 
-                <h1 className='text-3xl mobile:max-tablet:text-lg font-bold text-blue-600 flex items-center'>
+                <h1 className='text-3xl px-2 mobile:max-tablet:text-lg font-medium text-black flex items-center'>
 
                     <FaHistory className="mr-2" />
                     Leave History

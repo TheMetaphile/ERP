@@ -117,7 +117,7 @@ export default function HistoryTile({ details }) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
 
-            className="relative w-full p-4 mobile:max-tablet:p-2 border rounded-lg border-blue-300 shadow-lg mt-3 bg-blue-50"
+            className="relative w-full pl-2  mt-3 "
 
         >
             {data.map((item, index) => (

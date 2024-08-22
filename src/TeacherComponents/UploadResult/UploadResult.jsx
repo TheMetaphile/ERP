@@ -109,7 +109,7 @@ function UploadResult() {
         <div className='w-full flex items-center justify-between my-2'>
           <div className='flex-1'>
             <motion.h1
-              className="mb-2 text-3xl font-bold text-blue-600 mobile:max-tablet:text-2xl whitespace-nowrap"
+              className="mb-2 text-3xl font-medium text-black mobile:max-tablet:text-2xl whitespace-nowrap"
               whileHover={{ scale: 1.05 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >

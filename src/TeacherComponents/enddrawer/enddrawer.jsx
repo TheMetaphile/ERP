@@ -18,7 +18,7 @@ export default function TeacherEnddrawer() {
 
   return (
     <motion.div 
-      className="overflow-y-auto w-full h-full px-2 py-6 bg-blue-50 rounded-lg border mobile:max-tablet:border-t-0 border-gray-300 z-10 mobile:max-laptop:mt-0  shadow-lg"
+      className="overflow-y-auto w-full h-full px-2 py-6 rounded-lg border mobile:max-tablet:border-t-0 border-gray-300 z-10 mobile:max-laptop:mt-0  shadow-lg"
       initial="hidden"
       animate="visible"
       variants={containerVariants}

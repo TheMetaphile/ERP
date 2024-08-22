@@ -80,7 +80,7 @@ function StudentLeave() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="w-full flex flex-col px-4 h-screen items-start mb-3 bg-blue-50"
+            className="w-full flex flex-col px-4 h-screen items-start mb-3 "
         >
             <ToastContainer />
             <motion.div
@@ -90,7 +90,7 @@ function StudentLeave() {
                 transition={{ delay: 0.2 }}
             >
 
-                <h1 className='text-3xl mobile:max-tablet:text-sm font-bold text-blue-600 flex items-center'>
+                <h1 className='text-3xl mobile:max-tablet:text-sm font-medium text-black flex items-center'>
 
                     <FaUserGraduate className="mr-3" />
                     Student Leave

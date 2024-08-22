@@ -137,7 +137,7 @@ function HomeWork() {
       <ToastContainer />
       <motion.div variants={itemVariants} className='w-full flex items-center justify-between mb-4'>
 
-        <h1 className='text-3xl mobile:max-tablet:text-lg font-bold text-blue-600'>All Homework</h1>
+        <h1 className='text-3xl mobile:max-tablet:text-lg font-medium text-black'>All Homework</h1>
 
 
         <div className="flex items-center space-x-4 mt-3">
@@ -189,7 +189,7 @@ function HomeWork() {
         <Loading />
       ) : details.length === 0 ? (
         <motion.div
-          className="text-center w-full mt-6 text-blue-600"
+          className="text-center w-full mt-6 text-black"
           variants={itemVariants}
         >
           No Homework found

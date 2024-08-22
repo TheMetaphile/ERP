@@ -55,7 +55,7 @@ function StudentDoubts() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col px-6 h-screen overflow-y-auto items-start mt-4 ml-4 mr-6 mb-6 no-scrollbar bg-blue-50"
+            className="flex flex-col px-2 h-screen overflow-y-auto items-start mt-4 ml-4 mr-6 mb-6 no-scrollbar"
         >
             <ToastContainer />
             <motion.div
@@ -65,7 +65,7 @@ function StudentDoubts() {
                 className="flex justify-between mobile:max-tablet:flex-col w-full items-center mb-4 py-2"
             >
 
-                <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-blue-600">Student Doubts</h1>
+                <h1 className="text-3xl mobile:max-tablet:text-lg font-medium text-black">Student Doubts</h1>
                 <div className="flex justify-between gap-3 mobile:max-tablet: ">
                     <select id="class" value={Class} onChange={handleClassChange} className="shadow-md px-3 py-1  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
 

@@ -77,7 +77,7 @@ export default function Notices() {
                     {details.map((detail, index) => (
                         <motion.div
                             key={index}
-                            className="bg-white p-4 rounded-lg shadow-md"
+                            className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
                             variants={itemVariants}
                         >
                             <h4 className="flex w-full justify-start font-medium text-lg mb-2 items-start gap-2">

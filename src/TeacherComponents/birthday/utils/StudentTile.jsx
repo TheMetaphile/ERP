@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { IoLogoWhatsapp } from "react-icons/io";
 import { FaBirthdayCake, FaUserGraduate, FaCalendarAlt } from "react-icons/fa";
 
-const BirthdayCard = ({ detail, isToday }) => (
+const BirthdayCard = ({ detail }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

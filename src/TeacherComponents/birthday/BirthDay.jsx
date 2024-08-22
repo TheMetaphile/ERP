@@ -13,13 +13,13 @@ function BirthDay() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-laptop: bg-blue-50"
+            className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar  "
         >
             <motion.h1 
                 initial={{ y: -20 }}
                 animate={{ y: 0 }}
                 transition={{ type: "spring", stiffness: 300 }}
-                className='text-3xl font-semibold mobile:max-tablet:text-xl text-blue-600'
+                className='text-3xl font-medium mobile:max-tablet:text-xl text-black'
             >
                 Birthday Celebrations
             </motion.h1>
