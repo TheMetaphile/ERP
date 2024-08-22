@@ -18,14 +18,14 @@ function NoticeBoard() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3 bg-indigo-50"
+            className="flex flex-col px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3 bg-blue-50"
         >
             <ToastContainer />
             <div className="flex justify-between mobile:max-tablet:px-2 w-full items-center mb-4 py-3">
                 <motion.h1 
                     initial={{ x: -20 }}
                     animate={{ x: 0 }}
-                    className='text-3xl mobile:max-tablet:text-lg font-bold text-indigo-800 items-center flex'
+                    className='text-3xl mobile:max-tablet:text-lg font-bold text-blue-600 items-center flex'
                 >
                     <FaClipboardList className="inline-block mr-2" />
                     Notice Board
@@ -33,7 +33,7 @@ function NoticeBoard() {
                 <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex items-center text-base font-medium text-white bg-indigo-600 rounded-lg shadow-md mobile:max-tablet:p-2 p-3 cursor-pointer transition-colors duration-300 hover:bg-indigo-700"
+                    className="flex items-center text-base font-medium text-white bg-blue-600 rounded-lg shadow-md mobile:max-tablet:p-2 p-3 cursor-pointer transition-colors duration-300 hover:bg-blue-700"
                     onClick={handleOpenModal}
                 >
                     <FaPlusCircle className="mr-2" />
@@ -52,7 +52,7 @@ function NoticeBoard() {
                         <motion.div whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
                             <Link
                                 to={'/Teacher-Dashboard/noticeboard/teacher'}
-                                className={`text-xl mobile:max-tablet:text-sm font-medium px-4 py-2 rounded-t-lg transition-colors duration-300 flex items-center ${selectedLink === '/Teacher-Dashboard/noticeboard/teacher' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-600'}`}
+                                className={`text-xl mobile:max-tablet:text-sm font-medium px-4 py-2 rounded-t-lg transition-colors duration-300 flex items-center ${selectedLink === '/Teacher-Dashboard/noticeboard/teacher' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
                                 onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/teacher')}
                             >
                                 <FaClipboardList className="mr-2" />
@@ -62,7 +62,7 @@ function NoticeBoard() {
                         <motion.div whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
                             <Link
                                 to={'/Teacher-Dashboard/noticeboard/upload'}
-                                className={`text-xl mobile:max-tablet:text-sm font-medium px-4 py-2 rounded-t-lg transition-colors duration-300 flex items-center ${selectedLink === '/Teacher-Dashboard/noticeboard/upload' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-600'}`}
+                                className={`text-xl mobile:max-tablet:text-sm font-medium px-4 py-2 rounded-t-lg transition-colors duration-300 flex items-center ${selectedLink === '/Teacher-Dashboard/noticeboard/upload' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
                                 onClick={() => handleLinkSelect('/Teacher-Dashboard/noticeboard/upload')}
                             >
                                 <FaUpload className="mr-2" />

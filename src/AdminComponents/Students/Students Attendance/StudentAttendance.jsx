@@ -5,6 +5,8 @@ import axios from 'axios';
 import Loading from "../../../LoadingScreen/Loading";
 import AuthContext from "../../../Context/AuthContext";
 import { BASE_URL_Attendence } from "../../../Config";
+import { motion } from 'framer-motion';
+import { FaFilter } from 'react-icons/fa';
 
 export default function StudentAttendance() {
 
@@ -76,30 +78,60 @@ export default function StudentAttendance() {
         fetchStudents();
     }, [authState.accessToken, Class, Section, Month]);
 
-    return (
-        <div className="flex flex-col mx-2">
-            {/* Container for heading and filter button */}
-            <div className="flex justify-between items-center px-2 py-2 mobile:max-tablet:border-b border-gray-300 mobile:max-tablet:fixed mobile:max-tablet:top-32 left-0 right-0 bg-white mb-4 mobile:max-tablet:mb-0 mobile:max-tablet:py-4">
-                <div className="text-2xl mobile:max-tablet:text-xl mobile:max-tablet:px-2 mobile:max-tablet:">Student's Attendance Details</div>
-                <div className="mobile:max-tablet:block hidden">
-                    {/* Ensure this is hidden on medium and larger screens */}
-                    <button
-                        className="p-2 border rounded"
-                        onClick={() => setDropdownVisible(!isDropdownVisible)}
-                    >
-                        Filter
-                    </button>
-                    {isDropdownVisible && (
-                        <div className="absolute bg-white  py-2 mobile:max-tablet:my-3 rounded right-1 left-1 z-20 justify-center flex">
-                            <SearchBar
-                            />
-                        </div>
-                    )}
-                </div>
-            </div>
+    const containerVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.5,
+                when: "beforeChildren",
+                staggerChildren: 0.1
+            }
+        }
+    };
 
-            {/* Original SearchBar for non-mobile screens */}
-            <div className="w-full desktop:block hidden mobile:max-tablet:mt-14">
+    const itemVariants = {
+        hidden: { opacity: 0, y: 10 },
+        visible: { opacity: 1, y: 0 }
+    };
+
+    return (
+        <motion.div
+            className="flex flex-col mx-2 bg-purple-50 min-h-screen"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            <motion.div
+                className="flex justify-between items-center px-4 py-4  text-purple-600 mb-4"
+                variants={itemVariants}
+            >
+                <h1 className="text-3xl font-semibold mobile:max-tablet:text-xl">
+                    Student's Attendance Details
+                </h1>
+                <motion.button
+                    className="p-2 bg-purple-500 rounded-full shadow-md hover:bg-purple-400 transition-colors duration-200 mobile:max-tablet:block hidden"
+                    onClick={() => setDropdownVisible(!isDropdownVisible)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    <FaFilter />
+                </motion.button>
+            </motion.div>
+
+            {isDropdownVisible && (
+                <motion.div
+                    className="absolute bg-white py-2 rounded-lg shadow-xl right-4 left-4 z-20 mobile:max-tablet:mt-16"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                >
+                    <SearchBar />
+                </motion.div>
+            )}
+
+            <motion.div className="w-full mb-4" variants={itemVariants}>
                 <SearchBar
                     Class={Class}
                     Section={Section}
@@ -109,30 +141,33 @@ export default function StudentAttendance() {
                     handlebothEventsCalled={handlebothEventsCalled}
                     handleMonthChange={handleMonthChange}
                 />
-            </div>
+            </motion.div>
 
-            {loading ? (
-                <Loading />
-            ) : error ? (
-                <div className=" flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 ">
-                    {error}
-                </div>
-            ) : !data ? (
-                <div className=" flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 ">
-                    <div className="mx-4 text-xl px-4 mt-4">
-                        No data available
+            <motion.div
+                className="flex-grow"
+                variants={itemVariants}
+            >
+                {loading ? (
+                    <Loading />
+                ) : error ? (
+                    <div className=" flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 text-purple-600 text-center pt-3">
+                        {error}
                     </div>
-                </div>
-            ) : (
-                <div className="flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 mobile:max-tablet:mt-20">
-                    <div className=" text-xl px-4 mt-4 mobile:max-tablet:text-sm ">
-                        Attendance Sheet Of Class {Class} {Section}, {year}
+                ) : !data ? (
+                    <div className=" flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 text-purple-600 text-center pt-3">
+                        <div className="mx-4 text-xl px-4 mt-4">
+                            No data available
+                        </div>
                     </div>
-                    <div className="px-3">
-                        <AttendanceStatusGridTile data={data} month={Month}/>
+                ) : (
+                    <div className="flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 mobile:max-tablet:mt-20">
+                        <div className=" text-xl px-4 mt-4 mobile:max-tablet:text-sm ">                         Attendance Sheet Of Class {Class} {Section}, {year}                     </div>
+                        <div className="px-3">
+                            <AttendanceStatusGridTile data={data} month={Month} />
+                        </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )}
+            </motion.div>
+        </motion.div>
     )
 }

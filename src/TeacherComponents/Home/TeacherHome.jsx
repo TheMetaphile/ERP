@@ -11,7 +11,7 @@ function TeacherHome() {
     return (
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar mobile:max-laptop:mt-0">
             <h1 className='text-3xl mobile:max-tablet:text-xl'>Dashboard</h1>
-            <div className='flex items-center justify-between border shadow-md mt-4 rounded-lg  w-full bg-indigo-200'>
+            <div className='flex items-center justify-between border shadow-md mt-4 rounded-lg  w-full bg-blue-200'>
                 <h1 className='ml-3 font-medium text-2xl mobile:max-tablet:text-lg'>Welcome back, <span className='font-semibold text-3xl mobile:max-tablet:text-xl'>{authState.userDetails.name}</span></h1>
                 <img src={bg} alt="teacher-student" className='h-16'></img>
             </div>

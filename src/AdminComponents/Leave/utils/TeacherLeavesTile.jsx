@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
-import Logo from '../../../assets/Test Account.png'
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_TeacherLeave } from '../../../Config';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { motion } from "framer-motion";
 
 export default function TeacherLeavesTile({ data }) {
     const [expanded, setExpanded] = useState(null);
@@ -15,7 +15,7 @@ export default function TeacherLeavesTile({ data }) {
     const [selectedLeave, setSelectedLeave] = useState(null);
 
 
-   
+
 
     const handleClick = (index) => {
         setExpanded(expanded === index ? null : index);
@@ -67,73 +67,124 @@ export default function TeacherLeavesTile({ data }) {
     };
 
     return (
-        <div className="w-full">
+        <motion.div
+            className="w-full"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
             {data.length > 0 ? (
                 data.map((teacher, teacherIndex) => (
-                    <div key={teacherIndex} className=" border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center " onClick={() => handleClick(`${teacherIndex}`)}>
-                        <div className='w-full'>
-                            <div className='font-medium w-full text-base ml-2 flex text-center justify-between items-center'>
-                                <div className='flex mobile:max-tablet:flex-wrap items-center'>
+                    <motion.div
+                        key={teacherIndex}
+                        className="border p-2 justify-between rounded-lg shadow-md mt-3 flex items-center cursor-pointer"
+                        onClick={() => handleClick(`${teacherIndex}`)}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: teacherIndex * 0.1 }}
+                    >
+                        <div className="w-full">
+                            <div className="font-medium w-full text-base ml-2 flex text-center justify-between items-center">
+                                <div className="flex mobile:max-tablet:flex-wrap items-center">
                                     <div className="flex items-center">
                                         {teacher.AppliedBy && teacher.AppliedBy[0] && (
                                             <>
-                                                <img src={teacher.AppliedBy[0].profileLink} alt="" className="h-10 w-10 mobile:max-tablet:hidden rounded-full" />
-                                                <p className="  px-2 mobile:max-tablet:text-lg"> {teacher.AppliedBy[0].name}</p>
+                                                <img
+                                                    src={teacher.AppliedBy[0].profileLink}
+                                                    alt=""
+                                                    className="h-10 w-10 mobile:max-tablet:hidden rounded-full"
+                                                />
+                                                <p className="px-2 mobile:max-tablet:text-lg text-purple-500">
+                                                    {teacher.AppliedBy[0].name}
+                                                </p>
                                             </>
                                         )}
                                     </div>
-                                    wants a &nbsp;
-                                    <span className='text-red-500 whitespace-nowrap'>{teacher.type}&nbsp;</span>from &nbsp;
-                                    <div className=' flex'>
-                                        <span className='text-red-500 whitespace-nowrap'>{teacher.startDate}&nbsp;</span> to &nbsp;
-                                        <span className='text-red-500 whitespace-nowrap'>{teacher.endDate}</span>
+                                    <span className="text-purple-500 whitespace-nowrap">
+                                        wants a {teacher.type}
+                                    </span>
+                                    &nbsp;from&nbsp;
+                                    <div className="flex">
+                                        <span className="text-purple-500 whitespace-nowrap">
+                                            {teacher.startDate}
+                                        </span>
+                                        &nbsp;to&nbsp;
+                                        <span className="text-purple-500 whitespace-nowrap">
+                                            {teacher.endDate}
+                                        </span>
                                     </div>
-
                                 </div>
-                                <div className='items-center px-3 cursor-pointer'>
-                                    {expanded === `${teacherIndex}` ? <FaChevronUp /> : <FaChevronDown />}
+                                <div className="items-center px-3 cursor-pointer text-purple-500">
+                                    {expanded === `${teacherIndex}` ? (
+                                        <FaChevronUp />
+                                    ) : (
+                                        <FaChevronDown />
+                                    )}
                                 </div>
                             </div>
                             {expanded === `${teacherIndex}` && (
-                                <div className='font-medium text-base ml-2 mt-2'>
-                                    <span className='text-gray-400 text-xl'>Reason</span>
-                                    <div className='mt-2 text-gray-700 font-normal text-justify'>
+                                <motion.div
+                                    className="font-medium text-base ml-2 mt-2"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <span className="text-gray-400 text-xl">Reason</span>
+                                    <div className="mt-2 text-gray-700 font-normal text-justify">
                                         {teacher.reason}
                                     </div>
-                                </div>
+                                </motion.div>
                             )}
-                            <div className='flex gap-2 font-medium text-base ml-2 mt-2 w-full'>
+                            <motion.div
+                                className="flex gap-2 font-medium text-base ml-2 mt-2 w-full"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: 0.1 }}
+                            >
                                 {teacher.status === 'Approved' ? (
-                                    <div className='flex items-center justify-between w-full'>
+                                    <div className="flex items-center justify-between w-full">
                                         <button
-                                            className='p-1 rounded-lg border border-gray-300 text-black px-2 bg-green-300'
+                                            className="p-1 rounded-lg border border-green-500 text-green-500 px-2 bg-green-200"
                                             disabled={loading}
                                         >
                                             Approved
                                         </button>
                                         <div className="flex items-center">
-                                            Approved By: &nbsp;{teacher.ApprovedBy && teacher.ApprovedBy[0] && (
+                                            Approved By:&nbsp;
+                                            {teacher.ApprovedBy && teacher.ApprovedBy[0] && (
                                                 <>
-                                                    <img src={teacher.ApprovedBy[0].profileLink} alt="" className="h-8 w-8 mobile:max-tablet:hidden rounded-full" />
-                                                    <p className="  px-2 mobile:max-tablet:text-lg"> {teacher.ApprovedBy[0].name}</p>
+                                                    <img
+                                                        src={teacher.ApprovedBy[0].profileLink}
+                                                        alt=""
+                                                        className="h-8 w-8 mobile:max-tablet:hidden rounded-full"
+                                                    />
+                                                    <p className="px-2 mobile:max-tablet:text-lg text-purple-500">
+                                                        {teacher.ApprovedBy[0].name}
+                                                    </p>
                                                 </>
                                             )}
                                         </div>
                                     </div>
                                 ) : teacher.status === 'Rejected' ? (
-                                    <div className='flex items-center justify-between w-full'>
-
-                                    <button
-                                        className='p-1 rounded-lg text-black border border-gray-300 px-2 bg-red-300'
-                                        disabled={loading}
-                                    >
-                                        Rejected
-                                    </button>
-                                    <div className="flex items-center">
-                                            Rejected By: &nbsp;{teacher.AppliedBy && teacher.AppliedBy[0] && (
+                                    <div className="flex items-center justify-between w-full">
+                                        <button
+                                            className="p-1 rounded-lg text-red-500 border border-red-500 px-2 bg-red-200"
+                                            disabled={loading}
+                                        >
+                                            Rejected
+                                        </button>
+                                        <div className="flex items-center">
+                                            Rejected By:&nbsp;
+                                            {teacher.AppliedBy && teacher.AppliedBy[0] && (
                                                 <>
-                                                    <img src={teacher.AppliedBy[0].profileLink} alt="" className="h-8 w-8 mobile:max-tablet:hidden rounded-full" />
-                                                    <p className="  px-2 mobile:max-tablet:text-lg"> {teacher.AppliedBy[0].name}</p>
+                                                    <img
+                                                        src={teacher.AppliedBy[0].profileLink}
+                                                        alt=""
+                                                        className="h-8 w-8 mobile:max-tablet:hidden rounded-full"
+                                                    />
+                                                    <p className="px-2 mobile:max-tablet:text-lg text-purple-500">
+                                                        {teacher.AppliedBy[0].name}
+                                                    </p>
                                                 </>
                                             )}
                                         </div>
@@ -141,14 +192,14 @@ export default function TeacherLeavesTile({ data }) {
                                 ) : (
                                     <>
                                         <button
-                                            className='p-1 rounded-lg border border-gray-300 text-black px-2 bg-green-300'
+                                            className="p-1 rounded-lg border border-green-500 text-green-500 px-2 bg-green-200"
                                             onClick={() => handleAction("Approved", teacher._id)}
                                             disabled={loading}
                                         >
                                             Approve
                                         </button>
                                         <button
-                                            className='p-1 rounded-lg text-black border border-gray-300 px-2 bg-red-300'
+                                            className="p-1 rounded-lg text-red-500 border border-red-500 px-2 bg-red-200"
                                             onClick={() => handleAction("Rejected", teacher._id)}
                                             disabled={loading}
                                         >
@@ -156,17 +207,14 @@ export default function TeacherLeavesTile({ data }) {
                                         </button>
                                     </>
                                 )}
-
-                            </div>
+                            </motion.div>
                         </div>
-
-                    </div>
+                    </motion.div>
                 ))
             ) : (
-                <div>No new leave</div>
+                <div className="text-purple-500 font-bold text-2xl">No new leave</div>
             )}
-
-        </div>
+        </motion.div>
 
     )
 }

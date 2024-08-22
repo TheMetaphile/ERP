@@ -38,7 +38,7 @@ function ClassActivity() {
                         menuItems.map((item, index) => {
                             return (
                                 <li className="mr-4 w-fit whitespace-nowrap p-2" key={index}>
-                                    <Link to={item.route} className={`text-black  ${idx === index ? " text-purple-600 border-b-2 border-purple-600" : ""} font-medium  p-2`} onClick={() => { setidx(index) }}>{item.title}</Link>
+                                    <Link to={item.route} className={`text-black  ${idx === index ? " text-blue-600 border-b-2 border-blue-600" : ""} font-medium  p-2`} onClick={() => { setidx(index) }}>{item.title}</Link>
                                 </li>
                             )
                         })

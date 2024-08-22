@@ -83,7 +83,7 @@ function NewDoubt({ Class, Section, Subject }) {
                     )}
                 </>
             ) : (
-                <div className='w-full text-center mt-3'>No new doubt</div>
+                <div className='w-full text-center mt-3 text-blue-500'>No new doubt</div>
             )}
 
         </div>

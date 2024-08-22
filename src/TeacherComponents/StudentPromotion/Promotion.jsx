@@ -134,15 +134,19 @@ function Promotion() {
     };
 
     return (
-        <motion.div
-            className="w-full px-4 py-6 bg-gradient-to-r from-indigo-100 to-indigo-50"
+
+        <motion.div 
+            className="w-full px-4 py-6 bg-gradient-to-r from-blue-100 to-blue-50"
+
             initial="hidden"
             animate="visible"
             variants={containerVariants}
         >
             <ToastContainer />
             <div className='flex items-center justify-between mb-6'>
-                <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-indigo-800">Promotion</h1>
+
+                <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-blue-600">Promotion</h1>
+
                 <motion.button
                     className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-colors duration-300"
                     onClick={handleSave}
@@ -156,7 +160,7 @@ function Promotion() {
             {loading ? (
                 <Loading />
             ) : students.length === 0 ? (
-                <div className="text-center text-indigo-600 text-xl">No students found</div>
+                <div className="text-center text-blue-600 text-xl">No students found</div>
             ) : (
                 <motion.div
                     className="overflow-hidden rounded-lg shadow-lg bg-white"
@@ -165,7 +169,7 @@ function Promotion() {
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-max">
                             <thead>
-                                <tr className="bg-indigo-600 text-white">
+                                <tr className="bg-blue-600 text-white">
                                     <th className="py-3 px-4 text-left">Roll No.</th>
                                     <th className="py-3 px-4 text-left">Name</th>
                                     <th className="py-3 px-4 text-left">Class</th>
@@ -193,8 +197,9 @@ function Promotion() {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            <button
-                                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300"
+
+                            <button 
+                                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300"
                                 onClick={handleViewMore}
                             >
                                 View More

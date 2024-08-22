@@ -94,7 +94,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
-                    className='bg-white border border-indigo-200 rounded-lg shadow-lg overflow-hidden'
+                    className='bg-white border border-blue-200 rounded-lg shadow-lg overflow-hidden'
                 >
 
 
@@ -107,25 +107,25 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                             {editingRow === index ? (
                                 <>
                                     <div className='flex gap-2 items-center w-full'>
-                                        <div className="pl-2 font-medium text-indigo-700">Chapter: </div>
+                                        <div className="pl-2 font-medium text-blue-700">Chapter: </div>
                                         <input
-                                            className="font-normal border border-indigo-300 shadow-md rounded-lg px-3 py-2 text-justify flex-grow"
+                                            className="font-normal border border-blue-300 shadow-md rounded-lg px-3 py-2 text-justify flex-grow"
                                             value={detail.chapter}
                                             onChange={(e) => handleInputChange(index, 'chapter', e.target.value)}
                                         />
                                     </div>
                                     <div className='flex gap-3 items-center w-full mt-2'>
-                                        <div className="pl-2 font-medium text-indigo-700">Subject: </div>
+                                        <div className="pl-2 font-medium text-blue-700">Subject: </div>
                                         <input
-                                            className="font-normal border border-indigo-300 shadow-md rounded-lg px-3 py-2 text-justify flex-grow"
+                                            className="font-normal border border-blue-300 shadow-md rounded-lg px-3 py-2 text-justify flex-grow"
                                             value={detail.subject}
                                             onChange={(e) => handleInputChange(index, 'subject', e.target.value)}
                                         />
                                     </div>
                                     <div className='flex gap-3 items-center w-full mt-2'>
-                                        <div className="pl-2 font-medium text-indigo-700">Topic: </div>
+                                        <div className="pl-2 font-medium text-blue-700">Topic: </div>
                                         <input
-                                            className="font-normal border border-indigo-300 shadow-md rounded-lg px-3 py-2 text-justify flex-grow"
+                                            className="font-normal border border-blue-300 shadow-md rounded-lg px-3 py-2 text-justify flex-grow"
                                             value={detail.topic}
                                             onChange={(e) => handleInputChange(index, 'topic', e.target.value)}
                                         />
@@ -135,16 +135,16 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                                 <>
                                     <div className='flex flex-col w-full space-y-2'>
                                         <div className='flex justify-between items-center'>
-                                            <div className="pl-2 font-medium text-indigo-700">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
+                                            <div className="pl-2 font-medium text-blue-700">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
 
                                             <motion.div
-                                                className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full"
+                                                className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full"
                                                 whileHover={{ scale: 1.05 }}
                                             >
                                                 {detail.subject}
                                             </motion.div>
                                         </div>
-                                        <div className="pl-2 font-medium text-indigo-700">Topic: <span className='font-normal'>{detail.topic}</span></div>
+                                        <div className="pl-2 font-medium text-blue-700">Topic: <span className='font-normal'>{detail.topic}</span></div>
                                     </div>
                                 </>
                             )}
@@ -160,24 +160,24 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                                 >
                                     {editingRow === index ? (
                                         <div className="flex flex-col space-y-2">
-                                            <div className=" font-medium text-indigo-700">Task: </div>
+                                            <div className=" font-medium text-blue-700">Task: </div>
                                             <textarea
                                                 rows={6}
-                                                className="font-normal border border-indigo-300 shadow-md rounded-lg px-3 py-2 text-justify resize-none"
+                                                className="font-normal border border-blue-300 shadow-md rounded-lg px-3 py-2 text-justify resize-none"
                                                 value={detail.description}
                                                 onChange={(e) => handleInputChange(index, 'description', e.target.value)}
                                             />
                                         </div>
                                     ) : (
                                         <div className="space-y-2">
-                                            <div className=" font-medium text-indigo-700">Task: <span className='font-normal'>{detail.description}</span></div>
+                                            <div className=" font-medium text-blue-700">Task: <span className='font-normal'>{detail.description}</span></div>
                                         </div>
                                     )}
                                 </motion.div>
                             )}
                         </AnimatePresence>
 
-                        <div className="flex justify-between items-center mt-4 text-sm text-indigo-500">
+                        <div className="flex justify-between items-center mt-4 text-sm text-blue-500">
                             <div className="flex items-center space-x-2">
                                 <IoMdCalendar />
                                 <span>Date: {detail.date}</span>
@@ -186,7 +186,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                                 <IoMdTime />
                                 {editingRow === index ? (
                                     <input
-                                        className="border-b border-indigo-300 bg-transparent focus:outline-none focus:border-indigo-500"
+                                        className="border-b border-blue-300 bg-transparent focus:outline-none focus:border-blue-500"
                                         value={detail.deadline}
                                         onChange={(e) => handleInputChange(index, 'deadline', e.target.value)}
                                     />
@@ -197,7 +197,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                         </div>
 
                         <motion.div
-                            className='px-4 py-2 bg-indigo-50 flex justify-end space-x-2'
+                            className='px-4 py-2 bg-blue-50 flex justify-end space-x-2'
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.2 }}
@@ -229,7 +229,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                                     <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-                                        className="bg-indigo-500 text-white px-4 py-2 rounded-md shadow-md flex items-center space-x-2"
+                                        className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md flex items-center space-x-2"
                                         onClick={() => handleUpdateClick(index)}
 
                                     >

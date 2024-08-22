@@ -3,6 +3,7 @@ import axios from "axios";
 import AuthContext from "../../../../../Context/AuthContext";
 import { BASE_URL_Login } from "../../../../../Config";
 import { toast } from "react-toastify";
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ClassTeacherSubstitutionHistory() {
     const { authState } = useContext(AuthContext);
@@ -58,11 +59,40 @@ export default function ClassTeacherSubstitutionHistory() {
         }
     }, [start]);
 
+    const tableVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                when: "beforeChildren",
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const rowVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: 'spring',
+                stiffness: 100,
+                damping: 12
+            }
+        }
+    };
+
     return (
-        <div className=" rounded-lg overflow-auto pt-3">
-            <table className="min-w-fit bg-white border border-gray-300 rounded-lg">
+        <div className="rounded-lg overflow-auto pt-3">
+            <motion.table
+                className="min-w-fit bg-white border border-gray-300 rounded-lg"
+                variants={tableVariants}
+                initial="hidden"
+                animate="visible"
+            >
                 <thead>
-                    <tr className="bg-gradient-to-r from-indigo-400  to-indigo-200 text-lg ">
+                    <tr className="bg-gradient-to-r from-blue-400 to-blue-200 text-lg">
                         <th className="py-2 px-6 text-center">Lecture</th>
                         <th className="py-2 px-6 text-center">Date</th>
                         <th className="py-2 px-6 text-center">Class</th>
@@ -71,48 +101,59 @@ export default function ClassTeacherSubstitutionHistory() {
                         <th className="py-2 px-6 text-center">Section</th>
                         <th className="py-2 px-6 text-center">Subject</th>
                         <th className="py-2 px-6 text-center w-72">Substitute</th>
-
                     </tr>
                 </thead>
-                <tbody className="text-gray-600 text-md font-normal min-h-10 max-h-screen overflow-x-auto overflow-y-auto">
-                    {PrevioursSubstitutions.length === 0 ? (
-                        <div className="w-full whitespace-nowrap">Teacher leave history not available</div>
-                    ) : (
-                        <>
-                            {
-                                PrevioursSubstitutions.map((teachers, index) =>
-                                (
-                                    <tr key={index} className="border-b border-gray-200  last:border-none">
+                <AnimatePresence>
+                    <motion.tbody className="text-gray-600 text-md font-normal min-h-10 max-h-screen overflow-x-auto overflow-y-auto">
+                        {PrevioursSubstitutions.length === 0 ? (
+                            <motion.tr variants={rowVariants}>
+                                <td colSpan="8" className="text-center py-4">
+                                    Teacher leave history not available
+                                </td>
+                            </motion.tr>
+                        ) : (
+                            <>
+                                {PrevioursSubstitutions.map((teachers, index) => (
+                                    <motion.tr
+                                        key={index}
+                                        className="border-b border-gray-200 last:border-none"
+                                        variants={rowVariants}
+                                    >
                                         <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.Lecture}</td>
                                         <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.date}</td>
                                         <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.class}</td>
                                         <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.classTeacherDetails.employeeId}</td>
-                                        <td className="flex py-3 px-6 justify-start   items-center gap-2 whitespace-nowrap w-64"><img src={teachers.classTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />{teachers.classTeacherDetails.name}</td>
+                                        <td className="flex py-3 px-6 justify-start items-center gap-2 whitespace-nowrap w-64">
+                                            <img src={teachers.classTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />
+                                            {teachers.classTeacherDetails.name}
+                                        </td>
                                         <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.section}</td>
                                         <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.subject}</td>
-
-                                        <div className="flex justify-start gap-2 items-center w-72">
-                                            <img src={teachers.substituteTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />
-                                            <div className="text-start">
-                                                <p> {teachers.substituteTeacherDetails.name}</p>
-                                                {teachers.substituteTeacherDetails.employeeId}
-
+                                        <td className="py-3 px-6">
+                                            <div className="flex justify-start gap-2 items-center w-72">
+                                                <img src={teachers.substituteTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />
+                                                <div className="text-start">
+                                                    <p>{teachers.substituteTeacherDetails.name}</p>
+                                                    {teachers.substituteTeacherDetails.employeeId}
+                                                </div>
                                             </div>
-                                        </div>
+                                        </td>
+                                    </motion.tr>
+                                ))}
+                            </>
+                        )}
+                    </motion.tbody>
+                </AnimatePresence>
+            </motion.table>
+            {!allDataFetched && (
+                <motion.h1
+                    className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center'
+                    onClick={handleViewMore}
 
-                                    </tr>
-                                )
-                                )
-                            }
-
-                            {!allDataFetched && (
-                                <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                            )}
-                        </>
-                    )}
-
-                </tbody>
-            </table>
+                >
+                    View More
+                </motion.h1>
+            )}
         </div>
     )
 }

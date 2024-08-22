@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SubstituteTable from './utils/SubstituteTable';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { motion } from 'framer-motion';
 
 function SubstituteCoordinator() {
     const [data, setData] = useState([
@@ -44,15 +45,32 @@ function SubstituteCoordinator() {
     };
 
     return (
-        <div className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-tablet:mt-6">
+        <motion.div
+            className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-tablet:mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+        >
             <ToastContainer />
-            <div className="flex justify-between">
-                <h1 className="text-xl font-medium mb-2 mobile:max-tablet:text-lg">Coordinators on leave (Today)</h1>
-            </div>
-            <SubstituteTable />
-
-
-        </div>
+            <motion.div
+                className="flex justify-between"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+            >
+                <h1 className="text-3xl font-medium mb-2 mobile:max-tablet:text-lg text-purple-600">
+                    Coordinators on leave (Today)
+                </h1>
+            </motion.div>
+            <motion.div
+                className="flex w-full rounded-md shadow-md"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+            >
+                <SubstituteTable />
+            </motion.div>
+        </motion.div>
     );
 }
 

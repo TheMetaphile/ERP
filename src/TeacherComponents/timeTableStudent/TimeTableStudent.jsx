@@ -164,13 +164,15 @@ export default function TimeTableStudent() {
     };
 
     return (
-        <div className=" flex flex-col w-full  items-start  py-3 px-3 bg-gradient-to-r from-indigo-100 to-indigo-50">
+        <div className=" flex flex-col w-full  items-start  py-3 px-3 bg-gradient-to-r from-blue-100 to-blue-50">
             <div className="flex w-full justify-between mb-3">
-                <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-indigo-800 mb-2"> Time Table</h1>
+
+                <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-blue-600 mb-2"> Time Table</h1>
+
 
                 <select
                     type="text"
-                    className=" px-4 py-2  border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent mobile:max-tablet:text-sm"
+                    className=" px-4 py-2  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile:max-tablet:text-sm"
                     placeholder="Day"
                     value={day}
                     onChange={handleDayChange}
@@ -195,7 +197,9 @@ export default function TimeTableStudent() {
                         {loading ? (
                             <Loading />
                         ) : data === null || data.length === 0 ? (
-                            <tr className=' w-full border border-gray-300 px-4 py-2 text-center'>No data available</tr>
+                            <tr className='border border-gray-300 px-4 py-2 text-center text-blue-500'>
+                                <td colspan='4'>No data available</td>
+                            </tr>
                         ) : (
                             <>
                                 {lectureTimes.map((time, index) => {

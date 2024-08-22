@@ -34,7 +34,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
-    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 2));
+    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
     const nextWeekStart = new Date();
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
@@ -126,7 +126,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
 
     return (
         <motion.div
-            className='rounded-md overflow-auto bg-indigo-50 p-6'
+            className='rounded-md overflow-auto bg-blue-50 p-6'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -135,7 +135,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                 <Loading />
             ) : details.length === 0 && selectedTab === 'Next Week' ? (
                 <motion.div
-                    className="text-2xl text-indigo-600 font-semibold text-center"
+                    className="text-2xl text-blue-600 font-semibold text-center"
                     initial={{ scale: 0.9 }}
                     animate={{ scale: 1 }}
                     transition={{ duration: 0.3 }}
@@ -145,12 +145,12 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
             ) : (
                 <form onSubmit={handleSubmit}>
                     <motion.table
-                        className='w-full rounded-lg border-2 border-indigo-300 overflow-hidden'
+                        className='w-full rounded-lg border-2 border-blue-300 overflow-hidden'
                         initial={{ scale: 0.95 }}
                         animate={{ scale: 1 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <thead className='bg-indigo-600 text-white'>
+                        <thead className='bg-blue-600 text-white'>
                             <tr className='p-4 text-center'>
                                 <th className='py-3 px-4 text-xl font-semibold'>Date</th>
                                 <th className='py-3 px-4 text-xl font-semibold'>Chapter</th>
@@ -161,7 +161,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                         </thead>
                         <tbody className='text-center'>
                             {details.map((data, index) => (
-                                <NextWeekRow key={index} details={data} index={index} setDetails={setDetails} status={(HODStatus === "Accept" && adminStatus==='Accept')} />
+                                <NextWeekRow key={index} details={data} index={index} setDetails={setDetails} status={(HODStatus === "Accept" && adminStatus === 'Accept')} />
                             ))}
                         </tbody>
                     </motion.table>
@@ -235,17 +235,16 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                             </div>
                         )}
                     </motion.div>
-                    {
-                        adminStatus=='Reject' || HODStatus =='Reject' && <motion.button
+                    <motion.button
                         type="submit"
-                        className="px-8 py-3 w-full rounded-md bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-colors duration-300 flex items-center justify-center"
+                        className="px-8 py-3 w-full rounded-md bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >
                         <FaSave className="mr-2" />
                         <span className="text-lg">SAVE</span>
                     </motion.button>
-                    }
+
                 </form>
             )}
         </motion.div>

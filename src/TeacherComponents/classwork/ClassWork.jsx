@@ -142,11 +142,13 @@ function ClassWork() {
                 className='w-full flex  items-center justify-between tablet:max-laptop:flex-col tablet:max-laptop:items-start mobile:max-tablet:px-3'
                 variants={itemVariants}
             >
-                <h1 className='text-3xl font-bold text-indigo-700 mobile:max-tablet:text-lg whitespace-nowrap'>All ClassWork</h1>
+
+                <h1 className='text-3xl font-bold text-blue-600 mobile:max-tablet:text-lg whitespace-nowrap'>All ClassWork</h1>
+
 
                 <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
                     <motion.button
-                        className="p-2 border rounded-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition-colors duration-300"
+                        className="p-2 border rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors duration-300"
                         onClick={() => setDropdownVisible(!isDropdownVisible)}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -185,13 +187,12 @@ function ClassWork() {
                     </AnimatePresence>
                 </div>
 
-
             </motion.div>
             <div className="flex items-center space-x-4 mt-3">
                 <div className='flex mobile:max-tablet:hidden items-center gap-3'>
                     <div className="relative">
-                        <FiBook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500" />
-                        <select id="class" className="w-full pl-10 pr-4 py-2 border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent rounded-md" onChange={handleClassChange}>
+                        <FiBook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
+                        <select id="class" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" onChange={handleClassChange}>
                             <option value="">Class</option>
                             {uniqueClasses.map((classOption, index) => (
                                 <option key={index} value={classOption}>{classOption}</option>
@@ -199,26 +200,27 @@ function ClassWork() {
                         </select>
                     </div>
                     <div className="relative">
-                        <FiUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500" />
-                        <select id="section" className="w-full pl-10 pr-4 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" onChange={handleSectionChange}>
+                        <FiUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
+                        <select id="section" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSectionChange}>
                             <option value="">Section</option>
                             {uniqueSections.map((sectionOption, index) => (
                                 <option key={index} value={sectionOption}>{sectionOption}</option>
                             ))}
-                        </select>
+                        </select
                     </div>
                     <div className="relative">
-                        <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500" />
-                        <select id="subject" className="w-full pl-10 pr-4 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" onChange={handleSubjectChange}>
+                        <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
+                        <select id="subject" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSubjectChange}>
                             <option value="">Subject</option>
                             {uniqueSubjects.map((subjectOption, index) => (
                                 <option key={index} value={subjectOption}>{subjectOption}</option>
                             ))}
                         </select>
                     </div>
+
                 </div>
                 <motion.button
-                    className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300 flex items-center"
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 flex items-center"
                     onClick={handleOpen}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -231,7 +233,7 @@ function ClassWork() {
                 <Loading />
             ) : details.length === 0 ? (
                 <motion.div
-                    className="text-center w-full mt-6 text-indigo-600"
+                    className="text-center w-full mt-6 text-blue-600"
                     variants={itemVariants}
                 >
                     No Classwork found
@@ -244,7 +246,7 @@ function ClassWork() {
                     <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
                     {!allDataFetched && (
                         <motion.button
-                            className='text-indigo-500 hover:text-indigo-800 mt-3 cursor-pointer text-center w-full'
+                            className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center w-full'
                             onClick={handleViewMore}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}

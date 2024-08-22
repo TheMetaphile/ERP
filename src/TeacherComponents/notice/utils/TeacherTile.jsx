@@ -14,7 +14,7 @@ export default function TeacherTile({ details }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full bg-indigo-50 mb-4"
+        className="w-full bg-blue-50 mb-4"
     >
         {details.map((detail, index) => (
             <motion.div
@@ -22,16 +22,16 @@ export default function TeacherTile({ details }) {
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
-                className='p-4 border border-indigo-200 rounded-lg shadow-md mt-4 bg-white hover:shadow-lg transition-shadow duration-300'
+                className='p-4 border border-blue-200 rounded-lg shadow-md mt-4 bg-white hover:shadow-lg transition-shadow duration-300'
             >
                 <div className='flex items-center w-full'>
                     <div className='ml-4 flex-grow'>
                         <motion.div
-                            className="font-semibold text-lg text-indigo-700 cursor-pointer flex items-center justify-between"
+                            className="font-semibold text-lg text-blue-700 cursor-pointer flex items-center justify-between"
                             onClick={() => handleClick(index)}
                         >
                             <span>{detail.title}</span>
-                            {expanded === index ? <FaChevronUp className="text-indigo-500" /> : <FaChevronDown className="text-indigo-500" />}
+                            {expanded === index ? <FaChevronUp className="text-blue-500" /> : <FaChevronDown className="text-blue-500" />}
                         </motion.div>
                         <motion.div
                             initial={{ height: 0, opacity: 0 }}
@@ -45,12 +45,12 @@ export default function TeacherTile({ details }) {
                         </motion.div>
                         <div className='flex items-center justify-between mt-3 text-sm text-gray-500'>
                             <div className="flex items-center">
-                                <FaUser className="text-indigo-400 mr-2" />
+                                <FaUser className="text-blue-400 mr-2" />
                                 <img src={detail.from.profileLink} alt="profile" className='w-6 h-6 rounded-full mr-2'/>
                                 <span>{detail.from.name}</span>
                             </div>
                             <div className="flex items-center">
-                                <FaClock className="text-indigo-400 mr-2" />
+                                <FaClock className="text-blue-400 mr-2" />
                                 <span>{detail.date}</span>
                             </div>
                         </div>

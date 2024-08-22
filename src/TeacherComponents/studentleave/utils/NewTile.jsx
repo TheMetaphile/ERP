@@ -68,23 +68,23 @@ export default function NewTile({ data }) {
                 data.filter(student => student.status === "Pending").map((student, studentIndex) => (
                     <motion.div 
                         key={studentIndex} 
-                        className="border border-indigo-200 p-4 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300"
+                        className="border border-blue-200 p-4 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300"
                         whileHover={{ scale: 1.02 }}
                         layout
                     >
                         <div className="flex justify-between items-center cursor-pointer" onClick={() => handleClick(`${studentIndex}`)}>
                             <div className="flex items-center space-x-4">
-                                <img src={student.profileLink} alt="" className="w-12 h-12 rounded-full border-2 border-indigo-300" />
+                                <img src={student.profileLink} alt="" className="w-12 h-12 rounded-full border-2 border-blue-300" />
                                 <div>
-                                    <h3 className="text-lg font-semibold text-indigo-700">{student.name}</h3>
-                                    <div className="flex items-center text-sm text-indigo-600">
+                                    <h3 className="text-lg font-semibold text-blue-700">{student.name}</h3>
+                                    <div className="flex items-center text-sm text-blue-600">
                                         <FaUserGraduate className="mr-2" />
                                         Class {authState.ClassDetails.class} {authState.ClassDetails.section}
                                     </div>
                                 </div>
                             </div>
                             <div className="flex items-center space-x-4">
-                                <div className="text-sm text-indigo-600">
+                                <div className="text-sm text-blue-600">
                                     <FaCalendarAlt className="inline mr-2" />
                                     {student.startDate} - {student.endDate}
                                 </div>
@@ -93,7 +93,7 @@ export default function NewTile({ data }) {
                                     animate={{ rotate: expanded === `${studentIndex}` ? 180 : 0 }}
                                     transition={{ duration: 0.3 }}
                                 >
-                                    <FaChevronDown className="text-indigo-500" />
+                                    <FaChevronDown className="text-blue-500" />
                                 </motion.div>
                             </div>
                         </div>
@@ -106,8 +106,8 @@ export default function NewTile({ data }) {
                                     exit="hidden"
                                     className="mt-4"
                                 >
-                                    <h4 className="text-lg font-medium text-indigo-600 mb-2">Reason</h4>
-                                    <p className="text-gray-700 bg-indigo-50 p-3 rounded-lg">{student.reason}</p>
+                                    <h4 className="text-lg font-medium text-blue-600 mb-2">Reason</h4>
+                                    <p className="text-gray-700 bg-blue-50 p-3 rounded-lg">{student.reason}</p>
                                     <div className="mt-4 flex space-x-4">
                                         <motion.button
                                             className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition-colors duration-300"
@@ -135,7 +135,7 @@ export default function NewTile({ data }) {
                 ))
             ) : (
                 <motion.div 
-                    className="text-center text-indigo-600 text-lg"
+                    className="text-center text-blue-600 text-lg"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}

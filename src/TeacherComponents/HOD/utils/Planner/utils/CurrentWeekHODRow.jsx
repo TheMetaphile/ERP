@@ -1,8 +1,25 @@
 import React from 'react'
+import { motion } from 'framer-motion';
 
 function CurrentWeekHODRow({ details, index }) {
+    const rowVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: 'spring',
+                stiffness: 100,
+                damping: 12
+            }
+        }
+    };
     return (
-        <tr key={index}>
+        <motion.tr
+        key={index}
+        variants={rowVariants}
+    >
+
             <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
                 {details.date}
             </td>
@@ -25,7 +42,8 @@ function CurrentWeekHODRow({ details, index }) {
                     <>NA</>
                 )}
             </td>
-        </tr>
+
+        </motion.tr>
     )
 }
 

@@ -5,6 +5,7 @@ import { BASE_URL_Login } from "../../../../../Config";
 import { FaTimes } from "react-icons/fa";
 import { MdCheck, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
+import { motion } from 'framer-motion';
 
 export default function LectureRow({ Teacher, date, index, session, data, substitutionDetail }) {
     const { authState } = useContext(AuthContext);
@@ -194,9 +195,28 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
             });
     }
 
-    return (
-        <tr key={index} className="border-b border-gray-200 last:border-none">
+    const rowVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: 'spring',
+                stiffness: 100,
+                damping: 12,
+                delay: index * 0.05
+            }
+        }
+    };
 
+    return (
+        <motion.tr
+            variants={rowVariants}
+            initial="hidden"
+            animate="visible"
+            key={index}
+            className="border-b border-gray-200 last:border-none"
+        >
             <td className="py-1 px-3 text-center whitespace-nowrap">{data.lectureNo}</td>
             <td className="py-3 px-6 text-center whitespace-nowrap">{date}</td>
             <td className="py-1 px-3 text-center whitespace-nowrap">{data.class}</td>
@@ -209,10 +229,9 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
                     </div>
                 </div>
             </td>
-
             <td className="py-1 px-3 text-center whitespace-nowrap">{data.section}</td>
             <td className="py-1 px-3 text-center whitespace-nowrap">{data.subject}</td>
-            <td className="py-3 px-6 text-center items-center  w-60">
+            <td className="py-3 px-6 text-center items-center w-60">
                 {originalSubstitute ? (
                     <div className="flex justify-start gap-2 items-center">
                         <img src={originalSubstitute.profileLink} alt="img" className="rounded-full h-12 w-12" />
@@ -255,31 +274,38 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
             <td className="py-3 px-6 text-center whitespace-nowrap">
                 {editingRow ? (
                     <div className='flex gap-1 justify-center'>
-                        <button
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
                             onClick={handleConfirmClick}
                         >
                             <MdCheck />
-                        </button>
-                        <button
+                        </motion.button>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
                             onClick={handleCancelClick}
                         >
                             <FaTimes />
-                        </button>
+                        </motion.button>
                     </div>
                 ) : (
                     <div className="flex justify-center gap-1">
-                        <button
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             className='bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
                             onClick={handleUpdateClick}
                         >
                             <MdEdit />
-                        </button>
+                        </motion.button>
                     </div>
                 )}
             </td>
-        </tr>
+        </motion.tr>
+
     )
 
 }

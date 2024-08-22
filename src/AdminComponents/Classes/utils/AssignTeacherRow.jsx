@@ -8,6 +8,7 @@ import { BASE_URL_Login, BASE_URL_ClassTeacher } from '../../../Config';
 import { MdEdit, MdDeleteForever, MdCheck, MdCancel,MdAdd  } from "react-icons/md";
 import { motion, AnimatePresence } from 'framer-motion'; 
 export default function AssignTeacherRow({ Class }) {
+
     const [expanded, setExpanded] = useState(false);
     const [sectionsDetails, setSections] = useState([]);
     const [newSection, setNewSection] = useState('');
@@ -244,7 +245,7 @@ export default function AssignTeacherRow({ Class }) {
                         transition={{ duration: 0.3 }}
                         className='mx-3 border border-secondary-300 rounded-lg mb-2 mt-3 overflow-hidden'
                     >
-                        <div className="flex justify-between w-full py-2 pl-2 bg-secondary-600 text-white">
+                        <div className="flex justify-between w-full py-2 pl-2 bg-purple-300 text-black">
                             <h1 className="w-36 text-lg font-medium">Section</h1>
                             <h1 className="w-36 text-lg font-medium">Class Teacher</h1>
                             <h1 className="w-36 text-lg font-medium text-center">Action</h1>
@@ -315,7 +316,7 @@ export default function AssignTeacherRow({ Class }) {
                                                         <motion.button 
                                                             whileHover={{ scale: 1.1 }} 
                                                             whileTap={{ scale: 0.9 }}
-                                                            className='bg-secondary-500 hover:bg-secondary-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center' 
+                                                            className='bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center' 
                                                             onClick={() => handleUpdateClick(index)}
                                                         >
                                                             <MdEdit />
@@ -396,11 +397,11 @@ export default function AssignTeacherRow({ Class }) {
                         )}
                         
                         <motion.div 
-                            className="flex justify-center w-full px-3 py-3 h-fit bg-secondary-100"
-                            whileHover={{ backgroundColor: '#E9D8FD' }}
+                            className="flex justify-center w-full px-3 py-3 h-fit "
+                           
                         >
                             <motion.button 
-                                className='px-4 py-2 bg-secondary-500 hover:bg-secondary-600 text-white rounded-lg flex items-center'
+                                className='px-4 py-2 rounded-lg flex items-center bg-purple-300 text-black'
                                 onClick={() => getNextAsciiValues(sectionsDetails.length > 0 ? sectionsDetails[sectionsDetails.length - 1].section : '@')}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}

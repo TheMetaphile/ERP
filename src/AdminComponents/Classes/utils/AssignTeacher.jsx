@@ -36,7 +36,7 @@ function AssignTeacher() {
                 initial={{ y: -50 }}
                 animate={{ y: 0 }}
                 transition={{ type: "spring", stiffness: 100 }}
-                className="text-3xl p-4 mobile:max-tablet:text-2xl font-bold text-secondary-800 flex items-center"
+                className="text-3xl p-4 mobile:max-tablet:text-2xl font-bold text-purple-400 flex items-center"
             >
                 <FaChalkboardTeacher className="mr-2" /> Assign Class Teacher
             </motion.h1>

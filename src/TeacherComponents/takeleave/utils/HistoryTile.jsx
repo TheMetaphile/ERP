@@ -116,7 +116,9 @@ export default function HistoryTile({ details }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="relative w-full p-4 mobile:max-tablet:p-2 border rounded-lg border-indigo-300 shadow-lg mt-3 bg-indigo-50"
+
+            className="relative w-full p-4 mobile:max-tablet:p-2 border rounded-lg border-blue-300 shadow-lg mt-3 bg-blue-50"
+
         >
             {data.map((item, index) => (
                 <motion.div
@@ -124,15 +126,15 @@ export default function HistoryTile({ details }) {
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: index * 0.1 }}
-                    className="mb-4 border border-indigo-200 shadow-lg rounded-lg p-4 bg-white"
+                    className="mb-4 border border-blue-200 shadow-lg rounded-lg p-4 bg-white"
                 >
-                    <div className='flex justify-between items-center font-medium text-indigo-700 cursor-pointer' onClick={() => handleClick(index)}>
+                    <div className='flex justify-between items-center font-medium text-blue-700 cursor-pointer' onClick={() => handleClick(index)}>
                         <span>Type: {editRowIndex === index ? (
                             <input
                                 type="text"
                                 value={editData.type}
                                 onChange={(e) => handleInputChange(e, 'type')}
-                                className='border border-indigo-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                                className='border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500'
                             />
                         ) : (
                             item.type
@@ -157,7 +159,7 @@ export default function HistoryTile({ details }) {
                                     rows={6}
                                     value={editData.reason}
                                     onChange={(e) => handleInputChange(e, 'reason')}
-                                    className='border border-indigo-300 rounded w-full p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                                    className='border border-blue-300 rounded w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
                                 />
                             ) : (
                                 <span className='font-normal text-gray-700'>{item.reason}</span>
@@ -169,8 +171,8 @@ export default function HistoryTile({ details }) {
                         {item.by && item.status !== 'Pending' ? (
                             <>
                                 <div className='flex items-center'>
-                                    <img src={item.by[0].profileLink} alt="img" className="w-10 h-10 rounded-full border-2 border-indigo-500" />
-                                    <h5 className="ml-2 font-medium text-indigo-700">{item.by[0].name}</h5>
+                                    <img src={item.by[0].profileLink} alt="img" className="w-10 h-10 rounded-full border-2 border-blue-500" />
+                                    <h5 className="ml-2 font-medium text-blue-700">{item.by[0].name}</h5>
                                 </div>
                                 <div className={`ml-2 font-medium text-sm px-3 py-1 rounded-full ${item.status === 'Pending' ? 'bg-yellow-200 text-yellow-700' :
                                     item.status === 'Approved' ? 'bg-green-200 text-green-700' :
@@ -189,7 +191,7 @@ export default function HistoryTile({ details }) {
                                         </>
                                     ) : (
                                         <>
-                                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className='bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}><MdEdit size={20} /></motion.button>
+                                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className='bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleEditClick(index)}><MdEdit size={20} /></motion.button>
                                             <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center' onClick={() => handleDelete(index)}><MdDeleteForever size={20} /></motion.button>
                                         </>
                                     )}
@@ -203,14 +205,16 @@ export default function HistoryTile({ details }) {
                             </div>
                         )}
                     </div>
-                    <div className='w-full mobile:max-tablet:text-xs flex items-center justify-between mt-2 text-indigo-600'>
+
+                    <div className='w-full mobile:max-tablet:text-xs flex items-center justify-between mt-2 text-blue-600'>
+
                         <div>
                             From: {editRowIndex === index ? (
                                 <input
                                     type="date"
                                     value={editData.startDate}
                                     onChange={(e) => handleInputChange(e, 'startDate')}
-                                    className='border border-indigo-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                                    className='border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500'
                                 />
                             ) : (
                                 item.startDate
@@ -223,7 +227,7 @@ export default function HistoryTile({ details }) {
                                     type="date"
                                     value={editData.endDate}
                                     onChange={(e) => handleInputChange(e, 'endDate')}
-                                    className='border border-indigo-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                                    className='border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500'
                                 />
                             ) : (
                                 item.endDate

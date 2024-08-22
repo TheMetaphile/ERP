@@ -125,12 +125,12 @@ function NewLeave({ onClose, onNewLeave }) {
         className="bg-white rounded-lg p-6 shadow-2xl w-96 max-w-full mx-4"
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold text-indigo-700">Apply for Leave</h2>
+          <h2 className="text-2xl font-semibold text-blue-700">Apply for Leave</h2>
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={onClose}
-            className="text-indigo-500 hover:text-indigo-700"
+            className="text-blue-500 hover:text-blue-700"
           >
             <IoClose size={24} />
           </motion.button>
@@ -138,41 +138,41 @@ function NewLeave({ onClose, onNewLeave }) {
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label className="block text-indigo-700 mb-2 font-medium">From Date</label>
+              <label className="block text-blue-700 mb-2 font-medium">From Date</label>
               <div className="relative">
-                <FiCalendar className="absolute top-3 left-3 text-indigo-500" />
+                <FiCalendar className="absolute top-3 left-3 text-blue-500" />
                 <input
                   type="date"
                   value={fromDate}
                   min={getTodayDate()}
                   onChange={handleFromDateChange}
-                  className="w-full pl-10 pr-3 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full pl-10 pr-3 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
               </div>
             </div>
             <div>
-              <label className="block text-indigo-700 mb-2 font-medium">To Date</label>
+              <label className="block text-blue-700 mb-2 font-medium">To Date</label>
               <div className="relative">
-                <FiCalendar className="absolute top-3 left-3 text-indigo-500" />
+                <FiCalendar className="absolute top-3 left-3 text-blue-500" />
                 <input
                   type="date"
                   value={toDate}
                   min={getFromDate()}
                   onChange={handleToDateChange}
-                  className="w-full pl-10 pr-3 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full pl-10 pr-3 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
               </div>
             </div>
             <div>
-              <label className="block text-indigo-700 mb-2 font-medium">Choose Leave Type</label>
+              <label className="block text-blue-700 mb-2 font-medium">Choose Leave Type</label>
               <div className="relative">
-                <FiType className="absolute top-3 left-3 text-indigo-500" />
+                <FiType className="absolute top-3 left-3 text-blue-500" />
                 <select
                   value={leaveType}
                   onChange={handleLeaveTypeChange}
-                  className="w-full pl-10 pr-3 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none"
+                  className="w-full pl-10 pr-3 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
                   required
                 >
                   <option value="">Select Type</option>
@@ -186,13 +186,13 @@ function NewLeave({ onClose, onNewLeave }) {
               </div>
             </div>
             <div>
-              <label className="block text-indigo-700 mb-2 font-medium">Reason</label>
+              <label className="block text-blue-700 mb-2 font-medium">Reason</label>
               <div className="relative">
-                <FiMessageSquare className="absolute top-3 left-3 text-indigo-500" />
+                <FiMessageSquare className="absolute top-3 left-3 text-blue-500" />
                 <textarea
                   value={reason}
                   onChange={handleReasonChange}
-                  className="w-full pl-10 pr-3 py-2 border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full pl-10 pr-3 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   rows={3}
                   required
                 ></textarea>
@@ -204,7 +204,7 @@ function NewLeave({ onClose, onNewLeave }) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               type="button"
-              className="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-md hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+              className="bg-blue-100 text-blue-700 px-4 py-2 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               onClick={onClose}
             >
               Cancel
@@ -213,7 +213,7 @@ function NewLeave({ onClose, onNewLeave }) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               type="submit"
-              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             >
               {loading ? <Loading /> : 'Submit'}
             </motion.button>

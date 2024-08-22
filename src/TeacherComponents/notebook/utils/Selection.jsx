@@ -66,10 +66,10 @@ function Selection({ setClass, setSection, setSubject }) {
               whileHover="hover"
               whileTap="tap"
             >
-              <FaGraduationCap className="absolute left-2 top-1/2  transform -translate-y-1/2 text-indigo-500" />
+              <FaGraduationCap className="absolute left-2 top-1/2  transform -translate-y-1/2 text-blue-500" />
               <select
                 id="class"
-                className="w-full px-2 py-2 pl-8 border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent rounded-md"
+                className="w-full px-2 py-2 pl-8 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md"
                 onChange={handleClassChange}
               >
                 <option value="">Class</option>
@@ -84,10 +84,10 @@ function Selection({ setClass, setSection, setSubject }) {
               whileHover="hover"
               whileTap="tap"
             >
-              <FaChalkboardTeacher className="absolute left-2 top-1/2 transform -translate-y-1/2 text-indigo-500" />
+              <FaChalkboardTeacher className="absolute left-2 top-1/2 transform -translate-y-1/2 text-blue-500" />
               <select
                 id="section"
-                className="w-full px-2 py-2 pl-8 border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent rounded-md"
+                className="w-full px-2 py-2 pl-8 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md"
                 onChange={handleSectionChange}
               >
                 <option value="">Section</option>
@@ -102,10 +102,10 @@ function Selection({ setClass, setSection, setSubject }) {
               whileHover="hover"
               whileTap="tap"
             >
-              <FaBook className="absolute left-2 top-1/2 transform -translate-y-1/2 text-indigo-500" />
+              <FaBook className="absolute left-2 top-1/2 transform -translate-y-1/2 text-blue-500" />
               <select
                 id="subject"
-                className="w-full px-2 py-2 pl-8 border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent rounded-md"
+                className="w-full px-2 py-2 pl-8 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md"
                 onChange={handleSubjectChange}
               >
                 <option value="">Subject</option>

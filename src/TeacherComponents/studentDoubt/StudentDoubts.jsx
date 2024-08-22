@@ -55,7 +55,7 @@ function StudentDoubts() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col px-6 h-screen overflow-y-auto items-start mt-4 ml-4 mr-6 mb-6 no-scrollbar bg-indigo-50"
+            className="flex flex-col px-6 h-screen overflow-y-auto items-start mt-4 ml-4 mr-6 mb-6 no-scrollbar bg-blue-50"
         >
             <ToastContainer />
             <motion.div
@@ -64,23 +64,25 @@ function StudentDoubts() {
                 transition={{ duration: 0.5 }}
                 className="flex justify-between mobile:max-tablet:flex-col w-full items-center mb-4 py-2"
             >
-                <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-indigo-800">Student Doubts</h1>
+
+                <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-blue-600">Student Doubts</h1>
                 <div className="flex justify-between gap-3 mobile:max-tablet: ">
-                    <select id="class" value={Class} onChange={handleClassChange} className="shadow-md px-3 py-1  border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg">
+                    <select id="class" value={Class} onChange={handleClassChange} className="shadow-md px-3 py-1  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
+
                         <option value="">Search by Class</option>
                         {uniqueClasses.map((classOption, index) => (
                             <option key={index} value={classOption}>{classOption}</option>
                         ))}
                     </select>
 
-                    <select id="section" value={Section} onChange={handleSectionChange} className="shadow-md px-3 py-1  border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg">
+                    <select id="section" value={Section} onChange={handleSectionChange} className="shadow-md px-3 py-1  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
                         <option value="">Search by Section</option>
                         {uniqueSections.map((sectionOption, index) => (
                             <option key={index} value={sectionOption}>{sectionOption}</option>
                         ))}
                     </select>
 
-                    <select id="subject" value={Subject} onChange={handleSubjectChange} className="shadow-md px-3 py-2  border-2 border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg">
+                    <select id="subject" value={Subject} onChange={handleSubjectChange} className="shadow-md px-3 py-2  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
                         <option value="">Search by Subject</option>
                         {uniqueSubjects.map((subjectOption, index) => (
                             <option key={index} value={subjectOption}>{subjectOption}</option>
@@ -97,11 +99,11 @@ function StudentDoubts() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="w-full"
             >
-                <div className="flex mb-4 border-b-2 border-indigo-200">
+                <div className="flex mb-4 border-b-2 border-blue-200">
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`p-3 flex items-center ${selectedLink === `/Teacher-Dashboard/studentdoubts/new` ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-600"}`}
+                        className={`p-3 flex items-center ${selectedLink === `/Teacher-Dashboard/studentdoubts/new` ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
                         onClick={() => handleLinkSelect(`/Teacher-Dashboard/studentdoubts/new`)}
                     >
                         <FaQuestionCircle className="mr-2" /> New Doubts
@@ -109,7 +111,7 @@ function StudentDoubts() {
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`p-3 flex items-center ${selectedLink === `/Teacher-Dashboard/studentdoubts/answered` ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-600"}`}
+                        className={`p-3 flex items-center ${selectedLink === `/Teacher-Dashboard/studentdoubts/answered` ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
                         onClick={() => handleLinkSelect(`/Teacher-Dashboard/studentdoubts/answered`)}
                     >
                         <FaCheck className="mr-2" /> Answered Doubts

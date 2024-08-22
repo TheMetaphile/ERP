@@ -1,9 +1,9 @@
 import Tabs from "./utils/Tabs";
 import React, { useState } from "react";
-// import { useState } from "react";
 import Selection from "./utils/Selection";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { motion } from 'framer-motion';
 
 function PlannerHOD() {
     const [selectedClass, setSelectedClass] = useState('');
@@ -17,7 +17,14 @@ function PlannerHOD() {
         <div className="overflow-y-auto w-full items-start  px-2 no-scrollbar">
             <ToastContainer />
             <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:pl-0'>
-                <h1 className="text-3xl font-bold text-indigo-700 mobile:max-tablet:text-2xl whitespace-nowrap mb-2">Weekly Plan</h1>
+                <motion.h1
+                    className="text-3xl font-bold text-blue-600 mobile:max-tablet:text-2xl whitespace-nowrap mb-2"
+                    initial={{ y: -50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >Weekly Plan
+                </motion.h1>
+
                 <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
                     <button
                         className="p-2 border rounded"

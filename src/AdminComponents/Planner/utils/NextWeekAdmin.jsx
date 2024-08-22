@@ -6,6 +6,7 @@ import Loading from './../../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NextWeekAdminRow from './NextWeekAdminRow';
+import { motion } from "framer-motion";
 
 const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
     const { authState } = useContext(AuthContext);
@@ -103,7 +104,7 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
             );
             console.log("API response:", response.data);
             toast.success('Plan Saved Successfully');
-        }catch (err) {
+        } catch (err) {
             console.log(err.response.data.error);
             toast.error(err.response.data.error);
 
@@ -112,59 +113,98 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
 
 
     return (
-        <div className='rounded-md overflow-auto'>
+        <motion.div
+            className="rounded-md overflow-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
             {loading ? (
                 <Loading />
-            ) : details.length === 0 && selectedTab === 'Next Week' ? (
-                <>No Data Available</>
+            ) : details.length === 0 && selectedTab === "Next Week" ? (
+                <div className="text-purple-500 font-bold text-2xl">No Data Available</div>
             ) : (
-                <form onSubmit={handleSubmit}>
-                    <table className='w-full rounded-md border border-black'>
-                        <thead className='bg-secondary border-b border-black'>
-                            <tr className='p-4 text-center'>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Date</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Chapter</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Topic</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Teaching Aids</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Activity (if any)</th>
+                <motion.form
+                    onSubmit={handleSubmit}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                >
+                    <motion.table
+                        className="w-full rounded-md border border-purple-500"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                        <thead className="bg-purple-500 ">
+                            <tr className="p-4 text-center">
+                                <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
+                                    Date
+                                </th>
+                                <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
+                                    Chapter
+                                </th>
+                                <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
+                                    Topic
+                                </th>
+                                <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
+                                    Teaching Aids
+                                </th>
+                                <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
+                                    Activity (if any)
+                                </th>
                             </tr>
                         </thead>
-                        <tbody className='text-center whitespace-nowrap'>
+                        <tbody className="text-center whitespace-nowrap">
                             {details.map((data, index) => (
-                                <NextWeekAdminRow details={data} index={index} setDetails={setDetails} />
+                              
+                                    <NextWeekAdminRow
+                                        details={data}
+                                        index={index}
+                                        setDetails={setDetails}
+                                    />
+                               
                             ))}
                         </tbody>
-                    </table>
-
-                    <div className='flex justify-center items-center py-2 gap-2'>
+                    </motion.table>
+                    <motion.div
+                        className="flex justify-center items-center py-2 gap-2"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.3 }}
+                    >
                         <textarea
                             value={remark}
                             onChange={(e) => setRemark(e.target.value)}
-                            placeholder='Enter your remark'
-                            className='w-full p-2 border border-black rounded-md mb-4'
+                            placeholder="Enter your remark"
+                            className="w-full p-2 border border-purple-500 rounded-md mb-4 text-purple-500"
                         />
-
                         <select
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
-                            className='p-5 border border-black rounded-md mb-4 '
+                            className="p-5 border border-purple-500 rounded-md mb-4 text-purple-500"
                         >
                             <option value="">Select status</option>
                             <option value="Accept">Accept</option>
                             <option value="Reject">Reject</option>
                         </select>
-
-                    </div>
-                    <div className='flex justify-center items-center py-4'>
+                    </motion.div>
+                    <motion.div
+                        className="flex justify-center items-center py-4"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.4 }}
+                    >
                         <button
                             type="submit"
-                            className='p-1 px-4 rounded-md bg-secondary font-semibold border-black border hover:bg-white hover:text-black hover:border-black hover:border-2'>
+                            className="p-1 px-4 rounded-md bg-purple-500 font-semibold border-purple-500 border text-white hover:bg-white hover:text-purple-500 hover:border-purple-500 hover:border-2"
+                        >
                             SAVE
                         </button>
-                    </div>
-                </form>
+                    </motion.div>
+                </motion.form>
             )}
-        </div>
+        </motion.div>
     );
 };
 

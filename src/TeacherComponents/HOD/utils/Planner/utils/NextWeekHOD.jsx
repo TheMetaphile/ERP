@@ -6,6 +6,7 @@ import Loading from '../../../../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NextWeekHODRow from './NextWeekHODRow';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
     const { authState } = useContext(AuthContext);
@@ -33,7 +34,7 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
-    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 2));
+    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
     const nextWeekStart = new Date();
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
@@ -103,66 +104,107 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
             );
             console.log("API response:", response.data);
             toast.success('Plan Saved Successfully');
-        }catch (err) {
+        } catch (err) {
             console.log(err.response.data.error);
             toast.error(err.response.data.error);
 
         }
     };
 
+    const tableVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                when: "beforeChildren",
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+
+    const inputVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: 'spring',
+                stiffness: 100,
+                damping: 12
+            }
+        }
+    };
 
     return (
         <div className='rounded-md overflow-auto'>
             {loading ? (
                 <Loading />
             ) : details.length === 0 && selectedTab === 'Next Week' ? (
-                <>No Data Available</>
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-center py-4 text-blue-500"
+                >
+                    No Data Available
+                </motion.div>
             ) : (
-                <form onSubmit={handleSubmit}>
-                    <table className='w-full rounded-md border border-black'>
-                        <thead className='bg-gradient-to-r from-indigo-400  to-indigo-200'>
+                <motion.form
+                    onSubmit={handleSubmit}
+                    initial="hidden"
+                    animate="visible"
+                    variants={tableVariants}
+                >
+                    <motion.table className='w-full rounded-md border border-black' variants={tableVariants}>
+                        <thead className='bg-gradient-to-r from-blue-400  to-blue-200'>
                             <tr className='p-4 text-center'>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Date</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Chapter</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Topic</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Teaching Aids</th>
-                                <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Activity (if any)</th>
+                                <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Date</th>
+                                <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Chapter</th>
+                                <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Topic</th>
+                                <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Teaching Aids</th>
+                                <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Activity (if any)</th>
                             </tr>
                         </thead>
-                        <tbody className='text-center whitespace-nowrap'>
-                            {details.map((data, index) => (
-                                <NextWeekHODRow details={data} index={index} setDetails={setDetails} />
-                            ))}
-                        </tbody>
-                    </table>
+                        <AnimatePresence>
+                            <motion.tbody className='text-center whitespace-nowrap'>
+                                {details.map((data, index) => (
+                                    <NextWeekHODRow details={data} index={index} setDetails={setDetails} />
+                                ))}
+                            </motion.tbody>
+                        </AnimatePresence>
+                    </motion.table>
 
-                    <div className='flex justify-center items-center py-2 gap-2'>
-                        <textarea
+                    <motion.div className='flex justify-center items-center py-2 gap-2' variants={inputVariants}>
+                        <motion.textarea
                             value={remark}
                             onChange={(e) => setRemark(e.target.value)}
                             placeholder='Enter your remark'
                             className='w-full p-2 border border-black rounded-md mb-4'
+                            variants={inputVariants}
                         />
-
-                        <select
+                        <motion.select
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
-                            className='p-5 border border-black rounded-md mb-4 '
+                            className='p-5 border border-black rounded-md mb-4'
+                            variants={inputVariants}
                         >
                             <option value="">Select status</option>
                             <option value="Accept">Accept</option>
                             <option value="Reject">Reject</option>
-                        </select>
-
-                    </div>
-                    <div className='flex justify-center items-center py-4'>
-                        <button
+                        </motion.select>
+                    </motion.div>
+                    <motion.div className='flex justify-center items-center py-4' variants={inputVariants}>
+                        <motion.button
                             type="submit"
-                            className='p-1 px-4 rounded-md bg-secondary font-semibold border-black border hover:bg-white hover:text-black hover:border-black hover:border-2'>
+                            className='p-1 px-4 rounded-md bg-secondary font-semibold border-black border hover:bg-white hover:text-black hover:border-black hover:border-2'
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
                             SAVE
-                        </button>
-                    </div>
-                </form>
+                        </motion.button>
+                    </motion.div>
+                </motion.form>
             )}
         </div>
     );

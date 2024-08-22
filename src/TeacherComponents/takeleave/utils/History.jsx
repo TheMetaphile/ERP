@@ -89,7 +89,9 @@ function History({ additionalData }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className=' mx-auto p-6 bg-indigo-50 mobile:max-tablet:p-2 '
+
+            className=' mx-auto p-6 bg-blue-50 mobile:max-tablet:p-2 '
+
         >
             <motion.div
                 className='flex items-center justify-between mb-6 mobile:max-tablet:mb-3'
@@ -97,7 +99,9 @@ function History({ additionalData }) {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
             >
-                <h1 className='text-3xl mobile:max-tablet:text-lg font-bold text-indigo-700 flex items-center'>
+
+                <h1 className='text-3xl mobile:max-tablet:text-lg font-bold text-blue-600 flex items-center'>
+
                     <FaHistory className="mr-2" />
                     Leave History
                 </h1>
@@ -116,7 +120,7 @@ function History({ additionalData }) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
-                    className="text-center py-12 text-indigo-600 font-medium"
+                    className="text-center py-12 text-blue-600 font-medium"
                 >
                     No data available
                 </motion.div>
@@ -140,7 +144,7 @@ function History({ additionalData }) {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition duration-300"
+                                className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition duration-300"
                                 onClick={handleViewMore}
                             >
                                 View More

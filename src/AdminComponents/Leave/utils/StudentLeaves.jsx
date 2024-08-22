@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { userimg } from "../../Teachers/utils/images/index.js";
 import Loading from "../../../LoadingScreen/Loading.jsx";
 import AuthContext from "../../../Context/AuthContext.jsx";
 import axios from "axios";
 import { BASE_URL_Student_Leave } from "../../../Config.js";
 import { ToastContainer, toast } from "react-toastify";
+import { motion, AnimatePresence } from 'framer-motion';
+
 export default function StudentLeaves() {
 
   const [loading, setLoading] = useState(true);
@@ -68,58 +69,96 @@ export default function StudentLeaves() {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        staggerChildren: 0.1 
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  };
+
 
   return (
-    <div className="flex flex-col space-y-4 mb-4">
+  <motion.div 
+      className="flex flex-col space-y-6 mb-6 bg-purple-50 p-2 rounded-xl shadow-lg"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       <ToastContainer />
-      <div className="flex items-center justify-between w-full">
-        <h1 className="text-xl font-medium">Old Leave</h1>
+      <motion.div className="flex items-center justify-between w-full" variants={itemVariants}>
+        <h1 className="text-2xl font-semibold text-purple-600">Old Leave</h1>
         <select
           value={status}
           onChange={handleStatusChange}
-          className="border border-gray-300 rounded-lg px-2 py-1"
+          className="border-2 border-purple-300 rounded-lg px-3 py-2 bg-white text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
         >
           <option value="Pending">Pending</option>
           <option value="Approved">Approved</option>
           <option value="Rejected">Rejected</option>
         </select>
-      </div>
+      </motion.div>
+      
       {loading ? (
         <Loading />
       ) : data.length === 0 ? (
-        <div>No data available</div>
+        <motion.div variants={itemVariants} className="text-center text-purple-700">No data available</motion.div>
       ) : (
         <>
           {data.map((leave, index) => (
-            <div key={index} className={`rounded-md border p-4 flex flex-col w-full`}>
+            <motion.div 
+              key={index} 
+              className="rounded-lg border border-purple-200 p-5 bg-white shadow-md hover:shadow-lg transition duration-300"
+              variants={itemVariants}
+            >
               <div className="flex justify-between cursor-pointer" onClick={() => handleClick(`${index}`)}>
-                <div className="flex items-center">
-                  <img src={leave.profileLink} alt="" className="h-8 w-8 mobile:max-tablet:hidden rounded-full" />
-                  <p className=" mb-2 mt-2 px-2 mobile:max-tablet:">{leave.name}</p>
+                <div className="flex items-center space-x-3">
+                  <img src={leave.profileLink} alt="" className="h-10 w-10 rounded-full object-cover" />
+                  <p className="font-medium text-purple-800">{leave.name}</p>
                 </div>
                 <div>
-                  <h1 className=" mt-2 mobile:max-tablet: mobile:max-tablet:px-2">
+                  <h1 className="text-purple-700">
                     Class: {leave.class} {leave.section}
                   </h1>
                 </div>
-
               </div>
-              {expanded === `${index}` && (
-                <p className="mt-2">Reason for Leave: {leave.reason}</p>
-              )}
-              <div className="flex justify-between text-gray-900 mobile:max-tablet:flex-col mt-2">
-                <span className="">Leave Taken on: {leave.startDate}</span>
-                <span className="">Expected Arrival: {leave.endDate}</span>
+              <AnimatePresence>
+                {expanded === `${index}` && (
+                  <motion.p 
+                    className="mt-3 text-purple-600"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                  >
+                    Reason for Leave: {leave.reason}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+              <div className="flex justify-between text-purple-600 mt-3 space-x-4">
+                <span>Leave Taken on: {leave.startDate}</span>
+                <span>Expected Arrival: {leave.endDate}</span>
               </div>
-            </div>
+            </motion.div>
           ))}
           {!allDataFetched && (
-            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+            <motion.button
+              className='text-purple-500 hover:text-purple-700 mt-4 cursor-pointer text-center font-medium'
+              onClick={handleViewMore}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              View More
+            </motion.button>
           )}
         </>
       )}
-
-
-    </div>
+    </motion.div>
   );
 }

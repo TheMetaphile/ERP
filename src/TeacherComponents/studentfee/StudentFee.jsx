@@ -79,14 +79,18 @@ function StudentFee() {
 
     return (
         <motion.div
-            className="w-full items-start px-4 py-6 mobile:max-tablet:p-3 bg-gradient-to-r from-indigo-100 to-indigo-50"
+
+            className="w-full items-start px-4 py-6 mobile:max-tablet:p-3 bg-gradient-to-r from-blue-100 to-blue-50"
+
             initial="hidden"
             animate="visible"
             variants={containerVariants}
         >
             <ToastContainer />
+
             <div className='my-6 mobile:max-tablet:px-6 mobile:max-tablet:m-0 flex w-full justify-between items-center'>
-                <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-indigo-800 mb-2">Student Fee</h1>
+                <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-blue-600 mb-2">Student Fee</h1>
+
                 <Selection setFilter={setFilter} />
             </div>
             <motion.div
@@ -96,7 +100,7 @@ function StudentFee() {
                 <div className='overflow-x-auto'>
                     <table className='w-full min-w-max'>
                         <thead>
-                            <tr className='bg-indigo-600 text-white'>
+                            <tr className='bg-blue-600 text-white'>
                                 <th className='py-3 px-4 text-left'>Roll Number</th>
                                 <th className='py-3 px-4 text-left'>Name</th>
                                 <th className='py-3 px-4 text-left'>Total Fee</th>
@@ -124,21 +128,21 @@ function StudentFee() {
                                     return (
                                         <motion.tr
                                             key={index}
-                                            className='border-b hover:bg-indigo-50 transition-colors duration-200'
+                                            className='border-b hover:bg-blue-50 transition-colors duration-200'
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ duration: 0.3, delay: index * 0.05 }}
                                         >
-                                            <td className='py-3 px-4'><FaUserGraduate className="inline mr-2 text-indigo-600" />{detail.rollNumber}</td>
+                                            <td className='py-3 px-4'><FaUserGraduate className="inline mr-2 text-blue-600" />{detail.rollNumber}</td>
                                             <td className='py-3 px-4'>
                                                 <div className="flex items-center gap-2">
                                                     <img src={detail.profileLink} alt="Profile" className='w-8 h-8 rounded-full' />
-                                                    <span className="font-medium text-indigo-800">{detail.name}</span>
+                                                    <span className="font-medium text-blue-600">{detail.name}</span>
                                                 </div>
                                             </td>
-                                            <td className='py-3 px-4'><FaMoneyBillWave className="inline mr-2 text-indigo-600" />₹ {detail.totalfee}</td>
+                                            <td className='py-3 px-4'><FaMoneyBillWave className="inline mr-2 text-blue-600" />₹ {detail.totalfee}</td>
                                             <td className='py-3 px-4'>₹ {detail.discountAmount}</td>
-                                            <td className='py-3 px-4'><FaWallet className="inline mr-2 text-indigo-600" />₹ {detail.payableFee}</td>
+                                            <td className='py-3 px-4'><FaWallet className="inline mr-2 text-blue-600" />₹ {detail.payableFee}</td>
                                             <td className='py-3 px-4 text-green-600'><FaCheckCircle className="inline mr-2" />₹ {detail.paid}</td>
                                             <td className={`py-3 px-4 ${(detail.payableFee - detail.paid) === 0 ? "text-green-500" : "text-red-500"}`}>
                                                 <FaExclamationCircle className="inline mr-2" />₹ {detail.payableFee - detail.paid}
@@ -148,7 +152,7 @@ function StudentFee() {
                                 })
                             ) : (
                                 <tr>
-                                    <td colSpan="7" className='text-center py-8 text-indigo-600'>No Fee Details available</td>
+                                    <td colSpan="7" className='text-center py-8 text-blue-600'>No Fee Details available</td>
                                 </tr>
                             )}
                         </tbody>
@@ -160,8 +164,10 @@ function StudentFee() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >
+
                         <button
-                            className='px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300'
+                            className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300'
+
                             onClick={handleViewMore}
                         >
                             View More

@@ -4,9 +4,10 @@ import axios from "axios";
 import AuthContext from "../../../Context/AuthContext.jsx";
 import Loading from "../../../LoadingScreen/Loading.jsx";
 import { BASE_URL_TeacherLeave } from "../../../Config.js";
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TeacherLeavesTile from "./TeacherLeavesTile.jsx";
+import { motion } from "framer-motion";
 
 export default function TeacherLeaves() {
   const [selectedLeave, setSelectedLeave] = useState(null);
@@ -67,7 +68,7 @@ export default function TeacherLeaves() {
         console.log('All data fetched')
         setAllDataFetched(true);
       }
-      setData(prevData => [...prevData,...response.data.Leaves]);
+      setData(prevData => [...prevData, ...response.data.Leaves]);
       setLoading(false);
 
     } catch (err) {
@@ -109,19 +110,39 @@ export default function TeacherLeaves() {
 
 
   return (
-    <div className="flex flex-col space-y-4 mb-4">
+    <motion.div
+      className="flex flex-col space-y-4 mb-4"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <ToastContainer />
       {loading ? (
         <Loading />
       ) : data === null ? (
-        <div>No data available</div>
+        <div className="text-purple-500 font-bold text-2xl">No data available</div>
       ) : (
         <>
-          <TeacherLeavesTile data={data} />
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <TeacherLeavesTile data={data} />
+          </motion.div>
           {!allDataFetched && (
-            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+            <motion.h1
+              className="text-purple-500 hover:text-purple-800 mt-3 cursor-pointer text-center"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              onClick={handleViewMore}
+            >
+              View More
+            </motion.h1>
           )}
         </>
       )}
-    </div>
+    </motion.div>
   );
 }

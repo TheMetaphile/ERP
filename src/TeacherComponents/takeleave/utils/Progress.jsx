@@ -29,7 +29,7 @@ export default function Progress() {
             label: 'Attendance',
             data: [details.accepted, details.rejected, details.pending],
             backgroundColor: ['#4F46E5', '#EF4444', '#FBBF24'],
-            bg: ['text-indigo-600', 'text-red-600', 'text-yellow-500'],
+            bg: ['text-blue-600', 'text-red-600', 'text-yellow-500'],
             hoverOffset: 4,
             cutout: "80%",
             borderRadius: 60,
@@ -43,7 +43,7 @@ export default function Progress() {
             label: 'Attendance',
             data: [details.casual, details.complimentary, details.duty, details.earned, details.maternity, details.medical, details.restricted],
             backgroundColor: ['#4F46E5', '#10B981', '#FBBF24', '#F97316', '#3B82F6', '#8B5CF6', '#EC4899'],
-            bg: ['text-indigo-600', 'text-green-600', 'text-yellow-500', 'text-orange-500', 'text-blue-500', 'text-purple-500', 'text-pink-500'],
+            bg: ['text-blue-600', 'text-green-600', 'text-yellow-500', 'text-orange-500', 'text-blue-500', 'text-purple-500', 'text-pink-500'],
             hoverOffset: 4,
             cutout: "80%",
             borderRadius: 60,
@@ -79,7 +79,7 @@ export default function Progress() {
         >
             {loading ? (
                 <div className="flex items-center justify-center w-full h-72">
-                    <FaSpinner className="animate-spin text-4xl text-indigo-600" />
+                    <FaSpinner className="animate-spin text-4xl text-blue-600" />
                 </div>
             ) : (
                 <motion.div

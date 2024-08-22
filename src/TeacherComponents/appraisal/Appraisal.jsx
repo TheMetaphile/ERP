@@ -30,7 +30,9 @@ function Appraisal() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="text-4xl font-bold text-indigo-700 mb-6 mobile:max-tablet:mb-4 mobile:max-tablet:text-xl"
+
+        className="text-4xl font-bold text-blue-600 mb-6 mobile:max-tablet:mb-4 mobile:max-tablet:text-xl"
+
       >
         Appraisal
       </motion.h1>
@@ -38,9 +40,11 @@ function Appraisal() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.4, duration: 0.5 }}
-        className="border border-indigo-200 shadow-lg rounded-lg w-full overflow-hidden bg-white"
+
+        className="border border-blue-200 shadow-lg rounded-lg w-full overflow-hidden bg-white"
       >
-        <div className="flex items-center justify-between px-6 mobile:max-tablet:px-2 py-4 bg-indigo-50">
+        <div className="flex items-center justify-between px-6 mobile:max-tablet:px-2 py-4 bg-blue-50">
+
           <div className="flex gap-4">
             <LinkButton
               to="/Teacher-Dashboard/appraisal/applied"
@@ -75,8 +79,8 @@ const LinkButton = ({ to, icon, label, isSelected, onClick }) => (
     <Link
       to={to}
       className={`flex items-center gap-2 text-lg font-medium px-4 py-2 transition-colors duration-200 ${isSelected
-        ? 'text-indigo-600 border-b-2 border-indigo-600'
-        : 'bg-white text-indigo-600 hover:bg-indigo-100'
+        ? 'text-blue-600 border-b-2 border-blue-600'
+        : 'bg-white text-blue-600 hover:bg-blue-100'
         }`}
       onClick={onClick}
     >

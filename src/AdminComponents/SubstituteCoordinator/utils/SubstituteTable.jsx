@@ -3,6 +3,7 @@ import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import { BASE_URL_Login } from "../../../Config";
 import CoOrdinatorOnLeaveRow from "./CoOrdinatorOnLeaveRow";
+import { motion } from 'framer-motion';
 
 export default function SubstituteTable() {
     const { authState } = useContext(AuthContext);
@@ -41,36 +42,58 @@ export default function SubstituteTable() {
     }, [authState])
 
     return (
-        <div className="w-full overflow-x-auto rounded-lg">
+        <motion.div
+            className="w-full overflow-x-auto rounded-lg pt-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+        >
             <table className="min-w-full bg-white border border-gray-300 rounded-lg">
                 <thead>
-                    <tr className="bg-secondary text-gray-600 text-lg ">
-
-                        <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Employee Id</th>
-                        <th className="py-2 px-6 ">Name</th>
+                    <motion.tr
+                        className="bg-purple-300 text-lg"
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                    >
+                        <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">
+                            Employee Id
+                        </th>
+                        <th className="py-2 px-6">Name</th>
                         <th className="py-2 px-6 text-center">Date</th>
                         <th className="py-2 px-6 text-center">Wing</th>
                         <th className="py-2 px-6 text-center">Substitute</th>
                         <th className="py-2 px-6 text-center">Actions</th>
-
-                    </tr>
+                    </motion.tr>
                 </thead>
-                <tbody className="text-gray-600 text-md font-normal ">
+                <tbody className="text-gray-600 text-md font-normal">
                     {CoOrdinatorsOnLeave.length === 0 ? (
-                        <>No Coordinator is on leave</>
+                        <motion.tr
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                        >
+                            <td colSpan={6} className="text-center text-purple-400 py-4 font-medium">
+                                No Coordinator is on leave
+                            </td>
+                        </motion.tr>
                     ) : (
                         <>
-                            {
-                                CoOrdinatorsOnLeave.map((teachers, index) => {
-                                    return <CoOrdinatorOnLeaveRow Teacher={teachers} index={index} date={formattedDate} session={session} />
-                                })
-                            }
+                            {CoOrdinatorsOnLeave.map((teachers, index) => (
+                                
+                                    <CoOrdinatorOnLeaveRow
+                                        Teacher={teachers}
+                                        index={index}
+                                        date={formattedDate}
+                                        session={session}
+                                    />
+                           
+                            ))}
                         </>
                     )}
-
                 </tbody>
             </table>
-        </div>
+        </motion.div>
     )
 }
 

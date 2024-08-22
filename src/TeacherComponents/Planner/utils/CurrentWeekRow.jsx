@@ -71,12 +71,12 @@ function CurrentWeekRow({ details, index, mapId }) {
             animate="visible"
             className={ 'bg-white'}
         >
-            <td className='border-y p-4 border-indigo-200'>{details.date}</td>
-            <td className='border-y p-4 border-indigo-200'>{details.chapter}</td>
-            <td className='border-y p-4 border-indigo-200'>{details.topic}</td>
-            <td className='border-y p-4 border-indigo-200'>{details.teachingAids}</td>
-            <td className='border-y p-4 border-indigo-200'>{details.Activity}</td>
-            <td className='border-y p-4 border-indigo-200'>
+            <td className='border-y p-4 border-blue-200'>{details.date}</td>
+            <td className='border-y p-4 border-blue-200'>{details.chapter}</td>
+            <td className='border-y p-4 border-blue-200'>{details.topic}</td>
+            <td className='border-y p-4 border-blue-200'>{details.teachingAids}</td>
+            <td className='border-y p-4 border-blue-200'>{details.Activity}</td>
+            <td className='border-y p-4 border-blue-200'>
                 {editMode === index ? (
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
@@ -89,14 +89,14 @@ function CurrentWeekRow({ details, index, mapId }) {
                             name="description"
                             value={editedData.description || ''}
                             onChange={handleInputChange}
-                            className="border border-indigo-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="border border-blue-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Description"
                         />
                         <select
                             name="status"
                             value={editedData.status || ''}
                             onChange={handleInputChange}
-                            className="p-2 border border-indigo-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         >
                             <option value="">Select status</option>
                             <option value="On Time">On Time</option>
@@ -128,7 +128,7 @@ function CurrentWeekRow({ details, index, mapId }) {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <span className="text-indigo-700">
+                        <span className="text-blue-700">
                             {localUserData.description ? (
                                 <>  {localUserData.description}, <span className={`font-semibold ${localUserData.status === 'On Time' ? 'text-green-600' : 'text-red-600'}`}>{localUserData.status}</span></>
                             ) : (
@@ -138,7 +138,7 @@ function CurrentWeekRow({ details, index, mapId }) {
                         <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
-                            className="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
                             onClick={() => handleEditToggle(index, details)}
                         >
                             <MdOutlineModeEdit />

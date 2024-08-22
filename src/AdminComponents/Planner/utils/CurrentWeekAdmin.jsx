@@ -6,7 +6,7 @@ import Loading from '../../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CurrentWeekAdminRow from './CurrentWeekAdminRow';
-
+import { motion } from "framer-motion";
 
 const CurrentWeekAdmin = ({ selectedTab, Class, section, subject }) => {
     const { authState } = useContext(AuthContext);
@@ -54,37 +54,62 @@ const CurrentWeekAdmin = ({ selectedTab, Class, section, subject }) => {
             setDetails([]);
             fetchPlan();
         }
-    }, [Class, section, subject,  currentWeekFormattedDate]);
+    }, [Class, section, subject, currentWeekFormattedDate]);
 
-  
+
 
 
     return (
-        <div className='rounded-md overflow-auto'>
+
+        <motion.div
+            className="rounded-md overflow-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
             {loading ? (
                 <Loading />
-            ) : details.length === 0 && selectedTab === 'Current Week' ? (
-                <>No Data Available</>
+            ) : details.length === 0 && selectedTab === "Current Week" ? (
+                <div className="text-purple-500 font-bold text-xl text-center mt-3">No Data Available</div>
             ) : (
-                <table className='w-full rounded-md border border-black'>
-                    <thead className='bg-secondary border-b border-black'>
-                        <tr className='p-4 text-center'>
-                            <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 font-semibold'>Date</th>
-                            <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Chapter</th>
-                            <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Topic</th>
-                            <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Teaching Aids</th>
-                            <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Activity (if any)</th>
-                            <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Progress</th>
+                <motion.table
+                    className="w-full rounded-md border border-purple-500"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                >
+                    <thead className="bg-purple-500 border-b border-purple-500">
+                        <tr className="p-4 text-center">
+                            <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 font-semibold text-white">
+                                Date
+                            </th>
+                            <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
+                                Chapter
+                            </th>
+                            <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
+                                Topic
+                            </th>
+                            <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
+                                Teaching Aids
+                            </th>
+                            <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
+                                Activity (if any)
+                            </th>
+                            <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
+                                Progress
+                            </th>
                         </tr>
                     </thead>
-                    <tbody className='text-center'>
+                    <tbody className="text-center">
                         {details.map((data, index) => (
-                            <CurrentWeekAdminRow details={data} index={index}/>
+
+                            <CurrentWeekAdminRow details={data} index={index} />
+
                         ))}
                     </tbody>
-                </table>
+                </motion.table>
             )}
-        </div>
+        </motion.div>
     );
 };
 
