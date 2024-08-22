@@ -148,7 +148,9 @@ function StudentAttendance() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="w-full min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-6"
+
+      className="w-full min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-6 mobile:max-tablet:p-2"
+
     >
       <ToastContainer />
       <div className="max-w-6xl mx-auto">
@@ -157,8 +159,10 @@ function StudentAttendance() {
           animate={{ y: 0 }}
           className="flex justify-between items-center mb-8 mobile:max-tablet:flex-col mobile:max-tablet:justify-start"
         >
-          <h1 className="text-4xl font-extrabold text-blue-500 tracking-tight">Student Attendance</h1>
-          <div className="flex space-x-4">
+
+          <h1 className="text-4xl mobile:max-tablet:text-lg font-extrabold text-blue-500 tracking-tight">Student Attendance</h1>
+          <div className="flex space-x-4 mobile:max-tablet:text-sm mobile:max-tablet:flex-col mobile:max-tablet:gap-1 mobile:max-tablet:space-x-0">
+
             <Link
               to="/Teacher-Dashboard/class_activity/studentattendence/record"
               className="flex items-center px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-700 transition duration-300 shadow-lg"
@@ -183,7 +187,7 @@ function StudentAttendance() {
           <div className="p-6 bg-blue-500 text-white flex justify-between items-center">
             <div className="flex items-center">
               <FaUserGraduate className="text-3xl mr-3" />
-              <span className="text-xl font-semibold">Class Roster</span>
+              <span className="text-xl mobile:max-tablet:text-lg font-semibold">Class Roster</span>
             </div>
             <FaCalendarAlt className="text-2xl" />
           </div>
@@ -202,7 +206,7 @@ function StudentAttendance() {
                     transition={{ delay: index * 0.05 }}
                     className="p-4 hover:bg-gray-50 transition duration-150 ease-in-out"
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mobile:max-tablet:flex-col mobile:max-tablet:items-start mobile:max-tablet:gap-2">
                       <div className="flex items-center space-x-4">
                         <div className="flex-shrink-0">
                           <img className="h-12 w-12 rounded-full object-cover border-2 border-blue-500" src={student.profileLink} alt={student.name} />

@@ -6,19 +6,21 @@ function Apply() {
     const { authState } = useContext(AuthContext);
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto px-4 mobile:max-tablet:px-2 py-8 mobile:max-tablet:py-8">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-                <div className="bg-gradient-to-r from-purple-300 to-blue-300 py-6">
-                    <h1 className='text-3xl font-bold text-white text-center'>Employee Profile</h1>
+
+                <div className="bg-gradient-to-r from-purple-500 to-blue-300 py-6">
+                    <h1 className='text-3xl mobile:max-tablet:text-lg font-bold text-white text-center'>Employee Profile</h1>
+
                 </div>
 
-                <div className="p-6">
+                <div className="p-6 mobile:max-tablet:p-2">
                     <div className='flex flex-col md:flex-row md:space-x-10 items-center mb-8'>
                         <div className='flex flex-col items-center mb-4 md:mb-0'>
                             <img src={authState.userDetails.profileLink} alt="Profile" className='w-32 h-32 rounded-full border-4 border-purple-500 shadow-lg' />
                             <h2 className='mt-4 text-2xl font-semibold text-gray-800'>{authState.userDetails.name}</h2>
                         </div>
-                        <div className='flex-1 grid grid-cols-4 md:grid-cols-2 gap-4'>
+                        <div className='flex-1 grid grid-cols-4 mobile:max-tablet:grid-cols-1 gap-4'>
                             {[
                                 { icon: <FaUser />, label: "Employee ID", value: authState.userDetails.employeeId },
                                 { icon: <FaGraduationCap />, label: "Department", value: "10th - 12th" },
@@ -165,15 +167,15 @@ function Apply() {
                         />
                     </Section>
 
-                    <div className="mt-8 flex justify-between items-center">
-                        <div className="flex items-center space-x-4">
+                    <div className="mt-8 flex justify-between items-center mobile:max-tablet:flex-col">
+                        <div className="flex items-center space-x-4 mobile:max-tablet:flex-col">
                             <label className="block text-sm font-medium text-gray-700">Present Salary</label>
                             <input
                                 type="text"
                                 className="focus:ring-blue-500 focus:border-blue-500 block w-40 sm:text-sm border border-gray-300 rounded-md px-2 py-1"
                             />
                         </div>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-4 mobile:max-tablet:flex-col">
                             <label className="block text-sm font-medium text-gray-700">Expected Salary</label>
                             <input
                                 type="text"
@@ -182,8 +184,10 @@ function Apply() {
                         </div>
                     </div>
 
-                    <div className="mt-8 flex justify-end">
+
+                    <div className="mt-8 flex justify-end ">
                         <button className="bg-gradient-to-r from-purple-500 to-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
+
                             Submit Application
                         </button>
                     </div>
@@ -195,13 +199,21 @@ function Apply() {
 
 function Section({ title, icon, children }) {
     return (
-        <div className="mt-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                <span className="mr-2 text-blue-600">{icon}</span>
-                {title}
-            </h2>
-            {children}
+
+
+        <div className=" overflow-auto">
+            <div className="mt-8">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center mobile:max-tablet:text-sm  whitespace-nowrap">
+                    <span className="mr-2 text-blue-600">{icon}</span>
+                    {title}
+                </h2>
+                {children}
+            </div>
+
         </div>
+
+
+
     )
 }
 

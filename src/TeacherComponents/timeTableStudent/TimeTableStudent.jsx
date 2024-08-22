@@ -166,7 +166,9 @@ export default function TimeTableStudent() {
     return (
         <div className=" flex flex-col w-full  items-start  py-3 px-3 bg-gradient-to-r from-blue-100 to-blue-50">
             <div className="flex w-full justify-between mb-3">
-                <h1 className="text-3xl font-bold text-blue-600 mb-2"> Time Table</h1>
+
+                <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-blue-600 mb-2"> Time Table</h1>
+
 
                 <select
                     type="text"
@@ -188,7 +190,7 @@ export default function TimeTableStudent() {
             </div>
 
 
-            <div className='w-full rounded-lg border border-gray-400 '>
+            <div className='w-full rounded-lg border border-gray-400 overflow-auto '>
                 <table className='w-full'>
                     <TimeTableHeader />
                     <tbody className=' w-full '>

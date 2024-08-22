@@ -7,7 +7,7 @@ import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Homework } from "../../Config";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { motion} from 'framer-motion';
+import { motion } from 'framer-motion';
 import { FiUpload, FiBook, FiUsers, FiLayers } from 'react-icons/fi';
 
 function HomeWork() {
@@ -136,7 +136,9 @@ function HomeWork() {
     >
       <ToastContainer />
       <motion.div variants={itemVariants} className='w-full flex items-center justify-between mb-4'>
-        <h1 className='text-3xl font-bold text-blue-600'>All Homework</h1>
+
+        <h1 className='text-3xl mobile:max-tablet:text-lg font-bold text-blue-600'>All Homework</h1>
+
 
         <div className="flex items-center space-x-4 mt-3">
           <div className='flex mobile:max-tablet:hidden items-center gap-3'>
