@@ -34,9 +34,11 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
-    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
-    const nextWeekStart = new Date();
-    nextWeekStart.setDate(currentWeekStart.getDate() + 7);
+    const currentWeekStart = new Date(currentDate);  // Create a new Date object to avoid modifying the original
+    currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay() + 1);  // Adjust to Monday (start of the week)
+    
+    const nextWeekStart = new Date(currentWeekStart);  // Create a new Date object for next week
+    nextWeekStart.setDate(currentWeekStart.getDate() + 7); 
 
     const nextWeekDays = Array.from({ length: 6 }, (_, i) => {
         const date = new Date(nextWeekStart);
@@ -44,7 +46,8 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
         return date;
     });
 
-    const nextWeekFormattedDate = nextWeekStart.toISOString().split('T')[0];
+    const nextWeekFormattedDate = `${nextWeekStart.getFullYear()}-${ nextWeekStart.getMonth() <10 ? `0${nextWeekStart.getMonth()+1}` : nextWeekStart.getMonth()+1}-${nextWeekStart.getDate()}`;
+
     const [details, setDetails] = useState(defaultPlan());
 
 

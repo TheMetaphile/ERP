@@ -25,8 +25,11 @@ const CurrentWeek = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
-    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
-    const currentWeekFormattedDate = currentWeekStart.toISOString().split('T')[0];
+    const currentWeekStart = new Date(currentDate);  // Create a new Date object to avoid modifying the original
+    currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay() + 1);  // Adjust to Monday (start of the week)
+
+    const currentWeekFormattedDate = `${currentWeekStart.getFullYear()}-${ currentWeekStart.getMonth() <10 ? `0${currentWeekStart.getMonth()+1}` : currentWeekStart.getMonth()+1}-${currentWeekStart.getDate()}`;
+
 
     useEffect(() => {
         const fetchPlan = async () => {

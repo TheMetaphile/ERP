@@ -33,18 +33,33 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
 
 
     const session = getCurrentSession();
+
+
     const currentDate = new Date();
-    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
-    const nextWeekStart = new Date();
+    const day = currentDate.getDay();
+    const currentWeekStart = new Date();
+    const diff = 1 - day;  // If Sunday (0), go back 6 days, otherwise adjust to Monday
+    currentWeekStart.setDate(currentDate.getDate() + diff);
+    
+    const nextWeekStart = new Date(currentWeekStart);  // Create a new Date object for next week
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
 
-    const nextWeekFormattedDate = nextWeekStart.toISOString().split('T')[0];
+
+
+    // const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
+    // const nextWeekStart = new Date();
+    // nextWeekStart.setDate(currentWeekStart.getDate() + 7);
+
+
+    const nextWeekFormattedDate = `${nextWeekStart.getFullYear()}-${ nextWeekStart.getMonth() <10 ? `0${nextWeekStart.getMonth()+1}` : nextWeekStart.getMonth()+1}-${nextWeekStart.getDate()}`;
     const [details, setDetails] = useState(defaultPlan());
 
-    console.log(selectedTab)
+
+
+
     useEffect(() => {
-        console.log(nextWeekFormattedDate)
+        console.log(nextWeekFormattedDate,"dfh")
         const fetchPlan = async () => {
 
             try {

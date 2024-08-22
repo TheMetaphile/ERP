@@ -206,7 +206,7 @@ function ClassWork() {
                             {uniqueSections.map((sectionOption, index) => (
                                 <option key={index} value={sectionOption}>{sectionOption}</option>
                             ))}
-                        </select
+                        </select>
                     </div>
                     <div className="relative">
                         <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
