@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FaHome, FaMapMarkerAlt, FaCity, FaMapPin } from 'react-icons/fa';
 
 const stateDistrictData = {
   "Andhra Pradesh": ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Nellore", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
@@ -40,102 +42,183 @@ const stateDistrictData = {
 
 
 function Address({ nextStep, prevStep, handleChange, formData }) {
+  const [residentialDistricts, setResidentialDistricts] = useState([]);
+  const [permanentDistricts, setPermanentDistricts] = useState([]);
 
+  useEffect(() => {
+    if (formData.residentialState) {
+      setResidentialDistricts(stateDistrictData[formData.residentialState] || []);
+    }
+    if (formData.permanentState) {
+      setPermanentDistricts(stateDistrictData[formData.permanentState] || []);
+    }
+  }, [formData.residentialState, formData.permanentState]);
 
   const handleProceed = () => {
-      if (!formData.residentialAddress || !formData.residentialState || !formData.residentialDistrict || !formData.residentialPincode ||
-          !formData.permanentAddress || !formData.permanentState || !formData.permanentDistrict || !formData.permanentPincode) {
-          alert('Please fill in all fields.');
-      } else {
-          nextStep();
-      }
+    if (!formData.residentialAddress || !formData.residentialState || !formData.residentialDistrict || !formData.residentialPincode ||
+      !formData.permanentAddress || !formData.permanentState || !formData.permanentDistrict || !formData.permanentPincode) {
+      alert('Please fill in all fields.');
+    } else {
+      nextStep();
+    }
   };
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: 'spring',
+        stiffness: 120,
+        mass: 0.4,
+        damping: 8,
+        when: "beforeChildren",
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const childVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: 'spring', stiffness: 50 }
+    }
+  };
+
   return (
-    <div className="rounded-lg w-full px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3">
-      <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md space-y-4 border">
-        <h1 className="text-2xl font-normal p-2 mobile:max-tablet:text-xl">Address Details</h1>
+    <motion.div
+      className="w-full px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <div className="p-6  mx-auto bg-purple-50 rounded-lg shadow-lg space-y-6 border border-purple-200">
+        <motion.h1 className="text-2xl font-semibold p-2 text-purple-800 mobile:max-tablet:text-xl" variants={childVariants}>
+          Address Details
+        </motion.h1>
 
-        <h2 className="text-base p-2 mobile:max-tablet:text-xl">Residential Details</h2>
-        <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="Address"
-            className="w-full p-2 border rounded"
-            value={formData.residentialAddress}
-            onChange={handleChange('residentialAddress')}
-            required
-          />
-          <div className="flex space-x-2">
-            <select
-              className="w-full p-2 border rounded"
-              value={formData.residentialState}
-              onChange={handleChange('residentialState')}
-            >
-              <option value="">Select State</option>
-              <option value="Uttarakhand">Uttarakhand</option>
-            </select>
-            <input
-              type="text"
-              placeholder="District"
-              className="w-full p-2 border rounded"
-              value={formData.residentialDistrict}
-              onChange={handleChange('residentialDistrict')}
-            />
-          </div>
-          <input
-            type="text"
-            placeholder="Pincode"
-            className="w-full p-2 border rounded"
-            value={formData.residentialPincode}
-            onChange={handleChange('residentialPincode')}
-          />
-        </div>
+        <AddressSection
+          title="Residential Details"
+          address={formData.residentialAddress}
+          state={formData.residentialState}
+          district={formData.residentialDistrict}
+          pincode={formData.residentialPincode}
+          handleChange={handleChange}
+          prefix="residential"
+          districts={residentialDistricts}
+          childVariants={childVariants}
+        />
 
-        <h2 className="text-base p-2 mobile:max-tablet:text-xl">Permanent Address</h2>
-        <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="Address"
-            className="w-full p-2 border rounded"
-            value={formData.permanentAddress}
-            onChange={handleChange('permanentAddress')}
-          />
-          <div className="flex space-x-2">
-            <select
-              className="w-full p-2 border rounded"
-              value={formData.permanentState}
-              onChange={handleChange('permanentState')}
-            >
-              <option value="">Select State</option>
-              <option value="Uttarakhand">Uttarakhand</option>
+        <AddressSection
+          title="Permanent Address"
+          address={formData.permanentAddress}
+          state={formData.permanentState}
+          district={formData.permanentDistrict}
+          pincode={formData.permanentPincode}
+          handleChange={handleChange}
+          prefix="permanent"
+          districts={permanentDistricts}
+          childVariants={childVariants}
+        />
 
-            </select>
-            <input
-              type="text"
-              placeholder="District"
-              className="w-full p-2 border rounded"
-              value={formData.permanentDistrict}
-              onChange={handleChange('permanentDistrict')}
-            />
-          </div>
-          <input
-            type="text"
-            placeholder="Pincode"
-            className="w-full p-2 border rounded"
-            value={formData.permanentPincode}
-            onChange={handleChange('permanentPincode')}
-          />
-        </div>
-
-        <div className="flex justify-between">
-          <button onClick={prevStep} className="bg-gray-500 text-white p-2 rounded">
+        <motion.div className="flex justify-between" variants={childVariants}>
+          <motion.button
+            onClick={prevStep}
+            className="bg-purple-500 text-white p-2 rounded-lg shadow-md hover:bg-purple-600 transition duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             Back
-          </button>
-          <button onClick={handleProceed} className="bg-blue-500 text-white p-2 rounded">
+          </motion.button>
+          <motion.button
+            onClick={handleProceed}
+            className="bg-purple-700 text-white p-2 rounded-lg shadow-md hover:bg-purple-800 transition duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             Proceed
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
+    </motion.div>
+  );
+}
+
+function AddressSection({ title, address, state, district, pincode, handleChange, prefix, districts, childVariants }) {
+  return (
+    <motion.div className="space-y-4" variants={childVariants}>
+      <h2 className="text-lg font-medium p-2 text-purple-700 mobile:max-tablet:text-xl">{title}</h2>
+      <div className="space-y-4">
+        <InputField
+          icon={<FaHome />}
+          placeholder="Address"
+          value={address}
+          onChange={handleChange(`${prefix}Address`)}
+        />
+        <div className="flex space-x-2">
+          <SelectField
+            icon={<FaMapMarkerAlt />}
+            value={state}
+            onChange={handleChange(`${prefix}State`)}
+            options={Object.keys(stateDistrictData)}
+            placeholder="Select State"
+          />
+          <SelectField
+            icon={<FaCity />}
+            value={district}
+            onChange={handleChange(`${prefix}District`)}
+            options={districts}
+            placeholder="Select District"
+          />
+        </div>
+        <InputField
+          icon={<FaMapPin />}
+          placeholder="Pincode"
+          value={pincode}
+          onChange={handleChange(`${prefix}Pincode`)}
+        />
+      </div>
+    </motion.div>
+  );
+}
+
+function InputField({ icon, placeholder, value, onChange }) {
+  return (
+    <div className="relative">
+      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-purple-500">
+        {icon}
+      </span>
+      <input
+        type="text"
+        placeholder={placeholder}
+        className="w-full p-2 pl-10 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+        value={value}
+        onChange={onChange}
+        required
+      />
+    </div>
+  );
+}
+
+function SelectField({ icon, value, onChange, options, placeholder }) {
+  return (
+    <div className="relative flex-1">
+      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-purple-500">
+        {icon}
+      </span>
+      <select
+        className="w-full p-2 pl-10 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 appearance-none"
+        value={value}
+        onChange={onChange}
+      >
+        <option value="">{placeholder}</option>
+        {options.map((option) => (
+          <option key={option} value={option}>{option}</option>
+        ))}
+      </select>
     </div>
   );
 }

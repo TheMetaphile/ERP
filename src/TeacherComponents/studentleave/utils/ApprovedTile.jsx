@@ -11,9 +11,9 @@ export default function ApprovedTile({ data }) {
 
     const containerVariants = {
         hidden: { opacity: 0 },
-        visible: { 
+        visible: {
             opacity: 1,
-            transition: { 
+            transition: {
                 staggerChildren: 0.1,
                 delayChildren: 0.3
             }
@@ -22,10 +22,10 @@ export default function ApprovedTile({ data }) {
 
     const itemVariants = {
         hidden: { y: 20, opacity: 0 },
-        visible: { 
-            y: 0, 
+        visible: {
+            y: 0,
             opacity: 1,
-            transition: { 
+            transition: {
                 type: "spring",
                 stiffness: 100
             }
@@ -33,34 +33,35 @@ export default function ApprovedTile({ data }) {
     };
 
     return (
-        <motion.div 
+        <motion.div
             className="w-full bg-black space-y-4"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
             {data.StudentsLeaves.filter(student => student.status === 'Approved').map((student, studentIndex) => (
-                <motion.div 
-                    key={student._id} 
+                <motion.div
+                    key={student._id}
                     className="bg-white border-2 border-indigo-200 p-4 rounded-xl shadow-lg hover:shadow-xl transition duration-300"
                     variants={itemVariants}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                 >
-                    <motion.div 
-                        className='flex justify-between items-center cursor-pointer'
+                    <motion.div
+                        className='flex justify-between items-center cursor-pointer mobile:max-tablet:flex-col mobile:max-tablet:items-start '
                         onClick={() => handleClick(studentIndex)}
                     >
                         <div className='flex items-center space-x-4'>
-                            <motion.img 
-                                src={student.profileLink} 
-                                alt="" 
+                            <motion.img
+                                src={student.profileLink}
+                                alt=""
                                 className='w-12 h-12 rounded-full border-2 border-indigo-300'
                                 whileHover={{ scale: 1.1, rotate: 360 }}
                                 transition={{ duration: 0.5 }}
                             />
+                            <h3 className='font-semibold text-lg text-indigo-800'>{student.name}</h3>
+
                             <div>
-                                <h3 className='font-semibold text-lg text-indigo-800'>{student.name}</h3>
                                 <div className='flex items-center text-indigo-600'>
                                     <FaUserGraduate className="mr-2" />
                                     <p>Class {data.class} {data.section}</p>
@@ -68,14 +69,14 @@ export default function ApprovedTile({ data }) {
                             </div>
                         </div>
                         <div className='flex items-center space-x-4'>
-                            <motion.div 
+                            <motion.div
                                 className='flex items-center text-indigo-600'
                                 whileHover={{ scale: 1.05 }}
                             >
                                 <FaCalendarAlt className="mr-2" />
                                 <span>{student.startDate} to {student.endDate}</span>
                             </motion.div>
-                            <motion.div 
+                            <motion.div
                                 animate={{ rotate: expanded === studentIndex ? 180 : 0 }}
                                 transition={{ duration: 0.3 }}
                             >
@@ -83,10 +84,10 @@ export default function ApprovedTile({ data }) {
                             </motion.div>
                         </div>
                     </motion.div>
-                    
+
                     <AnimatePresence>
                         {expanded === studentIndex && (
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
@@ -94,7 +95,7 @@ export default function ApprovedTile({ data }) {
                                 className='mt-4'
                             >
                                 <h4 className='text-lg font-semibold text-indigo-700 mb-2'>Reason</h4>
-                                <motion.p 
+                                <motion.p
                                     className='bg-indigo-50 p-3 rounded-lg text-indigo-800'
                                     initial={{ x: -20, opacity: 0 }}
                                     animate={{ x: 0, opacity: 1 }}
@@ -105,8 +106,8 @@ export default function ApprovedTile({ data }) {
                             </motion.div>
                         )}
                     </AnimatePresence>
-                    
-                    <motion.div 
+
+                    <motion.div
                         className='mt-4 flex items-center'
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

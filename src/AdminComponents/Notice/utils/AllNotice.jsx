@@ -5,6 +5,7 @@ import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../../Config";
 import { MdEdit, MdCheck, MdCancel, MdDeleteForever } from 'react-icons/md';
 import { toast } from "react-toastify";
+import { motion, AnimatePresence } from 'framer-motion';
 
 const AllNotice = () => {
   const [loading, setLoading] = useState(true);
@@ -131,19 +132,39 @@ const AllNotice = () => {
   };
 
   return (
-    <div className="mt-4 mx-2">
-      <div className="flex flex-col space-y-4 mb-4">
-        {loading ? (
-          <Loading />
-        ) : data === null || data.length === 0 ? (
-          <div>No notices available</div>
-        ) : (
-          <>
+    <motion.div 
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.5 }}
+    className="mt-4 mx-2"
+  >
+    <div className="flex flex-col space-y-4 mb-4">
+      {loading ? (
+        <Loading />
+      ) : data === null || data.length === 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-purple-600 text-center text-lg"
+        >
+          No notices available
+        </motion.div>
+      ) : (
+        <>
+          <AnimatePresence>
             {data.map((notice, index) => (
               (notice.type === 'For All') && (
-                <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2 text-base " >
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-purple-50 shadow-md rounded-lg p-4 border border-purple-200 mt-2 text-base"
+                >
                   <div className="w-full flex mobile:max-tablet:flex-col mobile:max-tablet:items-baseline items-center justify-between mb-2 cursor-pointer" onClick={() => handleClick(index)}>
-                    <h3 className="font-medium">
+                    <h3 className="font-medium text-purple-800">
                       Title: {editingIndex === index ? (
                         <input
                           type="text"
@@ -151,68 +172,84 @@ const AllNotice = () => {
                           value={editedNotice.title}
                           onChange={handleChange}
                           onClick={handleFieldClick}
-                          className="border border-gray-300 rounded-lg px-2 py-1"
+                          className="border border-purple-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
                         />
                       ) : (
                         notice.title
                       )}
                     </h3>
-                    <p>
-                      Type: {editingIndex === index ? (
-                        <select
-                          name="type"
-                          value={editedNotice.type}
-                          onChange={handleChange}
-                          onClick={handleFieldClick}
-                          className="border border-gray-300 rounded-lg px-2 py-1"
-                        >
-                          <option value="For All">For All</option>
-                          <option value="For Student">For Student</option>
-                          <option value="For Teacher">For Teacher</option>
-                          <option value="For Sub Admin">For Sub Admin</option>
-                        </select>
-                      ) : (
-                        notice.type
-                      )}
+                    <div className="flex items-center">
+                      <p className="text-purple-600">
+                        Type: {editingIndex === index ? (
+                          <select
+                            name="type"
+                            value={editedNotice.type}
+                            onChange={handleChange}
+                            onClick={handleFieldClick}
+                            className="border border-purple-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          >
+                            <option value="For All">For All</option>
+                            <option value="For Student">For Student</option>
+                            <option value="For Teacher">For Teacher</option>
+                            <option value="For Sub Admin">For Sub Admin</option>
+                          </select>
+                        ) : (
+                          notice.type
+                        )}
+                      </p>
                       {
                         editingIndex === index ? (
-                          <>
-                            <button
-                              className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md"
+                          <div className="flex ml-2">
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="bg-green-400 hover:bg-green-500 text-white px-3 py-1 rounded-lg shadow-md mr-2"
                               onClick={() => handleSave(index)}
                             >
                               <MdCheck />
-                            </button>
-                            <button
-                              className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded-lg shadow-md"
                               onClick={handleCancel}
                             >
                               <MdCancel />
-                            </button>
-                          </>
+                            </motion.button>
+                          </div>
                         ) : (
-                          <>
-                            <button
-                              className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                          <div className="flex ml-2">
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded-lg shadow-md mr-2"
                               onClick={() => handleEdit(index)}
                             >
                               <MdEdit />
-                            </button>
-                            <button
-                              className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded-lg shadow-md"
                               onClick={() => handleDelete(index)}
                             >
                               <MdDeleteForever />
-                            </button>
-                          </>
+                            </motion.button>
+                          </div>
                         )
                       }
-                    </p>
+                    </div>
                   </div>
-                  {expandedIndex === index && (
-                    <>
-                      <div className='text-base mt-2'>
-                        <p className="text-base">
+                  <AnimatePresence>
+                    {expandedIndex === index && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className='text-base mt-2'
+                      >
+                        <p className="text-base text-purple-700">
                           Description: {editingIndex === index ? (
                             <textarea
                               rows={6}
@@ -220,36 +257,43 @@ const AllNotice = () => {
                               value={editedNotice.description}
                               onChange={handleChange}
                               onClick={handleFieldClick}
-                              className="border border-gray-300 rounded-lg px-2 py-1 w-full"
+                              className="border border-purple-300 rounded-lg px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
                             />
                           ) : (
                             notice.description
                           )}
                         </p>
-                      </div>
-                    </>
-                  )}
-
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                   <div className="w-full flex items-center justify-between mt-2 mobile:max-tablet:flex-col mobile:max-tablet:items-baseline">
-                    <p>Date: {notice.date}</p>
+                    <p className="text-purple-600">Date: {notice.date}</p>
                     <div className="flex items-center">
-                      By:
+                      <span className="text-purple-600">By:</span>
                       <div className="flex items-center gap-1 px-1">
                         <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full mobile:max-tablet:hidden" />
-                        <p>{notice.from.name}</p>
+                        <p className="text-purple-700">{notice.from.name}</p>
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               )
             ))}
-            {!allDataFetched && (
-              <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-            )}
-          </>
-        )}
-      </div>
+          </AnimatePresence>
+          {!allDataFetched && (
+            <motion.h1
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className='text-purple-500 hover:text-purple-700 mt-3 cursor-pointer text-center'
+              onClick={handleViewMore}
+            >
+              View More
+            </motion.h1>
+          )}
+        </>
+      )}
     </div>
+  </motion.div>
   );
 };
 

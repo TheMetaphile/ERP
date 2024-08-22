@@ -7,6 +7,7 @@ import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Login } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
+import { motion, AnimatePresence  } from 'framer-motion';
 
 function ReportCardAdmin() {
     const { authState } = useContext(AuthContext);
@@ -16,7 +17,6 @@ function ReportCardAdmin() {
     const [Section, setSection] = useState(localStorage.getItem('Section') || '');
     const [selectedSession, setSelectedSession] = useState(localStorage.getItem('selectedSession') || '');
     const [error, setError] = useState(null);
-    const containerRef = useRef(null);
     const [userData, setUserData] = useState([]);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(20);
@@ -108,68 +108,128 @@ function ReportCardAdmin() {
         }
     };
 
-
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: {
+            staggerChildren: 0.1
+          }
+        }
+      };
+    
+      const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: { 
+          y: 0, 
+          opacity: 1,
+          transition: {
+            type: 'spring',
+            stiffness: 100
+          }
+        }
+      };
 
     return (
-        <>
-            <div className='   '>
-                <ToastContainer />
-                <div className="flex items-center justify-between px-3 py-2">
-
-                    <h1 className="text-xl font-medium mb-2 ">Report Card</h1>
-
-
-                    <span className='w-fit flex items-center gap-2 mobile:max-laptop:hidden'>
-                        {/* <Link to={`/Sub-Admin/exStudent`}>
-                        <h1 className="p-2 rounded-lg bg-purple-300 hover:bg-purple-500 ">Ex Student</h1>
-                    </Link> */}
-                        <Selection
-                            Class={Class}
-                            Section={Section}
-                            Session={selectedSession}
-                            handleClassChange={handleClassChange}
-                            handleSectionChange={handleSectionChange}
-                            handleSessionChange={handleSessionChange}
-                        />
-
-                    </span>
-                </div>
-
-            </div>
-            <div className=" w-full items-start overflow-y-auto  px-2 no-scrollbar mobile:max-tablet:mt-2 ">
-                {loading && start == 0 ? (
-                    <Loading />
-                ) : userData.length === 0 ? (
-                    <>No student found</>
-                ) : (
-                    <div className='  rounded-lg shadow-md border border-gray-300 w-full mb-2 h-fit  report-header' ref={containerRef} >
-                        <Header headings={['Name', 'Class', 'Section', 'Email']} />
-                        {userData.map((detail, index) => (
-                            <Link to={`/Admin-Dashboard/Result/${detail.email}?session=${selectedSession}&Class=${Class}`} key={index}>
-                                <div key={index} className='flex justify-between border border-gray-300 shadow-md items-center py-2 pl-2  w-full' >
-                                    <div className='  flex flex-1 justify-center whitespace-nowrap  mobile:max-tablet:text-sm'>{detail.name}</div>
-                                    <div className='  flex flex-1 justify-center whitespace-nowrap  mobile:max-tablet:text-sm'>{detail.currentClass}</div>
-                                    <div className='  flex flex-1 justify-center whitespace-nowrap  mobile:max-tablet:text-sm'>{detail.section}</div>
-                                    <div className=' flex flex-1 justify-center gap-1 mobile:max-tablet:text-sm '>
-                                        <img src={detail.profileLink} alt="img" className='w-8 h-8 rounded-full mobile:max-tablet:hidden'></img>
-                                        <div >{detail.email}</div>
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
-                        {!allDataFetched && (
-
-                            <div colSpan="4" className="text-center">
-                                <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer' onClick={handleViewMore}>View More</h1>
-                            </div>
-
-                        )}
-                    </div>
-                )
-                }
-
-            </div>
-        </>
+        <motion.div
+        className="bg-purple-50 min-h-screen p-4"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        <ToastContainer />
+        
+        <motion.div 
+          className="flex justify-between items-center p-4 mb-6"
+          variants={itemVariants}
+        >
+          <h1 className="text-3xl font-bold text-purple-700">Report Card</h1>
+          <div className="hidden laptop:flex items-center space-x-4">
+            <Selection
+              Class={Class}
+              Section={Section}
+              Session={selectedSession}
+              handleClassChange={handleClassChange}
+              handleSectionChange={handleSectionChange}
+              handleSessionChange={handleSessionChange}
+            />
+          </div>
+        </motion.div>
+  
+        <motion.div 
+          className="bg-white rounded-lg shadow-lg overflow-hidden"
+          variants={itemVariants}
+        >
+          {loading && userData.length === 0 ? (
+            <Loading />
+          ) : userData.length === 0 ? (
+            <div className="p-4 text-center text-gray-500">No student found</div>
+          ) : (
+            <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+          >
+            <Header headings={['Name', 'Class', 'Section', 'Email']} />
+            <AnimatePresence>
+              <motion.div className="divide-y divide-purple-200">
+                {userData.map((detail, index) => (
+                  <motion.div
+                    key={detail.email}
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    whileHover={{ scale: 1.02, backgroundColor: "#F3E8FF" }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <Link to={`/Admin-Dashboard/Result/${detail.email}?session=${selectedSession}&Class=${Class}`}>
+                      <div className="flex items-center py-4 px-6">
+                        <motion.div 
+                          className="flex-1 font-medium"
+                          whileHover={{ x: 5 }}
+                        >
+                          {detail.name}
+                        </motion.div>
+                        <div className="flex-1 text-center">{detail.currentClass}</div>
+                        <div className="flex-1 text-center">{detail.section}</div>
+                        <div className="flex-1 flex items-center justify-end space-x-2">
+                          <motion.img 
+                            src={detail.profileLink} 
+                            alt="" 
+                            className="w-8 h-8 rounded-full hidden tablet:block"
+                            whileHover={{ scale: 1.2 }}
+                            transition={{ type: 'spring', stiffness: 300 }}
+                          />
+                          <div className="truncate max-w-xs">{detail.email}</div>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+            {!allDataFetched && (
+              <motion.div 
+                className="text-center py-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <motion.button
+                  className="text-purple-600 hover:text-purple-800 font-semibold"
+                  onClick={handleViewMore}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  View More
+                </motion.button>
+              </motion.div>
+            )}
+          </motion.div>
+          )}
+        </motion.div>
+      </motion.div>
     )
 }
 

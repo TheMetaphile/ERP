@@ -8,7 +8,8 @@ const AppliedTile = (props) => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="w-full p-6  rounded-xl shadow-lg bg-gradient-to-br from-blue-50 to-white border-l-4 border-blue-500"
+            className="w-full p-6 mobile:max-tablet:p-2  rounded-xl shadow-lg bg-gradient-to-br from-blue-50 to-white border-l-4 border-blue-500"
+
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Header name={props.name} id={props.id} />
@@ -29,7 +30,9 @@ const Header = ({ name, id }) => (
 );
 
 const StatusBar = ({ status, checkedBy }) => (
-    <div className="col-span-full mb-4 flex justify-between items-center bg-blue-100 rounded-lg p-3">
+
+    <div className="col-span-full mobile:max-tablet:flex-col mobile:max-tablet:items-start mb-4 flex justify-between items-center bg-blue-100 rounded-lg p-3">
+
         <div className="flex items-center space-x-2">
             <FaCheckCircle className="text-blue-600" />
             <span className="font-medium text-blue-700">Status: {status}</span>

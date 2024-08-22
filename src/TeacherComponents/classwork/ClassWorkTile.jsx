@@ -113,7 +113,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                                 {editingRow === index ? (
                                     <>
                                         <div className='flex gap-2 items-center w-full'>
-                                            <div className="pl-2 font-medium text-blue-700">Chapter: </div>
+                                            <div className="pl-2 font-medium text-black">Chapter: </div>
                                             <input
                                                 className="font-normal border border-blue-300 shadow-md rounded-lg px-3 py-2 text-justify flex-grow"
                                                 value={detail.chapter}
@@ -121,7 +121,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                                             />
                                         </div>
                                         <div className='flex gap-3 items-center w-full mt-2'>
-                                            <div className="pl-2 font-medium text-blue-700">Subject: </div>
+                                            <div className="pl-2 font-medium text-black">Subject: </div>
                                             <input
                                                 className="font-normal border border-blue-300 shadow-md rounded-lg px-3 py-2 text-justify flex-grow"
                                                 value={detail.subject}
@@ -129,7 +129,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                                             />
                                         </div>
                                         <div className='flex gap-3 items-center w-full mt-2'>
-                                            <div className="pl-2 font-medium text-blue-700">Topic: </div>
+                                            <div className="pl-2 font-medium text-black">Topic: </div>
                                             <input
                                                 className="font-normal border border-blue-300 shadow-md rounded-lg px-3 py-2 text-justify flex-grow"
                                                 value={detail.topic}
@@ -141,16 +141,16 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                                     <>
                                         <div className='flex flex-col w-full space-y-2'>
                                             <div className='flex justify-between items-center'>
-                                                <div className="pl-2 font-medium text-blue-700">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
+                                                <div className="pl-2 font-medium text-black">Chapter: <span className='font-normal'>{detail.chapter}</span></div>
 
                                                 <motion.div
-                                                    className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full"
+                                                    className="px-3 py-1 bg-blue-100 text-black rounded-full"
                                                     whileHover={{ scale: 1.05 }}
                                                 >
                                                     {detail.subject}
                                                 </motion.div>
                                             </div>
-                                            <div className="pl-2 font-medium text-blue-700">Topic: <span className='font-normal'>{detail.topic}</span></div>
+                                            <div className="pl-2 font-medium text-black">Topic: <span className='font-normal'>{detail.topic}</span></div>
                                         </div>
                                     </>
                                 )}
@@ -166,7 +166,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                                     >
                                         {editingRow === index ? (
                                             <div className="flex flex-col space-y-2">
-                                                <div className="font-medium text-blue-700">Task: </div>
+                                                <div className="font-medium text-black">Task: </div>
                                                 <textarea
                                                     rows={6}
                                                     className="font-normal border border-blue-300 shadow-md rounded-lg px-3 py-2 text-justify resize-none"
@@ -176,19 +176,19 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                                             </div>
                                         ) : (
                                             <div className="space-y-2">
-                                                <div className="font-medium text-blue-700">Task: <span className='font-normal'>{detail.description}</span></div>
+                                                <div className="font-medium text-black">Task: <span className='font-normal'>{detail.description}</span></div>
                                             </div>
                                         )}
                                     </motion.div>
                                 )}
                             </AnimatePresence>
 
-                            <div className='text-right text-blue-500 font-medium'>
+                            <div className='text-right text-black font-medium'>
                                 <span className='flex items-center space-x-2 justify-end'><IoMdCalendar /> {detail.date}</span>
                             </div>
 
                             <motion.div
-                                className='px-4 py-2 bg-blue-50 flex justify-end space-x-2'
+                                className='px-4 py-2 flex justify-end space-x-2'
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.2 }}

@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaBook, FaChalkboardTeacher, FaClock, FaGraduationCap, FaUtensils } from "react-icons/fa";
-import AuthContext from "../../../Context/AuthContext";
+
 
 export default function LectureTile({ index, numberOfLecturesBeforeLunch, Time, data, day }) {
-    const { authState } = useContext(AuthContext);
     const [lectures, setLectures] = useState({});
 
     useEffect(() => {
@@ -86,7 +85,6 @@ export default function LectureTile({ index, numberOfLecturesBeforeLunch, Time, 
                 initial="hidden"
                 animate="visible"
                 transition={{ duration: 0.5 }}
-                className="bg-gradient-to-r from-green-50 to-blue-50"
             >
                 <LectureCell icon={FaGraduationCap} content={lectures.lectureNo} />
                 <LectureCell icon={FaBook} content={lectures.subject} />

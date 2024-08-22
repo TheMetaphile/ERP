@@ -26,7 +26,7 @@ function Planner() {
                 <motion.h1 
                     initial={{ y: -20 }}
                     animate={{ y: 0 }}
-                    className="text-3xl mobile:max-tablet:text-2xl whitespace-nowrap font-bold mb-2 text-blue-700"
+                    className="text-3xl mobile:max-tablet:text-2xl whitespace-nowrap font-medium mb-2 text-black"
                 >
                     Weekly Plan
                 </motion.h1>

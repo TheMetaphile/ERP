@@ -65,7 +65,7 @@ const RecordDetailsHOD = () => {
       <ToastContainer />
       <div className="flex justify-between items-center mb-4">
         <motion.h1
-          className="text-3xl font-bold text-blue-600 mobile:max-tablet:text-2xl whitespace-nowrap mb-2 "
+          className="text-3xl font-medium text-black mobile:max-tablet:text-2xl whitespace-nowrap mb-2 "
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -74,7 +74,7 @@ const RecordDetailsHOD = () => {
         </motion.h1>
         <motion.Link
           to="/Teacher-Dashboard/HOD/notebook"
-          className="flex items-center text-blue-500 hover:text-blue-700 hover:cursor-pointer transition-colors duration-300"
+          className="flex items-center text-black hover:text-black hover:cursor-pointer transition-colors duration-300"
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -133,7 +133,7 @@ const RecordDetailsHOD = () => {
       </div>
 
       <motion.h1
-        className="text-3xl font-bold text-blue-600 mobile:max-tablet:text-2xl whitespace-nowrap my-3"
+        className="text-3xl font-medium text-black mobile:max-tablet:text-2xl whitespace-nowrap my-3"
         initial={{ x: -50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}

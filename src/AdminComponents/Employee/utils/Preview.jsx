@@ -4,6 +4,8 @@ import Loading from '../../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
 import { BASE_URL_Login } from '../../../Config';
 import AuthContext from '../../../Context/AuthContext';
+import { motion } from "framer-motion";
+import { FaUser, FaGraduationCap, FaUniversity, FaPhone, FaEnvelope, FaBirthdayCake, FaTint, FaIdCard, FaMapMarkerAlt, FaBuilding, FaUserTie, FaLink } from "react-icons/fa";
 
 const Preview = ({ prevStep, formData }) => {
     const [loading, setLoading] = useState(false);
@@ -89,53 +91,83 @@ const Preview = ({ prevStep, formData }) => {
         }
     };
 
+    const infoItems = [
+        { icon: <FaUser />, label: "Name", value: name },
+        { icon: <FaGraduationCap />, label: "Highest Qualification", value: qualification },
+        { icon: <FaUniversity />, label: "Name of Institute", value: institute },
+        { icon: <FaPhone />, label: "Phone Number", value: phoneNumber },
+        { icon: <FaPhone />, label: "Emergency Contact", value: emergencyContactNumber },
+        { icon: <FaEnvelope />, label: "Email", value: email },
+        { icon: <FaBirthdayCake />, label: "DOB", value: dob },
+        { icon: <FaTint />, label: "Blood Group", value: bloodGroup },
+        { icon: <FaIdCard />, label: "Aadhar Number", value: aadhaarNumber },
+        { icon: <FaMapMarkerAlt />, label: "Permanent Address", value: `${permanentAddress}, ${permanentDistrict}, ${permanentState}, ${permanentPincode}` },
+        { icon: <FaMapMarkerAlt />, label: "Residential Address", value: `${residentialAddress}, ${residentialDistrict}, ${residentialState}, ${residentialPincode}` },
+        { icon: <FaBuilding />, label: "Department", value: department },
+        { icon: <FaUserTie />, label: "Role", value: role },
+        { icon: <FaLink />, label: "Profile Link", value: "Available" },
+    ];
+
     return (
-        <div className="rounded-lg w-full px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3">
-            <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md space-y-4 border">
-                <h2 className="text-2xl font-normal p-2 mobile:max-tablet:text-xl">Preview</h2>
+        <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3"
+        >
+            <div className="p-6  mx-auto bg-purple-50 rounded-lg shadow-lg space-y-6 border border-purple-200">
+                <motion.h2
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-3xl font-semibold p-2 text-purple-700 text-center"
+                >
+                    Preview
+                </motion.h2>
 
-                <div className="space-y-4">
-                    <p><strong>Name:</strong> {name}</p>
-                    <p><strong>Highest Qualification:</strong> {qualification}</p>
-                    <p><strong>Name of Institute:</strong> {institute}</p>
-                    <p><strong>Phone Number:</strong> {phoneNumber}</p>
-                    <p><strong>Emergency Contact:</strong> {emergencyContactNumber}</p>
-                    <p><strong>Email:</strong> {email}</p>
-                    <p><strong>DOB:</strong> {dob}</p>
-                    <p><strong>Blood Group:</strong> {bloodGroup}</p>
-                    <p><strong>Aadhar Number:</strong> {aadhaarNumber}</p>
-                    <p><strong>Permanent Address:</strong> {permanentAddress}</p>
-                    <p><strong>Permanent State:</strong> {permanentState}</p>
-                    <p><strong>Permanent District:</strong> {permanentDistrict}</p>
-                    <p><strong>Permanent Pincode:</strong> {permanentPincode}</p>
-                    <p><strong>Residential Address:</strong> {residentialAddress}</p>
-                    <p><strong>Residential State:</strong> {residentialState}</p>
-                    <p><strong>Residential District:</strong> {residentialDistrict}</p>
-                    <p><strong>Residential Pincode:</strong> {residentialPincode}</p>
-                    <p><strong>Department:</strong> {department}</p>
-                    <p><strong>Role:</strong> {role}</p>
-                    <p><strong>Profile Link:</strong> Available</p>
-                    {/* <p><strong>In hand salary:</strong> {inHandSalary}</p> */}
-                    {/* <p><strong>Instruments:</strong></p>
-                    <ul>
-                        {instruments.map((instrument, index) => (
-                            <li key={index}>
-                                {instrument.title} - {instrument.amount}
-                            </li>
-                        ))}
-                    </ul> */}
+                <div className="grid grid-cols-2  gap-6">
+                    {infoItems.map((item, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className="flex items-center space-x-3"
+                        >
+                            <div className="text-purple-600 text-xl">{item.icon}</div>
+                            <div className='flex items-center font-semibold'>
+                                <p className="text-base text-purple-800">{item.label}: </p>&nbsp;
+                                <p className="text-base ">{item.value}</p>
+                            </div>
+                        </motion.div>
+                    ))}
                 </div>
 
-                <div className="flex justify-between">
-                    <button onClick={prevStep} className="bg-gray-500 text-white p-2 rounded">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.5 }}
+                    className="flex justify-between mt-8"
+                >
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={prevStep}
+                        className="bg-purple-500 text-white px-6 py-2 rounded-full shadow-md hover:bg-purple-600 transition duration-300"
+                    >
                         Back
-                    </button>
-                    <button onClick={handleConfirm} className="bg-blue-500 text-white p-2 rounded">
+                    </motion.button>
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handleConfirm}
+                        className="bg-purple-700 text-white px-6 py-2 rounded-full shadow-md hover:bg-purple-800 transition duration-300"
+                    >
                         {loading ? <Loading /> : 'Confirm'}
-                    </button>
-                </div>
+                    </motion.button>
+                </motion.div>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

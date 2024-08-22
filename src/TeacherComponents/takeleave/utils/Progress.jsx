@@ -75,7 +75,7 @@ export default function Progress() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col px-3 mobile:max-tablet:px-0 mobile:max-tablet:mx-0 items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar"
+            className="flex flex-col  mobile:max-tablet:px-0 mobile:max-tablet:mx-0 items-start mb-3 no-scrollbar"
         >
             {loading ? (
                 <div className="flex items-center justify-center w-full h-72">
@@ -91,7 +91,7 @@ export default function Progress() {
                     <div className="tablet:flex-1 h-80 mobile:max-tablet:text-lg mobile:max-tablet:w-full">
                         <DoughnutSecond chartData={chartData} title='Leave Status' />
                     </div>
-                    <div className="tablet:flex-1 h-80 mobile:max-tablet:text-lg w-full">
+                    <div className="tablet:flex-1 h-80 mobile:max-tablet:text-lg mobile:max-tablet:h-fit w-full">
                         <DoughnutSecond chartData={chartData2} title='Leave Types' />
                     </div>
                 </motion.div>

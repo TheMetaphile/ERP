@@ -34,7 +34,7 @@ export default function SearchBar({ handleClassChange, handleSectionChange,handl
     return (
 
         <div className="flex mobile:max-tablet:flex-col w-full mobile:max-tablet:w-full mobile:max-tablet:gap-2 mobile:max-tablet:p-2 ">
-             <select id="class" value={Class} onChange={handleClassChangeWithFetch} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
+             <select id="class" value={Class} onChange={handleClassChangeWithFetch} className="rounded-lg shadow-md px-3 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
                     <option value="">Search by Class</option>
                     <option value="Pre-Nursery">Pre-Nursery</option>
                     <option value="Nursery">Nursery</option>
@@ -54,7 +54,7 @@ export default function SearchBar({ handleClassChange, handleSectionChange,handl
                     <option value="12th">12th</option>
                 </select>
 
-                <select id="section" value={Section} onChange={handleSectionChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
+                <select id="section" value={Section} onChange={handleSectionChange} className="rounded-lg shadow-md px-3 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
                     <option value="">Search by Section</option>
                     {sectionsDetails.map((section, index) => (
                         <option key={index} value={section}>{section}</option>
@@ -66,7 +66,7 @@ export default function SearchBar({ handleClassChange, handleSectionChange,handl
                 name="month"
                 value={Month}
                 onChange={handleMonthChange}
-                className="rounded-lg shadow-md mr-3 px-3 py-1 border-2 border-gray-200 text-lg mobile:max-tablet:mr-0 flex-1"
+                className="rounded-lg shadow-md mr-3 px-3 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg mobile:max-tablet:mr-0 flex-1"
             >
                 <option value="">Select Month</option>
                 <option value="1">January</option>

@@ -40,7 +40,7 @@ function NoteBook() {
               initial={{ x: -50 }}
               animate={{ x: 0 }}
               transition={{ type: 'spring', stiffness: 120 }}
-              className="text-3xl font-bold text-blue-600 mobile:max-tablet:text-2xl whitespace-nowrap"
+              className="text-3xl font-medium text-black mobile:max-tablet:text-2xl whitespace-nowrap"
             >
               Note Book Record
             </motion.h1>

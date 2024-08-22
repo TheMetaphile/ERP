@@ -37,8 +37,10 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
         return date;
     });
 
-    const nextWeekFormattedDate = nextWeekStart.toISOString().split('T')[0];
-    const currentWeekFormattedDate = currentWeekStart.toISOString().split('T')[0];
+    const nextWeekFormattedDate = `${nextWeekStart.getFullYear()}-${ nextWeekStart.getMonth() <10 ? `0${nextWeekStart.getMonth()+1}` : nextWeekStart.getMonth()+1}-${nextWeekStart.getDate()}`;
+
+    const currentWeekFormattedDate = `${currentWeekStart.getFullYear()}-${ currentWeekStart.getMonth() <10 ? `0${currentWeekStart.getMonth()+1}` : currentWeekStart.getMonth()+1}-${currentWeekStart.getDate()}`;
+
 
 
     const [date, SetDate] = useState(currentWeekStart);

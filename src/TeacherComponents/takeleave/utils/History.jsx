@@ -89,15 +89,19 @@ function History({ additionalData }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className=' mx-auto p-6 bg-blue-50 '
+
+            className=' mx-auto   '
+
         >
             <motion.div
-                className='flex items-center justify-between mb-6'
+                className='flex items-center justify-between mb-6 mobile:max-tablet:mb-3'
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
             >
-                <h1 className='text-3xl font-bold text-blue-600 flex items-center mobile:max-tablet:text-2xl'>
+
+                <h1 className='text-3xl px-2 mobile:max-tablet:text-lg font-medium text-black flex items-center'>
+
                     <FaHistory className="mr-2" />
                     Leave History
                 </h1>

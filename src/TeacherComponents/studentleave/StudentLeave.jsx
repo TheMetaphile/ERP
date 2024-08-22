@@ -50,7 +50,7 @@ function StudentLeave() {
         setLoading(true);
         try {
             const today = new Date();
-            var month = today.getMonth()+1 < 10 ? `0${today.getMonth()+1}` : today.getMonth()+1; 
+            var month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;
             const formattedDate = `${today.getFullYear()}-${month}-${today.getDate()}`;
             const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/classTeacher?start=${start}&end=${end}&status=${status}&date=${formattedDate}`, {
                 headers: {
@@ -76,27 +76,31 @@ function StudentLeave() {
     }
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="w-full flex flex-col px-4 h-screen items-start mb-3 bg-blue-50"
+            className="w-full flex flex-col px-4 h-screen items-start mb-3 "
         >
             <ToastContainer />
-            <motion.div 
+            <motion.div
                 className='flex items-center justify-between w-full mt-6 mb-8'
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
             >
-                <h1 className='text-3xl font-bold text-blue-600 flex items-center'>
+
+                <h1 className='text-3xl mobile:max-tablet:text-sm font-medium text-black flex items-center'>
+
                     <FaUserGraduate className="mr-3" />
                     Student Leave
                 </h1>
                 <motion.select
                     value={status}
                     onChange={handleStatusChange}
-                    className="bg-white border-2 border-blue-300 text-blue-700 rounded-lg shadow-md px-4 py-2 outline-none focus:border-blue-500 transition duration-300"
+
+                    className="bg-white border-2 border-blue-300 text-blue-700 rounded-lg mobile:max-tablet:p-2 shadow-md px-4 py-2 outline-none focus:border-blue-500 transition duration-300"
+
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 >
@@ -105,8 +109,8 @@ function StudentLeave() {
                     <option value="Rejected">Rejected</option>
                 </motion.select>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
                 className='w-full'
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -114,8 +118,10 @@ function StudentLeave() {
             >
                 <NewTile data={data} />
                 {!allDataFetched && (
-                    <motion.h1 
+
+                    <motion.h1
                         className='text-blue-600 hover:text-blue-800 mt-6 cursor-pointer text-center font-semibold'
+
                         onClick={handleViewMore}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}

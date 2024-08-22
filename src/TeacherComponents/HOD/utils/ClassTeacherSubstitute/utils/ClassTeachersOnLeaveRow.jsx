@@ -5,6 +5,7 @@ import { BASE_URL_Login } from "../../../../../Config";
 import { FaTimes } from "react-icons/fa";
 import { MdCheck, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
+import { motion } from 'framer-motion';
 
 
 export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }) {
@@ -179,8 +180,26 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
 
     }
 
+    const rowVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { 
+          opacity: 1, 
+          y: 0,
+          transition: {
+            type: 'spring',
+            stiffness: 100,
+            damping: 12
+          }
+        }
+      };
+
     return (
-        <tr key={index} className="border-b border-gray-200  last:border-none">
+        <motion.tr
+        key={index}
+        variants={rowVariants}
+        className="border-b border-gray-200  last:border-none"
+      >
+    
             <td className="py-3 px-6 text-center whitespace-nowrap">{Teacher.employeeId}</td>
             <td className="flex py-3 px-6   items-center gap-2 whitespace-nowrap"><img src={Teacher.profileLink} alt="img" className="rounded-full h-12 w-12" />{Teacher.name}</td>
             <td className="py-3 px-6 text-center whitespace-nowrap">{date}</td>
@@ -261,6 +280,7 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
 
 
 
-        </tr>
+            </motion.tr>
+
     )
 }

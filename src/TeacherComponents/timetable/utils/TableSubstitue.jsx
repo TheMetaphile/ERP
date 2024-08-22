@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FaCalendarAlt, FaChalkboardTeacher, FaUserGraduate, FaBook,FaClock } from "react-icons/fa";
+import { FaCalendarAlt, FaChalkboardTeacher, FaUserGraduate, FaBook, FaClock } from "react-icons/fa";
 
 function TableSubstitute({ data, Time, numberOfLeacturesBeforeLunch }) {
   const formatTime = (date) => {
@@ -21,8 +21,10 @@ function TableSubstitute({ data, Time, numberOfLeacturesBeforeLunch }) {
       transition={{ duration: 0.5 }}
     >
       <table className="mobile:max-tablet:w-fit w-full items-center rounded-lg">
-        <thead className="w-fit bg-gradient-to-r from-blue-400 to-blue-200">
-          <tr className="w-fit">
+
+        <thead className="w-fit bg-gradient-to-r from-blue-200 to-blue-100">
+          <tr className="w-fit whitespace-nowrap">
+
             <th className="w-32 px-4 py-2 font-medium border-r border-gray-400">
               <FaCalendarAlt className="inline-block mr-2" /> Lecture
             </th>
@@ -47,7 +49,7 @@ function TableSubstitute({ data, Time, numberOfLeacturesBeforeLunch }) {
                 <React.Fragment key={item._id}>
                   {(numberOfLeacturesBeforeLunch === item.Lecture || (data[idx].lectureNo < numberOfLeacturesBeforeLunch && data[idx + 1].lectureNo > numberOfLeacturesBeforeLunch)) && (
                     <motion.tr
-                      className="w-full h-8 border-t border-gray-400 bg-blue-200 text-xl text-center"
+                      className="w-full h-8 border-t border-gray-400  text-xl text-center"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
@@ -64,23 +66,23 @@ function TableSubstitute({ data, Time, numberOfLeacturesBeforeLunch }) {
                     transition={{ duration: 0.3, delay: idx * 0.1 }}
                   >
                     <td className="w-32 px-4 py-2 border-r border-gray-400">
-                     
+
                       {item.Lecture}
                     </td>
-                    <td className="w-60 px-4 py-2 border-r whitespace-nowrap border-gray-400 bg-blue-200">
-                      
+                    <td className="w-60 px-4 py-2 border-r whitespace-nowrap border-gray-400 ">
+
                       {`${formatTime(Time[item.Lecture - 1].start)}-${formatTime(Time[item.Lecture - 1].end)}`}
                     </td>
-                    <td className="w-60 px-4 py-2 border-r border-gray-400 bg-blue-200">
-                 
+                    <td className="w-60 px-4 py-2 border-r border-gray-400 ">
+
                       {item.class}
                     </td>
-                    <td className="w-60 px-4 py-2 border-r border-gray-400 bg-blue-200">
-                  
+                    <td className="w-60 px-4 py-2 border-r border-gray-400 ">
+
                       {item.section}
                     </td>
-                    <td className="w-60 px-4 py-2 whitespace-nowrap bg-blue-200">
-                   
+                    <td className="w-60 px-4 py-2 whitespace-nowrap ">
+
                       {item.subject}
                     </td>
                   </motion.tr>

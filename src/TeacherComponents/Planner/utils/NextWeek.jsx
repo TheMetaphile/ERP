@@ -34,9 +34,11 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
-    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
-    const nextWeekStart = new Date();
-    nextWeekStart.setDate(currentWeekStart.getDate() + 7);
+    const currentWeekStart = new Date(currentDate);  // Create a new Date object to avoid modifying the original
+    currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay() + 1);  // Adjust to Monday (start of the week)
+    
+    const nextWeekStart = new Date(currentWeekStart);  // Create a new Date object for next week
+    nextWeekStart.setDate(currentWeekStart.getDate() + 7); 
 
     const nextWeekDays = Array.from({ length: 6 }, (_, i) => {
         const date = new Date(nextWeekStart);
@@ -44,7 +46,8 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
         return date;
     });
 
-    const nextWeekFormattedDate = nextWeekStart.toISOString().split('T')[0];
+    const nextWeekFormattedDate = `${nextWeekStart.getFullYear()}-${ nextWeekStart.getMonth() <10 ? `0${nextWeekStart.getMonth()+1}` : nextWeekStart.getMonth()+1}-${nextWeekStart.getDate()}`;
+
     const [details, setDetails] = useState(defaultPlan());
 
 
@@ -161,7 +164,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                         </thead>
                         <tbody className='text-center'>
                             {details.map((data, index) => (
-                                <NextWeekRow key={index} details={data} index={index} setDetails={setDetails} status={(HODStatus === "Accept" && adminStatus==='Accept')} />
+                                <NextWeekRow key={index} details={data} index={index} setDetails={setDetails} status={(HODStatus === "Accept" && adminStatus === 'Accept')} />
                             ))}
                         </tbody>
                     </motion.table>
@@ -235,8 +238,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                             </div>
                         )}
                     </motion.div>
-                    {
-                        adminStatus=='Reject' || HODStatus =='Reject' && <motion.button
+                    <motion.button
                         type="submit"
                         className="px-8 py-3 w-full rounded-md bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center"
                         whileHover={{ scale: 1.05 }}
@@ -245,7 +247,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                         <FaSave className="mr-2" />
                         <span className="text-lg">SAVE</span>
                     </motion.button>
-                    }
+
                 </form>
             )}
         </motion.div>

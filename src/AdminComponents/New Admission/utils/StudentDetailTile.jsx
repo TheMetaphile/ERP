@@ -4,6 +4,7 @@ import axios from 'axios';
 import { MdCheck, MdCancel, MdOutlineModeEdit } from 'react-icons/md';
 import { BASE_URL_ClassTeacher } from '../../../Config';
 import { toast } from 'react-toastify';
+import { motion } from 'framer-motion';
 
 export default function StudentDetailTile({ userData, Class }) {
     const [editMode, setEditMode] = useState(null);
@@ -42,58 +43,74 @@ export default function StudentDetailTile({ userData, Class }) {
         setSelectedSection('');
     };
 
+    const rowVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
+
     return (
-        <div className="w-full">
+        <>
             {userData.map((user, index) => (
-                <div key={index} className="flex text-center mobile:max-tablet:gap-2 items-center justify-evenly border rounded-lg py-2 pl-2 mb-2 tablet:max-laptop:w-fit">
-                    <div className="w-40 flex justify-center">
-                        <img src={user.profileLink} alt="" className="h-8 w-8 rounded-full" />
-                        <h1 className="text-base w-32">{user.name}</h1>
-                    </div>
-                    <h1 className="text-base w-40">{Class}</h1>
-                    <h1 className="text-base w-40">{user.gender}</h1>
-                    <h1 className="text-base w-40">{user.percentage}</h1>
-                    <h1 className="text-base w-40">{user.fatherPhoneNumber}</h1>
-                    <h1 className="text-base w-52">{user.email}</h1>
-                    <h1 className="text-base w-52 flex justify-center items-center">
+                <motion.tr
+                    key={index}
+                    className="hover:bg-purple-50 transition duration-300"
+                    variants={rowVariants}
+                    initial="hidden"
+                    animate="visible"
+                    transition={{ delay: index * 0.05 }}
+                >
+                    <td className="px-4 py-3">
+                        <div className="flex items-center space-x-3">
+                            <img src={user.profileLink} alt="" className="h-8 w-8 rounded-full object-cover" />
+                            <span className="font-medium text-purple-800">{user.name}</span>
+                        </div>
+                    </td>
+                    <td className="px-4 py-3 text-purple-700">{Class}</td>
+                    <td className="px-4 py-3 text-purple-700">{user.gender}</td>
+                    <td className="px-4 py-3 text-purple-700">{user.percentage}%</td>
+                    <td className="px-4 py-3 text-purple-700">{user.fatherPhoneNumber}</td>
+                    <td className="px-4 py-3 text-purple-700 truncate max-w-xs">{user.email}</td>
+                    <td className="px-4 py-3">
                         {editMode === index ? (
-                            <>
+                            <motion.div className="flex items-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                                 <input
-                                    className="p-2 border border-gray-300 rounded-md ml-2 w-24"
+                                    className="p-2 border border-purple-300 rounded-md w-24 focus:outline-none focus:ring-2 focus:ring-purple-500"
                                     id="section"
                                     type="text"
                                     value={selectedSection}
                                     onChange={(e) => setSelectedSection(e.target.value)}
                                     placeholder="Section"
                                 />
-
-                                <button
-                                    className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                                <motion.button
+                                    className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full shadow-md ml-2"
                                     onClick={() => handleConfirmEdit(index, user._id)}
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
                                 >
                                     <MdCheck />
-                                </button>
-                                <button
-                                    className="bg-gray-400 hover:bg-gray-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
+                                </motion.button>
+                                <motion.button
+                                    className="bg-gray-400 hover:bg-gray-500 text-white p-2 rounded-full shadow-md ml-2"
                                     onClick={handleCancelEdit}
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
                                 >
                                     <MdCancel />
-                                </button>
-                            </>
+                                </motion.button>
+                            </motion.div>
                         ) : (
-                            <div className='flex justify-center items-center'>
-                                <button
-                                    className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
-                                    onClick={() => handleEditToggle(index, user)}
-                                >
-                                    <MdOutlineModeEdit />
-                                </button>
-                            </div>
+                            <motion.button
+                                className="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded-full shadow-md flex items-center justify-center"
+                                onClick={() => handleEditToggle(index, user)}
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                            >
+                                <MdOutlineModeEdit />
+                            </motion.button>
                         )}
-                    </h1>
-
-                </div>
+                    </td>
+                </motion.tr>
             ))}
-        </div>
+        </>
     );
 }

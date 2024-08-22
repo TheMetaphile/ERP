@@ -30,7 +30,9 @@ function Appraisal() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="text-4xl font-bold text-blue-600 mb-6"
+
+        className="text-4xl font-bold text-black mb-6 mobile:max-tablet:mb-4 mobile:max-tablet:text-xl"
+
       >
         Appraisal
       </motion.h1>
@@ -38,9 +40,11 @@ function Appraisal() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.4, duration: 0.5 }}
-        className="border border-blue-200 shadow-lg rounded-xl w-full overflow-hidden bg-white"
+
+        className="border border-blue-200 shadow-lg rounded-lg w-full overflow-hidden bg-white"
       >
-        <div className="flex items-center justify-between px-6 py-4 bg-blue-50">
+        <div className="flex items-center justify-between px-6 mobile:max-tablet:px-2 py-4 bg-blue-50">
+
           <div className="flex gap-4">
             <LinkButton
               to="/Teacher-Dashboard/appraisal/applied"
@@ -58,7 +62,7 @@ function Appraisal() {
             />
           </div>
         </div>
-        <div className="p-6">
+        <div className="p-6 mobile:max-tablet:p-2">
           <Outlet />
         </div>
       </motion.div>

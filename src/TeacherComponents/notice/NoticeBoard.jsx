@@ -25,7 +25,7 @@ function NoticeBoard() {
                 <motion.h1 
                     initial={{ x: -20 }}
                     animate={{ x: 0 }}
-                    className='text-3xl mobile:max-tablet:text-lg font-bold text-blue-600 items-center flex'
+                    className='text-3xl mobile:max-tablet:text-lg font-medium text-black items-center flex'
                 >
                     <FaClipboardList className="inline-block mr-2" />
                     Notice Board

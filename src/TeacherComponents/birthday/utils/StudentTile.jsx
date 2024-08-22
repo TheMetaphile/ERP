@@ -3,12 +3,14 @@ import { motion } from 'framer-motion';
 import { IoLogoWhatsapp } from "react-icons/io";
 import { FaBirthdayCake, FaUserGraduate, FaCalendarAlt } from "react-icons/fa";
 
-const BirthdayCard = ({ detail, isToday }) => (
+const BirthdayCard = ({ detail }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full flex items-center mb-4 p-4 bg-blue-50 rounded-lg shadow-lg justify-between"
+
+        className="w-full flex items-center mb-4 p-4 bg-blue-50 rounded-lg shadow-lg justify-between mobile:max-tablet:flex-col mobile:max-tablet:gap-2 mobile:max-tablet:items-start"
+
     >
         <div className="flex items-center space-x-4">
             <motion.img

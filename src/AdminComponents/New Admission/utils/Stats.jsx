@@ -81,12 +81,12 @@ const Stats = ({ stat }) => {
     <div className="bg-white p-8 rounded-xl shadow-lg">
 
       <div className="grid grid-cols-2 md:grid-cols-2 gap-8">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4 text-gray-700">Percentage Distribution</h2>
+        <div className="bg-purple-50 p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-4 text-purple-700">Percentage Distribution</h2>
           <Bar options={options} data={percentChartData} />
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4 text-gray-700">Name Distribution</h2>
+        <div className="bg-purple-50 p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-4 text-purple-700">Name Distribution</h2>
           <Bar options={options} data={nameChartData} />
         </div>
       </div>

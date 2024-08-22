@@ -11,7 +11,7 @@ const DoubtCard = ({ doubt, index, expanded, handleClick }) => {
             transition={{ duration: 0.5 }}
             className="border border-blue-200 p-4 rounded-lg shadow-lg mt-4 bg-white"
         >
-            <div className="flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
+            <div className="flex items-center mobile:max-sm:flex-col mobile:max-sm:items-start justify-between cursor-pointer" onClick={() => handleClick(index)}>
                 <div className="flex items-center space-x-4">
                     <motion.img
                         whileHover={{ scale: 1.1 }}
@@ -19,9 +19,11 @@ const DoubtCard = ({ doubt, index, expanded, handleClick }) => {
                         alt=""
                         className="w-12 h-12 rounded-full border-2 border-blue-300"
                     />
+                    <h3 className="font-semibold text-blue-800">{doubt.student[0].name}</h3>
+
                     <div>
-                        <h3 className="font-semibold text-blue-800">{doubt.student[0].name}</h3>
-                        <div className="flex items-center text-sm text-blue-600">
+                        <div className="flex items-center text-sm text-blue-600 whitespace-nowrap">
+
                             <FaUserGraduate className="mr-1" />
                             <span>Roll: {doubt.student[0].rollNumber}</span>
                         </div>
@@ -98,8 +100,10 @@ export default function AnsweredTile({ data }) {
                 animate={{ y: 0, opacity: 1 }}
                 className="flex items-center justify-between mb-6"
             >
-                <h2 className="text-2xl font-bold text-blue-600">Resolved Doubts</h2>
-                <div className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md">
+
+                <h2 className="text-2xl mobile:max-sm:text-sm font-medium text-black">Resolved Doubts</h2>
+                <div className="flex items-center mobile:max-sm:text-xs bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md">
+
                     <IoMdCheckmarkCircleOutline className="mr-2" />
                     <span>{resolvedDoubts.length} Resolved</span>
                 </div>
