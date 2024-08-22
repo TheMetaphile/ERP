@@ -5,6 +5,7 @@ import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../../Config";
 import { MdEdit, MdCheck, MdCancel, MdDeleteForever } from 'react-icons/md';
 import { toast } from "react-toastify";
+import { motion, AnimatePresence } from 'framer-motion';
 
 const TeacherNotice = () => {
   const [loading, setLoading] = useState(true);
@@ -142,140 +143,192 @@ const TeacherNotice = () => {
   };
 
   return (
-    <div className="mt-4 mx-2">
-      <select
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="mt-4 mx-2"
+    >
+      <motion.select
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         value={type}
         onChange={handleTypeChange}
-        className="border border-gray-300 rounded-lg px-2 py-1"
+        className="border border-purple-300 rounded-lg px-2 py-1 mb-4 focus:outline-none focus:ring-2 focus:ring-purple-500"
       >
         <option value="For Teachers">For Teachers</option>
         <option value="Particular Teachers">Particular Teachers</option>
-      </select>
+      </motion.select>
+      
       <div className="flex flex-col space-y-4 mb-4">
         {loading ? (
           <Loading />
         ) : data === null || data.length === 0 ? (
-          <div>No notices available</div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-purple-600 text-center text-lg"
+          >
+            No notices available
+          </motion.div>
         ) : (
           <>
-
-            {data.map((notice, index) => (
-
-              <div key={index} className="bg-white shadow-md rounded-md p-4 border mt-2 text-base">
-                <div className="w-full flex items-center justify-between mb-2 cursor-pointer" onClick={() => handleClick(index)}>
-                  <h3>
-                    Title: {editingIndex === index ? (
-                      <input
-                        type="text"
-                        name="title"
-                        value={editedNotice.title}
-                        onChange={handleChange}
-                        onClick={handleFieldClick}
-                        className="border border-gray-300 rounded-lg px-2 py-1"
-                      />
-                    ) : (
-                      notice.title
-                    )}
-                  </h3>
-                  <p>
-                    Type: &nbsp;
-                    {notice.type}
-                    {editingIndex === index ? (
-                      <>
-                        <button
-                          className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                          onClick={() => handleSave(index)}
-                        >
-                          <MdCheck />
-                        </button>
-                        <button
-                          className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                          onClick={handleCancel}
-                        >
-                          <MdCancel />
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                          onClick={() => handleEdit(index)}
-                        >
-                          <MdEdit />
-                        </button>
-                        <button
-                          className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md ml-2"
-                          onClick={() => handleDelete(index)}
-                        >
-                          <MdDeleteForever />
-                        </button>
-                      </>
-                    )}
-                  </p>
-                </div>
-                {expanded === index && (
-                  <>
-                    <div className='text-base mt-2'>
-                      <p className="mb-2">
-                        Description: {editingIndex === index ? (
-                          <textarea
-                            rows={6}
-                            name="description"
-                            value={editedNotice.description}
-                            onChange={handleChange}
-                            onClick={handleFieldClick}
-                            className="border border-gray-300 rounded-lg px-2 py-1 w-full"
-                          />
-                        ) : (
-                          notice.description
-                        )}
-                      </p>
-                      {editingIndex === index && type === 'Particular Teachers'? (
-                        <>For Teachers :<ul>
-                          {editedNotice.forId.map((teacher, idx) => (
-                            <li key={idx}>
-                              {teacher.name}
-                            </li>
-                          ))}
-                        </ul>
-                        </>
+            <AnimatePresence>
+              {data.map((notice, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-purple-50 shadow-md rounded-lg p-4 border border-purple-200 mt-2 text-base"
+                >
+                  <div className="w-full flex items-center justify-between mb-2 cursor-pointer" onClick={() => handleClick(index)}>
+                    <h3 className="text-purple-800 font-medium">
+                      Title: {editingIndex === index ? (
+                        <input
+                          type="text"
+                          name="title"
+                          value={editedNotice.title}
+                          onChange={handleChange}
+                          onClick={handleFieldClick}
+                          className="border border-purple-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
                       ) : (
-                        <>
-                          {(type === 'Particular Teachers' && notice.forId.length > 0) && (
-                            <>For Teachers :
-                              <ul>
-                                {notice.forId.map((stud, index) => (
-                                  <li key={index} className="bg-gray-200 border border-gray-400 rounded-full px-3 py-1 inline-block">{stud.name}</li>
-                                ))}
-                              </ul>
-                            </>
-                          )}
-                        </>
+                        notice.title
+                      )}
+                    </h3>
+                    <div className="flex items-center">
+                      <p className="text-purple-600">
+                        Type: {notice.type}
+                      </p>
+                      {editingIndex === index ? (
+                        <div className="flex ml-2">
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="bg-green-400 hover:bg-green-500 text-white px-3 py-1 rounded-lg shadow-md mr-2"
+                            onClick={() => handleSave(index)}
+                          >
+                            <MdCheck />
+                          </motion.button>
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded-lg shadow-md"
+                            onClick={handleCancel}
+                          >
+                            <MdCancel />
+                          </motion.button>
+                        </div>
+                      ) : (
+                        <div className="flex ml-2">
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded-lg shadow-md mr-2"
+                            onClick={() => handleEdit(index)}
+                          >
+                            <MdEdit />
+                          </motion.button>
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded-lg shadow-md"
+                            onClick={() => handleDelete(index)}
+                          >
+                            <MdDeleteForever />
+                          </motion.button>
+                        </div>
                       )}
                     </div>
-                  </>
-                )}
+                  </div>
+                  <AnimatePresence>
+                    {expanded === index && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className='text-base mt-2'
+                      >
+                        <p className="mb-2 text-purple-700">
+                          Description: {editingIndex === index ? (
+                            <textarea
+                              rows={6}
+                              name="description"
+                              value={editedNotice.description}
+                              onChange={handleChange}
+                              onClick={handleFieldClick}
+                              className="border border-purple-300 rounded-lg px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            />
+                          ) : (
+                            notice.description
+                          )}
+                        </p>
+                        {editingIndex === index && type === 'Particular Teachers' ? (
+                          <div className="text-purple-700">
+                            For Teachers:
+                            <ul>
+                              {editedNotice.forId.map((teacher, idx) => (
+                                <li key={idx} className="ml-4">
+                                  • {teacher.name}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ) : (
+                          <>
+                            {(type === 'Particular Teachers' && notice.forId.length > 0) && (
+                              <div className="text-purple-700">
+                                For Teachers:
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                  {notice.forId.map((teacher, index) => (
+                                    <motion.div
+                                      key={index}
+                                      whileHover={{ scale: 1.05 }}
+                                      className="bg-purple-200 border border-purple-400 rounded-full px-3 py-1 inline-block"
+                                    >
+                                      {teacher.name}
+                                    </motion.div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
-                <div className="w-full flex items-center justify-between mt-2">
-                  <p>Date: {notice.date}</p>
-                  <div className="flex items-center">
-                    By:
-                    <div className="flex items-center gap-1 px-1">
-                      <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full" />
-                      <p>{notice.from.name}</p>
+                  <div className="w-full flex items-center justify-between mt-2">
+                    <p className="text-purple-600">Date: {notice.date}</p>
+                    <div className="flex items-center">
+                      <span className="text-purple-600">By:</span>
+                      <div className="flex items-center gap-1 px-1">
+                        <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full" />
+                        <p className="text-purple-700">{notice.from.name}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-
-            ))}
+                </motion.div>
+              ))}
+            </AnimatePresence>
             {!allDataFetched && (
-              <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+              <motion.h1
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className='text-purple-500 hover:text-purple-700 mt-3 cursor-pointer text-center'
+                onClick={handleViewMore}
+              >
+                View More
+              </motion.h1>
             )}
           </>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

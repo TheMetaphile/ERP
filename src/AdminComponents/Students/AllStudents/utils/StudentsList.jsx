@@ -6,17 +6,19 @@ import axios from 'axios';
 import AuthContext from "../../../../Context/AuthContext";
 import Loading from '../../../../LoadingScreen/Loading';
 import { BASE_URL_Login } from "../../../../Config";
+import { ToastContainer, toast } from "react-toastify";
+import { motion } from 'framer-motion';
 
 export default function StudentsList() {
     const [name, setName] = useState('');
     const [userData, setUserData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const { authState } = useContext(AuthContext);
-    const containerRef = useRef(null);
     const [rollNumber, setRollNumber] = useState('');
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(20);
+    const [end, setEnd] = useState(10);
+    const [allDataFetched, setAllDataFetched] = useState(false);
     const [loadMore, setLoadMore] = useState(false);
 
     const handleRollNumberChange = (event) => {
@@ -35,6 +37,7 @@ export default function StudentsList() {
     const handleClassChange = (event) => {
         setStart(0);
         setUserData([]);
+        setAllDataFetched(false);
         setClass(event.target.value);
     };
 
@@ -42,6 +45,7 @@ export default function StudentsList() {
     const handleSectionChange = (event) => {
         setStart(0);
         setUserData([]);
+        setAllDataFetched(false);
         setSection(event.target.value);
     };
 
@@ -58,7 +62,24 @@ export default function StudentsList() {
         }
     }, [Class, Section, bothEventsCalled]);
 
+    useEffect(() => {
+        if (authState.accessToken) {
+            fetchUserData();
+        }
+    }, [authState.accessToken, Class, rollNumber, Section, name]);
+
+    useEffect(() => {
+        if (start !== 0) {
+            fetchUserData();
+        }
+    }, [start, Class, rollNumber, Section, name]);
+
+    const handleViewMore = () => {
+        setStart(prevStart => prevStart + end);
+    };
+
     const fetchUserData = async () => {
+        setLoading(true);
         try {
             console.log(start, "-", end);
             const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
@@ -71,49 +92,21 @@ export default function StudentsList() {
             });
             console.log("API response:", response.data);
 
-            if (response.data.Students) {
-                const users = response.data.Students.map(user => ({
-                    ...user,
-                    profileLogo: user.profileLink || profilelogo,
-                }));
-
-                if (loadMore) {
-                    console.log(userData.length + users.length, "length");
-                    setUserData(prevUsers => [...prevUsers, ...users]);
-                    setLoadMore(false);
-                } else {
-                    setUserData(users);
-                    console.log(users.length, "length");
-                }
-
-            } else {
-                setError('Unexpected response format');
-                setTimeout(() => {
-                    setError('');
-                }, 2000);
+            const list = response.data.Students.length;
+            console.log("API response:", response.data.Students);
+            if (list < end) {
+                toast.success('All data fetched');
+                console.log('All data fetched')
+                setAllDataFetched(true);
             }
-
+            setUserData(prevData => [...prevData, ...response.data.Students]);
             setLoading(false);
         } catch (err) {
             setError(err.message);
-            setTimeout(() => {
-                setError('');
-            }, 2000);
-            setLoading(false);
         }
     };
 
-    useEffect(() => {
-        if (authState.accessToken) {
-            fetchUserData();
-        } else {
-            setError('No access token available');
-            setLoading(false);
-            setTimeout(() => {
-                setError('');
-            }, 2000);
-        }
-    }, [authState.accessToken, Class, rollNumber, Section, name, start]);
+
 
     const filteredStudents = userData.filter(student => {
         return (
@@ -148,51 +141,54 @@ export default function StudentsList() {
         }
     };
 
-    const handleScroll = () => {
-        const container = containerRef.current;
-        if (container && container.scrollHeight - container.scrollTop <= container.clientHeight + 50) {
-            if (start + end === userData.length) {
-                console.log("fetching");
-                setLoadMore(true);
-                setStart(prevStart => prevStart + 20);
-            }
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { duration: 0.5, when: "beforeChildren", staggerChildren: 0.1 }
         }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: { y: 0, opacity: 1, transition: { duration: 0.5 } }
     };
 
     // State to control the dropdown visibility
     const [isDropdownVisible, setDropdownVisible] = useState(false);
 
     return (
-        <>
-            <div className="flex tablet:max-tablet:mt-5  mobile:max-tablet:my-3 justify-between items-center mobile:max-tablet:items-baseline mobile:max-tablet:pl-1 mobile:max-tablet:py-2 px-2  mobile:max-tablet:fixed top-34 left-0 right-0 bg-white mb-4">
-                <h1 className="text-2xl font-medium px-2 mobile:max-tablet:text-lg ">All Students Data</h1>
-                <div className="block tablet:hidden">
-                    <button
-                        className="p-2 border rounded"
-                        onClick={() => setDropdownVisible(!isDropdownVisible)}
-                    >
-                        Filter
-                    </button>
-                    {isDropdownVisible && (
-                        <div className="absolute bg-white shadow-lg px-2 rounded mt-2 right-2 left-2 z-20 justify-center flex tablet:w-4/6 py-2">
-                            <SearchBar
-                                rollNumber={rollNumber}
-                                name={name}
-                                Class={Class}
-                                Section={Section}
-                                handleRollNumberChange={handleRollNumberChange}
-                                handleNameChange={handleNameChange}
-                                handleClassChange={handleClassChange}
-                                handleSectionChange={handleSectionChange}
-                                handlebothEventsCalled={handlebothEventsCalled}
-                            />
-                        </div>
-                    )}
-                </div>
-            </div>
-            <div className="h-fit w-full items-start mb-3 px-2">
-                {/* Original SearchBar for non-mobile screens */}
-                <div className="w-full tablet:block hidden my-2">
+        <motion.div
+            className="bg-purple-50 min-h-screen p-4"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+        >
+            <ToastContainer />
+
+            <motion.div
+                className="flex justify-between items-center p-4 mb-6"
+                variants={itemVariants}
+            >
+                <h1 className="text-3xl font-bold text-purple-700">All Students Data</h1>
+                <motion.button
+                    className="p-2 block tablet:hidden bg-purple-600 text-white rounded-md shadow-md hover:bg-purple-700 transition duration-300 ease-in-out"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setDropdownVisible(!isDropdownVisible)}
+                >
+                    Filter
+                </motion.button>
+            </motion.div>
+
+            {isDropdownVisible && (
+                <motion.div
+                    className="bg-white rounded-lg shadow-lg p-4 mb-6"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                >
                     <SearchBar
                         rollNumber={rollNumber}
                         name={name}
@@ -204,35 +200,71 @@ export default function StudentsList() {
                         handleSectionChange={handleSectionChange}
                         handlebothEventsCalled={handlebothEventsCalled}
                     />
-                </div>
+                </motion.div>
+            )}
 
-                {loading && userData.length > 0 ? <Loading /> : null}
-                {(showAddRollNumberButton && Class && Section && !loading) && (
-                    <button
-                        className=" rounded-lg shadow-md px-3 py-1 mr-2 border-2 border-r-gray-200 text-lg bg-secondary float-right mb-3"
+
+            {/* Original SearchBar for non-mobile screens */}
+            <div className="w-full tablet:block hidden my-2">
+                <SearchBar
+                    rollNumber={rollNumber}
+                    name={name}
+                    Class={Class}
+                    Section={Section}
+                    handleRollNumberChange={handleRollNumberChange}
+                    handleNameChange={handleNameChange}
+                    handleClassChange={handleClassChange}
+                    handleSectionChange={handleSectionChange}
+                    handlebothEventsCalled={handlebothEventsCalled}
+                />
+            </div>
+            <motion.div
+                className="bg-white rounded-lg shadow-lg p-4 text-center"
+                variants={itemVariants}
+            >
+                {loading && userData.length > 0 && <Loading />}
+
+                {showAddRollNumberButton && Class && Section && !loading && (
+                    <motion.button
+                        className="mb-4 px-4 py-2 bg-purple-600 text-white rounded-md shadow-md hover:bg-purple-700 transition duration-300 ease-in-out"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={handleRollNumber}
                     >
                         Add Roll Number
-                    </button>
+                    </motion.button>
                 )}
-                <div className="mobile:max-laptop:overflow-y-auto">
-                    <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap" ref={containerRef} onScroll={handleScroll}>
-                        <div className="stutable">
-                            <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
-                        </div>
-                        {loading && userData.length < 1 ? (
-                            <Loading />
-                        ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
-                            <div>No students found</div>
-                        ) : Array.isArray(filteredStudents) ? (
-                            <StudentDetailTile userData={filteredStudents} />
-                        ) : (
-                            <div>Unexpected data format</div>
-                        )}
-                        {loadMore && userData.length > 0 ? <Loading /> : null}
-                    </div>
+
+                <div className="overflow-x-auto">
+                    <table className="w-full">
+                        <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
+                        <tbody>
+                            {loading && userData.length < 1 ? (
+                                <tr><td colSpan="6"><Loading /></td></tr>
+                            ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
+                                <tr><td colSpan="6">No students found</td></tr>
+                            ) : Array.isArray(filteredStudents) ? (
+                                <StudentDetailTile userData={filteredStudents} />
+                            ) : (
+                                <tr><td colSpan="6">Unexpected data format</td></tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-        </>
+
+                {!allDataFetched && (
+                    <motion.button
+                        className="mt-4 text-purple-600 hover:text-purple-800 font-semibold"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handleViewMore}
+                    >
+                        View More
+                    </motion.button>
+                )}
+
+                {loadMore && userData.length > 0 && <Loading />}
+            </motion.div>
+        </motion.div>
     );
 }

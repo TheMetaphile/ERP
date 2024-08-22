@@ -37,7 +37,7 @@ const NoticeUser = () => {
             onClick={() => selectRole('subAdmin')}>Sub Admin</button>
         </div>
         <div className="flex justify-between mobile:max-tablet:gap-2">
-          <div><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mobile:max-tablet:py-0 mobile:max-tablet:px-2" onClick={handleOpenModal}>Write Notice</button></div>
+          <div><button className="bg-purple-200 hover:bg-purple-500 font-bold py-2 px-4 rounded mobile:max-tablet:py-0 mobile:max-tablet:px-2" onClick={handleOpenModal}>Write Notice</button></div>
         </div>
       </div>
       <div className="full h-1 border-b-2 border-gray-300 mt-1"></div>

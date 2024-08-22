@@ -665,7 +665,7 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/AddTeachers",
         element: <Suspense fallback={Loading}>
-          <AddTeacher /></Suspense>,
+          <TeacherRegister /></Suspense>,
         children: []
       },
       {

@@ -6,7 +6,8 @@ import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Login } from '../../Config';
-import { ToastContainer,toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import { motion } from 'framer-motion';
 
 function NewAdmission() {
     const [Class, setClass] = useState('9th');
@@ -111,14 +112,40 @@ function NewAdmission() {
         }
     }
 
-    return (
-        <div className="w-full px-3 mobile:max-tablet:px-0 overflow-auto items-start mt-2 mb-3 no-scrollbar mobile:max-tablet:mt-6">
-            <ToastContainer />
-            <div className='flex items-center justify-between '>
-                <h1 className="text-2xl p-2 mobile:max-tablet:text-xl">New Admission</h1>
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.5 } }
+    };
 
-                <div className='flex items-center gap-2'>
-                    <select id="class" value={Class} onChange={handleClassChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg  ">
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: { y: 0, opacity: 1, transition: { duration: 0.5 } }
+    };
+
+
+    return (
+        <motion.div
+            className="w-full px-6 py-8 bg-purple-50"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            <ToastContainer />
+            <motion.div className="flex  md:flex-row items-center justify-between mb-8" variants={itemVariants}>
+                <motion.h1
+                    className="text-4xl font-bold text-purple-600 mb-4 md:mb-0"
+                    whileHover={{ scale: 1.05 }}
+                >
+                    New Admission
+                </motion.h1>
+                <div className="flex items-center md:flex-row  gap-4">
+                    <motion.select
+                        id="class"
+                        value={Class}
+                        onChange={handleClassChange}
+                        className="rounded-full shadow-lg px-4 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg bg-white text-purple-700"
+                        whileHover={{ scale: 1.05 }}
+                    >
                         <option value="">Search by Class</option>
                         <option value="Pre-Nursery">Pre-Nursery</option>
                         <option value="Nursery">Nursery</option>
@@ -136,50 +163,76 @@ function NewAdmission() {
                         <option value="10th">10th</option>
                         <option value="11th">11th</option>
                         <option value="12th">12th</option>
-                    </select>
-
-                    <select id="distribution" value={distributionMethod} onChange={handleDistributionChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg  ">
+                    </motion.select>
+                    <motion.select
+                        id="distribution"
+                        value={distributionMethod}
+                        onChange={handleDistributionChange}
+                        className="rounded-full shadow-lg px-4 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg bg-white text-purple-700"
+                        whileHover={{ scale: 1.05 }}
+                    >
                         <option value="">Select Distribution Method</option>
                         <option value="By Name">By Name (Alphabetical)</option>
                         <option value="By Percentage">By Percentage</option>
                         <option value="New Section">New Section</option>
-                    </select>
-
-                    <button className='px-3 py-1 bg-secondary rounded-lg shadow-md text-lg' onClick={handleDistribute}>
+                    </motion.select>
+                    <motion.button
+                        className="px-6 py-2 bg-purple-400 text-white rounded-full shadow-lg text-lg font-semibold hover:bg-purple-600 transition duration-300"
+                        onClick={handleDistribute}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
                         Distribute
-                    </button>
+                    </motion.button>
                 </div>
-            </div>
+            </motion.div>
 
-            <div className="mt-4 mobile:max-tablet:w-full mobile:max-tablet:mx-0 mobile:max-tablet:my-8">
+            <motion.div
+                className="mt-8"
+                variants={itemVariants}
+            >
                 {statLoading ? (
                     <Loading />
                 ) : (
                     <Stats stat={stat} method={distributionMethod} />
                 )}
-            </div>
+            </motion.div>
 
-            <div className="mobile:max-laptop:overflow-y-auto mt-6">
-                <div className="rounded-lg shadow-md border h-fit text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap mobile:max-tablet:mt-20">
-                    <div className="stutable">
+            <motion.div
+                className="mt-12 overflow-hidden rounded-lg shadow-xl bg-white"
+                variants={itemVariants}
+            >
+                <div className="overflow-x-auto">
+                    <table className="w-full">
+                        <thead className="">
                         <Header headings={['Name', 'Class', 'Gender', 'Percentage', 'Phone No.', 'E-mail', 'Action']} />
-                    </div>
-                    {loading && userData.length < 1 ? (
-                        <Loading />
-                    ) : userData.length === 0 ? (
-                        <div>No students found</div>
-                    ) : (
-                        <>
-                            <StudentDetailTile userData={userData} Class={Class} />
-                            {!allDataFetched && (
-                                <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                        </thead>
+                        <tbody className="divide-y divide-purple-200">
+                            {loading && userData.length < 1 ? (
+                                <tr><td colSpan="7"><Loading /></td></tr>
+                            ) : userData.length === 0 ? (
+                                <tr><td colSpan="7" className="text-center py-4 text-purple-600">No students found</td></tr>
+                            ) : (
+                                <StudentDetailTile userData={userData} Class={Class} />
                             )}
-                        </>
-                    )}
-
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-        </div>
+                {!allDataFetched && (
+                    <motion.div
+                        className="text-center py-4"
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <button
+                            className="text-purple-600 hover:text-purple-800 font-semibold"
+                            onClick={handleViewMore}
+                        >
+                            View More
+                        </button>
+                    </motion.div>
+                )}
+            </motion.div>
+        </motion.div>
     )
 }
 

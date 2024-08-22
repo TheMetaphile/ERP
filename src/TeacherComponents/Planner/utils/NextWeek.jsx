@@ -161,7 +161,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                         </thead>
                         <tbody className='text-center'>
                             {details.map((data, index) => (
-                                <NextWeekRow key={index} details={data} index={index} setDetails={setDetails} status={(HODStatus === "Accept" && adminStatus==='Accept')} />
+                                <NextWeekRow key={index} details={data} index={index} setDetails={setDetails} status={(HODStatus === "Accept" && adminStatus === 'Accept')} />
                             ))}
                         </tbody>
                     </motion.table>
@@ -235,8 +235,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                             </div>
                         )}
                     </motion.div>
-                    {
-                        adminStatus=='Reject' || HODStatus =='Reject' && <motion.button
+                    <motion.button
                         type="submit"
                         className="px-8 py-3 w-full rounded-md bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center"
                         whileHover={{ scale: 1.05 }}
@@ -245,7 +244,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                         <FaSave className="mr-2" />
                         <span className="text-lg">SAVE</span>
                     </motion.button>
-                    }
+
                 </form>
             )}
         </motion.div>
