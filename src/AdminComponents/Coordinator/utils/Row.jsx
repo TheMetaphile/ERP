@@ -95,6 +95,7 @@ export default function Row({ con }) {
 
     const handleUpdateClick = () => {
         setEditingRowId(true);
+        setSearchString(coordinator.name); // Set the searchString to the current coordinator's name when editing
     };
 
     const handleConfirmClick = () => {
@@ -118,8 +119,8 @@ export default function Row({ con }) {
             <div className="flex-grow flex justify-between items-center">
                 <h2 className="text-lg">{con.classRange}</h2>
                 {editingRowId ? (
-                    Object.keys(selectedTeacher).length > 0 ? (
-                        <div className="flex justify-center gap-2 items-center">
+                    <div className="flex justify-center gap-2 items-center">
+                        {Object.keys(selectedTeacher).length > 0 ? (
                             <div className="flex justify-start w-52">
                                 <div className="flex items-center">
                                     <img src={selectedTeacher.profileLink} alt={selectedTeacher.name} className="w-14 h-14 rounded-full mr-2" />
@@ -129,45 +130,45 @@ export default function Row({ con }) {
                                     {selectedTeacher.employeeId}
                                 </div>
                             </div>
-                            <button
-                                className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                onClick={handleConfirmClick}
-                            >
-                                <MdCheck />
-                            </button>
-                            <button
-                                className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                onClick={handleCancelClick}
-                            >
-                                <FaTimes />
-                            </button>
-                        </div>
-                    ) : (
-                        <div className='flex gap-1 justify-center relative'>
-                            <input
-                                type="text"
-                                className="w-52 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap"
-                                placeholder="Coordinator Name"
-                                value={searchString}
-                                onChange={handleEmailChange}
-                                required
-                            />
-                            {suggestions.length > 0 && (
-                                <ul className="absolute z-10 w-52 bg-white border rounded-md mt-8 max-h-40 overflow-y-auto">
-                                    {suggestions.map((suggestion, idx) => (
-                                        <li
-                                            key={idx}
-                                            className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
-                                            onClick={() => handleSuggestionClick(suggestion)}
-                                        >
-                                            <img src={suggestion.profileLink} alt="Profile" className="w-6 h-6 rounded-full mr-2" />
-                                            {suggestion.name}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-                    )
+                        ) : (
+                            <div className='flex gap-1 justify-center relative'>
+                                <input
+                                    type="text"
+                                    className="w-52 px-2 border border-black rounded-lg text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap"
+                                    placeholder="Coordinator Name"
+                                    value={searchString}
+                                    onChange={handleEmailChange}
+                                    required
+                                />
+                                {suggestions.length > 0 && (
+                                    <ul className="absolute z-10 w-52 bg-white border rounded-md mt-8 max-h-40 overflow-y-auto">
+                                        {suggestions.map((suggestion, idx) => (
+                                            <li
+                                                key={idx}
+                                                className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                                onClick={() => handleSuggestionClick(suggestion)}
+                                            >
+                                                <img src={suggestion.profileLink} alt="Profile" className="w-6 h-6 rounded-full mr-2" />
+                                                {suggestion.name}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        )}
+                        <button
+                            className='bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                            onClick={handleConfirmClick}
+                        >
+                            <MdCheck />
+                        </button>
+                        <button
+                            className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                            onClick={handleCancelClick}
+                        >
+                            <FaTimes />
+                        </button>
+                    </div>
                 ) : (
                     <div className="flex justify-center gap-2 items-center">
                         <div className="flex justify-start w-52">

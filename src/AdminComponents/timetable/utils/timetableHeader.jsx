@@ -1,26 +1,26 @@
+import { motion } from 'framer-motion';
+import { FaGraduationCap, FaClock, FaBook, FaUserTie, FaComments } from 'react-icons/fa';
+
 export default function TimetableHeader() {
     return (
-        <thead className="bg-secondary border-t border-gray-400 rounded-t-lg text-xl w-full">
+        <motion.thead
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-purple-600 text-white rounded-t-lg text-xl w-full"
+        >
             <tr>
-                <th className="mobile:max-tablet:w-40 px-4 py-2 text-center border-r border-gray-400">
-                    Lecture
-                </th>
-                <th className="mobile:max-tablet:w-40 px-4 py-2 text-center border-r border-gray-400">
-                    Timing
-                </th>
-                <th className="mobile:max-tablet:w-40 px-4 py-2 text-center border-r border-gray-400">
-                    Subject
-                </th>
-                <th className="mobile:max-tablet:w-40 px-4 py-2 text-center border-r border-gray-400">
-                    Optional
-                </th>
-                <th className="mobile:max-tablet:w-40 px-4 py-2 text-center border-r border-gray-400">
-                    Teacher
-                </th>
-                <th className="mobile:max-tablet:w-40 px-4 py-2 text-center border-r border-gray-400">
-                    Remark
-                </th>
+                {['Lecture', 'Timing', 'Subject', 'Optional', 'Teacher', 'Remark'].map((header, index) => (
+                    <th key={index} className="px-4 py-3 text-center border-r border-purple-400">
+                        {header === 'Lecture' && <FaGraduationCap className="inline mr-2" />}
+                        {header === 'Timing' && <FaClock className="inline mr-2" />}
+                        {header === 'Subject' && <FaBook className="inline mr-2" />}
+                        {header === 'Teacher' && <FaUserTie className="inline mr-2" />}
+                        {header === 'Remark' && <FaComments className="inline mr-2" />}
+                        {header}
+                    </th>
+                ))}
             </tr>
-        </thead>
+        </motion.thead>
     );
 }

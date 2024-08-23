@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext, useCallback, useRef } from "rea
 import axios from "axios";
 import AuthContext from "../../../../Context/AuthContext";
 import { BASE_URL_Login, BASE_URL_TimeTable } from "../../../../Config";
+import { motion } from 'framer-motion';
+import { FaPlus, FaMinus } from 'react-icons/fa';
 
 export default function OptionalRow({
     lectureNo,
@@ -120,30 +122,42 @@ export default function OptionalRow({
 
 
     return (
-        <tr key={idx} className="bg-white border-b border-gray-300">
-            <td className="text-center py-2"></td>
-            <td className="text-center py-2 flex items-center gap-3">
-                {idx === optionalRows.length - 1 && (
-                    <div
-                        className='px-3 bg-green-300 hover:bg-green-400 w-fit rounded-lg cursor-pointer'
-                        onClick={addNewRow}
-                    >
-                        Add
-                    </div>
-                )}
-
-                {idx === optionalRows.length - 1 && (
-                    <div
-                        className='px-3 bg-red-300 hover:bg-red-400 w-fit rounded-lg cursor-pointer'
-                        onClick={RemoveNewRow}
-                    >
-                        Remove
-                    </div>
-                )}
+        <motion.tr
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white border-b border-purple-200 hover:bg-purple-50 transition-colors duration-200"
+        >
+            <td className="text-center py-3"></td>
+            <td className="text-center py-3">
+                <div className="flex items-center justify-center gap-2">
+                    {idx === optionalRows.length - 1 && (
+                        <>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="px-3 py-1 bg-green-400 hover:bg-green-500 text-white rounded-md flex items-center gap-1 transition-colors duration-200"
+                                onClick={addNewRow}
+                            >
+                                <FaPlus size={12} />
+                                Add
+                            </motion.button>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="px-3 py-1 bg-red-400 hover:bg-red-500 text-white rounded-md flex items-center gap-1 transition-colors duration-200"
+                                onClick={RemoveNewRow}
+                            >
+                                <FaMinus size={12} />
+                                Remove
+                            </motion.button>
+                        </>
+                    )}
+                </div>
             </td>
-            <td className="text-center py-2">
+            <td className="text-center py-3">
                 <select
-                    className="w-full"
+                    className="w-full bg-purple-50 border border-purple-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-200"
                     name="Subject"
                     value={data.subject}
                     onChange={(e) => handleOptionalRowChange(idx, 'subject', e.target.value)}
@@ -155,10 +169,9 @@ export default function OptionalRow({
                     ))}
                 </select>
             </td>
-
-            <td className="flex justify-center py-2">
+            <td className="py-3">
                 <select
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full bg-purple-50 border border-purple-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-200"
                     value={data.section}
                     onChange={(e) => handleOptionalRowChange(idx, 'section', e.target.value)}
                 >
@@ -168,37 +181,45 @@ export default function OptionalRow({
                     ))}
                 </select>
             </td>
-
-            <td className="relative py-2">
+            <td className="relative py-3">
                 <input
                     type="text"
                     ref={inputRef}
-                    className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                    className="w-full bg-purple-50 border border-purple-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-200"
                     value={teacherInput}
                     onClick={handleClickInside}
                     onChange={(e) => setTeacherInput(e.target.value)}
                     required
                 />
                 {showSuggestions && suggestions.length > 0 && (
-                    <ul className="absolute z-10 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto w-full" ref={suggestionsRef}>
+                    <motion.ul
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute z-10 bg-white border border-purple-200 rounded-md mt-1 max-h-40 overflow-y-auto w-full shadow-lg"
+                        ref={suggestionsRef}
+                    >
                         {suggestions.map((suggestion, indx) => (
-                            <li
+                            <motion.li
                                 key={indx}
-                                className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                whileHover={{ backgroundColor: '#F3E8FF' }}
+                                className="flex items-center p-2 cursor-pointer transition-colors duration-200"
                                 onClick={() => handleSuggestionClick(suggestion)}
                             >
                                 <img
                                     src={suggestion.profileLink}
                                     alt="Profile"
-                                    className="w-12 h-12 rounded-full mr-2"
+                                    className="w-10 h-10 rounded-full mr-2"
                                 />
-                                {suggestion.name}
-                            </li>
+                                <span className="text-purple-800">{suggestion.name}</span>
+                            </motion.li>
                         ))}
-                    </ul>
+                    </motion.ul>
                 )}
             </td>
-            <td className={`text-center py-2 ${remark.includes("Good")  ? "text-green-600" : "text-red-600"}`}>{remark}</td>
-        </tr>
+            <td className={`text-center py-3 ${remark.includes("Good") ? "text-green-600" : "text-red-600"}`}>
+                {remark}
+            </td>
+        </motion.tr>
     );
 }

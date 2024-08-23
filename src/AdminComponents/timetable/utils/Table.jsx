@@ -1,6 +1,8 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { FaChalkboardTeacher, FaClock, FaUsers, FaBookOpen } from 'react-icons/fa';
 
-function Table({  data, Time, numberOfLeacturesBeforeLunch }) {
+function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
 
     const formatTime = (date) => {
         let hours = date.getHours();
@@ -14,45 +16,59 @@ function Table({  data, Time, numberOfLeacturesBeforeLunch }) {
 
     const timetable = data?.timetable || [];
     return (
-        <div className="w-full overflow-auto mobile:max-tablet:w-auto mt-4 rounded-lg border border-gray-400 shadow-md">
-            <div className="">
-                <table className="w-full mobile:max-tablet:w-auto items-center rounded-lg whitespace-nowrap">
-                    <thead className="bg-secondary ">
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full overflow-auto mt-4 rounded-lg border border-purple-400 shadow-lg bg-purple-50"
+        >
+            <table className="w-full items-center rounded-lg whitespace-nowrap">
+                <thead className="bg-purple-600 text-white">
+                    <tr>
+                        <th className="px-4 py-3 font-medium"><FaChalkboardTeacher className="inline mr-2" />Lecture</th>
+                        <th className="px-4 py-3 font-medium"><FaClock className="inline mr-2" />Timing</th>
+                        <th className="px-4 py-3 font-medium"><FaUsers className="inline mr-2" />Class</th>
+                        <th className="px-4 py-3 font-medium">Section</th>
+                        <th className="px-4 py-3 font-medium"><FaBookOpen className="inline mr-2" />Subject</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {timetable.length > 0 ? (
+                        timetable.sort((a, b) => a.lectureNo - b.lectureNo).map((item, idx) => (
+                            <React.Fragment key={item._id}>
+                                {numberOfLeacturesBeforeLunch === item.lectureNo - 1 && (
+                                    <motion.tr
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="w-full h-10 bg-purple-200 text-xl text-center font-semibold"
+                                    >
+                                        <td colSpan="5">LUNCH BREAK</td>
+                                    </motion.tr>
+                                )}
+                                <motion.tr
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.3, delay: idx * 0.1 }}
+                                    className='text-center hover:bg-purple-100 transition-colors duration-200'
+                                >
+                                    <td className="px-4 py-3">{item.lectureNo}</td>
+                                    <td className="px-4 py-3 bg-purple-200">{`${formatTime(Time[item.lectureNo - 1].start)}-${formatTime(Time[item.lectureNo - 1].end)}`}</td>
+                                    <td className="px-4 py-3 bg-purple-200">{item.class}</td>
+                                    <td className="px-4 py-3 bg-purple-300">{item.section}</td>
+                                    <td className="px-4 py-3 bg-purple-300">{item.subject}</td>
+                                </motion.tr>
+                            </React.Fragment>
+                        ))
+                    ) : (
                         <tr>
-                            <th className="px-4 py-2 font-medium border-r border-gray-400">Lecture</th>
-                            <th className="px-4 py-2 font-medium border-r border-gray-400">Timing</th>
-                            <th className="px-4 py-2 font-medium border-r border-gray-400">Class</th>
-                            <th className="px-4 py-2 font-medium border-r border-gray-400">Section</th>
-                            <th className="px-4 py-2 font-medium border-r border-gray-400">Subject</th>
+                            <td colSpan="5" className="text-center py-6 text-purple-600">No data available</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {timetable.length > 0 ? (
-                            timetable.sort((a, b) => a.lectureNo - b.lectureNo).map((item, idx) => (
-                                <React.Fragment key={item._id}>
-                                    {numberOfLeacturesBeforeLunch === item.lectureNo - 1 && (
-                                        <tr className="w-full h-8 border-t border-gray-400 bg-secondary text-xl text-center">
-                                            <td colSpan="5">LUNCH</td>
-                                        </tr>
-                                    )}
-                                    <tr className='text-center border-t border-gray-400'>
-                                        <td className="px-4 py-2 border-r border-gray-400">{item.lectureNo}</td>
-                                        <td className="px-4 py-2 border-r border-gray-400 bg-green-200">{`${formatTime(Time[item.lectureNo - 1].start)}-${formatTime(Time[item.lectureNo - 1].end)}`}</td>
-                                        <td className="px-4 py-2 border-r border-gray-400 bg-green-200">{item.class}</td>
-                                        <td className="px-4 py-2 border-r border-gray-400 bg-blue-200">{item.section}</td>
-                                        <td className="px-4 py-2 border-r border-gray-400 bg-blue-200">{item.subject}</td>
-                                    </tr>
-                                </React.Fragment>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="5" className="text-center py-4 ">No data available</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                    )}
+                </tbody>
+            </table>
+        </motion.div>
+
     );
 }
 

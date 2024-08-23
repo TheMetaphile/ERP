@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react'
-import Selection from './../Selection'
 import Table from './../Table'
 import axios from 'axios';
 import AuthContext from '../../../../Context/AuthContext';
-import TableStudent from './../TableStudent';
 import SelectionTeacher from './../SelectionTeacher';
 import Loading from '../../../../LoadingScreen/Loading'
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { FaSearch, FaEnvelope, FaUser, FaCalendarAlt } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_TimeTableStructure, BASE_URL_TimeTable } from '../../../../Config';
@@ -111,92 +111,84 @@ function TeachersTimeTable() {
     };
 
     return (
-        <div className=" flex flex-col w-full mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-tablet:mt-4">
-            {/* <ToastContainer /> */}
-            <div className='flex justify-between items-center w-full mobile:max-tablet:flex-col mobile:max-tablet:items-baseline'>
-                {/* <div className="flex justify-between mobile:max-tablet:w-full">
-                    <div className="block tablet:hidden">
-                        <button
-                            className="p-2 border rounded"
-                            onClick={() => setDropdownVisible(!isDropdownVisible)}
-                        >
-                            Filter
-                        </button>
-                        {isDropdownVisible && (
-                            <div className="absolute bg-white shadow-lg pt-2 rounded mt-2 right-1 left-1 justify-center flex">
-                                <Selection
-                                    selectClass={selectClass}
-                                    selectedSection={selectedSection}
-
-                                    onClassChange={handleClass}
-                                    onSectionChange={handleSection}
-                                    onSearch={handleSearch}
-                                />
-                            </div>
-                        )}
-                    </div>
-                </div> */}
-
-
-
-            </div>
-
-            <div className=' mt-4  w-full mobile:max-tablet:hidden'>
-
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col w-full h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar bg-purple-50"
+        >
+            <motion.div
+                initial={{ y: -20 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="w-full mt-4 mobile:max-tablet:hidden"
+            >
                 <SelectionTeacher
                     onSearch={handleSearch}
                     onEmailChange={handleEmailChange}
                     onNameChange={handleName}
                     onDayChange={handleTeacherDayChange}
                 />
+            </motion.div>
 
-            </div>
-            <div className=' mt-3 w-full '>
-                {
-                    !loading ?
-                        (
-                            structureDetails
-                                ?
-                                <>
-                                    <div className='flex items-center'>
-                                        <span className=' px-2 text-xl'>
-                                            Showing Timetable for Teacher:
-
-                                        </span>
-                                        <img src={Teacher.profileLink} alt="profilepic" className='ml-2 w-10 h-10 rounded-full mr-2' />
-                                        <div className='flex-1 mobile:max-tablet:text-sm'>
-                                            <span>
-                                                {Teacher.name}
-                                            </span>
-                                            <div>
-                                                {Teacher.employeeId}
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <Table data={data} teacherEmail={teacherEmail} Time={lectureTimes} numberOfLeacturesBeforeLunch={structureDetails.numberOfLeacturesBeforeLunch} />
-                                </>
-                                :
-                                <div className='py-2 text-center '>
-                                    No Timetable found please upload one.
-                                    <Link
-                                        to="/Admin-Dashboard/timetable/upload"
-                                        className="px-4 py-1 ml-5 rounded-md mr-2 bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white"
-                                    >
-                                        Upload
-                                    </Link>
+            <motion.div
+                initial={{ y: 20 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mt-3 w-full"
+            >
+                {!loading ? (
+                    structureDetails ? (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <div className="flex items-center bg-purple-200 p-4 rounded-lg shadow-md">
+                                <span className="px-2 text-xl font-semibold text-purple-800">
+                                    Showing Timetable for Teacher:
+                                </span>
+                                <img
+                                    src={Teacher.profileLink}
+                                    alt="profilepic"
+                                    className="ml-2 w-12 h-12 rounded-full mr-2 border-2 border-purple-500"
+                                />
+                                <div className="flex-1 mobile:max-tablet:text-sm">
+                                    <span className="text-lg font-medium text-purple-700">
+                                        {Teacher.name}
+                                    </span>
+                                    <div className="text-sm text-purple-600">{Teacher.employeeId}</div>
                                 </div>
+                            </div>
 
-                        )
-                        :
-                        (
-                            <Loading />
-                        )
-                }
-            </div>
-
-        </div>
+                            <Table
+                                data={data}
+                                teacherEmail={teacherEmail}
+                                Time={lectureTimes}
+                                numberOfLeacturesBeforeLunch={structureDetails.numberOfLeacturesBeforeLunch}
+                            />
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="py-4 text-center bg-purple-100 rounded-lg shadow-md"
+                        >
+                            <p className="text-purple-700 mb-3">No Timetable found. Please upload one.</p>
+                            <Link
+                                to="/Admin-Dashboard/timetable/upload"
+                                className="px-6 py-2 rounded-md bg-purple-600 text-white hover:bg-purple-700 transition-colors duration-300 shadow-md"
+                            >
+                                Upload Timetable
+                            </Link>
+                        </motion.div>
+                    )
+                ) : (
+                    <Loading />
+                )}
+            </motion.div>
+        </motion.div>
 
     )
 }

@@ -4,6 +4,7 @@ import AuthContext from "../../../../Context/AuthContext";
 import { BASE_URL_Login, BASE_URL_TimeTable } from "../../../../Config";
 import Switch from "./switch";
 import OptionalRow from "./OptionalRow";
+import { motion } from 'framer-motion';
 
 export default function TimetableRow({
   index,
@@ -181,93 +182,107 @@ export default function TimetableRow({
 
   return (
     <>
-      {numberOfLeacturesBeforeLunch === index && (
-        <tr>
-          <td colSpan="6" className="h-8 bg-secondary text-xl text-center">
-            LUNCH
-          </td>
-        </tr>
-      )}
-
-      <tr className={`bg-white ${!rowState.optional ? "border-b border-gray-300" : ""}`}>
-        <td className="text-center py-2">{lectureNo}</td>
-        <td className="text-center py-2">{Time}</td>
-        <td className="text-center py-2">
-          {!rowState.optional && (
-            <select
-              className="w-full"
-              name="Subject"
-              value={Subject}
-              onChange={handleChange}
-              required
-            >
-              <option value="" disabled>Select a subject</option>
-              {subjects.map((subject, idx) => (
-                <option key={idx} value={subject}>{subject}</option>
-              ))}
-            </select>
-          )}
-        </td>
-        <td className="flex justify-center py-2">
-          <Switch
+    {numberOfLeacturesBeforeLunch === index && (
+      <motion.tr
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="bg-purple-200 text-purple-800 font-bold"
+      >
+        <td colSpan="6" className="h-10 text-xl text-center">LUNCH</td>
+      </motion.tr>
+    )}
+    <motion.tr
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3, delay: index * 0.1 }}
+      className={`bg-white hover:bg-purple-50 transition-colors duration-200 ${!rowState.optional ? "border-b border-purple-200" : ""}`}
+    >
+      <td className="text-center py-3">{lectureNo}</td>
+      <td className="text-center py-3">{Time}</td>
+      <td className="text-center py-3">
+        {!rowState.optional && (
+          <select
+            className="w-full bg-purple-50 border border-purple-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            name="Subject"
+            value={Subject}
+            onChange={handleChange}
+            required
+          >
+            <option value="" disabled>Select a subject</option>
+            {subjects.map((subject, idx) => (
+              <option key={idx} value={subject}>{subject}</option>
+            ))}
+          </select>
+        )}
+      </td>
+      <td className="flex justify-center py-3 mt-3">
+        <motion.div
+          whileTap={{ scale: 0.95 }}
+        >
+          <input
+            type="checkbox"
             checked={rowState.optional}
-            changeRole={(optional) => setRowState(prev => ({ ...prev, optional }))}
+            onChange={(e) => setRowState(prev => ({ ...prev, optional: e.target.checked }))}
+            className="form-checkbox h-5 w-5 text-purple-600 transition duration-150 ease-in-out"
           />
-        </td>
-        <td className="relative py-2">
-          {!rowState.optional && (
-            <>
-              <input
-                type="text"
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                value={rowState.teacherInput}
-                onChange={handleTeacher}
-                required
-              />
-              {rowState.showSuggestions && rowState.suggestions.length > 0 && (
-                <ul className="absolute z-10 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto w-full">
-                  {rowState.suggestions.map((suggestion, indx) => (
-                    <li
-                      key={indx}
-                      className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
-                      onClick={() => handleSuggestionClick(suggestion)}
-                    >
-                      <img
-                        src={suggestion.profileLink}
-                        alt="Profile"
-                        className="w-12 h-12 rounded-full mr-2"
-                      />
-                      {suggestion.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </>
-          )}
-        </td>
-        <td className={`text-center py-2 ${rowState.remark.includes("Good") ? "text-green-600" : "text-red-600"}`}>
-          {!rowState.optional && (
-            <>{rowState.remark}</>
-          )}
-
-        </td>
-      </tr>
-
-      {rowState.optional && optionalRows.map((data, idx) => (
-        <OptionalRow
-          lectureNo={lectureNo}
-          addNewRow={addNewRow}
-          RemoveNewRow={() => removeRow(idx)}
-          data={data}
-          handleOptionalRowChange={handleOptionalRowChange}
-          handleOptionalSuggestionClick={handleOptionalSuggestionClick}
-          optionalRows={optionalRows}
-          subjects={subjects}
-          idx={idx}
-          day={day}
-
-        />
-      ))}
-    </>
+        </motion.div>
+      </td>
+      <td className="relative py-3">
+        {!rowState.optional && (
+          <>
+            <input
+              type="text"
+              className="border border-purple-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+              value={rowState.teacherInput}
+              onChange={handleTeacher}
+              required
+            />
+            {rowState.showSuggestions && rowState.suggestions.length > 0 && (
+              <motion.ul
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute z-10 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto w-full shadow-lg"
+              >
+                {rowState.suggestions.map((suggestion, indx) => (
+                  <motion.li
+                    key={indx}
+                    whileHover={{ backgroundColor: '#F3E8FF' }}
+                    className="flex items-center p-2 cursor-pointer"
+                    onClick={() => handleSuggestionClick(suggestion)}
+                  >
+                    <img
+                      src={suggestion.profileLink}
+                      alt="Profile"
+                      className="w-10 h-10 rounded-full mr-2"
+                    />
+                    <span className="text-purple-800">{suggestion.name}</span>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            )}
+          </>
+        )}
+      </td>
+      <td className={`text-center py-3 ${rowState.remark.includes("Good") ? "text-green-600" : "text-red-600"}`}>
+        {!rowState.optional && <>{rowState.remark}</>}
+      </td>
+    </motion.tr>
+    {rowState.optional && optionalRows.map((data, idx) => (
+      <OptionalRow
+        key={idx}
+        lectureNo={lectureNo}
+        addNewRow={addNewRow}
+        RemoveNewRow={() => removeRow(idx)}
+        data={data}
+        handleOptionalRowChange={handleOptionalRowChange}
+        handleOptionalSuggestionClick={handleOptionalSuggestionClick}
+        optionalRows={optionalRows}
+        subjects={subjects}
+        idx={idx}
+        day={day}
+      />
+    ))}
+  </>
   );
 }

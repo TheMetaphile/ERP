@@ -94,9 +94,7 @@ export default function ClassTeacherOnLeaveTable() {
                         </motion.tr>
                     ) : (
                         TeachersOnLeave.map((teachers, index) => (
-                            <motion.tr key={index} variants={rowVariants}>
-                                <ClassTeacherOnLeaveRow Teacher={teachers} date={formattedDate} session={session} />
-                            </motion.tr>
+                            <ClassTeacherOnLeaveRow Teacher={teachers} date={formattedDate} session={session} />
                         ))
                     )}
                 </motion.tbody>
