@@ -21,7 +21,7 @@ function CurrentWeekRow({ details, index, mapId }) {
         setEditedData(item);
     };
 
-    const handleConfirmEdit = async ( id) => {
+    const handleConfirmEdit = async (id) => {
         try {
             const { description, status } = editedData;
 
@@ -36,7 +36,7 @@ function CurrentWeekRow({ details, index, mapId }) {
                 description,
                 status
             }));
-            
+
             toast.success('Status saved');
             setEditMode(null);
             setEditedData({});
@@ -69,7 +69,7 @@ function CurrentWeekRow({ details, index, mapId }) {
             variants={rowVariants}
             initial="hidden"
             animate="visible"
-            className={ 'bg-white'}
+            className={'bg-white whitespace-nowrap'}
         >
             <td className='border-y p-4 border-blue-200'>{details.date}</td>
             <td className='border-y p-4 border-blue-200'>{details.chapter}</td>
@@ -122,7 +122,7 @@ function CurrentWeekRow({ details, index, mapId }) {
                         </div>
                     </motion.div>
                 ) : (
-                    <motion.div 
+                    <motion.div
                         className='flex items-center justify-between'
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

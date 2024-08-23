@@ -23,12 +23,12 @@ function NextWeekRow({ details, index, setDetails, status }) {
             initial="hidden"
             animate="visible"
             transition={{ staggerChildren: 0.1 }}
-            className={'bg-white'}
+            className={'bg-white whitespace-nowrap'}
         >
             <motion.td variants={cellVariants} className='border-y p-4 border-blue-200'>
                 {details.date}
             </motion.td>
-            
+
             {status ? (
                 <>
                     <motion.td variants={cellVariants} className='border-y p-4 border-blue-200'>

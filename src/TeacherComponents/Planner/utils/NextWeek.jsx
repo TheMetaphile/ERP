@@ -34,8 +34,15 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
+<<<<<<< Updated upstream
     const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
     const nextWeekStart = new Date();
+=======
+    const currentWeekStart = new Date(currentDate);  // Create a new Date object to avoid modifying the original
+    currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay() + 1);  // Adjust to Monday (start of the week)
+
+    const nextWeekStart = new Date(currentWeekStart);  // Create a new Date object for next week
+>>>>>>> Stashed changes
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
     const nextWeekDays = Array.from({ length: 6 }, (_, i) => {
@@ -44,7 +51,12 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
         return date;
     });
 
+<<<<<<< Updated upstream
     const nextWeekFormattedDate = nextWeekStart.toISOString().split('T')[0];
+=======
+    const nextWeekFormattedDate = `${nextWeekStart.getFullYear()}-${nextWeekStart.getMonth() < 10 ? `0${nextWeekStart.getMonth() + 1}` : nextWeekStart.getMonth() + 1}-${nextWeekStart.getDate()}`;
+
+>>>>>>> Stashed changes
     const [details, setDetails] = useState(defaultPlan());
 
 
@@ -126,7 +138,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
 
     return (
         <motion.div
-            className='rounded-md overflow-auto bg-blue-50 p-6'
+            className='rounded-md overflow-auto bg-blue-50 p-6 mobile:max-tablet:p-2'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -151,7 +163,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
                         transition={{ duration: 0.3 }}
                     >
                         <thead className='bg-blue-600 text-white'>
-                            <tr className='p-4 text-center'>
+                            <tr className='p-4 text-center whitespace-nowrap'>
                                 <th className='py-3 px-4 text-xl font-semibold'>Date</th>
                                 <th className='py-3 px-4 text-xl font-semibold'>Chapter</th>
                                 <th className='py-3 px-4 text-xl font-semibold'>Topic</th>

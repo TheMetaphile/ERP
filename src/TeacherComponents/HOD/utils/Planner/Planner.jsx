@@ -18,7 +18,11 @@ function PlannerHOD() {
             <ToastContainer />
             <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:pl-0'>
                 <motion.h1
+<<<<<<< Updated upstream
                     className="text-3xl font-bold text-blue-600 mobile:max-tablet:text-2xl whitespace-nowrap mb-2"
+=======
+                    className="text-3xl font-medium text-black mobile:max-tablet:text-lg whitespace-nowrap mb-2"
+>>>>>>> Stashed changes
                     initial={{ y: -50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
