@@ -58,7 +58,7 @@ function SubstituteCoordinator() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
             >
-                <h1 className="text-3xl font-medium mb-2 mobile:max-tablet:text-lg text-purple-600">
+                <h1 className="text-3xl font-medium mb-2 mobile:max-tablet:text-lg text-black">
                     Coordinators on leave (Today)
                 </h1>
             </motion.div>

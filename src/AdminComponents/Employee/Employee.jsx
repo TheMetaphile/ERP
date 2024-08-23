@@ -86,7 +86,7 @@ function Employee() {
             <ToastContainer />
 
             <motion.h1
-                className="text-3xl font-bold text-purple-600 mb-8 self-center"
+                className="text-3xl font-medium text-black mb-8 self-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}

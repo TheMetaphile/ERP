@@ -78,14 +78,14 @@ const Stats = ({ stat }) => {
   };
 
   return (
-    <div className="bg-white p-8 rounded-xl shadow-lg">
+    <div className="bg-white p-8 border rounded-xl shadow-lg">
 
       <div className="grid grid-cols-2 md:grid-cols-2 gap-8">
-        <div className="bg-purple-50 p-6 rounded-lg shadow-md">
+        <div className="bg-purple-50 p-6 rounded-lg shadow-md border">
           <h2 className="text-xl font-semibold mb-4 text-purple-700">Percentage Distribution</h2>
           <Bar options={options} data={percentChartData} />
         </div>
-        <div className="bg-purple-50 p-6 rounded-lg shadow-md">
+        <div className="bg-purple-50 p-6 rounded-lg shadow- border">
           <h2 className="text-xl font-semibold mb-4 text-purple-700">Name Distribution</h2>
           <Bar options={options} data={nameChartData} />
         </div>

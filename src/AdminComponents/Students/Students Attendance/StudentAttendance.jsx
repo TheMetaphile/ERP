@@ -98,13 +98,13 @@ export default function StudentAttendance() {
 
     return (
         <motion.div
-            className="flex flex-col mx-2 bg-purple-50 min-h-screen"
+            className="flex flex-col mx-2  min-h-screen"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
             <motion.div
-                className="flex justify-between items-center px-4 py-4  text-purple-600 mb-4"
+                className="flex justify-between items-center  py-4  text-black mb-4"
                 variants={itemVariants}
             >
                 <h1 className="text-3xl font-semibold mobile:max-tablet:text-xl">

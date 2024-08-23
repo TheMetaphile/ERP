@@ -48,10 +48,10 @@ export default function SubstituteTable() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
         >
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+            <table className="min-w-full   border border-gray-300 rounded-lg">
                 <thead>
                     <motion.tr
-                        className="bg-purple-300 text-lg"
+                        className="bg-gradient-to-r from-purple-200 to-purple-100 text-lg"
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}

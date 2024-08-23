@@ -55,7 +55,7 @@ export default function CreateTimetableStrucutre({ handleSubmit, handleChange })
     return (
         <motion.form
             onSubmit={handleSubmit}
-            className='mt-6 w-full p-6 rounded-lg shadow-lg bg-purple-50'
+            className='mt-6 w-full p-6 rounded-lg shadow-lg bg-purple-50 border'
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}

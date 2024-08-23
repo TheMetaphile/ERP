@@ -149,7 +149,8 @@ const StudentNotice = () => {
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5 }}
-    className="mt-8 mx-auto bg-purple-50 rounded-xl shadow-lg p-6"
+    className="mt-8 mx-auto bg-purple-50  border rounded-xl shadow-lg p-6"
+
   >
     <motion.select
       whileHover={{ scale: 1.05 }}
@@ -184,7 +185,7 @@ const StudentNotice = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
-                className="bg-white shadow-lg rounded-lg p-3 border-l-4 border-purple-500"
+                className="bg-white shadow-lg rounded-lg p-3 border-l-4  border-purple-500"
               >
                 <div className="w-full flex items-center justify-between mb-4 cursor-pointer" onClick={() => handleClick(index)}>
                   <h3 className="text-purple-800 font-bold text-xl">

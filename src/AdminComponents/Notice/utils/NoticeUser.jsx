@@ -33,7 +33,7 @@ const NoticeUser = () => {
             onClick={() => selectRole('teacher')}>Teacher</button>
           <button className={`p-2 mx-1 ${selectedRole === 'class' ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}
             onClick={() => selectRole('class')}>Class</button>
-            <button className={`p-2 mx-1 ${selectedRole === 'subAdmin' ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}
+          <button className={`p-2 mx-1 ${selectedRole === 'subAdmin' ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}
             onClick={() => selectRole('subAdmin')}>Sub Admin</button>
         </div>
         <div className="flex justify-between mobile:max-tablet:gap-2">
@@ -65,7 +65,7 @@ const NoticeUser = () => {
         )}
         {selectedRole === 'subAdmin' && (
           <div className="">
-            <SubAdminNotice/>
+            <SubAdminNotice />
           </div>
         )}
       </div>

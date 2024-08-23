@@ -23,7 +23,7 @@ function PlannerAdmin() {
             <ToastContainer />
             <div className="w-full flex items-center justify-between px-4">
                 <motion.h1
-                    className="text-3xl mobile:max-tablet:text-lg whitespace-nowrap font-semibold mb-2 text-purple-600"
+                    className="text-3xl mobile:max-tablet:text-lg whitespace-nowrap font-medium mb-2 text-black"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.1 }}

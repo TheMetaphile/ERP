@@ -18,7 +18,7 @@ export default function Assigncoordinator() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
             >
-                <h1 className="text-3xl mobile:max-tablet:text-xl px-4 text-purple-600 font-bold">
+                <h1 className="text-3xl mobile:max-tablet:text-xl px-3 text-black font-medium">
                     Assign Coordinator
                 </h1>
             </motion.div>

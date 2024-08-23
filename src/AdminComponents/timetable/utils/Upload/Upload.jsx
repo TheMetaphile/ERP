@@ -223,14 +223,14 @@ const Upload = () => {
     return (
 
      <motion.div 
-      className="flex flex-col w-full mobile:max-tablet:px-4 h-screen overflow-y-auto items-start mt-4 mb-6 no-scrollbar bg-purple-50 rounded-lg shadow-lg"
+      className="flex flex-col w-full mobile:max-tablet:px-4 h-screen overflow-y-auto items-start mt-4 mb-6 no-scrollbar border bg-purple-50 p-3 rounded-lg shadow-lg"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       
-      <motion.div className='w-full flex justify-between items-center mb-6 px-4' variants={itemVariants}>
+      <motion.div className='w-full flex justify-between items-center mb-3 px-4' variants={itemVariants}>
         <motion.h1 className='text-3xl font-bold text-purple-800 flex items-center'>
           <FaCalendarAlt className="mr-2" />
           Schedule Time Table

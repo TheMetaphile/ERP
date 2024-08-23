@@ -17,7 +17,7 @@ function Selection({ selectClass, selectedSection, onClassChange, onSectionChang
 
     return (
         <motion.div
-            className="border rounded-lg shadow-lg w-full flex flex-col p-6 overflow-y-auto items-start mt-4 mb-6 no-scrollbar bg-purple-100"
+            className="border rounded-lg shadow-lg w-full flex flex-col p-3 overflow-y-auto items-start mt-4 mb-6 no-scrollbar bg-purple-100"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}

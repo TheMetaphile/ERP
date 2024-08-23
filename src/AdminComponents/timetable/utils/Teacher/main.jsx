@@ -115,7 +115,7 @@ function TeachersTimeTable() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col w-full h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar bg-purple-50"
+            className="flex flex-col w-full h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar"
         >
             <motion.div
                 initial={{ y: -20 }}
