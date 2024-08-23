@@ -1,6 +1,8 @@
 // import StudentDetails from './StudentDetails';
 // import { ToastContainer} from 'react-toastify';
+
 // import TransactionRow from './TransactionHistoryRow';
+
 // import { useLocation } from 'react-router-dom';
 // import { useState } from 'react';
 
@@ -35,7 +37,9 @@
 //             </div>
 //             <StudentDetails selectedOption={selectedOption} />
 //             <h1 className="mb-2 text-2xl font-normal mobile:max-tablet:text-lg">Transaction History</h1>
+
 //             <TransactionRow />
+
 //         </div>
 //     );
 // }
