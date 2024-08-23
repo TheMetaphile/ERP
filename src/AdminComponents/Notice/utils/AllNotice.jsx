@@ -6,6 +6,7 @@ import { BASE_URL_Notice } from "../../../Config";
 import { MdEdit, MdCheck, MdCancel, MdDeleteForever } from 'react-icons/md';
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaChevronDown, FaChevronUp, FaUserCircle } from 'react-icons/fa';
 
 const AllNotice = () => {
   const [loading, setLoading] = useState(true);
@@ -132,168 +133,182 @@ const AllNotice = () => {
   };
 
   return (
-    <motion.div 
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.5 }}
-    className="mt-4 mx-2"
-  >
-    <div className="flex flex-col space-y-4 mb-4">
-      {loading ? (
-        <Loading />
-      ) : data === null || data.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-purple-600 text-center text-lg"
-        >
-          No notices available
-        </motion.div>
-      ) : (
-        <>
-          <AnimatePresence>
-            {data.map((notice, index) => (
-              (notice.type === 'For All') && (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="bg-purple-50 shadow-md rounded-lg p-4 border border-purple-200 mt-2 text-base"
-                >
-                  <div className="w-full flex mobile:max-tablet:flex-col mobile:max-tablet:items-baseline items-center justify-between mb-2 cursor-pointer" onClick={() => handleClick(index)}>
-                    <h3 className="font-medium text-purple-800">
-                      Title: {editingIndex === index ? (
-                        <input
-                          type="text"
-                          name="title"
-                          value={editedNotice.title}
-                          onChange={handleChange}
-                          onClick={handleFieldClick}
-                          className="border border-purple-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        />
-                      ) : (
-                        notice.title
-                      )}
-                    </h3>
-                    <div className="flex items-center">
-                      <p className="text-purple-600">
-                        Type: {editingIndex === index ? (
-                          <select
-                            name="type"
-                            value={editedNotice.type}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="mt-8 mx-auto bg-purple-50  border rounded-xl shadow-lg p-6"
+    >
+      <div className="space-y-6">
+        {loading ? (
+          <Loading />
+        ) : data === null || data.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-purple-600 text-center text-xl font-semibold"
+          >
+            No notices available
+          </motion.div>
+        ) : (
+          <>
+            <AnimatePresence>
+              {data.map((notice, index) => (
+                notice.type === 'For All' && (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="bg-white shadow-lg rounded-lg p-3 border-l-4 border-purple-500"
+                  >
+                    <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between mb-4 cursor-pointer" onClick={() => handleClick(index)}>
+                      <h3 className="text-purple-800 font-bold text-xl mb-2 sm:mb-0">
+                        {editingIndex === index ? (
+                          <input
+                            type="text"
+                            name="title"
+                            value={editedNotice.title}
                             onChange={handleChange}
                             onClick={handleFieldClick}
-                            className="border border-purple-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                          >
-                            <option value="For All">For All</option>
-                            <option value="For Student">For Student</option>
-                            <option value="For Teacher">For Teacher</option>
-                            <option value="For Sub Admin">For Sub Admin</option>
-                          </select>
+                            className="border-2 border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 w-full"
+                          />
                         ) : (
-                          notice.type
+                          notice.title
                         )}
-                      </p>
-                      {
-                        editingIndex === index ? (
-                          <div className="flex ml-2">
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              className="bg-green-400 hover:bg-green-500 text-white px-3 py-1 rounded-lg shadow-md mr-2"
-                              onClick={() => handleSave(index)}
-                            >
-                              <MdCheck />
-                            </motion.button>
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              className="bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded-lg shadow-md"
-                              onClick={handleCancel}
-                            >
-                              <MdCancel />
-                            </motion.button>
-                          </div>
-                        ) : (
-                          <div className="flex ml-2">
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              className="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded-lg shadow-md mr-2"
-                              onClick={() => handleEdit(index)}
-                            >
-                              <MdEdit />
-                            </motion.button>
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              className="bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded-lg shadow-md"
-                              onClick={() => handleDelete(index)}
-                            >
-                              <MdDeleteForever />
-                            </motion.button>
-                          </div>
-                        )
-                      }
-                    </div>
-                  </div>
-                  <AnimatePresence>
-                    {expandedIndex === index && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className='text-base mt-2'
-                      >
-                        <p className="text-base text-purple-700">
-                          Description: {editingIndex === index ? (
-                            <textarea
-                              rows={6}
-                              name="description"
-                              value={editedNotice.description}
+                      </h3>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-purple-600 font-medium">
+                          {editingIndex === index ? (
+                            <select
+                              name="type"
+                              value={editedNotice.type}
                               onChange={handleChange}
                               onClick={handleFieldClick}
-                              className="border border-purple-300 rounded-lg px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-                            />
+                              className="border-2 border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            >
+                              <option value="For All">For All</option>
+                              <option value="For Student">For Student</option>
+                              <option value="For Teacher">For Teacher</option>
+                              <option value="For Sub Admin">For Sub Admin</option>
+                            </select>
                           ) : (
-                            notice.description
+                            notice.type
                           )}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                  <div className="w-full flex items-center justify-between mt-2 mobile:max-tablet:flex-col mobile:max-tablet:items-baseline">
-                    <p className="text-purple-600">Date: {notice.date}</p>
-                    <div className="flex items-center">
-                      <span className="text-purple-600">By:</span>
-                      <div className="flex items-center gap-1 px-1">
-                        <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full mobile:max-tablet:hidden" />
-                        <p className="text-purple-700">{notice.from.name}</p>
+                        </span>
+                        {editingIndex === index ? (
+                          <div className="flex space-x-2">
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="bg-green-500 text-white p-2 rounded-full shadow-md"
+                              onClick={() => handleSave(index)}
+                            >
+                              <MdCheck size={20} />
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="bg-red-500 text-white p-2 rounded-full shadow-md"
+                              onClick={handleCancel}
+                            >
+                              <MdCancel size={20} />
+                            </motion.button>
+                          </div>
+                        ) : (
+                          <div className="flex space-x-2">
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="bg-blue-500 text-white p-2 rounded-full shadow-md"
+                              onClick={() => handleEdit(index)}
+                            >
+                              <MdEdit size={20} />
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="bg-red-500 text-white p-2 rounded-full shadow-md"
+                              onClick={() => handleDelete(index)}
+                            >
+                              <MdDeleteForever size={20} />
+                            </motion.button>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              )
-            ))}
-          </AnimatePresence>
-          {!allDataFetched && (
-            <motion.h1
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className='text-purple-500 hover:text-purple-700 mt-3 cursor-pointer text-center'
-              onClick={handleViewMore}
-            >
-              View More
-            </motion.h1>
-          )}
-        </>
-      )}
-    </div>
-  </motion.div>
+                    <AnimatePresence>
+                      {expandedIndex === index && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="text-base mt-4"
+                        >
+                          <p className="text-purple-700">
+                            {editingIndex === index ? (
+                              <textarea
+                                rows={6}
+                                name="description"
+                                value={editedNotice.description}
+                                onChange={handleChange}
+                                onClick={handleFieldClick}
+                                className="border-2 border-purple-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+                              />
+                            ) : (
+                              notice.description
+                            )}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between mt-4 text-sm">
+                      <p className="text-purple-600 mb-2 sm:mb-0">Date: {notice.date}</p>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-purple-600">By:</span>
+                        <div className="flex items-center space-x-1 bg-purple-100 rounded-full px-3 py-1">
+                          {notice.from.profileLink ? (
+                            <img src={notice.from.profileLink} alt="" className="w-6 h-6 rounded-full hidden sm:block" />
+                          ) : (
+                            <FaUserCircle className="w-6 h-6 text-purple-500 hidden sm:block" />
+                          )}
+                          <p className="text-purple-700 font-medium">{notice.from.name}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="mt-4 flex justify-center"
+                      onClick={() => handleClick(index)}
+                    >
+                      {expandedIndex === index ? (
+                        <FaChevronUp className="text-purple-500 text-2xl" />
+                      ) : (
+                        <FaChevronDown className="text-purple-500 text-2xl" />
+                      )}
+                    </motion.div>
+                  </motion.div>
+                )
+              ))}
+            </AnimatePresence>
+            {!allDataFetched && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 rounded-lg shadow-md transition-colors duration-300"
+                onClick={handleViewMore}
+              >
+                View More
+              </motion.button>
+            )}
+          </>
+        )}
+      </div>
+    </motion.div>
   );
 };
 

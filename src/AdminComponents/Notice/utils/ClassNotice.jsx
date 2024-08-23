@@ -3,9 +3,10 @@ import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../../Config";
-import { MdEdit, MdCheck, MdCancel, MdDeleteForever } from 'react-icons/md';
+import { MdEdit, MdCheck, MdCancel, MdDeleteForever,MdArrowDropDown } from 'react-icons/md';
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaChevronDown, FaChevronUp, FaUserCircle } from 'react-icons/fa';
 
 const ClassNotice = () => {
     const [loading, setLoading] = useState(true);
@@ -135,196 +136,217 @@ const ClassNotice = () => {
     };
 
     return (
-
         <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="mt-4 mx-2"
-        >
-            <div className="flex flex-col space-y-4 mb-4">
-                {loading ? (
-                    <Loading />
-                ) : data === null || data.length === 0 ? (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-purple-600 text-center text-lg"
-                    >
-                        No notices available
-                    </motion.div>
-                ) : (
-                    <>
-                        <AnimatePresence>
-                            {data.map((notice, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    transition={{ duration: 0.3 }}
-                                    className="bg-purple-50 shadow-md rounded-lg p-4 border border-purple-200 mt-2 text-base"
-                                >
-                                    <div className="w-full flex items-center justify-between mb-2 cursor-pointer" onClick={() => handleClick(index)}>
-                                        <h3 className="text-purple-800 font-medium">
-                                            Title: {editingIndex === index ? (
-                                                <input
-                                                    type="text"
-                                                    name="title"
-                                                    value={editedNotice.title}
-                                                    onChange={handleChange}
-                                                    onClick={handleFieldClick}
-                                                    className="border border-purple-300 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                                />
-                                            ) : (
-                                                notice.title
-                                            )}
-                                        </h3>
-                                        <div className="flex items-center">
-                                            <p className="text-purple-600 mr-2">
-                                                Type: {notice.type}
-                                            </p>
-                                            {editingIndex === index ? (
-                                                <div className="flex">
-                                                    <motion.button
-                                                        whileHover={{ scale: 1.1 }}
-                                                        whileTap={{ scale: 0.9 }}
-                                                        className="bg-green-400 hover:bg-green-500 text-white px-3 py-1 rounded-lg shadow-md mr-2"
-                                                        onClick={() => handleSave(index)}
-                                                    >
-                                                        <MdCheck />
-                                                    </motion.button>
-                                                    <motion.button
-                                                        whileHover={{ scale: 1.1 }}
-                                                        whileTap={{ scale: 0.9 }}
-                                                        className="bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded-lg shadow-md"
-                                                        onClick={handleCancel}
-                                                    >
-                                                        <MdCancel />
-                                                    </motion.button>
-                                                </div>
-                                            ) : (
-                                                <div className="flex">
-                                                    <motion.button
-                                                        whileHover={{ scale: 1.1 }}
-                                                        whileTap={{ scale: 0.9 }}
-                                                        className="bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded-lg shadow-md mr-2"
-                                                        onClick={() => handleEdit(index)}
-                                                    >
-                                                        <MdEdit />
-                                                    </motion.button>
-                                                    <motion.button
-                                                        whileHover={{ scale: 1.1 }}
-                                                        whileTap={{ scale: 0.9 }}
-                                                        className="bg-red-400 hover:bg-red-500 text-white px-3 py-1 rounded-lg shadow-md"
-                                                        onClick={() => handleDelete(index)}
-                                                    >
-                                                        <MdDeleteForever />
-                                                    </motion.button>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <AnimatePresence>
-                                        {expanded === index && (
-                                            <motion.div
-                                                initial={{ opacity: 0, height: 0 }}
-                                                animate={{ opacity: 1, height: 'auto' }}
-                                                exit={{ opacity: 0, height: 0 }}
-                                                transition={{ duration: 0.3 }}
-                                                className='text-base mt-2'
-                                            >
-                                                <p className="mb-2 text-purple-700">
-                                                    Description: {editingIndex === index ? (
-                                                        <textarea
-                                                            name="description"
-                                                            value={editedNotice.description}
-                                                            onChange={handleChange}
-                                                            onClick={handleFieldClick}
-                                                            className="border border-purple-300 rounded-lg px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                                        />
-                                                    ) : (
-                                                        notice.description
-                                                    )}
-                                                </p>
-                                                {editingIndex === index && (
-                                                    <div className="mt-2 space-y-2">
-                                                        {editedNotice.forClasses.map((classInfo, idx) => (
-                                                            <motion.div
-                                                                key={idx}
-                                                                className="flex flex-wrap items-center gap-2 bg-purple-100 p-2 rounded-md"
-                                                                initial={{ opacity: 0, x: -20 }}
-                                                                animate={{ opacity: 1, x: 0 }}
-                                                                transition={{ delay: idx * 0.1 }}
-                                                            >
-                                                                <p className="font-medium text-purple-700">Class: {classInfo.Class}</p>
-                                                                <div className="flex flex-wrap gap-1">
-                                                                    {classInfo.sections.map((section, sIdx) => (
-                                                                        <span key={sIdx} className="bg-purple-200 text-purple-800 px-2 py-1 rounded-full text-sm">
-                                                                            {section}
-                                                                        </span>
-                                                                    ))}
-                                                                </div>
-                                                            </motion.div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                                {(notice.type === 'Particular Classes' && notice.forClasses.length > 0) && (
-                                                    <div className="mt-2">
-                                                        <p className="text-purple-700 font-medium">For Classes:</p>
-                                                        <div className="space-y-2 mt-1">
-                                                            {notice.forClasses.map((classInfo, index) => (
-                                                                <motion.div
-                                                                    key={index}
-                                                                    className="flex flex-wrap items-center gap-2 bg-purple-100 p-2 rounded-md"
-                                                                    initial={{ opacity: 0, x: -20 }}
-                                                                    animate={{ opacity: 1, x: 0 }}
-                                                                    transition={{ delay: index * 0.1 }}
-                                                                >
-                                                                    <span className="font-medium text-purple-700">Class {classInfo.Class}:</span>
-                                                                    <div className="flex flex-wrap gap-1">
-                                                                        {classInfo.sections.map((section, sIdx) => (
-                                                                            <span key={sIdx} className="bg-purple-200 text-purple-800 px-2 py-1 rounded-full text-sm">
-                                                                                {section}
-                                                                            </span>
-                                                                        ))}
-                                                                    </div>
-                                                                </motion.div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                    <div className="w-full flex items-center justify-between mt-2">
-                                        <p className="text-purple-600">Date: {notice.date}</p>
-                                        <div className="flex items-center">
-                                            <span className="text-purple-600 mr-1">By:</span>
-                                            <div className="flex items-center gap-1">
-                                                <img src={notice.from.profileLink} alt="" className="w-8 h-8 rounded-full" />
-                                                <p className="text-purple-700">{notice.from.name}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </AnimatePresence>
-                        {!allDataFetched && (
-                            <motion.h1
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className='text-purple-500 hover:text-purple-700 mt-3 cursor-pointer text-center'
-                                onClick={handleViewMore}
-                            >
-                                View More
-                            </motion.h1>
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}      
+        className="mt-8 mx-auto bg-purple-50  border rounded-xl shadow-lg p-6"
+
+      >
+        
+  
+        <div className="space-y-6">
+          {loading ? (
+            <Loading />
+          ) : data === null || data.length === 0 ? (
+            <motion.div
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              className="text-center text-purple-600 font-semibold"
+            >
+              No notices available
+            </motion.div>
+          ) : (
+            <>
+              <AnimatePresence>
+                {data.map((notice, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ y: 50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="bg-white shadow-lg rounded-lg p-3 border-l-4 border-purple-500"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <motion.h3
+                        whileHover={{ scale: 1.05 }}
+                        className="text-xl font-semibold text-purple-700 cursor-pointer"
+                        onClick={() => handleClick(index)}
+                      >
+                        {editingIndex === index ? (
+                          <input
+                            type="text"
+                            name="title"
+                            value={editedNotice.title}
+                            onChange={handleChange}
+                            onClick={handleFieldClick}
+                            className="border-2 border-purple-300 rounded-lg px-3 py-1 focus:outline-none focus:border-purple-500"
+                          />
+                        ) : (
+                          notice.title
                         )}
-                    </>
-                )}
-            </div>
-        </motion.div>
+                      </motion.h3>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-purple-600">{notice.type}</span>
+                        {editingIndex === index ? (
+                          <>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.95 }}
+                              className="bg-green-500 text-white p-2 rounded-full shadow-md"
+                              onClick={() => handleSave(index)}
+                            >
+                              <MdCheck size={20} />
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.95 }}
+                              className="bg-red-500 text-white p-2 rounded-full shadow-md"
+                              onClick={handleCancel}
+                            >
+                              <MdCancel size={20} />
+                            </motion.button>
+                          </>
+                        ) : (
+                          <>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.95 }}
+                              className="bg-purple-500 text-white p-2 rounded-full shadow-md"
+                              onClick={() => handleEdit(index)}
+                            >
+                              <MdEdit size={20} />
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.95 }}
+                              className="bg-red-500 text-white p-2 rounded-full shadow-md"
+                              onClick={() => handleDelete(index)}
+                            >
+                              <MdDeleteForever size={20} />
+                            </motion.button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+  
+                    <motion.div
+                      initial={false}
+                      animate={{ height: expanded === index ? 'auto' : 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      {expanded === index && (
+                        <div className="text-gray-700 mt-2">
+                          <p className="mb-4">
+                            <strong>Description:</strong> {editingIndex === index ? (
+                              <textarea
+                                rows={6}
+                                name="description"
+                                value={editedNotice.description}
+                                onChange={handleChange}
+                                onClick={handleFieldClick}
+                                className="w-full mt-2 border-2 border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500"
+                              />
+                            ) : (
+                              notice.description
+                            )}
+                          </p>
+                          {editingIndex === index && (
+                            <div className="mt-2 space-y-2">
+                              {editedNotice.forClasses.map((classInfo, idx) => (
+                                <motion.div
+                                  key={idx}
+                                  className="flex flex-wrap items-center gap-2 bg-purple-100 p-2 rounded-md"
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: idx * 0.1 }}
+                                >
+                                  <p className="font-medium text-purple-700">Class: {classInfo.Class}</p>
+                                  <div className="flex flex-wrap gap-1">
+                                    {classInfo.sections.map((section, sIdx) => (
+                                      <span key={sIdx} className="bg-purple-200 text-purple-800 px-2 py-1 rounded-full text-sm">
+                                        {section}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </motion.div>
+                              ))}
+                            </div>
+                          )}
+                          {(notice.type === 'Particular Classes' && notice.forClasses.length > 0) && (
+                            <div className="mt-2">
+                              <p className="text-purple-700 font-medium">For Classes:</p>
+                              <div className="space-y-2 mt-1">
+                                {notice.forClasses.map((classInfo, index) => (
+                                  <motion.div
+                                    key={index}
+                                    className="flex flex-wrap items-center gap-2 bg-purple-100 p-2 rounded-md"
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: index * 0.1 }}
+                                  >
+                                    <span className="font-medium text-purple-700">Class {classInfo.Class}:</span>
+                                    <div className="flex flex-wrap gap-1">
+                                      {classInfo.sections.map((section, sIdx) => (
+                                        <span key={sIdx} className="bg-purple-200 text-purple-800 px-2 py-1 rounded-full text-sm">
+                                          {section}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </motion.div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </motion.div>
+  
+                    <div className="flex items-center justify-between mt-4 text-sm text-gray-600">
+                      <p>Date: {notice.date}</p>
+                      <div className="flex items-center space-x-2">
+                        <span>By:</span>
+                        <div className="flex items-center bg-purple-100 rounded-full px-3 py-1">
+                          {notice.from.profileLink ? (
+                            <img src={notice.from.profileLink} alt="" className="w-6 h-6 rounded-full mr-2" />
+                          ) : (
+                            <FaUserCircle className="w-6 h-6 text-purple-500 mr-2" />
+                          )}
+                          <span className="text-purple-700">{notice.from.name}</span>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleClick(index)}
+                      className="mt-4 w-full text-purple-600 hover:text-purple-800 focus:outline-none"
+                    >
+                      {expanded === index ? (
+                        <FaChevronUp className="mx-auto" />
+                      ) : (
+                        <FaChevronDown className="mx-auto" />
+                      )}
+                    </motion.button>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+              {!allDataFetched && (
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleViewMore}
+                  className="w-full py-2 mt-6 bg-purple-500 text-white rounded-lg shadow-md hover:bg-purple-600 focus:outline-none"
+                >
+                  View More
+                </motion.button>
+              )}
+            </>
+          )}
+        </div>
+      </motion.div>
     );
 };
 

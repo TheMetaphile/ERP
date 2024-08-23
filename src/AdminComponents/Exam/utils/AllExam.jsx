@@ -206,7 +206,7 @@ export default function AllExam() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
             >
-                <h1 className="text-3xl mx-4 mobile:max-tablet:text-xl mobile:max-tablet:mb-2 mobile:max-tablet:mx-1 text-purple-600 font-bold">
+                <h1 className="text-3xl mx-4 mobile:max-tablet:text-xl mobile:max-tablet:mb-2 mobile:max-tablet:mx-1 text-black font-medium">
                     All Exam Schedule
                 </h1>
                 <motion.div
@@ -266,25 +266,25 @@ export default function AllExam() {
                     {loading ? (
                         <Loading />
                     ) : (
-                        <table className="min-w-full divide-y divide-gray-600">
-                            <thead className="">
+                        <table className="min-w-full ">
+                            <thead className="bg-gradient-to-r from-purple-200 to-purple-100 text-center text-xl font-normal ">
                                 <tr>
-                                    <th className="px-6 py-3 text-center text-xl font-normal border-r bg-purple-200 ">
+                                    <th className="px-6 py-3  ">
                                         Class
                                     </th>
-                                    <th className="px-6 py-3 text-center text-xl font-normal border-r bg-purple-200 ">
+                                    <th className="px-6 py-3  ">
                                         Subject
                                     </th>
-                                    <th className="px-6 py-3 text-center text-xl font-normal border-r bg-purple-200 ">
+                                    <th className="px-6 py-3   ">
                                         Time
                                     </th>
-                                    <th className="px-6 py-3 text-center text-xl font-normal border-r bg-purple-200 ">
+                                    <th className="px-6 py-3   ">
                                         Date
                                     </th>
-                                    <th className="px-6 py-3 text-center text-xl font-normal border-r bg-purple-200 ">
+                                    <th className="px-6 py-3 ">
                                         Duration
                                     </th>
-                                    <th className="px-6 py-3 text-center text-xl font-normal bg-purple-200 ">
+                                    <th className="px-6 py-3  ">
                                         Actions
                                     </th>
                                 </tr>

@@ -125,7 +125,7 @@ function NewAdmission() {
 
     return (
         <motion.div
-            className="w-full px-6 py-8 bg-purple-50"
+            className="w-full px-6 py-8 "
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -133,7 +133,7 @@ function NewAdmission() {
             <ToastContainer />
             <motion.div className="flex  md:flex-row items-center justify-between mb-8" variants={itemVariants}>
                 <motion.h1
-                    className="text-4xl font-bold text-purple-600 mb-4 md:mb-0"
+                    className="text-4xl font-medium text-black mb-4 md:mb-0"
                     whileHover={{ scale: 1.05 }}
                 >
                     New Admission

@@ -2,10 +2,12 @@ import React, { useState, useContext } from 'react';
 import { Link } from "react-router-dom";
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
-import TimetableHeader from './timetableHeader';
-import { ToastContainer, toast } from 'react-toastify';
+
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_TimeTable } from '../../../Config';
+import { motion } from 'framer-motion';
+import { FaEdit, FaSave, FaUtensils, FaBookOpen, FaChalkboardTeacher, FaClock } from 'react-icons/fa';
 
 function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOfLeacturesBeforeLunch, Time }) {
     const timetableData = data || {};
@@ -92,6 +94,20 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
 
     const lectures = timetableData[dayStudent] || [];
     console.log(lectures, "isaut ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    const tableVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const rowVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
     return (
         <div className="w-full rounded-lg border shadow-md">
             {/* <ToastContainer /> */}
@@ -126,142 +142,98 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                     </button>
                 )}
             </div>
-            <div className='overflow-auto w-full'>
-                <TimetableHeader />
-                {lectures.length === 0 ? (
-                    <div className='text-center'>No data available</div>
-                ) : (
-                    <div className='shadow-md whitespace-nowrap'>
-                        {lectures.map((lecture, idx) => (
-                            <React.Fragment key={lecture._id}>
-                                {numberOfLeacturesBeforeLunch === lecture.lectureNo - 1 ? (
-                                    <div className="w-full mobile:max-tablet:w-fit h-8 border-t border-gray-400 bg-secondary text-xl text-center">
-                                        LUNCH
-                                    </div>
-                                ) : null}
-                                {
-                                    lecture?.optionalSubjects?.length > 0 ? (
-
-                                        lecture.optionalSubjects.map((optSub, index) => (
-                                            <div className="flex mobile:max-tablet:w-fit justify-between border-t border-gray-400">
-                                                <h1 className="w-full mobile:max-tablet:w-40 border-r border-gray-400 px-4 py-2 text-center">
-                                                    {editMode ? (
-                                                        <input
-                                                            type="text"
-                                                            value={editedData[dayStudent]?.[lecture._id]?.lectureNo || lecture.lectureNo}
-                                                            onChange={(e) => handleInputChange(dayStudent, lecture._id, 'lectureNo', e.target.value)}
-                                                            className='border border-gray-300'
-                                                        />
-                                                    ) : (
-                                                        lecture.lectureNo
-                                                    )}
-                                                </h1>
-                                                <h1 className="w-full mobile:max-tablet:w-40 border-r border-gray-400 px-4 py-2 text-center bg-green-200">
-                                                    {`${formatTime(Time[lecture.lectureNo - 1].start)}-${formatTime(Time[lecture.lectureNo - 1].end)}`}
-                                                </h1>
-                                                <h1 className="w-full mobile:max-tablet:w-40 border-r border-gray-400 px-4 py-2 text-center bg-green-200">
-                                                    {editMode ? (
-                                                        <input
-                                                            type="text"
-                                                            value={editedData[dayStudent]?.[lecture._id]?.subject || lecture.subject}
-                                                            onChange={(e) => handleInputChange(dayStudent, lecture._id, 'subject', e.target.value)}
-                                                            className='border border-gray-300'
-                                                        />
-                                                    ) : (
-
-                                                        <div>{optSub.optionalSubject}, {optSub.mergeWithSection} </div>
-
-
-                                                    )}
-                                                </h1>
-                                                <div className='w-full mobile:max-tablet:w-40 border-r border-gray-400 flex items-center whitespace-nowrap px-4 py-2 bg-blue-200'>
-                                                    {lecture.teacher?.profileLink && (
-                                                        <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full" />
-                                                    )}
-                                                    {editMode ? (
-                                                        <input
-                                                            type="text"
-                                                            value={editedData[dayStudent]?.[lecture._id]?.teacher || lecture.teacher?.name || ''}
-                                                            onChange={(e) => handleInputChange(dayStudent, lecture._id, 'teacher', e.target.value)}
-                                                            className='border border-gray-300'
-                                                        />
-                                                    ) : (
-
-                                                        <div className=" flex items-center">
-                                                            {optSub.teacher?.name && (
-                                                                <img
-                                                                    src={optSub.teacher.profileLink}
-                                                                    alt={optSub.teacher.name}
-                                                                    className="w-8 h-8 rounded-full"
-                                                                />
-                                                            )}
-                                                            {optSub.teacher?.name}
-                                                        </div>
-
-
-                                                    )}
-                                                </div>
-                                                <div className='w-full mobile:max-tablet:w-40 border-r border-gray-400 px-4 py-2 text-center bg-blue-200'>
-
-                                                </div>
+            <div className="container mx-auto p-4">
+                <motion.div
+                    initial="hidden"
+                    animate="visible"
+                    variants={tableVariants}
+                    className="overflow-x-auto shadow-lg rounded-lg"
+                >
+                    <table className="w-full table-auto">
+                        <thead>
+                            <tr className=" text-gray-600 uppercase bg-gradient-to-r from-purple-200 to-purple-100 text-sm leading-normal">
+                                <th className="py-3 px-6 text-left">Lecture</th>
+                                <th className="py-3 px-6 text-left">Time</th>
+                                <th className="py-3 px-6 text-left">Subject</th>
+                                <th className="py-3 px-6 text-left">Teacher</th>
+                                <th className="py-3 px-6 text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-sm font-light">
+                            {lectures.map((lecture, idx) => (
+                                <React.Fragment key={lecture._id}>
+                                    {numberOfLeacturesBeforeLunch === lecture.lectureNo - 1 && (
+                                        <motion.tr variants={rowVariants} className="border-b border-gray-200 hover:bg-yellow-100">
+                                            <td colSpan="5" className="py-3 px-6 text-center font-medium">
+                                                <FaUtensils className="inline mr-2" /> LUNCH
+                                            </td>
+                                        </motion.tr>
+                                    )}
+                                    <motion.tr variants={rowVariants} className="border-b border-gray-200 hover:bg-gray-100">
+                                        <td className="py-3 px-6 text-left whitespace-nowrap">
+                                            <div className="flex items-center">
+                                                <span className="font-medium">{lecture.lectureNo}</span>
                                             </div>
-                                        ))
-
-                                    ) : (
-                                        <div className="flex mobile:max-tablet:w-fit justify-between border-t border-gray-400">
-                                            <h1 className="w-full mobile:max-tablet:w-40 border-r border-gray-400 px-4 py-2 text-center">
-                                                {editMode ? (
-                                                    <input
-                                                        type="text"
-                                                        value={editedData[dayStudent]?.[lecture._id]?.lectureNo || lecture.lectureNo}
-                                                        onChange={(e) => handleInputChange(dayStudent, lecture._id, 'lectureNo', e.target.value)}
-                                                        className='border border-gray-300'
-                                                    />
-                                                ) : (
-                                                    lecture.lectureNo
-                                                )}
-                                            </h1>
-                                            <h1 className="w-full mobile:max-tablet:w-40 border-r border-gray-400 px-4 py-2 text-center bg-green-200">
+                                        </td>
+                                        <td className="py-3 px-6 text-left">
+                                            <div className="flex items-center">
+                                                <FaClock className="mr-2" />
                                                 {`${formatTime(Time[lecture.lectureNo - 1].start)}-${formatTime(Time[lecture.lectureNo - 1].end)}`}
-                                            </h1>
-                                            <h1 className="w-full mobile:max-tablet:w-40 border-r border-gray-400 px-4 py-2 text-center bg-green-200">
+                                            </div>
+                                        </td>
+                                        <td className="py-3 px-6 text-left">
+                                            <div className="flex items-center">
+                                                <FaBookOpen className="mr-2" />
                                                 {editMode ? (
                                                     <input
                                                         type="text"
-                                                        value={editedData[dayStudent]?.[lecture._id]?.subject || lecture.subject}
-                                                        onChange={(e) => handleInputChange(dayStudent, lecture._id, 'subject', e.target.value)}
-                                                        className='border border-gray-300'
+                                                        value={editedData[lecture._id]?.subject || lecture.subject}
+                                                        onChange={(e) => handleInputChange('dayStudent', lecture._id, 'subject', e.target.value)}
+                                                        className="border border-gray-300 px-2 py-1 rounded"
                                                     />
                                                 ) : (
                                                     lecture.subject
                                                 )}
-                                            </h1>
-                                            <div className='w-full mobile:max-tablet:w-40 border-r border-gray-400 flex items-center whitespace-nowrap px-4 py-2 bg-blue-200'>
-                                                {lecture.teacher?.profileLink && (
-                                                    <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full" />
-                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="py-3 px-6 text-left">
+                                            <div className="flex items-center">
+                                                <FaChalkboardTeacher className="mr-2" />
                                                 {editMode ? (
                                                     <input
                                                         type="text"
-                                                        value={editedData[dayStudent]?.[lecture._id]?.teacher || lecture.teacher?.name || ''}
-                                                        onChange={(e) => handleInputChange(dayStudent, lecture._id, 'teacher', e.target.value)}
-                                                        className='border border-gray-300'
+                                                        value={editedData[lecture._id]?.teacher || lecture.teacher?.name || ''}
+                                                        onChange={(e) => handleInputChange('dayStudent', lecture._id, 'teacher', e.target.value)}
+                                                        className="border border-gray-300 px-2 py-1 rounded"
                                                     />
                                                 ) : (
-                                                    lecture.teacher.name
+                                                    <div className="flex items-center">
+                                                        {lecture.teacher?.profileLink && (
+                                                            <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full mr-2" />
+                                                        )}
+                                                        {lecture.teacher?.name}
+                                                    </div>
                                                 )}
                                             </div>
-                                            <div className='w-full mobile:max-tablet:w-40 border-r border-gray-400 px-4 py-2 text-center bg-blue-200'>
-
+                                        </td>
+                                        <td className="py-3 px-6 text-left">
+                                            <div className="flex item-center justify-center">
+                                                <motion.button
+                                                    whileHover={{ scale: 1.1 }}
+                                                    whileTap={{ scale: 0.9 }}
+                                                    onClick={() => setEditMode(!editMode)}
+                                                    className="transform hover:text-purple-500 hover:scale-110"
+                                                >
+                                                    {editMode ? <FaSave size="18" /> : <FaEdit size="18" />}
+                                                </motion.button>
                                             </div>
-                                        </div>
-                                    )
-                                }
-
-                            </React.Fragment>
-                        ))}
-                    </div>
-                )}
+                                        </td>
+                                    </motion.tr>
+                                </React.Fragment>
+                            ))}
+                        </tbody>
+                    </table>
+                </motion.div>
             </div>
         </div>
     );

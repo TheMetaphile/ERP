@@ -23,12 +23,12 @@ const AdminProfile = () => {
 
   return (
     <motion.div
-      className="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen tablet:p-8 mobile:max-tablet:p-2 p-4"
+      className=" min-h-screen tablet:p-8 mobile:max-tablet:p-2 p-4"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
-      <motion.div className=" mx-auto bg-white rounded-lg shadow-lg overflow-hidden" variants={itemVariants}>
+      <motion.div className=" mx-auto bg-white border rounded-lg shadow-lg overflow-hidden" variants={itemVariants}>
         <div className="relative">
           <div className="h-32 bg-gradient-to-r from-blue-300 to-purple-300"></div>
           <img
@@ -70,7 +70,7 @@ const AdminProfile = () => {
 
 const InfoItem = ({ icon, label, value }) => (
   <motion.div
-    className="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300"
+    className="bg-white rounded-lg border shadow-md p-4 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-300"
     variants={itemVariants}
     whileHover={{ scale: 1.03 }}
     whileTap={{ scale: 0.98 }}

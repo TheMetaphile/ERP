@@ -28,16 +28,16 @@ export default function AdminDrawer({ isOpen }) {
     <div className={` ${isOpen ? '  py-6 px-2' : ''} w-full overflow-y-auto rounded-lg text-center items-center border bg-white shadow-md no-scrollbar`}>
       <div className="flex items-center">
         <img src={schoolImage} alt="school_image" className="w-1/3" />
-        <span className="text-purple-500 font-medium ">Metaphile Public School</span>
+        <span className="text-black font-medium ">Metaphile Public School</span>
       </div>
-      <div className="mt-5 bg-purple-300 px-2 py-4 rounded-2xl shadow-lg">
+      <div className="mt-5 bg-gradient-to-r from-purple-200 to-purple-100 px-2 py-4 rounded-2xl shadow-lg">
         <h2 className="text-xl font-semibold">Dashboard</h2>
         <div className="mt-4">
           {menuItems.map((menuItem, index) => (
             <div
               key={index}
               onClick={() => handleClick(index)}
-              className={`cursor-pointer rounded-lg ${active === index ? 'bg-purple-200' : ''}`}
+              className={`cursor-pointer rounded-lg ${active === index ? 'bg-purple-300' : ''}`}
             >
               <ExpansionTile
 
@@ -51,15 +51,7 @@ export default function AdminDrawer({ isOpen }) {
           ))}
         </div>
       </div>
-      <div className="flex h-fit justify-center my-2">
-        <button
-          onClick={handleLogout}
-          className="bg-purple-300 border border-transparent rounded-xl px-4 py-2 flex items-center shadow-md"
-        >
-          <img src={logout1} alt="logout" className="w-6 mr-2" />
-          <span className="text-black">Log out</span>
-        </button>
-      </div>
+
     </div>
   );
 }

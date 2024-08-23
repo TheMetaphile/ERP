@@ -1,30 +1,28 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaChevronUp, FaChevronDown, FaUserGraduate, FaCalendarAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import {  FaChevronDown, FaUserGraduate, FaCalendarAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Student_Leave } from '../../../Config';
+import {  toast } from 'react-toastify';
 
-export default function NewTile({ data }) {
+export default function NewTile({ data, setData }) {
     const [expanded, setExpanded] = useState(null);
     const { authState } = useContext(AuthContext);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [leaves, setLeaves] = useState([]);
 
-    useEffect(() => {
-        if (data && data.StudentsLeaves) {
-            setLeaves(data.StudentsLeaves);
-        }
-    }, [data]);
 
     const handleClick = (index) => {
         setExpanded(expanded === index ? null : index);
     }
+    console.log(data,"*****************data***********************");
+    console.log('setData:', setData);
 
-    const handleStatusUpdate = async (leaveId, status, email) => {
+    const handleStatusUpdate = async (leaveId, status, email,index) => {
         console.log('id', leaveId, 'status', status, 'email', email)
         setLoading(true);
+        
         try {
             const response = await axios.put(`${BASE_URL_Student_Leave}/leave/update`,
                 {
@@ -37,10 +35,16 @@ export default function NewTile({ data }) {
                     }
                 }
             );
-            console.log(`Leave ${leaveId} status updated to ${status}:`, response.data);
-            setLeaves(prevLeaves => prevLeaves.filter(leave => leave._id !== leaveId));
+            if(response.status===200){
+                console.log(`Leave ${leaveId} status updated to ${status}:`, response.data);
+                toast.success(`Status ${status}`);
+                console.log(data.filter(leave => leave._id !== leaveId));
+                setData(data.filter(leave => leave._id !== leaveId));
+            }
+            
         } catch (err) {
-            console.error("Error updating status");
+            console.error("Error updating status",err);
+            toast.error(err);
             setError(`Error updating status: ${err}`);
         } finally {
             setLoading(false);
@@ -111,7 +115,7 @@ export default function NewTile({ data }) {
                                     <div className="mt-4 flex space-x-4">
                                         <motion.button
                                             className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition-colors duration-300"
-                                            onClick={() => handleStatusUpdate(student._id, 'Approved', student.email)}
+                                            onClick={() => handleStatusUpdate(student._id, 'Approved', student.email,studentIndex)}
                                             disabled={loading}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
@@ -120,7 +124,7 @@ export default function NewTile({ data }) {
                                         </motion.button>
                                         <motion.button
                                             className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition-colors duration-300"
-                                            onClick={() => handleStatusUpdate(student._id, 'Rejected', student.email)}
+                                            onClick={() => handleStatusUpdate(student._id, 'Rejected', student.email,studentIndex)}
                                             disabled={loading}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}

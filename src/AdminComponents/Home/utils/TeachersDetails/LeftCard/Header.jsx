@@ -1,11 +1,24 @@
-export default function Header(props) {
-    return (
-        <div className="flex justify-between items-center py-2 pl-2 bg-purple-200 h-fit rounded-t-lg  border-black text-center w-fit mobile:max-tablet:w-full laptop:w-full  gap-2 ">
-            {props.headings.map((heading, index) => (
-                <h1 key={index} className={`${heading === 'Name' ? "w-52 mobile:max-laptop:w-48 " : heading === 'Roll Number' ? "w-28 mobile:max-tablet:w-20  tablet:"  : "mobile:max-tablet:w-20 w-40 "} text-lg  font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm`}>
-                    {heading}
-                </h1>
-            ))}
-        </div>
-    )
+import React from 'react';
+import { motion } from 'framer-motion';
+
+export default function Header({ headings }) {
+  return (
+    <thead>
+      <motion.tr 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-purple-200 text-gray-700 uppercase text-sm leading-normal"
+      >
+        {headings.map((heading, index) => (
+          <th 
+            key={index} 
+            className={`py-3 px-6 text-left font-medium `}
+          >
+            {heading}
+          </th>
+        ))}
+      </motion.tr>
+    </thead>
+  );
 }

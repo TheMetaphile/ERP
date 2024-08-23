@@ -156,10 +156,24 @@ export default function StudentsList() {
 
     // State to control the dropdown visibility
     const [isDropdownVisible, setDropdownVisible] = useState(false);
+    const tableBodyVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.05
+            }
+        }
+    };
+
+    const rowVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
 
     return (
         <motion.div
-            className="bg-purple-50 min-h-screen p-4"
+            className="min-h-screen p-4"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
@@ -167,10 +181,10 @@ export default function StudentsList() {
             <ToastContainer />
 
             <motion.div
-                className="flex justify-between items-center p-4 mb-6"
+                className="flex justify-between items-center  mb-6"
                 variants={itemVariants}
             >
-                <h1 className="text-3xl font-bold text-purple-700">All Students Data</h1>
+                <h1 className="text-3xl font-medium text-black">All Students Data</h1>
                 <motion.button
                     className="p-2 block tablet:hidden bg-purple-600 text-white rounded-md shadow-md hover:bg-purple-700 transition duration-300 ease-in-out"
                     whileHover={{ scale: 1.05 }}
@@ -219,7 +233,7 @@ export default function StudentsList() {
                 />
             </div>
             <motion.div
-                className="bg-white rounded-lg shadow-lg p-4 text-center"
+            className="text-center"
                 variants={itemVariants}
             >
                 {loading && userData.length > 0 && <Loading />}
@@ -236,25 +250,42 @@ export default function StudentsList() {
                 )}
 
                 <div className="overflow-x-auto">
-                    <table className="w-full">
-                        <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail']} />
-                        <tbody>
+                    <table className="w-full rounded-md border shadow-lg">
+                        <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail',"Action"]} />
+                        <motion.tbody
+                            variants={tableBodyVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="text-gray-600 text-sm font-light"
+                        >
                             {loading && userData.length < 1 ? (
-                                <tr><td colSpan="6"><Loading /></td></tr>
+                                <motion.tr variants={rowVariants}>
+                                    <td colSpan="6" className="py-4 px-6 text-center">
+                                        <Loading />
+                                    </td>
+                                </motion.tr>
                             ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
-                                <tr><td colSpan="6">No students found</td></tr>
+                                <motion.tr variants={rowVariants}>
+                                    <td colSpan="6" className="py-4 px-6 text-center font-medium text-gray-500">
+                                        No students found
+                                    </td>
+                                </motion.tr>
                             ) : Array.isArray(filteredStudents) ? (
                                 <StudentDetailTile userData={filteredStudents} />
                             ) : (
-                                <tr><td colSpan="6">Unexpected data format</td></tr>
+                                <motion.tr variants={rowVariants}>
+                                    <td colSpan="6" className="py-4 px-6 text-center font-medium text-red-500">
+                                        Unexpected data format
+                                    </td>
+                                </motion.tr>
                             )}
-                        </tbody>
+                        </motion.tbody>
                     </table>
                 </div>
 
                 {!allDataFetched && (
                     <motion.button
-                        className="mt-4 text-purple-600 hover:text-purple-800 font-semibold"
+                        className="mt-4 text-purple-600 hover:text-purple-800 font-semibold "
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handleViewMore}
