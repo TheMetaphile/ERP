@@ -10,19 +10,16 @@ import { BASE_URL_Student_Leave } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 
 function StudentLeave() {
-    const [selectedLink, setSelectedLink] = useState('/Teacher-Dashboard/studentleave/new');
     const [status, setStatus] = useState('Pending');
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(4);
+    const end = 4;
     const [allDataFetched, setAllDataFetched] = useState(false);
 
-    const handleLinkSelect = (link) => {
-        setSelectedLink(link);
-    };
+
 
     const handleStatusChange = (e) => {
         setStatus(e.target.value);
@@ -116,7 +113,7 @@ function StudentLeave() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
             >
-                <NewTile data={data} />
+                <NewTile data={data} setData={setData}/>
                 {!allDataFetched && (
 
                     <motion.h1

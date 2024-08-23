@@ -52,7 +52,7 @@ function New() {
 
     return (
         <div className='w-full mr-3'>
-            <NewTile data={data} />
+            <NewTile data={data} setData={setData}/>
         </div>
     )
 }

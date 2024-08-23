@@ -1,27 +1,23 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaChevronUp, FaChevronDown, FaUserGraduate, FaCalendarAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import {  FaChevronDown, FaUserGraduate, FaCalendarAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Student_Leave } from '../../../Config';
 import {  toast } from 'react-toastify';
 
-export default function NewTile({ data }) {
+export default function NewTile({ data, setData }) {
     const [expanded, setExpanded] = useState(null);
     const { authState } = useContext(AuthContext);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [leaves, setLeaves] = useState([]);
 
-    useEffect(() => {
-        if (data && data.StudentsLeaves) {
-            setLeaves(data.StudentsLeaves);
-        }
-    }, [data]);
 
     const handleClick = (index) => {
         setExpanded(expanded === index ? null : index);
     }
+    console.log(data,"*****************data***********************");
+    console.log('setData:', setData);
 
     const handleStatusUpdate = async (leaveId, status, email,index) => {
         console.log('id', leaveId, 'status', status, 'email', email)
@@ -42,11 +38,12 @@ export default function NewTile({ data }) {
             if(response.status===200){
                 console.log(`Leave ${leaveId} status updated to ${status}:`, response.data);
                 toast.success(`Status ${status}`);
-                setLeaves(prevLeaves => prevLeaves.filter(leave => leave._id !== leaveId));
+                console.log(data.filter(leave => leave._id !== leaveId));
+                setData(data.filter(leave => leave._id !== leaveId));
             }
             
         } catch (err) {
-            console.error("Error updating status");
+            console.error("Error updating status",err);
             toast.error(err);
             setError(`Error updating status: ${err}`);
         } finally {
