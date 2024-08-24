@@ -9,7 +9,7 @@ function Selection({ setFilter }) {
 
     return (
         <motion.div
-            className="w-1/4 relative"
+            className="w-1/4 relative mobile:max-tablet:w-1/3"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
