@@ -27,7 +27,8 @@ const CurrentWeekAdmin = ({ selectedTab, Class, section, subject }) => {
     const nextWeekStart = new Date();
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
-    const currentWeekFormattedDate = currentWeekStart.toISOString().split('T')[0];
+    const currentWeekFormattedDate = `${currentWeekStart.getFullYear()}-${ currentWeekStart.getMonth() <10 ? `0${currentWeekStart.getMonth()+1}` : currentWeekStart.getMonth()+1}-${currentWeekStart.getDate()}`;
+
 
     console.log(selectedTab)
     useEffect(() => {
