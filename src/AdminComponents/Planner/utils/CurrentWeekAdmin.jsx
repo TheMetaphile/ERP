@@ -23,12 +23,13 @@ const CurrentWeekAdmin = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
-    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 2));
-    const nextWeekStart = new Date();
-    nextWeekStart.setDate(currentWeekStart.getDate() + 7);
+    const currentWeekStart = new Date(currentDate);  // Create a new Date object to avoid modifying the original
+    currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay() + 1);  // Adjust to Monday (start of the week)
 
-    const currentWeekFormattedDate = currentWeekStart.toISOString().split('T')[0];
+    const currentWeekFormattedDate = `${currentWeekStart.getFullYear()}-${ currentWeekStart.getMonth() <10 ? `0${currentWeekStart.getMonth()+1}` : currentWeekStart.getMonth()+1}-${currentWeekStart.getDate()}`;
 
+
+    
     console.log(selectedTab)
     useEffect(() => {
         console.log(currentWeekFormattedDate)
