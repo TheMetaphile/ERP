@@ -93,11 +93,11 @@ function NewUpload({ onClose, onNewWork }) {
             <motion.div
                 initial={{ scale: 0.9, y: 50 }}
                 animate={{ scale: 1, y: 0 }}
-                className="bg-white mobile:max-tablet:mx-4 rounded-lg p-6 shadow-lg max-w-2xl w-full"
+                className="bg-white mobile:max-tablet:mx-4 mobile:max-tablet:my-8 rounded-lg p-6 shadow-lg max-w-2xl w-full"
             >
                 <h2 className="text-2xl font-bold text-blue-700 mb-6">Create New Homework</h2>
 
-                <div className='grid grid-cols-2 gap-4'>
+                <div className='grid grid-cols-2 gap-4 mobile:max-sm:whitespace-nowrap'>
                     <div>
                         <label className="block text-sm font-medium text-blue-600 mb-1">
                             <FiBook className="inline mr-2" />
