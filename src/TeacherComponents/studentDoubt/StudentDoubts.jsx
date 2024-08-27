@@ -65,10 +65,9 @@ function StudentDoubts() {
                 className="flex justify-between mobile:max-tablet:flex-col w-full items-center mb-4 py-2"
             >
 
-                <h1 className="text-3xl mobile:max-tablet:text-lg font-medium text-black">Student Doubts</h1>
-                <div className="flex justify-between gap-3 mobile:max-tablet: ">
+                <h1 className="text-3xl mobile:max-tablet:text-lg font-medium text-black mobile:max-tablet:">Student Doubts</h1>
+                <div className="flex justify-between gap-3 mobile:max-tablet:flex-col ">
                     <select id="class" value={Class} onChange={handleClassChange} className="shadow-md px-3 py-1  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
-
                         <option value="">Search by Class</option>
                         {uniqueClasses.map((classOption, index) => (
                             <option key={index} value={classOption}>{classOption}</option>
@@ -90,7 +89,6 @@ function StudentDoubts() {
                     </select>
                 </div>
             </motion.div>
-
 
 
             <motion.div

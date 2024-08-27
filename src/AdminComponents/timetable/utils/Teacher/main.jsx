@@ -144,19 +144,21 @@ function TeachersTimeTable() {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.5 }}
                         >
-                            <div className="flex items-center bg-purple-200 p-4 rounded-lg shadow-md">
-                                <span className="px-2 text-xl font-semibold text-purple-800">
+                            <div className="flex items-center mobile:max-tablet:flex-col  mobile:max-tablet:px-0 bg-purple-200 p-4 rounded-lg shadow-md">
+                                <span className="px-2 text-xl mobile:max-tablet:text-sm whitespace-nowrap font-semibold text-purple-800">
                                     Showing Timetable for Teacher:
                                 </span>
-                                <img
-                                    src={Teacher.profileLink}
-                                    alt="profilepic"
-                                    className="ml-2 w-12 h-12 rounded-full mr-2 border-2 border-purple-500"
-                                />
-                                <div className="flex-1 mobile:max-tablet:text-sm">
-                                    <span className="text-lg font-medium text-purple-700">
+                                <div className="flex-1 flex-wrap flex items-center gap-2 mobile:max-tablet:text-sm">
+                                    <img
+                                        src={Teacher.profileLink}
+                                        alt="profilepic"
+                                        className="ml-2 w-12 h-12 rounded-full mr-2 border-2 border-purple-500"
+                                    />
+
+                                    <span className="text-lg mobile:max-tablet:text-sm whitespace-nowrap font-medium text-purple-700">
                                         {Teacher.name}
                                     </span>
+
                                     <div className="text-sm text-purple-600">{Teacher.employeeId}</div>
                                 </div>
                             </div>

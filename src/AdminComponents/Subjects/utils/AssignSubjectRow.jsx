@@ -130,7 +130,7 @@ export default function AssignSubjectRow({ Class }) {
                         sectionsDetails.length > 0 ? (
                             <div>
                                 {sectionsDetails.map((details, index) => (
-                                    <div key={index} className="mb-3 rounded-lg shadow-md">
+                                    <div key={index} className="mb-3 rounded-lg border shadow-md">
                                         <div className="px-2 flex justify-between py-2 pl-2 h-fit border border-gray-300" onClick={() => handleSectionClick(index)}>
                                             <h1 className="w-36 text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                                                 {details.section}

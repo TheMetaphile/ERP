@@ -25,14 +25,14 @@ function AssignTeacher() {
     ];
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-tablet:mt-6 bg-secondary-50"
+            className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start  mb-3 no-scrollbar mobile:max-tablet:mx-2 bg-secondary-50"
         >
             <ToastContainer />
-            <motion.h1 
+            <motion.h1
                 initial={{ y: -50 }}
                 animate={{ y: 0 }}
                 transition={{ type: "spring", stiffness: 100 }}
@@ -41,7 +41,7 @@ function AssignTeacher() {
                 <FaChalkboardTeacher className="mr-2" /> Assign Class Teacher
             </motion.h1>
 
-            <motion.div 
+            <motion.div
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5 }}

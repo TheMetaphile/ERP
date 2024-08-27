@@ -43,12 +43,12 @@ export default function SubstituteTable() {
 
     return (
         <motion.div
-            className="w-full overflow-x-auto rounded-lg pt-3"
+            className="w-full overflow-x-auto border rounded-lg"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
         >
-            <table className="min-w-full   border border-gray-300 rounded-lg">
+            <table className="min-w-full border border-gray-300 rounded-lg">
                 <thead>
                     <motion.tr
                         className="bg-gradient-to-r from-purple-200 to-purple-100 text-lg"
@@ -80,14 +80,14 @@ export default function SubstituteTable() {
                     ) : (
                         <>
                             {CoOrdinatorsOnLeave.map((teachers, index) => (
-                                
-                                    <CoOrdinatorOnLeaveRow
-                                        Teacher={teachers}
-                                        index={index}
-                                        date={formattedDate}
-                                        session={session}
-                                    />
-                           
+
+                                <CoOrdinatorOnLeaveRow
+                                    Teacher={teachers}
+                                    index={index}
+                                    date={formattedDate}
+                                    session={session}
+                                />
+
                             ))}
                         </>
                     )}

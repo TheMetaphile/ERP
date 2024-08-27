@@ -21,7 +21,7 @@ const Upload = () => {
         setLoading(true);
         handleFetch();
     }, []);
-    
+
     const [structureData, setStructureData] = useState(
         {
             Class: ClassRange,
@@ -131,26 +131,26 @@ const Upload = () => {
         console.log(createStructureData)
         try {
             const structureResponse = await axios.post(`${BASE_URL_TimeTableStructure}/timeTableStructure/create`, createStructureData);
-           
+
             if (structureResponse.status === 200) {
-                console.log(structureResponse, 'OK',structureData.Class)
+                console.log(structureResponse, 'OK', structureData.Class)
                 toast.success('Time table structure created successfully!');
 
-                    const scheduleArray = [];
-                    for (let i = 0; i < structureData.lecture; i++) {
-                        scheduleArray.push({
-                            subject: '',
-                            teacher: ''
-                        });
-                    }
+                const scheduleArray = [];
+                for (let i = 0; i < structureData.lecture; i++) {
+                    scheduleArray.push({
+                        subject: '',
+                        teacher: ''
+                    });
+                }
 
-                    setUploadData(prevState => ({
-                        ...prevState,
-                        schedule: scheduleArray
-                    }))
-                    setTimetableStructure(createStructureData);
-                    // setShowTimetableStructure(false);
-                    setShowTimetable(true);
+                setUploadData(prevState => ({
+                    ...prevState,
+                    schedule: scheduleArray
+                }))
+                setTimetableStructure(createStructureData);
+                // setShowTimetableStructure(false);
+                setShowTimetable(true);
             }
         }
         catch (error) {
@@ -171,7 +171,7 @@ const Upload = () => {
             });
 
             if (response.status === 200) {
-                
+
                 console.log('response from fetch', response.data);
                 if (response.data) {
                     console.log("here", response.data.numberOfLecture);
@@ -197,7 +197,7 @@ const Upload = () => {
                     setShowTimetableStructure(true);
                 }
             }
-            
+
             if (loading) {
                 setLoading(false);
                 console.log("Fetch successful")
@@ -212,82 +212,82 @@ const Upload = () => {
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: { opacity: 1, transition: { duration: 0.5, when: "beforeChildren", staggerChildren: 0.1 } }
-      };
-    
-      const itemVariants = {
+    };
+
+    const itemVariants = {
         hidden: { y: 20, opacity: 0 },
         visible: { y: 0, opacity: 1, transition: { duration: 0.5 } }
-      };
+    };
 
 
     return (
 
-     <motion.div 
-      className="flex flex-col w-full mobile:max-tablet:px-4 h-screen overflow-y-auto items-start mt-4 mb-6 no-scrollbar border bg-purple-50 p-3 rounded-lg shadow-lg"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-      
-      <motion.div className='w-full flex justify-between items-center mb-3 px-4' variants={itemVariants}>
-        <motion.h1 className='text-3xl font-bold text-purple-800 flex items-center'>
-          <FaCalendarAlt className="mr-2" />
-          Schedule Time Table
-        </motion.h1>
-        <motion.button
-          className='px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md flex items-center'
-          onClick={() => setShowTimetableStructure(!showTimetableStructure)}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+        <motion.div
+            className="flex flex-col w-full mobile:max-tablet:px-2 h-screen overflow-y-auto items-start mt-4 mb-6 no-scrollbar border bg-purple-50 p-3 rounded-lg shadow-lg"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
         >
-          <FaCog className="mr-2" />
-          {showTimetableStructure ? 'Cancel' : 'Change Layout'}
-        </motion.button>
-      </motion.div>
-      
-      {loading ? (
-        <motion.div variants={itemVariants}>
-          <Loading />
-        </motion.div>
-      ) : (
-        <motion.div className='w-full' variants={itemVariants}>
-          <AnimatePresence>
-            {showTimetableStructure && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <CreateTimetableStrucutre 
-                  handleChange={handleStructureChange} 
-                  structureData={structureData} 
-                  handleSubmit={handleSubmit} 
-                />
-              </motion.div>
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+
+            <motion.div className='w-full flex flex-wrap justify-between items-center mb-3 px-4 mobile:max-tablet:px-2 gap-2' variants={itemVariants}>
+                <motion.h1 className='text-3xl mobile:max-tablet:text-lg whitespace-nowrap font-bold text-purple-800 flex items-center'>
+                    <FaCalendarAlt className="mr-2" />
+                    Schedule Time Table
+                </motion.h1>
+                <motion.button
+                    className='px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md flex items-center'
+                    onClick={() => setShowTimetableStructure(!showTimetableStructure)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    <FaCog className="mr-2" />
+                    {showTimetableStructure ? 'Cancel' : 'Change Layout'}
+                </motion.button>
+            </motion.div>
+
+            {loading ? (
+                <motion.div variants={itemVariants}>
+                    <Loading />
+                </motion.div>
+            ) : (
+                <motion.div className='w-full' variants={itemVariants}>
+                    <AnimatePresence>
+                        {showTimetableStructure && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <CreateTimetableStrucutre
+                                    handleChange={handleStructureChange}
+                                    structureData={structureData}
+                                    handleSubmit={handleSubmit}
+                                />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    <AnimatePresence>
+                        {showTimetable && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <UploadTimetable
+                                    fetchedTimeTableStructure={fetchedTimeTableStructure}
+                                    uploadTimetableData={uploadTimetableData}
+                                    handleChange={handleTimetableChange}
+                                />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </motion.div>
             )}
-          </AnimatePresence>
-          
-          <AnimatePresence>
-            {showTimetable && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <UploadTimetable 
-                  fetchedTimeTableStructure={fetchedTimeTableStructure} 
-                  uploadTimetableData={uploadTimetableData} 
-                  handleChange={handleTimetableChange} 
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
         </motion.div>
-      )}
-    </motion.div>
 
 
 
@@ -298,4 +298,4 @@ export default Upload;
 
 
 
-  
+

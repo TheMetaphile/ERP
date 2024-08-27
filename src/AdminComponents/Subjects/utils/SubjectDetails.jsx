@@ -25,19 +25,19 @@ function SubjectDetails({ Class, section }) {
         setScholastic(event);
     };
 
-    useEffect(()=>{
-        if(scholastic){
+    useEffect(() => {
+        if (scholastic) {
             setAdditionalLink("/coScholastic");
-        }else{
+        } else {
             setAdditionalLink("");
         }
-    },[scholastic]);
+    }, [scholastic]);
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(additionalLink);
         setSubjects([]);
         fetchSubject()
-    },[additionalLink]);
+    }, [additionalLink]);
     useEffect(() => {
         if (section != null && section != null) {
             setSubjectLoading(true);
@@ -125,7 +125,7 @@ function SubjectDetails({ Class, section }) {
                         const teacherEmails = response.data.Teachers.map(teacher => ({
                             email: teacher.email,
                             profileLink: teacher.profileLink,
-                            name : teacher.name
+                            name: teacher.name
                         }));
                         setSuggestions(teacherEmails);
 
@@ -171,19 +171,19 @@ function SubjectDetails({ Class, section }) {
     };
 
     return (
-        <div className='px-5 mt-2 mb-2 py-2 overflow-auto w-full border border-gray-300' >
+        <div className='px-5 mt-2 mb-2 py-2 w-full border border-gray-300 mobile:max-tablet:pr-0' >
             <ToastContainer />
             <div className="flex gap-4 px-3 py-2  mt-2 text-lg justify-end items-center mobile:max-tablet:pl-0">
                 <label className="text-base font-normal text-center">
                     Scholastic
                 </label>
-                <Switch checked={scholastic} changeRole={handleRoleChange}/>
+                <Switch checked={scholastic} changeRole={handleRoleChange} />
                 <label className="text-base font-normal text-center">
                     Co-Scholastic
                 </label>
             </div>
             {scholastic === 'Scholistics' ? (
-                <div>
+                <div className=' overflow-auto'>
                     <div className="border border-black rounded-lg mobile:max-laptop:w-fit w-full">
                         <div className="flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border bg-purple-200">
                             <h1 className="w-48 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm">
@@ -271,7 +271,7 @@ function SubjectDetails({ Class, section }) {
                     </div>
                 </div>
             ) : (
-                <div>
+                <div className=' overflow-auto'>
                     <div className="border border-black rounded-lg mobile:max-laptop:w-fit w-full">
                         <div className="flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border bg-purple-200">
                             <h1 className="w-48 text-lg font-medium mobile:max-laptop:text-sm mobile:max-laptop:font-sm">

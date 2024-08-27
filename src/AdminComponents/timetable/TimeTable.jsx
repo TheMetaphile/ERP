@@ -27,7 +27,7 @@ function TimeTable() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col px-6 h-screen overflow-y-auto items-start mt-4 mx-4 mb-6 no-scrollbar border rounded-lg shadow-lg"
+        className="flex flex-col px-6 h-screen mobile:max-tablet:px-2 overflow-y-auto items-start mt-4 mx-4 mobile:max-tablet:mx-2 mb-6 no-scrollbar border rounded-lg shadow-lg"
       >
         <motion.div
           className='flex justify-between items-center w-full mobile:max-tablet:flex-col mobile:max-tablet:items-baseline'
@@ -36,13 +36,13 @@ function TimeTable() {
           transition={{ type: "spring", stiffness: 300 }}
         >
           <motion.h1
-            className='text-3xl font-medium text-black whitespace-nowrap'
+            className='text-3xl mobile:max-tablet:text-lg mobile:max-tablet:py-2 font-medium text-black whitespace-nowrap'
             whileHover={{ scale: 1.05 }}
           >
             Time Table
           </motion.h1>
           <motion.div
-            className="flex gap-6 px-4 py-3 mt-4 text-lg justify-between border bg-white rounded-full shadow-md"
+            className="flex gap-6 px-4 py-3 mt-4 mobile:max-tablet:mt-0 text-lg justify-between border bg-white rounded-full shadow-md"
             whileHover={{ boxShadow: "0px 0px 8px rgba(0,0,0,0.2)" }}
           >
             <motion.label className={`flex items-center cursor-pointer ${role === "Teacher" ? 'text-purple-700' : 'text-gray-600'}`}>

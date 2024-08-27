@@ -162,7 +162,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
     };
 
     return (
-        <form onSubmit={handleSubmit} className=' w-full px-3 '>
+        <form onSubmit={handleSubmit} className=' w-full px-3 mobile:max-tablet:px-1'>
             {/* {uploadTimetableData.map((value, index) => ( */}
             {/* <ToastContainer /> */}
 
@@ -171,7 +171,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
                     <div>
                         <label className='text-black font-medium'>Class</label>
                         <select
-                            className="w-full border p-2"
+                            className="w-full border p-2 rounded-md "
                             name="Class"
                             value={selectedClass}
                             onChange={(e) => {
@@ -207,7 +207,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
                             value={selectedSection}
                             onChange={(e) => { setSection(e.target.value) }}
                             required
-                            className="w-full border p-2"
+                            className="w-full border p-2 rounded-md"
                         >
                             <option value="">Select Section</option>
                             <option value="A">A</option>
@@ -229,7 +229,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
                             value={selectedDay}
                             onChange={(e) => { setDay(e.target.value) }}
                             required
-                            className="w-full border p-2"
+                            className="w-full border p-2 rounded-md"
                         >
                             <option value="" disabled>Select Day</option>
                             <option value="monday">Monday</option>
@@ -241,16 +241,17 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
                         </select>
                     </div>
                 </div>
-                <table className='rounded-lg shadow-md w-full border border-gray-300'>
-                    <TimetableHeader />
+                <div className=' overflow-auto border rounded-md'>
+                    <table className='rounded-lg shadow-md w-full border border-gray-300 whitespace-nowrap'>
+                        <TimetableHeader />
 
-                    <tbody>
-                        {lectureTimes.map((time, index) => (
-                            <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange} handleSchedule={setSchedule} day={selectedDay} />
-                        ))}
-                    </tbody>
-                </table>
-
+                        <tbody>
+                            {lectureTimes.map((time, index) => (
+                                <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange} handleSchedule={setSchedule} day={selectedDay} />
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div className="flex items-center justify-between mt-4">
                 <button
