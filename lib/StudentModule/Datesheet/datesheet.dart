@@ -3,21 +3,40 @@ import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:student/APIs/StudentModuleAPI/DateSheet/date_sheet.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import '../../CustomTheme/customTheme.dart';
 
 class DateSheet extends StatefulWidget {
-  const DateSheet({super.key, required this.Class});
+  const DateSheet({Key? key, required this.Class}) : super(key: key);
   final String Class;
 
   @override
   State<DateSheet> createState() => _DateSheetState();
 }
 
-class _DateSheetState extends State<DateSheet> {
+class _DateSheetState extends State<DateSheet> with SingleTickerProviderStateMixin {
   DateSheetApi apiObj = DateSheetApi();
   List<Map<String, dynamic>>? dateSheet;
   bool isLoading = false;
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1000),
+    );
+    fetchDateSheet();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   Future<void> fetchDateSheet() async {
     setState(() {
@@ -33,7 +52,6 @@ class _DateSheetState extends State<DateSheet> {
       dateSheet = (await apiObj.fetchDateSheet(accessToken, widget.Class))
           .cast<Map<String, dynamic>>();
 
-
       dateSheet!.sort((a, b) {
         DateTime dateA = DateTime.parse(a['schedule'][0]['date']);
         DateTime dateB = DateTime.parse(b['schedule'][0]['date']);
@@ -41,26 +59,19 @@ class _DateSheetState extends State<DateSheet> {
       });
     } catch (e) {
       print('Error fetching DateSheet data: $e');
-      showRedSnackBar('$e', context);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error fetching data: $e')));
     } finally {
       setState(() {
         isLoading = false;
       });
+      _animationController.forward();
     }
-  }
-
-
-  @override
-  void initState() {
-    super.initState();
-    fetchDateSheet();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     CustomTheme themeObj = CustomTheme(size);
-    print("dateSheet $dateSheet");
 
     return Scaffold(
       backgroundColor: CustomTheme.whiteColor,
@@ -76,12 +87,7 @@ class _DateSheetState extends State<DateSheet> {
         ),
       ),
       body: isLoading
-          ? Center(
-        child: LoadingAnimationWidget.threeArchedCircle(
-          color: CustomTheme.primaryColor,
-          size: 50,
-        ),
-      )
+          ? _buildShimmerEffect()
           : dateSheet == null || dateSheet!.isEmpty || dateSheet![0]['schedule'].isEmpty
           ? Center(
         child: Text(
@@ -89,16 +95,47 @@ class _DateSheetState extends State<DateSheet> {
           style: TextStyle(fontSize: 18, color: Colors.grey[600]),
         ),
       )
-          : ListView.builder(
-        itemCount: dateSheet?.length ?? 0,
-        itemBuilder: (context, index) {
-          final scheduleList = dateSheet![index]['schedule'] as List?;
-          if (scheduleList == null || scheduleList.isEmpty) {
-            return SizedBox.shrink(); // Return an empty widget if schedule is null or empty
-          }
-          final exam = scheduleList[0];
-          return ExamCard(exam: exam);
-        },
+          : AnimationLimiter(
+        child: ListView.builder(
+          itemCount: dateSheet?.length ?? 0,
+          itemBuilder: (context, index) {
+            final scheduleList = dateSheet![index]['schedule'] as List?;
+            if (scheduleList == null || scheduleList.isEmpty) {
+              return SizedBox.shrink();
+            }
+            final exam = scheduleList[0];
+            return AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 375),
+              child: SlideAnimation(
+                verticalOffset: 50.0,
+                child: FadeInAnimation(
+                  child: ExamCard(exam: exam),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerEffect() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: ListView.builder(
+        itemCount: 5,
+        itemBuilder: (_, __) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Container(
+            height: 120,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -115,7 +152,6 @@ class ExamCard extends StatelessWidget {
     final formattedDate = DateFormat('MMMM d, yyyy').format(date);
     final dayName = DateFormat('EEEE').format(date);
 
-    // Parse the time and convert to 12-hour format
     final timeFormat = DateFormat('HH:mm');
     final examTime = timeFormat.parse(exam['time']);
     final formattedTime = DateFormat('h:mm a').format(examTime);

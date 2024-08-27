@@ -6,7 +6,7 @@ class TeacherLeaveApi{
 
   Future<List<dynamic>>  studentLeaveData(String accessToken,int start,String status) async {
 
-    final url = Uri.parse('$_baseUrl/leave/fetch/particularStudent?start=$start&end=10&status=$status');
+    final url = Uri.parse('$_baseUrl/leave/fetch/particularStudent?start=$start&end=2&status=$status');
 
     try {
       final response = await http.get(

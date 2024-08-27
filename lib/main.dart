@@ -3,10 +3,19 @@ import 'package:highlight_text/highlight_text.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:student/StudentModule/Attendance/studentAttendance.dart';
+import 'package:student/StudentModule/Classword/classWork.dart';
+import 'package:student/StudentModule/Fees/fees.dart';
+import 'package:student/StudentModule/NoteBookRecord/noteBook_Record.dart';
+import 'package:student/StudentModule/Notice/notice.dart';
+import 'package:student/StudentModule/StudentLeave/student_leave.dart';
+import 'package:student/StudentModule/homeWork/homeWork.dart';
 
 import 'APIs/Authentication/studentAuthentication.dart';
 import 'APIs/SharedPreference/sharedPreferenceFile.dart';
 import 'CustomTheme/customTheme.dart';
+import 'StudentModule/Fees/Fee_Due.dart';
+import 'StudentModule/Result/result.dart';
 import 'StudentModule/StudentHome/studentHome.dart';
 import 'onBoarding/Screens/Forget.dart';
 
@@ -125,7 +134,13 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getDetails();
 
+  }
+  
+  Map<String, dynamic> retrievedUserDetails={};
+  Future<void> getDetails() async {
+    retrievedUserDetails = await UserPreferences.getDetails("userDetails");
   }
 
   // void _checkForCompletedTask() async {
@@ -146,26 +161,21 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        // '/resetPassword': (context) => ForgetPassword(),
-        // // "/resultScreen": (context) => const ResultPdf(student: stu,),
-        //
-        // '/dashboard': (context) => const TeacherHome(),
-        // '/attendance': (context) => const TeacherAttendance(),
-        // '/leave': (context) =>  const TeacherLeave(),
-        // '/assignment': (context) => const HomeWork(),
-        // '/resultAPI.dart': (context) => const StudentResults(),
-        // '/expense management': (context) =>const ExpenseManagement(),
-        // '/classwork': (context) =>const ClassWork(),
-        // '/check-in': (context) =>const TeacherAttendanceCheckIn(),
-        // // '/classes': (context) =>const Timetable(),
-        // '/student fee status': (context) =>const StudentFeesStatus(),
-        // '/student notebook record': (context) => const NoteBookRecord(),
-        // '/home': (context) =>const TeacherHome(),
-        // '/salary': (context) =>const TeacherSalary(),
-        // // '/admin panel': (context) =>const AdminHome(),
-        // '/homework': (context) =>const HomeWork(),
-        // // '/chat': (context) =>const ChatScreen(),
-        // '/notice-board': (context) =>const NoticeBoard(),
+        '/resetPassword': (context) => ForgetPassword(),
+        // "/resultScreen": (context) => const ResultPdf(student: stu,),
+
+        '/dashboard': (context) => const StudentHome(),
+        '/attendance': (context) =>  StudentAttendanceUI(),
+        '/leave': (context) =>  const StudentLeave(),
+        '/resultAPI.dart': (context) =>  ReportCardOpen(userDetails: retrievedUserDetails,),
+        '/classwork': (context) => Classwork(),
+
+        '/student fee status': (context) => FeesDue(email: retrievedUserDetails["email"]),
+        '/student notebook record': (context) => NoteBookRecord(currentClass: retrievedUserDetails["currentClass"], section: retrievedUserDetails["section"]),
+        '/home': (context) =>const StudentHome(),
+
+        '/homework': (context) => Homework(),
+        '/notice-board': (context) => Notice(),
 
         '/logout': (context) =>Login(),
 

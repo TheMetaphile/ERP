@@ -1,253 +1,242 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../../APIs/StudentModuleAPI/NoteBookRecord/noteBook_Record_API.dart';
-import '../../APIs/StudentModuleAPI/StudentSubject/subjects.dart';
 import '../../CustomTheme/customTheme.dart';
 
 class NoteBookRecord extends StatefulWidget {
-  const NoteBookRecord({super.key, required this.currentClass, required this.section,});
+  const NoteBookRecord({Key? key, required this.currentClass, required this.section}) : super(key: key);
   final String currentClass;
   final String section;
-
 
   @override
   State<NoteBookRecord> createState() => _NoteBookRecordState();
 }
 
-class _NoteBookRecordState extends State<NoteBookRecord> {
-
+class _NoteBookRecordState extends State<NoteBookRecord> with SingleTickerProviderStateMixin {
   List<Map<String, dynamic>>? checkedStudentList;
-
-  String selectedSubject="";
+  String selectedSubject = "";
   List<String>? subjectOptions;
-  List<String>  handleSubject=[
-    ""
-  ];
-
-
-  bool isLoading=false;
-
-  NotebookRecordApi notebookObj=NotebookRecordApi();
-
-  Future<void> fetchNoteBookRecord() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      if (accessToken == null) {
-        throw Exception('Access token is null');
-      }
-      checkedStudentList =(await notebookObj.fetchNoteBookRecord(accessToken,selectedSubject)).cast<Map<String, dynamic>>();
-
-    } catch (e) {
-      print('Error fetching NoteBookRecord data: $e');
-     showRedSnackBar('Error fetching NoteBookRecord data: $e', context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-
-
-  Future<void> fetchSubjects() async {
-    SharedPreferences pref=await SharedPreferences.getInstance();
-    subjectOptions =pref.getStringList("subjects") ;
-  }
+  bool isLoading = false;
+  NotebookRecordApi notebookObj = NotebookRecordApi();
+  late AnimationController _animationController;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1000),
+    );
     fetchSubjects();
     fetchNoteBookRecord();
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  Future<void> fetchNoteBookRecord() async {
+    setState(() => isLoading = true);
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? accessToken = pref.getString("accessToken");
+      if (accessToken == null) throw Exception('Access token is null');
+      checkedStudentList = (await notebookObj.fetchNoteBookRecord(accessToken, selectedSubject)).cast<Map<String, dynamic>>();
+    } catch (e) {
+      print('Error fetching NoteBookRecord data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error fetching data: $e')));
+    } finally {
+      setState(() => isLoading = false);
+      _animationController.forward();
+    }
+  }
+
+  Future<void> fetchSubjects() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    subjectOptions = pref.getStringList("subjects");
+  }
+
+  @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
-
-    CustomTheme themeObj=CustomTheme(size);
+    CustomTheme themeObj = CustomTheme(size);
     return Scaffold(
-      backgroundColor: CustomTheme.whiteColor,
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios, color: CustomTheme.blackColor),
-        ),
+        elevation: 0,
         backgroundColor: CustomTheme.primaryColor,
-        title: Text(
-          "NoteBook Record",
-          style: themeObj.bigNormalText,
+        title: Text("Notebook Record", style: themeObj.bigNormalText.copyWith(fontSize: size.width * 0.05)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: CustomTheme.blackColor),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: size.width * 0.04),
-          child: Column(
+      body: Column(
+        children: [
+          _buildSubjectDropdown(size, themeObj),
+          Expanded(
+            child: isLoading ? _buildShimmerEffect() : _buildContent(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSubjectDropdown(Size size, CustomTheme themeObj) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: CustomTheme.primaryColor.withOpacity(0.1),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("Select Subject", style: themeObj.bigNormalText),
+          Container(
+            width: size.width * 0.4,
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: CustomTheme.whiteColor,
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                isExpanded: true,
+                hint: Text("Subject", style: themeObj.normalText),
+                value: selectedSubject.isEmpty ? null : selectedSubject,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedSubject = newValue!;
+                    checkedStudentList = [];
+                    fetchNoteBookRecord();
+                  });
+                },
+                items: subjectOptions?.map((String option) {
+                  return DropdownMenuItem<String>(
+                    value: option,
+                    child: Text(option, style: themeObj.normalText),
+                  );
+                }).toList() ?? [],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShimmerEffect() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: ListView.builder(
+        itemCount: 5,
+        itemBuilder: (_, __) => Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: size.height * 0.02),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Search by Subject",style: themeObj.bigNormalText,),
-                  Card(
-                    child: SizedBox(
-                      width: size.width * 0.3,
-                      height: size.height * 0.05,
-                      child:DropdownButton<String>(
-                        isExpanded: true,
-                        borderRadius: BorderRadius.circular(12),
-                        hint: Text("Subject", style: themeObj.normalText),
-                        padding: const EdgeInsets.all(8),
-                        icon: Icon(Icons.keyboard_arrow_down_sharp, color: CustomTheme.greyColor),
-                        alignment: Alignment.center,
-                        underline: Container(),
-                        value: selectedSubject.isEmpty ? null : selectedSubject,
-                        onChanged: (newValue) {
-                          setState(() {
-                            selectedSubject = newValue!;
-                            checkedStudentList=[];
-                            fetchNoteBookRecord();
-
-
-                          });
-                        },
-                        items: subjectOptions==null ||  subjectOptions!.isEmpty? handleSubject.map((String option) {
-                          return DropdownMenuItem<String>(
-                            value: option,
-                            child: Text(option, overflow: TextOverflow.ellipsis, style:themeObj.normalText),
-                          );
-                        }).toList():
-                        subjectOptions?.map((String option) {
-                          return DropdownMenuItem<String>(
-                            value: option,
-                            child: Text(option, overflow: TextOverflow.ellipsis, style:themeObj.normalText),
-                          );
-                        }).toList(),
-                      ),
-
-
-                    ),
-                  ),
-                ],
+              Container(
+                width: 48.0,
+                height: 48.0,
+                color: Colors.white,
               ),
-              SizedBox(height: size.height * 0.01),
-              isLoading? Center(
-                child: LoadingAnimationWidget.threeArchedCircle(
-                  color: CustomTheme.primaryColor,
-                  size: 50,
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      width: double.infinity,
+                      height: 8.0,
+                      color: Colors.white,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 2.0),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 8.0,
+                      color: Colors.white,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 2.0),
+                    ),
+                    Container(
+                      width: 40.0,
+                      height: 8.0,
+                      color: Colors.white,
+                    ),
+                  ],
                 ),
-              ):
-               checkedStudentList == null || checkedStudentList!.isEmpty? SizedBox(
-                   height: size.height*0.7,
-                   child: Center(child: Text("There was no NoteBook Record Found", style: TextStyle(fontSize: 18, color: Colors.grey[600]),),)):
-              Column(
-                children: [
-                  pendingTable(),
-                  SizedBox(height: size.height*0.02,)
-                ],
               )
-
             ],
           ),
         ),
       ),
-
     );
-
   }
 
-  Widget pendingTable() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Table(
-          border: TableBorder.all(),
-          columnWidths: const {
-            0: FixedColumnWidth(80),
-            1: FixedColumnWidth(150),
-            2: FixedColumnWidth(120),
-            3: FixedColumnWidth(120),
-            4: FixedColumnWidth(120),
-            5: FixedColumnWidth(150),
-          },
-          children: [
-            pendingHeader(),
-            ...pendingRows(),
-          ],
+  Widget _buildContent() {
+    if (checkedStudentList == null || checkedStudentList!.isEmpty) {
+      return Center(
+        child: Text(
+          "No Notebook Records Found",
+          style: TextStyle(fontSize: 18, color: Colors.grey[600]),
         ),
-      ),
-    );
-  }
-
-  TableRow pendingHeader() {
-    return TableRow(
-      decoration: BoxDecoration(color: Colors.cyan[100]),
-      children: [
-        'Checked By',
-        'Date',
-        'Chapter',
-        'Topic',
-        'Checked'
-      ].map((header) => TableCell(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(
-              header,
-              style: const TextStyle(fontWeight: FontWeight.bold)
-          ),
-        ),
-      )).toList(),
-    );
-  }
-
-  List<TableRow> pendingRows() {
-
-
-      return checkedStudentList!.map((student) {
-        return TableRow(
-          children: [
-            pendingTableCell(student["by"]["name"]?.toString() ?? ""),
-            pendingTableCell(student['date']?.toString() ?? ""),
-            pendingTableCell(student["chapter"]?.toString() ?? ""),
-            pendingTableCell(student["topic"]?.toString() ?? ""),
-            newCheckboxCell(student['status']?.toString() ?? ""),
-          ],
-        );
-      }).toList();
+      );
     }
-
-
-  Widget pendingTableCell(String text) {
-    return TableCell(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Text(text),
-      ),
-    );
-  }
-
-  Widget newCheckboxCell(String status) {
-    return TableCell(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Switch(
-            value: status=="true"?true:false,
-            activeColor: Colors.green,
-            onChanged: (bool value){}
-
-        ),
+    return AnimationLimiter(
+      child: ListView.builder(
+        itemCount: checkedStudentList!.length,
+        itemBuilder: (BuildContext context, int index) {
+          final record = checkedStudentList![index];
+          return AnimationConfiguration.staggeredList(
+            position: index,
+            duration: const Duration(milliseconds: 375),
+            child: SlideAnimation(
+              verticalOffset: 50.0,
+              child: FadeInAnimation(
+                child: Card(
+                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  elevation: 2,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: CustomTheme.primaryColor,
+                      child: Text(record["by"]["name"][0] ?? "?", style: TextStyle(color: Colors.white)),
+                    ),
+                    title: Text(record["topic"] ?? "No Topic", style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text("Chapter: ${record["chapter"] ?? "N/A"}"),
+                    trailing: Switch(
+                      value: true,
+                      onChanged: (bool value) {},
+                      activeColor: Colors.green,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

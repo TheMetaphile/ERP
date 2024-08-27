@@ -70,15 +70,14 @@ class AskDoubtAPI {
     }
   }
 
-  Future<dynamic>  updateDoubt(String accessToken,String docID, Map<String,dynamic> updateData) async {
+  Future<dynamic>  updateDoubt(String accessToken,String docID, Map<String,dynamic> updateData,String Class) async {
     print("updateData $updateData");
     print("docID $docID");
 
     final url = Uri.parse('$_baseUrl/doubts/update/student?id=$docID');
 
     try {
-      SharedPreferences pref=await SharedPreferences.getInstance();
-      String currentClass = pref.getString("currentClass") ?? "";
+
       final response = await http.put(
         url,
         headers: {
@@ -88,7 +87,7 @@ class AskDoubtAPI {
         body: jsonEncode({
           "question" : updateData["question"],
           "subject": updateData["subject"],
-          "class":currentClass,
+          "class":Class,
         }),
       );
 
@@ -98,6 +97,7 @@ class AskDoubtAPI {
         return data["status"] ;
 
       } else {
+        print(response.body);
         throw Exception('Failed to update Doubt: ${response.body}');
       }
     } catch (e) {
@@ -105,12 +105,12 @@ class AskDoubtAPI {
     }
   }
 
-  Future<dynamic>  deleteDoubt(String accessToken,String docID) async {
+  Future<dynamic>  deleteDoubt(String accessToken,String docID,String Class) async {
 
-    SharedPreferences pref=await SharedPreferences.getInstance();
-    String currentClass = pref.getString("currentClass") ?? "";
+    print("docID $docID");
 
-    final url = Uri.parse('$_baseUrl/doubts/delete?class=$currentClass&doubtId=$docID');
+
+    final url = Uri.parse('$_baseUrl/doubts/delete?class=$Class&doubtId=$docID');
 
     try {
       final response = await http.delete(
