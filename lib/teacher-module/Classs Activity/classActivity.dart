@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:untitled/teacher-module/Classs%20Activity/Student%20Promotion/student_promotion.dart';
 import 'package:untitled/teacher-module/Classs%20Activity/StudentFees/studentFeesStatus.dart';
 import 'package:untitled/teacher-module/Classs%20Activity/StudentLeave/studentLeave.dart';
 import 'package:untitled/teacher-module/Classs%20Activity/studentAttendance/studentAttendance.dart';
@@ -21,13 +22,14 @@ class _ClassActivityState extends State<ClassActivity> {
       "Result",
       "Fees Status",
     "Student Leave",
-    "Student Attendance"
+    "Student Attendance",
+    "Student Promotion"
 
 
   ];
   int currentIndex =0 ;
-  List<String> cardImage=["assets/Images/TeacherDashboard/Dashboard_time_table.png","assets/Images/Class Activity/Dashboard_result.png","assets/Images/Class Activity/feesStatus.png","assets/Images/Class Activity/leave.png","assets/Images/Class Activity/studentAttendance.png"];
-  List screens=const [ TimeTable(),ReportCard(),StudentFeesStatus(),StudentLeaves(),StudentAttendance()];
+  List<String> cardImage=["assets/Images/TeacherDashboard/Dashboard_time_table.png","assets/Images/Class Activity/Dashboard_result.png","assets/Images/Class Activity/feesStatus.png","assets/Images/Class Activity/leave.png","assets/Images/Class Activity/studentAttendance.png","assets/Images/Admin Home/Students.png"];
+  List screens=const [ TimeTable(),ReportCard(),StudentFeesStatus(),StudentLeaves(),StudentAttendance(),StudentPromotion()];
   CustomTheme themeObj=CustomTheme();
   @override
   Widget build(BuildContext context) {

@@ -69,10 +69,10 @@ class WeeklyPlannerTeacherAPI{
         print("response data $data");
         return data;
       } else {
-        throw Exception('Failed to load lessonPlan: ${response.body}');
+        throw Exception('${response.body}');
       }
     } catch (e) {
-      throw Exception('Error fetching lessonPlan: $e');
+      throw Exception(' $e');
     }
   }
 
@@ -143,7 +143,7 @@ class WeeklyPlannerTeacherAPI{
         print("status $data");
         return data["status"];
       } else {
-        throw Exception('Failed upload lessonPlan (${response.body})');
+        throw Exception('${response.body}');
       }
     } catch (e) {
       throw Exception('Network error: $e');

@@ -1,15 +1,36 @@
 import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/APIs/StudentsData/student.dart';
 import 'package:http/http.dart' as http;
-
-class NoteBookRecordHODAPI{
-
-  static String baseUrl = "http://philester.com";
+import 'package:untitled/utils/utils.dart';
 
 
 
-  Future<List<dynamic>> fetchNoteBookRecord(String accessToken,String Class,String section,String subject,int start) async {
+class NoteBooksRecords{
+
+  static String baseUrl="https://philester.com";
+
+  Future<List<dynamic>> fetchNoteBooksRecords(String accessToken,String Class,String section,String subject,int start) async{
     print("accessToken $accessToken");
+    if (Class == "" && section == "" && subject == "") {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? jsonString = prefs.getString('class_section_subjects');
 
+      // Decode the JSON string
+      Map<String, dynamic> data = jsonDecode(jsonString!);
+
+      // Access the nested structure
+      String firstClass = data.keys.first;
+      Map<String, dynamic> sections = data[firstClass];
+      String firstSection = sections.keys.first;
+      List<dynamic> subjects = sections[firstSection];
+      String firstSubject = subjects.first;
+
+      Class = firstClass;
+      section = firstSection;
+      subject = firstSubject;
+    }
     String calculateCurrentSession() {
       DateTime now = DateTime.now();
       int currentYear = now.year;
@@ -24,7 +45,13 @@ class NoteBookRecordHODAPI{
     }
     String session=calculateCurrentSession();
 
-    final url = Uri.parse('$baseUrl/notebook/fetch/coordinator/all?class=$Class&section=$section&subject=$subject&session=$session&start=$start&count=');
+    print("Class $Class");
+    print("section $section");
+    print("subject $subject");
+    print("session $session");
+
+    final url = Uri.parse(
+        '$baseUrl/notebook/fetch/coordinator/all?class=$Class&section=$section&subject=$subject&session=$session&start=$start&count=10');
 
     try {
       final response = await http.get(
@@ -37,18 +64,17 @@ class NoteBookRecordHODAPI{
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-
-        return data["notebookRecord"] ;
+        print("API data  $data");
+        return data["notebookRecord"];
       } else {
-        print("${response.body}");
-        throw Exception('Failed to load notices: ${response.body}');
+        print(response.body);
+        throw Exception('${response.body}');
       }
     } catch (e) {
-      print("$e");
-      throw Exception('Error fetching notices: $e');
+      print("Error $e");
+      throw Exception('Error fetching  notebookRecord : $e');
     }
   }
-
 
   Future<dynamic> updateRemark( String accessToken, String docID,  String remark, String session,)
   async {
@@ -84,5 +110,6 @@ class NoteBookRecordHODAPI{
       throw Exception('Network error: $e');
     }
   }
+
 
 }

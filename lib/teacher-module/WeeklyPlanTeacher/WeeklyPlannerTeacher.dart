@@ -38,7 +38,8 @@ class _WeeklyPlanTeacherState extends State<WeeklyPlanTeacher> {
   //   "Accept",
   //   "Reject"
   // ];
-  String status="";
+  String coordinatorStatus="";
+  String hodStatus="";
   String remark="";
 
 
@@ -64,10 +65,11 @@ class _WeeklyPlanTeacherState extends State<WeeklyPlanTeacher> {
         print(plan);
        if( _selectedTab == "Next Week") {
 
-         status=fetchData["coordinatorStatus"]??"";
-         print("status $status");
+         coordinatorStatus=fetchData["coordinatorStatus"]??"";
+         hodStatus=fetchData["hodStatus"]??"";
+         print("status $coordinatorStatus");
          remark=fetchData["coordinatorRemark"]??"";
-         if(status!="Accept"){
+         if(coordinatorStatus!="Accept" || coordinatorStatus=="" || hodStatus!="Accept" || hodStatus==""){
            formattedPlan = plan.map((item) => {
              'date': item['date'],
              'chapter': item['chapter'],
@@ -146,7 +148,7 @@ class _WeeklyPlanTeacherState extends State<WeeklyPlanTeacher> {
       }
     } catch (e) {
       print("Failed to upload plan records: $e");
-      showError("Failed to upload plan records: $e");
+      showError("$e");
     } finally {
       setState(() {
         isLoading = false;
@@ -218,6 +220,8 @@ class _WeeklyPlanTeacherState extends State<WeeklyPlanTeacher> {
   }
   @override
   Widget build(BuildContext context) {
+  print("coordinatorStatus $coordinatorStatus");
+  print("hodStats $hodStatus");
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -239,14 +243,15 @@ class _WeeklyPlanTeacherState extends State<WeeklyPlanTeacher> {
           children: [
             SizedBox(height: size.height*0.01,),
             dropDownButton(size),
-            SizedBox(height: size.height*0.01,),
+            SizedBox(height: size.height*0.02,),
             Row(
               children: [
-                tabButton('Current Week'),
+                Expanded(child: buildTabButton('Current Week')),
                 SizedBox(width: 8),
-                tabButton('Next Week'),
+                Expanded(child: buildTabButton('Next Week')),
               ],
             ),
+            SizedBox(height: size.height*0.02,),
             Column(
               children: [
                 SizedBox(height: size.height*0.01,),
@@ -262,14 +267,43 @@ class _WeeklyPlanTeacherState extends State<WeeklyPlanTeacher> {
                   child: allTable(),
                 ):
 
-               status == "Accept"?
+                coordinatorStatus!="Accept" || coordinatorStatus=="" || hodStatus!="Accept" || hodStatus==""?
+
                Column(
+                 children: [
+                     SizedBox(
+                       height: size.height*0.6,
+                       child: createTable()),
+                    AnimatedContainer(
+                      width: size.width*0.3,
+                        duration: Duration(milliseconds: 300),
+                       decoration: BoxDecoration(
+                       color: themeObj.primayColor ,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow:  [BoxShadow(color: themeObj.primayColor.withOpacity(0.3), blurRadius: 8, offset: Offset(0, 4))]),
+                       child: TextButton(
+                          onPressed: (){
+                        print("Weekly pLan $formattedPlan");
+                        createPlan(startOfNextWeek.toString().split(" ")[0].toString());
+                      },
+                            child: Text(
+                        "Save",
+                        style: TextStyle(
+                          color:  Colors.white ,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                 ],
+               ): Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     allTable(),
                     SizedBox(height: size.height*0.02,),
 
-                    Text("Status : $status",style: GoogleFonts.openSans(fontSize:size.width*0.045,color: themeObj.textBlack,),),
+                    Text("Status : $coordinatorStatus",style: GoogleFonts.openSans(fontSize:size.width*0.045,color: themeObj.textBlack,),),
                     SizedBox(height: size.height*0.01,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 3.0),
@@ -280,26 +314,7 @@ class _WeeklyPlanTeacherState extends State<WeeklyPlanTeacher> {
 
 
                   ],
-                ):
-
-               Column(
-                 children: [
-                   SizedBox(
-                       height: size.height*0.6,
-                       child: createTable()),
-
-                   ElevatedButton(
-                     onPressed: (){
-                       print("Weekly pLan $formattedPlan");
-                       createPlan(startOfNextWeek.toString().split(" ")[0].toString());
-                     },
-                     style: ElevatedButton.styleFrom(
-                       backgroundColor: themeObj.primayColor,
-                     ),
-                     child: Text("Save", style: TextStyle(color:Colors.black)),
-                   )
-                 ],
-               )
+                )
               ],
             ),
 
@@ -309,135 +324,111 @@ class _WeeklyPlanTeacherState extends State<WeeklyPlanTeacher> {
 
     );
   }
-  Widget tabButton(String title) {
-    return ElevatedButton(
-      onPressed: () {
-        setState(() {
-          _selectedTab = title;
-          plan=[];
 
-          if(_selectedTab=="Current Week"){
-            docID="";
-            fetchWeeklyPlan(startOfWeek.toString().split(" ")[0].toString());
-          }else{
-            docID="";
-            formattedPlan=[];
-            print("next week");
-            fetchWeeklyPlan(startOfNextWeek.toString().split(" ")[0].toString());
-          }
-        });
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: _selectedTab == title ? Color.fromRGBO(216,180,254,1) : Colors.grey[300],
+
+  Widget dropDownButton(Size size) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _buildDropdown(size, "Class", _selectedClass, _storedData.keys.toList(), (newValue) {
+            setState(() {
+              _selectedClass = newValue!;
+              updateSections();
+            });
+          }),
+          SizedBox(width: size.width * 0.02),
+          _buildDropdown(size, "Section", _selectedSection, classSections, (newValue) {
+            setState(() {
+              _selectedSection = newValue!;
+              updateSubjects();
+            });
+          }),
+          SizedBox(width: size.width * 0.02),
+          _buildDropdown(size, "Subject", _selectedSubject, classSubjects, (newValue) {
+            setState(() {
+              _selectedSubject = newValue!;
+              plan=[];
+              docID="";
+              _selectedTab == "Current Week" ?  fetchWeeklyPlan(startOfWeek.toString().split(" ")[0].toString()) :  fetchWeeklyPlan(startOfNextWeek.toString().split(" ")[0].toString());
+            });
+          }),
+        ],
       ),
-      child: Text(title, style: TextStyle(color: _selectedTab == title ? Colors.white : Colors.black)),
     );
   }
 
 
-  Widget dropDownButton(Size size) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 2.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Card(
-              child: Container(
-                width: size.width * 0.3,
-                height: size.height * 0.05,
-                child:DropdownButton<String>(
-                  isExpanded: true,
-                  borderRadius: BorderRadius.circular(12),
-                  hint: Text("Classes", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(8),
-                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
-                  underline: Container(),
-                  value: _selectedClass.isEmpty ? null : _selectedClass,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedClass = newValue!;
-                      updateSections();
+  Widget buildTabButton(String title) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      decoration: BoxDecoration(
+        color: _selectedTab == title ? themeObj.primayColor : Colors.grey[300],
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: _selectedTab == title
+            ? [BoxShadow(color: themeObj.primayColor.withOpacity(0.3), blurRadius: 8, offset: Offset(0, 4))]
+            : [],
+      ),
+      child: TextButton(
+        onPressed: () {
+          setState(() {
+            _selectedTab = title;
+            plan=[];
 
-                    });
-                  },
-                  items: _storedData.keys.toList().map((String option) {
-                    return DropdownMenuItem<String>(
-                      value: option,
-                      child: Text(option, overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
-                    );
-                  }).toList(),
-                ),
+            if(_selectedTab=="Current Week"){
+              docID="";
+              fetchWeeklyPlan(startOfWeek.toString().split(" ")[0].toString());
+            }else{
+              docID="";
+              formattedPlan=[];
+              print("next week");
+              fetchWeeklyPlan(startOfNextWeek.toString().split(" ")[0].toString());
+            }
+          });
+        },
+        child: Text(
+          title,
+          style: TextStyle(
+            color: _selectedTab == title ? Colors.white : Colors.black87,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
 
-
-              ),
-            ),
-            SizedBox(width: size.width * 0.02,),
-            Card(
-              child: Container(
-                width: size.width * 0.3,
-                height: size.height * 0.05,
-                child:DropdownButton<String>(
-                  isExpanded: true,
-                  borderRadius: BorderRadius.circular(12),
-                  hint: Text("Sections", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
-                  padding: EdgeInsets.all(8),
-                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
-                  alignment: Alignment.center,
-                  underline: Container(),
-                  value: _selectedSection.isEmpty ? null : _selectedSection,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedSection = newValue!;
-                      updateSubjects();
-
-                    });
-                  },
-                  items: classSections.map((String option) {
-                    return DropdownMenuItem<String>(
-                      value: option,
-                      child: Text(option, overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
-                    );
-                  }).toList(),
-                ),
-
-
-              ),
-            ),
-            SizedBox(width: size.width * 0.02,),
-            Card(
-              child: Container(
-                width: size.width * 0.3,
-                height: size.height * 0.05,
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  borderRadius: BorderRadius.circular(12),
-                  hint: Text("Subjects", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
-                  padding: EdgeInsets.all(8),
-                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
-                  alignment: Alignment.center,
-                  underline: Container(),
-                  value: _selectedSubject.isEmpty ? null : _selectedSubject,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedSubject = newValue!;
-                      plan=[];
-                      docID="";
-                      _selectedTab == "Current Week" ?  fetchWeeklyPlan(startOfWeek.toString().split(" ")[0].toString()) :  fetchWeeklyPlan(startOfNextWeek.toString().split(" ")[0].toString());
-                    });
-                  },
-                  items: classSubjects.map((String option) {
-                    return DropdownMenuItem<String>(
-                      value: option,
-                      child: Text(option, overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-          ],
+  Widget _buildDropdown(Size size, String hint, String value, List<String> items, Function(String?) onChanged) {
+    return Container(
+      width: size.width * 0.3,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey.withOpacity(0.2),
+          //     spreadRadius: 1,
+          //     blurRadius: 5,
+          //     offset: Offset(0, 3),
+          //   ),
+          // ],
+          border: Border.all(color: Colors.grey)
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          isExpanded: true,
+          hint: Text(hint, style: GoogleFonts.poppins(color: themeObj.textgrey, fontSize: size.width * 0.035)),
+          value: value.isEmpty ? null : value,
+          onChanged: onChanged,
+          items: items.map((String option) {
+            return DropdownMenuItem<String>(
+              value: option,
+              child: Text(option, style: GoogleFonts.poppins(color: themeObj.textBlack, fontSize: size.width * 0.035)),
+            );
+          }).toList(),
+          icon: Icon(Icons.arrow_drop_down, color: themeObj.textgrey),
+          borderRadius: BorderRadius.circular(30),
+          dropdownColor: Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: 16),
         ),
       ),
     );

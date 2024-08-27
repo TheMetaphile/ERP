@@ -29,7 +29,7 @@ class NoticeBoardAPI{
     }
   }
 
-  Future<dynamic>  noticeUpload(String accessToken,String type,String title,String description, List<String> emailIds,String Class,String section )async {
+  Future<dynamic>  noticeUpload(String accessToken,String type,String title,String description, List<String> emailIds,List<Map<String, dynamic>> Class,)async {
 
 
     String calculateCurrentSession() {
@@ -47,20 +47,15 @@ class NoticeBoardAPI{
     String session=calculateCurrentSession();
     String date = DateTime.now().toString().split(" ")[0].toString();
     print(date);
-    print(Class);
-    print(section);
+    print("Class $Class");
+    // print(section);
     print(jsonEncode({
       "title": title,
       "type": type,
       "description": description,
       "session": session,
       "date": date,
-      "Classes": [
-        {
-          "Class": Class,
-          "sections": ["$section"]
-        }
-      ]
+      "Classes": Class
     }));
 
     final url = Uri.parse('$_baseUrl/notice/upload/teacher');
@@ -79,12 +74,7 @@ class NoticeBoardAPI{
           "description": description,
           "session": session,
           "date": date,
-          "Classes": [
-            {
-              "Class": Class,
-              "sections": ["$section"]
-            }
-          ]
+          "Classes": Class
         }):
         jsonEncode({
           "title": title,

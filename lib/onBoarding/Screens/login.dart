@@ -34,214 +34,127 @@ class _LoginState extends State<Login> {
     final email = emailController.text.trim();
     final password = passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
-      showRedSnackBar("Please enter both email and password", context);
-      return;
-    }
+
 
     setState(() {
       isLoading = true;
     });
 
     try {
-      {
-
-        var data=await authApiAcess.loginUser(email, password, context);
-        if(data=="Invalid Credentials"){
-          showRedSnackBar("Invalid Email and Password", context);
-        }
-        Map<String,dynamic> userDetails=data["userDetails"] ?? {};
-        Map<String,dynamic> tokens=data["tokens"] ?? {};
-        Map<String,dynamic> subject=data["subject"] ?? {};
-        Map<String,dynamic> classDetails=data["ClassDetails"] ?? {};
-        SharedPreferences pref = await SharedPreferences.getInstance();
-
-        print("user details $userDetails");
-        print("subject details $subject");
-        print("class details $classDetails");
-   print("/////////////////////////userdetails");
-        if(userDetails.isNotEmpty) {
-
-          var tokens = data["tokens"];
-          // var subject= data["subject"];
-          var classDetails = data["ClassDetails"];
-          // print("User Details $userDetails");
-          // print("tokens Details $tokens");
-          // print("subject Details $subject");
-          // print("classDetails Details $classDetails");
-
-
-          final userEmail = userDetails["email"] ?? "email@gmail.com";
-          final name = userDetails["name"] ?? "UserName";
-          final profileLink = userDetails["profileLink"] ??
-              "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-          final employeeId = userDetails["employeeId"].toString() ?? "ID123";
-          final phoneNumber = userDetails["phoneNumber"].toString() ?? "+91 ********";
-          final dob = userDetails["DOB"].toString() ?? "DD-MM-YYYY";
-          final permanentAddress = userDetails["permanentAddress"] ??
-              "DD-MM-YYYY";
-
-          await pref.setString("email", userEmail);
-          await pref.setString("name", name);
-          await pref.setString("profileLink", profileLink);
-          await pref.setString("employeeId", employeeId);
-          await pref.setString("phoneNumber", phoneNumber);
-          await pref.setString("dob", dob);
-          await pref.setString("permanentAddress", permanentAddress);
-
-          // print(pref.getString("email"));
-          // print(pref.getString("name"));
-          // print(pref.getString("profileLink"));
-          // print(pref.getString("employeeId"));
-          // print(pref.getString("phoneNumber"));
-          // print(pref.getString("dob",));
-          // print(pref.getString("permanentAddress",));
-
-
-        }
-        print("/////////////////////////token");
-        if(tokens.isNotEmpty){
-
-          final accessToken = tokens["accessToken"];
-          final refreshToken = tokens["refreshToken"];
-
-
-          await pref.setString("accessToken", accessToken);
-          await pref.setString("refreshToken", refreshToken);
-
-          print(pref.getString("accessToken"));
-
-
-        }
-        if(subject.isNotEmpty){
-
-          final Map<String, Map<String, List<String>>> transformedData = {};
-
-          void addSubjects(List<dynamic> subjects) {
-            for (var item in subjects) {
-              final className = item['class'];
-              final section = item['section'];
-              final subject = item['subject'];
-
-              if (!transformedData.containsKey(className)) {
-                transformedData[className] = {};
-              }
-              if (!transformedData[className]!.containsKey(section)) {
-                transformedData[className]![section] = [];
-              }
-              if (!transformedData[className]![section]!.contains(subject)) {
-                transformedData[className]![section]!.add(subject);
-              }
-            }
-          }
-
-          addSubjects(data['subject']['subjects'] as List<dynamic>);
-          addSubjects(data['subject']['Co_scholastic'] as List<dynamic>);
-
-          print(transformedData);
-          await pref.setString(
-              'class_section_subjects', jsonEncode(transformedData));
-
-          // To retrieve the data
-          String? jsonString = pref.getString('class_section_subjects');
-          if (jsonString != null) {
-            Map<String, dynamic> retrievedData = jsonDecode(jsonString);
-            print(retrievedData); // Use the retrieved data as needed
-          }
-
-
-
-        }
-        if(classDetails.isNotEmpty){
-
-          final teacherClass = classDetails["class"] ?? "";
-          final teacherSection = classDetails["section"] ?? "";
-          print(teacherClass);
-          print(teacherSection);
-          await pref.setString("teacherClass", teacherClass);
-          await pref.setString("teacherSection", teacherSection);
-        }
-        // else{
-        //
-        //     final authApiAcess = TeacherAuthentication();
-        //     DateTime currentDateTime=DateTime.now();
-        //     String date=currentDateTime.toString().split(' ')[0];
-        //
-        //     String calculateCurrentSession() {
-        //       DateTime now = DateTime.now();
-        //       int currentYear = now.year;
-        //       int nextYear = currentYear + 1;
-        //
-        //       if (now.isBefore(DateTime(currentYear, 3, 31))) {
-        //         currentYear--;
-        //         nextYear--;
-        //       }
-        //
-        //       return "$currentYear-${nextYear.toString().substring(2)}";
-        //     }
-        //
-        //     SharedPreferences pref =await  SharedPreferences.getInstance();
-        //     String? accessToken=pref.getString("accessToken");
-        //
-        //     print("accessTOken $accessToken");
-        //     print(" session ${calculateCurrentSession()}");
-        //     print("date $date");
-        //     if(accessToken!=null){
-        //       var data=await authApiAcess.fetchSubstitutionTeacher(accessToken,date,calculateCurrentSession());
-        //
-        //       print("substitute data $data ...............");
-        //
-        //       if(data!=null){
-        //         print("//////////////////substitute data called successfully ..........///////////////// ");
-        //
-        //         String? teacherClass=pref.getString("teacherClass") ??"";
-        //         String? teacherSection=pref.getString("teacherSection") ?? "";
-        //         print("Before teacherClass $teacherClass");
-        //         print("Before teacherSection $teacherSection");
-        //
-        //         if(teacherClass.isEmpty && teacherSection.isEmpty){
-        //
-        //           final teacherClass = data["class"] ?? "";
-        //           final teacherSection = data["section"] ?? "";
-        //
-        //            print("Fetched teacherClass $teacherClass");
-        //            print("Fetched teacherSection $teacherSection");
-        //
-        //           await pref.setString("teacherClass", teacherClass);
-        //           await pref.setString("teacherSection", teacherSection);
-        //
-        //           print("Set teacherClass ${pref.getString("teacherClass")}");
-        //           print("Set teacherSection ${pref.getString("teacherSection")}");
-        //
-        //           int currentHour=DateTime.now().hour;
-        //           int assignHour=17-currentHour;
-        //           await pref.setInt("assignHour", assignHour);
-        //           print("The login workmanager");
-        //
-        //         }
-        //
-        //
-        //       }
-        //     }
-        //
-        //
-        // }
-
-
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(),));
+      var data = await authApiAcess.loginUser(email, password, context);
+      if (data == "Invalid Credentials") {
+        showRedSnackBar("Invalid Email and Password", context);
+        return;
       }
 
+      Map<String, dynamic> userDetails = data["userDetails"] ?? {};
+      Map<String, dynamic> tokens = data["tokens"] ?? {};
+      Map<String, dynamic> subject = data["subject"] ?? {};
+      Map<String, dynamic> classDetails = data["ClassDetails"] ?? {};
+      SharedPreferences pref = await SharedPreferences.getInstance();
 
+      if (userDetails.isNotEmpty) {
+        final userEmail = userDetails["email"] ?? "email@gmail.com";
+        final name = userDetails["name"] ?? "UserName";
+        final profileLink = userDetails["profileLink"] ??
+            "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+        final employeeId = userDetails["employeeId"].toString() ?? "ID123";
+        final phoneNumber = userDetails["phoneNumber"].toString() ?? "+91 ********";
+        final dob = userDetails["DOB"].toString() ?? "DD-MM-YYYY";
+        final permanentAddress = userDetails["permanentAddress"] ?? "Address not provided";
+
+        await pref.setString("email", userEmail);
+        await pref.setString("name", name);
+        await pref.setString("profileLink", profileLink);
+        await pref.setString("employeeId", employeeId);
+        await pref.setString("phoneNumber", phoneNumber);
+        await pref.setString("dob", dob);
+        await pref.setString("permanentAddress", permanentAddress);
+      } else {
+        showRedSnackBar("User details are missing", context);
+      }
+
+      if (tokens.isNotEmpty) {
+        final accessToken = tokens["accessToken"];
+        final refreshToken = tokens["refreshToken"];
+
+        if (accessToken != null && refreshToken != null) {
+          await pref.setString("accessToken", accessToken);
+          await pref.setString("refreshToken", refreshToken);
+        } else {
+          showRedSnackBar("Token information is incomplete", context);
+        }
+      } else {
+        showRedSnackBar("Tokens are missing", context);
+      }
+
+      if (subject.isNotEmpty) {
+        final Map<String, Map<String, List<String>>> transformedData = {};
+
+        void addSubjects(List<dynamic> subjects) {
+          for (var item in subjects) {
+            final className = item['class'];
+            final section = item['section'];
+            final subject = item['subject'];
+
+            if (!transformedData.containsKey(className)) {
+              transformedData[className] = {};
+            }
+            if (!transformedData[className]!.containsKey(section)) {
+              transformedData[className]![section] = [];
+            }
+            if (!transformedData[className]![section]!.contains(subject)) {
+              transformedData[className]![section]!.add(subject);
+            }
+          }
+        }
+
+        List<dynamic>? subjects = subject['subjects'] ?? [];
+        if (subjects!.isNotEmpty) {
+          addSubjects(subjects);
+        }
+
+        List<dynamic>? coScholastics = subject["Co_scholastic"] ?? [];
+        if (coScholastics!.isNotEmpty) {
+          addSubjects(coScholastics);
+        }
+
+        await pref.setString('class_section_subjects', jsonEncode(transformedData));
+
+        // To retrieve the data
+        String? jsonString = pref.getString('class_section_subjects');
+        if (jsonString != null) {
+          Map<String, dynamic> retrievedData = jsonDecode(jsonString);
+          print(retrievedData); // Use the retrieved data as needed
+        }
+      } else {
+        showRedSnackBar("Subject information is missing", context);
+      }
+
+      if (classDetails.isNotEmpty) {
+        final teacherClass = classDetails["class"] ?? "";
+        final teacherSection = classDetails["section"] ?? "";
+
+        await pref.setString("teacherClass", teacherClass);
+        await pref.setString("teacherSection", teacherSection);
+      } else {
+        showRedSnackBar("Class details are missing", context);
+      }
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MyApp()),
+      );
     } catch (e) {
       print("Login error: $e");
-      showRedSnackBar("An error occurred during login ${e}", context);
+      showRedSnackBar("An error occurred during login: $e", context);
     } finally {
-
       setState(() {
         isLoading = false;
       });
     }
   }
+
 
   CustomTheme themeObj = CustomTheme();
 

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,7 +18,7 @@ class ReportCardOpen extends StatefulWidget {
   State<ReportCardOpen> createState() => _ReportCardOpenState();
 }
 
-class _ReportCardOpenState extends State<ReportCardOpen> {
+class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProviderStateMixin{
   String? _selectTerm ="Term 1";
   List<String> termOption = [
     'Term 1',
@@ -29,14 +30,7 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
   ResultApi apiObj=ResultApi();
   StudentApi stdObj=StudentApi();
   ScrollController scrolController =ScrollController();
-  List<dynamic>? Final;
-  List<dynamic>? finalCoScholastic;
-  List<dynamic>? halfYearly;
-  List<dynamic>? halfYearlyCoScholastic;
-  List<dynamic>? term1;
-  List<dynamic>? term1CoScholastic;
-  List<dynamic>? term2;
-  List<dynamic>? term2CoScholastic;
+  List<dynamic>? Final, finalCoScholastic, halfYearly, halfYearlyCoScholastic, term1, term1CoScholastic, term2, term2CoScholastic;
   bool isLoading=false;
 
   List<dynamic> studentDetail=[];
@@ -51,7 +45,6 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
       final resultData = await apiObj.fetchResult(accessToken!, widget.email);
       print("result data $resultData");
       if(resultData.isNotEmpty && resultData!=null){
-       setState(() {
          Final =resultData["final"]!=[]?resultData["final"] :[];
          finalCoScholastic =resultData["final_Co_scholastic"]!=[]? resultData["final_Co_scholastic"]:[];
          halfYearly =resultData["halfYearly"]!=[] ?resultData["halfYearly"] :[];
@@ -60,7 +53,7 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
          term1CoScholastic =resultData["term1_Co_scholastic"]!=[]? resultData["term1_Co_scholastic"]:[];
          term2 =resultData["term2"]!=[] ? resultData["term2"]:[];
          term2CoScholastic =resultData["term2_Co_scholastic"]!=[]?resultData["term2_Co_scholastic"]: [];
-       });
+
 
       }
 
@@ -129,133 +122,162 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
 
   }
 
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Final = [];
-    finalCoScholastic = [];
-    halfYearly = [];
-    halfYearlyCoScholastic = [];
-    term1 = [];
-    term1CoScholastic = [];
-    term2 = [];
-    term2CoScholastic = [];
-    studentDetail = [];
-    fetchResultData();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+    _animation = CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
     fetchStudentDetails();
+    fetchResultData();
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
-    print("student $studentDetail");
-    print("final $Final");
-    print("final_Co_scholastic $finalCoScholastic");
-    print("halfYearly $halfYearly");
-    print("halfYearly_Co_scholastic $halfYearlyCoScholastic");
-    print("term1 $term1");
-    print("term1_Co_scholastic $term1CoScholastic");
-    print("term2 $term2");
-    print("term2_Co_scholastic $term2CoScholastic");
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios, color: themeObj.textBlack),
-        ),
-        backgroundColor: themeObj.primayColor,
-        title: Text(
-          "Student Report Card",
-          style: GoogleFonts.openSans(
-            color: themeObj.textBlack,
-            fontWeight: FontWeight.w500,
-            fontSize: size.width * 0.05,
+      appBar: _buildAppBar(size),
+      body: SafeArea(
+        child: isLoading
+            ? Center(
+          child: LoadingAnimationWidget.threeArchedCircle(
+            color: themeObj.primayColor,
+            size: 50,
+          ),
+        )
+            : SingleChildScrollView(
+          child: AnimationLimiter(
+
+            child: Column(
+              children: AnimationConfiguration.toStaggeredList(
+                duration: const Duration(milliseconds: 375),
+                childAnimationBuilder: (widget) => SlideAnimation(
+                  horizontalOffset: 50.0,
+                  child: FadeInAnimation(
+                    child: widget,
+                  ),
+                ),
+                children: [
+                  _buildHeaderSection(size),
+                  _buildHeaderCard(size),
+                  _buildScholasticCard(size),
+                  _buildCoScholasticCard(size),
+                  _buildAttendanceCard(size),
+                  _buildRemarkCard(size),
+                  _buildScholasticMarkRangeCard(size),
+                  _buildCoScholasticMarkRangeCard(size),
+                ],
+              ),
+            ),
           ),
         ),
       ),
-      body:  isLoading
-          ? Center(
-        child: LoadingAnimationWidget.threeArchedCircle(
-          color: themeObj.primayColor,
-          size: 50,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Implement action (e.g., download report card)
+        },
+        child: Icon(Icons.download),
+        backgroundColor:themeObj.primayColor,
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(Size size) {
+    return AppBar(
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [themeObj.primayColor, themeObj.primayColor.withOpacity(0.7)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
-      )
-          : SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child:   isLoading ?Center(
-              child: LoadingAnimationWidget.threeArchedCircle(
-                color: themeObj.primayColor,
-                size: 50,
+      ),
+      leading: IconButton(
+        onPressed: () => Navigator.pop(context),
+        icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+      ),
+      title: Text(
+        "Student Report Card",
+        style: GoogleFonts.openSans(
+          color: Colors.black,
+          fontWeight: FontWeight.w400,
+          fontSize: size.width * 0.05,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderSection(Size size) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            width: size.width * 0.6,
+            child: AutoSizeText(
+              '${studentDetail[0]["name"] ?? ""} Progress Report',
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.openSans(
+                color: themeObj.textBlack,
+                fontWeight: FontWeight.w500,
+                fontSize: size.width * 0.035,
               ),
-            ):Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: size.width*0.6,
-                      child: AutoSizeText(
-                        '${studentDetail.isNotEmpty ? (studentDetail[0]["name"] ?? "Name") : "Name"} Progress Report',overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.openSans(
-                          color: themeObj.textBlack,
-                          fontWeight: FontWeight.w500,
-                          fontSize: size.width * 0.035,
-                        ),
-                      ),
-                    ),
-                    Card(
-                      child: SizedBox(
-                        width: size.width*0.3,
-                        height: size.height*0.055,
-                        child: DropdownButton<String>(
-                          isExpanded: true,
-                          borderRadius: BorderRadius.circular(12),
-                          hint: const Text("Term",),
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(8),
-                          icon: const Icon(Icons.keyboard_arrow_down_sharp),
-                          underline: Container(),
-                          value: _selectTerm,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectTerm = newValue!;
-                            });
-                          },
-                          items: termOption.map((String option) {
-                            return DropdownMenuItem<String>(
-                              value: option,
-                              child: Text(option,overflow: TextOverflow.ellipsis,),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-             Column(
-                 children: [
-                   _buildHeaderCard(size),
-                   SizedBox(height: size.height*0.02),
-                   _buildScholasticCard(size),
-                   SizedBox(height: size.height*0.02),
-                   _buildCoScholasticCard(size),
-                   SizedBox(height: size.height*0.02),
-                   _buildAttendanceCard(size),
-                   SizedBox(height: size.height*0.02),
-                   _buildRemarkCard(size),
-                   SizedBox(height: size.height*0.02),
-                   _buildScholasticMarkRangeCard(size),
-                   SizedBox(height: size.height*0.02),
-                   _buildCoScholasticMarkRangeCard(size),
-                 ],
-               )
-              ],
             ),
           ),
+          _buildTermDropdown(size),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTermDropdown(Size size) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: _selectTerm,
+          icon: Icon(Icons.arrow_drop_down, color: themeObj.primayColor),
+          iconSize: 24,
+          elevation: 16,
+          style: TextStyle(color: themeObj.primayColor),
+          onChanged: (String? newValue) {
+            setState(() {
+              _selectTerm = newValue!;
+            });
+          },
+          items: termOption.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
         ),
       ),
     );
@@ -264,17 +286,17 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
   Widget _buildHeaderCard(Size size) {
     return Card(
       elevation: 4,
+      margin: EdgeInsets.all(16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: size.height*0.05,
-           decoration: const BoxDecoration(
-             color: Color.fromRGBO(153,246,228,1),
-             border: Border(bottom: BorderSide(color: Colors.black)),
-             borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))
-           ),
+            height: size.height * 0.05,
+            decoration: BoxDecoration(
+              color:  themeObj.primayColor.withOpacity(0.1),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+            ),
             child: Center(
               child: Text(
                 '$_selectTerm : 2024-25',
@@ -286,19 +308,19 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
               ),
             ),
           ),
-         Padding(
-           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-           child: Column(
-             children: [
-               _buildInfoRow('Student\'s Name', studentDetail.isNotEmpty ? (studentDetail[0]["name"] ?? "N/A") : "N/A"),
-               _buildInfoRow('Father\'s Name', studentDetail.isNotEmpty ? (studentDetail[0]["fatherName"] ?? "N/A") : "N/A"),
-               _buildInfoRow('Mother\'s Name', studentDetail.isNotEmpty ? (studentDetail[0]["motherName"] ?? "N/A") : "N/A"),
-               _buildInfoRow('Admission No.', studentDetail.isNotEmpty ? (studentDetail[0]["oldAdmissionNumber"] ?? "N/A") : "N/A"),
-               _buildInfoRow('Class & Section', studentDetail.isNotEmpty ? "${studentDetail[0]["currentClass"] ?? "N/A"} ${studentDetail[0]["section"] ?? "N/A"}" : "N/A"),
-               _buildInfoRow('Date of Birth', studentDetail.isNotEmpty ? (studentDetail[0]["DOB"] ?? "N/A") : "N/A"),
-             ],
-           ),
-         )
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                _buildInfoRow('Student\'s Name',"${ studentDetail[0]["name"] ?? "N/A"}"),
+                _buildInfoRow('Father\'s Name', "${studentDetail[0]["fatherName"] ?? "N/A"}"),
+                _buildInfoRow('Mother\'s Name',"${ studentDetail[0]["motherName"] ?? "N/A"}"),
+                _buildInfoRow('Admission No.',"${studentDetail[0]["oldAdmissionNumber"] ?? "N/A"}"),
+                _buildInfoRow('Class & Section', "${studentDetail[0]["currentClass"] ?? "N/A"} ${studentDetail[0]["currentSection"] ?? "N/A"}"),
+                _buildInfoRow('Date of Birth',"${ studentDetail[0]["DOB"] ?? "N/A"}"),
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -315,23 +337,19 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
     } else if (_selectTerm == "Final" && Final != null) {
       currentTermData = Final!;
     }
-    String getColumnLabel(String baseLabel, String dataKey) {
-      if (currentTermData.isNotEmpty && currentTermData[0].containsKey(dataKey)) {
-        return '$baseLabel\n(${currentTermData[0][dataKey] ?? ""})';
-      }
-      return baseLabel;
-    }
+
     return Card(
       elevation: 4,
+      margin: EdgeInsets.all(16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: size.height*0.05,
-            decoration: const BoxDecoration(
-                color: Color.fromRGBO(153,246,228,1),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))
+            height: size.height * 0.05,
+            decoration: BoxDecoration(
+              color:  themeObj.primayColor.withOpacity(0.1),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
             ),
             child: Center(
               child: Text(
@@ -344,46 +362,11 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
               ),
             ),
           ),
-          Scrollbar(
-           trackVisibility: true,
-            thumbVisibility: true,
-            controller: scrolController,
-            thickness: 6.0,
-            radius: const Radius.circular(10.0),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                border: TableBorder.all(),
-                columns:  [
-                  const DataColumn(label: Text('Subject')),
-                  DataColumn(label: Text(getColumnLabel('Note Book', 'totalNoteBookMarks'), textAlign: TextAlign.center)),
-                  DataColumn(label: Text(getColumnLabel('S.Enrichment', 'totalSubjectEnrichmentMarks'))),
-                  DataColumn(label: Text(getColumnLabel('Marks Obt', 'marksObtained'))),
-                  DataColumn(label: Text(getColumnLabel('Total', 'totalMarks'))),
-                  const DataColumn(label: Text('%')),
-                  const DataColumn(label: Text('Grade')),
-                ],
-                rows:currentTermData.map((item) {
-                  int noteBook = item['obtainedNoteBookMarks'] ?? 0;
-                  int enrichment = item['obtainedSubjectEnrichmentMarks'] ?? 0;
-                  int marksObtained = item['marksObtained'] ?? 0;
-                  int obtainedTotal = noteBook + enrichment + marksObtained;
-                  int totalMarks=item["totalPracticalMarks"]+item["totalNoteBookMarks"]+item["totalSubjectEnrichmentMarks"];
-            
-                  double percentage = (obtainedTotal / totalMarks) * 100;
-            
-                  return DataRow(cells: [
-                    DataCell(Text(item['subject']?.toString() ?? '')),
-                    DataCell(Text(noteBook.toString())),
-                    DataCell(Text(enrichment.toString())),
-                    DataCell(Text(marksObtained.toString())),
-                    DataCell(Text(obtainedTotal.toString())),
-                    DataCell(Text(percentage.toStringAsFixed(2))),
-                    DataCell(Text(calculateRange(percentage))),
-                  ]);
-                }).toList()
-                   ,
-              ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: DataTable(
+              columns: _buildScholasticColumns(currentTermData),
+              rows: _buildScholasticRows(currentTermData),
             ),
           ),
         ],
@@ -391,61 +374,85 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
     );
   }
 
+  List<DataColumn> _buildScholasticColumns(List<dynamic> currentTermData) {
+    return [
+      DataColumn(label: Text('Subject')),
+      DataColumn(label: Text('Note Book')),
+      DataColumn(label: Text('S.Enrichment')),
+      DataColumn(label: Text('Marks Obt')),
+      DataColumn(label: Text('Total')),
+      DataColumn(label: Text('%')),
+      DataColumn(label: Text('Grade')),
+    ];
+  }
+
+  List<DataRow> _buildScholasticRows(List<dynamic> currentTermData) {
+    return currentTermData.map((item) {
+      int noteBook = item['obtainedNoteBookMarks'] ?? 0;
+      int enrichment = item['obtainedSubjectEnrichmentMarks'] ?? 0;
+      int marksObtained = item['marksObtained'] ?? 0;
+      int obtainedTotal = noteBook + enrichment + marksObtained;
+      int totalMarks = item["totalPracticalMarks"] + item["totalNoteBookMarks"] + item["totalSubjectEnrichmentMarks"];
+      double percentage = (obtainedTotal / totalMarks) * 100;
+
+      return DataRow(cells: [
+        DataCell(Text(item['subject']?.toString() ?? '')),
+        DataCell(Text(noteBook.toString())),
+        DataCell(Text(enrichment.toString())),
+        DataCell(Text(marksObtained.toString())),
+        DataCell(Text(obtainedTotal.toString())),
+        DataCell(Text(percentage.toStringAsFixed(2))),
+        DataCell(Text(calculateRange(percentage))),
+      ]);
+    }).toList();
+  }
+
   Widget _buildCoScholasticCard(Size size) {
     List<dynamic> currentTermData = [];
-    if (_selectTerm == "Term 1" && term1 != null) {
+    if (_selectTerm == "Term 1" && term1CoScholastic != null) {
       currentTermData = term1CoScholastic!;
-    } else if (_selectTerm == "Half Yearly" && halfYearly != null) {
+    } else if (_selectTerm == "Half Yearly" && halfYearlyCoScholastic != null) {
       currentTermData = halfYearlyCoScholastic!;
-    } else if (_selectTerm == "Term 2" && term2 != null) {
+    } else if (_selectTerm == "Term 2" && term2CoScholastic != null) {
       currentTermData = term2CoScholastic!;
-    } else if (_selectTerm == "Final" && Final != null) {
+    } else if (_selectTerm == "Final" && finalCoScholastic != null) {
       currentTermData = finalCoScholastic!;
     }
+
     return Card(
       elevation: 4,
+      margin: EdgeInsets.all(16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: size.height*0.05,
-            decoration: const BoxDecoration(
-                color: Color.fromRGBO(153,246,228,1),
-                border: Border(bottom: BorderSide(color: Colors.black)),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))
+            height: size.height * 0.05,
+            decoration: BoxDecoration(
+              color:  themeObj.primayColor.withOpacity(0.1),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
             ),
             child: Center(
               child: Text(
                 'Co-Scholastic Areas',
                 style: GoogleFonts.openSans(
-                  color: themeObj.textBlack,
+                  color:  themeObj.textBlack,
                   fontWeight: FontWeight.w500,
                   fontSize: size.width * 0.045,
                 ),
               ),
             ),
           ),
-          SizedBox(height: size.height*0.003),
-         Padding(
-           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-           child: Column(
-             children: [
-               currentTermData.isEmpty
-                   ? Center(child: Text("No co-scholastic data available for this term"))
-                   :ListView.builder(
-                 shrinkWrap: true,
-                   itemCount: currentTermData.length,
-                 itemBuilder: (context, index) {
-                     final coScholastic=currentTermData[index];
-                   return _buildInfoRow(coScholastic["subject"], coScholastic["grade"]);
-                 },
-
-               )
-
-             ],
-           ),
-         )
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: currentTermData.isEmpty
+                ? Center(child: Text("No co-scholastic data available for this term"))
+                : Column(
+              children: currentTermData.map((coScholastic) {
+                return _buildInfoRow(coScholastic["subject"], coScholastic["grade"]);
+              }).toList(),
+            ),
+          ),
         ],
       ),
     );
@@ -454,31 +461,30 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
   Widget _buildAttendanceCard(Size size) {
     return Card(
       elevation: 4,
+      margin: EdgeInsets.all(16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: size.height*0.05,
-            decoration: const BoxDecoration(
-                color: Color.fromRGBO(153,246,228,1),
-                border: Border(bottom: BorderSide(color: Colors.black)),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))
+            height: size.height * 0.05,
+            decoration: BoxDecoration(
+              color:  themeObj.primayColor.withOpacity(0.1),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
             ),
             child: Center(
               child: Text(
                 'Attendance',
                 style: GoogleFonts.openSans(
-                  color: themeObj.textBlack,
+                  color:  themeObj.textBlack,
                   fontWeight: FontWeight.w500,
                   fontSize: size.width * 0.045,
                 ),
               ),
             ),
           ),
-          SizedBox(height: size.height*0.003),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
                 _buildInfoRow('Total', '100'),
@@ -486,8 +492,7 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
                 _buildInfoRow('Percentage', '80%'),
               ],
             ),
-          )
-
+          ),
         ],
       ),
     );
@@ -496,16 +501,16 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
   Widget _buildRemarkCard(Size size) {
     return Card(
       elevation: 4,
+      margin: EdgeInsets.all(16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: size.height*0.05,
-            decoration: const BoxDecoration(
-                color: Color.fromRGBO(153,246,228,1),
-                border: Border(bottom: BorderSide(color: Colors.black)),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))
+            height: size.height * 0.05,
+            decoration: BoxDecoration(
+              color:  themeObj.primayColor.withOpacity(0.1),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
             ),
             child: Center(
               child: Text(
@@ -518,9 +523,8 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
               ),
             ),
           ),
-          SizedBox(height: size.height*0.003),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
                 _buildInfoRow('ClassTeacher', 'Ankit Sharma'),
@@ -528,8 +532,7 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
                 _buildInfoRow('Principal', 'xyz'),
               ],
             ),
-          )
-
+          ),
         ],
       ),
     );
@@ -538,19 +541,20 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
   Widget _buildScholasticMarkRangeCard(Size size) {
     return Card(
       elevation: 4,
+      margin: EdgeInsets.all(16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: size.height*0.05,
-            decoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.black)),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))
+            height: size.height * 0.05,
+            decoration: BoxDecoration(
+              color: themeObj.primayColor.withOpacity(0.1),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
             ),
             child: Center(
               child: Text(
-                'Scholastic ',
+                'Scholastic',
                 style: GoogleFonts.openSans(
                   color: themeObj.textBlack,
                   fontWeight: FontWeight.w500,
@@ -559,47 +563,46 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
               ),
             ),
           ),
-          SizedBox(height: size.height*0.003),
           Container(
-            color: const Color.fromRGBO(153,246,228,1),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Mark Range",style: GoogleFonts.openSans(
+            color: themeObj.primayColor.withOpacity(0.05),
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Mark Range",
+                  style: GoogleFonts.openSans(
+                    color:themeObj.textBlack,
+                    fontWeight: FontWeight.w600,
+                    fontSize: size.width * 0.035,
+                  ),
+                ),
+                Text(
+                  "Grade",
+                  style: GoogleFonts.openSans(
                     color: themeObj.textBlack,
                     fontWeight: FontWeight.w600,
                     fontSize: size.width * 0.035,
-
-                  ),),
-                  Text("Grade",style: GoogleFonts.openSans(
-                    color: themeObj.textBlack,
-                    fontWeight: FontWeight.w400,
-                    fontSize: size.width * 0.035,
-                  ),),
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
                 _buildInfoRow('91-100', 'A1'),
                 _buildInfoRow('81-90', 'A2'),
-                _buildInfoRow('71-100', 'B1'),
-                _buildInfoRow('61-100', 'B2'),
-                _buildInfoRow('51-100', 'C1'),
-                _buildInfoRow('41-100', 'C2'),
-                _buildInfoRow('31-40', 'D'),
+                _buildInfoRow('71-80', 'B1'),
+                _buildInfoRow('61-70', 'B2'),
+                _buildInfoRow('51-60', 'C1'),
+                _buildInfoRow('41-50', 'C2'),
+                _buildInfoRow('33-40', 'D'),
                 _buildInfoRow('32 & below', 'E'),
-
-
               ],
             ),
-          )
-
+          ),
         ],
       ),
     );
@@ -608,87 +611,91 @@ class _ReportCardOpenState extends State<ReportCardOpen> {
   Widget _buildCoScholasticMarkRangeCard(Size size) {
     return Card(
       elevation: 4,
+      margin: EdgeInsets.all(16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: size.height*0.05,
-            decoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.black)),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))
+            height: size.height * 0.05,
+            decoration: BoxDecoration(
+              color:  themeObj.primayColor.withOpacity(0.1),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
             ),
             child: Center(
               child: Text(
-                'Co-Scholastic And Discipline ',
+                'Co-Scholastic And Discipline',
                 style: GoogleFonts.openSans(
-                  color: themeObj.textBlack,
+                  color:themeObj.textBlack,
                   fontWeight: FontWeight.w500,
                   fontSize: size.width * 0.045,
                 ),
               ),
             ),
           ),
-          SizedBox(height: size.height*0.003),
           Container(
-            color: const Color.fromRGBO(153,246,228,1),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("PERFORMANCE INDICATORS",style: GoogleFonts.openSans(
+            color:  themeObj.primayColor.withOpacity(0.05),
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "PERFORMANCE INDICATORS",
+                  style: GoogleFonts.openSans(
                     color: themeObj.textBlack,
                     fontWeight: FontWeight.w600,
                     fontSize: size.width * 0.035,
-
-                  ),),
-                  Text("GRADE",style: GoogleFonts.openSans(
+                  ),
+                ),
+                Text(
+                  "GRADE",
+                  style: GoogleFonts.openSans(
                     color: themeObj.textBlack,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                     fontSize: size.width * 0.035,
-                  ),),
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
                 _buildInfoRow('OUTSTANDING', 'A'),
                 _buildInfoRow('VERY GOOD', 'B'),
                 _buildInfoRow('FAIR', 'C'),
-
-
-
               ],
             ),
-          )
-
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildInfoRow(String label, String value,) {
-    Size size = MediaQuery.of(context).size;
+  Widget _buildInfoRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label,style: GoogleFonts.openSans(
-        color: themeObj.textBlack,
-        fontWeight: FontWeight.w600,
-        fontSize: size.width * 0.035,
-
-      ),),
-          Text(value,overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(
-            color: themeObj.textBlack,
-            fontWeight: FontWeight.w400,
-            fontSize: size.width * 0.035,
-          ),),
+          Text(
+            label,
+            style: GoogleFonts.openSans(
+              color: themeObj.textBlack,
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+          Text(
+            value,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.openSans(
+              color: themeObj.textBlack,
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+            ),
+          ),
         ],
       ),
     );

@@ -96,4 +96,8 @@ class SubstituteClassTeacherApi{
       throw Exception('Error fetching absenteeism: $e');
     }
   }
+
+
+
+
 }

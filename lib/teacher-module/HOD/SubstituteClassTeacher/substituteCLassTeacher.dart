@@ -269,8 +269,15 @@ class _SubstituteClassTeacherState extends State<SubstituteClassTeacher> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: size.height * 0.02),
-            _buildFilterButtons(size),
-            SizedBox(height: size.height * 0.01),
+            Row(
+              children: [
+                Expanded(child: buildTabButton('Absenteeism')),
+                SizedBox(width: 8),
+                Expanded(child: buildTabButton('SubstitutionLog')),
+              ],
+            ),
+         //   _buildFilterButtons(size),
+            SizedBox(height: size.height * 0.015),
             isLoading ? Center(
               child: LoadingAnimationWidget.threeArchedCircle(
                 color: themeObj.primayColor,
@@ -278,10 +285,14 @@ class _SubstituteClassTeacherState extends State<SubstituteClassTeacher> {
               ),
             ) :
             selectedFilter == "Absenteeism" ? Column(children: [
-              absenteeismData!['ClassTeachers']==null || absenteeismData!.isEmpty?const Center(child: Text("No teacher is on Leave Today"),):
+              absenteeismData!['ClassTeachers']==null || absenteeismData!.isEmpty? SizedBox(
+                  height: size.height*0.7,
+                  child: Center(child: Text("No teacher is on Leave Today",style: TextStyle(fontSize: 18, color: Colors.grey[600]),),)):
               absenteeism()
             ],) :Column(children: [
-              substitutionLogData!['history']==null || substitutionLogData!.isEmpty?const Center(child: Text("No teacher is on Leave Today"),):
+              substitutionLogData!['history']==null || substitutionLogData!.isEmpty? SizedBox(
+                  height: size.height*0.7,
+                  child: Center(child: Text("No teacher is on Leave Today",style: TextStyle(fontSize: 18, color: Colors.grey[600]),),)):
               substitutionLogTable(),
             ],)
 
@@ -292,41 +303,67 @@ class _SubstituteClassTeacherState extends State<SubstituteClassTeacher> {
     );
   }
 
-  Widget _buildFilterButtons(Size size) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: ['Absenteeism', 'SubstitutionLog'].map((filter) {
-        return Padding(
-          padding: EdgeInsets.only(right: size.width * 0.02),
-          child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                selectedFilter = filter;
-              });
-            },
-
-            style: ElevatedButton.styleFrom(
-              backgroundColor: selectedFilter == filter
-                  ? themeObj.primayColor
-                  : const Color.fromRGBO(209, 213, 219, 1),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-
-              ),
-            ),
-            child: Text(
-              filter,
-              style: GoogleFonts.openSans(
-                color: themeObj.textBlack,
-                fontWeight: FontWeight.w400,
-                fontSize: size.width * 0.035,
-              ),
-            ),
+  Widget buildTabButton(String title) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      decoration: BoxDecoration(
+        color: selectedFilter == title ? themeObj.primayColor : Colors.grey[300],
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: selectedFilter == title
+            ? [BoxShadow(color: themeObj.primayColor.withOpacity(0.3), blurRadius: 8, offset: Offset(0, 4))]
+            : [],
+      ),
+      child: TextButton(
+        onPressed: () {
+          setState(() {
+            selectedFilter = title;
+          });
+        },
+        child: Text(
+          title,
+          style: TextStyle(
+            color: selectedFilter == title ? Colors.white : Colors.black87,
+            fontWeight: FontWeight.bold,
           ),
-        );
-      }).toList(),
+        ),
+      ),
     );
   }
+
+  // Widget _buildFilterButtons(Size size) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //     children: ['Absenteeism', 'SubstitutionLog'].map((filter) {
+  //       return Padding(
+  //         padding: EdgeInsets.only(right: size.width * 0.02),
+  //         child: ElevatedButton(
+  //           onPressed: () {
+  //             setState(() {
+  //               selectedFilter = filter;
+  //             });
+  //           },
+  //
+  //           style: ElevatedButton.styleFrom(
+  //             backgroundColor: selectedFilter == filter
+  //                 ? themeObj.primayColor
+  //                 : const Color.fromRGBO(209, 213, 219, 1),
+  //             shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(8),
+  //
+  //             ),
+  //           ),
+  //           child: Text(
+  //             filter,
+  //             style: TextStyle(
+  //               color: _selectedTab == title ? Colors.white : Colors.black87,
+  //               fontWeight: FontWeight.bold,
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     }).toList(),
+  //   );
+  // }
 
   Widget absenteeism() {
 

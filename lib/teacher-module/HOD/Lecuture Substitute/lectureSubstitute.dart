@@ -21,7 +21,7 @@ class _LectureSubstituteState extends State<LectureSubstitute> {
   bool isLoading = true;
   bool isLoadingMore = false;
   CustomTheme themeObj=CustomTheme();
-  String selectedFilter = 'Absenteeism(Today)';
+  String selectedFilter = 'Absenteeism';
   SubstituteSubjectTeacherApi apiObj=SubstituteSubjectTeacherApi();
   Map<String , dynamic>? absenteeismData;
   Map<String , dynamic>? substitutionLogData;
@@ -328,7 +328,13 @@ class _LectureSubstituteState extends State<LectureSubstitute> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: size.height * 0.02),
-            _buildFilterButtons(size),
+            Row(
+              children: [
+                Expanded(child: buildTabButton('Absenteeism')),
+                SizedBox(width: 8),
+                Expanded(child: buildTabButton('SubstitutionLog')),
+              ],
+            ),
             SizedBox(height: size.height * 0.01),
             isLoading ? Center(
               child: LoadingAnimationWidget.threeArchedCircle(
@@ -336,7 +342,7 @@ class _LectureSubstituteState extends State<LectureSubstitute> {
                 size: 50,
               ),
             ) :
-            selectedFilter == "Absenteeism(Today)" ? Column(children: [
+            selectedFilter == "Absenteeism" ? Column(children: [
               absenteeismData!['Teachers']==null || absenteeismData!.isEmpty?const Center(child: Text("No teacher is on Leave Today"),):
               absenteeism()
             ],) :Column(children: [
@@ -350,42 +356,33 @@ class _LectureSubstituteState extends State<LectureSubstitute> {
 
     );
   }
-
-  Widget _buildFilterButtons(Size size) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: ['Absenteeism(Today)', 'SubstitutionLog(History)'].map((filter) {
-        return Padding(
-          padding: EdgeInsets.only(right: size.width * 0.01),
-          child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                selectedFilter = filter;
-              });
-            },
-
-            style: ElevatedButton.styleFrom(
-              backgroundColor: selectedFilter == filter
-                  ? themeObj.primayColor
-                  : const Color.fromRGBO(209, 213, 219, 1),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-
-              ),
-            ),
-            child: Text(
-              filter,
-              style: GoogleFonts.openSans(
-                color: themeObj.textBlack,
-                fontWeight: FontWeight.w400,
-                fontSize: size.width * 0.03,
-              ),
-            ),
+  Widget buildTabButton(String title) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      decoration: BoxDecoration(
+        color: selectedFilter == title ? themeObj.primayColor : Colors.grey[300],
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: selectedFilter == title
+            ? [BoxShadow(color: themeObj.primayColor.withOpacity(0.3), blurRadius: 8, offset: Offset(0, 4))]
+            : [],
+      ),
+      child: TextButton(
+        onPressed: () {
+          setState(() {
+            selectedFilter = title;
+          });
+        },
+        child: Text(
+          title,
+          style: TextStyle(
+            color: selectedFilter == title ? Colors.white : Colors.black87,
+            fontWeight: FontWeight.bold,
           ),
-        );
-      }).toList(),
+        ),
+      ),
     );
   }
+
 
   Widget absenteeism() {
 

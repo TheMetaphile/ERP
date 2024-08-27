@@ -16,8 +16,8 @@ class StudentFeesAPi{
               return "$currentYear-${nextYear.toString().substring(2)}";
             }
             String session=calculateCurrentSession();
-
-        final url = Uri.parse('$_baseUrl/fee/fetch/classTeacher?&start=0&end=10&session=$session');
+      print("start $start");
+        final url = Uri.parse('$_baseUrl/fee/fetch/classTeacher?&start=$start&end=5&session=$session');
 
         try {
           final response = await http.get(

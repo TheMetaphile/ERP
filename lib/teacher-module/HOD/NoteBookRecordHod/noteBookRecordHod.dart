@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:untitled/APIs/HOD/NoteBookRecordHODAPi/noteBookRecordAPI.dart';
 import 'package:untitled/APIs/Teacher%20Module/NoteBookReord/noteBookRecordAPI.dart';
 import 'package:untitled/teacher-module/NoteBookRecord/previousRecord.dart';
 import 'package:untitled/utils/theme.dart';
 import 'package:untitled/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../APIs/HOD/NoteBOokAPI/notebook.dart';
+import '../../../APIs/HOD/substituteClassTeacherAPI/substituteClassTeacherAPI.dart';
 import '../../../APIs/StudentsData/StudentApi.dart';
 
 
@@ -34,20 +35,12 @@ class _NoteBookRecordHodState extends State<NoteBookRecordHod> {
 
   List<Map<String, dynamic>> noteBookRecordList = [];
   bool isLoading = false;
-  NoteBookRecordHODAPI apiObj = NoteBookRecordHODAPI();
+  // NoteBookRecordHODAPI apiObj = NoteBookRecordHODAPI();
   String date = DateTime.now().toString().split(" ")[0];
   String session = '';
   Map<String, bool> editingStates = {};
+  NoteBooksRecords testing =NoteBooksRecords();
 
-  @override
-  void initState() {
-    super.initState();
-    initializeDropdowns();
-    session = calculateCurrentSession();
-    getStudentData();
-    notebookRecord();
-
-  }
 
   String calculateCurrentSession() {
     DateTime now = DateTime.now();
@@ -93,7 +86,7 @@ class _NoteBookRecordHodState extends State<NoteBookRecordHod> {
       String? accessToken = pref.getString("accessToken");
       if (accessToken == null) throw Exception("Access token is null");
 
-      List<dynamic> noteBookData = await apiObj.fetchNoteBookRecord(
+      List<dynamic> noteBookData = await testing.fetchNoteBooksRecords(
         accessToken,
         _selectedClass,
         _selectedSection,
@@ -124,7 +117,7 @@ class _NoteBookRecordHodState extends State<NoteBookRecordHod> {
       if (accessToken == null) {
         throw Exception('Access token is null');
       }
-      dynamic data =await apiObj.updateRemark(accessToken, docID, remark, session);
+      dynamic data =await testing.updateRemark(accessToken, docID, remark, session);
 
       if(data==true){
 
@@ -187,6 +180,16 @@ class _NoteBookRecordHodState extends State<NoteBookRecordHod> {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    initializeDropdowns();
+    session = calculateCurrentSession();
+    getStudentData();
+    notebookRecord();
+
+  }
+
   CustomTheme themeObj=CustomTheme();
   @override
   Widget build(BuildContext context) {
@@ -199,10 +202,26 @@ class _NoteBookRecordHodState extends State<NoteBookRecordHod> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: size.height*0.02),
             dropDownButton(size),
         
             SizedBox(height: size.height*0.01),
-            noteBookRecordList.isEmpty ? Center(child: Text("No Record Found")):Column(
+            noteBookRecordList.isEmpty ? SizedBox(
+              height: size.height*0.65,
+              child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.class_outlined, size: 100, color: Colors.grey[400]),
+                  SizedBox(height: 20),
+                  Text(
+                    "No NoteBook Record found",
+                    style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+                  ),
+                ],
+              ),
+            ),):
+            Column(
               children: [
         
                 Padding(
@@ -233,108 +252,71 @@ class _NoteBookRecordHodState extends State<NoteBookRecordHod> {
 
     );
   }
+
   Widget dropDownButton(Size size) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 2.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Card(
-              child: Container(
-                width: size.width * 0.3,
-                height: size.height * 0.05,
-                child:DropdownButton<String>(
-                  isExpanded: true,
-                  borderRadius: BorderRadius.circular(12),
-                  hint: Text("Classes", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(8),
-                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
-                  underline: Container(),
-                  value: _selectedClass.isEmpty ? null : _selectedClass,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedClass = newValue!;
-                      updateSections();
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _buildDropdown(size, "Class", _selectedClass, _storedData.keys.toList(), (newValue) {
+            setState(() {
+              _selectedClass = newValue!;
+              updateSections();
+            });
+          }),
+          SizedBox(width: size.width * 0.02),
+          _buildDropdown(size, "Section", _selectedSection, classSections, (newValue) {
+            setState(() {
+              _selectedSection = newValue!;
+              updateSubjects();
+            });
+          }),
+          SizedBox(width: size.width * 0.02),
+          _buildDropdown(size, "Subject", _selectedSubject, classSubjects, (newValue) {
+            setState(() {
+              _selectedSubject = newValue!;
 
-                    });
-                  },
-                  items: _storedData.keys.toList().map((String option) {
-                    return DropdownMenuItem<String>(
-                      value: option,
-                      child: Text(option, overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
-                    );
-                  }).toList(),
-                ),
+              notebookRecord();
+            });
+          }),
+        ],
+      ),
+    );
+  }
 
 
-              ),
-            ),
-            SizedBox(width: size.width * 0.02,),
-            Card(
-              child: Container(
-                width: size.width * 0.3,
-                height: size.height * 0.05,
-                child:DropdownButton<String>(
-                  isExpanded: true,
-                  borderRadius: BorderRadius.circular(12),
-                  hint: Text("Sections", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
-                  padding: EdgeInsets.all(8),
-                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
-                  alignment: Alignment.center,
-                  underline: Container(),
-                  value: _selectedSection.isEmpty ? null : _selectedSection,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedSection = newValue!;
-                      updateSubjects();
-
-                    });
-                  },
-                  items: classSections.map((String option) {
-                    return DropdownMenuItem<String>(
-                      value: option,
-                      child: Text(option, overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
-                    );
-                  }).toList(),
-                ),
-
-
-              ),
-            ),
-            SizedBox(width: size.width * 0.02,),
-            Card(
-              child: Container(
-                width: size.width * 0.3,
-                height: size.height * 0.05,
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  borderRadius: BorderRadius.circular(12),
-                  hint: Text("Subjects", style: GoogleFonts.openSans(color: themeObj.textgrey, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
-                  padding: EdgeInsets.all(8),
-                  icon: Icon(Icons.keyboard_arrow_down_sharp, color: themeObj.textgrey),
-                  alignment: Alignment.center,
-                  underline: Container(),
-                  value: _selectedSubject.isEmpty ? null : _selectedSubject,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedSubject = newValue!;
-
-                      notebookRecord();
-                    });
-                  },
-                  items: classSubjects.map((String option) {
-                    return DropdownMenuItem<String>(
-                      value: option,
-                      child: Text(option, overflow: TextOverflow.ellipsis, style: GoogleFonts.openSans(color: themeObj.textBlack, fontSize: size.width * 0.045, fontWeight: FontWeight.w600)),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-          ],
+  Widget _buildDropdown(Size size, String hint, String value, List<String> items, Function(String?) onChanged) {
+    return Container(
+      width: size.width * 0.3,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey.withOpacity(0.2),
+          //     spreadRadius: 1,
+          //     blurRadius: 5,
+          //     offset: Offset(0, 3),
+          //   ),
+          // ],
+          border: Border.all(color: Colors.grey)
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          isExpanded: true,
+          hint: Text(hint, style: GoogleFonts.poppins(color: themeObj.textgrey, fontSize: size.width * 0.035)),
+          value: value.isEmpty ? null : value,
+          onChanged: onChanged,
+          items: items.map((String option) {
+            return DropdownMenuItem<String>(
+              value: option,
+              child: Text(option, style: GoogleFonts.poppins(color: themeObj.textBlack, fontSize: size.width * 0.035)),
+            );
+          }).toList(),
+          icon: Icon(Icons.arrow_drop_down, color: themeObj.textgrey),
+          borderRadius: BorderRadius.circular(30),
+          dropdownColor: Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: 16),
         ),
       ),
     );

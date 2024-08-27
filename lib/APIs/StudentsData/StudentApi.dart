@@ -50,7 +50,7 @@ class StudentApi{
     }
   }
 
-  Future<List> fetchSingleUser(String accessToken, String email) async {
+  Future<List<dynamic>> fetchSingleUser(String accessToken, String email) async {
     final url = Uri.parse("$_baseUrl/fetchSingle/student");
 
     try {
