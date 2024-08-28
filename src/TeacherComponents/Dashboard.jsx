@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import TeacherDrawer from "./drawer/Drawer.jsx"
 import TeacherNavbar from "./navbar/navbar.jsx";
 import TeacherEnddrawer from "./enddrawer/enddrawer.jsx";
-import { messaging, getToken } from './firebase';
+import { messaging, getToken,onMessage } from './../firebase';
 
 export default function TeacherDashboard() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
