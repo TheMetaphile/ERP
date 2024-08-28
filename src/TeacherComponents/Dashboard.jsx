@@ -26,12 +26,13 @@ export default function TeacherDashboard() {
     // Request permission and get token as shown in the previous step
 
     // Handle incoming messages
-    const unsubscribe = onMessage(messaging, (payload) => {
+    const unsubscribe = onMessage(messaging, function (payload) {
       console.log('Message received. ', payload);
       // Customize notification handling here
       alert(`New message: ${payload.notification.title}`);
     });
     return () => unsubscribe();
+
   }, []);
 
   return (
