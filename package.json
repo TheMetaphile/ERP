@@ -20,6 +20,7 @@
     "date-fns": "^3.6.0",
     "face-api.js": "^0.22.2",
     "filesaver": "^0.0.13",
+    "firebase": "^10.13.0",
     "framer-motion": "^11.3.27",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",

@@ -78,15 +78,15 @@ const Stats = ({ stat }) => {
   };
 
   return (
-    <div className="bg-white p-8 border rounded-xl shadow-lg">
+    <div className="bg-white p-8 mobile:max-tablet:p-2 border rounded-xl shadow-lg">
 
-      <div className="grid grid-cols-2 md:grid-cols-2 gap-8">
-        <div className="bg-purple-50 p-6 rounded-lg shadow-md border">
-          <h2 className="text-xl font-semibold mb-4 text-purple-700">Percentage Distribution</h2>
+      <div className="grid grid-cols-2 mobile:max-tablet:grid-cols-1 gap-8">
+        <div className="bg-purple-50 p-6 mobile:max-tablet:p-1 rounded-lg shadow-md border">
+          <h2 className="text-xl mobile:max-tablet:text-sm font-semibold mb-4 text-purple-700">Percentage Distribution</h2>
           <Bar options={options} data={percentChartData} />
         </div>
-        <div className="bg-purple-50 p-6 rounded-lg shadow- border">
-          <h2 className="text-xl font-semibold mb-4 text-purple-700">Name Distribution</h2>
+        <div className="bg-purple-50 p-6 mobile:max-tablet:p-1 rounded-lg shadow- border">
+          <h2 className="text-xl mobile:max-tablet:text-sm  font-semibold mb-4 text-purple-700">Name Distribution</h2>
           <Bar options={options} data={nameChartData} />
         </div>
       </div>

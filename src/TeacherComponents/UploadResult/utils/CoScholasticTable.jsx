@@ -69,7 +69,7 @@ export default function CoScholasticTable({ students, term, Class }) {
             subject,
             grade: studentGrades[subject]
         }));
-        if(!email || !Class) return;
+        if (!email || !Class) return;
         const resultData = {
             email,
             class: Class,
@@ -95,13 +95,13 @@ export default function CoScholasticTable({ students, term, Class }) {
     };
 
     return (
-        <motion.div 
+        <motion.div
             className="w-full overflow-x-auto rounded-lg shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+            <table className="min-w-full whitespace-nowrap bg-white border border-gray-300 rounded-lg">
                 <thead>
                     <tr className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-lg leading-normal">
                         <th className="py-3 px-6 text-center rounded-tl-lg"><FaUserGraduate className="inline mr-2" />Roll No.</th>
@@ -114,8 +114,8 @@ export default function CoScholasticTable({ students, term, Class }) {
                 </thead>
                 <tbody className="text-gray-600 text-md font-normal">
                     {students.map((Student, index) => (
-                        <motion.tr 
-                            key={index} 
+                        <motion.tr
+                            key={index}
                             className={`border-b border-gray-200 hover:bg-gray-100 transition-colors duration-200 ${clickedIndex === index ? 'bg-blue-100' : ''}`}
                             onClick={() => handleClick(index)}
                             whileHover={{ scale: 1.01 }}

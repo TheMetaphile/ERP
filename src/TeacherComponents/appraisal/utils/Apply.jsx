@@ -6,7 +6,7 @@ function Apply() {
     const { authState } = useContext(AuthContext);
 
     return (
-        <div className="max-w-7xl mx-auto px-4 mobile:max-tablet:px-2 py-8 mobile:max-tablet:py-8">
+        <div className="max-w-7xl mx-auto px-4 mobile:max-tablet:px-1 py-8 mobile:max-tablet:py-8 ">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden">
 
                 <div className="bg-gradient-to-r from-purple-500 to-blue-300 py-6">

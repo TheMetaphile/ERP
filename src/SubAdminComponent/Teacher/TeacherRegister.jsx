@@ -167,7 +167,7 @@ export default function TeacherRegister() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="mx-4 pt-4 bg-gradient-to-br from-purple-50 to-white rounded-lg shadow-xl p-8 mobile:max-tablet:p-2"
+      className="mx-4 pt-4 bg-gradient-to-br from-purple-50 to-white rounded-lg shadow-xl p-8 mobile:max-tablet:p-2 mobile:max-tablet:mx-2 mobile:max-tablet:mt-2"
     >
       <ToastContainer />
       <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-purple-700 mb-8 text-center">Add New Teacher</h1>

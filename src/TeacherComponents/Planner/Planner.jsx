@@ -15,7 +15,7 @@ function Planner() {
     console.log(selectedClass, selectedSection, selectedSubject)
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -23,10 +23,10 @@ function Planner() {
         >
             <ToastContainer />
             <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:pl-1 py-4'>
-                <motion.h1 
+                <motion.h1
                     initial={{ y: -20 }}
                     animate={{ y: 0 }}
-                    className="text-3xl mobile:max-tablet:text-2xl whitespace-nowrap font-medium mb-2 text-black"
+                    className="text-3xl mobile:max-tablet:text-lg whitespace-nowrap font-medium mb-2 text-black"
                 >
                     Weekly Plan
                 </motion.h1>
@@ -40,7 +40,7 @@ function Planner() {
                         <FaFilter className="mr-2" /> Filter
                     </motion.button>
                     {isDropdownVisible && (
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             className='flex fixed left-0 right-0 bg-white pt-1 p-4 gap-2 justify-between mobile:max-tablet:flex-col shadow-lg'
@@ -48,7 +48,7 @@ function Planner() {
                             <Selection
                                 setClass={setSelectedClass}
                                 setSection={setSelectedSection}
-                                setSubject={setSelectedSubject} 
+                                setSubject={setSelectedSubject}
                             />
                         </motion.div>
                     )}
@@ -58,7 +58,7 @@ function Planner() {
                     <Selection
                         setClass={setSelectedClass}
                         setSection={setSelectedSection}
-                        setSubject={setSelectedSubject} 
+                        setSubject={setSelectedSubject}
                     />
                 </div>
             </div>

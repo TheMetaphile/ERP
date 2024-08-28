@@ -149,7 +149,7 @@ const TeacherNotice = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="mt-8 mx-auto bg-purple-50  border rounded-xl shadow-lg p-6"
+      className="mt-8 mx-auto bg-purple-50  border rounded-xl shadow-lg p-6 mobile:max-tablet:p-2"
 
     >
       <motion.select

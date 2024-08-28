@@ -88,7 +88,7 @@ function StudentFee() {
         >
             <ToastContainer />
 
-            <div className='my-6 mobile:max-tablet:px-6 mobile:max-tablet:m-0 flex w-full justify-between items-center'>
+            <div className='my-6 mobile:max-tablet:px-1 mobile:max-tablet:m-0 flex w-full justify-between items-center'>
                 <h1 className="text-3xl mobile:max-tablet:text-lg font-medium text-black mb-2">Student Fee</h1>
 
                 <Selection setFilter={setFilter} />

@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import {  useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../../../../Context/AuthContext";
 import axios from "axios";
 import Switch from "./switch";
-import {  ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { BASE_URL_Login } from "../../../../../Config";
 import { motion } from "framer-motion";
 import { AiOutlineArrowLeft } from "react-icons/ai";
@@ -65,7 +65,7 @@ const RecordDetailsHOD = () => {
       <ToastContainer />
       <div className="flex justify-between items-center mb-4">
         <motion.h1
-          className="text-3xl font-medium text-black mobile:max-tablet:text-2xl whitespace-nowrap mb-2 "
+          className="text-3xl font-medium text-black mobile:max-tablet:text-lg whitespace-nowrap mb-2 "
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -133,7 +133,7 @@ const RecordDetailsHOD = () => {
       </div>
 
       <motion.h1
-        className="text-3xl font-medium text-black mobile:max-tablet:text-2xl whitespace-nowrap my-3"
+        className="text-3xl font-medium text-black mobile:max-tablet:text-lg whitespace-nowrap my-3"
         initial={{ x: -50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -185,7 +185,7 @@ const RecordDetailsHOD = () => {
                 <td className="py-3 px-6 text-center whitespace-nowrap">{topic}</td>
                 <td className="py-3 px-6 text-center">{chapter}</td>
                 <td className="flex py-3 px-6 justify-center">
-                  <Switch checked={true}  />
+                  <Switch checked={true} />
                 </td>
               </motion.tr>
             ))}

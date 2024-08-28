@@ -28,13 +28,13 @@ function AssignSubject() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-tablet:mt-6 bg-secondary-50"
+            className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mb-3 no-scrollbar bg-secondary-50 mobile:max-tablet:mx-2.5"
         >
             <motion.h1
                 initial={{ y: -50 }}
                 animate={{ y: 0 }}
                 transition={{ type: "spring", stiffness: 100 }}
-                className="text-3xl p-4 mobile:max-tablet:text-2xl font-medium text-black400 flex items-center"
+                className="text-3xl p-4 mobile:max-tablet:text-lg font-medium text-black400 flex items-center"
             >
                 <FaChalkboardTeacher className="mr-2" />Assign Subject Teacher </motion.h1>
 

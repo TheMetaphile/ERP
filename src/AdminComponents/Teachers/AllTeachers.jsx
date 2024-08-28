@@ -124,7 +124,7 @@ export default function AllTeachers() {
     return (
         <div className="flex flex-col mx-4">
             <ToastContainer />
-            <div className="mt-4 mobile:max-tablet:w-full mobile:max-tablet:mx-0 mobile:max-tablet:my-8">
+            <div className="mt-4 mobile:max-tablet:w-full mobile:max-tablet:mx-0 mobile:max-tablet:my-8 mobile:max-tablet:mb-1">
                 <TeacherStats />
             </div>
             <div className="flex items-center justify-between">

@@ -120,7 +120,7 @@ function ReportCardAdmin() {
       }
     }
   };
-  
+
   const itemVariants = {
     hidden: { y: 10, opacity: 0 },
     visible: {
@@ -136,7 +136,7 @@ function ReportCardAdmin() {
 
   return (
     <motion.div
-      className=" min-h-screen p-4"
+      className=" min-h-screen p-4 mobile:max-tablet:px-2"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -144,10 +144,10 @@ function ReportCardAdmin() {
       <ToastContainer />
 
       <motion.div
-        className="flex justify-between items-center  mb-6"
+        className="flex justify-between items-center  mb-6 mobile:max-tablet:mb-3"
         variants={itemVariants}
       >
-        <h1 className="text-3xl font-medium text-black">Report Card</h1>
+        <h1 className="text-3xl font-medium text-black mobile:max-tablet:text-lg">Report Card</h1>
         <div className="hidden laptop:flex items-center space-x-4">
           <Selection
             Class={Class}
@@ -161,7 +161,7 @@ function ReportCardAdmin() {
       </motion.div>
 
       <motion.div
-        className="bg-white rounded-lg shadow-lg overflow-hidden"
+        className="bg-white rounded-lg shadow-lg  overflow-auto"
         variants={itemVariants}
       >
         {loading && userData.length === 0 ? (
@@ -173,7 +173,7 @@ function ReportCardAdmin() {
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            className='w-full border'
+            className='w-full border text-center'
           >
             <Header headings={['Name', 'Class', 'Section', 'Email']} />
             <AnimatePresence>
@@ -188,8 +188,8 @@ function ReportCardAdmin() {
                   <motion.tr
                     key={detail.email}
                     variants={itemVariants}
-                    // whileHover={{ scale: 1.01, backgroundColor: "#F3E8FF" }}
-                    // transition={{ type: 'spring', stiffness: 300 }}
+                  // whileHover={{ scale: 1.01, backgroundColor: "#F3E8FF" }}
+                  // transition={{ type: 'spring', stiffness: 300 }}
                   >
                     <td className="py-4 px-6">
                       <Link to={`/Admin-Dashboard/Result/${detail.email}?session=${selectedSession}&Class=${Class}`}>

@@ -173,7 +173,7 @@ export default function StudentsList() {
 
     return (
         <motion.div
-            className="min-h-screen p-4"
+            className="min-h-screen p-4 mobile:max-tablet:px-2"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
@@ -181,10 +181,10 @@ export default function StudentsList() {
             <ToastContainer />
 
             <motion.div
-                className="flex justify-between items-center  mb-6"
+                className="flex justify-between items-center  mb-6 mobile:max-tablet:mb-3"
                 variants={itemVariants}
             >
-                <h1 className="text-3xl font-medium text-black">All Students Data</h1>
+                <h1 className="text-3xl mobile:max-tablet:text-lg font-medium text-black">All Students Data</h1>
                 <motion.button
                     className="p-2 block tablet:hidden bg-purple-600 text-white rounded-md shadow-md hover:bg-purple-700 transition duration-300 ease-in-out"
                     whileHover={{ scale: 1.05 }}
@@ -233,7 +233,7 @@ export default function StudentsList() {
                 />
             </div>
             <motion.div
-            className="text-center"
+                className="text-center"
                 variants={itemVariants}
             >
                 {loading && userData.length > 0 && <Loading />}
@@ -249,9 +249,9 @@ export default function StudentsList() {
                     </motion.button>
                 )}
 
-                <div className="overflow-x-auto">
-                    <table className="w-full rounded-md border shadow-lg">
-                        <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail',"Action"]} />
+                <div className="overflow-x-auto border rounded-lg">
+                    <table className="w-full rounded-md border shadow-lg whitespace-nowrap">
+                        <Header headings={['Roll Number', 'Name', 'Class', 'Section', 'Phone No.', 'E-mail', "Action"]} />
                         <motion.tbody
                             variants={tableBodyVariants}
                             initial="hidden"

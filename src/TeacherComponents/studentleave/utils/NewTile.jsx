@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {  FaChevronDown, FaUserGraduate, FaCalendarAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaChevronDown, FaUserGraduate, FaCalendarAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Student_Leave } from '../../../Config';
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 export default function NewTile({ data, setData }) {
     const [expanded, setExpanded] = useState(null);
@@ -16,13 +16,13 @@ export default function NewTile({ data, setData }) {
     const handleClick = (index) => {
         setExpanded(expanded === index ? null : index);
     }
-    console.log(data,"*****************data***********************");
+    console.log(data, "*****************data***********************");
     console.log('setData:', setData);
 
-    const handleStatusUpdate = async (leaveId, status, email,index) => {
+    const handleStatusUpdate = async (leaveId, status, email, index) => {
         console.log('id', leaveId, 'status', status, 'email', email)
         setLoading(true);
-        
+
         try {
             const response = await axios.put(`${BASE_URL_Student_Leave}/leave/update`,
                 {
@@ -35,15 +35,15 @@ export default function NewTile({ data, setData }) {
                     }
                 }
             );
-            if(response.status===200){
+            if (response.status === 200) {
                 console.log(`Leave ${leaveId} status updated to ${status}:`, response.data);
                 toast.success(`Status ${status}`);
                 console.log(data.filter(leave => leave._id !== leaveId));
                 setData(data.filter(leave => leave._id !== leaveId));
             }
-            
+
         } catch (err) {
-            console.error("Error updating status",err);
+            console.error("Error updating status", err);
             toast.error(err);
             setError(`Error updating status: ${err}`);
         } finally {
@@ -62,7 +62,7 @@ export default function NewTile({ data, setData }) {
     };
 
     return (
-        <motion.div 
+        <motion.div
             className="w-full space-y-4"
             initial="hidden"
             animate="visible"
@@ -70,13 +70,13 @@ export default function NewTile({ data, setData }) {
         >
             {data.length > 0 ? (
                 data.filter(student => student.status === "Pending").map((student, studentIndex) => (
-                    <motion.div 
-                        key={studentIndex} 
+                    <motion.div
+                        key={studentIndex}
                         className="border border-blue-200 p-4 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300"
                         whileHover={{ scale: 1.02 }}
                         layout
                     >
-                        <div className="flex justify-between items-center cursor-pointer" onClick={() => handleClick(`${studentIndex}`)}>
+                        <div className="flex justify-between items-center cursor-pointer mobile:max-tablet:flex-col mobile:max-tablet:items-start mobile:max-tablet:gap-2" onClick={() => handleClick(`${studentIndex}`)}>
                             <div className="flex items-center space-x-4">
                                 <img src={student.profileLink} alt="" className="w-12 h-12 rounded-full border-2 border-blue-300" />
                                 <div>
@@ -115,7 +115,7 @@ export default function NewTile({ data, setData }) {
                                     <div className="mt-4 flex space-x-4">
                                         <motion.button
                                             className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition-colors duration-300"
-                                            onClick={() => handleStatusUpdate(student._id, 'Approved', student.email,studentIndex)}
+                                            onClick={() => handleStatusUpdate(student._id, 'Approved', student.email, studentIndex)}
                                             disabled={loading}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
@@ -124,7 +124,7 @@ export default function NewTile({ data, setData }) {
                                         </motion.button>
                                         <motion.button
                                             className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition-colors duration-300"
-                                            onClick={() => handleStatusUpdate(student._id, 'Rejected', student.email,studentIndex)}
+                                            onClick={() => handleStatusUpdate(student._id, 'Rejected', student.email, studentIndex)}
                                             disabled={loading}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
@@ -138,7 +138,7 @@ export default function NewTile({ data, setData }) {
                     </motion.div>
                 ))
             ) : (
-                <motion.div 
+                <motion.div
                     className="text-center text-blue-600 text-lg"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -149,13 +149,13 @@ export default function NewTile({ data, setData }) {
             )}
 
             {data.filter(student => student.status === 'Approved').map((student, studentIndex) => (
-                <motion.div 
-                    key={student._id} 
+                <motion.div
+                    key={student._id}
                     className="border border-green-200 p-4 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300"
                     whileHover={{ scale: 1.02 }}
                     layout
                 >
-                    <div className="flex justify-between items-center cursor-pointer" onClick={() => handleClick(studentIndex)}>
+                    <div className="flex justify-between items-center cursor-pointer mobile:max-tablet:flex-col mobile:max-tablet:items-start mobile:max-tablet:gap-2" onClick={() => handleClick(studentIndex)}>
                         <div className="flex items-center space-x-4">
                             <img src={student.profileLink} alt="" className="w-12 h-12 rounded-full border-2 border-green-300" />
                             <div>
@@ -203,13 +203,13 @@ export default function NewTile({ data, setData }) {
             ))}
 
             {data.filter(student => student.status === 'Rejected').map((student, studentIndex) => (
-                <motion.div 
-                    key={student._id} 
+                <motion.div
+                    key={student._id}
                     className="border border-red-200 p-4 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300"
                     whileHover={{ scale: 1.02 }}
                     layout
                 >
-                    <div className="flex justify-between items-center cursor-pointer" onClick={() => handleClick(studentIndex)}>
+                    <div className="flex justify-between items-center cursor-pointer mobile:max-tablet:flex-col mobile:max-tablet:items-start mobile:max-tablet:gap-2" onClick={() => handleClick(studentIndex)}>
                         <div className="flex items-center space-x-4">
                             <img src={student.profileLink} alt="" className="w-12 h-12 rounded-full border-2 border-red-300" />
                             <div>

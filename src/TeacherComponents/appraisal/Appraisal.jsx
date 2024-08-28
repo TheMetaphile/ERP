@@ -23,7 +23,7 @@ function Appraisal() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col px-6 items-start mt-6 mb-8 mx-auto"
+      className="flex flex-col px-6 items-start mt-6 mb-8 mx-auto mobile:max-tablet:px-2"
     >
       <ToastContainer />
       <motion.h1

@@ -18,7 +18,7 @@ export default function DoughnutChart({ chartData, title }) {
     },
   };
   return (
-    <div className="flex flex-col h-full justify-evenly items-center shadow-lg bg-purple-200 border border-gray-300 rounded-lg px-4 mobile:max-laptop:py-2 ">
+    <div className="flex flex-col h-full justify-evenly items-center shadow-lg border border-gray-300 rounded-lg px-4 mobile:max-laptop:py-2 ">
       <div className="w-11/12">
         <h2 className="mb-2  whitespace-nowrap text-2xl mobile:max-tablet:text-xl text-center font-medium">{title}</h2>
         <div >

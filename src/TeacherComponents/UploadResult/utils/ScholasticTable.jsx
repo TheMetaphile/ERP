@@ -36,7 +36,7 @@ export default function ScholasticTable({ students, term, Class, subject }) {
 
     const fetchLastNoteBookChecked = async () => {
         try {
-            if(!subject) return;
+            if (!subject) return;
             const responses = await Promise.all(
                 students.map(student =>
                     axios.get(`${BASE_URL_Result}/notebook/fetch/student/last?subject=${subject}&email=${student.email}`, {
@@ -135,9 +135,9 @@ export default function ScholasticTable({ students, term, Class, subject }) {
             console.error('Error saving result:', error.response?.data?.error);
         }
     };
-    
+
     return (
-        <motion.div 
+        <motion.div
             className="w-full overflow-x-auto rounded-lg shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -161,7 +161,7 @@ export default function ScholasticTable({ students, term, Class, subject }) {
                 ))}
             </div>
             <div className="overflow-auto">
-                <table className="min-w-full bg-white border border-gray-300 rounded-lg text-center">
+                <table className="min-w-full whitespace-nowrap bg-white border border-gray-300 rounded-lg text-center">
                     <thead>
                         <tr className="bg-gradient-to-r from-blue-500 to-purple-500 text-white ">
                             <th className="py-3 px-2 text-center  rounded-tl-lg"><FaUserGraduate className="inline mr-2" />Roll No.</th>
@@ -176,18 +176,18 @@ export default function ScholasticTable({ students, term, Class, subject }) {
                     </thead>
                     <tbody className="text-gray-600 text-md font-normal ">
                         {students.map((student, index) => (
-                            <motion.tr 
-                                key={index} 
+                            <motion.tr
+                                key={index}
                                 className={`border-b border-gray-200 hover:bg-gray-100 transition-colors duration-200 ${clickedIndex === index ? 'bg-blue-100' : ''}`}
                                 onClick={() => handleClick(index)}
                                 whileHover={{ scale: 1.01 }}
                                 transition={{ type: "spring", stiffness: 300 }}
                             >
                                 <td className="py-3 px-2 text-center ">
-                                    
+
                                     {student.rollNumber}</td>
                                 <td className="py-3 px-2 text-center flex gap-2 items-center">
-                                <img src={student.profileLink} alt="" className="h-10 w-10 rounded-full"/>
+                                    <img src={student.profileLink} alt="" className="h-10 w-10 rounded-full" />
                                     {student.name}</td>
                                 <td className="py-3 px-2 text-center ">
                                     {marks[student.email]?.lastNoteBookChecked?.topic || 'No data'}

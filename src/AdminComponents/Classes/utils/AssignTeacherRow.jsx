@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { FaChevronUp, FaChevronDown ,FaUserGraduate } from "react-icons/fa6";
+import { FaChevronUp, FaChevronDown, FaUserGraduate } from "react-icons/fa6";
 import AuthContext from '../../../Context/AuthContext';
 import Loading from './../../../LoadingScreen/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { BASE_URL_Login, BASE_URL_ClassTeacher } from '../../../Config';
-import { MdEdit, MdDeleteForever, MdCheck, MdCancel,MdAdd  } from "react-icons/md";
-import { motion, AnimatePresence } from 'framer-motion'; 
+import { MdEdit, MdDeleteForever, MdCheck, MdCancel, MdAdd } from "react-icons/md";
+import { motion, AnimatePresence } from 'framer-motion';
 export default function AssignTeacherRow({ Class }) {
 
     const [expanded, setExpanded] = useState(false);
     const [sectionsDetails, setSections] = useState([]);
     const [newSection, setNewSection] = useState('');
     const [email, setEmail] = useState('');
-    const [name,setName]=useState('');
+    const [name, setName] = useState('');
     const [temp, setTemp] = useState();
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -115,7 +115,7 @@ export default function AssignTeacherRow({ Class }) {
         try {
             const newData = {
                 section: newSection,
-                name : name
+                name: name
             }
             console.log(newData)
             if (email) {
@@ -164,18 +164,18 @@ export default function AssignTeacherRow({ Class }) {
                     teacherEmail: email
                 });
                 if (response.status === 200) {
-                    toast.success('Teacher Updated successfully');     
+                    toast.success('Teacher Updated successfully');
                     const updatedSection = {
-                        ...sectionsDetails[index], 
-                        name: name         
+                        ...sectionsDetails[index],
+                        name: name
                     };
-            
+
                     const updatedSections = [
-                        ...sectionsDetails.slice(0, index), 
-                        updatedSection,                      
-                        ...sectionsDetails.slice(index + 1)  
+                        ...sectionsDetails.slice(0, index),
+                        updatedSection,
+                        ...sectionsDetails.slice(index + 1)
                     ];
-            
+
                     setSections(updatedSections);
                     // fetchSections();
                     setEmail('');
@@ -185,7 +185,7 @@ export default function AssignTeacherRow({ Class }) {
         } catch (error) {
             toast.error('Error updating teacher');
         }
-        finally{
+        finally {
             setShowSuggestions(false);
         }
     };
@@ -212,30 +212,30 @@ export default function AssignTeacherRow({ Class }) {
     };
 
     return (
-        <motion.div 
-            key={Class} 
+        <motion.div
+            key={Class}
             className="w-full mb-4 rounded-lg mt-2 shadow-md border border-secondary-200 overflow-hidden"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             transition={{ duration: 0.3 }}
         >
-            <motion.div 
-                className="flex justify-between items-center p-3 bg-secondary-100 hover:bg-secondary-200 cursor-pointer" 
+            <motion.div
+                className="flex justify-between items-center p-3 bg-secondary-100 hover:bg-secondary-200 cursor-pointer"
                 onClick={handleClick}
-        
+
             >
                 <div className="flex items-center">
                     <FaUserGraduate className="text-secondary-600 mr-2" />
                     <div className="text-lg font-semibold text-secondary-800">{Class}</div>
                 </div>
-                <motion.div 
+                <motion.div
                     animate={{ rotate: expanded ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
                 >
                     {expanded ? <FaChevronUp className="text-secondary-600" /> : <FaChevronDown className="text-secondary-600" />}
                 </motion.div>
             </motion.div>
-    
+
             <AnimatePresence>
                 {expanded && (
                     <motion.div
@@ -250,13 +250,13 @@ export default function AssignTeacherRow({ Class }) {
                             <h1 className="w-36 text-lg font-medium">Class Teacher</h1>
                             <h1 className="w-36 text-lg font-medium text-center">Action</h1>
                         </div>
-                        
+
                         {!loading ? (
                             sectionsDetails.length > 0 ? (
                                 <div>
                                     {sectionsDetails.map((details, index) => (
-                                        <motion.div 
-                                            key={index} 
+                                        <motion.div
+                                            key={index}
                                             className={`flex justify-between w-full py-2 px-2 h-fit border-b border-secondary-200 ${index % 2 === 0 ? 'bg-secondary-50' : 'bg-white'}`}
                                             initial={{ opacity: 0, y: -20 }}
                                             animate={{ opacity: 1, y: 0 }}
@@ -294,18 +294,18 @@ export default function AssignTeacherRow({ Class }) {
                                             <div className='w-36 text-lg font-medium flex justify-center'>
                                                 {editingRow === index ? (
                                                     <div className='flex items-center gap-2'>
-                                                        <motion.button 
-                                                            whileHover={{ scale: 1.1 }} 
+                                                        <motion.button
+                                                            whileHover={{ scale: 1.1 }}
                                                             whileTap={{ scale: 0.9 }}
-                                                            className='bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center' 
+                                                            className='bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
                                                             onClick={() => handleConfirmClick(index)}
                                                         >
                                                             <MdCheck />
                                                         </motion.button>
-                                                        <motion.button 
-                                                            whileHover={{ scale: 1.1 }} 
+                                                        <motion.button
+                                                            whileHover={{ scale: 1.1 }}
                                                             whileTap={{ scale: 0.9 }}
-                                                            className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md' 
+                                                            className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md'
                                                             onClick={handleCancelEdit}
                                                         >
                                                             <MdCancel />
@@ -313,18 +313,18 @@ export default function AssignTeacherRow({ Class }) {
                                                     </div>
                                                 ) : (
                                                     <div className='flex items-center gap-2'>
-                                                        <motion.button 
-                                                            whileHover={{ scale: 1.1 }} 
+                                                        <motion.button
+                                                            whileHover={{ scale: 1.1 }}
                                                             whileTap={{ scale: 0.9 }}
-                                                            className='bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center' 
+                                                            className='bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
                                                             onClick={() => handleUpdateClick(index)}
                                                         >
                                                             <MdEdit />
                                                         </motion.button>
-                                                        <motion.button 
-                                                            whileHover={{ scale: 1.1 }} 
+                                                        <motion.button
+                                                            whileHover={{ scale: 1.1 }}
                                                             whileTap={{ scale: 0.9 }}
-                                                            className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center' 
+                                                            className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
                                                             onClick={() => handleDelete(index, details.section)}
                                                         >
                                                             <MdDeleteForever />
@@ -341,9 +341,9 @@ export default function AssignTeacherRow({ Class }) {
                         ) : (
                             <Loading />
                         )}
-                        
+
                         {showNewRow && (
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0, y: -20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 className={`flex justify-between w-full py-2 px-4 h-fit border border-secondary-300 ${sectionsDetails.length > 0 ? "rounded-b-lg" : "rounded-lg"} bg-secondary-50`}
@@ -376,16 +376,16 @@ export default function AssignTeacherRow({ Class }) {
                                     )}
                                 </div>
                                 <div className='flex items-center gap-2'>
-                                    <motion.button 
-                                        whileHover={{ scale: 1.1 }} 
+                                    <motion.button
+                                        whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
                                         className='bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md'
                                         onClick={handleAddSection}
                                     >
                                         Save
                                     </motion.button>
-                                    <motion.button 
-                                        whileHover={{ scale: 1.1 }} 
+                                    <motion.button
+                                        whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
                                         className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md'
                                         onClick={() => setShowNewRow(false)}
@@ -395,12 +395,12 @@ export default function AssignTeacherRow({ Class }) {
                                 </div>
                             </motion.div>
                         )}
-                        
-                        <motion.div 
+
+                        <motion.div
                             className="flex justify-center w-full px-3 py-3 h-fit "
-                           
+
                         >
-                            <motion.button 
+                            <motion.button
                                 className='px-4 py-2 rounded-lg flex items-center bg-purple-300 text-black'
                                 onClick={() => getNextAsciiValues(sectionsDetails.length > 0 ? sectionsDetails[sectionsDetails.length - 1].section : '@')}
                                 whileHover={{ scale: 1.05 }}

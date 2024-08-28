@@ -125,20 +125,20 @@ function NewAdmission() {
 
     return (
         <motion.div
-            className="w-full px-6 py-8 "
+            className="w-full px-6 py-8 mobile:max-tablet:px-2 "
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
             <ToastContainer />
-            <motion.div className="flex  md:flex-row items-center justify-between mb-8" variants={itemVariants}>
+            <motion.div className="flex mobile:max-tablet:flex-col  items-center justify-between mb-8" variants={itemVariants}>
                 <motion.h1
-                    className="text-4xl font-medium text-black mb-4 md:mb-0"
+                    className="text-4xl font-medium text-black mb-4 md:mb-0 mobile:max-tablet:text-lg"
                     whileHover={{ scale: 1.05 }}
                 >
                     New Admission
                 </motion.h1>
-                <div className="flex items-center md:flex-row  gap-4">
+                <div className="flex items-center mobile:max-tablet:flex-col  gap-4">
                     <motion.select
                         id="class"
                         value={Class}
@@ -203,9 +203,9 @@ function NewAdmission() {
                 variants={itemVariants}
             >
                 <div className="overflow-x-auto">
-                    <table className="w-full">
+                    <table className="w-full whitespace-nowrap">
                         <thead className="">
-                        <Header headings={['Name', 'Class', 'Gender', 'Percentage', 'Phone No.', 'E-mail', 'Action']} />
+                            <Header headings={['Name', 'Class', 'Gender', 'Percentage', 'Phone No.', 'E-mail', 'Action']} />
                         </thead>
                         <tbody className="divide-y divide-purple-200">
                             {loading && userData.length < 1 ? (

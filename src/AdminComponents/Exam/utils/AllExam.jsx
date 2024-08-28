@@ -201,7 +201,7 @@ export default function AllExam() {
             <ToastContainer />
 
             <motion.div
-                className="flex items-center justify-between"
+                className="flex items-center justify-between mobile:max-tablet:items-start mobile:max-tablet:flex-col"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}

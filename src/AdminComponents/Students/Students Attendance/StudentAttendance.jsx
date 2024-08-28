@@ -104,10 +104,10 @@ export default function StudentAttendance() {
             animate="visible"
         >
             <motion.div
-                className="flex justify-between items-center  py-4  text-black mb-4"
+                className="flex justify-between items-center  py-4  text-black mb-4 mobile:max-tablet:mb-0"
                 variants={itemVariants}
             >
-                <h1 className="text-3xl font-semibold mobile:max-tablet:text-xl">
+                <h1 className="text-3xl font-semibold mobile:max-tablet:text-lg">
                     Student's Attendance Details
                 </h1>
                 <motion.button
@@ -131,7 +131,8 @@ export default function StudentAttendance() {
                 </motion.div>
             )}
 
-            <motion.div className="w-full mb-4" variants={itemVariants}>
+            <motion.div className="w-full mb-4 mobile:max-tablet:hidden
+            " variants={itemVariants}>
                 <SearchBar
                     Class={Class}
                     Section={Section}
@@ -160,9 +161,9 @@ export default function StudentAttendance() {
                         </div>
                     </div>
                 ) : (
-                    <div className="flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 mobile:max-tablet:mt-20">
+                    <div className="flex flex-col rounded-lg border-gray-200 mb-4 mobile:max-tablet:">
                         <div className=" text-xl px-4 mt-4 mobile:max-tablet:text-sm ">                         Attendance Sheet Of Class {Class} {Section}, {year}                     </div>
-                        <div className="px-3">
+                        <div className="px-3 mobile:max-tablet:px-0">
                             <AttendanceStatusGridTile data={data} month={Month} />
                         </div>
                     </div>
