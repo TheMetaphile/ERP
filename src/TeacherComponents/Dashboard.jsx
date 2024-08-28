@@ -7,6 +7,7 @@ import TeacherEnddrawer from "./enddrawer/enddrawer.jsx";
 import { messaging, getToken, onMessage } from './../firebase';
 import AuthContext from "../Context/AuthContext.jsx";
 import { BASE_URL_Login } from "../Config.js";
+import SendNotification from "../SendNotification.jsx";
 
 export default function TeacherDashboard() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -25,11 +26,12 @@ export default function TeacherDashboard() {
     // Request permission and get token as shown in the previous step
 
     // Handle incoming messages
-    onMessage(messaging, (payload) => {
+    const unsubscribe = onMessage(messaging, (payload) => {
       console.log('Message received. ', payload);
       // Customize notification handling here
       alert(`New message: ${payload.notification.title}`);
     });
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -37,7 +39,7 @@ export default function TeacherDashboard() {
       <div className="sticky top-0 left-0 w-full px-2 z-50">
         <TeacherNavbar onDrawerToggle={toggleDrawer} onEndDrawerToggle={toggleEndDrawer} />
       </div>
-
+      {/* <SendNotification /> */}
       <div className="flex flex-grow h-screen">
         <div className={`mobile:max-tablet:absolute z-20 flex-shrink-0 transition-all duration-300 mobile:max-tablet:mt-2. ${isDrawerOpen ? 'w-60 h-full' : 'w-0'} overflow-y-auto no-scrollbar`}>
           <TeacherDrawer isOpen={isDrawerOpen} />
