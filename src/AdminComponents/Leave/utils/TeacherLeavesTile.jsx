@@ -84,8 +84,8 @@ export default function TeacherLeavesTile({ data }) {
                         transition={{ duration: 0.3, delay: teacherIndex * 0.1 }}
                     >
                         <div className="w-full">
-                            <div className="font-medium w-full text-base ml-2 flex text-center justify-between items-center">
-                                <div className="flex mobile:max-tablet:flex-wrap items-center">
+                            <div className="font-medium w-full text-base ml-2 flex text-center justify-between items-center mobile:max-sm:flex-col">
+                                <div className="flex mobile:max-tablet:flex-wrap items-center mobile:max-sm:">
                                     <div className="flex items-center">
                                         {teacher.AppliedBy && teacher.AppliedBy[0] && (
                                             <>
@@ -136,13 +136,13 @@ export default function TeacherLeavesTile({ data }) {
                                 </motion.div>
                             )}
                             <motion.div
-                                className="flex gap-2 font-medium text-base ml-2 mt-2 w-full"
+                                className="flex gap-2 font-medium text-base ml-2 mt-2 w-full "
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.3, delay: 0.1 }}
                             >
                                 {teacher.status === 'Approved' ? (
-                                    <div className="flex items-center justify-between w-full">
+                                    <div className="flex items-center justify-between w-full mobile:max-sm:flex-col mobile:max-sm:">
                                         <button
                                             className="p-1 rounded-lg border border-green-500 text-green-500 px-2 bg-green-200"
                                             disabled={loading}
@@ -166,7 +166,7 @@ export default function TeacherLeavesTile({ data }) {
                                         </div>
                                     </div>
                                 ) : teacher.status === 'Rejected' ? (
-                                    <div className="flex items-center justify-between w-full">
+                                    <div className="flex items-center justify-between w-full mobile:max-sm:flex-col">
                                         <button
                                             className="p-1 rounded-lg text-red-500 border border-red-500 px-2 bg-red-200"
                                             disabled={loading}

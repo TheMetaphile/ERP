@@ -132,9 +132,9 @@ function FeeDetails() {
             <ToastContainer />
 
             <div className='flex w-full justify-between whitespace-nowrap mobile:max-tablet:flex-col'>
-                <h1 className="text-2xl p-2">Student Fee Details</h1>
+                <h1 className="text-2xl p-2 mobile:max-tablet:text-lg">Student Fee Details</h1>
 
-                <div className='flex justify-end gap-2'>
+                <div className='flex justify-end gap-2 mobile:max-tablet:flex-wrap'>
                     <select
                         id="sessionSelector"
                         value={selectedSession}
@@ -184,9 +184,10 @@ function FeeDetails() {
                 </div>
             </div>
 
-            <div className='overflow-auto w-full'>
-                <div className=' mt-2  border rounded-lg'>
-                    <div className="flex justify-between  py-2  bg-gradient-to-r from-teal-400 to-blue-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap">
+            <div className=' w-full'>
+                <div className=' mt-2  border rounded-lg overflow-auto'>
+                    <div className="flex justify-between  py-2  bg-gradient-to-r from-teal-400 to-blue-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap mobile:max-tan
+                    w-fit">
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Roll No.
                         </h1>
@@ -216,40 +217,40 @@ function FeeDetails() {
                         <Loading />
                     ) : (
                         details.length > 0 ? (
-                            <div>
+                            <div className=' mobile:max-tablet:w-fit'>
                                 {details.map((details, index) => (
                                     // <Link to={`/Admin-Dashboard/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}&section=${details.section}`}>
-                                        <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`}
-                                        //  onClick={() => handleClick(index)}
-                                         >
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.rollNumber}
-                                            </h1>
-                                            <h1 className="w-44 text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                <img src={details.profileLink} alt="profile pic" className='w-10 h-10 rounded-full ' />
-                                                <div className='w-32'>
-                                                    {details.name}
-                                                </div>
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.section}
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.session}
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.totalfee}
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.discountAmount}
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.paid}
-                                            </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                                {details.payableFee || 'NA'}
-                                            </h1>
-                                        </div>
+                                    <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`}
+                                    //  onClick={() => handleClick(index)}
+                                    >
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.rollNumber}
+                                        </h1>
+                                        <h1 className="w-44 text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            <img src={details.profileLink} alt="profile pic" className='w-10 h-10 rounded-full ' />
+                                            <div className='w-32'>
+                                                {details.name}
+                                            </div>
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.section}
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.session}
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.totalfee}
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.discountAmount}
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.paid}
+                                        </h1>
+                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            {details.payableFee || 'NA'}
+                                        </h1>
+                                    </div>
                                     // {/* </Link> */}
 
                                 ))}

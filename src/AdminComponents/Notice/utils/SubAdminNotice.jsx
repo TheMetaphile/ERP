@@ -184,7 +184,7 @@ export default function () {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 className="bg-white shadow-lg rounded-lg p-3 border-l-4 border-purple-500"
               >
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-2 mobile:max-sm:flex-col mobile:max-sm:items-start">
                   <motion.h3
                     whileHover={{ scale: 1.05 }}
                     className="text-xl font-semibold text-purple-700 cursor-pointer"
@@ -298,7 +298,7 @@ export default function () {
                   )}
                 </motion.div>
 
-                <div className="flex items-center justify-between mt-4 text-sm text-gray-600">
+                <div className="flex items-center justify-between mt-4 text-sm text-gray-600 mobile:max-sm:flex-col mobile:max-sm:items-start">
                   <p>Date: {notice.date}</p>
                   <div className="flex items-center space-x-2">
                     <span>By:</span>

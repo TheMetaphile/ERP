@@ -78,7 +78,7 @@ function Employee() {
 
     return (
         <motion.div
-            className="flex flex-col px-6 items-start mt-8 mb-6 w-full  mx-auto"
+            className="flex flex-col px-6 items-start py-2 mb-6 w-full  mx-auto mobile:max-tablet:px-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -86,7 +86,7 @@ function Employee() {
             <ToastContainer />
 
             <motion.h1
-                className="text-3xl font-medium text-black mb-8 self-center"
+                className="text-3xl font-medium items-start text-black mb-2 self-center mobile:max-tablet:text-lg"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
@@ -94,9 +94,9 @@ function Employee() {
                 Employee Registration
             </motion.h1>
 
-            <div className="flex flex-col items-center justify-center w-full bg-purple-50 rounded-xl shadow-lg p-8">
+            <div className="flex flex-col items-center justify-center w-full bg-purple-50 rounded-xl shadow-lg p-8 mobile:max-tablet:px-2">
                 <ProgressBar step={step} />
-                <div className="relative w-full mt-8">
+                <div className="relative w-full">
                     <AnimatePresence mode='wait'>
                         <motion.div
                             key={step}

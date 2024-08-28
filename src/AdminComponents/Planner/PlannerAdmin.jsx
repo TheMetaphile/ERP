@@ -15,7 +15,7 @@ function PlannerAdmin() {
 
     return (
         <motion.div
-            className="overflow-y-auto w-full items-start px-2 no-scrollbar"
+            className="overflow-y-auto w-full items-start px-2 no-scrollbar mobile:max-sm:mt-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}

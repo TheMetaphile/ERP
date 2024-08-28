@@ -199,7 +199,7 @@ const AllNotice = () => {
                           )}
                         </span>
                         {editingIndex === index ? (
-                          <div className="flex space-x-2">
+                          <div className="flex space-x-2 mobile:max-tablet:space-x-0">
                             <motion.button
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}

@@ -71,10 +71,10 @@ export default function StudentLeaves() {
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
       opacity: 1,
-      transition: { 
-        staggerChildren: 0.1 
+      transition: {
+        staggerChildren: 0.1
       }
     }
   };
@@ -86,7 +86,7 @@ export default function StudentLeaves() {
 
 
   return (
-  <motion.div 
+    <motion.div
       className="flex flex-col space-y-6 mb-6 bg-purple-50 p-2 rounded-xl shadow-lg"
       variants={containerVariants}
       initial="hidden"
@@ -105,7 +105,7 @@ export default function StudentLeaves() {
           <option value="Rejected">Rejected</option>
         </select>
       </motion.div>
-      
+
       {loading ? (
         <Loading />
       ) : data.length === 0 ? (
@@ -113,12 +113,12 @@ export default function StudentLeaves() {
       ) : (
         <>
           {data.map((leave, index) => (
-            <motion.div 
-              key={index} 
+            <motion.div
+              key={index}
               className="rounded-lg border border-purple-200 p-5 bg-white shadow-md hover:shadow-lg transition duration-300"
               variants={itemVariants}
             >
-              <div className="flex justify-between cursor-pointer" onClick={() => handleClick(`${index}`)}>
+              <div className="flex justify-between cursor-pointer mobile:max-sm:flex-col" onClick={() => handleClick(`${index}`)}>
                 <div className="flex items-center space-x-3">
                   <img src={leave.profileLink} alt="" className="h-10 w-10 rounded-full object-cover" />
                   <p className="font-medium text-purple-800">{leave.name}</p>
@@ -131,7 +131,7 @@ export default function StudentLeaves() {
               </div>
               <AnimatePresence>
                 {expanded === `${index}` && (
-                  <motion.p 
+                  <motion.p
                     className="mt-3 text-purple-600"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
@@ -141,9 +141,9 @@ export default function StudentLeaves() {
                   </motion.p>
                 )}
               </AnimatePresence>
-              <div className="flex justify-between text-purple-600 mt-3 space-x-4">
+              <div className="flex justify-between text-purple-600 mt-3 space-x-4 mobile:max-sm:flex-col mobile:max-sm:space-x-0">
                 <span>Leave Taken on: {leave.startDate}</span>
-                <span>Expected Arrival: {leave.endDate}</span>
+                <span>Expected Arr: {leave.endDate}</span>
               </div>
             </motion.div>
           ))}

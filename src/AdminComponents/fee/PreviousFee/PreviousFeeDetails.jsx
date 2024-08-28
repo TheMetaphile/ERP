@@ -84,18 +84,18 @@ function PreviousFeeDetailsAdmin() {
             <ToastContainer />
 
             <div className='flex w-full justify-between whitespace-nowrap mobile:max-tablet:flex-col'>
-                <h1 className="text-2xl p-2">Previous Fee Details</h1>
+                <h1 className="text-2xl p-2 mobile:max-tablet:text-lg">Previous Fee Details</h1>
 
 
             </div>
 
-            <div className='overflow-auto w-full'>
-                <div className=' mt-2  border rounded-lg'>
-                    <div className="flex justify-between  py-2  bg-gradient-to-r from-teal-400 to-blue-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap">
-                        <h1 className="w-44 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+            <div className=' w-full'>
+                <div className=' mt-2  border rounded-lg overflow-auto'>
+                    <div className="flex justify-between  py-2  bg-gradient-to-r from-teal-400 to-blue-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap mobile:max-tablet:w-fit">
+                        <h1 className="w-44 mobile:max-tablet:w-60 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Name
                         </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-32 mobile:max-tablet:w-36 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Class
                         </h1>
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
@@ -121,7 +121,7 @@ function PreviousFeeDetailsAdmin() {
                         <Loading />
                     ) : (
                         details.length > 0 ? (
-                            <div>
+                            <div className=' mobile:max-tablet:w-fit'>
                                 {details.map((details, index) => (
                                     // <Link to={`/Admin-Dashboard/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}&section=${details.section}`}>
                                     <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`}

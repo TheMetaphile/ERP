@@ -23,7 +23,7 @@ function Details({ nextStep, handleChange, formData }) {
 
   return (
     <motion.div className="w-full px-4 py-6 bg-purple-50 rounded-lg shadow-lg" variants={containerVariants} initial="hidden" animate="visible">
-      <h1 className="text-3xl font-semibold mb-6 text-purple-800">Add Employee</h1>
+      <h1 className="text-3xl font-semibold mb-6 text-purple-800 mobile:max-tablet:text-xl">Add Employee</h1>
       <motion.div className="space-y-4" variants={inputVariants}>
         <div className="flex items-center space-x-2">
           <FaUser className="text-purple-600" />

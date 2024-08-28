@@ -231,7 +231,7 @@ function NewNotice({ setShowModal }) {
         }
     };
 
-    const addEmailId = (email,name) => {
+    const addEmailId = (email, name) => {
         if (!emailIds.includes(email)) {
             setEmailIds([...emailIds, email]);
             setName(name);
@@ -303,7 +303,7 @@ function NewNotice({ setShowModal }) {
                                             <img src={user.profileLink} alt="" className="w-6 h-6 rounded-full"></img>{user.name} </span>
                                         <button
                                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                                            onClick={() => addEmailId(user.email,user.name)}
+                                            onClick={() => addEmailId(user.email, user.name)}
                                         >
                                             Add
                                         </button>
@@ -437,7 +437,7 @@ function NewNotice({ setShowModal }) {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
             <div className="bg-white rounded-lg p-6">
                 <h2 className="text-xl font-bold mobile:max-tablet:font-normal mobile:max-tablet:w-1/4 mb-4">Write Notice</h2>
                 <div className="flex space-x-4 mb-4">
