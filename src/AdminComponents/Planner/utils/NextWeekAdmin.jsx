@@ -39,7 +39,8 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
 
-    const nextWeekFormattedDate = nextWeekStart.toISOString().split('T')[0];
+    const nextWeekFormattedDate = `${nextWeekStart.getFullYear()}-${ nextWeekStart.getMonth() <10 ? `0${nextWeekStart.getMonth()+1}` : nextWeekStart.getMonth()+1}-${nextWeekStart.getDate()}`;
+
     const [details, setDetails] = useState(defaultPlan());
 
     console.log(selectedTab)
