@@ -34,7 +34,6 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // NotificationServices.display(message, message.data["channel"]);
 }
 
 Future<void> main() async {
@@ -46,8 +45,10 @@ Future<void> main() async {
   bool status= await Permission.notification.isGranted;
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  print("Status $status");
   if(status){}
   else {
+    print("Status $status");
     if (await Permission.notification.isPermanentlyDenied) {
       await openAppSettings();
     } else {
@@ -170,17 +171,19 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     getDetails();
     FirebaseMessaging.onMessage.listen(firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onBackgroundMessage.call(firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessageOpenedApp.listen(firebaseMessagingBackgroundHandler);
 
+
   }
 
 
 
-  
+
   Map<String, dynamic> retrievedUserDetails={};
   Future<void> getDetails() async {
     retrievedUserDetails = await UserPreferences.getDetails("userDetails");
@@ -201,7 +204,32 @@ class _MyAppState extends State<MyApp> {
 
 
 
-
+  // Future<void> setupInteractedMessage() async {
+  //   // Get any messages which caused the application to open from a terminated state.
+  //
+  //   RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+  //   print("intial message $initialMessage");
+  //   if (initialMessage != null) {
+  //     _handleMessage(initialMessage);
+  //   }
+  //
+  //   // Also handle any interaction when the app is in the background via a Stream listener
+  //   FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  //
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //     print("FirebaseMessaging.onMessage.listen");
+  //     if (message.notification != null) {
+  //       print(message.notification!.title);
+  //       print(message.notification!.body);
+  //       print("message.data11 ${message.data}");
+  //       LocalNotificationService.display(message);
+  //     }
+  //   });
+  // }
+  //
+  // void _handleMessage(RemoteMessage message) {
+  // print("message  $message");
+  // }
 
   @override
   Widget build(BuildContext context) {
