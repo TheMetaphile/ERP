@@ -8,6 +8,8 @@ import Loading from "../../../LoadingScreen/Loading"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Login } from "../../../Config";
+import { messaging, getToken } from '../../../firebase';
+
 
 export default function RightCard() {
     const [email, setEmail] = useState('');
@@ -118,7 +120,8 @@ export default function RightCard() {
 
 
                     }
-                    login(userDetails, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : [], subjects ? subjects : []);
+                    const token = await requestPermission(tokens.accessToken);
+                    login(userDetails, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : [], subjects ? subjects : [], token);
                     navigate(`/${role}`);
                 }
             });
@@ -134,6 +137,50 @@ export default function RightCard() {
             setIsSubmitting(false);
         }
     }
+
+
+    // Request permission to send notifications
+    const requestPermission = async (accessToken) => {
+        try {
+            const registration = await navigator.serviceWorker.ready;
+            await Notification.requestPermission();
+            const token = await getToken(messaging, { vapidKey: 'BFSxjvP6e1f3aPaE6KhR4izey4zKE9iLCHEXMoEKFJDqUP3L7esYA8BOjC6JQ_Qr-bvOq1uXHLpD2B0uiYx3hAM', serviceWorkerRegistration: registration, });
+            console.log('FCM Token:', token);
+            sendToken(token, accessToken);
+            return token;
+            // You can send the token to your server to save it and use it to send push notifications
+        } catch (error) {
+            console.error('Error getting FCM token', error);
+            return '';
+        }
+    };
+
+    const sendToken = async (token, accessToken) => {
+        try {
+            const response = await axios.put(`${BASE_URL_Login}/notification/addToken`,
+                {
+                    token: token
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    }
+                }
+            );
+            if (response.status === 200) {
+                console.log('token send', response.data);
+            }
+        } catch (error) {
+            console.error("Error sending token:", error);
+        }
+    };
+
+
+
+
+
+
+
     return (
         <div className="flex flex-col bg-white rounded-2xl shadow-lg tablet:w-fit tablet:px-10 mobile:w-full mobile:px-7 mobile:max-tablet:mt-10 justify-center">
             <ToastContainer />

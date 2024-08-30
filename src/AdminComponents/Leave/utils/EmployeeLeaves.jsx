@@ -73,7 +73,7 @@ export default function EmployeeLeaves() {
       duration: "7 Days",
       expectedArrival: "5 March 2023",
     },
-   
+
   ];
 
   const [selectedLeave, setSelectedLeave] = useState(null);
@@ -90,7 +90,7 @@ export default function EmployeeLeaves() {
     <div className="flex flex-col space-y-4 mb-4 ">
       {leaves.map((leave, index) => (
         <div key={index} className={`rounded-md border p-4 flex flex-col w-full`}>
-          <div className="flex justify-between">
+          <div className="flex justify-between mobile:max-tablet:flex-col">
             <div className="flex">
               <img src={userimg} alt="" className="h-12 w-12 mobile:max-tablet:hidden" />
               <p className="text-xl mb-2 mt-2 px-2  mobile:max-tablet:text-lg">{leave.name}</p>

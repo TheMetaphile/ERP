@@ -98,7 +98,7 @@ const NewExam = ({ onClose, addExam }) => {
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-3xl"
+        className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-3xl mobile:max-tablet:p-4"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -112,7 +112,7 @@ const NewExam = ({ onClose, addExam }) => {
           {/* <FaTimes className="text-purple-600" /> */}
         </motion.button>
         <motion.h2
-          className="text-2xl mb-4 text-purple-600 font-bold"
+          className="text-2xl mobile:max-tablet:text-lg mb-4 text-purple-600 font-bold"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -172,127 +172,129 @@ const NewExam = ({ onClose, addExam }) => {
               </select>
             </div>
           </motion.div>
-          <motion.table
-            className="bg-white"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <thead>
-              <tr>
-                <th className="py-2 text-purple-600 font-medium">Class</th>
-                <th className="py-2 text-purple-600 font-medium">Subject</th>
-                <th className="py-2 text-purple-600 font-medium">Date</th>
-                <th className="py-2 text-purple-600 font-medium">Time</th>
-                <th className="py-2 text-purple-600 font-medium">Duration</th>
-              </tr>
-            </thead>
-            <tbody>
-              {exams.map((exam, index) => (
-                <motion.tr
-                  key={index}
-                  className="border-b border-gray-200 last:border-none"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                >
-                  <td className="border px-4 py-2">
-                    <select
-                      className="w-full"
-                      name="Class"
-                      value={exam.Class}
-                      onChange={(e) => handleChange(index, e)}
-                      required
-                    >
-                      <option value="" disabled>
-                        Select Class
-                      </option>
-                      <option value="Pre-Nursery">Pre-Nursery</option>
-                      <option value="Nursery">Nursery</option>
-                      <option value="L.K.G">L.K.G</option>
-                      <option value="U.K.G">U.K.G</option>
-                      <option value="1st">1st</option>
-                      <option value="2nd">2nd</option>
-                      <option value="3rd">3rd</option>
-                      <option value="4th">4th</option>
-                      <option value="5th">5th</option>
-                      <option value="6th">6th</option>
-                      <option value="7th">7th</option>
-                      <option value="8th">8th</option>
-                      <option value="9th">9th</option>
-                      <option value="10th">10th</option>
-                      <option value="11th">11th</option>
-                      <option value="12th">12th</option>
-                    </select>
-                  </td>
-                  <td className="border px-4 py-2">
-                    <select
-                      className="w-full"
-                      name="subject"
-                      value={exam.subject}
-                      onChange={(e) => handleChange(index, e)}
-                      required
-                    >
-                      <option value="" disabled>
-                        Select Subject
-                      </option>
-                      <option value="Hindi">Hindi</option>
-                      <option value="English">English</option>
-                      <option value="Maths">Maths</option>
-                      <option value="Science">Science</option>
-                      <option value="Social Science">Social Science</option>
-                      <option value="Drawing">Drawing</option>
-                      <option value="Computer">Computer</option>
-                      <option value="Sanskrit">Sanskrit</option>
-                      <option value="Physics">Physics</option>
-                      <option value="Chemistry">Chemistry</option>
-                      <option value="Economics">Economics</option>
-                      <option value="Business">Business</option>
-                      <option value="Accounts">Accounts</option>
-                    </select>
-                  </td>
-                  <td className="border px-4 py-2">
-                    <input
-                      className="w-full"
-                      type="date"
-                      name="date"
-                      value={exam.date}
-                      onChange={(e) => handleChange(index, e)}
-                      required
-                    />
-                  </td>
-                  <td className="border px-4 py-2">
-                    <input
-                      className="w-full"
-                      type="time"
-                      name="time"
-                      value={exam.time}
-                      onChange={(e) => handleChange(index, e)}
-                      required
-                    />
-                  </td>
-                  <td className="border px-4 py-2">
-                    <select
-                      className="w-full"
-                      name="duration"
-                      value={exam.duration}
-                      onChange={(e) => handleChange(index, e)}
-                      required
-                    >
-                      <option value="" disabled>
-                        Select Duration
-                      </option>
-                      <option value="1:00 hr">1:00 hr</option>
-                      <option value="1:30 hr">1:30 hr</option>
-                      <option value="2:00 hr">2:00 hr</option>
-                      <option value="2:30 hr">2:30 hr</option>
-                      <option value="3:00 hr">3:00 hr</option>
-                    </select>
-                  </td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </motion.table>
+          <div className=' overflow-auto'>
+            <motion.table
+              className="bg-white overflow-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <thead>
+                <tr>
+                  <th className="py-2 text-purple-600 font-medium">Class</th>
+                  <th className="py-2 text-purple-600 font-medium">Subject</th>
+                  <th className="py-2 text-purple-600 font-medium">Date</th>
+                  <th className="py-2 text-purple-600 font-medium">Time</th>
+                  <th className="py-2 text-purple-600 font-medium">Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                {exams.map((exam, index) => (
+                  <motion.tr
+                    key={index}
+                    className="border-b border-gray-200 last:border-none"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+                  >
+                    <td className="border px-4 py-2">
+                      <select
+                        className="w-full"
+                        name="Class"
+                        value={exam.Class}
+                        onChange={(e) => handleChange(index, e)}
+                        required
+                      >
+                        <option value="" disabled>
+                          Select Class
+                        </option>
+                        <option value="Pre-Nursery">Pre-Nursery</option>
+                        <option value="Nursery">Nursery</option>
+                        <option value="L.K.G">L.K.G</option>
+                        <option value="U.K.G">U.K.G</option>
+                        <option value="1st">1st</option>
+                        <option value="2nd">2nd</option>
+                        <option value="3rd">3rd</option>
+                        <option value="4th">4th</option>
+                        <option value="5th">5th</option>
+                        <option value="6th">6th</option>
+                        <option value="7th">7th</option>
+                        <option value="8th">8th</option>
+                        <option value="9th">9th</option>
+                        <option value="10th">10th</option>
+                        <option value="11th">11th</option>
+                        <option value="12th">12th</option>
+                      </select>
+                    </td>
+                    <td className="border px-4 py-2">
+                      <select
+                        className="w-full"
+                        name="subject"
+                        value={exam.subject}
+                        onChange={(e) => handleChange(index, e)}
+                        required
+                      >
+                        <option value="" disabled>
+                          Select Subject
+                        </option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="English">English</option>
+                        <option value="Maths">Maths</option>
+                        <option value="Science">Science</option>
+                        <option value="Social Science">Social Science</option>
+                        <option value="Drawing">Drawing</option>
+                        <option value="Computer">Computer</option>
+                        <option value="Sanskrit">Sanskrit</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Economics">Economics</option>
+                        <option value="Business">Business</option>
+                        <option value="Accounts">Accounts</option>
+                      </select>
+                    </td>
+                    <td className="border px-4 py-2">
+                      <input
+                        className="w-full"
+                        type="date"
+                        name="date"
+                        value={exam.date}
+                        onChange={(e) => handleChange(index, e)}
+                        required
+                      />
+                    </td>
+                    <td className="border px-4 py-2">
+                      <input
+                        className="w-full"
+                        type="time"
+                        name="time"
+                        value={exam.time}
+                        onChange={(e) => handleChange(index, e)}
+                        required
+                      />
+                    </td>
+                    <td className="border px-4 py-2">
+                      <select
+                        className="w-full"
+                        name="duration"
+                        value={exam.duration}
+                        onChange={(e) => handleChange(index, e)}
+                        required
+                      >
+                        <option value="" disabled>
+                          Select Duration
+                        </option>
+                        <option value="1:00 hr">1:00 hr</option>
+                        <option value="1:30 hr">1:30 hr</option>
+                        <option value="2:00 hr">2:00 hr</option>
+                        <option value="2:30 hr">2:30 hr</option>
+                        <option value="3:00 hr">3:00 hr</option>
+                      </select>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </motion.table>
+          </div>
           <motion.div
             className="flex items-center justify-between mt-4"
             initial={{ opacity: 0, y: 20 }}

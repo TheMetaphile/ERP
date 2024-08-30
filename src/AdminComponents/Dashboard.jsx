@@ -3,7 +3,8 @@ import { Outlet } from "react-router-dom";
 import AdminDrawer from "./drawer/Drawer.jsx";
 import AdminNavbar from "./navbar/navbar.jsx";
 import AdminEnddrawer from "./enddrawer/enddrawer.jsx";
-import { messaging, getToken } from './firebase'; 
+import { messaging, getToken,onMessage } from './../firebase';
+
 
 export default function AdminDashboard() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -18,21 +19,6 @@ export default function AdminDashboard() {
     setIsEndDrawerOpen(!isEndDrawerOpen);
   };
 
-  useEffect(() => {
-    // Request permission to send notifications
-    const requestPermission = async () => {
-      try {
-        await Notification.requestPermission();
-        const token = await getToken(messaging, { vapidKey: 'YOUR_VAPID_KEY' });
-        console.log('FCM Token:', token);
-        // You can send the token to your server to save it and use it to send push notifications
-      } catch (error) {
-        console.error('Error getting FCM token', error);
-      }
-    };
-
-    requestPermission();
-  }, []);
   
   useEffect(() => {
     // Request permission and get token as shown in the previous step

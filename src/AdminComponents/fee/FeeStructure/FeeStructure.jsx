@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import FeeAdminRows from './FeeAdminRows';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -43,7 +43,7 @@ function FeeStructure() {
         <div className=" flex flex-col px-3 mobile:max-tablet:px-0  overflow-auto items-start mt-2  mb-3 no-scrollbar">
             <ToastContainer />
             <div className='flex w-full justify-between'>
-                <h1 className="text-2xl p-2">Fee Structure</h1>
+                <h1 className="text-2xl p-2 mobile:max-tablet:text-lg">Fee Structure</h1>
                 <div className='border border-gray-300 rounded-lg'>
                     <select
                         id="sessionSelector"
@@ -59,18 +59,20 @@ function FeeStructure() {
                     </select>
                 </div>
             </div>
-            <table className="w-full mt-3  rounded-lg shadow-lg border border-gray-300 ">
-                <Header headings={['Classes', 'Admission Fee', 'Monthly Fee', 'Quarter Fee', 'Action']} />
-                <tbody className="bg-white divide-y divide-gray-200 last:rounded-b-lg last:border-b-gray-300">
-                    {content.map((con, index) => (
-                        <FeeAdminRows
-                            Class={con.class}
-                            key={index}
-                            session={selectedSession}
-                        />
-                    ))}
-                </tbody>
-            </table>
+            <div className=' overflow-auto'>
+                <table className="w-full mt-3  rounded-lg shadow-lg border border-gray-300 ">
+                    <Header headings={['Classes', 'Admission Fee', 'Monthly Fee', 'Quarter Fee', 'Action']} />
+                    <tbody className="bg-white divide-y divide-gray-200 last:rounded-b-lg last:border-b-gray-300">
+                        {content.map((con, index) => (
+                            <FeeAdminRows
+                                Class={con.class}
+                                key={index}
+                                session={selectedSession}
+                            />
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

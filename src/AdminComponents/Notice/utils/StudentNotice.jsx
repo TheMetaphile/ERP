@@ -187,7 +187,7 @@ const StudentNotice = () => {
                   transition={{ duration: 0.3 }}
                   className="bg-white shadow-lg rounded-lg p-3 border-l-4  border-purple-500"
                 >
-                  <div className="w-full flex items-center justify-between mb-4 cursor-pointer" onClick={() => handleClick(index)}>
+                  <div className="w-full flex items-center justify-between mb-4 cursor-pointer mobile:max-sm:items-start mobile:max-sm:flex-col" onClick={() => handleClick(index)}>
                     <h3 className="text-purple-800 font-bold text-xl">
                       {editingIndex === index ? (
                         <input
@@ -321,7 +321,7 @@ const StudentNotice = () => {
                     )}
                   </AnimatePresence>
 
-                  <div className="w-full flex items-center justify-between mt-4 text-sm">
+                  <div className="w-full flex items-center justify-between mt-4 text-sm mobile:max-sm:flex-col mobile:max-sm:items-start">
                     <p className="text-purple-600">Date: {notice.date}</p>
                     <div className="flex items-center space-x-2">
                       <span className="text-purple-600">By:</span>
