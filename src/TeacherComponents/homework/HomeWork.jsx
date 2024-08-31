@@ -7,8 +7,8 @@ import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Homework } from "../../Config";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { motion } from 'framer-motion';
-import { FiUpload, FiBook, FiUsers, FiLayers } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiFilter, FiUpload, FiBook, FiUsers, FiLayers } from 'react-icons/fi';
 
 function HomeWork() {
   const { authState } = useContext(AuthContext);
@@ -135,9 +135,67 @@ function HomeWork() {
       className="w-full flex flex-col px-3 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar"
     >
       <ToastContainer />
+      <motion.div
+        className='w-full flex  items-center justify-between tablet:max-laptop:flex-col tablet:max-laptop:items-start mobile:max-tablet:px-3'
+        variants={itemVariants}
+      >
+
+        <h1 className='text-3xl whitespace-nowrap mobile:max-tablet:text-lg font-medium text-black'>All Homework</h1>
+
+
+        <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
+          <motion.button
+            className="p-2 border rounded-full bg-blue-100 text-black hover:bg-blue-200 transition-colors duration-300"
+            onClick={() => setDropdownVisible(!isDropdownVisible)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FiFilter className="inline-block mr-2" />
+            Filter
+          </motion.button>
+          <AnimatePresence>
+            {isDropdownVisible && (
+              <motion.div
+                className='flex absolute left-0 right-0 bg-white p-4 items-center gap-3 flex-col shadow-lg rounded-md'
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <div className=" w-full">
+                  <select id="class" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleClassChange}>
+                    <option value="">Class</option>
+                    {uniqueClasses.map((classOption, index) => (
+                      <option key={index} value={classOption}>{classOption}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="relative w-full">
+                  <FiUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
+                  <select id="section" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSectionChange}>
+                    <option value="">Section</option>
+                    {uniqueSections.map((sectionOption, index) => (
+                      <option key={index} value={sectionOption}>{sectionOption}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="relative w-full">
+                  <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
+                  <select id="subject" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSubjectChange}>
+                    <option value="">Subject</option>
+                    {uniqueSubjects.map((subjectOption, index) => (
+                      <option key={index} value={subjectOption}>{subjectOption}</option>
+                    ))}
+                  </select>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+      </motion.div>
+
       <motion.div variants={itemVariants} className='w-full flex items-center justify-between mb-4'>
 
-        <h1 className='text-3xl mobile:max-tablet:text-lg font-medium text-black'>All Homework</h1>
 
 
         <div className="flex items-center space-x-4 mt-3">
