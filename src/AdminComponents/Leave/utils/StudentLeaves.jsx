@@ -94,7 +94,7 @@ export default function StudentLeaves() {
     >
       <ToastContainer />
       <motion.div className="flex items-center justify-between w-full" variants={itemVariants}>
-        <h1 className="text-2xl font-semibold text-purple-600">Old Leave</h1>
+        <h1 className="text-2xl mobile:max-sm:text-lg font-semibold text-purple-600">Old Leave</h1>
         <select
           value={status}
           onChange={handleStatusChange}
