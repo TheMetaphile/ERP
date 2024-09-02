@@ -138,96 +138,98 @@ function ClassWork() {
             animate="visible"
         >
             <ToastContainer />
-            <motion.div
-                className='w-full flex  items-center justify-between tablet:max-laptop:flex-col tablet:max-laptop:items-start mobile:max-tablet:px-3'
-                variants={itemVariants}
-            >
+            <div className=" flex justify-between w-full mobile:max-sm:flex-col">
+                <motion.div
+                    className='w-full flex  items-center justify-between tablet:max-laptop:flex-col tablet:max-laptop:items-start mobile:max-tablet:px-3'
+                    variants={itemVariants}
+                >
 
-                <h1 className='text-3xl font-medium text-black mobile:max-tablet:text-lg whitespace-nowrap'>All ClassWork</h1>
+                    <h1 className='text-3xl font-medium text-black mobile:max-tablet:text-lg whitespace-nowrap'>All ClassWork</h1>
 
 
-                <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
+                    <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
+                        <motion.button
+                            className="p-2 border rounded-full bg-blue-100 text-black hover:bg-blue-200 transition-colors duration-300"
+                            onClick={() => setDropdownVisible(!isDropdownVisible)}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <FiFilter className="inline-block mr-2" />
+                            Filter
+                        </motion.button>
+                        <AnimatePresence>
+                            {isDropdownVisible && (
+                                <motion.div
+                                    className='flex absolute left-0 right-0 bg-white p-4 items-center gap-3 flex-col shadow-lg rounded-md'
+                                    initial={{ opacity: 0, y: -20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                >
+                                    <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange}>
+                                        <option value="">Class</option>
+                                        {uniqueClasses.map((classOption, index) => (
+                                            <option key={index} value={classOption}>{classOption}</option>
+                                        ))}
+                                    </select>
+                                    <select id="section" className="w-full px-4 py-2 border rounded-md" onChange={handleSectionChange}>
+                                        <option value="">Section</option>
+                                        {uniqueSections.map((sectionOption, index) => (
+                                            <option key={index} value={sectionOption}>{sectionOption}</option>
+                                        ))}
+                                    </select>
+                                    <select id="subject" className="w-full px-4 py-2 border rounded-md" onChange={handleSubjectChange}>
+                                        <option value="">Subject</option>
+                                        {uniqueSubjects.map((subjectOption, index) => (
+                                            <option key={index} value={subjectOption}>{subjectOption}</option>
+                                        ))}
+                                    </select>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+
+                </motion.div>
+                <div className="flex items-center space-x-4 mt-3">
+                    <div className='flex mobile:max-tablet:hidden items-center gap-3'>
+                        <div className="relative">
+                            <FiBook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
+                            <select id="class" className="w-full px-8 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" onChange={handleClassChange}>
+                                <option value="">Class</option>
+                                {uniqueClasses.map((classOption, index) => (
+                                    <option key={index} value={classOption}>{classOption}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="relative">
+                            <FiUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
+                            <select id="section" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSectionChange}>
+                                <option value="">Section</option>
+                                {uniqueSections.map((sectionOption, index) => (
+                                    <option key={index} value={sectionOption}>{sectionOption}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="relative">
+                            <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
+                            <select id="subject" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSubjectChange}>
+                                <option value="">Subject</option>
+                                {uniqueSubjects.map((subjectOption, index) => (
+                                    <option key={index} value={subjectOption}>{subjectOption}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                    </div>
                     <motion.button
-                        className="p-2 border rounded-full bg-blue-100 text-black hover:bg-blue-200 transition-colors duration-300"
-                        onClick={() => setDropdownVisible(!isDropdownVisible)}
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 flex items-center"
+                        onClick={handleOpen}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >
-                        <FiFilter className="inline-block mr-2" />
-                        Filter
+                        <FiUpload className="mr-2" />
+                        Upload
                     </motion.button>
-                    <AnimatePresence>
-                        {isDropdownVisible && (
-                            <motion.div
-                                className='flex absolute left-0 right-0 bg-white p-4 items-center gap-3 flex-col shadow-lg rounded-md'
-                                initial={{ opacity: 0, y: -20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                            >
-                                <select id="class" className="w-full px-4 py-2 border rounded-md" onChange={handleClassChange}>
-                                    <option value="">Class</option>
-                                    {uniqueClasses.map((classOption, index) => (
-                                        <option key={index} value={classOption}>{classOption}</option>
-                                    ))}
-                                </select>
-                                <select id="section" className="w-full px-4 py-2 border rounded-md" onChange={handleSectionChange}>
-                                    <option value="">Section</option>
-                                    {uniqueSections.map((sectionOption, index) => (
-                                        <option key={index} value={sectionOption}>{sectionOption}</option>
-                                    ))}
-                                </select>
-                                <select id="subject" className="w-full px-4 py-2 border rounded-md" onChange={handleSubjectChange}>
-                                    <option value="">Subject</option>
-                                    {uniqueSubjects.map((subjectOption, index) => (
-                                        <option key={index} value={subjectOption}>{subjectOption}</option>
-                                    ))}
-                                </select>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
                 </div>
-
-            </motion.div>
-            <div className="flex items-center space-x-4 mt-3">
-                <div className='flex mobile:max-tablet:hidden items-center gap-3'>
-                    <div className="relative">
-                        <FiBook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
-                        <select id="class" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" onChange={handleClassChange}>
-                            <option value="">Class</option>
-                            {uniqueClasses.map((classOption, index) => (
-                                <option key={index} value={classOption}>{classOption}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="relative">
-                        <FiUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
-                        <select id="section" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSectionChange}>
-                            <option value="">Section</option>
-                            {uniqueSections.map((sectionOption, index) => (
-                                <option key={index} value={sectionOption}>{sectionOption}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="relative">
-                        <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
-                        <select id="subject" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSubjectChange}>
-                            <option value="">Subject</option>
-                            {uniqueSubjects.map((subjectOption, index) => (
-                                <option key={index} value={subjectOption}>{subjectOption}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                </div>
-                <motion.button
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 flex items-center"
-                    onClick={handleOpen}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                >
-                    <FiUpload className="mr-2" />
-                    Upload
-                </motion.button>
             </div>
             {loading ? (
                 <Loading />

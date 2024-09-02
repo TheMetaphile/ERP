@@ -46,7 +46,7 @@ export default function TeacherNavbar({ onDrawerToggle, onEndDrawerToggle }) {
         <img src={logo} alt="Metaphile Public School" className="w-10" />
         <span className="tablet:text-lg font-medium text-text_blue mobile:text-sm mr-2">etaphile Public School</span>
 
-        <div>
+        <div className=' tablet:hidden'>
           <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white px-2 py-1 mobile:max-laptop:w-7 mobile:max-laptop:h-7 rounded-lg" />
         </div>
       </div>

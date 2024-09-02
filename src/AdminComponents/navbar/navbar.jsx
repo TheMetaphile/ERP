@@ -32,7 +32,7 @@ export default function AdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
         <FaBars onClick={onDrawerToggle} className="w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-white hover:bg-purple-200 shadow-lg cursor-pointer" />
         <img src={logo} alt="Metaphile Public School" className="w-10" />
         <span className="tablet:text-lg font-medium  mobile:text-sm mr-2">etaphile Public School</span>
-        <div>
+        <div className=' tablet:hidden'>
           <FaBell onClick={onEndDrawerToggle} className=" font-medium bg-white hover: px-2 py-1 mobile:max-tablet:w-7 mobile:max-tablet:h-7 rounded-lg" />
         </div>
       </div>
