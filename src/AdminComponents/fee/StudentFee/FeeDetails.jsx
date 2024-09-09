@@ -188,28 +188,28 @@ function FeeDetails() {
                 <div className=' mt-2  border rounded-lg overflow-auto'>
                     <div className="flex justify-between  py-2  bg-gradient-to-r from-teal-400 to-blue-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap mobile:max-tan
                     w-fit">
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm ">
                             Roll No.
                         </h1>
-                        <h1 className="w-44 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-64 text-lg text-center font-medium mobile:max-tablet:text-sm ">
                             Name
                         </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm ">
                             Section
                         </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm ">
                             Session
                         </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm ">
                             Total Fee
                         </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm ">
                             Discount
                         </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm ">
                             Paid
                         </h1>
-                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
+                        <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm ">
                             Payable
                         </h1>
                     </div>
@@ -219,39 +219,39 @@ function FeeDetails() {
                         details.length > 0 ? (
                             <div className=' mobile:max-tablet:w-fit'>
                                 {details.map((details, index) => (
-                                    // <Link to={`/Admin-Dashboard/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}&section=${details.section}`}>
-                                    <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`}
-                                    //  onClick={() => handleClick(index)}
-                                    >
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.rollNumber}
-                                        </h1>
-                                        <h1 className="w-44 text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            <img src={details.profileLink} alt="profile pic" className='w-10 h-10 rounded-full ' />
-                                            <div className='w-32'>
-                                                {details.name}
-                                            </div>
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.section}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.session}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.totalfee}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.discountAmount}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.paid}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.payableFee || 'NA'}
-                                        </h1>
-                                    </div>
-                                    // {/* </Link> */}
+                                    <Link to={`/Admin-Dashboard/StudentsFee/details/${details.email}`}>
+                                        <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`}
+                                        //  onClick={() => handleClick(index)}
+                                        >
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.rollNumber}
+                                            </h1>
+                                            <h1 className="w-44 text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                <img src={details.profileLink} alt="profile pic" className='w-10 h-10 rounded-full ' />
+                                                <div className='w-32'>
+                                                    {details.name}
+                                                </div>
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.section}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.session}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.totalfee}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.discountAmount}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.paid}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.payableFee || 'NA'}
+                                            </h1>
+                                        </div>
+                                    </Link>
 
                                 ))}
                                 {!allDataFetched && (
