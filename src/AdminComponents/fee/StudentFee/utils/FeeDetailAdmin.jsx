@@ -58,7 +58,7 @@ export default function FeeDetailAdmin() {
     return (
         <div className="p-4 mobile:max-sm:p-2">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl">
-                <div className="bg-purple-600 text-white p-6 mobile:max-sm:p-1">
+                <div className="bg-purple-100 text-white p-6 mobile:max-sm:p-1">
                     <div className="flex items-center space-x-4">
                         <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center bg-purple-300 text-purple-600 text-2xl font-bold">
                             {imageError || !userData?.profileLink ? (
@@ -73,8 +73,8 @@ export default function FeeDetailAdmin() {
                             )}
                         </div>
                         <div>
-                            <h2 className="text-2xl font-bold">{userData?.name}</h2>
-                            <p className="text-purple-200">Roll No: {userData?.rollNumber}</p>
+                            <h2 className="text-2xl font-bold text-purple-700">{userData?.name}</h2>
+                            <p className="text-purple-700">Roll No: {userData?.rollNumber}</p>
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@ export default function FeeDetailAdmin() {
                             <button
                                 key={tab}
                                 className={`flex-1 py-2 px-4 transition-all duration-300 ease-in-out ${selectedTab === tab
-                                    ? 'bg-purple-500 text-white shadow-md'
+                                    ? 'bg-purple-400 text-white shadow-md'
                                     : 'bg-gray-200 hover:bg-purple-100'
                                     }`}
                                 onClick={() => setSelectedTab(tab)}
