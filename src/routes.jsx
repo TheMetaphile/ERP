@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 import Loading from "./LoadingScreen/Loading.jsx";
 import StudentCard from "./AdminComponents/StudentDetails.jsx";
+import Studentdetailscard from "./TeacherComponents/studentattendence/Students Attendance/utils/studentdetailcard.jsx";
 
 const AllPreviousDetailsAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/AllDetailsAdmin.jsx"));
 const PreviousFeeDetailAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/utils/PreviousFeeDetailAdmin.jsx"));
@@ -1002,11 +1003,24 @@ const router = createBrowserRouter([
         path: "/Teacher-Dashboard/class_activity",
         element: <Suspense fallback={Loading}>
           <ClassActivity /></Suspense>,
+
         children: [
           {
             path: "",
             element: <Suspense fallback={Loading}>
-              <TimeTableStudent /></Suspense>
+              <TimeTableStudent /></Suspense>,
+            children: []
+          },
+          {
+            path: "/Teacher-Dashboard/class_activity/details",
+            element: <Suspense fallback={Loading}>
+              <Studentdetailscard /></Suspense>,
+            children: [
+              {
+                path: ':email',
+                element: <Suspense fallback={Loading}><Studentdetailscard /></Suspense>
+              }
+            ]
           },
           {
             path: "/Teacher-Dashboard/class_activity/timetablestudent",

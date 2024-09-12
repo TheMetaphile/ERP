@@ -33,9 +33,6 @@ function PreviousFeeDetailsAdmin() {
 
     const [clickedIndex, setClickedIndex] = useState(null);
 
-
-
-
     useEffect(() => {
         if (authState.accessToken) {
             fetchDetails();
