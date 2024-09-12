@@ -59,8 +59,8 @@ function FeeStructure() {
                     </select>
                 </div>
             </div>
-            <div className=' overflow-auto'>
-                <table className="w-full mt-3  rounded-lg shadow-lg border border-gray-300 ">
+            <div className=' overflow-auto w-full rounded-md'>
+                <table className="w-full mt-3 border rounded-lg shadow-lg  border-gray-300 ">
                     <Header headings={['Classes', 'Admission Fee', 'Monthly Fee', 'Quarter Fee', 'Action']} />
                     <tbody className="bg-white divide-y divide-gray-200 last:rounded-b-lg last:border-b-gray-300">
                         {content.map((con, index) => (

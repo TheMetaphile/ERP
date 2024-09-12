@@ -131,53 +131,55 @@ function NewAdmission() {
             animate="visible"
         >
             <ToastContainer />
-            <motion.div className="flex mobile:max-tablet:flex-col  items-center justify-between mb-8" variants={itemVariants}>
+            <motion.div className="flex mobile:max-tablet:flex-col mobile:max-tablet:items-start  items-center justify-between mb-8" variants={itemVariants}>
                 <motion.h1
-                    className="text-4xl font-medium text-black mb-4 md:mb-0 mobile:max-tablet:text-lg"
+                    className="text-4xl font-medium ml-1 text-black mb-4 md:mb-0 mobile:max-tablet:text-lg"
                     whileHover={{ scale: 1.05 }}
                 >
                     New Admission
                 </motion.h1>
-                <div className="flex items-center mobile:max-tablet:flex-col  gap-4">
-                    <motion.select
-                        id="class"
-                        value={Class}
-                        onChange={handleClassChange}
-                        className="rounded-full shadow-lg px-4 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg bg-white text-purple-700"
-                        whileHover={{ scale: 1.05 }}
-                    >
-                        <option value="">Search by Class</option>
-                        <option value="Pre-Nursery">Pre-Nursery</option>
-                        <option value="Nursery">Nursery</option>
-                        <option value="L.K.G">L.K.G</option>
-                        <option value="U.K.G">U.K.G</option>
-                        <option value="1st">1st</option>
-                        <option value="2nd">2nd</option>
-                        <option value="3rd">3rd</option>
-                        <option value="4th">4th</option>
-                        <option value="5th">5th</option>
-                        <option value="6th">6th</option>
-                        <option value="7th">7th</option>
-                        <option value="8th">8th</option>
-                        <option value="9th">9th</option>
-                        <option value="10th">10th</option>
-                        <option value="11th">11th</option>
-                        <option value="12th">12th</option>
-                    </motion.select>
-                    <motion.select
-                        id="distribution"
-                        value={distributionMethod}
-                        onChange={handleDistributionChange}
-                        className="rounded-full shadow-lg px-4 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg bg-white text-purple-700"
-                        whileHover={{ scale: 1.05 }}
-                    >
-                        <option value="">Select Distribution Method</option>
-                        <option value="By Name">By Name (Alphabetical)</option>
-                        <option value="By Percentage">By Percentage</option>
-                        <option value="New Section">New Section</option>
-                    </motion.select>
+                <div className="flex items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start  gap-4">
+                    <div className=' flex gap-2'>
+                        <motion.select
+                            id="class"
+                            value={Class}
+                            onChange={handleClassChange}
+                            className="rounded-full shadow-lg w-1/2 px-4 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg bg-white text-purple-700"
+                            whileHover={{ scale: 1.05 }}
+                        >
+                            <option value="">Search by Class</option>
+                            <option value="Pre-Nursery">Pre-Nursery</option>
+                            <option value="Nursery">Nursery</option>
+                            <option value="L.K.G">L.K.G</option>
+                            <option value="U.K.G">U.K.G</option>
+                            <option value="1st">1st</option>
+                            <option value="2nd">2nd</option>
+                            <option value="3rd">3rd</option>
+                            <option value="4th">4th</option>
+                            <option value="5th">5th</option>
+                            <option value="6th">6th</option>
+                            <option value="7th">7th</option>
+                            <option value="8th">8th</option>
+                            <option value="9th">9th</option>
+                            <option value="10th">10th</option>
+                            <option value="11th">11th</option>
+                            <option value="12th">12th</option>
+                        </motion.select>
+                        <motion.select
+                            id="distribution"
+                            value={distributionMethod}
+                            onChange={handleDistributionChange}
+                            className="rounded-full shadow-lg px-4 w-1/2 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg bg-white text-purple-700"
+                            whileHover={{ scale: 1.05 }}
+                        >
+                            <option value="">Select Distribution Method</option>
+                            <option value="By Name">By Name (Alphabetical)</option>
+                            <option value="By Percentage">By Percentage</option>
+                            <option value="New Section">New Section</option>
+                        </motion.select>
+                    </div>
                     <motion.button
-                        className="px-6 py-2 bg-purple-400 text-white rounded-full shadow-lg text-lg font-semibold hover:bg-purple-600 transition duration-300"
+                        className="px-6 py-2 bg-purple-400 text-white rounded-full shadow-lg text-lg font-semibold hover:bg-purple-600 transition duration-300 "
                         onClick={handleDistribute}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}

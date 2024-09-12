@@ -7,6 +7,7 @@ import AuthContext from '../../../Context/AuthContext';
 import CreateDiscount from './CreateDiscount';
 import { MdDeleteForever, MdAdd, MdRemove } from "react-icons/md";
 import { BASE_URL_Fee } from '../../../Config';
+import { Link } from 'react-router-dom';
 
 const getSessions = () => {
     const currentYear = new Date().getFullYear();
@@ -74,6 +75,7 @@ function FeeDiscount() {
                     toast.success('All data fetched');
                     setAllDataFetched(true);
                 }
+                console.log(response.data)
                 setDetails(prevData => [...prevData, ...response.data]);
                 setLoading(false);
             }
@@ -176,26 +178,28 @@ function FeeDiscount() {
                                 </tr>
                             ) : details.length > 0 ? (
                                 details.map((detail, index) => (
-                                    <tr key={index} className="border-b hover:bg-gray-100 transition duration-200">
-                                        <td className="py-3 px-4">{detail.to.rollNumber}</td>
-                                        <td className="py-3 px-4 flex items-center">
-                                            <img src={detail.to.profileLink} alt="profile" className="h-8 w-8 rounded-full mr-3" />
-                                            {detail.to.name}
-                                        </td>
-                                        <td className="py-3 px-4">{detail.to.currentClass}</td>
-                                        <td className="py-3 px-4">{detail.session}</td>
-                                        <td className="py-3 px-4">{detail.amount}</td>
-                                        <td className="py-3 px-4">{detail.by.name}</td>
-                                        <td className="py-3 px-4">{detail.by.employeeId}</td>
-                                        <td className="py-3 px-4">
-                                            <button
-                                                className="text-red-500 hover:text-red-700 transition duration-200"
-                                                onClick={() => handleDelete(index, detail._id)}
-                                            >
-                                                <MdDeleteForever size={20} />
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    <Link to={`/Admin-Dashboard/StudentsFee/details/${details.email}`}>
+                                        <tr key={index} className="border-b hover:bg-gray-100 transition duration-200">
+                                            <td className="py-3 px-4">{detail.to.rollNumber}</td>
+                                            <td className="py-3 px-4 flex items-center">
+                                                <img src={detail.to.profileLink} alt="profile" className="h-8 w-8 rounded-full mr-3" />
+                                                {detail.to.name}
+                                            </td>
+                                            <td className="py-3 px-4">{detail.to.currentClass}</td>
+                                            <td className="py-3 px-4">{detail.session}</td>
+                                            <td className="py-3 px-4">{detail.amount}</td>
+                                            <td className="py-3 px-4">{detail.by.name}</td>
+                                            <td className="py-3 px-4">{detail.by.employeeId}</td>
+                                            <td className="py-3 px-4">
+                                                <button
+                                                    className="text-red-500 hover:text-red-700 transition duration-200"
+                                                    onClick={() => handleDelete(index, detail._id)}
+                                                >
+                                                    <MdDeleteForever size={20} />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </Link>
                                 ))
                             ) : (
                                 <tr>

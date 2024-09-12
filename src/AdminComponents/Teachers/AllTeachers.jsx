@@ -153,14 +153,14 @@ export default function AllTeachers() {
             </div>
             {isModalOpen && (
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-                    <div className="bg-white rounded-lg p-6 shadow-lg w-1/2">
-                        <div className="flex mobile:max-tablet:w-full gap-2 items-center">
+                    <div className="bg-white rounded-lg p-6 shadow-lg w-1/2 mobile:max-tablet:w-11/12">
+                        <div className="flex mobile:max-tablet:w-full gap-2 items-center mobile:max-sm:flex-col">
                             <label className="text-lg font-normal">Upload Keras :</label>
-                            <input type="file" accept=".keras" className="" onChange={handleKerasChange} />
+                            <input type="file" accept=".keras" className="mx-auto" onChange={handleKerasChange} />
                         </div>
-                        <div className="flex mobile:max-tablet:w-full gap-2 items-center mt-3">
+                        <div className="flex mobile:max-tablet:w-full gap-2 items-center my-3 mobile:max-sm:flex-col">
                             <label className="text-lg font-normal">Upload Pkl :</label>
-                            <input type="file" accept=".pkl" className="" onChange={handlePylChange} />
+                            <input type="file" accept=".pkl" className="mx-auto" onChange={handlePylChange} />
                         </div>
                         <div className="flex justify-end">
                             <button className="bg-gray-300 rounded-lg px-4 py-2 mr-2" onClick={handleCloseModal}>Cancel</button>

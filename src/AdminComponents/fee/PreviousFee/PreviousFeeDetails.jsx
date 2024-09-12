@@ -5,11 +5,12 @@ import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Fee } from '../../../Config';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 const getSessions = () => {
     const currentYear = new Date().getFullYear();
     const newSessions = [];
+
 
     for (let i = 0; i < 5; i++) {
         const startYear = currentYear - i;
@@ -119,43 +120,44 @@ function PreviousFeeDetailsAdmin() {
                     </div>
                     {loading ? (
                         <Loading />
+
                     ) : (
                         details.length > 0 ? (
                             <div className=' mobile:max-tablet:w-fit'>
                                 {details.map((details, index) => (
-                                    // <Link to={`/Admin-Dashboard/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}&section=${details.section}`}>
-                                    <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`}
-                                    //  onClick={() => handleClick(index)}
-                                    >
-                                        <h1 className="w-44 text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            <img src={details.Student.profileLink} alt="profile pic" className='w-10 h-10 rounded-full ' />
-                                            <div className='w-32'>
-                                                {details.Student.name}
-                                            </div>
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.Student.currentClass}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.Student.section}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.session}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.Student.fatherPhoneNumber}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.total}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.discount}
-                                        </h1>
-                                        <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                                            {details.total - details.discount}
-                                        </h1>
-                                    </div>
-                                    // {/* </Link> */}
+                                    <Link to={`/Admin-Dashboard/StudentsFee/details/${details.Student.email}`}>
+                                        <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`}
+                                        //  onClick={() => handleClick(index)}
+                                        >
+                                            <h1 className="w-44 text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                <img src={details.Student.profileLink} alt="profile pic" className='w-10 h-10 rounded-full ' />
+                                                <div className='w-32'>
+                                                    {details.Student.name}
+                                                </div>
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.Student.currentClass}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.Student.section}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.session}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.Student.fatherPhoneNumber}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.total}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.discount}
+                                            </h1>
+                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                                {details.total - details.discount}
+                                            </h1>
+                                        </div>
+                                    </Link>
 
                                 ))}
                                 {!allDataFetched && (

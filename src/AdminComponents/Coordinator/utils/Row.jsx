@@ -115,9 +115,9 @@ export default function Row({ con }) {
     };
 
     return (
-        <div key={con.id} className="w-full mobile:max-tablet:flex-col items-center p-2 gap-2 border rounded-md flex mobile:max-tablet:items-start mobile:max-tablet:gap-2" ref={containerRef}>
+        <div key={con.id} className="w-full mobile:max-tablet:flex-col overflow-auto items-center p-2 gap-2 border rounded-md flex mobile:max-tablet:items-start mobile:max-tablet:gap-2" ref={containerRef}>
             <div className="flex-grow flex justify-between items-center">
-                <h2 className="text-lg">{con.classRange}</h2>
+                <h2 className="text-lg mobile:max-sm:text-sm whitespace-nowrap mr-1">{con.classRange}</h2>
                 {editingRowId ? (
                     <div className="flex justify-center gap-2 items-center">
                         {Object.keys(selectedTeacher).length > 0 ? (

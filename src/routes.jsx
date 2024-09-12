@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 import Loading from "./LoadingScreen/Loading.jsx";
+import StudentCard from "./AdminComponents/StudentDetails.jsx";
 
 const AllPreviousDetailsAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/AllDetailsAdmin.jsx"));
 const PreviousFeeDetailAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/utils/PreviousFeeDetailAdmin.jsx"));
@@ -507,7 +508,7 @@ const router = createBrowserRouter([
                   <FeeDetails /></Suspense>
               },
               {
-                path: ':id',
+                path: ':email',
                 element: <Suspense fallback={Loading}><FeeDetailAdmin /></Suspense>
               }
             ]
@@ -538,7 +539,7 @@ const router = createBrowserRouter([
                   <PreviousFeeDetailsAdmin /></Suspense>
               },
               {
-                path: ':id',
+                path: ':email',
                 element: <Suspense fallback={Loading}><PreviousFeeDetailAdmin /></Suspense>
               }
             ]

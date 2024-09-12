@@ -64,3 +64,10 @@ code {
 .Home-table>div {
   width: auto;
 }
+
+select,
+input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}

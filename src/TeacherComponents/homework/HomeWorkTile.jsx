@@ -177,7 +177,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                             )}
                         </AnimatePresence>
 
-                        <div className="flex justify-between items-center mt-4 text-sm text-black">
+                        <div className="flex justify-between items-center mt-4 text-sm text-black mobile:max-sm:flex-col mobile:max-sm:items-start">
                             <div className="flex items-center space-x-2">
                                 <IoMdCalendar />
                                 <span>Date: {detail.date}</span>

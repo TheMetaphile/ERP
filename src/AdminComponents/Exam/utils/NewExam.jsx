@@ -98,7 +98,7 @@ const NewExam = ({ onClose, addExam }) => {
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-3xl mobile:max-tablet:p-4"
+        className="relative bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-3xl mobile:max-tablet:p-4 mobile:max-sm:w-11/12"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}

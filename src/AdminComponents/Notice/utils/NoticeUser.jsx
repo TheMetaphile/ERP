@@ -24,7 +24,7 @@ const NoticeUser = () => {
     <div className="bg-white p-4 rounded-lg shadow-md w-full flex flex-col">
       <ToastContainer />
       <div className="flex justify-between mobile:max-tablet:flex-col mobile:max-laptop:gap-2">
-        <div className="flex gap-10  mobile:max-tablet:whitespace-nowrap mobile:max-laptop:gap-2">
+        <div className="flex gap-10  mobile:max-tablet:whitespace-nowrap mobile:max-laptop:gap-2 overflow-auto">
           <button className={`p-2 mx-1 ${selectedRole === 'all' ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}
             onClick={() => selectRole('all')}>For All</button>
           <button className={`p-2 mx-1 ${selectedRole === 'student' ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}
