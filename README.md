@@ -169,6 +169,22 @@ The API endpoints are documented using Swagger. Navigate to `http://localhost:30
   - **Account Expenses**: `/Admin-Dashboard/Account/Expenses`
   - **Teacher-Student Account**: `/Admin-Dashboard/Account/TeacherStudents`
 
+## Demo
+Website - https://erp-themetaphiles-projects.vercel.app/
+Credential -
+1. Admin, Teacher, Student -
+   Email: jioraaza@gmail.com
+   Password: demo1234
+2. Sub-Admin Finance -
+   Email: jioraaza@gmail.com
+   Password: 123456789101
+3. Sub-Admin Result -
+   Email: result@gmail.com
+   Password: 123456789101
+4. Sub-Admin Certificate -
+   Email: certificate@gmail.com
+   Password: 123456789101
+
 ## Contributing
 
 Contributions are welcome! Please follow these steps to contribute:
