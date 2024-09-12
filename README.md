@@ -60,11 +60,11 @@ The School ERP System is a comprehensive solution designed to manage various adm
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/school-erp-system.git
+    git clone https://github.com/TheMetaphile/ERP.git
     ```
 2. Navigate to the project directory:
     ```bash
-    cd school-erp-system
+    cd ERP
     ```
 3. Install dependencies:
     ```bash
@@ -79,7 +79,7 @@ The School ERP System is a comprehensive solution designed to manage various adm
     ```
 5. Start the application:
     ```bash
-    npm start
+    npm run dev
     ```
 
 ## Usage
