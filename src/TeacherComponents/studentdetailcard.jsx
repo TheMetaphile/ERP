@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { BASE_URL_Login } from '../../../../Config';
-import AuthContext from '../../../../Context/AuthContext';
+import { BASE_URL_Login } from '../Config';
+import AuthContext from '../Context/AuthContext';
 
 export default function Studentdetailscard() {
     const { email } = useParams();

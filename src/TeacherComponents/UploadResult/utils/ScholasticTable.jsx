@@ -5,6 +5,7 @@ import { BASE_URL_Result } from '../../../Config';
 import AuthContext from "../../../Context/AuthContext";
 import { motion } from "framer-motion";
 import { FaSave, FaUserGraduate, FaBook, FaPencilAlt, FaFlask, FaClipboardCheck } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function ScholasticTable({ students, term, Class, subject }) {
     const { authState } = useContext(AuthContext);
@@ -186,9 +187,11 @@ export default function ScholasticTable({ students, term, Class, subject }) {
                                 <td className="py-3 px-2 text-center ">
 
                                     {student.rollNumber}</td>
-                                <td className="py-3 px-2 text-center flex gap-2 items-center">
-                                    <img src={student.profileLink} alt="" className="h-10 w-10 rounded-full" />
-                                    {student.name}</td>
+                                <Link to={`/Teacher-Dashboard/uploadResult/details/${student.email}`}>
+                                    <td className="py-3 px-2 text-center flex gap-2 items-center">
+                                        <img src={student.profileLink} alt="" className="h-10 w-10 rounded-full" />
+                                        {student.name}</td>
+                                </Link>
                                 <td className="py-3 px-2 text-center ">
                                     {marks[student.email]?.lastNoteBookChecked?.topic || 'No data'}
                                 </td>

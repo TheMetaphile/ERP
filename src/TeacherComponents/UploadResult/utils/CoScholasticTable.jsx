@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { BASE_URL_Result } from '../../../Config';
 import { motion } from "framer-motion";
 import { FaSave, FaGraduationCap, FaUserGraduate, FaBook } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function CoScholasticTable({ students, term, Class }) {
     const { authState } = useContext(AuthContext);
@@ -122,7 +123,9 @@ export default function CoScholasticTable({ students, term, Class }) {
                             transition={{ type: "spring", stiffness: 300 }}
                         >
                             <td className="py-3 px-6 text-center">{Student.rollNumber}</td>
-                            <td className="py-3 px-6 text-center whitespace-nowrap">{Student.name}</td>
+                            <Link to={`/Teacher-Dashboard/uploadResult/details/${Student.email}`}>
+                                <td className="py-3 px-6 text-center whitespace-nowrap">{Student.name}</td>
+                            </Link>
                             {Subjects.map((Subject, subIndex) => (
                                 <td key={subIndex} className="py-3 px-6 text-center">
                                     <motion.input

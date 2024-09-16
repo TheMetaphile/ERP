@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 import Loading from "./LoadingScreen/Loading.jsx";
 import StudentCard from "./AdminComponents/StudentDetails.jsx";
-import Studentdetailscard from "./TeacherComponents/studentattendence/Students Attendance/utils/studentdetailcard.jsx";
+import Studentdetailscard from "./TeacherComponents/studentdetailcard.jsx";
 
 const AllPreviousDetailsAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/AllDetailsAdmin.jsx"));
 const PreviousFeeDetailAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/utils/PreviousFeeDetailAdmin.jsx"));
@@ -522,7 +522,13 @@ const router = createBrowserRouter([
           {
             path: '/Admin-Dashboard/StudentsFee/feediscount',
             element: <Suspense fallback={Loading}>
-              <FeeDiscount /></Suspense>
+              <FeeDiscount /></Suspense>,
+            children: [
+              {
+                path: ':email',
+                element: <Suspense fallback={Loading}><FeeDiscount /></Suspense>
+              }
+            ]
           },
           {
             path: '',
@@ -1098,7 +1104,17 @@ const router = createBrowserRouter([
             element: <Suspense fallback={Loading}>
               <NewNoteBookRecord /></Suspense>
           },
-
+          {
+            path: "/Teacher-Dashboard/notebook/studentdetails",
+            element: <Suspense fallback={Loading}>
+              <Studentdetailscard /></Suspense>,
+            children: [
+              {
+                path: ':email',
+                element: <Suspense fallback={Loading}><Studentdetailscard /></Suspense>
+              },
+            ]
+          },
         ]
       },
       {
@@ -1175,7 +1191,27 @@ const router = createBrowserRouter([
         path: "/Teacher-Dashboard/uploadResult",
         element: <Suspense fallback={Loading}>
           <UploadResult /></Suspense>,
-        children: []
+        children: [
+          {
+            path: "",
+            element: <Suspense fallback={Loading}>
+              <Studentdetailscard /></Suspense>,
+            children: [
+              {
+                path: "/Teacher-Dashboard/uploadResult/details",
+                element: <Suspense fallback={Loading}>
+                  <Studentdetailscard /></Suspense>,
+                children: [
+                  {
+                    path: ':email',
+                    element: <Suspense fallback={Loading}><Studentdetailscard /></Suspense>
+                  },
+                ]
+              },
+            ]
+          },
+
+        ]
       },
     ]
   },

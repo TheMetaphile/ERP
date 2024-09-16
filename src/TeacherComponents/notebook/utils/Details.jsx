@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import AuthContext from "../../../Context/AuthContext";
 import axios from "axios";
 import Switch from "./switch";
@@ -139,10 +139,12 @@ const RecordDetails = () => {
                 className="border-b border-gray-200 last:border-none"
               >
                 <td className="py-3 px-6 text-center whitespace-nowrap">{Student.rollNumber}</td>
-                <td className="flex py-3 px-6 text-center items-center gap-2 whitespace-nowrap">
-                  <img src={Student.profileLink} alt="img" className="rounded-full h-10 w-10" />
-                  {Student.name}
-                </td>
+                <Link to={`/Teacher-Dashboard/notebook/studentdetails/${Student.email}`}>
+                  <td className="flex py-3 px-6 text-center items-center gap-2 whitespace-nowrap">
+                    <img src={Student.profileLink} alt="img" className="rounded-full h-10 w-10" />
+                    {Student.name}
+                  </td>
+                </Link>
                 <td className="py-3 px-6 text-center whitespace-nowrap">{new Date(date).toDateString()}</td>
                 <td className="py-3 px-6 text-center">{chapter}</td>
                 <td className="py-3 px-6 text-center whitespace-nowrap">{topic}</td>
@@ -193,10 +195,12 @@ const RecordDetails = () => {
                 className="border-b border-gray-200 last:border-none"
               >
                 <td className="py-3 px-6 text-center whitespace-nowrap">{Student.rollNumber}</td>
+
                 <td className="flex py-3 px-6 text-center items-center gap-2 whitespace-nowrap">
                   <img src={Student.profileLink} alt="img" className="rounded-full h-10 w-10" />
                   {Student.name}
                 </td>
+
                 <td className="py-3 px-6 text-center whitespace-nowrap">{new Date(date).toDateString()}</td>
                 <td className="py-3 px-6 text-center">{chapter}</td>
                 <td className="py-3 px-6 text-center whitespace-nowrap">{topic}</td>

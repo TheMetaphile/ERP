@@ -178,28 +178,30 @@ function FeeDiscount() {
                                 </tr>
                             ) : details.length > 0 ? (
                                 details.map((detail, index) => (
-                                    <Link to={`/Admin-Dashboard/StudentsFee/details/${details.email}`}>
-                                        <tr key={index} className="border-b hover:bg-gray-100 transition duration-200">
-                                            <td className="py-3 px-4">{detail.to.rollNumber}</td>
+
+                                    <tr key={index} className="border-b hover:bg-gray-100 transition duration-200">
+                                        <td className="py-3 px-4">{detail.to.rollNumber}</td>
+                                        <Link to={`/Admin-Dashboard/StudentsFee/details/${detail.to.email}`}>
                                             <td className="py-3 px-4 flex items-center">
                                                 <img src={detail.to.profileLink} alt="profile" className="h-8 w-8 rounded-full mr-3" />
                                                 {detail.to.name}
                                             </td>
-                                            <td className="py-3 px-4">{detail.to.currentClass}</td>
-                                            <td className="py-3 px-4">{detail.session}</td>
-                                            <td className="py-3 px-4">{detail.amount}</td>
-                                            <td className="py-3 px-4">{detail.by.name}</td>
-                                            <td className="py-3 px-4">{detail.by.employeeId}</td>
-                                            <td className="py-3 px-4">
-                                                <button
-                                                    className="text-red-500 hover:text-red-700 transition duration-200"
-                                                    onClick={() => handleDelete(index, detail._id)}
-                                                >
-                                                    <MdDeleteForever size={20} />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </Link>
+                                        </Link>
+                                        <td className="py-3 px-4">{detail.to.currentClass}</td>
+                                        <td className="py-3 px-4">{detail.session}</td>
+                                        <td className="py-3 px-4">{detail.amount}</td>
+                                        <td className="py-3 px-4">{detail.by.name}</td>
+                                        <td className="py-3 px-4">{detail.by.employeeId}</td>
+                                        <td className="py-3 px-4">
+                                            <button
+                                                className="text-red-500 hover:text-red-700 transition duration-200"
+                                                onClick={() => handleDelete(index, detail._id)}
+                                            >
+                                                <MdDeleteForever size={20} />
+                                            </button>
+                                        </td>
+                                    </tr>
+
                                 ))
                             ) : (
                                 <tr>
