@@ -89,7 +89,7 @@ function PreviousFeeDetailsAdmin() {
 
             <div className=' w-full'>
                 <div className=' mt-2  border rounded-lg overflow-auto'>
-                    <div className="flex justify-between  py-2  bg-gradient-to-r from-teal-400 to-blue-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap mobile:max-tablet:w-fit">
+                    <div className="flex justify-between  py-2  bg-gradient-to-r from-purple-400 to-purple-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap mobile:max-tablet:w-fit">
                         <h1 className="w-44 mobile:max-tablet:w-60 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Name
                         </h1>
