@@ -8,13 +8,19 @@ import { FaFilter, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 function NoteBook() {
   const { authState } = useContext(AuthContext);
-  const [Class, setClass] = useState(authState.subject ? authState.subject[0].class : '');
-  const [Section, setSection] = useState(authState.subject ? authState.subject[0].section : "");
+  const [Class, setClass] = useState(localStorage.getItem('Class') || '');
+  const [Section, setSection] = useState(localStorage.getItem('Section') || '');
   const [selectedTab, setSelectedTab] = useState('All');
   const [searchParams, setSearchParams] = useSearchParams();
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-  const [Subject, setSubject] = useState(authState.subject ? authState.subject[0].subject : "");
+  const [Subject, setSubject] = useState(localStorage.getItem('Subject') || '');
+
+  useEffect(() => {
+    localStorage.setItem('Class', Class);
+    localStorage.setItem('Section', Section);
+    localStorage.setItem('Subject', Subject);
+}, [Class, Section, Subject]);
 
   const onTabChange = (tab) => {
     setSelectedTab(tab);

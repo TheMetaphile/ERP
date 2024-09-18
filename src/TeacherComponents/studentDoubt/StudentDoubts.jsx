@@ -9,14 +9,20 @@ import Answered from './utils/Answered';
 
 function StudentDoubts() {
     const { authState } = useContext(AuthContext);
-    const [Class, setClass] = useState('');
-    const [Section, setSection] = useState('');
-    const [Subject, setSubject] = useState('');
+    const [Class, setClass] = useState(localStorage.getItem('Class') || '');
+    const [Section, setSection] = useState(localStorage.getItem('Section') || '');
+    const [Subject, setSubject] = useState(localStorage.getItem('Subject') || '');
     const [selectedLink, setSelectedLink] = useState(`/Teacher-Dashboard/studentdoubts/new`);
     const uniqueClasses = Array.from(new Set(authState.subject ? authState.subject.map(subj => subj.class) : []));
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
     const [isDropdownVisible, setDropdownVisible] = useState(false);
+
+    useEffect(() => {
+        localStorage.setItem('Class', Class);
+        localStorage.setItem('Section', Section);
+        localStorage.setItem('Subject', Subject);
+    }, [Class, Section, Subject]);
 
     useEffect(() => {
         setUniqueSections(Array.from(new Set(

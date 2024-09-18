@@ -33,7 +33,7 @@ export default function StudentsList() {
         setName(event.target.value);
     };
 
-    const [Class, setClass] = useState('');
+    const [Class, setClass] = useState(localStorage.getItem('Class') || '');
     const handleClassChange = (event) => {
         setStart(0);
         setUserData([]);
@@ -41,7 +41,7 @@ export default function StudentsList() {
         setClass(event.target.value);
     };
 
-    const [Section, setSection] = useState('');
+    const [Section, setSection] = useState(localStorage.getItem('Section') || '');
     const handleSectionChange = (event) => {
         setStart(0);
         setUserData([]);
@@ -53,6 +53,11 @@ export default function StudentsList() {
     const handlebothEventsCalled = (event) => {
         setBothEventsCalled(true);
     };
+
+    useEffect(() => {
+        localStorage.setItem('Class', Class);
+        localStorage.setItem('Section', Section);
+    }, [Class, Section]);
 
     useEffect(() => {
         if (bothEventsCalled) {

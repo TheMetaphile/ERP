@@ -1193,22 +1193,8 @@ const router = createBrowserRouter([
           <UploadResult /></Suspense>,
         children: [
           {
-            path: "",
-            element: <Suspense fallback={Loading}>
-              <Studentdetailscard /></Suspense>,
-            children: [
-              {
-                path: "/Teacher-Dashboard/uploadResult/details",
-                element: <Suspense fallback={Loading}>
-                  <Studentdetailscard /></Suspense>,
-                children: [
-                  {
-                    path: ':email',
-                    element: <Suspense fallback={Loading}><Studentdetailscard /></Suspense>
-                  },
-                ]
-              },
-            ]
+            path: '/Teacher-Dashboard/uploadResult/details/:email',
+            element: <Suspense fallback={Loading}><Studentdetailscard /></Suspense>
           },
 
         ]
