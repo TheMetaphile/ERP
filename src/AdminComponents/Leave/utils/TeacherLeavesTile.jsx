@@ -38,7 +38,7 @@ export default function TeacherLeavesTile({ data }) {
         const session = getCurrentSession();
         try {
             const response = await axios.put(
-                `${BASE_URL_TeacherLeave}/leave/update?leaveId=${id}&session=${session}`,
+                `${BASE_URL_TeacherLeave}/teacherleave/update?leaveId=${id}&session=${session}`,
                 { status: actionType },
                 {
                     headers: {
@@ -59,7 +59,7 @@ export default function TeacherLeavesTile({ data }) {
                 toast.error('Failed to update leave status');
             }
         } catch (err) {
-            console.error('Error updating leave:', err.message);
+            console.error('Error updating leave:', err.message,err);
             toast.error('Error updating leave');
         } finally {
             setLoading(false);
