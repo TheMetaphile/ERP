@@ -5,6 +5,7 @@ import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL_Login } from "../../../Config";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export default function StudentDetailTile({ userData }) {
     const { authState } = useContext(AuthContext);
@@ -57,10 +58,12 @@ export default function StudentDetailTile({ userData }) {
                     className="border-b border-gray-200 hover:bg-purple-100 transition-colors mb-2"
                 >
                     <div className="flex text-center mobile:max-tablet:gap-2 items-center justify-evenly border rounded-lg py-2 pl-2 tablet:max-laptop:w-fit">
-                        <div className="w-40 flex justify-center items-center space-x-2">
-                            <img src={user.profileLink} alt="" className="h-8 w-8 rounded-full object-cover" />
-                            <h1 className="text-base w-32 truncate">{user.name}</h1>
-                        </div>
+                        <Link to={`/Sub-Admin/Students/details/${user.email}`}>
+                            <div className="w-40 flex justify-center items-center space-x-2">
+                                <img src={user.profileLink} alt="" className="h-8 w-8 rounded-full object-cover" />
+                                <h1 className="text-base w-32 truncate">{user.name}</h1>
+                            </div>
+                        </Link>
                         <h1 className="text-base w-40 truncate">{user.currentClass}</h1>
                         <h1 className="text-base w-40 truncate">{user.section}</h1>
                         <h1 className="text-base w-40 truncate">{user.fatherPhoneNumber}</h1>

@@ -96,7 +96,7 @@ export default function FeeDetailAdmin() {
                     <div className="transition-opacity duration-300 ease-in-out"
                         style={{ opacity: loading ? 0 : 1 }}>
                         {selectedTab === 'personal' && (
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-4 mobile:max-sm:grid-cols-1">
                                 <InfoItem label="Class & Section" value={`${userData?.currentClass} ${userData?.section}`} />
                                 <InfoItem label="Date of Birth" value={userData?.DOB} />
                                 <InfoItem label="Gender" value={userData?.gender} />
@@ -109,7 +109,7 @@ export default function FeeDetailAdmin() {
                             </div>
                         )}
                         {selectedTab === 'parent' && (
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-4 mobile:max-sm:grid-cols-1">
                                 <InfoItem label="Father's Name" value={userData?.fatherName} />
                                 <InfoItem label="Mother's Name" value={userData?.motherName} />
                                 <InfoItem label="Father's Phone" value={userData?.fatherPhoneNumber} />
