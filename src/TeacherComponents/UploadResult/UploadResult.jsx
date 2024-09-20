@@ -28,8 +28,8 @@ function UploadResult() {
     localStorage.setItem('Class', Class);
     localStorage.setItem('Section', Section);
     localStorage.setItem('Subject', Subject);
-    localStorage.setItem('selectedTerm',selectedTerm);
-}, [Class, Section, Subject,selectedTerm]);
+    localStorage.setItem('selectedTerm', selectedTerm);
+  }, [Class, Section, Subject, selectedTerm]);
 
   const terms = [
     {
@@ -124,7 +124,7 @@ function UploadResult() {
             Upload Report Card
           </motion.h1>
         </div>
-        <div className="block flex-1 justify-end laptop:hidden w-full items-end mobile:max-laptop:text-end">
+        <div className="block flex-1 justify-end sm:hidden w-full items-end mobile:max-laptop:text-end">
           <motion.button
             className="p-2 border rounded flex items-center"
             onClick={() => setDropdownVisible(!isDropdownVisible)}
@@ -144,7 +144,7 @@ function UploadResult() {
               <div className='flex absolute left-0 right-0 bg-white p-4 gap-2 justify-between mobile:max-tablet:flex-col'>
                 <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
                 <div className="w-36 mobile:max-tablet:w-full mobile:max-tablet:mr-0 mr-3 self-center">
-                  <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleTermChange}>
+                  <select id="section" className="w-full px-2 py-2 border-2 border-blue-300 rounded-md" onChange={handleTermChange}>
                     <option value="">Select Term</option>
                     {terms.map((sectionOption, index) => (
                       <option key={index} value={sectionOption.value}>{sectionOption.label}</option>
@@ -170,7 +170,7 @@ function UploadResult() {
           <Switch checked={scholastic} changeRole={handleRoleChange} />
         </div>
       </div>
-      <Outlet/>
+      <Outlet />
       {loading ? (
         <Loading />
       ) : scholastic ? (
@@ -178,7 +178,7 @@ function UploadResult() {
       ) : (
         <CoScholasticTable students={students} Class={Class} term={selectedTerm} />
       )}
-      
+
     </motion.div>
   );
 };

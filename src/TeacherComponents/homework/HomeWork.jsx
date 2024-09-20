@@ -138,8 +138,10 @@ function HomeWork() {
           className='w-full flex  items-center justify-between tablet:max-laptop:flex-col tablet:max-laptop:items-start mobile:max-tablet:px-3'
           variants={itemVariants}
         >
-          <h1 className='text-3xl whitespace-nowrap mobile:max-tablet:text-lg font-medium text-black'>All Homework</h1>
-          <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
+          <div>
+            <h1 className='text-3xl whitespace-nowrap mobile:max-tablet:text-lg font-medium text-black'>All Homework</h1>
+          </div>
+          <div className="block sm:hidden w-full mobile:max-tablet:text-end">
             <motion.button
               className="p-2 border rounded-full bg-blue-100 text-black hover:bg-blue-200 transition-colors duration-300"
               onClick={() => setDropdownVisible(!isDropdownVisible)}
@@ -190,9 +192,9 @@ function HomeWork() {
           </div>
 
         </motion.div>
-        <motion.div variants={itemVariants} className='w-full flex items-center justify-between mb-4'>
+        <motion.div variants={itemVariants} className='w-full flex items-center justify-end mb-4'>
           <div className="flex items-center space-x-4 mt-3">
-            <div className='flex mobile:max-tablet:hidden items-center gap-3'>
+            <div className='flex mobile:max-sm:hidden items-center gap-3'>
               <div className="relative">
                 <FiBook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
                 <select id="class" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleClassChange}>
