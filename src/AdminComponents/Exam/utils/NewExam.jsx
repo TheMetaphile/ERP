@@ -9,10 +9,10 @@ import { motion } from 'framer-motion';
 const NewExam = ({ onClose, addExam }) => {
   const { authState } = useContext(AuthContext);
   const [selectedTerm, setSelectedTerm] = useState('');
+  const [classs, setClass] = useState('');
   const [stream, setStream] = useState('');
   const [exams, setExams] = useState([
     {
-      Class: '',
       subject: '',
       time: '',
       date: '',
@@ -31,11 +31,14 @@ const NewExam = ({ onClose, addExam }) => {
     setStream(e.target.value);
   };
 
+  const handleClassChange = (e) => {
+    setClass(e.target.value);
+  };
+
   const addNewExam = () => {
     setExams([
       ...exams,
       {
-        Class: '',
         subject: '',
         time: '',
         date: '',
@@ -68,7 +71,7 @@ const NewExam = ({ onClose, addExam }) => {
     const examData = {
       accessToken: authState.accessToken,
       stream: stream || "Not applicable",
-      class: exams[0].Class,
+      class: classs,
       term: selectedTerm,
       schedule: schedules,
     };
@@ -128,6 +131,42 @@ const NewExam = ({ onClose, addExam }) => {
           >
             <div className="mb-4 w-full">
               <label
+                htmlFor="class"
+                className="block  font-bold mb-2 text-purple-600"
+              >
+                Select Class
+              </label>
+              <select
+                className="w-full p-2 border border-purple-400 rounded-md"
+                name="Class"
+                value={classs}
+                onChange={handleClassChange}
+                required
+              >
+                <option value="" disabled >
+                  Select Class
+                </option>
+                <option value="Pre-Nursery">Pre-Nursery</option>
+                <option value="Nursery">Nursery</option>
+                <option value="L.K.G">L.K.G</option>
+                <option value="U.K.G">U.K.G</option>
+                <option value="1st">1st</option>
+                <option value="2nd">2nd</option>
+                <option value="3rd">3rd</option>
+                <option value="4th">4th</option>
+                <option value="5th">5th</option>
+                <option value="6th">6th</option>
+                <option value="7th">7th</option>
+                <option value="8th">8th</option>
+                <option value="9th">9th</option>
+                <option value="10th">10th</option>
+                <option value="11th">11th</option>
+                <option value="12th">12th</option>
+              </select>
+            </div>
+
+            <div className="mb-4 w-full">
+              <label
                 htmlFor="term"
                 className="block  font-bold mb-2 text-purple-600"
               >
@@ -174,14 +213,13 @@ const NewExam = ({ onClose, addExam }) => {
           </motion.div>
           <div className=' overflow-auto'>
             <motion.table
-              className="bg-white overflow-auto"
+              className="bg-white overflow-auto w-full"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               <thead>
                 <tr>
-                  <th className="py-2 text-purple-600 font-medium">Class</th>
                   <th className="py-2 text-purple-600 font-medium">Subject</th>
                   <th className="py-2 text-purple-600 font-medium">Date</th>
                   <th className="py-2 text-purple-600 font-medium">Time</th>
@@ -197,35 +235,7 @@ const NewExam = ({ onClose, addExam }) => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
                   >
-                    <td className="border px-4 py-2">
-                      <select
-                        className="w-full"
-                        name="Class"
-                        value={exam.Class}
-                        onChange={(e) => handleChange(index, e)}
-                        required
-                      >
-                        <option value="" disabled>
-                          Select Class
-                        </option>
-                        <option value="Pre-Nursery">Pre-Nursery</option>
-                        <option value="Nursery">Nursery</option>
-                        <option value="L.K.G">L.K.G</option>
-                        <option value="U.K.G">U.K.G</option>
-                        <option value="1st">1st</option>
-                        <option value="2nd">2nd</option>
-                        <option value="3rd">3rd</option>
-                        <option value="4th">4th</option>
-                        <option value="5th">5th</option>
-                        <option value="6th">6th</option>
-                        <option value="7th">7th</option>
-                        <option value="8th">8th</option>
-                        <option value="9th">9th</option>
-                        <option value="10th">10th</option>
-                        <option value="11th">11th</option>
-                        <option value="12th">12th</option>
-                      </select>
-                    </td>
+
                     <td className="border px-4 py-2">
                       <select
                         className="w-full"
