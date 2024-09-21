@@ -20,7 +20,7 @@ function NoteBook() {
     localStorage.setItem('Class', Class);
     localStorage.setItem('Section', Section);
     localStorage.setItem('Subject', Subject);
-}, [Class, Section, Subject]);
+  }, [Class, Section, Subject]);
 
   const onTabChange = (tab) => {
     setSelectedTab(tab);
@@ -41,17 +41,18 @@ function NoteBook() {
       transition={{ duration: 0.5 }}
       className="overflow-y-auto w-full items-start px-2 no-scrollbar"
     >
-      <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:py-1'>
-        <motion.h1
-          initial={{ x: -50 }}
-          animate={{ x: 0 }}
-          transition={{ type: 'spring', stiffness: 120 }}
-          className="text-3xl font-medium text-black mobile:max-tablet:text-lg whitespace-nowrap"
-        >
-          Note Book Record
-        </motion.h1>
-
-        <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
+      <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:px-1 mb-2'>
+        <div className=' mobile:max-tablet:flex'>
+          <motion.h1
+            initial={{ x: -50 }}
+            animate={{ x: 0 }}
+            transition={{ type: 'spring', stiffness: 120 }}
+            className="text-3xl font-medium text-black mobile:max-tablet:text-lg whitespace-nowrap"
+          >
+            Note Book Record
+          </motion.h1>
+        </div>
+        <div className="flex justify-end tablet:hidden w-full mobile:max-tablet:text-end right-0">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

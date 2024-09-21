@@ -39,9 +39,9 @@ function NoteBookHOD() {
                 >
                     Note Book Record
                 </motion.h1>
-                <div className="block tablet:hidden w-full mobile:max-tablet:text-end whitespace-nowrap">
+                <div className="flex justify-end tablet:hidden w-full mobile:max-tablet:text-end whitespace-nowrap">
                     <motion.button
-                        className="p-2 border mx-auto rounded bg-blue-700 text-white hover:bg-blue-800 transition-colors duration-300"
+                        className="p-2 border items-center rounded bg-blue-700 text-white hover:bg-blue-800 transition-colors duration-300 flex"
                         onClick={() => setDropdownVisible(!isDropdownVisible)}
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
@@ -52,7 +52,7 @@ function NoteBookHOD() {
                     </motion.button>
                     {isDropdownVisible && (
                         <motion.div
-                            className='flex fixed left-0 right-0 bg-white pt-1 p-4 gap-2 justify-between mobile:max-tablet:flex-col'
+                            className='flex fixed mt-11 left-0 right-0 bg-white pt-1 p-4 gap-2 justify-between mobile:max-tablet:flex-col'
                             initial={{ y: -20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.3 }}

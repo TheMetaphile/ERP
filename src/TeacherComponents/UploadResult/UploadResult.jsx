@@ -124,7 +124,7 @@ function UploadResult() {
             Upload Report Card
           </motion.h1>
         </div>
-        <div className="block flex-1 justify-end sm:hidden w-full items-end mobile:max-laptop:text-end">
+        <div className="flex flex-1 justify-end sm:hidden w-full items-end mobile:max-laptop:text-end">
           <motion.button
             className="p-2 border rounded flex items-center"
             onClick={() => setDropdownVisible(!isDropdownVisible)}
