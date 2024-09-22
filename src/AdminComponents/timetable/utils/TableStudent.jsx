@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import { Link } from "react-router-dom";
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
-
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_TimeTable } from '../../../Config';
@@ -17,13 +16,22 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
 
     const handleEditClick = () => {
         setEditMode(true);
+        // Initialize editedData with current data
+        const initialEditedData = {};
+        lectures.forEach(lecture => {
+            initialEditedData[lecture._id] = {
+                subject: lecture.subject,
+                teacher: lecture.teacher?.name || ''
+            };
+        });
+        setEditedData(initialEditedData);
     };
 
     const handleCancelClick = () => {
         setEditMode(false);
+        setEditedData({});
     };
 
-    console.log('ttt', Time)
     const formatTime = (date) => {
         let hours = date.getHours();
         const minutes = date.getMinutes();
@@ -37,63 +45,44 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
     const handleSaveClick = async () => {
         try {
             const url = `${BASE_URL_TimeTable}/timetable/update`;
-            const updatedPeriodId = Object.keys(editedData[dayStudent])[0];
+            const updates = Object.entries(editedData).map(([periodId, data]) => ({
+                periodId,
+                ...data
+            }));
+            
             const payload = {
                 accessToken: authState.accessToken,
                 class: selectClass,
                 section: selectedSection,
                 day: dayStudent,
-                update: editedData[dayStudent][updatedPeriodId],
-                periodId: updatedPeriodId
+                update: updates
             };
-            console.log(payload)
+            
             const response = await axios.post(url, payload);
             if (response.status === 200) {
-                toast.success('Updated Successfully')
+                toast.success('Updated Successfully');
                 console.log('Update response:', response.data);
                 setEditMode(false);
+                setEditedData({});
             }
         } catch (error) {
-            toast.error(error)
+            toast.error(error.message || 'Error updating data');
             console.error('Error updating data:', error);
-        } finally {
-            setEditMode(false);
         }
     };
 
-    const handleInputChange = (day, periodId, field, value) => {
+    const handleInputChange = (lectureId, field, value) => {
         setEditedData(prevData => ({
             ...prevData,
-            [day]: {
-                ...prevData[day],
-                [periodId]: {
-                    ...prevData[day]?.[periodId],
-                    [field]: value
-                }
-            }
-        }));
-    };
-
-    const handleOptionalSubjectChange = (day, lectureId, value) => {
-        const selectedSubject = lectures.find(lecture => lecture._id === lectureId)
-            .optionalSubjects.find(opt => opt.optionalSubject === value);
-
-        setEditedData(prevData => ({
-            ...prevData,
-            [day]: {
-                ...(prevData[day] || {}),
-                [lectureId]: {
-                    ...(prevData[day]?.[lectureId] || {}),
-                    selectedOptional: value,
-                    subject: value,
-                    teacher: selectedSubject?.teacher?.name || ''
-                }
+            [lectureId]: {
+                ...prevData[lectureId],
+                [field]: value
             }
         }));
     };
 
     const lectures = timetableData[dayStudent] || [];
-    console.log(lectures, "isaut ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+
     const tableVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -108,9 +97,9 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0 }
     };
+
     return (
         <div className="w-full rounded-lg border shadow-md">
-            {/* <ToastContainer /> */}
             <div className="flex p-3 mb-4 justify-between w-full mobile:max-tablet:mb-0">
                 <Link
                     to="/Admin-Dashboard/timetable/upload"
@@ -151,7 +140,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                 >
                     <table className="w-full table-auto">
                         <thead>
-                            <tr className=" text-gray-600 uppercase bg-gradient-to-r from-purple-200 to-purple-100 text-sm leading-normal">
+                            <tr className="text-gray-600 uppercase bg-gradient-to-r from-purple-200 to-purple-100 text-sm leading-normal">
                                 <th className="py-3 px-6 text-left">Lecture</th>
                                 <th className="py-3 px-6 text-left">Time</th>
                                 <th className="py-3 px-6 text-left">Subject</th>
@@ -188,7 +177,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                                     <input
                                                         type="text"
                                                         value={editedData[lecture._id]?.subject || lecture.subject}
-                                                        onChange={(e) => handleInputChange('dayStudent', lecture._id, 'subject', e.target.value)}
+                                                        onChange={(e) => handleInputChange(lecture._id, 'subject', e.target.value)}
                                                         className="border border-gray-300 px-2 py-1 rounded"
                                                     />
                                                 ) : (
@@ -203,7 +192,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                                     <input
                                                         type="text"
                                                         value={editedData[lecture._id]?.teacher || lecture.teacher?.name || ''}
-                                                        onChange={(e) => handleInputChange('dayStudent', lecture._id, 'teacher', e.target.value)}
+                                                        onChange={(e) => handleInputChange(lecture._id, 'teacher', e.target.value)}
                                                         className="border border-gray-300 px-2 py-1 rounded"
                                                     />
                                                 ) : (

@@ -47,6 +47,12 @@ const NewExam = ({ onClose, addExam }) => {
     ]);
   };
 
+  const removeNewExam = () => {
+    if (exams.length > 0) {
+      setExams(exams.slice(0, -1));  // Remove the last exam entry
+    }
+  };
+
   const handleTermChange = (e) => {
     const { value } = e.target;
     setSelectedTerm(value);
@@ -88,7 +94,7 @@ const NewExam = ({ onClose, addExam }) => {
 
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.error || 'An error occurred';
+      const errorMessage = error.response?.data?.error;
       toast.error(errorMessage);
     }
   };
@@ -318,7 +324,16 @@ const NewExam = ({ onClose, addExam }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Add New
+              Add Row
+            </motion.button>
+            <motion.button
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="button"
+              onClick={removeNewExam}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Remove Row
             </motion.button>
             <motion.button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
