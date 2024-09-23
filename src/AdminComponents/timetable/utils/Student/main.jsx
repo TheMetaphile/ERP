@@ -100,6 +100,7 @@ function StudentsTimeTable() {
                 if (response.status === 200) {
                     setData(response.data);
                 }
+                console.log(response.data)
             } catch (error) {
                 toast.error('Error fetching data.');
                 console.error('Error fetching data:', error);

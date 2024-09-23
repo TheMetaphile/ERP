@@ -40,6 +40,7 @@ export const AuthProvider = ({ children }) => {
         console.log("auth subject", subject);
         console.log("auth ClassDetails", ClassDetails);
         console.log("auth student side subjects", subjects);
+        console.log("auth techer coscholastic", Co_scholastic);
         console.log("notification", token);
 
     };

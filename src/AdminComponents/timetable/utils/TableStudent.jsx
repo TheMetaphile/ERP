@@ -1,34 +1,35 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { Link } from "react-router-dom";
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_TimeTable } from '../../../Config';
+import { BASE_URL_Result, BASE_URL_TimeTable } from '../../../Config';
 import { motion } from 'framer-motion';
 import { FaEdit, FaSave, FaUtensils, FaBookOpen, FaChalkboardTeacher, FaClock } from 'react-icons/fa';
 
 function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOfLeacturesBeforeLunch, Time }) {
     const timetableData = data || {};
-    const [editMode, setEditMode] = useState(false);
+    const [lectures, setLectures] = useState(timetableData[dayStudent] || []);
+    const [editingLectureId, setEditingLectureId] = useState(null);
     const [editedData, setEditedData] = useState({});
     const { authState } = useContext(AuthContext);
+    const [suggestions, setSuggestions] = useState([]);
+    const [teacherInput, setTeacherInput] = useState('');
+    const subjects = ["Hindi", "English", "Mathematics", "Science", " Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", " Accounts"];
 
-    const handleEditClick = () => {
-        setEditMode(true);
-        // Initialize editedData with current data
-        const initialEditedData = {};
-        lectures.forEach(lecture => {
-            initialEditedData[lecture._id] = {
-                subject: lecture.subject,
-                teacher: lecture.teacher?.name || ''
-            };
+    const handleEditClick = (lectureId) => {
+        setEditingLectureId(lectureId);
+        const lecture = lectures.find(l => l._id === lectureId);
+        setEditedData({
+            subject: lecture.subject,
+            teacher: lecture.teacher?.name || ''
         });
-        setEditedData(initialEditedData);
+        setTeacherInput(lecture.teacher?.name || '');
     };
 
     const handleCancelClick = () => {
-        setEditMode(false);
+        setEditingLectureId(null);
         setEditedData({});
     };
 
@@ -42,27 +43,36 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
         return `${hours}:${strMinutes} ${ampm}`;
     };
 
-    const handleSaveClick = async () => {
+    const handleSaveClick = async (lectureId) => {
         try {
             const url = `${BASE_URL_TimeTable}/timetable/update`;
-            const updates = Object.entries(editedData).map(([periodId, data]) => ({
-                periodId,
-                ...data
-            }));
-            
+            const updates = {
+                periodId: lectureId,
+                ...editedData
+            };
+
             const payload = {
                 accessToken: authState.accessToken,
                 class: selectClass,
                 section: selectedSection,
                 day: dayStudent,
-                update: updates
+                update: [updates],
+                periodId: lectureId
             };
-            
+
             const response = await axios.post(url, payload);
             if (response.status === 200) {
                 toast.success('Updated Successfully');
                 console.log('Update response:', response.data);
-                setEditMode(false);
+
+
+                setLectures(prevLectures =>
+                    prevLectures.map(lecture =>
+                        lecture._id === lectureId ? { ...lecture, subject: editedData.subject, teacher: { name: editedData.teacher } } : lecture
+                    )
+                );
+
+                setEditingLectureId(null);
                 setEditedData({});
             }
         } catch (error) {
@@ -71,31 +81,47 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
         }
     };
 
-    const handleInputChange = (lectureId, field, value) => {
+    const handleInputChange = (field, value) => {
         setEditedData(prevData => ({
             ...prevData,
-            [lectureId]: {
-                ...prevData[lectureId],
-                [field]: value
-            }
+            [field]: value
         }));
-    };
 
-    const lectures = timetableData[dayStudent] || [];
 
-    const tableVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1
-            }
+        if (field === 'teacher') {
+            setTeacherInput(value);
+            fetchTeacherSuggestions(value);
         }
     };
 
-    const rowVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0 }
+    const fetchTeacherSuggestions = useCallback(async (searchString) => {
+        if (!searchString) {
+            setSuggestions([]);
+            return;
+        }
+        try {
+            const response = await axios.post(`${BASE_URL_Result}/search/teacher`, {
+                accessToken: authState.accessToken,
+                searchString,
+                start: 0,
+                end: 30,
+            });
+            const fetchedSuggestions = response.data.Teachers.map((teacher) => ({
+                name: teacher.name,
+                profileLink: teacher.profileLink,
+                email: teacher.email,
+            }));
+            setSuggestions(fetchedSuggestions);
+        } catch (error) {
+            console.error("Error searching for teachers:", error);
+            setSuggestions([]);
+        }
+    }, [authState.accessToken]);
+
+    const handleSuggestionClick = (suggestion) => {
+        setTeacherInput(suggestion.name);
+        setEditedData(prev => ({ ...prev, teacher: suggestion.name }));
+        setSuggestions([]);
     };
 
     return (
@@ -107,35 +133,15 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                 >
                     Upload
                 </Link>
-                {editMode ? (
-                    <>
-                        <button
-                            onClick={handleSaveClick}
-                            className="px-4 py-2 rounded-md bg-green-200 text-gray-800 hover:bg-green-500 hover:text-white"
-                        >
-                            Save
-                        </button>
-                        <button
-                            onClick={handleCancelClick}
-                            className="px-4 py-2 rounded-md bg-red-200 text-gray-800 hover:bg-red-500 hover:text-white"
-                        >
-                            Cancel
-                        </button>
-                    </>
-                ) : (
-                    <button
-                        onClick={handleEditClick}
-                        className="px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white"
-                    >
-                        Edit
-                    </button>
-                )}
             </div>
             <div className="container mx-auto p-4">
                 <motion.div
                     initial="hidden"
                     animate="visible"
-                    variants={tableVariants}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+                    }}
                     className="overflow-x-auto shadow-lg rounded-lg"
                 >
                     <table className="w-full table-auto">
@@ -149,20 +155,18 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                             </tr>
                         </thead>
                         <tbody className="text-gray-600 text-sm font-light">
-                            {lectures.map((lecture, idx) => (
+                            {lectures.map((lecture) => (
                                 <React.Fragment key={lecture._id}>
                                     {numberOfLeacturesBeforeLunch === lecture.lectureNo - 1 && (
-                                        <motion.tr variants={rowVariants} className="border-b border-gray-200 hover:bg-yellow-100">
+                                        <motion.tr className="border-b border-gray-200 hover:bg-yellow-100">
                                             <td colSpan="5" className="py-3 px-6 text-center font-medium">
                                                 <FaUtensils className="inline mr-2" /> LUNCH
                                             </td>
                                         </motion.tr>
                                     )}
-                                    <motion.tr variants={rowVariants} className="border-b border-gray-200 hover:bg-gray-100">
-                                        <td className="py-3 px-6 text-left whitespace-nowrap">
-                                            <div className="flex items-center">
-                                                <span className="font-medium">{lecture.lectureNo}</span>
-                                            </div>
+                                    <motion.tr className="border-b border-gray-200 hover:bg-gray-100">
+                                        <td className="py-3 px-6 text-left">
+                                            <span className="font-medium">{lecture.lectureNo}</span>
                                         </td>
                                         <td className="py-3 px-6 text-left">
                                             <div className="flex items-center">
@@ -173,13 +177,19 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                         <td className="py-3 px-6 text-left">
                                             <div className="flex items-center">
                                                 <FaBookOpen className="mr-2" />
-                                                {editMode ? (
-                                                    <input
-                                                        type="text"
-                                                        value={editedData[lecture._id]?.subject || lecture.subject}
-                                                        onChange={(e) => handleInputChange(lecture._id, 'subject', e.target.value)}
+                                                {editingLectureId === lecture._id ? (
+                                                    <select
+                                                        value={editedData.subject || lecture.subject}
+                                                        onChange={(e) => handleInputChange('subject', e.target.value)}
                                                         className="border border-gray-300 px-2 py-1 rounded"
-                                                    />
+                                                    >
+                                                        <option value="">Select Subject</option>
+                                                        {subjects.map((subject) => (
+                                                            <option key={subject} value={subject}>
+                                                                {subject}
+                                                            </option>
+                                                        ))}
+                                                    </select>
                                                 ) : (
                                                     lecture.subject
                                                 )}
@@ -188,13 +198,33 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                         <td className="py-3 px-6 text-left">
                                             <div className="flex items-center">
                                                 <FaChalkboardTeacher className="mr-2" />
-                                                {editMode ? (
-                                                    <input
-                                                        type="text"
-                                                        value={editedData[lecture._id]?.teacher || lecture.teacher?.name || ''}
-                                                        onChange={(e) => handleInputChange(lecture._id, 'teacher', e.target.value)}
-                                                        className="border border-gray-300 px-2 py-1 rounded"
-                                                    />
+                                                {editingLectureId === lecture._id ? (
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            value={teacherInput}
+                                                            onChange={(e) => handleInputChange('teacher', e.target.value)}
+                                                            className="border border-gray-300 px-2 py-1 rounded"
+                                                        />
+                                                        {suggestions.length > 0 && (
+                                                            <div className="absolute bg-white border border-gray-300 shadow-lg">
+                                                                {suggestions.map(suggestion => (
+                                                                    <div
+                                                                        key={suggestion.email}
+                                                                        className="flex items-center p-2 cursor-pointer"
+                                                                        onClick={() => handleSuggestionClick(suggestion)}
+                                                                    >
+                                                                        <img
+                                                                            src={suggestion.profileLink}
+                                                                            alt="Profile"
+                                                                            className="w-10 h-10 rounded-full mr-2"
+                                                                        />
+                                                                        {suggestion.name}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 ) : (
                                                     <div className="flex items-center">
                                                         {lecture.teacher?.profileLink && (
@@ -207,14 +237,31 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                         </td>
                                         <td className="py-3 px-6 text-left">
                                             <div className="flex item-center justify-center">
-                                                <motion.button
-                                                    whileHover={{ scale: 1.1 }}
-                                                    whileTap={{ scale: 0.9 }}
-                                                    onClick={() => setEditMode(!editMode)}
-                                                    className="transform hover:text-purple-500 hover:scale-110"
-                                                >
-                                                    {editMode ? <FaSave size="18" /> : <FaEdit size="18" />}
-                                                </motion.button>
+                                                {editingLectureId === lecture._id ? (
+                                                    <>
+                                                        <button
+                                                            onClick={() => handleSaveClick(lecture._id)}
+                                                            className="px-4 py-2 rounded-md bg-green-200 text-gray-800 hover:bg-green-500 hover:text-white"
+                                                        >
+                                                            Save
+                                                        </button>
+                                                        <button
+                                                            onClick={handleCancelClick}
+                                                            className="px-4 py-2 rounded-md bg-red-200 text-gray-800 hover:bg-red-500 hover:text-white"
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <motion.button
+                                                        whileHover={{ scale: 1.1 }}
+                                                        whileTap={{ scale: 0.9 }}
+                                                        onClick={() => handleEditClick(lecture._id)}
+                                                        className="transform hover:text-purple-500 hover:scale-110"
+                                                    >
+                                                        <FaEdit />
+                                                    </motion.button>
+                                                )}
                                             </div>
                                         </td>
                                     </motion.tr>

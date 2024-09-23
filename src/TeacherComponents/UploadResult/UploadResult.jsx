@@ -174,9 +174,9 @@ function UploadResult() {
       {loading ? (
         <Loading />
       ) : scholastic ? (
-        <ScholasticTable students={students} subject={Subject} term={selectedTerm} Class={Class} />
+        <ScholasticTable students={students} subject={Subject} term={selectedTerm} Class={Class} section={Section}/>
       ) : (
-        <CoScholasticTable students={students} Class={Class} term={selectedTerm} />
+        <CoScholasticTable students={students} Class={Class} term={selectedTerm} section={Section}/>
       )}
 
     </motion.div>
