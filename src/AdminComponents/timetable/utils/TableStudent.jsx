@@ -56,7 +56,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                 class: selectClass,
                 section: selectedSection,
                 day: dayStudent,
-                update: [updates],
+                update: updates,
                 periodId: lectureId
             };
 
@@ -120,7 +120,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
 
     const handleSuggestionClick = (suggestion) => {
         setTeacherInput(suggestion.name);
-        setEditedData(prev => ({ ...prev, teacher: suggestion.name }));
+        setEditedData(prev => ({ ...prev, teacher: suggestion.email }));
         setSuggestions([]);
     };
 
