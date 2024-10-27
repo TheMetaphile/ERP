@@ -154,10 +154,10 @@ export default function () {
       className="mt-8 mx-auto bg-purple-50  border rounded-xl shadow-lg p-6 mobile:max-tablet:p-2"
     >
       <motion.select
-        whileHover={{ scale: 1.05 }}
+        whileHover={{ scale: 1.01 }}
         value={type}
         onChange={handleTypeChange}
-        className="w-full mb-6 bg-white border-2 border-purple-300 rounded-lg px-4 py-2 text-purple-700 focus:outline-none focus:border-purple-500"
+        className="w-full mb-6 bg-white border-2 border-purple-500 rounded-lg px-4 py-2 text-purple-700 focus:outline-none focus:border-purple-500"
       >
         <option value="For Sub Admin">For Sub Admin</option>
         <option value="Particular Sub Admin">Particular Sub Admin</option>

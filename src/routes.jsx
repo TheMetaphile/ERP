@@ -2,6 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 import Loading from "./LoadingScreen/Loading.jsx";
 import StudentCard from "./AdminComponents/StudentDetails.jsx";
+import Studentdetailscard from "./TeacherComponents/studentdetailcard.jsx";
+import Detailscard from "./SubAdminComponent/Detailscard.jsx";
 
 const AllPreviousDetailsAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/AllDetailsAdmin.jsx"));
 const PreviousFeeDetailAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/utils/PreviousFeeDetailAdmin.jsx"));
@@ -181,8 +183,6 @@ const TeachersTimeTable = lazy(() => import("./AdminComponents/timetable/utils/T
 const StudentsTimeTable = lazy(() => import("./AdminComponents/timetable/utils/Student/main.jsx"));
 const UserProfile = lazy(() => import("./components/StudentProfile/Profile.jsx"));
 const TakeLeaveSubAdmin = lazy(() => import("./SubAdminComponent/takeleave/TakeLeaveSubAdmin.jsx"));
-
-
 
 
 
@@ -521,7 +521,13 @@ const router = createBrowserRouter([
           {
             path: '/Admin-Dashboard/StudentsFee/feediscount',
             element: <Suspense fallback={Loading}>
-              <FeeDiscount /></Suspense>
+              <FeeDiscount /></Suspense>,
+            children: [
+              {
+                path: ':email',
+                element: <Suspense fallback={Loading}><FeeDiscount /></Suspense>
+              }
+            ]
           },
           {
             path: '',
@@ -1002,11 +1008,24 @@ const router = createBrowserRouter([
         path: "/Teacher-Dashboard/class_activity",
         element: <Suspense fallback={Loading}>
           <ClassActivity /></Suspense>,
+
         children: [
           {
             path: "",
             element: <Suspense fallback={Loading}>
-              <TimeTableStudent /></Suspense>
+              <TimeTableStudent /></Suspense>,
+            children: []
+          },
+          {
+            path: "/Teacher-Dashboard/class_activity/details",
+            element: <Suspense fallback={Loading}>
+              <Studentdetailscard /></Suspense>,
+            children: [
+              {
+                path: ':email',
+                element: <Suspense fallback={Loading}><Studentdetailscard /></Suspense>
+              }
+            ]
           },
           {
             path: "/Teacher-Dashboard/class_activity/timetablestudent",
@@ -1084,7 +1103,17 @@ const router = createBrowserRouter([
             element: <Suspense fallback={Loading}>
               <NewNoteBookRecord /></Suspense>
           },
-
+          {
+            path: "/Teacher-Dashboard/notebook/studentdetails",
+            element: <Suspense fallback={Loading}>
+              <Studentdetailscard /></Suspense>,
+            children: [
+              {
+                path: ':email',
+                element: <Suspense fallback={Loading}><Studentdetailscard /></Suspense>
+              },
+            ]
+          },
         ]
       },
       {
@@ -1161,7 +1190,13 @@ const router = createBrowserRouter([
         path: "/Teacher-Dashboard/uploadResult",
         element: <Suspense fallback={Loading}>
           <UploadResult /></Suspense>,
-        children: []
+        children: [
+          {
+            path: '/Teacher-Dashboard/uploadResult/details/:email',
+            element: <Suspense fallback={Loading}><Studentdetailscard /></Suspense>
+          },
+
+        ]
       },
     ]
   },
@@ -1213,10 +1248,18 @@ const router = createBrowserRouter([
             element: <Suspense fallback={Loading}>
               <AllStudentsList /></Suspense>
           },
-          // {
-          //   path: '/Sub-Admin/Students/studentdetails',
-          //   element: <StudentDetailScreen />
-          // },
+          {
+            path: "/Sub-Admin/Students/details",
+            element: <Suspense fallback={Loading}>
+              <Detailscard /></Suspense>,
+            children: [
+              {
+                path: ":email",
+                element: <Suspense fallback={Loading}>
+                  <Detailscard /></Suspense>,
+              }
+            ]
+          },
         ]
       },
       {
@@ -1227,8 +1270,22 @@ const router = createBrowserRouter([
           {
             path: '',
             element: <Suspense fallback={Loading}>
-              <AllAdmission /></Suspense>
+              <AllAdmission /></Suspense>,
           },
+          {
+            path: "/Sub-Admin/Readmission/details",
+            element: <Suspense fallback={Loading}>
+              <Detailscard /></Suspense>,
+            children: [
+              {
+                path: ":email",
+                element: <Suspense fallback={Loading}>
+                  <Detailscard /></Suspense>,
+              }
+            ]
+          }
+
+
         ]
       },
       {

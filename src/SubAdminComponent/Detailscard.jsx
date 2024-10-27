@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { BASE_URL_Login } from '../../../../Config';
-import AuthContext from '../../../../Context/AuthContext';
+import { BASE_URL_Login } from '../Config';
+import AuthContext from '../Context/AuthContext';
 
-export default function FeeDetailAdmin() {
+export default function Detailscard() {
     const { email } = useParams();
     const [selectedTab, setSelectedTab] = useState('personal');
     const { authState } = useContext(AuthContext);
@@ -29,13 +29,13 @@ export default function FeeDetailAdmin() {
                 setUserData(response.data.StudentDetails[0]);
                 setImageError(false);
             }
+            console.log(response.data);
         } catch (err) {
             console.error(err);
         } finally {
             setLoading(false);
         }
     };
-
     const handleImageError = () => {
         setImageError(true);
     };
@@ -56,7 +56,7 @@ export default function FeeDetailAdmin() {
     }
 
     return (
-        <div className="p-4 mobile:max-sm:p-2">
+        <div className="pt-1 w-full mobile:max-sm:p-2">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl">
                 <div className="bg-purple-100 text-white p-6 mobile:max-sm:p-1">
                     <div className="flex items-center space-x-4">
@@ -96,7 +96,7 @@ export default function FeeDetailAdmin() {
                     <div className="transition-opacity duration-300 ease-in-out"
                         style={{ opacity: loading ? 0 : 1 }}>
                         {selectedTab === 'personal' && (
-                            <div className="grid grid-cols-2 gap-4 mobile:max-sm:grid-cols-1">
+                            <div className="grid grid-cols-2 gap-4">
                                 <InfoItem label="Class & Section" value={`${userData?.currentClass} ${userData?.section}`} />
                                 <InfoItem label="Date of Birth" value={userData?.DOB} />
                                 <InfoItem label="Gender" value={userData?.gender} />
@@ -109,7 +109,7 @@ export default function FeeDetailAdmin() {
                             </div>
                         )}
                         {selectedTab === 'parent' && (
-                            <div className="grid grid-cols-2 gap-4 mobile:max-sm:grid-cols-1">
+                            <div className="grid grid-cols-2 gap-4">
                                 <InfoItem label="Father's Name" value={userData?.fatherName} />
                                 <InfoItem label="Mother's Name" value={userData?.motherName} />
                                 <InfoItem label="Father's Phone" value={userData?.fatherPhoneNumber} />

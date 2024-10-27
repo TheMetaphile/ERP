@@ -11,17 +11,25 @@ import CoScholasticTable from './utils/CoScholasticTable';
 import ScholasticTable from './utils/ScholasticTable';
 import { motion } from 'framer-motion';
 import { FaFilter, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { Outlet } from 'react-router-dom';
 
 function UploadResult() {
   const [students, setStudents] = useState([]);
   const { authState } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const end = 100;
-  const [Class, setClass] = useState(authState.subject ? authState.subject[0].class : '');
-  const [Section, setSection] = useState(authState.subject ? authState.subject[0].section : "");
-  const [Subject, setSubject] = useState(authState.subject ? authState.subject[0].subject : "");
+  const [Class, setClass] = useState(localStorage.getItem('Class') || '');
+  const [Section, setSection] = useState(localStorage.getItem('Section') || '');
+  const [Subject, setSubject] = useState(localStorage.getItem('Subject') || '');
   const [scholastic, setScholastic] = useState(false);
-  const [selectedTerm, setSelectedTerm] = useState('term1');
+  const [selectedTerm, setSelectedTerm] = useState(localStorage.getItem('selectedTerm') || '');
+
+  useEffect(() => {
+    localStorage.setItem('Class', Class);
+    localStorage.setItem('Section', Section);
+    localStorage.setItem('Subject', Subject);
+    localStorage.setItem('selectedTerm', selectedTerm);
+  }, [Class, Section, Subject, selectedTerm]);
 
   const terms = [
     {
@@ -116,7 +124,7 @@ function UploadResult() {
             Upload Report Card
           </motion.h1>
         </div>
-        <div className="block flex-1 justify-end laptop:hidden w-full items-end mobile:max-laptop:text-end">
+        <div className="flex flex-1 justify-end sm:hidden w-full items-end mobile:max-laptop:text-end">
           <motion.button
             className="p-2 border rounded flex items-center"
             onClick={() => setDropdownVisible(!isDropdownVisible)}
@@ -136,7 +144,7 @@ function UploadResult() {
               <div className='flex absolute left-0 right-0 bg-white p-4 gap-2 justify-between mobile:max-tablet:flex-col'>
                 <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
                 <div className="w-36 mobile:max-tablet:w-full mobile:max-tablet:mr-0 mr-3 self-center">
-                  <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleTermChange}>
+                  <select id="section" className="w-full px-2 py-2 border-2 border-blue-300 rounded-md" onChange={handleTermChange}>
                     <option value="">Select Term</option>
                     {terms.map((sectionOption, index) => (
                       <option key={index} value={sectionOption.value}>{sectionOption.label}</option>
@@ -162,13 +170,15 @@ function UploadResult() {
           <Switch checked={scholastic} changeRole={handleRoleChange} />
         </div>
       </div>
+      <Outlet />
       {loading ? (
         <Loading />
       ) : scholastic ? (
-        <ScholasticTable students={students} subject={Subject} term={selectedTerm} Class={Class} />
+        <ScholasticTable students={students} subject={Subject} term={selectedTerm} Class={Class} section={Section}/>
       ) : (
-        <CoScholasticTable students={students} Class={Class} term={selectedTerm} />
+        <CoScholasticTable students={students} Class={Class} term={selectedTerm} section={Section}/>
       )}
+
     </motion.div>
   );
 };

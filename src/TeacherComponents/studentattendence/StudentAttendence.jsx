@@ -211,10 +211,12 @@ function StudentAttendance() {
                         <div className="flex-shrink-0">
                           <img className="h-12 w-12 rounded-full object-cover border-2 border-blue-500" src={student.profileLink} alt={student.name} />
                         </div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">{student.name}</p>
-                          <p className="text-sm text-gray-500">Roll: {student.rollNumber}</p>
-                        </div>
+                        <Link to={`/Teacher-Dashboard/class_activity/details/${student.email}`}>
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">{student.name}</p>
+                            <p className="text-sm text-gray-500">Roll: {student.rollNumber}</p>
+                          </div>
+                        </Link>
                       </div>
                       <div className="flex items-center space-x-2">
                         <AttendanceButton

@@ -6,11 +6,17 @@ import axios from 'axios';
 import TimeTableHeader from './utils/TimeTableHeader'
 import { BASE_URL_TimeTableStructure, BASE_URL_TimeTable } from '../../Config';
 
+const getCurrentDay = () => {
+    const daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const currentDayIndex = new Date().getDay();
+    return daysOfWeek[currentDayIndex];
+  };
+
 export default function TimeTableStudent() {
     const [data, setData] = useState(null);
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
-    const [day, setDay] = useState('tuesday');
+    const [day, setDay] = useState(getCurrentDay());
     const [fetchedTimeTableStructure, setTimetableStructure] = useState(null);
 
     const [lectureTimes, setLectureTimes] = useState([]);

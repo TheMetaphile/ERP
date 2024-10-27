@@ -9,14 +9,20 @@ import Answered from './utils/Answered';
 
 function StudentDoubts() {
     const { authState } = useContext(AuthContext);
-    const [Class, setClass] = useState('');
-    const [Section, setSection] = useState('');
-    const [Subject, setSubject] = useState('');
+    const [Class, setClass] = useState(localStorage.getItem('Class') || '');
+    const [Section, setSection] = useState(localStorage.getItem('Section') || '');
+    const [Subject, setSubject] = useState(localStorage.getItem('Subject') || '');
     const [selectedLink, setSelectedLink] = useState(`/Teacher-Dashboard/studentdoubts/new`);
     const uniqueClasses = Array.from(new Set(authState.subject ? authState.subject.map(subj => subj.class) : []));
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
     const [isDropdownVisible, setDropdownVisible] = useState(false);
+
+    useEffect(() => {
+        localStorage.setItem('Class', Class);
+        localStorage.setItem('Section', Section);
+        localStorage.setItem('Subject', Subject);
+    }, [Class, Section, Subject]);
 
     useEffect(() => {
         setUniqueSections(Array.from(new Set(
@@ -62,11 +68,11 @@ function StudentDoubts() {
                 initial={{ y: -20 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="flex justify-between mobile:max-tablet:flex-col w-full items-center mb-4 py-2"
+                className="flex justify-between mobile:max-tablet:flex-col w-full mobile:max-tablet:items-start items-center mb-4 py-2"
             >
 
-                <h1 className="text-3xl mobile:max-tablet:text-lg font-medium text-black mobile:max-tablet:">Student Doubts</h1>
-                <div className="flex justify-between gap-3 mobile:max-tablet:flex-col ">
+                <h1 className="text-3xl mobile:max-tablet:text-xl font-medium text-black mobile:max-tablet:text-left">Student Doubts</h1>
+                <div className="flex justify-between gap-3 mobile:max-tablet:overflow-auto w-full ">
                     <select id="class" value={Class} onChange={handleClassChange} className="shadow-md px-3 py-1  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
                         <option value="">Search by Class</option>
                         {uniqueClasses.map((classOption, index) => (

@@ -153,11 +153,10 @@ const StudentNotice = () => {
 
     >
       <motion.select
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.01 }}
         value={type}
         onChange={handleTypeChange}
-        className="w-full border-2 border-purple-300 rounded-lg px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-purple-500 text-purple-700 bg-white"
+        className="w-full border-2 border-purple-500 rounded-lg px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-purple-500 text-purple-700 bg-white"
       >
         <option value="For Students">For Students</option>
         <option value="Particular Students">Particular Students</option>

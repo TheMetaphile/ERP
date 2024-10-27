@@ -1,5 +1,6 @@
 
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 function AdmissionTileRow({ data, index, setClickedIndex, setIsDialogOpen }) {
 
@@ -21,10 +22,12 @@ function AdmissionTileRow({ data, index, setClickedIndex, setIsDialogOpen }) {
         >
             <div
                 key={index} className='flex text-center mobile:max-tablet:gap-2 items-center justify-evenly border rounded-lg py-2 pl-2 mb-2 tablet:max-laptop:w-fit'>
-                <div className="w-40 flex justify-center">
-                    <img src={data.profileLogo || userimg} alt="" className="h-8 w-8 rounded-full" />
-                    <h1 className="text-base w-32">{data.name}</h1>
-                </div>
+                <Link to={`/Sub-Admin/Readmission/details/${data.email}`}>
+                    <div className="w-40 flex justify-center">
+                        <img src={data.profileLogo || userimg} alt="" className="h-8 w-8 rounded-full" />
+                        <h1 className="text-base w-32">{data.name}</h1>
+                    </div>
+                </Link>
 
                 <h1 className="text-base  w-40 ">{data.currentClass}</h1>
                 <h1 className="text-base  w-40">{data.section}</h1>

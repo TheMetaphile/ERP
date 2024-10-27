@@ -17,17 +17,17 @@ export default function StudentAttendance() {
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const [error, setError] = useState('');
 
-    const [Class, setClass] = useState('');
+    const [Class, setClass] = useState(localStorage.getItem('Class') || '');
     const handleClassChange = (event) => {
         setClass(event.target.value);
     };
 
-    const [Section, setSection] = useState('');
+    const [Section, setSection] = useState(localStorage.getItem('Section') || '');
     const handleSectionChange = (event) => {
         setSection(event.target.value);
     };
 
-    const [Month, setMonth] = useState('');
+    const [Month, setMonth] = useState(localStorage.getItem('Month') || '');
     const handleMonthChange = (event) => {
         setMonth(event.target.value);
     };
@@ -36,6 +36,12 @@ export default function StudentAttendance() {
     const handlebothEventsCalled = (event) => {
         setBothEventsCalled(true);
     };
+
+    useEffect(() => {
+        localStorage.setItem('Class', Class);
+        localStorage.setItem('Section', Section);
+        localStorage.setItem('Month', Month);
+    }, [Class, Section, Month]);
 
     useEffect(() => {
         if (bothEventsCalled) {

@@ -186,12 +186,12 @@ function FeeDetails() {
 
             <div className=' w-full'>
                 <div className=' mt-2  border rounded-lg overflow-auto'>
-                    <div className="flex justify-between  py-2  bg-gradient-to-r from-teal-400 to-blue-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap mobile:max-tan
+                    <div className="flex justify-between  py-2  bg-gradient-to-r from-purple-400 to-purple-500 text-white  rounded-t-lg border border-b-2  whitespace-nowrap mobile:max-tan
                     w-fit">
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm ">
                             Roll No.
                         </h1>
-                        <h1 className="w-64 text-lg text-center font-medium mobile:max-tablet:text-sm ">
+                        <h1 className="w-64 mobile:max-tablet:w-44 text-lg text-center font-medium mobile:max-tablet:text-sm ">
                             Name
                         </h1>
                         <h1 className="w-32 text-lg text-center font-medium mobile:max-tablet:text-sm ">
@@ -226,7 +226,7 @@ function FeeDetails() {
                                             <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.rollNumber}
                                             </h1>
-                                            <h1 className="w-44 text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            <h1 className="w-44 mobile:max-tablet:w-32  text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 <img src={details.profileLink} alt="profile pic" className='w-10 h-10 rounded-full ' />
                                                 <div className='w-32'>
                                                     {details.name}
@@ -238,10 +238,10 @@ function FeeDetails() {
                                             <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.session}
                                             </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            <h1 className="w-32 mobile:max-tablet:w-20 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.totalfee}
                                             </h1>
-                                            <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                                            <h1 className="w-32 mobile:max-tablet:w-24 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
                                                 {details.discountAmount}
                                             </h1>
                                             <h1 className="w-32 text-lg text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">

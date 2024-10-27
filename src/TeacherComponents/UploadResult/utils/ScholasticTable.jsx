@@ -5,8 +5,9 @@ import { BASE_URL_Result } from '../../../Config';
 import AuthContext from "../../../Context/AuthContext";
 import { motion } from "framer-motion";
 import { FaSave, FaUserGraduate, FaBook, FaPencilAlt, FaFlask, FaClipboardCheck } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-export default function ScholasticTable({ students, term, Class, subject }) {
+export default function ScholasticTable({ students, term, Class, subject, section }) {
     const { authState } = useContext(AuthContext);
     const [totalTheoryMarks, setTotalMarks] = useState({
         noteBook: "",
@@ -29,40 +30,46 @@ export default function ScholasticTable({ students, term, Class, subject }) {
     const handleClick = (index) => {
         setClickedIndex(index);
     };
-
+console.log(subject)
     useEffect(() => {
-        fetchLastNoteBookChecked();
+        fetchLastUpload();
     }, [subject]);
 
-    const fetchLastNoteBookChecked = async () => {
+    const fetchLastUpload = async () => {
         try {
             if (!subject) return;
-            const responses = await Promise.all(
-                students.map(student =>
-                    axios.get(`${BASE_URL_Result}/notebook/fetch/student/last?subject=${subject}&email=${student.email}`, {
-                        headers: {
-                            Authorization: `bearer ${authState.accessToken}`
-                        }
-                    })
-                )
-            );
-            const lastNoteBookCheckedData = responses.reduce((acc, response, index) => {
-                acc[students[index].email] = response.data;
-                return acc;
-            }, {});
-            setMarks(prevMarks => ({
-                ...prevMarks,
-                ...Object.keys(lastNoteBookCheckedData).reduce((acc, email) => {
-                    acc[email] = {
-                        ...prevMarks[email],
-                        lastNoteBookChecked: lastNoteBookCheckedData[email].last ? lastNoteBookCheckedData[email].last[0] : ''
-                    };
-                    return acc;
-                }, {})
-            }));
+
+            const response = await axios.get(
+                `${BASE_URL_Result}/result/fetch/scholastic/${Class}/${section}/${subject}/${term}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
+                  }
+                }
+              );
+              
+            console.log(response.data)
+            const updatedMarks = { ...marks };
+
+            Object.keys(response.data).forEach((email) => {
+              const studentResult = response.data[email];
+              
+              if (updatedMarks[email]) {
+                updatedMarks[email] = {
+                  ...updatedMarks[email],
+                  noteBook: studentResult.obtainedNoteBookMarks || '',
+                  practical: studentResult.obtainedPracticalMarks || '',
+                  subjectEnrichment: studentResult.obtainedSubjectEnrichmentMarks || '',
+                  theory: studentResult.marksObtained || '',
+                  lastNoteBookChecked: studentResult.totalNoteBookMarks || '',
+                };
+              }
+            });
+        
+            setMarks(updatedMarks);
         } catch (error) {
-            toast.error('Error fetching last notebook checked data');
-            console.error('Error fetching last notebook checked data:', error);
+            toast.error('Error fetching last result data');
+            console.error('Error fetching last result data:', error);
         }
     };
 
@@ -75,6 +82,8 @@ export default function ScholasticTable({ students, term, Class, subject }) {
             }
         }));
     };
+
+    console.log(marks,'marks')
 
     const handletotalMarksChange = (type, value) => {
         setTotalMarks(prevMarks => ({
@@ -101,7 +110,7 @@ export default function ScholasticTable({ students, term, Class, subject }) {
             validationErrors.forEach(error => toast.error(error));
             return;
         }
-        const schedules = {
+        const schedules = [{
             subject,
             marksObtained: Number(studentMarks.theory),
             totalMarks: Number(totalTheoryMarks.theory),
@@ -111,7 +120,7 @@ export default function ScholasticTable({ students, term, Class, subject }) {
             obtainedNoteBookMarks: Number(studentMarks.noteBook),
             totalSubjectEnrichmentMarks: Number(totalTheoryMarks.subjectEnrichment),
             obtainedSubjectEnrichmentMarks: Number(studentMarks.subjectEnrichment),
-        };
+        }];
         const resultData = {
             email,
             class: Class,
@@ -119,7 +128,7 @@ export default function ScholasticTable({ students, term, Class, subject }) {
             term: term,
         };
         try {
-            const response = await axios.put(`${BASE_URL_Result}/result/update/addSubject`,
+            const response = await axios.post(`${BASE_URL_Result}/result/create`,
                 resultData,
                 {
                     headers: {
@@ -186,9 +195,11 @@ export default function ScholasticTable({ students, term, Class, subject }) {
                                 <td className="py-3 px-2 text-center ">
 
                                     {student.rollNumber}</td>
-                                <td className="py-3 px-2 text-center flex gap-2 items-center">
-                                    <img src={student.profileLink} alt="" className="h-10 w-10 rounded-full" />
-                                    {student.name}</td>
+                                <Link to={`/Teacher-Dashboard/uploadResult/details/${student.email}`}>
+                                    <td className="py-3 px-2 text-center flex gap-2 items-center">
+                                        <img src={student.profileLink} alt="" className="h-10 w-10 rounded-full" />
+                                        {student.name}</td>
+                                </Link>
                                 <td className="py-3 px-2 text-center ">
                                     {marks[student.email]?.lastNoteBookChecked?.topic || 'No data'}
                                 </td>

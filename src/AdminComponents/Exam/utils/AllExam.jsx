@@ -25,27 +25,19 @@ export default function AllExam() {
         setPopUp(!popUp);
     };
     const addExam = (newExam) => {
-        console.log(newExam.class, selectedClass, newExam);
-
+        console.log(newExam.class, selectedClass, newExam,typeof(newExam.class),typeof(selectedClass));
+    
         if (newExam.class === selectedClass) {
-            let examIndex = exams.findIndex(
-                exam => exam.class === newExam.class &&
-                    exam.stream === newExam.stream &&
-                    exam.term === newExam.term
-            );
+            console.log('sadf')
+            const schedule=newExam.schedule;
+            schedule.forEach(value=>{value.class=newExam.class,value.stream=newExam.stream,value.term=newExam.term});
 
-            if (examIndex !== -1) {
-                const updatedExams = [...exams];
-                updatedExams[examIndex].schedule = [
-                    ...updatedExams[examIndex].schedule,
-                    ...newExam.schedule
-                ];
-                setExams(updatedExams);
-            } else {
-                setExams([...exams, newExam]);
-            }
+                console.log(schedule,'flat ')
+                setExams([...exams, ...schedule]);
+                // console.log([...exams, newExamEntry], 'Added new exam');
+            
         }
-
+    
         togglePopUp();
     };
 
@@ -72,7 +64,9 @@ export default function AllExam() {
                 data: {
                     accessToken: authState.accessToken,
                     examId: examToDelete._id,
-                    class: examToDelete.class
+                    class: examToDelete.class,
+                    term: examToDelete.term,
+                    stream: examToDelete.stream
                 }
             })
             if (response.status === 200) {

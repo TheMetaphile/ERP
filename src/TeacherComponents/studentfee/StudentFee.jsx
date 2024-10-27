@@ -7,6 +7,7 @@ import { BASE_URL_Fee } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import { FaUserGraduate, FaMoneyBillWave, FaPercent, FaWallet, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 function StudentFee() {
     const [loading, setLoading] = useState(false);
@@ -135,10 +136,12 @@ function StudentFee() {
                                         >
                                             <td className='py-3 px-4'><FaUserGraduate className="inline mr-2 text-blue-600" />{detail.rollNumber}</td>
                                             <td className='py-3 px-4'>
-                                                <div className="flex items-center gap-2">
-                                                    <img src={detail.profileLink} alt="Profile" className='w-8 h-8 rounded-full' />
-                                                    <span className="font-medium text-blue-600">{detail.name}</span>
-                                                </div>
+                                                <Link to={`/Teacher-Dashboard/class_activity/details/${detail.email}`}>
+                                                    <div className="flex items-center gap-2">
+                                                        <img src={detail.profileLink} alt="Profile" className='w-8 h-8 rounded-full' />
+                                                        <span className="font-medium text-blue-600">{detail.name}</span>
+                                                    </div>
+                                                </Link>
                                             </td>
                                             <td className='py-3 px-4'><FaMoneyBillWave className="inline mr-2 text-blue-600" />₹ {detail.totalfee}</td>
                                             <td className='py-3 px-4'>₹ {detail.discountAmount}</td>

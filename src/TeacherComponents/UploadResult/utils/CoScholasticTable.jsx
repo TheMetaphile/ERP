@@ -1,14 +1,21 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import { toast } from "react-toastify";
 import { BASE_URL_Result } from '../../../Config';
 import { motion } from "framer-motion";
 import { FaSave, FaGraduationCap, FaUserGraduate, FaBook } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-export default function CoScholasticTable({ students, term, Class }) {
+export default function CoScholasticTable({ students, term, Class, section }) {
     const { authState } = useContext(AuthContext);
-    const [Subjects] = useState(authState.Co_scholastic === undefined ? [] : authState.Co_scholastic);
+    const [Subjects] = useState(() => {
+        if (authState.Co_scholastic === undefined) return [];
+        
+        return authState.Co_scholastic.filter(subject => 
+            subject.class === Class && subject.section === section
+        );
+    });
     const [grades, setGrades] = useState(() => {
         const initialGrades = {};
         students.forEach(student => {
@@ -21,6 +28,47 @@ export default function CoScholasticTable({ students, term, Class }) {
     });
     const [errors, setErrors] = useState({});
     const [clickedIndex, setClickedIndex] = useState(null);
+
+    console.log(grades)
+    useEffect(() => {
+        fetchLastUpload();
+    },[]);
+    console.log(Subjects)
+    const fetchLastUpload = async () => {
+        try {
+            const subjectArray = Subjects.map((item) => item.subject);
+            const response = await axios.get(
+                `${BASE_URL_Result}/result/fetch/Coscholastic/${Class}/${section}/${term}?subject=${subjectArray}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`
+                    }
+                }
+            );
+
+            console.log(response.data);
+    
+            const fetchedGrades = response.data; 
+    
+
+            const updatedGrades = { ...grades };
+            Object.keys(fetchedGrades).forEach(studentEmail => {
+                const studentData = fetchedGrades[studentEmail];
+                Subjects.forEach(subject => {
+                    if (studentData[subject.subject]) {
+                        updatedGrades[studentEmail][subject.subject] = studentData[subject.subject];
+                    }
+                });
+            });
+    
+            setGrades(updatedGrades); 
+    
+        } catch (error) {
+            toast.error('Error fetching last result data');
+            console.error('Error fetching last result data:', error);
+        }
+    };
+    
 
     const handleClick = (index) => {
         setClickedIndex(index);
@@ -122,7 +170,9 @@ export default function CoScholasticTable({ students, term, Class }) {
                             transition={{ type: "spring", stiffness: 300 }}
                         >
                             <td className="py-3 px-6 text-center">{Student.rollNumber}</td>
-                            <td className="py-3 px-6 text-center whitespace-nowrap">{Student.name}</td>
+                            <Link to={`/Teacher-Dashboard/uploadResult/details/${Student.email}`}>
+                                <td className="py-3 px-6 text-center whitespace-nowrap">{Student.name}</td>
+                            </Link>
                             {Subjects.map((Subject, subIndex) => (
                                 <td key={subIndex} className="py-3 px-6 text-center">
                                     <motion.input

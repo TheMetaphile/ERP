@@ -17,6 +17,8 @@ function NewNotice({ setShowModal }) {
   const [emailIds, setEmailIds] = useState([]);
   const [searchInputStudent, setSearchInputStudent] = useState('');
   const [searchResultsStudent, setSearchResultsStudent] = useState([]);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
   const [classOptions] = useState(['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']);
   const [selectedClass, setSelectedClass] = useState('');
   const [sectionOptions, setSectionOptions] = useState([]);
@@ -77,6 +79,8 @@ function NewNotice({ setShowModal }) {
         payload.emailIds = emailIds.map(user => user.email);
       } else if (selectedOption === 'Particular Classes') {
         payload.Classes = classes;
+      } else if (selectedOption === 'Particular Teachers') {
+        payload.emailIds = emailIds.map(user => user.email);
       }
 
       console.log('payload', payload);
@@ -171,6 +175,15 @@ function NewNotice({ setShowModal }) {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setSearchInput(e.target.value);
+    if (e.target.value.length > 2) {
+      searchUsers(e.target.value);
+    } else {
+      setSearchResults([]);
+    }
+  };
+
   const searchStudents = async (query) => {
     console.log(query)
     try {
@@ -186,7 +199,18 @@ function NewNotice({ setShowModal }) {
     }
   };
 
-
+  const searchUsers = async (query) => {
+    try {
+      const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
+        accessToken: authState.accessToken,
+        searchString: query,
+      });
+      console.log('search', response.data);
+      setSearchResults(response.data.Teachers);
+    } catch (error) {
+      console.error("Error searching users:", error);
+    }
+  };
 
   const addEmailId = (email) => {
     if (!emailIds.includes(email)) {
@@ -373,6 +397,90 @@ function NewNotice({ setShowModal }) {
             )}
           </motion.div>
         );
+
+      case 'Particular Teachers':
+        return (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-white p-6 rounded-lg shadow-lg"
+          >
+            <div className="relative mb-4">
+              <FaSearch className="absolute left-3 top-3 text-gray-400" />
+              <motion.input
+                whileFocus={{ scale: 1.02 }}
+                type="text"
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Search for users"
+                value={searchInput}
+                onChange={handleSearchChange}
+              />
+            </div>
+
+            {searchResults.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="w-full bg-gray-100 mb-4 border border-gray-300 rounded-lg p-3 max-h-60 overflow-y-auto"
+              >
+                {searchResults.map(user => (
+                  <motion.div
+                    key={user.email}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    className="flex justify-between items-center mb-2 bg-white p-2 rounded-lg shadow-sm"
+                  >
+                    <span className="flex items-center gap-2">
+                      <img src={user.profileLink} alt="" className="w-8 h-8 rounded-full" />
+                      {user.name}
+                    </span>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded-full flex items-center gap-1"
+                      onClick={() => addEmailId({ email: user.email, name: user.name })}
+                    >
+                      <FaUserPlus /> Add
+                    </motion.button>
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+
+            <motion.div
+              layout
+              className="w-full mb-4 border border-gray-300 rounded-lg p-3 min-h-[100px]"
+            >
+              {emailIds.length > 0 ? (
+                emailIds.map(user => (
+                  <motion.div
+                    key={user.email}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="flex justify-between items-center mb-2 bg-blue-100 rounded-full px-4 py-2 shadow-md"
+                  >
+                    <span>{user.name}</span>
+                    <motion.button
+                      whileHover={{ scale: 1.1, rotate: 90 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => removeEmailId(user)}
+                    >
+                      <FaTimes className="text-red-500 h-5 w-5" />
+                    </motion.button>
+                  </motion.div>
+                ))
+              ) : (
+                <span className="text-gray-500 italic">No email IDs added.</span>
+              )}
+            </motion.div>
+          </motion.div>
+        );
+
+
       default:
         return null;
     }
@@ -416,6 +524,9 @@ function NewNotice({ setShowModal }) {
             >
               <option value="Particular Students">Particular Students</option>
               <option value="Particular Classes">Particular Classes</option>
+              {authState.userDetails.co_ordinator_wing && authState.userDetails.co_ordinator_wing.trim() !== "" && (
+                <option value="Particular Teachers">Particular Teachers</option>
+              )}
             </motion.select>
             <motion.input
               className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"

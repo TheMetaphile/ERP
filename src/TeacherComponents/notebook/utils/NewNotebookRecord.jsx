@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import {  useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import AuthContext from "../../../Context/AuthContext";
 import Switch from "./switch";
 import { toast, ToastContainer } from "react-toastify";
@@ -142,7 +142,7 @@ const NewNoteBookRecord = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex-col mobile:max-tablet:flex-col-reverse justify-between tablet:items-center px-4 pb-0 mb-2 overflow-auto"
+      className="flex-col mobile:max-tablet:flex-col-reverse justify-between tablet:items-center px-4 pb-0 mb-2 overflow-auto mobile:max-tablet:px-1"
     >
       <ToastContainer />
       <motion.div
@@ -215,10 +215,12 @@ const NewNoteBookRecord = () => {
                 className="border-b border-gray-200 last:border-none"
               >
                 <td className="py-3 px-6 text-center whitespace-nowrap">{Student.rollNumber}</td>
-                <td className="flex py-3 px-6 text-center items-center gap-2 whitespace-nowrap">
-                  <img src={Student.profileLink} alt="img" className="rounded-full h-10 w-10" />
-                  {Student.name}
-                </td>
+                <Link to={`/Teacher-Dashboard/notebook/studentdetails/${Student.email}`}>
+                  <td className="flex py-3 px-6 text-center items-center gap-2 whitespace-nowrap">
+                    <img src={Student.profileLink} alt="img" className="rounded-full h-10 w-10" />
+                    {Student.name}
+                  </td>
+                </Link>
                 <td className="py-3 px-6 text-center whitespace-nowrap">{date.toDateString()}</td>
                 <td className="py-3 px-6 text-center">{chapter}</td>
                 <td className="py-3 px-6 text-center">{topic}</td>

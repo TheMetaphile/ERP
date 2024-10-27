@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaFilter } from "react-icons/fa";
 import Tabs from "./utils/Tabs";
@@ -7,12 +7,18 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Planner() {
-    const [selectedClass, setSelectedClass] = useState('');
-    const [selectedSection, setSelectedSection] = useState('');
-    const [selectedSubject, setSelectedSubject] = useState('');
+    const [selectedClass, setSelectedClass] = useState(localStorage.getItem('selectedClass') || '');
+    const [selectedSection, setSelectedSection] = useState(localStorage.getItem('selectedSection') || '');
+    const [selectedSubject, setSelectedSubject] = useState(localStorage.getItem('selectedSubject') || '');
     const [isDropdownVisible, setDropdownVisible] = useState(false);
 
     console.log(selectedClass, selectedSection, selectedSubject)
+
+    useEffect(() => {
+        localStorage.setItem('selectedClass', selectedClass);
+        localStorage.setItem('selectedSection', selectedSection);
+        localStorage.setItem('selectedSubject', selectedSubject);
+    }, [selectedClass, selectedSection, selectedSubject]);
 
     return (
         <motion.div
@@ -23,6 +29,7 @@ function Planner() {
         >
             <ToastContainer />
             <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:pl-1 py-4'>
+
                 <motion.h1
                     initial={{ y: -20 }}
                     animate={{ y: 0 }}
@@ -30,7 +37,7 @@ function Planner() {
                 >
                     Weekly Plan
                 </motion.h1>
-                <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
+                <div className="flex justify-end tablet:hidden w-full mobile:max-tablet:text-end pt-10">
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -43,7 +50,7 @@ function Planner() {
                         <motion.div
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className='flex fixed left-0 right-0 bg-white pt-1 p-4 gap-2 justify-between mobile:max-tablet:flex-col shadow-lg'
+                            className='flex fixed mt-12 left-0 right-0 bg-white pt-1 p-4 gap-2 justify-between mobile:max-tablet:flex-col shadow-lg'
                         >
                             <Selection
                                 setClass={setSelectedClass}
