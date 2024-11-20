@@ -4,7 +4,8 @@ import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL_Notice } from "../../Config";
 import { motion } from "framer-motion";
-import { FaCalendarAlt, FaInfoCircle } from "react-icons/fa";
+import { FaBell, FaCalendarAlt, FaSpinner } from 'react-icons/fa';
+
 
 export default function Notices() {
     const { authState } = useContext(AuthContext);
@@ -58,42 +59,38 @@ export default function Notices() {
 
     return (
         <motion.div
-            className="mt-3 mb-30 space-y-4"
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-        >
-            {loading ? (
-                <Loading />
-            ) : details.length === 0 ? (
-                <motion.div
-                    className="w-full text-center text-gray-500"
-                    variants={itemVariants}
-                >
-                    No notices available
-                </motion.div>
-            ) : (
-                <>
-                    {details.map((detail, index) => (
-                        <motion.div
-                            key={index}
-                            className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
-                            variants={itemVariants}
-                        >
-                            <h4 className="flex w-full justify-start font-medium text-lg mb-2 items-start gap-2">
-                                {detail.title}
-                            </h4>
-                            <p className="text-gray-600 leading-relaxed line-clamp-4">
-                                {detail.description}
-                            </p>
-                            <div className="flex justify-end items-center text-gray-500 text-xs mt-2">
-                                <FaCalendarAlt className="mr-1" />
-                                Date: {detail.date}
-                            </div>
-                        </motion.div>
-                    ))}
-                </>
-            )}
-        </motion.div>
+      className="bg-gradient-to-r from-blue-100 to-indigo-50 p-3 border border-gray-200 rounded-xl shadow-lg"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      {loading ? (
+        <div className="flex justify-center items-center h-40">
+          <FaSpinner className="animate-spin text-4xl text-indigo-600" />
+        </div>
+      ) : details.length === 0 ? (
+        <div className="text-center text-indigo-600 py-10">
+          <FaBell className="text-5xl mb-4 mx-auto" />
+          <p className="text-xl font-semibold">No notices available</p>
+        </div>
+      ) : (
+        details.map((detail, index) => (
+          <motion.div
+            key={index}
+            className="mb-6 last:mb-0"
+            variants={itemVariants}
+          >
+            <h3 className="text-xl font-bold text-indigo-800 mb-2">{detail.title}</h3>
+            <p className="text-indigo-600 text-opacity-80 leading-relaxed line-clamp-4">
+              {detail.description}
+            </p>
+            <div className="flex justify-end items-center text-indigo-600 border-t border-gray-400 text-xs mt-2">
+              <FaCalendarAlt className="mr-1" />
+              Date: {detail.date}
+            </div>
+          </motion.div>
+        ))
+      )}
+    </motion.div>
     );
 }
