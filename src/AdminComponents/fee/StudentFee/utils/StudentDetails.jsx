@@ -3,9 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import AuthContext from "../../../../Context/AuthContext";
 import axios from 'axios'
 import Loading from "../../../../LoadingScreen/Loading.jsx";
-import Header from './feestructureheader.jsx';
 import FeeStructureField from './feeStructureField.jsx';
-import FeeStructureFooter from './feeStructureFooter';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Fee } from "../../../../Config";
@@ -16,8 +14,6 @@ function StudentDetails({ selectedOption }) {
   const { authState } = useContext(AuthContext);
   const [fees, setFees] = useState([]);
   const [loading, setLoading] = useState(false)
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(10);
 
   const useQuery = () => {
     return new URLSearchParams(location.search);
@@ -25,8 +21,7 @@ function StudentDetails({ selectedOption }) {
 
   const query = useQuery();
   const session = query.get('session');
-  const Class = query.get('Class');
-  const name = query.get('name');
+
 
   useEffect(() => {
     if (authState.accessToken) {
@@ -38,7 +33,7 @@ function StudentDetails({ selectedOption }) {
   }, [authState.accessToken]);
 
   const today = new Date();
-  const formattedDate = today.toISOString().split('T')[0];
+
 
   const fetchFees = async () => {
 
@@ -64,9 +59,7 @@ function StudentDetails({ selectedOption }) {
   }
 
 
-  const handleViewMore = () => {
-    setVisibleCount(prevCount => prevCount + 10);
-  };
+
 
   return (
     <div className="w-full h-fit mb-4 mt-3 rounded-lg shadow-md overflow-auto border border-gray-300">

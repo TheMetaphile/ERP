@@ -508,7 +508,7 @@ const router = createBrowserRouter([
                   <FeeDetails /></Suspense>
               },
               {
-                path: ':email',
+                path: ':id',
                 element: <Suspense fallback={Loading}><FeeDetailAdmin /></Suspense>
               }
             ]

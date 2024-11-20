@@ -3,9 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import AuthContext from "../../../../Context/AuthContext";
 import axios from 'axios'
 import Loading from "../../../../LoadingScreen/Loading.jsx";
-import Header from './feestructureheader.jsx';
 import FeeStructureField from './feeStructureField.jsx';
-import FeeStructureFooter from './feeStructureFooter';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Fee } from "../../../../Config";

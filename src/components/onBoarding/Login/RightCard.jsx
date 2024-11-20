@@ -175,65 +175,61 @@ export default function RightCard() {
         }
     };
 
-
-
-
-
-
-
     return (
-        <div className="flex flex-col bg-white rounded-2xl shadow-lg tablet:w-fit tablet:px-10 mobile:w-full mobile:px-7 mobile:max-tablet:mt-10 justify-center">
+        <div className="flex flex-col bg-white rounded-2xl shadow-lg tablet:w-96 mobile:w-full px-7 py-6 justify-center space-y-5">
             <ToastContainer />
-            <img src={logo} alt="img" className="mr-4 h-28 self-center" />
+            <img src={logo} alt="img" className="h-24 self-center" />
 
-            <h1 className="tablet:text-2xl mobile:text-2xl font-bold self-center whitespace-nowrap">Welcome Back</h1>
-            <h1 className="text-lg mt-2 text-gray-400">Please Enter Your ID & Password</h1>
+            <h1 className="text-2xl font-bold text-center">Welcome Back</h1>
+            <h1 className="text-lg text-gray-400 text-center">Please Enter Your ID & Password</h1>
 
-            {/* {error && <div className="text-red-500 text-center mt-2">{error}</div>} */}
-            <h1 className="text-xl font-bold mt-3 ">Login Id</h1>
-
-            <input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={handleEmailChange}
-                placeholder="Enter your email"
-                className=" rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg "
-                disabled={isSubmitting}
-            />
-
-            <h1 className="text-xl font-bold mt-3">Password</h1>
-            <div className="relative">
+            <div>
+                <label htmlFor="email" className="text-xl font-bold">Login Id</label>
                 <input
-                    type={showPassword ? 'text' : 'password'}
-                    id="password"
-                    name="password"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    placeholder="Enter your password"
-                    className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-500 mt-2 text-lg pr-10"
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    placeholder="Enter your email"
+                    className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-300 mt-2 w-full text-lg"
                     disabled={isSubmitting}
                 />
-                <button
-                    type="button"
-                    onClick={togglePasswordVisibility}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                    disabled={isSubmitting}
-                >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
             </div>
-            <Link to='/resetpassword' className="w-fit mt-2">
-                <h1 className=" text-lg text-blue-600">Forgot Password?</h1>
-            </Link>
 
-            <div className="flex w-full   mt-2 text-lg justify-between">
+            <div>
+                <label htmlFor="password" className="text-xl font-bold">Password</label>
+                <div className="relative mt-2">
+                    <input
+                        type={showPassword ? 'text' : 'password'}
+                        id="password"
+                        name="password"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        placeholder="Enter your password"
+                        className="rounded-lg shadow-md px-3 py-2 border-2 border-gray-300 w-full text-lg pr-12"
+                        disabled={isSubmitting}
+                    />
+                    <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                        disabled={isSubmitting}
+                    >
+                        {showPassword ? <FaEyeSlash className="w-5 h-5" /> : <FaEye className="w-5 h-5" />}
+                    </button>
+                </div>
+            </div>
+
+            <Link to="/resetpassword" className="text-blue-600 text-center text-lg">Forgot Password?</Link>
+
+            <div className="w-full">
+                <label htmlFor="role" className="sr-only">Select Role</label>
                 <select
                     name="role"
                     value={role}
                     onChange={handleRoleChange}
-                    className="w-full p-2 border rounded"
+                    className="w-full p-2 border border-gray-300 rounded-lg"
                     disabled={isSubmitting}
                 >
                     <option value="">Select Role</option>
@@ -241,17 +237,17 @@ export default function RightCard() {
                     <option value="Student-Dashboard">Student</option>
                     <option value="Sub-Admin">Sub Admin</option>
                     <option value="Admin-Dashboard">Admin</option>
-
                 </select>
-
             </div>
 
-
-            <button className="flex w-64 shadow-md rounded-2xl py-2 mb-4 mt-2 justify-center self-center  bg-blue-600" onClick={handleSubmit} disabled={isSubmitting}>
-
-                {isSubmitting ? <Loading /> : <h1 className="font-medium text-2xl text-white">Login</h1>}
-
+            <button
+                className="w-full shadow-md rounded-2xl py-2 flex justify-center bg-blue-600 text-white font-medium text-lg hover:bg-blue-700 transition"
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+            >
+                {isSubmitting ? <Loading /> : "Login"}
             </button>
         </div>
+
     )
 }

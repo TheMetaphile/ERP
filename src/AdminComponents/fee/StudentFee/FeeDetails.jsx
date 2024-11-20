@@ -219,7 +219,7 @@ function FeeDetails() {
                         details.length > 0 ? (
                             <div className=' mobile:max-tablet:w-fit'>
                                 {details.map((details, index) => (
-                                    <Link to={`/Admin-Dashboard/StudentsFee/details/${details.email}`}>
+                                    <Link to={`/Admin-Dashboard/StudentsFee/details/${details.email}?Class=${selectedClass}&session=${details.session}&name=${details.name}&section=${details.section}`}>
                                         <div key={index} className={`px-1 flex justify-between w-full py-2 pl-2 h-fit border gap-x-4 items-center ${clickedIndex === index ? 'bg-secondary' : ''}`}
                                         //  onClick={() => handleClick(index)}
                                         >
