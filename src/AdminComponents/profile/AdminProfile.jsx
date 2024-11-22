@@ -80,7 +80,7 @@ const InfoItem = ({ icon, label, value }) => (
     </div>
     <div className="flex-grow">
       <p className="text-sm font-semibold text-gray-500">{label}</p>
-      <p className="text-lg font-medium text-gray-800 w-32 truncate overflow-hidden whitespace-nowrap">{value}</p>
+      <p className="text-lg font-medium text-gray-800 truncate overflow-hidden whitespace-nowrap">{value}</p>
     </div>
   </motion.div>
 );

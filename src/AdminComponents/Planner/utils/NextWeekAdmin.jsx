@@ -34,8 +34,12 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
 
     const session = getCurrentSession();
     const currentDate = new Date();
-    const currentWeekStart = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 2));
-    const nextWeekStart = new Date();
+    const day = currentDate.getDay();
+    const currentWeekStart = new Date();
+    const diff = 1 - day;  
+    currentWeekStart.setDate(currentDate.getDate() + diff);
+    
+    const nextWeekStart = new Date(currentWeekStart);  
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
 

@@ -121,7 +121,7 @@ function TeachersTimeTable() {
                 initial={{ y: -20 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="w-full mt-4 mobile:max-tablet:hidden"
+                className="w-full mt-4"
             >
                 <SelectionTeacher
                     onSearch={handleSearch}

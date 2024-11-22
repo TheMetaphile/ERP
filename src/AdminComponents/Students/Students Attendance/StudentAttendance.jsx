@@ -133,12 +133,19 @@ export default function StudentAttendance() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                 >
-                    <SearchBar />
+                    <SearchBar 
+                    Class={Class}
+                    Section={Section}
+                    Month={Month}
+                    handleClassChange={handleClassChange}
+                    handleSectionChange={handleSectionChange}
+                    handlebothEventsCalled={handlebothEventsCalled}
+                    handleMonthChange={handleMonthChange}
+                    />
                 </motion.div>
             )}
 
-            <motion.div className="w-full mb-4 mobile:max-tablet:hidden
-            " variants={itemVariants}>
+            <motion.div className="w-full mb-4 mobile:max-tablet:hidden" variants={itemVariants}>
                 <SearchBar
                     Class={Class}
                     Section={Section}

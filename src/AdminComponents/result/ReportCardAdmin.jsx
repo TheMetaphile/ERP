@@ -8,6 +8,7 @@ import AuthContext from '../../Context/AuthContext';
 import { BASE_URL_Login } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaFilter } from 'react-icons/fa';
 
 function ReportCardAdmin() {
   const { authState } = useContext(AuthContext);
@@ -21,6 +22,7 @@ function ReportCardAdmin() {
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(20);
   const [allDataFetched, setAllDataFetched] = useState(false);
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('Class', Class);
@@ -136,7 +138,7 @@ function ReportCardAdmin() {
 
   return (
     <motion.div
-      className=" min-h-screen p-4 mobile:max-tablet:px-2"
+      className=" flex flex-col mx-2  min-h-screen"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -144,11 +146,19 @@ function ReportCardAdmin() {
       <ToastContainer />
 
       <motion.div
-        className="flex justify-between items-center  mb-6 mobile:max-tablet:mb-3"
+        className="flex justify-between items-center py-4  text-black mb-4 mobile:max-tablet:mb-0"
         variants={itemVariants}
       >
-        <h1 className="text-3xl font-medium text-black mobile:max-tablet:text-lg">Report Card</h1>
-        <div className="hidden laptop:flex items-center space-x-4">
+        <h1 className="text-3xl font-semibold mobile:max-tablet:text-lg">Report Card</h1>
+        <motion.button
+          className="p-2 bg-purple-500 rounded-full shadow-md hover:bg-purple-400 transition-colors duration-200 mobile:max-tablet:block hidden"
+          onClick={() => setDropdownVisible(!isDropdownVisible)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <FaFilter />
+        </motion.button>
+        <motion.div className="mobile:max-tablet:hidden" variants={itemVariants}>
           <Selection
             Class={Class}
             Section={Section}
@@ -157,8 +167,30 @@ function ReportCardAdmin() {
             handleSectionChange={handleSectionChange}
             handleSessionChange={handleSessionChange}
           />
-        </div>
+        </motion.div>
       </motion.div>
+
+
+      {isDropdownVisible && (
+        <motion.div
+          className="absolute bg-white py-2 rounded-lg shadow-xl right-4 left-4 z-20 mobile:max-tablet:mt-16"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+        >
+          <Selection
+            Class={Class}
+            Section={Section}
+            Session={selectedSession}
+            handleClassChange={handleClassChange}
+            handleSectionChange={handleSectionChange}
+            handleSessionChange={handleSessionChange}
+          />
+        </motion.div>
+      )}
+
+
+
 
       <motion.div
         className="bg-white rounded-lg shadow-lg  overflow-auto"

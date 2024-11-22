@@ -112,7 +112,7 @@ function StudentsTimeTable() {
 
     return (
         <div className="flex flex-col w-full mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar mobile:max-tablet:mt-4">
-            <div className='mt-4 w-full mobile:max-tablet:hidden'>
+            <div className='mt-4 w-full'>
                 <Selection
                     selectClass={selectClass}
                     selectedSection={selectedSection}
