@@ -6,8 +6,8 @@ import { MdDeleteForever } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_AskDoubt } from '../../../Config';
+import AuthContext from '../../../../../Context/AuthContext';
+import { BASE_URL_AskDoubt } from '../../../../../Config';
 
 const DoubtCard = ({ doubt, index, expanded, handleClick, handleDelete }) => {
     return (
@@ -90,8 +90,8 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, handleDelete }) => {
 
 export default function AnsweredTile({ data, Class }) {
     const [expanded, setExpanded] = useState(null);
-    const { authState } = useContext(AuthContext);
     const [resolvedDoubts, setResolvedDoubts] = useState([]);
+    const { authState } = useContext(AuthContext);
 
     useEffect(() => {
         if (data) {
@@ -119,7 +119,6 @@ export default function AnsweredTile({ data, Class }) {
             }
         } catch (error) {
             console.error("Error deleting Doubt:", error);
-            toast.error(error.response.data.error);
         }
     };
 

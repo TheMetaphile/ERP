@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthContext from '../../Context/AuthContext';
 import { motion } from 'framer-motion';
-import { FaFilter, FaChevronDown, FaQuestionCircle, FaCheck } from 'react-icons/fa';
+import { FaQuestionCircle, FaCheck } from 'react-icons/fa';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NewDoubt from './utils/NewDoubt';
@@ -71,28 +71,30 @@ function StudentDoubts() {
                 className="flex justify-between mobile:max-tablet:flex-col w-full mobile:max-tablet:items-start items-center mb-4 py-2"
             >
 
-                <h1 className="text-3xl mobile:max-tablet:text-xl font-medium text-black mobile:max-tablet:text-left">Student Doubts</h1>
-                <div className="flex justify-between gap-3 mobile:max-tablet:overflow-auto w-full ">
-                    <select id="class" value={Class} onChange={handleClassChange} className="shadow-md px-3 py-1  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
-                        <option value="">Search by Class</option>
-                        {uniqueClasses.map((classOption, index) => (
-                            <option key={index} value={classOption}>{classOption}</option>
-                        ))}
-                    </select>
+                <div className='w-full flex'>
+                    <h1 className="text-3xl mobile:max-tablet:text-xl font-medium text-black mobile:max-tablet:text-left w-full">Student Doubts</h1>
+                    <div className="flex justify-between mobile:max-tablet:overflow-auto w-full ">
+                        <select id="class" value={Class} onChange={handleClassChange} className="shadow-md px-3 py-1  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
+                            <option value="">Search by Class</option>
+                            {uniqueClasses.map((classOption, index) => (
+                                <option key={index} value={classOption}>{classOption}</option>
+                            ))}
+                        </select>
 
-                    <select id="section" value={Section} onChange={handleSectionChange} className="shadow-md px-3 py-1  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
-                        <option value="">Search by Section</option>
-                        {uniqueSections.map((sectionOption, index) => (
-                            <option key={index} value={sectionOption}>{sectionOption}</option>
-                        ))}
-                    </select>
+                        <select id="section" value={Section} onChange={handleSectionChange} className="shadow-md px-3 py-1  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
+                            <option value="">Search by Section</option>
+                            {uniqueSections.map((sectionOption, index) => (
+                                <option key={index} value={sectionOption}>{sectionOption}</option>
+                            ))}
+                        </select>
 
-                    <select id="subject" value={Subject} onChange={handleSubjectChange} className="shadow-md px-3 py-2  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
-                        <option value="">Search by Subject</option>
-                        {uniqueSubjects.map((subjectOption, index) => (
-                            <option key={index} value={subjectOption}>{subjectOption}</option>
-                        ))}
-                    </select>
+                        <select id="subject" value={Subject} onChange={handleSubjectChange} className="shadow-md px-3 py-2  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
+                            <option value="">Search by Subject</option>
+                            {uniqueSubjects.map((subjectOption, index) => (
+                                <option key={index} value={subjectOption}>{subjectOption}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
             </motion.div>
 

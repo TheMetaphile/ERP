@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
 import NewDoubtTile from './NewDoubtTile'
-import Loading from '../../../LoadingScreen/Loading'
+import Loading from '../../../../../LoadingScreen/Loading'
 import axios from 'axios'
-import AuthContext from '../../../Context/AuthContext'
-import { BASE_URL_AskDoubt } from '../../../Config'
+import AuthContext from '../../../../../Context/AuthContext'
+import { BASE_URL_AskDoubt } from '../../../../../Config'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

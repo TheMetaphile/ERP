@@ -78,7 +78,7 @@ function Answered({ Class, Section, Subject }) {
         <div className=''>
             {data.length > 0 ? (
                 <>
-                    <AnsweredTile data={data} />
+                    <AnsweredTile data={data} Class={Class}/>
                     {(!allDataFetched) && (
                         <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
                     )}

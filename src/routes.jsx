@@ -4,7 +4,10 @@ import Loading from "./LoadingScreen/Loading.jsx";
 import StudentCard from "./AdminComponents/StudentDetails.jsx";
 import Studentdetailscard from "./TeacherComponents/studentdetailcard.jsx";
 import Detailscard from "./SubAdminComponent/Detailscard.jsx";
+import StudentDoubtsHOD from "./TeacherComponents/HOD/utils/studentDoubt/StudentDoubtsHOD.jsx";
 
+const AllReportHOD = lazy(() => import("./TeacherComponents/HOD/utils/result/AllReportHOD.jsx"));
+const ReportCardHOD = lazy(() => import("./TeacherComponents/HOD/utils/result/ReportCardHOD.jsx"));
 const AllPreviousDetailsAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/AllDetailsAdmin.jsx"));
 const PreviousFeeDetailAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/utils/PreviousFeeDetailAdmin.jsx"));
 const PreviousFeeDetailsAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/PreviousFeeDetails.jsx"));
@@ -1152,6 +1155,45 @@ const router = createBrowserRouter([
             path: "/Teacher-Dashboard/HOD/lectureSubstitute",
             element: <Suspense fallback={Loading}>
               <LectureSubstitute /></Suspense>,
+          },
+          {
+            path: "/Teacher-Dashboard/HOD/studentResult",
+            element: <Suspense fallback={Loading}>
+              <AllReportHOD /></Suspense>,
+            children: [
+              {
+                path: '',
+                element: <Suspense fallback={Loading}>
+                  <ReportCardHOD /></Suspense>
+              },
+              {
+                path: ':id',
+                element: <Suspense fallback={Loading}>
+                  <Subresult /></Suspense>
+              }
+            ]
+          },
+          {
+            path: "/Teacher-Dashboard/HOD/studentDoubts",
+            element: <Suspense fallback={Loading}>
+              <StudentDoubtsHOD /></Suspense>,
+            children: [
+              {
+                path: "new",
+                element: <Suspense fallback={Loading}>
+                  <NewDoubt /></Suspense>
+              },
+              {
+                path: "answered",
+                element: <Suspense fallback={Loading}>
+                  <Answered /></Suspense>
+              },
+              {
+                path: "",
+                element: <Suspense fallback={Loading}>
+                  <NewDoubt /></Suspense>
+              }
+            ]
           },
         ]
       },

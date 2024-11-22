@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronUp, FaChevronDown, FaUserGraduate, FaQuestionCircle, FaPen } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import axios from 'axios';
-import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_AskDoubt } from '../../../Config';
+import AuthContext from '../../../../../Context/AuthContext';
+import { BASE_URL_AskDoubt } from '../../../../../Config';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdDeleteForever } from "react-icons/md";
@@ -44,7 +44,6 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
             className="bg-blue-100 p-2 rounded-full"
           >
             {expanded === index ? <FaChevronUp className="text-blue-600" /> : <FaChevronDown className="text-blue-600" />}
-
           </motion.div>
           <motion.button
             whileHover={{ scale: 1.1 }}
@@ -113,7 +112,6 @@ export default function NewDoubtTile({ data, Class }) {
   const [loading, setLoading] = useState(false);
   const [answers, setAnswers] = useState({});
   const [pendingDoubts, setPendingDoubts] = useState([]);
-
 
   const handleDelete = async (index, id) => {
     try {

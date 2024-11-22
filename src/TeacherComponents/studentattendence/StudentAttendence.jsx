@@ -28,34 +28,41 @@ function StudentAttendance() {
       try {
         console.log(start, "-", end);
         const today = new Date();
-        var month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;
+        const month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;
         const formattedDate = `${today.getFullYear()}-${month}-${today.getDate()}`;
         const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/student/list?date=${formattedDate}&start=${start}&end=${end}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
-          }
+          },
         });
-        const studentsList = response.data.studentsList.map(student => ({
-          ...student,
-          present: false,
-          absent: false,
-          leave: student.leave
-        }));
+
+        const studentsList = response.data.studentsList.map(student => {
+          const present = student.attendanceStatus === "Present";
+          const absent = student.attendanceStatus === "Absent";
+          const leave = student.attendanceStatus === "Leave";
+
+          return {
+            ...student,
+            present,
+            absent,
+            leave,
+          };
+        });
 
         setStudents(prevStudents => [...prevStudents, ...studentsList]);
         setStudentClone(prevStudents => [...prevStudents, ...studentsList]);
         console.log('fetch', studentsList);
       } catch (error) {
-        setError(error.response.data.error);
+        setError(error.response?.data?.error || "An error occurred");
         console.error("Error fetching student attendance:", error);
-      }
-      finally {
+      } finally {
         setLoading(false);
       }
     };
 
     fetchStudents();
   }, [authState.accessToken, start]);
+
 
 
   const handleScroll = () => {
@@ -131,7 +138,7 @@ function StudentAttendance() {
           absent: false,
           leave: false
         }));
-        setStudentClone(resetStudents);
+        // setStudentClone(resetStudents);
         setMarkLoading(false);
 
       }
