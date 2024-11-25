@@ -32,7 +32,7 @@ function StudentDetails({ selectedOption }) {
     }
   }, [authState.accessToken]);
 
-  const today = new Date();
+  // const today = new Date();
 
 
   const fetchFees = async () => {

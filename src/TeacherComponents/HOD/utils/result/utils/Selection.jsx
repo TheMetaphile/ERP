@@ -6,8 +6,8 @@ import { BASE_URL_Login } from '../../../../../Config';
 function Selection({ handleClassChange, handleSectionChange, handleSessionChange, Class, Section, Session }) {
   const { authState } = useContext(AuthContext);
   const [sectionsDetails, setSectionsDetails] = useState([]);
-  const [sessions, setSessions] = useState([]);
-  const [selectedSession, setSelectedSession] = useState('');
+  // const [sessions, setSessions] = useState([]);
+  // const [selectedSession, setSelectedSession] = useState('');
 
   const wingClasses = {
     'Pre-Nursery-U.K.G': ['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G'],
@@ -19,16 +19,16 @@ function Selection({ handleClassChange, handleSectionChange, handleSessionChange
 
   const availableClasses = wingClasses[authState?.userDetails?.co_ordinator_wing] || [];
 
-  useEffect(() => {
-    const currentYear = new Date().getFullYear();
-    const newSessions = [];
-    for (let i = 0; i < 5; i++) {
-      const startYear = currentYear - i;
-      const endYear = startYear + 1;
-      newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
-    }
-    setSessions(newSessions);
-  }, []);
+  // useEffect(() => {
+  //   const currentYear = new Date().getFullYear();
+  //   const newSessions = [];
+  //   for (let i = 0; i < 5; i++) {
+  //     const startYear = currentYear - i;
+  //     const endYear = startYear + 1;
+  //     newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
+  //   }
+  //   // setSessions(newSessions);
+  // }, []);
 
   const fetchSections = async (selectedClass) => {
     try {
@@ -53,11 +53,11 @@ function Selection({ handleClassChange, handleSectionChange, handleSessionChange
     }
   };
 
-  const handleSessionChangeInternal = (e) => {
-    const selectedSessionValue = e.target.value;
-    setSelectedSession(selectedSessionValue);
-    handleSessionChange(selectedSessionValue);
-  };
+  // const handleSessionChangeInternal = (e) => {
+  //   const selectedSessionValue = e.target.value;
+  //   setSelectedSession(selectedSessionValue);
+  //   handleSessionChange(selectedSessionValue);
+  // };
 
   return (
     <div className="w-fit flex items-center gap-2 mobile:max-tablet:flex-col mobile:max-tablet:w-full mobile:max-tablet:px-4">

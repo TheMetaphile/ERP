@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { MdDeleteForever } from "react-icons/md";
 
 const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerChange, handleStatusUpdate, loading, handleDelete }) => {
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

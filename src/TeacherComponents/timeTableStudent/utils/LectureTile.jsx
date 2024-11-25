@@ -4,7 +4,7 @@ import { FaBook, FaChalkboardTeacher, FaClock, FaGraduationCap, FaUtensils } fro
 
 
 export default function LectureTile({ index, numberOfLecturesBeforeLunch, Time, data, day }) {
-    const [lectures, setLectures] = useState({});
+    const [lectures, setLectures] = useState(null);
 
     useEffect(() => {
         setLectures(data && data[day] ? data[day][index] : {})
@@ -55,7 +55,7 @@ export default function LectureTile({ index, numberOfLecturesBeforeLunch, Time, 
         );
     }
 
-    if (lectures.optional) {
+    if (lectures && lectures.optional) {
         return lectures.optionalSubjects.map((optSub, optSubIndex) => (
             <motion.tr
                 key={optSubIndex}
@@ -78,7 +78,7 @@ export default function LectureTile({ index, numberOfLecturesBeforeLunch, Time, 
         ));
     }
 
-    if (Object.keys(lectures).length > 0) {
+    if (lectures && Object.keys(lectures).length > 0) {
         return (
             <motion.tr
                 variants={rowVariants}
