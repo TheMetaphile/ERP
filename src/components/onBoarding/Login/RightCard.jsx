@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import logo from '../../../assets/school logo.png'
+import logo from '../../../assets/Bds_logo.png'
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading"
