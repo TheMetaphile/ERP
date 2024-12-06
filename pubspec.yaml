@@ -40,8 +40,8 @@ dependencies:
   workmanager: ^0.5.2
   google_nav_bar: ^5.0.6
   alphabet_slider: ^1.0.4
-  audiofileplayer: ^2.1.1
-  flutter_sound: ^9.2.13
+  audioplayers: ^6.1.0
+  flutter_sound: ^9.17.6
   audio_session: ^0.1.11
   speech_to_text: ^6.6.0
   flutter_tts: ^3.6.0
@@ -62,8 +62,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
-  firebase_core: ^2.24.2
-  firebase_messaging: ^14.7.10
+  firebase_core: ^3.8.1
+  firebase_messaging: ^15.1.6
   flutter_local_notifications: ^17.2.2
 
 dev_dependencies:

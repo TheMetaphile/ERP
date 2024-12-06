@@ -3,7 +3,7 @@
 // import 'package:shared_preferences/shared_preferences.dart';
 //
 // class Subjects {
-//   static const String _baseUrl = 'https://philester.com';
+//   static const String _baseUrl = 'https://school.bdssl.edu.in/api';
 //
 //   Future<List<dynamic>> fetchSubjects(String accessToken, String Class, String section) async {
 //     print("Class $Class");

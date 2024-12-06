@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 class NotificationAPI{
 
-  static const String _baseUrl = 'https://philester.com';
+  static const String _baseUrl = 'https://school.bdssl.edu.in/api';
 
   Future<bool> addToken( String accessToken, String deviceToken) async {
 

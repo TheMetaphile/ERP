@@ -13,7 +13,7 @@ import '../../onBoarding/Screens/reset_confirmation.dart';
 import 'package:http/http.dart' as http;
 
 class StudentAuthentication{
-  static String baseUrl = "https://philester.com";
+  static String baseUrl = "https://school.bdssl.edu.in/api";
 
 
   Future<dynamic> loginUser(String email, String password, BuildContext context) async {

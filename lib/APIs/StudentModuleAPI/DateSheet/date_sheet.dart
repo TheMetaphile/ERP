@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 
 class DateSheetApi {
-  static const String _baseUrl = 'https://philester.com';
+  static const String _baseUrl = 'https://school.bdssl.edu.in/api';
 
   Future<List<dynamic>> fetchDateSheet(String accessToken,String Class) async {
     print(accessToken);

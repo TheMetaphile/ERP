@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 
 class AttendanceApi {
-  static const String _baseUrl = 'https://philester.com';
+  static const String _baseUrl = 'https://school.bdssl.edu.in/api';
 
   Future<Map<String,dynamic>> fetchAttendance(String accessToken,int month,String year) async {
 

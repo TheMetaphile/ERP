@@ -9,7 +9,7 @@ import '../../../SharedPreference/sharedPreferenceFile.dart';
 
 
 class TimetableApi {
-  static const String baseUrl = 'https://philester.com';
+  static const String baseUrl = 'https://school.bdssl.edu.in/api';
 
   Future<List<dynamic>> fetchStudentTimetable(String accessToken,String day) async {
 

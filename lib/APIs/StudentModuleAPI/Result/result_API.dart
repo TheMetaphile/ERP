@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ResultApi {
-  static const String _baseUrl = 'https://philester.com';
+  static const String _baseUrl = 'https://school.bdssl.edu.in/api';
 
   Future<dynamic> fetchResult(String accessToken,String email) async {
 

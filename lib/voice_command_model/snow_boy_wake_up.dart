@@ -18,7 +18,7 @@ class SnowBoyWakeUp {
   late Snowboy detector = Snowboy();
 
   final FlutterSoundRecorder _micRecorder = FlutterSoundRecorder();
-  StreamController? _recordingDataController;
+  StreamController<Uint8List>? _recordingDataController;
   StreamSubscription? _recordingDataSubscription;
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -88,20 +88,20 @@ class SnowBoyWakeUp {
     await _micRecorder.openRecorder();
 
     // Create recording stream
-    _recordingDataController = StreamController<Food>();
+    _recordingDataController = StreamController<Uint8List>();
     _recordingDataSubscription =
         _recordingDataController?.stream.listen((buffer) {
       // When we get data, feed it into Snowboy detector
-      if (buffer is FoodData) {
-        Uint8List copy = new Uint8List.fromList(buffer.data!);
-        // print("Got audio data (${buffer.data.lengthInBytes} bytes");
-        detector.detect(copy);
-      }
+      _recordingDataSubscription =
+          _recordingDataController?.stream.listen((buffer) {
+        // When we get data, feed it into Snowboy detector
+        detector.detect(buffer);
+      });
     });
 
     // Start recording
     await _micRecorder.startRecorder(
-        toStream: _recordingDataController!.sink as StreamSink<Food>,
+        toStream: _recordingDataController!.sink,
         codec: Codec.pcm16,
         numChannels: kNumChannels,
         sampleRate: kSampleRate);

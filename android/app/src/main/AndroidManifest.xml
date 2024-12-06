@@ -10,7 +10,7 @@
         </intent>
     </queries>
     <application
-        android:label="student"
+        android:label="Student"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

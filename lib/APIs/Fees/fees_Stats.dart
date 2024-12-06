@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FeesStatsApi {
-  static const String _baseUrl = 'https://philester.com';
+  static const String _baseUrl = 'https://school.bdssl.edu.in/api';
 
   Future<Map<String,dynamic>> fetchStats(String accessToken) async {
 
