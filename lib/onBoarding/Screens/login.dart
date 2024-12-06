@@ -6,8 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../APIs/Authentication/studentAuthentication.dart';
+import '../../APIs/NotificationAPI/notificationAPI.dart';
 import '../../APIs/SharedPreference/sharedPreferenceFile.dart';
 import '../../CustomTheme/customTheme.dart';
+import '../../Notification/Messanging.dart';
 import '../../main.dart';
 import '../utils/text_field.dart';
 import 'Forget.dart';
@@ -110,7 +112,13 @@ class _LoginState extends State<Login> {
 
 
         }
+        NotificationAPI apiObj=NotificationAPI();
+        String? accessToken = pref.getString("accessToken");
 
+        String? deviceToken = await FCMService.getDeviceToken();
+        print("FCM Token: $deviceToken");
+        await apiObj.addToken(accessToken!, deviceToken!);
+        print("token send-------------------");
 
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp(),));
       }

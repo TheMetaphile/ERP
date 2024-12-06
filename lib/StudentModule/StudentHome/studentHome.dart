@@ -11,8 +11,10 @@ import 'package:student/StudentModule/NoteBookRecord/noteBook_Record.dart';
 import 'package:student/StudentModule/Notice/notice.dart';
 import 'package:student/StudentModule/homeWork/homeWork.dart';
 
+import '../../APIs/NotificationAPI/notificationAPI.dart';
 import '../../APIs/SharedPreference/sharedPreferenceFile.dart';
 import '../../CustomTheme/customTheme.dart';
+import '../../Notification/Messanging.dart';
 import '../../WorkManager1/preferenceListener.dart';
 import '../../onBoarding/Screens/login.dart';
 import '../../voice_command_model/permission/permission.dart';
@@ -24,7 +26,6 @@ import '../Attendance/studentAttendance.dart';
 import '../Dashboard/dashboard.dart';
 import '../Datesheet/datesheet.dart';
 import '../Fees/Fee_Due.dart';
-import '../Fees/fees.dart';
 import '../Result/result.dart';
 import '../StudentLeave/student_leave.dart';
 import '../TimeTable/timeTable.dart';
@@ -330,6 +331,21 @@ class _StudentHomeState extends State<StudentHome> {
   //   );
   // }
 
+  Future<dynamic> deleteDeviceToken() async {
+    try {
+      NotificationAPI apiObj=NotificationAPI();
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? accessToken = pref.getString("accessToken");
+
+      String? deviceToken = await FCMService.getDeviceToken();
+      print("FCM Token: $deviceToken");
+      await apiObj.removeToken(accessToken!, deviceToken!);
+
+    } catch (e) {
+      print('$e');
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -528,6 +544,7 @@ class _StudentHomeState extends State<StudentHome> {
                             SharedPreferences prefs = await SharedPreferences
                                 .getInstance();
                             await prefs.clear();
+                            await deleteDeviceToken();
                             Navigator.pushReplacement(context,
                                 MaterialPageRoute(builder: (context) => const Login()));
                           } ),

@@ -18,7 +18,7 @@ import 'package:student/StudentModule/homeWork/homeWork.dart';
 import 'APIs/Authentication/studentAuthentication.dart';
 import 'APIs/SharedPreference/sharedPreferenceFile.dart';
 import 'CustomTheme/customTheme.dart';
-import 'Notification/local_notification_service.dart';
+import 'Notification/Messanging.dart';
 import 'StudentModule/Fees/Fee_Due.dart';
 import 'StudentModule/Result/result.dart';
 import 'StudentModule/StudentHome/studentHome.dart';
@@ -27,42 +27,25 @@ import 'onBoarding/Screens/Forget.dart';
 
 import 'onBoarding/Screens/login.dart';
 
-@pragma('vm:entry-point')
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("inside background handler");
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-}
 
+Future<void> requestNotificationPermissions() async {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await messaging.requestPermission();
+  print('User granted permission: ${settings.authorizationStatus}');
+}
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Workmanager().initialize(callbackDispatcher,isInDebugMode: false);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  bool status= await Permission.notification.isGranted;
 
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  print("Status $status");
-  if(status){}
-  else {
-    print("Status $status");
-    if (await Permission.notification.isPermanentlyDenied) {
-      await openAppSettings();
-    } else {
-      await Permission.notification.request().then((value) {
-        status = value.isGranted;
-      });
-    }
-  }
+  // Initialize FCM
+  await FCMService.initializeFCM();
 
   String? token = await FCMService.getDeviceToken();
-  print("Token $token");
+  print("FCM Token: $token");
 
   runApp(const MyApp());
-
 }
 
 
@@ -171,16 +154,21 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+  //_setupFCMListeners();
     getDetails();
-    FirebaseMessaging.onMessage.listen(firebaseMessagingBackgroundHandler);
-
-    FirebaseMessaging.onBackgroundMessage.call(firebaseMessagingBackgroundHandler);
-    FirebaseMessaging.onMessageOpenedApp.listen(firebaseMessagingBackgroundHandler);
-
 
   }
+  void _setupFCMListeners() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("Received message in _MyAppState: ${message.notification?.title}");
+      // You can add additional handling here if needed
+    });
 
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("App opened from notification in _MyAppState: ${message.notification?.title}");
+      // You can add navigation logic here if needed
+    });
+  }
 
 
 
@@ -277,31 +265,3 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-
-
-class FCMService {
-  static Future<String?> getDeviceToken() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-    // Request permission (required for iOS)
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      // Get the token
-      String? token = await messaging.getToken();
-      print('FCM Token: $token');
-      return token;
-    } else {
-      print('User declined or has not accepted permission');
-      return null;
-    }
-  }
-}
