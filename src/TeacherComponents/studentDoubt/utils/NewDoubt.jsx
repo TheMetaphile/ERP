@@ -13,7 +13,7 @@ function NewDoubt({ Class, Section, Subject }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(4);
+    const end = 4;
     const [allDataFetched, setAllDataFetched] = useState(false);
 
     console.log(Class, Section, Subject)

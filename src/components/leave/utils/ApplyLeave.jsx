@@ -43,6 +43,7 @@ export default function ApplyLeave({ onNewLeave }) {
                 setReason('');
             }
         } catch (error) {
+            console.log(error);
             toast.error(error.message);
         } finally {
             setIsLoading(false);

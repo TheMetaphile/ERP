@@ -110,10 +110,8 @@ function ReportCard() {
                                         transition={{ duration: 0.3, delay: index * 0.05 }}
                                     >
                                         <td className="py-3 px-4">
-                                            <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`}>
-                                                <FaUserGraduate className="inline mr-2 text-blue-600" />
-                                                {detail.rollNumber}
-                                            </Link>
+                                            <FaUserGraduate className="inline mr-2 text-blue-600" />
+                                            {detail.rollNumber}
                                         </td>
                                         <td className="py-3 px-4">
                                             <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`} className="flex items-center">

@@ -189,47 +189,51 @@ function ClassWork() {
                     </div>
 
                 </motion.div>
-                <div className="flex items-center space-x-4 mt-3">
-                    <div className='flex mobile:max-tablet:hidden items-center gap-3'>
-                        <div className="relative">
-                            <FiBook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
-                            <select id="class" className="w-full px-8 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" onChange={handleClassChange}>
-                                <option value="">Class</option>
-                                {uniqueClasses.map((classOption, index) => (
-                                    <option key={index} value={classOption}>{classOption}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="relative">
-                            <FiUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
-                            <select id="section" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSectionChange}>
-                                <option value="">Section</option>
-                                {uniqueSections.map((sectionOption, index) => (
-                                    <option key={index} value={sectionOption}>{sectionOption}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="relative">
-                            <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
-                            <select id="subject" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSubjectChange}>
-                                <option value="">Subject</option>
-                                {uniqueSubjects.map((subjectOption, index) => (
-                                    <option key={index} value={subjectOption}>{subjectOption}</option>
-                                ))}
-                            </select>
-                        </div>
+                <motion.div variants={itemVariants} className='w-full flex items-center justify-end mb-4'>
 
+                    <div className="flex items-center space-x-4 mt-3">
+                        <div className='flex mobile:max-tablet:hidden items-center gap-3'>
+                            <div className="relative">
+                                <FiBook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
+                                <select id="class" className="w-full px-8 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" onChange={handleClassChange}>
+                                    <option value="">Class</option>
+                                    {uniqueClasses.map((classOption, index) => (
+                                        <option key={index} value={classOption}>{classOption}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="relative">
+                                <FiUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
+                                <select id="section" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSectionChange}>
+                                    <option value="">Section</option>
+                                    {uniqueSections.map((sectionOption, index) => (
+                                        <option key={index} value={sectionOption}>{sectionOption}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="relative">
+                                <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
+                                <select id="subject" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSubjectChange}>
+                                    <option value="">Subject</option>
+                                    {uniqueSubjects.map((subjectOption, index) => (
+                                        <option key={index} value={subjectOption}>{subjectOption}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                        </div>
+                        <motion.button
+                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 flex items-center"
+                            onClick={handleOpen}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <FiUpload className="mr-2" />
+                            Upload
+                        </motion.button>
                     </div>
-                    <motion.button
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 flex items-center"
-                        onClick={handleOpen}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <FiUpload className="mr-2" />
-                        Upload
-                    </motion.button>
-                </div>
+                </motion.div>
+
             </div>
             {loading ? (
                 <Loading />
