@@ -187,70 +187,78 @@ const StudentsTimeTable = lazy(() => import("./AdminComponents/timetable/utils/S
 const UserProfile = lazy(() => import("./components/StudentProfile/Profile.jsx"));
 const TakeLeaveSubAdmin = lazy(() => import("./SubAdminComponent/takeleave/TakeLeaveSubAdmin.jsx"));
 
-
+const SuspenseWrapper = ({ children }) => (
+  <Suspense
+    fallback={
+      <Loading />
+    }
+  >
+    {children}
+  </Suspense>
+);
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Suspense fallback={Loading}>
-      <Login /></Suspense>
+    element: <SuspenseWrapper fallback={Loading}>
+      <Login /></SuspenseWrapper>
 
 
     ,
   },
   {
     path: "/resetpassword",
-    element: <Suspense fallback={Loading}><ResetPassword /></Suspense>
+    element: <SuspenseWrapper fallback={Loading}><ResetPassword /></SuspenseWrapper>
     ,
   },
   {
     path: "/newPassword",
-    element: <Suspense fallback={Loading}>
-      <SetNewPassword /></Suspense>,
+    element: <SuspenseWrapper fallback={Loading}>
+      <SetNewPassword /></SuspenseWrapper>,
   },
   {
     path: "/Student-Dashboard",
     element: (
-      <PrivateRoute>
-        <Suspense fallback={Loading}>
-          <Dashboard /></Suspense>
-      </PrivateRoute>
+      // <PrivateRoute>
+      <SuspenseWrapper fallback={Loading}>
+        <Dashboard /></SuspenseWrapper>
+      // </PrivateRoute>
     ),
     children: [
       {
         path: "",
-        element: <Suspense fallback={Loading}>
-          <Home /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Home /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/home",
-        element: <Suspense fallback={Loading}>
-          <Home /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Home /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/profile",
-        element: <Suspense fallback={Loading}>
-          <UserProfile /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <UserProfile /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/assignment",
-        element: <Suspense fallback={Loading}>
-          <AssignmentReport /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AssignmentReport /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/fee-due",
-        element: <Suspense fallback={Loading}>
-          <TabsStudentFee /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TabsStudentFee /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/events",
-        element: <Suspense fallback={Loading}>
-          <Border /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Border /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/profile",
-        element: <Suspense fallback={Loading}>
-          <Profile /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Profile /></SuspenseWrapper>,
       },
       // {
       //   path: "/Student-Dashboard/playquiz",
@@ -258,72 +266,72 @@ const router = createBrowserRouter([
       // },
       {
         path: "/Student-Dashboard/receipt",
-        element: <Suspense fallback={Loading}>
-          <Receipt /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Receipt /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/quiz",
-        element: <Suspense fallback={Loading}><QuizRoute /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}><QuizRoute /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <Panel /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Panel /></SuspenseWrapper>
           },
 
           {
             path: ':subject',
-            element: <Suspense fallback={Loading}>
-              <Quiz /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Quiz /></SuspenseWrapper>
           }
         ]
       },
       {
         path: "/Student-Dashboard/exam",
-        element: <Suspense fallback={Loading}>
-          <ExamRoute /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <ExamRoute /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <Examination /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Examination /></SuspenseWrapper>
           },
           {
             path: ':subject',
-            element: <Suspense fallback={Loading}>
-              <Quiz /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Quiz /></SuspenseWrapper>
           }
         ]
       },
       {
         path: "/Student-Dashboard/result",
-        element: <Suspense fallback={Loading}>
-          <Result /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Result /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/attendance",
-        element: <Suspense fallback={Loading}>
-          <Attendance /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Attendance /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/datesheet",
-        element: <Suspense fallback={Loading}>
-          <DateSheet /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <DateSheet /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/timetable",
-        element: <Suspense fallback={Loading}>
-          <TimeTable /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TimeTable /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/classwork",
-        element: <Suspense fallback={Loading}>
-          <ClassWork /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <ClassWork /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <TodayClassWork /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <TodayClassWork /></SuspenseWrapper>
           },
 
           // {
@@ -334,13 +342,13 @@ const router = createBrowserRouter([
       },
       {
         path: "/Student-Dashboard/homework",
-        element: <Suspense fallback={Loading}>
-          <Route /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Route /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <TodayHomeWork /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <TodayHomeWork /></SuspenseWrapper>
           },
 
           // {
@@ -351,205 +359,205 @@ const router = createBrowserRouter([
       },
       {
         path: "/Student-Dashboard/askdoubt",
-        element: <Suspense fallback={Loading}>
-          <AskDoubt /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AskDoubt /></SuspenseWrapper>,
         children: [
           {
             path: '/Student-Dashboard/askdoubt/mydoubts',
-            element: <Suspense fallback={Loading}>
-              <MyDoubts /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <MyDoubts /></SuspenseWrapper>
           },
           {
             path: '/Student-Dashboard/askdoubt/alldoubt',
-            element: <Suspense fallback={Loading}>
-              <AllDoubts /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllDoubts /></SuspenseWrapper>
           },
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <MyDoubts /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <MyDoubts /></SuspenseWrapper>
           }
         ]
       },
       {
         path: "/Student-Dashboard/notification",
-        element: <Suspense fallback={Loading}>
-          <Notification /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Notification /></SuspenseWrapper>,
         children: [
           {
             path: '/Student-Dashboard/notification/allnotification',
-            element: <Suspense fallback={Loading}>
-              <AllNotification /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllNotification /></SuspenseWrapper>
           },
           {
             path: '/Student-Dashboard/notification/inbox',
-            element: <Suspense fallback={Loading}>
-              <Inbox /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Inbox /></SuspenseWrapper>
           },
           {
             path: '/Student-Dashboard/notification/archived',
-            element: <Suspense fallback={Loading}>
-              <Archived /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Archived /></SuspenseWrapper>
           },
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <AllNotification /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllNotification /></SuspenseWrapper>
           },
         ]
       },
       {
         path: "/Student-Dashboard/leave",
-        element: <Suspense fallback={Loading}>
-          <Leave /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Leave /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/gallery",
-        element: <Suspense fallback={Loading}>
-          <Gallery /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Gallery /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/broadcast",
-        element: <Suspense fallback={Loading}>
-          <BroadCast /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <BroadCast /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/activities",
-        element: <Suspense fallback={Loading}>
-          <Activities /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Activities /></SuspenseWrapper>,
         children: [
           {
             path: '/Student-Dashboard/activities/recentactivity',
-            element: <Suspense fallback={Loading}>
-              <RecentActivity /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <RecentActivity /></SuspenseWrapper>
           },
           {
             path: '/Student-Dashboard/activities/allactivity',
-            element: <Suspense fallback={Loading}>
-              <AllActivity /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllActivity /></SuspenseWrapper>
           },
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <RecentActivity /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <RecentActivity /></SuspenseWrapper>
           },
         ]
       },
       {
         path: "/Student-Dashboard/medical",
-        element: <Suspense fallback={Loading}>
-          <Mediacal /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Mediacal /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/homework",
-        element: <Suspense fallback={Loading}>
-          <HomeWork /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <HomeWork /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/notebook",
-        element: <Suspense fallback={Loading}>
-          <Status /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Status /></SuspenseWrapper>,
       },
     ],
   },
   {
     path: "/Admin-Dashboard",
     element: (
-      <PrivateRoute>
-        <Suspense fallback={Loading}>
-          <AdminDashboard />
-        </Suspense>
-      </PrivateRoute>
+      // <PrivateRoute>
+      <SuspenseWrapper fallback={Loading}>
+        <AdminDashboard />
+      </SuspenseWrapper>
+      // </PrivateRoute>
     ),
     children: [
       {
         path: "",
-        element: <Suspense fallback={Loading}>
-          <AdminHome /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AdminHome /></SuspenseWrapper>,
       },
       {
         path: '/Admin-Dashboard/Profile',
-        element: <Suspense fallback={Loading}>
-          <AdminProfile /></Suspense>
+        element: <SuspenseWrapper fallback={Loading}>
+          <AdminProfile /></SuspenseWrapper>
       },
       {
         path: "/Admin-Dashboard/Students",
-        element: <Suspense fallback={Loading}>
-          <AllStudents /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllStudents /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <StudentsList /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <StudentsList /></SuspenseWrapper>
           },
           {
             path: '/Admin-Dashboard/Students/studentdetails',
-            element: <Suspense fallback={Loading}>
-              <StudentDetailScreen /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <StudentDetailScreen /></SuspenseWrapper>
           },
         ]
       },
       {
         path: "/Admin-Dashboard/StudentsAddmissionForm",
-        element: <Suspense fallback={Loading}>
-          <StudentRegister /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <StudentRegister /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/StudentsFee",
-        element: <Suspense fallback={Loading}>
-          <FeeAdmin /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <FeeAdmin /></SuspenseWrapper>,
         children: [
           {
             path: '/Admin-Dashboard/StudentsFee/details',
-            element: <Suspense fallback={Loading}>
-              <AllDetailsAdmin /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllDetailsAdmin /></SuspenseWrapper>,
             children: [
               {
                 path: '',
-                element: <Suspense fallback={Loading}>
-                  <FeeDetails /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <FeeDetails /></SuspenseWrapper>
               },
               {
                 path: ':id',
-                element: <Suspense fallback={Loading}><FeeDetailAdmin /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}><FeeDetailAdmin /></SuspenseWrapper>
               }
             ]
           },
           {
             path: '/Admin-Dashboard/StudentsFee/structure',
-            element: <Suspense fallback={Loading}>
-              <FeeStructure /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <FeeStructure /></SuspenseWrapper>
           },
           {
             path: '/Admin-Dashboard/StudentsFee/feediscount',
-            element: <Suspense fallback={Loading}>
-              <FeeDiscount /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <FeeDiscount /></SuspenseWrapper>,
             children: [
               {
                 path: ':email',
-                element: <Suspense fallback={Loading}><FeeDiscount /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}><FeeDiscount /></SuspenseWrapper>
               }
             ]
           },
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <FeeDetails /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <FeeDetails /></SuspenseWrapper>
           },
           {
             path: '/Admin-Dashboard/StudentsFee/PreviousFee',
-            element: <Suspense fallback={Loading}>
-              <AllPreviousDetailsAdmin /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllPreviousDetailsAdmin /></SuspenseWrapper>,
             children: [
               {
                 path: '',
-                element: <Suspense fallback={Loading}>
-                  <PreviousFeeDetailsAdmin /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <PreviousFeeDetailsAdmin /></SuspenseWrapper>
               },
               {
                 path: ':email',
-                element: <Suspense fallback={Loading}><PreviousFeeDetailAdmin /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}><PreviousFeeDetailAdmin /></SuspenseWrapper>
               }
             ]
           }
@@ -558,30 +566,30 @@ const router = createBrowserRouter([
 
       {
         path: "/Admin-Dashboard/StudentAttendance",
-        element: <Suspense fallback={Loading}>
-          <StudentAttendance /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <StudentAttendance /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/StudentPromotion",
-        element: <Suspense fallback={Loading}>
-          <StudentPromotion /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <StudentPromotion /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Result",
-        element: <Suspense fallback={Loading}>
-          <AllReportAdmin /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllReportAdmin /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <ReportCardAdmin /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <ReportCardAdmin /></SuspenseWrapper>
           },
           {
             path: ':id',
-            element: <Suspense fallback={Loading}>
-              <Subresult /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Subresult /></SuspenseWrapper>
           }
         ]
       },
@@ -592,48 +600,48 @@ const router = createBrowserRouter([
       // },
       {
         path: "/Admin-Dashboard/transfercertificate",
-        element: <Suspense fallback={Loading}>
-          <AllTC /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllTC /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <TC /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <TC /></SuspenseWrapper>
           },
           {
             path: ':id',
-            element: <Suspense fallback={Loading}>
-              <Certificate /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Certificate /></SuspenseWrapper>
           }
         ]
       },
       {
         path: "/Admin-Dashboard/charactercetificate",
-        element: <Suspense fallback={Loading}>
-          <AllCC /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllCC /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <CC /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <CC /></SuspenseWrapper>
           },
           {
             path: ':id',
-            element: <Suspense fallback={Loading}>
-              <CharacterCertificate /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <CharacterCertificate /></SuspenseWrapper>
           }
         ]
       },
       {
         path: "/Admin-Dashboard/Assigncoordinator",
-        element: <Suspense fallback={Loading}>
-          <Assigncoordinator /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Assigncoordinator /></SuspenseWrapper>,
         children: [],
       },
       {
         path: "/Admin-Dashboard/Substitutecoordinator",
-        element: <Suspense fallback={Loading}>
-          <Substitutecoordinator /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Substitutecoordinator /></SuspenseWrapper>,
         children: [],
       },
       // {
@@ -656,203 +664,203 @@ const router = createBrowserRouter([
       // },
       {
         path: "/Admin-Dashboard/NewAdmission",
-        element: <Suspense fallback={Loading}>
-          <NewAdmission /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <NewAdmission /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Teachers",
-        element: <Suspense fallback={Loading}>
-          <AllTeachers /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllTeachers /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Teachers/Profile",
-        element: <Suspense fallback={Loading}>
-          <TeacherProfile /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TeacherProfile /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/AddTeachers",
-        element: <Suspense fallback={Loading}>
-          <TeacherRegister /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TeacherRegister /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/TeachersAttendance",
-        element: <Suspense fallback={Loading}>
-          <TeacherAttendance /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TeacherAttendance /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/TeachersSalary",
-        element: <Suspense fallback={Loading}>
-          <TeachersSalary /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TeachersSalary /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Parents/AllParents",
-        element: <Suspense fallback={Loading}>
-          <AllParents /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllParents /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Parents/AllParents/Details",
-        element: <Suspense fallback={Loading}>
-          <ParentsDetails /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <ParentsDetails /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Library/AllBooks",
-        element: <Suspense fallback={Loading}>
-          <AllBooks /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllBooks /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/StudentResult/Details",
-        element: <Suspense fallback={Loading}>
-          <ResultLayout /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <ResultLayout /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Transport",
-        element: <Suspense fallback={Loading}>
-          <Transport /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Transport /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Notice",
-        element: <Suspense fallback={Loading}>
-          <Notice /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Notice /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Leave",
-        element: <Suspense fallback={Loading}><Leaves /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}><Leaves /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Classes",
-        element: <Suspense fallback={Loading}>
-          <Class /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Class /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Classteacher",
-        element: <Suspense fallback={Loading}>
-          <ClassTeacher /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <ClassTeacher /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Assignteacher",
-        element: <Suspense fallback={Loading}>
-          <AssignTeacher /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AssignTeacher /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Exam",
-        element: <Suspense fallback={Loading}>
-          <Exam /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Exam /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Message",
-        element: <Suspense fallback={Loading}>
-          <Message /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Message /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Subjects",
-        element: <Suspense fallback={Loading}>
-          <Subject /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Subject /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Assignsubject",
-        element: <Suspense fallback={Loading}>
-          <AssignSubject /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AssignSubject /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Account/Expenses",
-        element: <Suspense fallback={Loading}>
-          <Expenses /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Expenses /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Account/TeacherStudents",
-        element: <Suspense fallback={Loading}>
-          <TeacherStudent /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TeacherStudent /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/Employee",
-        element: <Suspense fallback={Loading}>
-          <Employee /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Employee /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Admin-Dashboard/timetable",
-        element: <Suspense fallback={Loading}>
-          <TimeTableAdmin /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TimeTableAdmin /></SuspenseWrapper>,
         children: [
           {
             path: "",
-            element: <Suspense fallback={Loading}>
-              <StudentsTimeTable /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <StudentsTimeTable /></SuspenseWrapper>,
             children: []
           },
           {
             path: "timetablestructure",
-            element: <Suspense fallback={Loading}><Employee /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}><Employee /></SuspenseWrapper>,
             children: []
           },
           {
             path: "upload",
-            element: <Suspense fallback={Loading}>
-              <Upload /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <Upload /></SuspenseWrapper>,
             children: []
           },
           {
             path: "teacher",
-            element: <Suspense fallback={Loading}>
-              <TeachersTimeTable /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <TeachersTimeTable /></SuspenseWrapper>,
             children: []
           },
           {
             path: "student",
-            element: <Suspense fallback={Loading}>
-              <StudentsTimeTable /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <StudentsTimeTable /></SuspenseWrapper>,
             children: []
           },
         ]
       },
       {
         path: "/Admin-Dashboard/weekplan",
-        element: <Suspense fallback={Loading}>
-          <PlannerAdmin /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <PlannerAdmin /></SuspenseWrapper>,
       },
       {
         path: "/Admin-Dashboard/appraisal",
-        element: <Suspense fallback={Loading}>
-          <AppraisalAdmin /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AppraisalAdmin /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <AppliedAdmin /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <AppliedAdmin /></SuspenseWrapper>
           },
           {
             path: ':id',
-            element: <Suspense fallback={Loading}>
-              <ApplyAdmin /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <ApplyAdmin /></SuspenseWrapper>
           }
         ]
       },
       {
         path: '/Admin-Dashboard/Events',
-        element: <Suspense fallback={Loading}>
-          <Event /></Suspense>
+        element: <SuspenseWrapper fallback={Loading}>
+          <Event /></SuspenseWrapper>
       },
     ]
   },
@@ -860,227 +868,227 @@ const router = createBrowserRouter([
     path: "/Teacher-Dashboard",
     element: (
 
-      <Suspense fallback={Loading}>
-        <TeacherDashboard /></Suspense>
+      <SuspenseWrapper fallback={Loading}>
+        <TeacherDashboard /></SuspenseWrapper>
 
     ),
     children: [
       {
         path: "",
-        element: <Suspense fallback={Loading}>
-          <TeacherHome /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TeacherHome /></SuspenseWrapper>,
       },
       {
         path: '/Teacher-Dashboard/Profile',
-        element: <Suspense fallback={Loading}>
-          <TeacherDashboardProfile /></Suspense>
+        element: <SuspenseWrapper fallback={Loading}>
+          <TeacherDashboardProfile /></SuspenseWrapper>
       },
       {
         path: "/Teacher-Dashboard/noticeboard",
-        element: <Suspense fallback={Loading}><NoticeBoard /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}><NoticeBoard /></SuspenseWrapper>,
         children: [
           // {
           //   path: '/Teacher-Dashboard/noticeboard/allnotice',
-          //   element: <Suspense fallback={Loading}>
-          //     <AllNotice /></Suspense>
+          //   element: <SuspenseWrapper fallback={Loading}>
+          //     <AllNotice /></SuspenseWrapper>
           // },
           {
             path: '/Teacher-Dashboard/noticeboard/teacher',
-            element: <Suspense fallback={Loading}>
-              <Teacher /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Teacher /></SuspenseWrapper>
           },
           // {
           //   path: '/Teacher-Dashboard/noticeboard/student',
-          //   element: <Suspense fallback={Loading}>
-          //     <Student /></Suspense>
+          //   element: <SuspenseWrapper fallback={Loading}>
+          //     <Student /></SuspenseWrapper>
           // },
           {
             path: '/Teacher-Dashboard/noticeboard/upload',
-            element: <Suspense fallback={Loading}>
-              <UploadNotice /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <UploadNotice /></SuspenseWrapper>
           },
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <Teacher /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Teacher /></SuspenseWrapper>
           },
         ]
       },
       {
         path: "/Teacher-Dashboard/checkin",
-        element: <Suspense fallback={Loading}>
-          <CheckIn /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <CheckIn /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Teacher-Dashboard/classwork",
-        element: <Suspense fallback={Loading}>
-          <ClassWorkTeacher /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <ClassWorkTeacher /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Teacher-Dashboard/homework",
-        element: <Suspense fallback={Loading}>
-          <HomeWorkTeacher /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <HomeWorkTeacher /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Teacher-Dashboard/takeleave",
-        element: <Suspense fallback={Loading}>
-          <TakeLeave /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TakeLeave /></SuspenseWrapper>,
         children: []
       },
 
       {
         path: "/Teacher-Dashboard/timetable",
-        element: <Suspense fallback={Loading}>
-          <TimeTableTeacher /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TimeTableTeacher /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Teacher-Dashboard/birthday",
-        element: <Suspense fallback={Loading}>
-          <BirthDay /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <BirthDay /></SuspenseWrapper>,
         children: [
           {
             path: '/Teacher-Dashboard/birthday/all',
-            element: <Suspense fallback={Loading}>
-              <All /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <All /></SuspenseWrapper>
           },
           {
             path: '/Teacher-Dashboard/birthday/teacher',
-            element: <Suspense fallback={Loading}>
-              <TeacherBirthDay /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <TeacherBirthDay /></SuspenseWrapper>
           },
           {
             path: '/Teacher-Dashboard/birthday/student',
-            element: <Suspense fallback={Loading}>
-              <StudentBirthDay /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <StudentBirthDay /></SuspenseWrapper>
           },
           {
             path: '',
-            element: <Suspense fallback={Loading}><StudentBirthDay /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}><StudentBirthDay /></SuspenseWrapper>
           },
         ]
       },
       {
         path: "/Teacher-Dashboard/appraisal",
-        element: <Suspense fallback={Loading}>
-          <Appraisal /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Appraisal /></SuspenseWrapper>,
         children: [
           {
             path: '/Teacher-Dashboard/appraisal/apply',
-            element: <Suspense fallback={Loading}>
-              <Apply /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Apply /></SuspenseWrapper>
           },
           {
             path: '/Teacher-Dashboard/appraisal/applied',
-            element: <Suspense fallback={Loading}>
-              <Applied /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Applied /></SuspenseWrapper>
           },
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <Apply /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Apply /></SuspenseWrapper>
           },
         ]
       },
       {
         path: "/Teacher-Dashboard/studentdoubts",
-        element: <Suspense fallback={Loading}>
-          <StudentDoubts /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <StudentDoubts /></SuspenseWrapper>,
         children: [
           {
             path: "new",
-            element: <Suspense fallback={Loading}>
-              <NewDoubt /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <NewDoubt /></SuspenseWrapper>
           },
           {
             path: "answered",
-            element: <Suspense fallback={Loading}>
-              <Answered /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Answered /></SuspenseWrapper>
           },
           {
             path: "",
-            element: <Suspense fallback={Loading}>
-              <NewDoubt /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <NewDoubt /></SuspenseWrapper>
           }
         ]
       },
       {
         path: "/Teacher-Dashboard/class_activity",
-        element: <Suspense fallback={Loading}>
-          <ClassActivity /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <ClassActivity /></SuspenseWrapper>,
 
         children: [
           {
             path: "",
-            element: <Suspense fallback={Loading}>
-              <TimeTableStudent /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <TimeTableStudent /></SuspenseWrapper>,
             children: []
           },
           {
             path: "/Teacher-Dashboard/class_activity/details",
-            element: <Suspense fallback={Loading}>
-              <Studentdetailscard /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <Studentdetailscard /></SuspenseWrapper>,
             children: [
               {
                 path: ':email',
-                element: <Suspense fallback={Loading}><Studentdetailscard /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}><Studentdetailscard /></SuspenseWrapper>
               }
             ]
           },
           {
             path: "/Teacher-Dashboard/class_activity/timetablestudent",
-            element: <Suspense fallback={Loading}>
-              <TimeTableStudent /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <TimeTableStudent /></SuspenseWrapper>,
             children: []
           },
           {
             path: "reportcard",
-            element: <Suspense fallback={Loading}>
-              <AllReport /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllReport /></SuspenseWrapper>,
             children: [
               {
                 path: '',
-                element: <Suspense fallback={Loading}>
-                  <ReportCard /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <ReportCard /></SuspenseWrapper>
               },
               {
                 path: ':id',
-                element: <Suspense fallback={Loading}>
-                  <Subresult /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <Subresult /></SuspenseWrapper>
               }
             ]
           },
           {
             path: "/Teacher-Dashboard/class_activity/studentfee",
-            element: <Suspense fallback={Loading}>
-              <StudentFee /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <StudentFee /></SuspenseWrapper>,
             children: []
           },
           {
             path: "/Teacher-Dashboard/class_activity/studentAttendence",
-            element: <Suspense fallback={Loading}>
-              <TeacherStudentAttendance /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <TeacherStudentAttendance /></SuspenseWrapper>,
             children: []
           },
           {
             path: "/Teacher-Dashboard/class_activity/studentattendence/record",
-            element: <Suspense fallback={Loading}>
-              <StudentAttendanceRecord /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <StudentAttendanceRecord /></SuspenseWrapper>,
             children: []
           },
           {
             path: "/Teacher-Dashboard/class_activity/studentleave",
-            element: <Suspense fallback={Loading}>
-              <StudentLeave /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <StudentLeave /></SuspenseWrapper>,
             children: []
           },
           {
             path: "/Teacher-Dashboard/class_activity/studentPromotion",
-            element: <Suspense fallback={Loading}>
-              <Promotion /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <Promotion /></SuspenseWrapper>,
             children: []
           },
         ]
@@ -1088,32 +1096,32 @@ const router = createBrowserRouter([
 
       {
         path: "/Teacher-Dashboard/notebook",
-        element: <Suspense fallback={Loading}>
-          <NoteBook /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <NoteBook /></SuspenseWrapper>,
         children: [
           {
             path: "",
-            element: <Suspense fallback={Loading}>
-              <AllNoteBookRecord /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllNoteBookRecord /></SuspenseWrapper>
           },
           {
             path: "All",
-            element: <Suspense fallback={Loading}>
-              <AllNoteBookRecord /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllNoteBookRecord /></SuspenseWrapper>
           },
           {
             path: "New",
-            element: <Suspense fallback={Loading}>
-              <NewNoteBookRecord /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <NewNoteBookRecord /></SuspenseWrapper>
           },
           {
             path: "/Teacher-Dashboard/notebook/studentdetails",
-            element: <Suspense fallback={Loading}>
-              <Studentdetailscard /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <Studentdetailscard /></SuspenseWrapper>,
             children: [
               {
                 path: ':email',
-                element: <Suspense fallback={Loading}><Studentdetailscard /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}><Studentdetailscard /></SuspenseWrapper>
               },
             ]
           },
@@ -1121,77 +1129,77 @@ const router = createBrowserRouter([
       },
       {
         path: "/Teacher-Dashboard/HOD",
-        element: <Suspense fallback={Loading}>
-          <Hod /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Hod /></SuspenseWrapper>,
         children: [
           {
             path: "",
-            element: <Suspense fallback={Loading}>
-              <PlannerHOD /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <PlannerHOD /></SuspenseWrapper>
           },
           {
             path: "/Teacher-Dashboard/HOD/planner",
-            element: <Suspense fallback={Loading}>
-              <PlannerHOD /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <PlannerHOD /></SuspenseWrapper>,
           },
           {
             path: "/Teacher-Dashboard/HOD/notebook",
-            element: <Suspense fallback={Loading}>
-              <NoteBookHOD /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <NoteBookHOD /></SuspenseWrapper>,
             children: []
           },
           {
             path: "/Teacher-Dashboard/HOD/notebook/details/:id",
-            element: <Suspense fallback={Loading}>
-              <RecordDetailsHOD /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <RecordDetailsHOD /></SuspenseWrapper>,
             children: []
           },
           {
             path: "/Teacher-Dashboard/HOD/classTeacherSubstitute",
-            element: <Suspense fallback={Loading}>
-              <ClassTeacherSubstitute /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <ClassTeacherSubstitute /></SuspenseWrapper>,
           },
           {
             path: "/Teacher-Dashboard/HOD/lectureSubstitute",
-            element: <Suspense fallback={Loading}>
-              <LectureSubstitute /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <LectureSubstitute /></SuspenseWrapper>,
           },
           {
             path: "/Teacher-Dashboard/HOD/studentResult",
-            element: <Suspense fallback={Loading}>
-              <AllReportHOD /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllReportHOD /></SuspenseWrapper>,
             children: [
               {
                 path: '',
-                element: <Suspense fallback={Loading}>
-                  <ReportCardHOD /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <ReportCardHOD /></SuspenseWrapper>
               },
               {
                 path: ':id',
-                element: <Suspense fallback={Loading}>
-                  <Subresult /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <Subresult /></SuspenseWrapper>
               }
             ]
           },
           {
             path: "/Teacher-Dashboard/HOD/studentDoubts",
-            element: <Suspense fallback={Loading}>
-              <StudentDoubtsHOD /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <StudentDoubtsHOD /></SuspenseWrapper>,
             children: [
               {
                 path: "new",
-                element: <Suspense fallback={Loading}>
-                  <NewDoubt /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <NewDoubt /></SuspenseWrapper>
               },
               {
                 path: "answered",
-                element: <Suspense fallback={Loading}>
-                  <Answered /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <Answered /></SuspenseWrapper>
               },
               {
                 path: "",
-                element: <Suspense fallback={Loading}>
-                  <NewDoubt /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <NewDoubt /></SuspenseWrapper>
               }
             ]
           },
@@ -1199,19 +1207,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/Teacher-Dashboard/planner",
-        element: <Suspense fallback={Loading}>
-          <Planner /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Planner /></SuspenseWrapper>,
       },
       {
         path: "/Teacher-Dashboard/notebook/details/:id",
-        element: <Suspense fallback={Loading}>
-          <RecordDetails /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <RecordDetails /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Teacher-Dashboard/message",
-        element: <Suspense fallback={Loading}>
-          <TeacherMessage /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TeacherMessage /></SuspenseWrapper>,
         children: []
       },
       // {
@@ -1230,12 +1238,12 @@ const router = createBrowserRouter([
       // },
       {
         path: "/Teacher-Dashboard/uploadResult",
-        element: <Suspense fallback={Loading}>
-          <UploadResult /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <UploadResult /></SuspenseWrapper>,
         children: [
           {
             path: '/Teacher-Dashboard/uploadResult/details/:email',
-            element: <Suspense fallback={Loading}><Studentdetailscard /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}><Studentdetailscard /></SuspenseWrapper>
           },
 
         ]
@@ -1245,60 +1253,60 @@ const router = createBrowserRouter([
   {
     path: "/Sub-Admin",
     element: (
-      <Suspense fallback={Loading}> <SubAdminDashboard /></Suspense>
+      <SuspenseWrapper fallback={Loading}> <SubAdminDashboard /></SuspenseWrapper>
     ),
     children: [
       {
         path: '',
-        element: <Suspense fallback={Loading}>
-          <AllStudentsList /></Suspense>
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllStudentsList /></SuspenseWrapper>
       },
       {
         path: 'Profile',
-        element: <Suspense fallback={Loading}>
-          <ProfileSubAdmin /></Suspense>
+        element: <SuspenseWrapper fallback={Loading}>
+          <ProfileSubAdmin /></SuspenseWrapper>
       },
       {
         path: "/Sub-Admin/Certificates",
-        element: <Suspense fallback={Loading}>
-          <Allcertificate /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Allcertificate /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <Certificates /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Certificates /></SuspenseWrapper>
           },
           {
             path: 'transfer/:tc/:class/:section/:session',
-            element: <Suspense fallback={Loading}>
-              <Transfer /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Transfer /></SuspenseWrapper>
           },
           {
             path: 'character/:tc/:class/:section/:session',
-            element: <Suspense fallback={Loading}>
-              <Character /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Character /></SuspenseWrapper>
           }
         ]
       },
       {
         path: "/Sub-Admin/Students",
-        element: <Suspense fallback={Loading}>
-          <AllStudentSubAdmin /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllStudentSubAdmin /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <AllStudentsList /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllStudentsList /></SuspenseWrapper>
           },
           {
             path: "/Sub-Admin/Students/details",
-            element: <Suspense fallback={Loading}>
-              <Detailscard /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <Detailscard /></SuspenseWrapper>,
             children: [
               {
                 path: ":email",
-                element: <Suspense fallback={Loading}>
-                  <Detailscard /></Suspense>,
+                element: <SuspenseWrapper fallback={Loading}>
+                  <Detailscard /></SuspenseWrapper>,
               }
             ]
           },
@@ -1306,23 +1314,23 @@ const router = createBrowserRouter([
       },
       {
         path: "/Sub-Admin/Readmission",
-        element: <Suspense fallback={Loading}>
-          <Readmission /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <Readmission /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <AllAdmission /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllAdmission /></SuspenseWrapper>,
           },
           {
             path: "/Sub-Admin/Readmission/details",
-            element: <Suspense fallback={Loading}>
-              <Detailscard /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <Detailscard /></SuspenseWrapper>,
             children: [
               {
                 path: ":email",
-                element: <Suspense fallback={Loading}>
-                  <Detailscard /></Suspense>,
+                element: <SuspenseWrapper fallback={Loading}>
+                  <Detailscard /></SuspenseWrapper>,
               }
             ]
           }
@@ -1332,33 +1340,33 @@ const router = createBrowserRouter([
       },
       {
         path: "/Sub-Admin/Result",
-        element: <Suspense fallback={Loading}>
-          <AllReportSubAdmin /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllReportSubAdmin /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <ReportCardSubAdmin /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <ReportCardSubAdmin /></SuspenseWrapper>
           },
           {
             path: ':id',
-            element: <Suspense fallback={Loading}>
-              <Subresult /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Subresult /></SuspenseWrapper>
           },
           {
             path: "exStudent",
-            element: <Suspense fallback={Loading}>
-              <AllExReport /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllExReport /></SuspenseWrapper>,
             children: [
               {
                 path: '',
-                element: <Suspense fallback={Loading}>
-                  <List /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <List /></SuspenseWrapper>
               },
               {
                 path: ':id',
-                element: <Suspense fallback={Loading}>
-                  <ExResult /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <ExResult /></SuspenseWrapper>
               }
             ]
           },
@@ -1381,13 +1389,13 @@ const router = createBrowserRouter([
 
       {
         path: "/Sub-Admin/Salary",
-        element: <Suspense fallback={Loading}>
-          <AllSalary /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllSalary /></SuspenseWrapper>,
         children: [
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <Salary /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <Salary /></SuspenseWrapper>
           },
           // {
           //   path: ':id',
@@ -1397,81 +1405,81 @@ const router = createBrowserRouter([
       },
       {
         path: "/Sub-Admin/registerTeacher",
-        element: <Suspense fallback={Loading}>
-          <TeacherRegister /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <TeacherRegister /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Sub-Admin/registerStudent",
-        element: <Suspense fallback={Loading}>
-          <StudentRegister /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <StudentRegister /></SuspenseWrapper>,
         children: []
       },
       {
         path: "/Sub-Admin/StudentsFee",
-        element: <Suspense fallback={Loading}>
-          <FeeSubAdmin /></Suspense>,
+        element: <SuspenseWrapper fallback={Loading}>
+          <FeeSubAdmin /></SuspenseWrapper>,
         children: [
           {
             path: '/Sub-Admin/StudentsFee/details',
-            element: <Suspense fallback={Loading}>
-              <AllExDetails /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllExDetails /></SuspenseWrapper>,
             children: [
               {
                 path: '',
-                element: <Suspense fallback={Loading}>
-                  <FeeDetailsSubAdmin /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <FeeDetailsSubAdmin /></SuspenseWrapper>
               },
               {
                 path: ':id',
-                element: <Suspense fallback={Loading}>
-                  <FeeDetail /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <FeeDetail /></SuspenseWrapper>
               }
             ]
           },
           {
             path: '/Sub-Admin/StudentsFee/structure',
-            element: <Suspense fallback={Loading}><FeeStructureSubAdmin /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}><FeeStructureSubAdmin /></SuspenseWrapper>
           },
           {
             path: '/Sub-Admin/StudentsFee/feediscount',
-            element: <Suspense fallback={Loading}>
-              <FeeDiscountSubAdmin /></Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <FeeDiscountSubAdmin /></SuspenseWrapper>
           },
           {
             path: '/Sub-Admin/StudentsFee/PreviousFeeSubAdmin',
-            element: <Suspense fallback={Loading}>
-              <AllPreviousDetails /></Suspense>,
+            element: <SuspenseWrapper fallback={Loading}>
+              <AllPreviousDetails /></SuspenseWrapper>,
             children: [
               {
                 path: '',
-                element: <Suspense fallback={Loading}>
-                  <PreviousFeeDetailsSubAdmin /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <PreviousFeeDetailsSubAdmin /></SuspenseWrapper>
               },
               {
                 path: ':id',
-                element: <Suspense fallback={Loading}>
-                  <PreviousFeeDetail /></Suspense>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <PreviousFeeDetail /></SuspenseWrapper>
               }
             ]
           },
           {
             path: '',
-            element: <Suspense fallback={Loading}>
-              <FeeDetailsSubAdmin /> </Suspense>
+            element: <SuspenseWrapper fallback={Loading}>
+              <FeeDetailsSubAdmin /> </SuspenseWrapper>
           },
         ]
       },
       {
         path: "/Sub-Admin/Notice",
-        element: <Suspense fallback={Loading}> <NoticeSubAdmin /> </Suspense>
+        element: <SuspenseWrapper fallback={Loading}> <NoticeSubAdmin /> </SuspenseWrapper>
         ,
         children: []
       },
       {
         path: '/Sub-Admin/TakeLeave',
-        element: <Suspense fallback={Loading}>
-          <TakeLeaveSubAdmin /></Suspense>
+        element: <SuspenseWrapper fallback={Loading}>
+          <TakeLeaveSubAdmin /></SuspenseWrapper>
       },
     ]
   }

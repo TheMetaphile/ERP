@@ -5,7 +5,7 @@ import MetaphileLogo from './../../../assets/metaphile_logo.png';
 export default function Login() {
   return (
     <div className="w-screen h-screen bg-login flex flex-col items-center justify-center">
-      <div className="flex self-center items-center  mobile:py-3 tablet:px-6 mobile:px-3 overflow-y-auto tablet:flex tablet:justify-between  mobile:max-table:flex-col-reverse">
+      <div className="flex mobile:max-tablet:flex-col self-center items-center  mobile:py-3 tablet:px-6 mobile:px-3 overflow-y-auto tablet:flex tablet:justify-between">
         <LeftCard />
         <RightCard />
       </div>

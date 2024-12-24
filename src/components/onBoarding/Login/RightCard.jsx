@@ -121,8 +121,8 @@ export default function RightCard() {
 
                     }
                     const token = await requestPermission(tokens.accessToken);
-                    login(userDetails, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : [], subjects ? subjects : [], token);
-                    navigate(`/${role}`);
+                    login({ ...userDetails, role }, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : [], subjects ? subjects : [], token);
+                    // navigate(`/${role}`);
                 }
             });
 

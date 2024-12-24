@@ -21,9 +21,9 @@ if ('serviceWorker' in navigator) {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
-    <BeforeUnload>
+    {/* <BeforeUnload> */}
       <RouterProvider router={router} />
-    </BeforeUnload>
+    {/* </BeforeUnload> */}
   </AuthProvider>
 );
 

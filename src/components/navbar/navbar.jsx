@@ -29,8 +29,8 @@ export default function Navbar({ onDrawerToggle, onEndDrawerToggle }) {
     <div className="flex flex-grow mobile:max-tablet:flex-col h-full mt-1 px-2 py-3 mb-2 items-center justify-between bg-gradient-to-r from-blue-300 to-blue-200 rounded-lg shadow-md z-10">
       <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-3">
         <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-blue-100 shadow-lg cursor-pointer' />
-        <div className='flex items-center'>
-          <img src={logo} alt="Metaphile Public School" className="w-10" />
+        <div className='flex items-end gap-1'>
+          <img src={logo} alt="Metaphile Public School" className="w-8" />
           <span className=" mobile:max-tablet:text-sm font-medium text-text_blue mobile:text-xl">etaphile Public School</span>
 
         </div>
