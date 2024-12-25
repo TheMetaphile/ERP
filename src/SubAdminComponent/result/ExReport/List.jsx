@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
@@ -10,14 +10,15 @@ import { motion } from 'framer-motion';
 const List = () => {
     const [data, setData] = useState([]);
     const { authState } = useContext(AuthContext);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [Class, setClass] = useState('9th');
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(5);
+    const end = 5;
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [sessions, setSessions] = useState([]);
     const [selectedSession, setSelectedSession] = useState('2024-25');
     const [clickedIndex, setClickedIndex] = useState(null);
+    const sentinelRef = useRef(null);
 
     const handleClick = (index) => {
         setClickedIndex(index);
@@ -62,8 +63,31 @@ const List = () => {
         }
     }, [start]);
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
 
     const fetchUsers = async () => {
+        if (loading || allDataFetched) return;
+
         setLoading(true);
         console.log(selectedSession, Class)
         console.log(start, 'start', end, 'end')
@@ -191,22 +215,9 @@ const List = () => {
                                         </td>
                                     </motion.tr>
                                 ))}
-                                {!allDataFetched && (
-                                    <motion.div
-                                        className="text-center py-4"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ delay: 0.5 }}
-                                    >
-                                        <motion.button
-                                            className="text-purple-500 hover:text-purple-700 font-medium focus:outline-none"
-                                            onClick={handleViewMore}
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                        >
-                                            View More
-                                        </motion.button>
-                                    </motion.div>
+                                <div ref={sentinelRef} className="h-10"></div>
+                                {loading && start > 0 && (
+                                    <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
                                 )}
                             </>
                         )}

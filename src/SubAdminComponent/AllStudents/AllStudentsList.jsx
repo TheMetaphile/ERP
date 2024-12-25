@@ -11,12 +11,13 @@ import { ToastContainer, toast } from "react-toastify";
 export default function AllStudentsList() {
     const [name, setName] = useState('');
     const [userData, setUserData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const { authState } = useContext(AuthContext);
     const [rollNumber, setRollNumber] = useState('');
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(10);
+    const end = 9;
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const sentinelRef = useRef(null);
 
 
     const handleRollNumberChange = (event) => {
@@ -71,10 +72,36 @@ export default function AllStudentsList() {
     }, [start, Class, rollNumber, Section, name]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
+
     const fetchUserData = async () => {
+        if (loading || allDataFetched) return;
+        setLoading(true);
         try {
             console.log(start, "-", end);
             const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
@@ -97,6 +124,8 @@ export default function AllStudentsList() {
 
         } catch (err) {
             console.log(err);
+        } finally {
+            setLoading(false); 
         }
     };
 
@@ -164,22 +193,20 @@ export default function AllStudentsList() {
                         <div className="stutable">
                             <Header headings={['Name', 'Class', 'Section', 'Phone No.', 'E-mail', 'Action']} />
                         </div>
-                        {loading && userData.length < 1 ? (
+                        {loading && userData.length === 0 ? (
                             <Loading />
                         ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
                             <div>No students found</div>
-                        ) : Array.isArray(filteredStudents) ? (
-                            <div className=''>
-
+                        ) : (
+                            <div>
                                 <StudentDetailTile userData={filteredStudents} />
-                                {!allDataFetched && (
-                                    <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                                <div ref={sentinelRef} className="h-10"></div>
+                                {loading && start > 0 && (
+                                    <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
                                 )}
                             </div>
-
-                        ) : (
-                            <div>Unexpected data format</div>
                         )}
+
 
                     </div>
                 </div>

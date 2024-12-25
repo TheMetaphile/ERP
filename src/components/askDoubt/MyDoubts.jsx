@@ -14,7 +14,6 @@ export default function MyDoubts() {
     const { authState } = useContext(AuthContext);
     const [selectedSubject, setSelectedSubject] = useState('Maths');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [doubtDescription, setDoubtDescription] = useState('');
@@ -56,7 +55,6 @@ export default function MyDoubts() {
             toast.error('Please fill all fields');
             return;
         }
-        setLoading(true)
         const datee = getCurrentDate();
         try {
             const response = await axios.post(`${BASE_URL_AskDoubt}/doubts/create`, {
@@ -84,21 +82,26 @@ export default function MyDoubts() {
         } catch (error) {
             toast.error(error.message);
         }
-        setLoading(false)
     };
 
     useEffect(() => {
+        setAllDataFetched(false);
+        console.log('dsfds')
+        setLoading(false);
         setStart(0);
         setData([]);
-        setAllDataFetched(false);
+
     }, [selectedSubject, status]);
 
     useEffect(() => {
-        setIsLoading(true);
         fetchDoubt();
+        console.log('fetc')
     }, [start, selectedSubject, status]);
 
     const fetchDoubt = async () => {
+        console.log(loading, allDataFetched)
+        if (loading || allDataFetched) return;
+        setLoading(true);
         try {
             var params = `start=${start}&end=${end}&status=${status}`;
             if (selectedSubject != 'Subject') {
@@ -119,9 +122,10 @@ export default function MyDoubts() {
                 console.log('All data fetched')
                 setAllDataFetched(true);
             }
-            setIsLoading(false);
+            setLoading(false);
         } catch (err) {
             toast.error(err.message);
+            setLoading(false);
         }
     };
 
@@ -129,12 +133,18 @@ export default function MyDoubts() {
         setStatus(e.target.value);
     };
 
+    const handleViewMore = () => {
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
+    };
+
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
-                if (entries[0].isIntersecting && !allDataFetched && !isLoading) {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
                     console.log("Fetching more data...");
-                    setStart((prevStart) => prevStart + end);
+                    handleViewMore();
                 }
             },
             { root: null, rootMargin: '0px', threshold: 1.0 }
@@ -149,7 +159,7 @@ export default function MyDoubts() {
                 observer.unobserve(sentinelRef.current);
             }
         };
-    }, [allDataFetched, isLoading, end]);
+    }, [allDataFetched, loading]);
 
     return (
         <motion.div
@@ -194,7 +204,7 @@ export default function MyDoubts() {
                 transition={{ delay: 0.3 }}
                 className="flex flex-col laptop:mr-3 mt-6 mb-3 no-scrollbar w-full"
             >
-                {isLoading ? (
+                {loading ? (
                     <Loading />
                 ) : data.length === 0 ? (
                     <div className='text-center w-full text-gray-600 text-lg'>No doubts asked yet. Start by asking a doubt!</div>
@@ -202,7 +212,7 @@ export default function MyDoubts() {
                     <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
                         <MyDoubtTile data={data} />
                         <div ref={sentinelRef} className="h-10"></div>
-                        {isLoading && start > 0 && (
+                        {loading && start > 0 && (
                             <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
                         )}
                     </div>

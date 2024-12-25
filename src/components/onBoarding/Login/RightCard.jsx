@@ -14,15 +14,15 @@ import { messaging, getToken } from '../../../firebase';
 export default function RightCard() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('');
+    const [rolee, setRolee] = useState('');
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { login } = useContext(AuthContext);
 
-    const handleRoleChange = (event) => {
-        setRole(event.target.value);
+    const handleRoleeChange = (event) => {
+        setRolee(event.target.value);
     };
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
@@ -47,7 +47,7 @@ export default function RightCard() {
         setIsSubmitting(true);
         setError('');
         try {
-            const endpoint = role === "Teacher-Dashboard" ? "/login/teacher" : role === "Sub-Admin" ? "/login/SubAdmin" : role === "Admin-Dashboard" ? "/login/admin" : "/login/student";
+            const endpoint = rolee === "Teacher-Dashboard" ? "/login/teacher" : rolee === "Sub-Admin" ? "/login/SubAdmin" : rolee === "Admin-Dashboard" ? "/login/admin" : "/login/student";
             await axios.post(`${BASE_URL_Login}${endpoint}`, {
                 email,
                 password
@@ -57,7 +57,7 @@ export default function RightCard() {
                     var { userDetails, tokens, subject, ClassDetails, subjects } = response.data;
                     console.log(userDetails, tokens);
                     var date = new Date();
-                    if (role === "Teacher-Dashboard" && date.getHours() < 17) {
+                    if (rolee === "Teacher-Dashboard" && date.getHours() < 17) {
 
                         var month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
                         date = `${date.getFullYear()}-${month}-${date.getDate()}`
@@ -121,8 +121,8 @@ export default function RightCard() {
 
                     }
                     const token = await requestPermission(tokens.accessToken);
-                    login({ ...userDetails, role }, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : [], subjects ? subjects : [], token);
-                    // navigate(`/${role}`);
+                    login({ ...userDetails, rolee }, tokens, subject ? subject.subjects : [], ClassDetails, subject ? subject.Co_scholastic : [], subjects ? subjects : [], token);
+                    // navigate(`/${rolee}`);
                 }
             });
 
@@ -224,11 +224,11 @@ export default function RightCard() {
             <Link to="/resetpassword" className="text-blue-600 text-center text-lg">Forgot Password?</Link>
 
             <div className="w-full">
-                <label htmlFor="role" className="sr-only">Select Role</label>
+                <label htmlFor="rolee" className="sr-only">Select Role</label>
                 <select
-                    name="role"
-                    value={role}
-                    onChange={handleRoleChange}
+                    name="rolee"
+                    value={rolee}
+                    onChange={handleRoleeChange}
                     className="w-full p-2 border border-gray-300 rounded-lg"
                     disabled={isSubmitting}
                 >

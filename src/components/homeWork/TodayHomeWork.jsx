@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import Loading from "../../LoadingScreen/Loading";
 import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
-import HomeWorkGrid from "./utils/HomeWorkGrid";
-import HomeSubjectGrid from "./utils/HomeSubjectGrid";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL_Homework } from "../../Config";
 import SubjectHomeWorkTile from "./utils/SubjectHomeWorkTile";
@@ -20,6 +18,7 @@ export default function TodayHomeWork() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const sentinelRef = useRef(null);
 
     const handleSubjectSelect = (subject) => {
         setSelectedSubject(subject);
@@ -31,10 +30,12 @@ export default function TodayHomeWork() {
         setDetails([]);
         setAllDataFetched(false);
         fetchHomework();
-    }, [authState.accessToken, selectedSubject]);
+    }, [selectedSubject]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
     useEffect(() => {
@@ -45,6 +46,8 @@ export default function TodayHomeWork() {
 
     const fetchHomework = async () => {
         console.log(authState.userDetails.currentClass, new Date().getMonth() + 1, authState.userDetails.academicYear, authState.userDetails.section, selectedSubject)
+        if (loading || allDataFetched) return;
+
         setLoading(true);
         try {
             const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/student?class=${authState.userDetails.currentClass}&month=${new Date().getMonth() + 1}&year=${authState.userDetails.academicYear}&section=${authState.userDetails.section}&subject=${selectedSubject}&start=${start}&end=${end}`, {
@@ -70,6 +73,28 @@ export default function TodayHomeWork() {
         }
     };
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
+
     return (
         <div className="flex flex-col">
             {/* <h1 className="text-lg font-medium px-2">Today HomeWork</h1>
@@ -87,8 +112,9 @@ export default function TodayHomeWork() {
             ) : (
                 <>
                     <SubjectHomeWorkTile subject={selectedSubject} details={details} />
-                    {!allDataFetched && (
-                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+                    <div ref={sentinelRef} className="h-10"></div>
+                    {loading && start > 0 && (
+                        <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
                     )}
                 </>
             )

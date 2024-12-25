@@ -11,8 +11,8 @@ export default function CoScholasticTable({ students, term, Class, section }) {
     const { authState } = useContext(AuthContext);
     const [Subjects] = useState(() => {
         if (authState.Co_scholastic === undefined) return [];
-        
-        return authState.Co_scholastic.filter(subject => 
+
+        return authState.Co_scholastic.filter(subject =>
             subject.class === Class && subject.section === section
         );
     });
@@ -32,7 +32,7 @@ export default function CoScholasticTable({ students, term, Class, section }) {
     console.log(grades)
     useEffect(() => {
         fetchLastUpload();
-    },[]);
+    }, [Class, section, term, Subjects]);
     console.log(Subjects)
     const fetchLastUpload = async () => {
         try {
@@ -47,9 +47,9 @@ export default function CoScholasticTable({ students, term, Class, section }) {
             );
 
             console.log(response.data);
-    
-            const fetchedGrades = response.data; 
-    
+
+            const fetchedGrades = response.data;
+
 
             const updatedGrades = { ...grades };
             Object.keys(fetchedGrades).forEach(studentEmail => {
@@ -60,15 +60,15 @@ export default function CoScholasticTable({ students, term, Class, section }) {
                     }
                 });
             });
-    
-            setGrades(updatedGrades); 
-    
+
+            setGrades(updatedGrades);
+
         } catch (error) {
             toast.error('Error fetching last result data');
             console.error('Error fetching last result data:', error);
         }
     };
-    
+
 
     const handleClick = (index) => {
         setClickedIndex(index);

@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
         console.log(userDetails,tokens, subject, ClassDetails, Co_scholastic, subjects, token)
         const newAuthState = {
             userDetails,
-            role: userDetails.role,
+            role: userDetails.rolee,
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
             otpToken: null,

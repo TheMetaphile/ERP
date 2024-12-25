@@ -30,10 +30,12 @@ export default function TodayClassWork() {
     setDetails([]);
     setAllDataFetched(false);
     fetchClassWork();
-  }, [authState.accessToken, selectedSubject]);
+  }, [selectedSubject]);
 
   const handleViewMore = () => {
-    setStart(prevStart => prevStart + end);
+    if (!allDataFetched && !loading) {
+      setStart((prevStart) => prevStart + end);
+    }
   };
 
   useEffect(() => {
@@ -46,6 +48,8 @@ export default function TodayClassWork() {
 
   const fetchClassWork = async () => {
     console.log(authState.userDetails.currentClass, new Date().getMonth() + 1, authState.userDetails.academicYear, authState.userDetails.section, selectedSubject)
+    if (loading || allDataFetched) return;
+
     setLoading(true);
     try {
       const response = await axios.get(`${BASE_URL_ClassWork}/classwork/fetch/student?class=${authState.userDetails.currentClass}&month=${new Date().getMonth() + 1}&year=${authState.userDetails.academicYear}&section=${authState.userDetails.section}&subject=${selectedSubject}&start=${start}&end=${end}`, {
@@ -75,7 +79,8 @@ export default function TodayClassWork() {
       (entries) => {
         if (entries[0].isIntersecting && !allDataFetched && !loading) {
           console.log("Fetching more data...");
-          setStart((prevStart) => prevStart + end);
+          handleViewMore();
+
         }
       },
       { root: null, rootMargin: '0px', threshold: 1.0 }
@@ -90,7 +95,7 @@ export default function TodayClassWork() {
         observer.unobserve(sentinelRef.current);
       }
     };
-  }, [allDataFetched, loading, end]);
+  }, [allDataFetched, loading]);
 
   return (
     <motion.div
@@ -128,9 +133,9 @@ export default function TodayClassWork() {
         <>
           <SubjectClassWorkTile subject={selectedSubject} details={details} />
           <div ref={sentinelRef} className="h-10"></div>
-                        {loading && start > 0 && (
-                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
-                        )}
+          {loading && start > 0 && (
+            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+          )}
         </>
       )}
     </motion.div>
