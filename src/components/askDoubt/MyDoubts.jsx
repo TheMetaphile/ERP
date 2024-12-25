@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import AuthContext from '../../Context/AuthContext';
 import SubjectSelection from '../classWork/utils/SubjectSelection';
@@ -20,9 +20,10 @@ export default function MyDoubts() {
     const [doubtDescription, setDoubtDescription] = useState('');
     const [modalSubject, setModalSubject] = useState(null);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(4);
+    const end = 2;
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [status, setStatus] = useState('Pending');
+    const sentinelRef = useRef(null);
 
     const handleSubjectSelect = (subject) => {
         setSelectedSubject(subject);
@@ -97,10 +98,6 @@ export default function MyDoubts() {
         fetchDoubt();
     }, [start, selectedSubject, status]);
 
-    const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
-    };
-
     const fetchDoubt = async () => {
         try {
             var params = `start=${start}&end=${end}&status=${status}`;
@@ -131,6 +128,28 @@ export default function MyDoubts() {
     const handleStatusChange = (e) => {
         setStatus(e.target.value);
     };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !isLoading) {
+                    console.log("Fetching more data...");
+                    setStart((prevStart) => prevStart + end);
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, isLoading, end]);
 
     return (
         <motion.div
@@ -182,14 +201,9 @@ export default function MyDoubts() {
                 ) : (
                     <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
                         <MyDoubtTile data={data} />
-                        {!allDataFetched && (
-                            <motion.h1
-                                whileHover={{ scale: 1.05 }}
-                                className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center col-span-full'
-                                onClick={handleViewMore}
-                            >
-                                View More
-                            </motion.h1>
+                        <div ref={sentinelRef} className="h-10"></div>
+                        {isLoading && start > 0 && (
+                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
                         )}
                     </div>
                 )}

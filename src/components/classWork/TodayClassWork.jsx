@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import Loading from "../../LoadingScreen/Loading";
 import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
@@ -7,12 +7,8 @@ import SubjectClassWorkTile from "./utils/SubjectClassworkTile";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SubjectSelection from "./utils/SubjectSelection";
-
 import { motion } from "framer-motion";
-
 import { FaBook, FaChevronDown } from "react-icons/fa";
-
-
 
 export default function TodayClassWork() {
   const [selectedSubject, setSelectedSubject] = useState('Maths');
@@ -20,8 +16,9 @@ export default function TodayClassWork() {
   const [details, setDetails] = useState([]);
   const { authState } = useContext(AuthContext);
   const [start, setStart] = useState(0);
-  const [end, setEnd] = useState(4);
+  const end = 5;
   const [allDataFetched, setAllDataFetched] = useState(false);
+  const sentinelRef = useRef(null);
 
   const handleSubjectSelect = (subject) => {
     setSelectedSubject(subject);
@@ -73,6 +70,27 @@ export default function TodayClassWork() {
     }
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !allDataFetched && !loading) {
+          console.log("Fetching more data...");
+          setStart((prevStart) => prevStart + end);
+        }
+      },
+      { root: null, rootMargin: '0px', threshold: 1.0 }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+      if (sentinelRef.current) {
+        observer.unobserve(sentinelRef.current);
+      }
+    };
+  }, [allDataFetched, loading, end]);
 
   return (
     <motion.div
@@ -109,17 +127,10 @@ export default function TodayClassWork() {
       ) : (
         <>
           <SubjectClassWorkTile subject={selectedSubject} details={details} />
-          {!allDataFetched && (
-            <motion.button
-              className='mt-6 text-indigo-600 hover:text-indigo-800 font-medium flex items-center justify-center mx-auto'
-              onClick={handleViewMore}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              View More
-              <FaChevronDown className="ml-1" />
-            </motion.button>
-          )}
+          <div ref={sentinelRef} className="h-10"></div>
+                        {loading && start > 0 && (
+                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                        )}
         </>
       )}
     </motion.div>
