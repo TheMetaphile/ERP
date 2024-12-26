@@ -4,7 +4,7 @@ import * as faceapi from 'face-api.js';
 import axios from 'axios';
 import Loading from '../../../LoadingScreen/Loading';
 import { BASE_URL_FaceDetection, BASE_URL_TeacherAttendence } from '../../../Config';
-import image from '../../../assets/Bds_logo.png';
+import image from '../../../assets/metaphile_logo.png';
 import AuthContext from '../../../Context/AuthContext';
 
 function VideoStream({ onClose, onCapture }) {

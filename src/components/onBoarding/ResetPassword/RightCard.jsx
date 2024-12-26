@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import logo from '../../../assets/Bds_logo.png'
+import logo from '../../../assets/metaphile_logo.png'
 import OTPInput from "react-otp-input";
 import AuthContext from "../../../Context/AuthContext";
 import Loading from '../../../LoadingScreen/Loading'

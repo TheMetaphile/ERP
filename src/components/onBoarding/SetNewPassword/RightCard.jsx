@@ -1,4 +1,4 @@
-import logo from '../../../assets/Bds_logo.png'
+import logo from '../../../assets/metaphile_logo.png'
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useState, useContext } from "react";

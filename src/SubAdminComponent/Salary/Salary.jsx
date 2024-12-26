@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Tabs from "./utils/Tabs";
 import Dashboard from "./utils/Dashboard";
-import profile from '../../assets/Bds_logo.png'
+import profile from '../../assets/metaphile_logo.png'
 import { GoBell } from "react-icons/go";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { CiSearch } from "react-icons/ci";
