@@ -85,18 +85,24 @@ export default function MyDoubts() {
     };
 
     useEffect(() => {
-        setAllDataFetched(false);
-        console.log('dsfds')
-        setLoading(false);
         setStart(0);
         setData([]);
+        setAllDataFetched(false);
+        setLoading(false);
 
     }, [selectedSubject, status]);
+    useEffect(() => {
+        if (start === 0 && data.length === 0 && !allDataFetched && !loading) {
+            fetchDoubt();
+        }
+    }, [start, data, allDataFetched, loading]);
 
     useEffect(() => {
-        fetchDoubt();
+        if (start != 0) {
+            fetchDoubt();
+        }
         console.log('fetc')
-    }, [start, selectedSubject, status]);
+    }, [start]);
 
     const fetchDoubt = async () => {
         console.log(loading, allDataFetched)
