@@ -18,22 +18,23 @@ export default function StudentsList() {
     const [rollNumber, setRollNumber] = useState('');
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(10);
+    const [Class, setClass] = useState(localStorage.getItem('Class') || '');
+    const [Section, setSection] = useState(localStorage.getItem('Section') || '');
+    const [bothEventsCalled, setBothEventsCalled] = useState(false);
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [loadMore, setLoadMore] = useState(false);
+    const sentinelRef = useRef(null);
 
     const handleRollNumberChange = (event) => {
         setStart(0);
-        setUserData([]);
         setRollNumber(event.target.value);
     };
 
     const handleNameChange = (event) => {
         setStart(0);
-        setUserData([]);
         setName(event.target.value);
     };
 
-    const [Class, setClass] = useState(localStorage.getItem('Class') || '');
     const handleClassChange = (event) => {
         setStart(0);
         setUserData([]);
@@ -41,7 +42,6 @@ export default function StudentsList() {
         setClass(event.target.value);
     };
 
-    const [Section, setSection] = useState(localStorage.getItem('Section') || '');
     const handleSectionChange = (event) => {
         setStart(0);
         setUserData([]);
@@ -49,7 +49,6 @@ export default function StudentsList() {
         setSection(event.target.value);
     };
 
-    const [bothEventsCalled, setBothEventsCalled] = useState(false);
     const handlebothEventsCalled = (event) => {
         setBothEventsCalled(true);
     };
@@ -80,10 +79,36 @@ export default function StudentsList() {
     }, [start, Class, rollNumber, Section, name]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
+
     const fetchUserData = async () => {
+        if (loading || allDataFetched) return;
+
         setLoading(true);
         try {
             console.log(start, "-", end);
@@ -105,9 +130,10 @@ export default function StudentsList() {
                 setAllDataFetched(true);
             }
             setUserData(prevData => [...prevData, ...response.data.Students]);
-            setLoading(false);
         } catch (err) {
             setError(err.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -288,16 +314,11 @@ export default function StudentsList() {
                     </table>
                 </div>
 
-                {!allDataFetched && (
-                    <motion.button
-                        className="mt-4 text-purple-600 hover:text-purple-800 font-semibold "
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={handleViewMore}
-                    >
-                        View More
-                    </motion.button>
-                )}
+                <div ref={sentinelRef} className="h-10">
+                    {loading && start > 0 && (
+                        <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                    )}
+                </div>
 
                 {loadMore && userData.length > 0 && <Loading />}
             </motion.div>

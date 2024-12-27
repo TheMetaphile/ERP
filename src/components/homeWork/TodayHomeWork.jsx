@@ -29,8 +29,14 @@ export default function TodayHomeWork() {
         setStart(0);
         setDetails([]);
         setAllDataFetched(false);
-        fetchHomework();
+        setLoading(false);
     }, [selectedSubject]);
+
+    useEffect(() => {
+        if (start === 0 && details.length === 0 && !allDataFetched && !loading) {
+            fetchHomework();
+        }
+    }, [start, details, allDataFetched, loading]);
 
     const handleViewMore = () => {
         if (!allDataFetched && !loading) {
@@ -42,7 +48,7 @@ export default function TodayHomeWork() {
         if (start !== 0) {
             fetchHomework();
         }
-    }, [start, selectedSubject]);
+    }, [start]);
 
     const fetchHomework = async () => {
         console.log(authState.userDetails.currentClass, new Date().getMonth() + 1, authState.userDetails.academicYear, authState.userDetails.section, selectedSubject)

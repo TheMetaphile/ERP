@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Stats from './utils/Stats';
 import Header from './utils/Header';
 import StudentDetailTile from './utils/StudentDetailTile';
@@ -17,9 +17,10 @@ function NewAdmission() {
     const [distributionMethod, setDistributionMethod] = useState('By Percentage');
     const { authState } = useContext(AuthContext);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(20);
+    const [end, setEnd] = useState(1);
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [stat, setStat] = useState({});
+    const sentinelRef = useRef(null);
 
     const handleClassChange = (event) => {
         setClass(event.target.value);
@@ -30,17 +31,23 @@ function NewAdmission() {
     };
 
     useEffect(() => {
-        if (authState.accessToken) {
-            setStart(0);
-            setUserData([]);
-            fetchUserData();
-            fetchUserStat();
-        }
-    }, [authState.accessToken, Class]);
+        setStart(0);
+        setUserData([]);
+        setAllDataFetched(false);
+        setLoading(false);
+    }, [Class]);
 
+    useEffect(() => {
+        if (start === 0 && userData.length === 0 && !allDataFetched && !loading) {
+            fetchUserStat();
+            fetchUserData();
+        }
+    }, [start, userData, allDataFetched, loading]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
     useEffect(() => {
@@ -49,8 +56,13 @@ function NewAdmission() {
         }
     }, [start]);
 
+
+
     const fetchUserData = async () => {
+        if (loading || allDataFetched) return;
+
         setLoading(true);
+        console.log(start)
         try {
             const response = await axios.get(`${BASE_URL_Login}/newStudents/students?class=${Class}&start=${start}&end=${end}`, {
                 headers: {
@@ -122,6 +134,28 @@ function NewAdmission() {
         visible: { y: 0, opacity: 1, transition: { duration: 0.5 } }
     };
 
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
 
     return (
         <motion.div
@@ -220,19 +254,11 @@ function NewAdmission() {
                         </tbody>
                     </table>
                 </div>
-                {!allDataFetched && (
-                    <motion.div
-                        className="text-center py-4"
-                        whileHover={{ scale: 1.05 }}
-                    >
-                        <button
-                            className="text-purple-600 hover:text-purple-800 font-semibold"
-                            onClick={handleViewMore}
-                        >
-                            View More
-                        </button>
-                    </motion.div>
-                )}
+                <div ref={sentinelRef} className="h-10">
+                    {loading && start > 0 && (
+                        <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                    )}
+                </div>
             </motion.div>
         </motion.div>
     )

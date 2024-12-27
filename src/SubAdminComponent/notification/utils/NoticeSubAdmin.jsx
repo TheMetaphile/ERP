@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import AllNotificationTile from './AllNotificationTile';
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
@@ -17,22 +17,26 @@ function NoticeSubAdmin() {
     const sessions = getLast5Sessions();
     const [selectedSession, setSelectedSession] = useState(sessions[1]);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const sentinelRef = useRef(null);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
     useEffect(() => {
         fetchNotice();
-    }, [authState.accessToken, selectedSession]);
+    }, [selectedSession]);
 
     useEffect(() => {
         if (start !== 0) {
             fetchNotice();
         }
-    }, [start, selectedSession]);
+    }, [start]);
 
     const fetchNotice = async () => {
+        if (loading || allDataFetched) return;
         setLoading(true);
         try {
             const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/subAdmin?start=${start}&limit=${end}&session=${selectedSession}&type=for`, {
@@ -66,6 +70,29 @@ function NoticeSubAdmin() {
         setSelectedSession(event.target.value);
         setDetails([]);
     };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
 
     return (
         <motion.div
@@ -101,17 +128,11 @@ function NoticeSubAdmin() {
             ) : (
                 <>
                     <AllNotificationTile details={details} />
-                    {!allDataFetched && (
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className='flex items-center justify-center mx-auto mt-6 px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-300'
-                            onClick={handleViewMore}
-                        >
-                            <FaEye className="mr-2" />
-                            View More
-                        </motion.button>
-                    )}
+                    <div ref={sentinelRef} className="h-10">
+                        {loading && start > 0 && (
+                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                        )}
+                    </div>
                 </>
             )}
         </motion.div>

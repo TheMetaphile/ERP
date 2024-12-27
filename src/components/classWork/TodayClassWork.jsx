@@ -29,8 +29,14 @@ export default function TodayClassWork() {
     setStart(0);
     setDetails([]);
     setAllDataFetched(false);
-    fetchClassWork();
+    setLoading(false);
   }, [selectedSubject]);
+
+  useEffect(() => {
+    if (start === 0 && details.length === 0 && !allDataFetched && !loading) {
+      fetchClassWork();
+    }
+  }, [start, details, allDataFetched, loading]);
 
   const handleViewMore = () => {
     if (!allDataFetched && !loading) {
@@ -42,7 +48,7 @@ export default function TodayClassWork() {
     if (start !== 0) {
       fetchClassWork();
     }
-  }, [start, selectedSubject]);
+  }, [start]);
 
 
 
@@ -132,10 +138,11 @@ export default function TodayClassWork() {
       ) : (
         <>
           <SubjectClassWorkTile subject={selectedSubject} details={details} />
-          <div ref={sentinelRef} className="h-10"></div>
+          <div ref={sentinelRef} className="h-10">
           {loading && start > 0 && (
             <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
           )}
+          </div>
         </>
       )}
     </motion.div>

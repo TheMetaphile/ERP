@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../LoadingScreen/Loading'
@@ -28,24 +28,32 @@ function PreviousFeeDetailsSubAdmin() {
     const { authState } = useContext(AuthContext);
     const session = getSessions();
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(9);
+    const [end, setEnd] = useState(2);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const sentinelRef = useRef(null);
 
     const [clickedIndex, setClickedIndex] = useState(null);
 
     const handleClick = (index) => {
         setClickedIndex(index);
     };
-
+    useEffect(() => {
+        setStart(0);
+        setDetails([]);
+        setAllDataFetched(false);
+        setLoading(false);
+    }, []);
 
     useEffect(() => {
-        if (authState.accessToken) {
+        if (start === 0 && details.length === 0 && !allDataFetched && !loading) {
             fetchDetails();
         }
-    }, [authState.accessToken]);
+    }, [start, details, allDataFetched, loading]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
     useEffect(() => {
@@ -55,9 +63,11 @@ function PreviousFeeDetailsSubAdmin() {
     }, [start]);
 
     const fetchDetails = async () => {
+        if (loading || allDataFetched) return;
+
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/pendingFeeStats`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/pendingFeeStats?end=${end}&start=${start}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -81,6 +91,28 @@ function PreviousFeeDetailsSubAdmin() {
         }
     }
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
 
     return (
 
@@ -164,11 +196,11 @@ function PreviousFeeDetailsSubAdmin() {
                                     </motion.div>
 
                                 ))}
-                                {!allDataFetched && (
-                                    <div colSpan="4" className="text-center">
-                                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer' onClick={handleViewMore}>View More</h1>
-                                    </div>
-                                )}
+                                <div ref={sentinelRef} className="h-10">
+                                    {loading && start > 0 && (
+                                        <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                                    )}
+                                </div>
                             </div>
                         ) : (
                             <div className='text-center mt-2'>No Fee Details available</div>

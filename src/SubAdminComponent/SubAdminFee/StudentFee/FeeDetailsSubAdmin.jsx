@@ -1,10 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Fee } from '../../../Config';
+import { BASE_URL_Fee, BASE_URL_Login } from '../../../Config';
 import { Link, Outlet } from 'react-router-dom';
 import { MdSchool } from 'react-icons/md';
 import { motion } from "framer-motion";
@@ -24,7 +24,8 @@ const getSessions = () => {
 
 function FeeDetailsSubAdmin() {
     const [selectedClass, setSelectedClass] = useState("9th");
-    const [section, setSelectedSection] = useState("A");
+    const [section, setSelectedSection] = useState('A');
+    const [sectionsDetails, setSectionsDetails] = useState([]);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([])
     const { authState } = useContext(AuthContext);
@@ -33,6 +34,7 @@ function FeeDetailsSubAdmin() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(9);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const sentinelRef = useRef(null);
 
     const [clickedIndex, setClickedIndex] = useState(null);
 
@@ -41,14 +43,21 @@ function FeeDetailsSubAdmin() {
     };
 
     const handleClassChange = (e) => {
+        const selectedClass = e.target.value;
         setDetails([]);
         setAllDataFetched(false);
-        setSelectedClass(e.target.value);
+        setSelectedClass(selectedClass);
         setStart(0);
+
+        if (selectedClass) {
+            fetchSections(selectedClass);
+        } else {
+            setSectionsDetails([]);
+        }
     };
 
     const handleSectionChange = (e) => {
-        setDetails([]);
+        setUserData([]);
         setAllDataFetched(false);
         setSelectedSection(e.target.value);
         setStart(0);
@@ -59,18 +68,14 @@ function FeeDetailsSubAdmin() {
     };
 
 
-
-
-
-
     useEffect(() => {
-        if (selectedClass !== "" && selectedSession !== "" && section !== "") {
-            fetchDetails();
-        }
+        fetchDetails();
     }, [selectedClass, selectedSession, section]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
     useEffect(() => {
@@ -78,6 +83,7 @@ function FeeDetailsSubAdmin() {
             fetchDetails();
         }
     }, [start]);
+
 
     const fetchDetails = async () => {
         console.log(selectedClass, selectedSession)
@@ -108,6 +114,43 @@ function FeeDetailsSubAdmin() {
     }
 
 
+    const fetchSections = async (selectedClass) => {
+        try {
+            const response = await axios.post(`${BASE_URL_Login}/classTeacher/fetch/sections`, {
+                accessToken: authState.accessToken,
+                class: selectedClass,
+            });
+            console.log(response.data, 'section')
+            const sectionsDetail = response.data.sections.map(sectionObj => sectionObj.section);
+            setSectionsDetails(sectionsDetail);
+        } catch (error) {
+            console.error("Error while fetching section:", error);
+        }
+    };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
+
     return (
 
         <div className="flex flex-col px-6 py-8 mobile:max-tablet:p-2">
@@ -129,12 +172,13 @@ function FeeDetailsSubAdmin() {
                                 ))}
                             </select>
                         </div>
-                        <select id="Section" name="Section" value={section} onChange={handleSectionChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
-                            <option value="">Select Class</option>
-                            {["A", "B", "C", "D", "E", "F"].map(cls => (
-                                <option key={cls} value={cls}>{cls}</option>
+                        <select id="section" value={section} onChange={handleSectionChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                            <option value="">Select Section</option>
+                            {sectionsDetails.map((section, index) => (
+                                <option key={index} value={section}>{section}</option>
                             ))}
                         </select>
+
 
                     </div>
                 </div>
@@ -218,11 +262,11 @@ function FeeDetailsSubAdmin() {
                                 </motion.div>
 
                             ))}
-                            {!allDataFetched && (
-                                <div colSpan="4" className="text-center">
-                                    <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer' onClick={handleViewMore}>View More</h1>
-                                </div>
-                            )}
+                            <div ref={sentinelRef} className="h-10">
+                                {loading && start > 0 && (
+                                    <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                                )}
+                            </div>
                         </div>
                     ) : (
                         <div className='text-center mt-2'>No Fee Details available</div>

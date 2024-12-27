@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios';
@@ -15,20 +15,28 @@ function StudentFee() {
     const { authState } = useContext(AuthContext);
     const [filter, setFilter] = useState('');
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(10);
+    const [end, setEnd] = useState(1);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const sentinelRef = useRef(null);
 
     useEffect(() => {
         setStart(0);
         setDetails([]);
-        setLoading(true);
+        setLoading(false);
         setAllDataFetched(false);
-        fetchDetails();
-    }, [authState.accessToken, filter]);
+    }, [filter]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
+
+    useEffect(() => {
+        if (start === 0 && details.length === 0 && !allDataFetched && !loading) {
+            fetchDetails();
+        }
+    }, [start, details, allDataFetched, loading]);
 
     useEffect(() => {
         if (start !== 0) {
@@ -46,6 +54,8 @@ function StudentFee() {
     const session = getCurrentSession();
 
     const fetchDetails = async () => {
+        if (loading || allDataFetched) return;
+
         setLoading(true);
         try {
             const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/classTeacher?&start=${start}&end=${end}&session=${session}`, {
@@ -67,6 +77,30 @@ function StudentFee() {
             setLoading(false);
         }
     }
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
+
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -161,22 +195,11 @@ function StudentFee() {
                         </tbody>
                     </table>
                 </div>
-                {!allDataFetched && (
-                    <motion.div
-                        className='text-center py-4'
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-
-                        <button
-                            className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300'
-
-                            onClick={handleViewMore}
-                        >
-                            View More
-                        </button>
-                    </motion.div>
-                )}
+                <div ref={sentinelRef} className="h-10">
+                    {loading && start > 0 && (
+                        <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                    )}
+                </div>
             </motion.div>
         </motion.div>
     )

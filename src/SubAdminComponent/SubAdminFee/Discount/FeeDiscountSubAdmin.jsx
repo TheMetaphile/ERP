@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../LoadingScreen/Loading';
@@ -26,8 +26,9 @@ function FeeDiscountSubAdmin() {
     const session = getSessions();
     const [selectedSession, setSelectedSession] = useState(session[0]);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(4);
+    const [end, setEnd] = useState(1);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const sentinelRef = useRef(null);
 
     const handleClassChange = (e) => {
         setSelectedClass(e.target.value);
@@ -40,16 +41,25 @@ function FeeDiscountSubAdmin() {
 
     useEffect(() => {
         if (selectedClass !== "" && selectedSession !== "") {
-            setDetails([]);
             setStart(0);
+            setDetails([]);
             setAllDataFetched(false);
-            fetchDiscount();
+            setLoading(false);
         }
     }, [selectedClass, selectedSession]);
 
+    useEffect(() => {
+        if (start === 0 && details.length === 0 && !allDataFetched && !loading) {
+            fetchDiscount();
+        }
+    }, [start, details, allDataFetched, loading]);
+
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
+
 
     useEffect(() => {
         if (start !== 0) {
@@ -58,6 +68,7 @@ function FeeDiscountSubAdmin() {
     }, [start]);
 
     const fetchDiscount = async () => {
+        if (loading || allDataFetched) return;
         setLoading(true);
         try {
             const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/discount?end=${end}&start=${start}&class=${selectedClass}`, {
@@ -97,6 +108,29 @@ function FeeDiscountSubAdmin() {
             toast.error('Error deleting Discount');
         }
     };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
 
     return (
         <div className="flex flex-col px-6 py-8 min-h-screen mobile:max-tablet:p-2">
@@ -170,12 +204,9 @@ function FeeDiscountSubAdmin() {
                         </tbody>
                     </table>
                 </div>
-                {!allDataFetched && (
-                    <div className="text-center mt-6">
-                        <button className="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-6 rounded-full transition duration-300 flex items-center justify-center mx-auto" onClick={handleViewMore}>
-                            <MdRefresh className="mr-2" /> View More
-                        </button>
-                    </div>
+                <div ref={sentinelRef} className="h-10"></div>
+                {loading && start > 0 && (
+                    <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
                 )}
             </div>
         </div>

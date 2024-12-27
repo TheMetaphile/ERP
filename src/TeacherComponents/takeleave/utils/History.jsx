@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { BASE_URL_TeacherLeave } from './../../../Config';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
@@ -14,8 +14,9 @@ function History({ additionalData }) {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(4);
+    const [end, setEnd] = useState(2);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const sentinelRef = useRef(null);
 
     useEffect(() => {
         if (authState.accessToken) {
@@ -38,23 +39,28 @@ function History({ additionalData }) {
     }
 
     useEffect(() => {
-        setLoading(true);
-        fetchLeaves();
-    }, [authState.accessToken]);
+        if (start === 0 && details.length === 0 && !allDataFetched && !loading) {
+            fetchLeaves();
+        }
+    }, [start, details, allDataFetched, loading]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
     useEffect(() => {
         if (start !== 0) {
             fetchLeaves();
-
         }
     }, [start]);
 
     const fetchLeaves = async () => {
         const session = getCurrentSession();
+        if (loading || allDataFetched) return;
+
+        setLoading(true);
         console.log('start', start, 'end', end)
         try {
             const response = await axios.get(`${BASE_URL_TeacherLeave}/teacherleave/fetch/teacher?start=${start}&end=${end}&session=${session}`, {
@@ -82,6 +88,29 @@ function History({ additionalData }) {
             setLoading(false)
         }
     }
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
 
 
     return (
@@ -134,24 +163,11 @@ function History({ additionalData }) {
                         <HistoryTile details={details} />
                     </motion.div>
 
-                    {!allDataFetched && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                            className="mt-6 text-center"
-                        >
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition duration-300"
-                                onClick={handleViewMore}
-                            >
-                                View More
-                                <FaChevronDown className="ml-2" />
-                            </motion.button>
-                        </motion.div>
-                    )}
+                    <div ref={sentinelRef} className="h-10">
+                        {loading && start > 0 && (
+                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                        )}
+                    </div>
                 </>
             )}
         </motion.div>

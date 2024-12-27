@@ -21,6 +21,7 @@ function ReportCardHOD() {
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(20);
   const [allDataFetched, setAllDataFetched] = useState(false);
+  const sentinelRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem('Class', Class);
@@ -29,40 +30,49 @@ function ReportCardHOD() {
   }, [Class, Section, selectedSession]);
 
   const handleClassChange = (event) => {
-    setUserData([]);
-    setAllDataFetched(false);
     setClass(event.target.value);
-    setStart(0);
   };
 
   const handleSectionChange = (event) => {
-
-    setUserData([]);
-    setAllDataFetched(false);
     setSection(event.target.value);
-    setStart(0);
   };
 
   const handleSessionChange = (session) => {
     setSelectedSession(session);
   };
 
-  const handleViewMore = () => {
-    setStart(prevStart => prevStart + end);
-  };
+      useEffect(() => {
+          setStart(0);
+          setUserData([]);
+          setLoading(false);
+          setAllDataFetched(false);
+      }, [Class, Section]);
+  
+      const handleViewMore = () => {
+          if (!allDataFetched && !loading) {
+              setStart((prevStart) => prevStart + end);
+          }
+      };
+  
+      useEffect(() => {
+          if (start !== 0) {
+            fetchStudents();
+          }
+      }, [start]);
+  
+      useEffect(() => {
+          if (start === 0 && userData.length === 0 && !allDataFetched && !loading) {
+            fetchStudents();
+          }
+      }, [start, userData, allDataFetched, loading]);
 
-  useEffect(() => {
-    if (start !== 0) {
-      fetchStudents();
-    }
-  }, [start]);
 
   console.log('ll', Class, Section, selectedSession)
-  useEffect(() => {
-    fetchStudents();
-  }, [authState.accessToken, Class, Section]);
+
 
   const fetchStudents = async () => {
+    if (loading || allDataFetched) return;
+    
     setLoading(true);
     try {
       console.log(start, "-", end);
@@ -133,6 +143,29 @@ function ReportCardHOD() {
       }
     }
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+        (entries) => {
+            if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                console.log("Fetching more data...");
+                handleViewMore();
+
+            }
+        },
+        { root: null, rootMargin: '0px', threshold: 1.0 }
+    );
+
+    if (sentinelRef.current) {
+        observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+        if (sentinelRef.current) {
+            observer.unobserve(sentinelRef.current);
+        }
+    };
+}, [allDataFetched, loading]);
 
   return (
     <motion.div
@@ -222,23 +255,11 @@ function ReportCardHOD() {
                 ))}
               </motion.tbody>
             </AnimatePresence>
-            {!allDataFetched && (
-              <motion.div
-                className="text-center py-4"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                <motion.button
-                  className="text-purple-600 hover:text-purple-800 font-semibold"
-                  onClick={handleViewMore}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  View More
-                </motion.button>
-              </motion.div>
-            )}
+            <div ref={sentinelRef} className="h-10">
+                        {loading && start > 0 && (
+                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                        )}
+                    </div>
           </motion.table>
         )}
       </motion.div>

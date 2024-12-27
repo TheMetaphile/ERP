@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { userimg } from "../../Teachers/utils/images/index.js";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext.jsx";
@@ -10,26 +10,25 @@ import TeacherLeavesTile from "./TeacherLeavesTile.jsx";
 import { motion } from "framer-motion";
 
 export default function TeacherLeaves() {
-  const [selectedLeave, setSelectedLeave] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const { authState } = useContext(AuthContext);
   const [start, setStart] = useState(0);
-  const [end, setEnd] = useState(4);
+  const end = 4;
   const [allDataFetched, setAllDataFetched] = useState(false);
+  const sentinelRef = useRef(null);
+
 
   useEffect(() => {
-    if (authState.accessToken) {
-      setLoading(true);
+    if (start === 0 && data.length === 0 && !allDataFetched && !loading) {
       fetchTeacherData();
-    } else {
-      setError('No access token available');
-      setLoading(false);
     }
-  }, [authState.accessToken]);
+  }, [start, data, allDataFetched, loading]);
 
   const handleViewMore = () => {
-    setStart(prevStart => prevStart + end);
+    if (!allDataFetched && !loading) {
+      setStart((prevStart) => prevStart + end);
+    }
   };
 
   useEffect(() => {
@@ -52,6 +51,8 @@ export default function TeacherLeaves() {
 
   const fetchTeacherData = async () => {
     const session = getCurrentSession();
+    if (loading || allDataFetched) return;
+    setLoading(true);
 
     try {
       const response = await axios.get(`${BASE_URL_TeacherLeave}/teacherleave/fetch/admin?start=${start}&end=${end}&session=${session}`, {
@@ -69,43 +70,35 @@ export default function TeacherLeaves() {
         setAllDataFetched(true);
       }
       setData(prevData => [...prevData, ...response.data.Leaves]);
-      setLoading(false);
-
     } catch (err) {
       setError(err.message);
     }
-  };
-
-  const handleAction = async (actionType) => {
-    const id = selectedLeave._id;
-    const session = getCurrentSession();
-    try {
-      const response = await axios.put(
-        `${BASE_URL_TeacherLeave}/leave/update?leaveId=${id}&session=${session}`,
-        { status: actionType },
-        {
-          headers: {
-            Authorization: `Bearer ${authState.accessToken}`
-          }
-        }
-      );
-
-      if (response.status === 200) {
-        const updatedLeaves = data.map((leave) =>
-          leave._id === id ? { ...leave, status: actionType } : leave
-        );
-        setData(updatedLeaves);
-        setSelectedLeave(null);
-        toast.success(`Leave ${actionType === 'Approved' ? 'approved' : 'rejected'}`);
-        console.log(`Leave ${actionType === 'Approved' ? 'approved' : 'rejected'}`);
-      } else {
-        console.error('Unexpected response:', response);
-      }
-    } catch (err) {
-      console.error('Error updating leave:', err.message);
+    finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !allDataFetched && !loading) {
+          console.log("Fetching more data...");
+          handleViewMore();
+        }
+      },
+      { root: null, rootMargin: '0px', threshold: 1.0 }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+      if (sentinelRef.current) {
+        observer.unobserve(sentinelRef.current);
+      }
+    };
+  }, [allDataFetched, loading]);
 
 
 
@@ -130,17 +123,11 @@ export default function TeacherLeaves() {
           >
             <TeacherLeavesTile data={data} />
           </motion.div>
-          {!allDataFetched && (
-            <motion.h1
-              className="text-purple-500 hover:text-purple-800 mt-3 cursor-pointer text-center"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-              onClick={handleViewMore}
-            >
-              View More
-            </motion.h1>
-          )}
+          <div ref={sentinelRef} className="h-10">
+            {loading && start > 0 && (
+              <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+            )}
+          </div>
         </>
       )}
     </motion.div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import TeacherTile from './TeacherTile';
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
@@ -15,6 +15,7 @@ export default function Teacher() {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const sentinelRef = useRef(null);
 
     function getCurrentSession() {
         const now = new Date();
@@ -29,7 +30,9 @@ export default function Teacher() {
     }
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
     useEffect(() => {
@@ -39,12 +42,14 @@ export default function Teacher() {
     }, [start]);
 
     useEffect(() => {
-        if (authState.accessToken) {
+        if (start === 0 && details.length === 0 && !allDataFetched && !loading) {
             fetchNotice();
         }
-    }, [authState.accessToken]);
+    }, [start, details, allDataFetched, loading]);
+
 
     const fetchNotice = async () => {
+        if (loading || allDataFetched) return;
         setLoading(true);
         console.log(start, 'start', end, 'end')
         try {
@@ -71,6 +76,28 @@ export default function Teacher() {
         }
     };
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
 
     return (
         <div className='mx-3'>
@@ -93,9 +120,11 @@ export default function Teacher() {
             ) : (
                 <>
                     <TeacherTile details={details} />
-                    {!allDataFetched && (
-                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                    )}
+                    <div ref={sentinelRef} className="h-10">
+                        {loading && start > 0 && (
+                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                        )}
+                    </div>
                 </>
             )}
 

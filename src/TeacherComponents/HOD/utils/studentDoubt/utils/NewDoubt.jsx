@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import NewDoubtTile from './NewDoubtTile'
 import Loading from '../../../../../LoadingScreen/Loading'
 import axios from 'axios'
@@ -10,23 +10,25 @@ import 'react-toastify/dist/ReactToastify.css';
 function NewDoubt({ Class, Section, Subject }) {
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(4);
+    const [end, setEnd] = useState(2);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const sentinelRef = useRef(null);
 
     console.log(Class, Section, Subject)
     useEffect(() => {
         setStart(0);
         setData([]);
-        setLoading(true);
+        setLoading(false);
         setAllDataFetched(false);
-        fetchUserData();
     }, [Class, Section, Subject]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
     useEffect(() => {
@@ -35,9 +37,18 @@ function NewDoubt({ Class, Section, Subject }) {
         }
     }, [start]);
 
+    useEffect(() => {
+        if (start === 0 && data.length === 0 && !allDataFetched && !loading) {
+            fetchUserData();
+        }
+    }, [start, data, allDataFetched, loading]);
+
     const fetchUserData = async () => {
         console.log(Subject, start, end)
-        if(!Class || !Section || !Subject) {setLoading(false); return ;} ;
+        if (!Class || !Section || !Subject) return;
+        if (loading || allDataFetched) return;
+
+        setLoading(true);
         try {
             const response = await axios.get(`${BASE_URL_AskDoubt}/doubts/fetch/teacher?class=${Class}&section=${Section}&subject=${Subject}&start=${start}&end=${end}&status=${'Pending'}`, {
                 headers: {
@@ -64,6 +75,29 @@ function NewDoubt({ Class, Section, Subject }) {
         }
     };
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
+
     if (loading && start === 0) {
         return <Loading />;
     }
@@ -73,9 +107,11 @@ function NewDoubt({ Class, Section, Subject }) {
             {data.length > 0 ? (
                 <>
                     <NewDoubtTile data={data} Class={Class} />
-                    {(!allDataFetched) && (
-                        <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
-                    )}
+                    <div ref={sentinelRef} className="h-10">
+                        {loading && start > 0 && (
+                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                        )}
+                    </div>
                 </>
             ) : (
                 <div className='w-full text-center mt-3 text-blue-500'>No new doubt</div>

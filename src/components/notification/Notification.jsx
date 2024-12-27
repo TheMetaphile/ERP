@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Outlet } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
 
 export default function Notification() {
     const [selectedLink, setSelectedLink] = useState('/Student-Dashboard/notification/allnotification');
@@ -11,7 +12,7 @@ export default function Notification() {
 
     return (
         <div className=" flex flex-col px-3  items-start mt-2">
-
+            <ToastContainer />
             <div className=" flex  mx-3 items-center justify-between">
                 <h1 className='text-2xl mobile:max-tablet:text-xl mt-2'>Notice</h1>
 
@@ -40,7 +41,7 @@ export default function Notification() {
                 </div>
 
             </div>
-  
+
             <Outlet />
             <br></br>
 

@@ -1,16 +1,16 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthContext from '../../../Context/AuthContext';
 import Loading from '../../../LoadingScreen/Loading';
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteForever, MdCheck, MdCancel, MdExpandMore, MdExpandLess } from "react-icons/md";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Student_Leave } from '../../../Config';
 
 export default function AttendenceTable({ additionalData, status }) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [error, setError] = useState('');
   const [editRowIndex, setEditRowIndex] = useState(null);
@@ -19,18 +19,27 @@ export default function AttendenceTable({ additionalData, status }) {
   const { authState } = useContext(AuthContext);
   const [expanded, setExpanded] = useState(null);
   const [start, setStart] = useState(0);
-  const [end, setEnd] = useState(4);
+  const [end, setEnd] = useState(1);
   const [allDataFetched, setAllDataFetched] = useState(false);
+  const sentinelRef = useRef(null);
 
   useEffect(() => {
     setStart(0);
     setData([]);
-    setLoading(true);
-    fetchUserData();
-  }, [authState.accessToken, status]);
+    setAllDataFetched(false);
+    setLoading(false);
+  }, [status]);
+
+  useEffect(() => {
+    if (start === 0 && data.length === 0 && !allDataFetched && !loading) {
+      fetchUserData();
+    }
+}, [start, data, allDataFetched, loading]);
 
   const handleViewMore = () => {
-    setStart(prevStart => prevStart + end);
+    if (!allDataFetched && !loading) {
+      setStart((prevStart) => prevStart + end);
+    }
   };
 
   useEffect(() => {
@@ -40,6 +49,9 @@ export default function AttendenceTable({ additionalData, status }) {
   }, [start]);
 
   const fetchUserData = async () => {
+    if (loading || allDataFetched) return;
+
+    setLoading(true);
     try {
       const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/particularStudent?start=${start}&end=${end}&status=${status}`, {
         headers: {
@@ -52,10 +64,11 @@ export default function AttendenceTable({ additionalData, status }) {
         setAllDataFetched(true);
       }
       setData(prevData => [...prevData, ...leaves]);
-      setLoading(false);
     } catch (err) {
       setError(err.message);
       toast.error(err.message);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -153,6 +166,29 @@ export default function AttendenceTable({ additionalData, status }) {
     setEditRowIndex(null);
     setEditData({});
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !allDataFetched && !loading) {
+          console.log("Fetching more data...");
+          handleViewMore();
+
+        }
+      },
+      { root: null, rootMargin: '0px', threshold: 1.0 }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+      if (sentinelRef.current) {
+        observer.unobserve(sentinelRef.current);
+      }
+    };
+  }, [allDataFetched, loading]);
 
   return (
     <div className=' mt-1 border-gray-300 w-full bg-white '>
@@ -277,15 +313,9 @@ export default function AttendenceTable({ additionalData, status }) {
               </AnimatePresence>
             </motion.div>
           ))}
-          {!allDataFetched && (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className='w-full text-blue-500 hover:text-blue-700 py-2 mt-4 rounded-lg border border-blue-500 hover:border-blue-700 transition-colors duration-300'
-              onClick={handleViewMore}
-            >
-              View More
-            </motion.button>
+           <div ref={sentinelRef} className="h-10"></div>
+          {loading && start > 0 && (
+            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
           )}
         </div>
       )}

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FaUserGraduate, FaCalendarAlt, FaClipboardList } from 'react-icons/fa';
 import { Link, Outlet } from "react-router-dom";
@@ -13,37 +13,44 @@ function StudentLeave() {
     const [status, setStatus] = useState('Pending');
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [start, setStart] = useState(0);
-    const end = 4;
+    const end = 2;
     const [allDataFetched, setAllDataFetched] = useState(false);
-
-
+    const sentinelRef = useRef(null);
 
     const handleStatusChange = (e) => {
         setStatus(e.target.value);
+    };
+    useEffect(() => {
         setStart(0);
         setData([]);
+        setLoading(false);
         setAllDataFetched(false);
-    };
+    }, [status]);
+
 
     useEffect(() => {
-        setLoading(true);
-        fetchUserData();
-    }, [authState.accessToken, status]);
+        if (start === 0 && data.length === 0 && !allDataFetched && !loading) {
+            fetchUserData();
+        }
+    }, [start, data, allDataFetched, loading]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
     useEffect(() => {
         if (start !== 0) {
             fetchUserData();
         }
-    }, [start, status]);
+    }, [start]);
 
     const fetchUserData = async () => {
+        if (loading || allDataFetched) return;
         setLoading(true);
         try {
             const today = new Date();
@@ -67,6 +74,29 @@ function StudentLeave() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
 
     if (loading) {
         return <Loading />;
@@ -113,19 +143,12 @@ function StudentLeave() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
             >
-                <NewTile data={data} setData={setData}/>
-                {!allDataFetched && (
-
-                    <motion.h1
-                        className='text-blue-600 hover:text-blue-800 mt-6 cursor-pointer text-center font-semibold'
-
-                        onClick={handleViewMore}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        View More
-                    </motion.h1>
-                )}
+                <NewTile data={data} setData={setData} />
+                <div ref={sentinelRef} className="h-10">
+                    {loading && start > 0 && (
+                        <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                    )}
+                </div>
             </motion.div>
         </motion.div>
     )

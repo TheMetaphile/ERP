@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
@@ -15,11 +15,12 @@ const Certificates = () => {
     const [Class, setClass] = useState('9th');
     const [sectionsDetails, setSections] = useState([]);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(5);
+    const [end, setEnd] = useState(10);
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [sessions, setSessions] = useState([]);
     const [selectedSession, setSelectedSession] = useState('2024-25');
     const [clickedIndex, setClickedIndex] = useState(null);
+    const sentinelRef = useRef(null);
 
     const handleClick = (index) => {
         setClickedIndex(index);
@@ -48,17 +49,21 @@ const Certificates = () => {
         if (selectedSession) {
             setStart(0);
             setTcData([]);
-            fetchUserTc();
-            fetchSections();
+            setAllDataFetched(false);
+            setLoading(false);
         }
     }, [selectedSession, Class]);
 
     useEffect(() => {
-        fetchSections();
-    }, [Class]);
+        if (start === 0 && tcData.length === 0 && !allDataFetched && !loading) {
+            fetchUserTc();
+        }
+    }, [start, tcData, allDataFetched, loading]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
     useEffect(() => {
@@ -69,6 +74,7 @@ const Certificates = () => {
 
 
     const fetchUserTc = async () => {
+        if (loading || allDataFetched) return;
         setLoading(true);
         console.log(selectedSession, Class)
         console.log(start, 'start', end, 'end')
@@ -117,6 +123,30 @@ const Certificates = () => {
             console.error("Error while fetching section:", error);
         }
     };
+
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
 
     return (
         <div className="mx-auto p-4">
@@ -237,20 +267,11 @@ const Certificates = () => {
                                         </td>
                                     </motion.tr>
                                 ))}
-                                {!allDataFetched && (
-                                    <tr>
-                                        <td colSpan="6" className="text-center p-4">
-                                            <motion.button
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                className="text-purple-500 hover:text-purple-700 font-medium focus:outline-none"
-                                                onClick={handleViewMore}
-                                            >
-                                                View More
-                                            </motion.button>
-                                        </td>
-                                    </tr>
-                                )}
+                                <div ref={sentinelRef} className="h-10">
+                                    {loading && start > 0 && (
+                                        <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                                    )}
+                                </div>
                             </>
                         )}
                     </tbody>

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown, FaChevronUp, FaUserCircle } from 'react-icons/fa';
 
 const ClassNotice = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const { authState } = useContext(AuthContext);
   const [expanded, setExpanded] = useState(null);
@@ -17,21 +17,20 @@ const ClassNotice = () => {
   const [editedNotice, setEditedNotice] = useState({});
   const [error, setError] = useState('');
   const [start, setStart] = useState(0);
-  const [end, setEnd] = useState(4);
+  const end = 4;
   const [allDataFetched, setAllDataFetched] = useState(false);
+  const sentinelRef = useRef(null);
 
   useEffect(() => {
-    if (authState.accessToken) {
-      setLoading(true);
+    if (start === 0 && data.length === 0 && !allDataFetched && !loading) {
       fetchClassNotices();
-    } else {
-      setError('No access token available');
-      setLoading(false);
     }
-  }, [authState.accessToken]);
+  }, [start, data, allDataFetched, loading]);
 
   const handleViewMore = () => {
-    setStart(prevStart => prevStart + end);
+    if (!allDataFetched && !loading) {
+      setStart((prevStart) => prevStart + end);
+    }
   };
 
   useEffect(() => {
@@ -61,7 +60,8 @@ const ClassNotice = () => {
 
 
   const fetchClassNotices = async () => {
-    const session = getCurrentSession();
+    if (loading || allDataFetched) return;
+    setLoading(true);
 
     try {
       const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${'Particular Classes'}`, {
@@ -77,9 +77,10 @@ const ClassNotice = () => {
         setAllDataFetched(true);
       }
       setData(prevData => [...prevData, ...response.data.notices]);
-      setLoading(false);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,6 +136,27 @@ const ClassNotice = () => {
     e.stopPropagation();
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !allDataFetched && !loading) {
+          console.log("Fetching more data...");
+          handleViewMore();
+        }
+      },
+      { root: null, rootMargin: '0px', threshold: 1.0 }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+      if (sentinelRef.current) {
+        observer.unobserve(sentinelRef.current);
+      }
+    };
+  }, [allDataFetched, loading]);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -333,16 +355,11 @@ const ClassNotice = () => {
                 </motion.div>
               ))}
             </AnimatePresence>
-            {!allDataFetched && (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleViewMore}
-                className="w-full py-2 mt-6 bg-purple-500 text-white rounded-lg shadow-md hover:bg-purple-600 focus:outline-none"
-              >
-                View More
-              </motion.button>
-            )}
+            <div ref={sentinelRef} className="h-10">
+              {loading && start > 0 && (
+                <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+              )}
+            </div>
           </>
         )}
       </div>

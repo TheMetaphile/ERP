@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import HomeWorkTile from './HomeWorkTile';
 import NewUpload from './NewUpload';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiFilter, FiUpload, FiBook, FiUsers, FiLayers } from 'react-icons/fi';
+import { IoMdArrowDropdown } from "react-icons/io";
 
 function HomeWork() {
   const { authState } = useContext(AuthContext);
@@ -24,6 +25,7 @@ function HomeWork() {
   const [allDataFetched, setAllDataFetched] = useState(false);
   const [uniqueSections, setUniqueSections] = useState([]);
   const [uniqueSubjects, setUniqueSubjects] = useState([]);
+  const sentinelRef = useRef(null);
 
   const uniqueClasses = Array.from(new Set(authState.subject ? authState.subject.map(subj => subj.class) : []));
 
@@ -72,26 +74,37 @@ function HomeWork() {
       setStart(0);
       setDetails([]);
       setAllDataFetched(false);
-      fetchHomework();
+      setLoading(false);
 
     }
-  }, [authState.accessToken, selectedSubject, selectedSection, selectedClass]);
+  }, [selectedSubject, selectedSection, selectedClass]);
 
   const handleViewMore = () => {
-    setStart(prevStart => prevStart + end);
+    if (!allDataFetched && !loading) {
+      setStart((prevStart) => prevStart + end);
+    }
   };
+
+  useEffect(() => {
+    if (start === 0 && details.length === 0 && !allDataFetched && !loading) {
+      fetchHomework();
+    }
+  }, [start, details, allDataFetched, loading]);
+
 
   useEffect(() => {
     if (start !== 0) {
       fetchHomework();
     }
-  }, [start, selectedSubject, selectedSection, selectedClass]);
+  }, [start]);
 
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
   const fetchHomework = async () => {
     console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
     if (!selectedClass || !selectedSection || !selectedSubject) return;
+    if (loading || allDataFetched) return;
+
     setLoading(true);
     try {
       const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/teacher?class=${selectedClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${selectedSection}&subject=${selectedSubject}&start=${start}&end=${end}`, {
@@ -125,6 +138,29 @@ function HomeWork() {
     hidden: { y: 20, opacity: 0 },
     visible: { y: 0, opacity: 1 },
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !allDataFetched && !loading) {
+          console.log("Fetching more data...");
+          handleViewMore();
+
+        }
+      },
+      { root: null, rootMargin: '0px', threshold: 1.0 }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+      if (sentinelRef.current) {
+        observer.unobserve(sentinelRef.current);
+      }
+    };
+  }, [allDataFetched, loading]);
 
   return (
     <motion.div
@@ -247,16 +283,11 @@ function HomeWork() {
       ) : (
         <motion.div variants={itemVariants} className='w-full mt-2 rounded-lg'>
           <HomeWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
-          {!allDataFetched && (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className='text-blue-600 hover:text-blue-800 mt-3 cursor-pointer text-center flex items-center justify-center w-full py-2 border border-blue-300 rounded-md'
-              onClick={handleViewMore}
-            >
-              <IoMdArrowDropdown className="mr-1" /> View More
-            </motion.button>
-          )}
+          <div ref={sentinelRef} className="h-10">
+            {loading && start > 0 && (
+              <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+            )}
+          </div>
         </motion.div>
       )}
       {isDialogOpen && <NewUpload onClose={handleClose} onNewWork={handleNewWork} />}

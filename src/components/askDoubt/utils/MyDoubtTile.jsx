@@ -140,7 +140,7 @@ export default function MyDoubtTile({ data }) {
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
                                     exit={{ opacity: 0, height: 0 }}
-                                    transition={{ duration: 0.3 }}
+                                    transition={{ duration: 0.1 }}
                                 >
                                     <div className="flex justify-between items-center mt-4 mobile:max-tablet:flex-col">
                                         <div className="font-normal px-2 w-full">

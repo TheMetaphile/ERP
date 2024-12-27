@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import ClassWorkTile from './ClassWorkTile';
 import NewUpload from './NewUpload';
 import axios from "axios";
@@ -24,6 +24,8 @@ function ClassWork() {
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
+    const sentinelRef = useRef(null);
+
 
     const uniqueClasses = Array.from(new Set(authState.subject ? authState.subject.map(subj => subj.class) : []));
 
@@ -74,23 +76,33 @@ function ClassWork() {
             setStart(0);
             setDetails([]);
             setAllDataFetched(false);
-            fetchClassWork();
+            setLoading(false);
         }
-    }, [authState.accessToken, selectedSubject, selectedSection, selectedClass]);
+    }, [selectedSubject, selectedSection, selectedClass]);
+
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
+
+    useEffect(() => {
+        if (start === 0 && details.length === 0 && !allDataFetched && !loading) {
+            fetchClassWork();
+        }
+    }, [start, details, allDataFetched, loading]);
 
     useEffect(() => {
         if (start !== 0) {
             fetchClassWork();
         }
-    }, [start, selectedSubject, selectedSection, selectedClass]);
+    }, [start]);
 
 
     const fetchClassWork = async () => {
         if (!selectedClass || !selectedSection || !selectedSubject) return;
+        if (loading || allDataFetched) return;
 
         console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
         setLoading(true);
@@ -129,6 +141,28 @@ function ClassWork() {
         visible: { y: 0, opacity: 1, transition: { duration: 0.5 } }
     };
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
 
     return (
         <motion.div
@@ -250,16 +284,11 @@ function ClassWork() {
                     variants={containerVariants}
                 >
                     <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
-                    {!allDataFetched && (
-                        <motion.button
-                            className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center w-full'
-                            onClick={handleViewMore}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            View More
-                        </motion.button>
-                    )}
+                    <div ref={sentinelRef} className="h-10">
+                        {loading && start > 0 && (
+                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                        )}
+                    </div>
                 </motion.div>
             )}
 

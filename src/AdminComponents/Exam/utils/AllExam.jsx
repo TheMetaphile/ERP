@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import NewExam from "./NewExam";
 import axios from 'axios'
 import AuthContext from "../../../Context/AuthContext";
@@ -18,44 +18,54 @@ export default function AllExam() {
     const [selectedClass, setSelectedClass] = useState("");
     const [loading, setLoading] = useState(false);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(4);
+    const end = 2;
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const sentinelRef = useRef(null);
 
     const togglePopUp = () => {
         setPopUp(!popUp);
     };
     const addExam = (newExam) => {
-        console.log(newExam.class, selectedClass, newExam,typeof(newExam.class),typeof(selectedClass));
-    
+        console.log(newExam.class, selectedClass, newExam, typeof (newExam.class), typeof (selectedClass));
+
         if (newExam.class === selectedClass) {
             console.log('sadf')
-            const schedule=newExam.schedule;
-            schedule.forEach(value=>{value.class=newExam.class,value.stream=newExam.stream,value.term=newExam.term});
+            const schedule = newExam.schedule;
+            schedule.forEach(value => { value.class = newExam.class, value.stream = newExam.stream, value.term = newExam.term });
 
-                console.log(schedule,'flat ')
-                setExams([...exams, ...schedule]);
-                // console.log([...exams, newExamEntry], 'Added new exam');
-            
+            console.log(schedule, 'flat ')
+            setExams([...exams, ...schedule]);
+            // console.log([...exams, newExamEntry], 'Added new exam');
+
         }
-    
+
         togglePopUp();
     };
 
     useEffect(() => {
-        if (authState.accessToken) {
+        setStart(0);
+        setExams([]);
+        setAllDataFetched(false);
+        setLoading(false);
+    }, [selectedClass]);
+
+    useEffect(() => {
+        if (start === 0 && exams.length === 0 && !allDataFetched && !loading) {
             fetchExam();
         }
-    }, [authState.accessToken, selectedClass]);
+    }, [start, exams, allDataFetched, loading]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
     useEffect(() => {
         if (start !== 0) {
             fetchExam();
         }
-    }, [start, selectedClass]);
+    }, [start]);
 
     const deleteExam = async (index) => {
         const examToDelete = exams[index];
@@ -88,6 +98,8 @@ export default function AllExam() {
 
 
     const fetchExam = async () => {
+        if (loading || allDataFetched) return;
+
         setLoading(true);
         try {
             const response = await axios.post(`${BASE_URL_Exam}/fetchExams`, {
@@ -115,13 +127,12 @@ export default function AllExam() {
                     setAllDataFetched(true);
                 }
                 setExams(prevData => [...prevData, ...flattenedExams]);
-                setLoading(false);
-
             }
         }
         catch (error) {
-            setLoading(false);
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -177,11 +188,30 @@ export default function AllExam() {
     };
 
     const handleClassChange = (e) => {
-        setStart(0);
-        setAllDataFetched(false);
-        setExams([]);
         setSelectedClass(e.target.value);
     };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
 
     const filteredExams = selectedClass ? exams.filter(exam => exam.class === selectedClass) : exams;
 
@@ -416,17 +446,11 @@ export default function AllExam() {
                                     ))
                                 )}
                             </tbody>
-                            {!allDataFetched && (
-                                <motion.h1
-                                    className="text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center"
-                                    onClick={handleViewMore}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ duration: 0.5, delay: 0.4 }}
-                                >
-                                    View More
-                                </motion.h1>
-                            )}
+                            <div ref={sentinelRef} className="h-10">
+                                {loading && start > 0 && (
+                                    <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                                )}
+                            </div>
                         </table>
                     )}
                 </div>

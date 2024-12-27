@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
@@ -22,14 +22,14 @@ const getSessions = () => {
 
 const Transactions = ({ transactions }) => {
     const { authState } = useContext(AuthContext);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState('');
     const [data, setData] = useState([]);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(5);
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [clickedIndex, setClickedIndex] = useState(null);
-
+    const sentinelRef = useRef(null);
     const session = getSessions();
     const [selectedSession, setSelectedSession] = useState(session[0]);
 
@@ -42,18 +42,30 @@ const Transactions = ({ transactions }) => {
     };
 
     const handleStatusChange = (event) => {
-        setAllDataFetched(false);
-        setData([]);
         setStart(0);
+        setData([]);
+        setLoading(false);
+        setAllDataFetched(false);
         setStatus(event.target.value);
     };
 
     useEffect(() => {
-        fetchTransaction();
-    }, [authState.accessToken, status, selectedSession]);
+        setStart(0);
+        setData([]);
+        setAllDataFetched(false);
+        setLoading(false);
+    }, [status, selectedSession]);
+
+    useEffect(() => {
+        if (start === 0 && data.length === 0 && !allDataFetched && !loading) {
+            fetchTransaction();
+        }
+    }, [start, data, allDataFetched, loading]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
 
     useEffect(() => {
@@ -63,6 +75,8 @@ const Transactions = ({ transactions }) => {
     }, [start]);
 
     const fetchTransaction = async () => {
+        if (loading || allDataFetched) return;
+
         setLoading(true);
         console.log(start, 'start', end, 'end', status)
 
@@ -89,6 +103,29 @@ const Transactions = ({ transactions }) => {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
 
     return (
         <div>
@@ -154,13 +191,11 @@ const Transactions = ({ transactions }) => {
                             </motion.tr>
 
                         ))}
-                        {!allDataFetched && (
-                            <tr>
-                                <td colSpan="8" className="text-center">
-                                    <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer' onClick={handleViewMore}>View More</h1>
-                                </td>
-                            </tr>
-                        )}
+                        <div ref={sentinelRef} className="h-10">
+                            {loading && start > 0 && (
+                                <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                            )}
+                        </div>
                     </tbody>
                 </table>
             </div>

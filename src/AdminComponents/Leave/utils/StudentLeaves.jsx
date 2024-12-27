@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import Loading from "../../../LoadingScreen/Loading.jsx";
 import AuthContext from "../../../Context/AuthContext.jsx";
 import axios from "axios";
@@ -8,15 +8,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function StudentLeaves() {
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
   const { authState } = useContext(AuthContext);
   const [expanded, setExpanded] = useState(null);
   const [start, setStart] = useState(0);
-  const [end, setEnd] = useState(4);
+  const end = 4;
   const [allDataFetched, setAllDataFetched] = useState(false);
   const [status, setStatus] = useState('Pending');
+  const sentinelRef = useRef(null);
+
 
   const handleClick = (index) => {
     setExpanded(expanded === index ? null : index);
@@ -27,16 +29,22 @@ export default function StudentLeaves() {
   };
 
   useEffect(() => {
-
     setStart(0);
     setData([]);
-    setLoading(true);
-    fetchUserData();
+    setAllDataFetched(false);
+    setLoading(false);
+  }, [status]);
 
-  }, [authState.accessToken, status]);
+  useEffect(() => {
+    if (start === 0 && data.length === 0 && !allDataFetched && !loading) {
+      fetchUserData();
+    }
+  }, [start, data, allDataFetched, loading]);
 
   const handleViewMore = () => {
-    setStart(prevStart => prevStart + end);
+    if (!allDataFetched && !loading) {
+      setStart((prevStart) => prevStart + end);
+    }
   };
 
   useEffect(() => {
@@ -46,6 +54,8 @@ export default function StudentLeaves() {
   }, [start]);
 
   const fetchUserData = async () => {
+    if (loading || allDataFetched) return;
+    setLoading(true);
     try {
       const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/admin?start=${start}&end=${end}&status=${status}`, {
         headers: {
@@ -62,9 +72,9 @@ export default function StudentLeaves() {
         setAllDataFetched(true);
       }
       setData(prevData => [...prevData, ...response.data.StudentsLeaves]);
-      setLoading(false);
     } catch (err) {
       setError(err);
+    } finally {
       setLoading(false);
     }
   };
@@ -84,6 +94,27 @@ export default function StudentLeaves() {
     visible: { opacity: 1, y: 0 }
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !allDataFetched && !loading) {
+          console.log("Fetching more data...");
+          handleViewMore();
+        }
+      },
+      { root: null, rootMargin: '0px', threshold: 1.0 }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+      if (sentinelRef.current) {
+        observer.unobserve(sentinelRef.current);
+      }
+    };
+  }, [allDataFetched, loading]);
 
   return (
     <motion.div
@@ -147,16 +178,11 @@ export default function StudentLeaves() {
               </div>
             </motion.div>
           ))}
-          {!allDataFetched && (
-            <motion.button
-              className='text-purple-500 hover:text-purple-700 mt-4 cursor-pointer text-center font-medium'
-              onClick={handleViewMore}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              View More
-            </motion.button>
-          )}
+          <div ref={sentinelRef} className="h-10">
+            {loading && start > 0 && (
+              <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+            )}
+          </div>
         </>
       )}
     </motion.div>

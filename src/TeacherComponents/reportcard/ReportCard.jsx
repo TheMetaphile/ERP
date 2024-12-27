@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import { motion } from 'framer-motion';
@@ -14,16 +14,23 @@ function ReportCard() {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(10);
+    const [end, setEnd] = useState(1);
     const [allDataFetched, setAllDataFetched] = useState(false);
+    const sentinelRef = useRef(null);
 
-    useEffect(() => {
-        fetchStudents();
-    }, [authState.accessToken]);
 
     const handleViewMore = () => {
-        setStart(prevStart => prevStart + end);
+        if (!allDataFetched && !loading) {
+            setStart((prevStart) => prevStart + end);
+        }
     };
+
+    useEffect(() => {
+        if (start === 0 && students.length === 0 && !allDataFetched && !loading) {
+            fetchStudents();
+        }
+    }, [start, students, allDataFetched, loading]);
+
 
     useEffect(() => {
         if (start !== 0) {
@@ -32,6 +39,7 @@ function ReportCard() {
     }, [start]);
 
     const fetchStudents = async () => {
+        if (loading || allDataFetched) return;
         setLoading(true);
         try {
             const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
@@ -61,6 +69,30 @@ function ReportCard() {
         hidden: { opacity: 0 },
         visible: { opacity: 1, transition: { duration: 0.5 } }
     };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !allDataFetched && !loading) {
+                    console.log("Fetching more data...");
+                    handleViewMore();
+
+                }
+            },
+            { root: null, rootMargin: '0px', threshold: 1.0 }
+        );
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
+        return () => {
+            if (sentinelRef.current) {
+                observer.unobserve(sentinelRef.current);
+            }
+        };
+    }, [allDataFetched, loading]);
+
 
     const tableVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -132,22 +164,11 @@ function ReportCard() {
                             </tbody>
                         </table>
                     </div>
-                    {!allDataFetched && (
-                        <motion.div
-                            className="text-center py-4"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-
-                            <button
-                                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300"
-
-                                onClick={handleViewMore}
-                            >
-                                View More
-                            </button>
-                        </motion.div>
-                    )}
+                    <div ref={sentinelRef} className="h-10">
+                        {loading && start > 0 && (
+                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                        )}
+                    </div>
                 </motion.div>
             )}
         </motion.div>
