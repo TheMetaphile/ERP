@@ -9,7 +9,7 @@ import 'package:untitled/utils/utils.dart';
 
 class SubstituteSubjectTeacherApi{
 
-  static String baseUrl="https://philester.com";
+  static String baseUrl="https://school.bdssl.edu.in/api";
 
   Future<Map<String,dynamic>> absenteeismFetch(String accessToken) async
   {

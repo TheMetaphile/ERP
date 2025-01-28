@@ -66,7 +66,7 @@ class Doubt {
 //   }
 // }
 class DoubtsApi {
-  static const String baseUrl = 'https://philester.com';
+  static const String baseUrl = 'https://school.bdssl.edu.in/api';
 
   Future<List<Doubt>> fetchTeacherDoubts(String accessToken, String Class, String section, String subject,String status, int start) async {
     if (Class == "" && section == "" && subject == "") {

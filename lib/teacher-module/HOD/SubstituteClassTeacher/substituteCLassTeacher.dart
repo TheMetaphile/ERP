@@ -146,7 +146,7 @@ class _SubstituteClassTeacherState extends State<SubstituteClassTeacher> {
       }
 
       var response = await http.post(
-        Uri.parse('https://philester.com/search/teacher'),
+        Uri.parse('https://school.bdssl.edu.in/api/search/teacher'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           "accessToken": accessToken,
@@ -201,7 +201,7 @@ class _SubstituteClassTeacherState extends State<SubstituteClassTeacher> {
       }
 
       final response = await http.post(
-        Uri.parse('https://philester.com/classTeacherSubstitute/create'),
+        Uri.parse('https://school.bdssl.edu.in/api/classTeacherSubstitute/create'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

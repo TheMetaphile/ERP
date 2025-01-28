@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 class StudentFeesAPi{
-      static const String _baseUrl = "https://philester.com";
+      static const String _baseUrl = "https://school.bdssl.edu.in/api";
       Future<List<dynamic>>  fetchStudentData(String accessToken,int start) async {
             String calculateCurrentSession() {
               DateTime now = DateTime.now();

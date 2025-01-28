@@ -7,7 +7,7 @@ import 'package:untitled/utils/utils.dart';
 
 class WeeklyPlannerHodAPI{
 
-  static String baseUrl = "https://philester.com";
+  static String baseUrl = "https://school.bdssl.edu.in/api";
 
 
   Future<Map<String,dynamic>> fetchPlan(String accessToken,String Class,String section,String subject,String startingDate)

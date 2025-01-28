@@ -1186,7 +1186,7 @@ class _SearchWidgetState extends State<SearchWidget> {
       }
 
       var response = await http.post(
-        Uri.parse('https://philester.com/search/student'),
+        Uri.parse('https://school.bdssl.edu.in/api/search/student'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           "accessToken": accessToken,

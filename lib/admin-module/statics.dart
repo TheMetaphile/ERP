@@ -265,7 +265,7 @@ class BarChartWeek extends StatelessWidget {
       tooltipPadding: EdgeInsets.all(0),
       tooltipMargin: 0,
       tooltipRoundedRadius: 12,
-      tooltipBgColor: Colors.transparent,
+      // getTooltipColor: Colors.transparent,
       getTooltipItem: (
           BarChartGroupData group,
           int groupIndex,
@@ -470,7 +470,7 @@ class BarChartMonth extends StatelessWidget {
       tooltipPadding: EdgeInsets.all(0),
       tooltipMargin: 0,
       tooltipRoundedRadius: 12,
-      tooltipBgColor: Colors.transparent,
+      // tooltipBgColor: Colors.transparent,
       getTooltipItem: (
           BarChartGroupData group,
           int groupIndex,
@@ -756,7 +756,7 @@ class BarChartYear extends StatelessWidget {
       tooltipPadding: EdgeInsets.all(0),
       tooltipMargin: 0,
       tooltipRoundedRadius: 12,
-      tooltipBgColor: Colors.transparent,
+      // tooltipBgColor: Colors.transparent,
       getTooltipItem: (
           BarChartGroupData group,
           int groupIndex,

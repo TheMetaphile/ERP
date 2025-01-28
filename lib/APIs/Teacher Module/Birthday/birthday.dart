@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class BirthdayAPI{
-  static const String _baseUrl = 'https://philester.com';
+  static const String _baseUrl = 'https://school.bdssl.edu.in/api';
 
   Future<Map<dynamic,dynamic>> fetchStudentBirthdays(String accessToken,String date) async {
     print(accessToken);

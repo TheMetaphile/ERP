@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class StudentPromotionAPI {
-  String baseUrl = 'https://philester.com';
+  String baseUrl = 'https://school.bdssl.edu.in/api';
   Future<bool> promoteStudents(String accessToken, String Class, String section,List<String> emails) async {
     try {
     String calculateCurrentSession() {

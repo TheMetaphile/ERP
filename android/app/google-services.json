@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "640779355140",
+    "project_id": "erpdemo-7dfd8",
+    "storage_bucket": "erpdemo-7dfd8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640779355140:android:64f055ac2fb09c54316151",
+        "android_client_info": {
+          "package_name": "com.example.student"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsWVwOSgduYtuPgwLjbJlEV8FaOKLywGU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640779355140:android:325fbfb9d8d00960316151",
+        "android_client_info": {
+          "package_name": "com.example.untitled"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsWVwOSgduYtuPgwLjbJlEV8FaOKLywGU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

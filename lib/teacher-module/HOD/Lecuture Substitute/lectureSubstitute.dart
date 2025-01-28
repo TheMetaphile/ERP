@@ -160,7 +160,7 @@ class _LectureSubstituteState extends State<LectureSubstitute> {
       }
 
       var response = await http.post(
-        Uri.parse('https://philester.com/search/teacher'),
+        Uri.parse('https://school.bdssl.edu.in/api/search/teacher'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           "accessToken": accessToken,
@@ -216,7 +216,7 @@ class _LectureSubstituteState extends State<LectureSubstitute> {
       }
 
       final response = await http.post(
-        Uri.parse('https://philester.com/LectureSubstitute/create'),
+        Uri.parse('https://school.bdssl.edu.in/api/LectureSubstitute/create'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -261,7 +261,7 @@ class _LectureSubstituteState extends State<LectureSubstitute> {
     // String day1=day.toLowerCase();
      String day1="wednesday";
       final response = await http.get(
-        Uri.parse('https://philester.com/timetable/fetch/checkAvailability?lecture=$lecture&day=$day1&email=$email'),
+        Uri.parse('https://school.bdssl.edu.in/api/timetable/fetch/checkAvailability?lecture=$lecture&day=$day1&email=$email'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
