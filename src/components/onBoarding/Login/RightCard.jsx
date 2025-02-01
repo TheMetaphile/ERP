@@ -47,7 +47,13 @@ export default function RightCard() {
         setIsSubmitting(true);
         setError('');
         try {
-            const endpoint = rolee === "Teacher-Dashboard" ? "/login/teacher" : rolee === "Sub-Admin" ? "/login/SubAdmin" : rolee === "Admin-Dashboard" ? "/login/admin" : "/login/student";
+            const endpoint =
+                rolee === "Teacher-Dashboard" ? "/login/teacher" :
+                    rolee === "Sub-Admin" ? "/login/SubAdmin" :
+                        rolee === "Admin-Dashboard" ? "/login/admin" :
+                            rolee === "Sup-Admin" ? "/login/SupAdmin" :
+                                "/login/student";
+
             await axios.post(`${BASE_URL_Login}${endpoint}`, {
                 email,
                 password
@@ -237,6 +243,7 @@ export default function RightCard() {
                     <option value="Student-Dashboard">Student</option>
                     <option value="Sub-Admin">Sub Admin</option>
                     <option value="Admin-Dashboard">Admin</option>
+                    <option value="Sup-Admin">Super Admin</option>
                 </select>
             </div>
 

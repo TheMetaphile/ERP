@@ -2,10 +2,14 @@ import { createBrowserRouter } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 import Loading from "./LoadingScreen/Loading.jsx";
 import StudentCard from "./AdminComponents/StudentDetails.jsx";
-import Studentdetailscard from "./TeacherComponents/studentdetailcard.jsx";
-import Detailscard from "./SubAdminComponent/Detailscard.jsx";
-import StudentDoubtsHOD from "./TeacherComponents/HOD/utils/studentDoubt/StudentDoubtsHOD.jsx";
 
+const Studentdetailscard = lazy(() => import("./TeacherComponents/studentdetailcard.jsx"));
+const Detailscard = lazy(() => import("./SubAdminComponent/Detailscard.jsx"));
+const StudentDoubtsHOD = lazy(() => import("./TeacherComponents/HOD/utils/studentDoubt/StudentDoubtsHOD.jsx"));
+const SuperAdminDashboard = lazy(() => import("./SuperAdminComponents/Dashboard.jsx"));
+const SuperAdminHome = lazy(() => import("./SuperAdminComponents/Home/Home.jsx"));
+const SuperAdminProfile = lazy(() => import("./SuperAdminComponents/profile/AdminProfile.jsx"));
+const AllAdmins = lazy(() => import("./SuperAdminComponents/Admins/AllAdmins.jsx"));
 const AllReportHOD = lazy(() => import("./TeacherComponents/HOD/utils/result/AllReportHOD.jsx"));
 const ReportCardHOD = lazy(() => import("./TeacherComponents/HOD/utils/result/ReportCardHOD.jsx"));
 const AllPreviousDetailsAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/AllDetailsAdmin.jsx"));
@@ -1482,7 +1486,34 @@ const router = createBrowserRouter([
           <TakeLeaveSubAdmin /></SuspenseWrapper>
       },
     ]
-  }
+  },
+  {
+    path: "/Sup-Admin",
+    element: (
+      // <PrivateRoute>
+      <SuspenseWrapper fallback={Loading}>
+        <SuperAdminDashboard />
+      </SuspenseWrapper>
+      // </PrivateRoute>
+    ),
+    children: [
+      {
+        path: "",
+        element: <SuspenseWrapper fallback={Loading}>
+          <SuperAdminHome /></SuspenseWrapper>,
+      },
+      {
+        path: '/Sup-Admin/Profile',
+        element: <SuspenseWrapper fallback={Loading}>
+          <SuperAdminProfile /></SuspenseWrapper>
+      },
+      {
+        path: '/Sup-Admin/Admins',
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllAdmins /></SuspenseWrapper>
+      },
+    ]
+  },
 
 ]);
 
