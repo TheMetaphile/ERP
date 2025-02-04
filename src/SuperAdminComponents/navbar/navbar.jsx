@@ -4,15 +4,38 @@ import { FaBars, FaUserCircle, FaBell } from 'react-icons/fa';
 import AuthContext from '../../Context/AuthContext';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { BASE_URL_Login } from '../../Config';
+import axios from 'axios';
 
 export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { logout, authState, setAuthState } = useContext(AuthContext);
-  const [branches, setBranches] = useState(["Haridwar", "Modinagar"]);
+  const [branches, setBranches] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState(
-    authState?.userDetails?.branch || branches[0]
+    authState?.userDetails?.branch || ""
   );
+
+  // Fetch branches from the API
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL_Login}/branch/fetch/all`, {
+          headers: {
+            'Authorization': `Bearer ${authState.accessToken}`
+          }
+        });
+        setBranches(response.data);
+        if (!selectedBranch && response.data.length > 0) {
+          setSelectedBranch(response.data[0].branch);
+        }
+      } catch (error) {
+        console.error("Error fetching branches:", error);
+      }
+    };
+
+    fetchBranches();
+  }, []);
 
   const handleBranchChange = (e) => {
     const selectedValue = e.target.value;
@@ -20,7 +43,6 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
       addBranch();
     } else {
       setSelectedBranch(selectedValue);
-
       setAuthState((prevState) => ({
         ...prevState,
         userDetails: {
@@ -31,11 +53,29 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
     }
   };
 
-  const addBranch = () => {
+  const addBranch = async () => {
     const newBranch = prompt("Enter new branch name:");
-    if (newBranch && !branches.includes(newBranch)) {
-      setBranches([...branches, newBranch]);
-      setSelectedBranch(newBranch);
+    if (newBranch && !branches.some((b) => b.branch === newBranch)) {
+      try {
+        const response = await axios.post(
+          `${BASE_URL_Login}/branch/create`,
+          { branch: newBranch },
+          {
+            headers: {
+              Authorization: `Bearer ${authState.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        setBranches([...branches, response.data.branch]);
+        setSelectedBranch(response.data.branch.branch);
+      } catch (error) {
+        console.error("Error adding branch:", error);
+        alert(error.response?.data?.message || "Failed to add branch");
+      }
+    } else {
+      alert("Branch already exists or is invalid!");
     }
   };
 
@@ -81,8 +121,8 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
               >
                 <option>Branch </option>
                 {branches.map((branch, index) => (
-                  <option key={index} value={branch}>
-                    {branch}
+                  <option key={branch._id} value={branch.branch}>
+                    {branch.branch}
                   </option>
                 ))}
                 <option value="add_new">➕ Add New Branch</option>

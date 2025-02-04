@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import { BASE_URL_Login } from "../../../Config";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaArrowUp } from "react-icons/fa";
 
@@ -93,6 +93,7 @@ export default function AllTeachers({ additionalDataAdmin, onNew }) {
 
     return (
         <div className="w-full overflow-x-auto rounded-lg">
+            <ToastContainer />
             <motion.table
                 className="min-w-full bg-white border border-gray-300 rounded-lg"
                 variants={tableVariants}

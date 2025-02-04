@@ -3,6 +3,7 @@ import AllTeachers from "./utils/AllTeachers";
 import { motion } from 'framer-motion';
 import CurrentAdmin from "./utils/CurrentAdmin";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function AllAdmins() {
   const [additionalDataAdmin, setAdditionalDataAdmin] = useState([]);
@@ -28,6 +29,9 @@ export default function AllAdmins() {
         >Current Admins
         </motion.h1>
 
+        <Link to="/Sup-Admin/AddTeachers" className="bg-purple-200 p-2 block text-center rounded-md">
+          Register
+        </Link>
       </div>
       <CurrentAdmin onNewWork={handleDemotedAdmin} additionalDataNonAdmin={additionalDataNonAdmin} />
 

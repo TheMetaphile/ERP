@@ -4,7 +4,6 @@ import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import { BASE_URL_Login } from "../../../Config";
 import { motion } from 'framer-motion';
-import { ToastContainer } from "react-toastify";
 
 export default function CurrentAdmin({ onNewWork, additionalDataNonAdmin }) {
   const { authState } = useContext(AuthContext);
@@ -57,7 +56,7 @@ export default function CurrentAdmin({ onNewWork, additionalDataNonAdmin }) {
 
   return (
     <div className="w-full overflow-x-auto rounded-lg pt-2">
-      <ToastContainer />
+
       <motion.table
         className="min-w-full bg-white border border-gray-300 rounded-lg"
         variants={tableVariants}

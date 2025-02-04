@@ -3,6 +3,7 @@ import React, { lazy, Suspense } from "react";
 import Loading from "./LoadingScreen/Loading.jsx";
 import StudentCard from "./AdminComponents/StudentDetails.jsx";
 
+const SupAdminTeacherRegister = lazy(() => import("./SuperAdminComponents/Teacher/SupAdminTeacherRegister.jsx"));
 const Studentdetailscard = lazy(() => import("./TeacherComponents/studentdetailcard.jsx"));
 const Detailscard = lazy(() => import("./SubAdminComponent/Detailscard.jsx"));
 const StudentDoubtsHOD = lazy(() => import("./TeacherComponents/HOD/utils/studentDoubt/StudentDoubtsHOD.jsx"));
@@ -1511,6 +1512,12 @@ const router = createBrowserRouter([
         path: '/Sup-Admin/Admins',
         element: <SuspenseWrapper fallback={Loading}>
           <AllAdmins /></SuspenseWrapper>
+      },
+      {
+        path: "/Sup-Admin/AddTeachers",
+        element: <SuspenseWrapper fallback={Loading}>
+          <SupAdminTeacherRegister /></SuspenseWrapper>,
+        children: []
       },
     ]
   },
