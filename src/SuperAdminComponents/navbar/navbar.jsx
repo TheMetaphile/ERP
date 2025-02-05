@@ -6,39 +6,22 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { BASE_URL_Login } from '../../Config';
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 
 export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { logout, authState, setAuthState } = useContext(AuthContext);
-  const [branches, setBranches] = useState([]);
-  const [selectedBranch, setSelectedBranch] = useState(
-    authState?.userDetails?.branch || ""
-  );
+  const [branches, setBranches] = useState(authState?.userDetails?.branches || []);
+  const [selectedBranch, setSelectedBranch] = useState(authState?.userDetails?.branch || "");
 
-  // Fetch branches from the API
-  useEffect(() => {
-    const fetchBranches = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL_Login}/branch/fetch/all`, {
-          headers: {
-            'Authorization': `Bearer ${authState.accessToken}`
-          }
-        });
-        setBranches(response.data);
-        if (!selectedBranch && response.data.length > 0) {
-          setSelectedBranch(response.data[0].branch);
-        }
-      } catch (error) {
-        console.error("Error fetching branches:", error);
-      }
-    };
-
-    fetchBranches();
-  }, []);
+  const hashData = (data) => {
+    return CryptoJS.AES.encrypt(JSON.stringify(data), 'secret-key').toString();
+  };
 
   const handleBranchChange = (e) => {
     const selectedValue = e.target.value;
+
     if (selectedValue === "add_new") {
       addBranch();
     } else {
@@ -55,11 +38,12 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
 
   const addBranch = async () => {
     const newBranch = prompt("Enter new branch name:");
-    if (newBranch && !branches.some((b) => b.branch === newBranch)) {
+    console.log(authState.userDetails)
+    if (newBranch && !branches.includes(newBranch)) {
       try {
         const response = await axios.post(
           `${BASE_URL_Login}/branch/create`,
-          { branch: newBranch },
+          { branch: newBranch, _id: authState.userDetails._id },
           {
             headers: {
               Authorization: `Bearer ${authState.accessToken}`,
@@ -68,8 +52,23 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
           }
         );
 
-        setBranches([...branches, response.data.branch]);
-        setSelectedBranch(response.data.branch.branch);
+        setBranches((prevBranches) => [...prevBranches, newBranch]);
+        setSelectedBranch(newBranch);
+        alert("After adding a branch it is recommended to Re-Login");
+
+        setAuthState((prevState) => ({
+          ...prevState,
+          userDetails: {
+            ...prevState.userDetails,
+            branch: newBranch,
+            branches: [...prevState.userDetails.branches, newBranch],
+          },
+
+        }));
+
+
+
+
       } catch (error) {
         console.error("Error adding branch:", error);
         alert(error.response?.data?.message || "Failed to add branch");
@@ -78,6 +77,12 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
       alert("Branch already exists or is invalid!");
     }
   };
+
+  useEffect(() => {
+    const hashedAuthState = hashData(authState);
+    localStorage.setItem('authState', hashedAuthState);
+  }, [authState])
+
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -88,14 +93,14 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
       setIsOpen(false);
     }
   };
-  console.log(authState.userDetails)
+
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  console.log(authState.userDetails)
+
   return (
     <div className="flex flex-grow mobile:max-tablet:flex-col h-full mt-1 px-2 py-3 mb-2 mobile:max-tablet:mb-0 items-center justify-between bg-gradient-to-r from-purple-200 to-purple-100 rounded-lg shadow-md mobile:max-tablet:gap-2">
       <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-0 mobile:max-tablet:justify-center">
@@ -119,14 +124,15 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
                 onChange={handleBranchChange}
                 className="border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight"
               >
-                <option>Branch </option>
+                <option>Select Branch</option>
                 {branches.map((branch, index) => (
-                  <option key={branch._id} value={branch.branch}>
-                    {branch.branch}
+                  <option key={index} value={branch}>
+                    {branch}
                   </option>
                 ))}
                 <option value="add_new">➕ Add New Branch</option>
               </select>
+
             </div>
 
             <div className="relative" ref={dropdownRef}>

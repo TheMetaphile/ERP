@@ -93,7 +93,7 @@ export default function AllTeachers({ additionalDataAdmin, onNew }) {
 
     return (
         <div className="w-full overflow-x-auto rounded-lg">
-            <ToastContainer />
+            
             <motion.table
                 className="min-w-full bg-white border border-gray-300 rounded-lg"
                 variants={tableVariants}

@@ -1,10 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { userimg } from "./images/index.js";
 import { IoCameraOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import JSZip from 'jszip';
-
+import { BASE_URL_Login } from "../../../Config.js";
+import axios from "axios";
+import AuthContext from "../../../Context/AuthContext.jsx";
+import { toast } from "react-toastify";
+import { MdOutlineSecurity } from "react-icons/md";
+import { CgProfile } from "react-icons/cg";
+import { RxCrossCircled } from "react-icons/rx";
 export default function TeacherCard({ userData }) {
+    const { authState } = useContext(AuthContext);
     const [isCapturing, setIsCapturing] = useState(false);
     const [capturedImages, setCapturedImages] = useState([]);
     const [mediaStream, setMediaStream] = useState(null);
@@ -12,6 +19,11 @@ export default function TeacherCard({ userData }) {
     const videoRef = useRef(null);
     const [progress, setProgress] = useState(0);
     const [showPercentage, setShowPercentage] = useState(false);
+    const [permission, setPermission] = useState(false);
+    const [selectedPermissions, setSelectedPermissions] = useState([]);
+    const [selectedUserId, setSelectedUserId] = useState(null);
+
+    const availablePermissions = ["Exam", "Attendance", "Homework", "Fee Management", "Student Details"];
 
     const handleChatClick = async (index) => {
         setActiveUser(index);
@@ -97,6 +109,62 @@ export default function TeacherCard({ userData }) {
         });
     };
 
+    const handlePermission = async (userId) => {
+        setSelectedUserId(userId);
+
+        try {
+            const response = await axios.get(`${BASE_URL_Login}/permission/fetch/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
+                }
+            });
+
+            if (response.status === 200) {
+                const extractedPermissions = response.data.permissions.map(p => p.permission);
+                setSelectedPermissions(extractedPermissions);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.error || "Error while getting Permission")
+            console.error("Error fetching permissions:", error);
+        }
+        setPermission(true);
+
+    };
+
+    const handlePermissionChange = (perm) => {
+        setSelectedPermissions((prevPermissions) =>
+            prevPermissions.includes(perm)
+                ? prevPermissions.filter((p) => p !== perm)
+                : [...prevPermissions, perm]
+        );
+    };
+
+    const handleSave = async () => {
+        try {
+            const formattedPermissions = selectedPermissions.map(perm => ({ permission: perm }));
+            const response = await axios.post(`${BASE_URL_Login}/permission/update/${selectedUserId}`,
+                { permissions: formattedPermissions },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`
+                    }
+                }
+            );
+
+            if (response.status === 200) {
+                toast.success('Permissions updated successfully!');
+                setPermission(false);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.error || "Failed to update Permission")
+            console.error("Error updating permissions:", error);
+        }
+    };
+
+    const handleCancelPermission = () => {
+        setPermission(false);
+    };
+
     return (
         <div className="mx-3">
             {userData.map((user, index) => (
@@ -114,15 +182,23 @@ export default function TeacherCard({ userData }) {
                         ))}
                     </div>
                     <div className="flex mt-4 gap-2 mb-4 mobile:max-tablet:mb-0">
+
+                        <div className="flex gap-2 items-center bg-blue-300 mx-2 justify-evenly rounded-md px-2 cursor-pointer"
+                            onClick={() => handlePermission(user._id)}>
+                            <MdOutlineSecurity className="text-white" />
+                            <button className="text-white">Permissions</button>
+                        </div>
+
                         <Link to={{
                             pathname: "/Admin-Dashboard/Teachers/profile",
                             search: `?employeeId=${user.employeeId}&name=${user.name}&profileLogo=${user.profileLogo}`,
                         }}>
-                            <div className="flex gap-2 items-center bg-blue-300 mx-2 w-30 justify-evenly rounded-md px-4 ">
+                            <div className="flex gap-2 items-center bg-blue-300 mx-2 justify-evenly rounded-md px-2 cursor-pointer">
+                                <CgProfile className="text-white" />
                                 <button className="text-white p-1">Profile</button>
                             </div>
                         </Link>
-                        <div className="flex gap-2 items-center bg-blue-300 mx-2 w-28 justify-evenly rounded-md px-2 cursor-pointer" onClick={() => handleChatClick(index)}>
+                        <div className="flex gap-2 items-center bg-blue-300 mx-2 justify-evenly rounded-md px-2 cursor-pointer" onClick={() => handleChatClick(index)}>
                             <IoCameraOutline className="text-white" />
                             <button className="text-white">Camera</button>
                         </div>
@@ -163,6 +239,65 @@ export default function TeacherCard({ userData }) {
                     </div>
                 </div>
             )}
+
+            {permission && (
+                <div className="mt-2 fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center p-4">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all">
+                        <div className="border-b p-6">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-2xl font-bold text-purple-600">Manage Permissions</h2>
+                            </div>
+                            <p className=" mt-2">Select the permissions you want to enable</p>
+                        </div>
+
+                        <div className="p-6">
+                            <div className="space-y-4">
+                                {availablePermissions.map((perm) => (
+                                    <label
+                                        key={perm}
+                                        className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer group"
+                                    >
+                                        <div className="relative flex items-center justify-center">
+                                            <input
+                                                type="checkbox"
+                                                value={perm}
+                                                checked={selectedPermissions.includes(perm)}
+                                                onChange={() => handlePermissionChange(perm)}
+                                                className="appearance-none w-6 h-6 border-2 rounded-md border-gray-300 checked:border-purple-500 checked:bg-purple-500 transition-all duration-200"
+                                            />
+                                            <span className="absolute text-white font-bold pointer-events-none opacity-0 transform scale-0 transition-all duration-200 checked:opacity-100 checked:scale-100">
+                                                ✓
+                                            </span>
+                                        </div>
+                                        <span className="ml-3 text-gray-700 font-medium group-hover:text-gray-900">
+                                            {perm}
+                                        </span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="border-t p-6 bg-gray-50 rounded-b-xl">
+                            <div className="flex gap-4 justify-end">
+                                <button
+                                    onClick={handleCancelPermission}
+                                    className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors font-medium"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleSave}
+                                    className="px-4 py-2 rounded-lg bg-purple-500 text-white hover:bg-purple-600 transition-colors font-medium"
+                                >
+                                    Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
         </div>
     );
 }

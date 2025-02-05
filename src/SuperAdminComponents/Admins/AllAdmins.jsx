@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import CurrentAdmin from "./utils/CurrentAdmin";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AllAdmins() {
   const [additionalDataAdmin, setAdditionalDataAdmin] = useState([]);
