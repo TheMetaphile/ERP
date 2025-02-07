@@ -63,7 +63,7 @@ export default function StudentAttendance() {
 
                 console.log(Class, Section, Month, year)
 
-                const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/admin?month=${month}&year=${year}&class=${Class}&section=${Section}`, {
+                const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/admin?month=${Month}&year=${year}&class=${Class}&section=${Section}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

@@ -14,13 +14,17 @@ export default function Notice(props) {
   const [end, setEnd] = useState(5);
 
 
-  const getCurrentSession = () => {
+  function getCurrentSession() {
     const now = new Date();
     const currentYear = now.getFullYear();
-    const nextYear = (currentYear + 1).toString().slice(-2);
-    return `${currentYear}-${nextYear}`;
-  };
+    const currentMonth = now.getMonth();
 
+    if (currentMonth >= 3) {
+      return `${currentYear}-${(currentYear + 1).toString().slice(-2)}`;
+    } else {
+      return `${currentYear - 1}-${currentYear.toString().slice(-2)}`;
+    }
+  }
   const session = getCurrentSession();
 
   useEffect(() => {

@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 import Loading from "./LoadingScreen/Loading.jsx";
 import StudentCard from "./AdminComponents/StudentDetails.jsx";
+import CompleteFee from "./AdminComponents/fee/CompleteFee/CompleteFee.jsx";
 
 const SupAdminTeacherRegister = lazy(() => import("./SuperAdminComponents/Teacher/SupAdminTeacherRegister.jsx"));
 const Studentdetailscard = lazy(() => import("./TeacherComponents/studentdetailcard.jsx"));
@@ -565,7 +566,12 @@ const router = createBrowserRouter([
                 element: <SuspenseWrapper fallback={Loading}><PreviousFeeDetailAdmin /></SuspenseWrapper>
               }
             ]
-          }
+          },
+          {
+            path: '/Admin-Dashboard/StudentsFee/CompleteFee',
+            element: <SuspenseWrapper fallback={Loading}>
+              <CompleteFee /></SuspenseWrapper>
+          },
         ]
       },
 

@@ -58,7 +58,7 @@ export default function TodayClassWork() {
 
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL_ClassWork}/classwork/fetch/student?class=${authState.userDetails.currentClass}&month=${new Date().getMonth() + 1}&year=${authState.userDetails.academicYear}&section=${authState.userDetails.section}&subject=${selectedSubject}&start=${start}&end=${end}`, {
+      const response = await axios.get(`${BASE_URL_ClassWork}/classwork/fetch/student?class=${authState.userDetails.currentClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${authState.userDetails.section}&subject=${selectedSubject}&start=${start}&end=${end}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`,
         }
