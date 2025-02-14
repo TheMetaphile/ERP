@@ -5,7 +5,7 @@ import Loading from '../../../LoadingScreen/Loading';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import CreateDiscount from './CreateDiscount';
-import { MdDeleteForever, MdAdd, MdRemove, MdSchool, MdRefresh } from "react-icons/md";
+import { MdDeleteForever, MdAdd, MdRemove, MdSchool } from "react-icons/md";
 import { BASE_URL_Fee } from '../../../Config';
 import { motion } from "framer-motion";
 
@@ -50,7 +50,7 @@ function FeeDiscountSubAdmin() {
 
     useEffect(() => {
         if (start === 0 && details.length === 0 && !allDataFetched && !loading) {
-            fetchDiscount();
+            // fetchDiscount();
         }
     }, [start, details, allDataFetched, loading]);
 
@@ -61,35 +61,35 @@ function FeeDiscountSubAdmin() {
     };
 
 
-    useEffect(() => {
-        if (start !== 0) {
-            fetchDiscount();
-        }
-    }, [start]);
+    // useEffect(() => {
+    //     if (start !== 0) {
+    //         fetchDiscount();
+    //     }
+    // }, [start]);
 
-    const fetchDiscount = async () => {
-        if (loading || allDataFetched) return;
-        setLoading(true);
-        try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/discount?end=${end}&start=${start}&class=${selectedClass}`, {
-                headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
-                }
-            });
-            if (response.status === 200) {
-                const data = response.data.length;
-                if (data < end) {
-                    toast.success('All data fetched');
-                    setAllDataFetched(true);
-                }
-                setDetails(prevData => [...prevData, ...response.data]);
-                setLoading(false);
-            }
-        } catch (err) {
-            console.log(err);
-            setLoading(false);
-        }
-    }
+    // const fetchDiscount = async () => {
+    //     if (loading || allDataFetched) return;
+    //     setLoading(true);
+    //     try {
+    //         const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/discount?end=${end}&start=${start}&class=${selectedClass}`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${authState.accessToken}`
+    //             }
+    //         });
+    //         if (response.status === 200) {
+    //             const data = response.data.length;
+    //             if (data < end) {
+    //                 toast.success('All data fetched');
+    //                 setAllDataFetched(true);
+    //             }
+    //             setDetails(prevData => [...prevData, ...response.data]);
+    //             setLoading(false);
+    //         }
+    //     } catch (err) {
+    //         console.log(err);
+    //         setLoading(false);
+    //     }
+    // }
 
     const handleDelete = async (index, id) => {
         try {

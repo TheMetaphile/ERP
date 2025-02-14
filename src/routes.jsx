@@ -1439,7 +1439,7 @@ const router = createBrowserRouter([
               {
                 path: '',
                 element: <SuspenseWrapper fallback={Loading}>
-                  <FeeDetailsSubAdmin /></SuspenseWrapper>
+                  <FeeDetail /></SuspenseWrapper>
               },
               {
                 path: ':id',

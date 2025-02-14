@@ -6,33 +6,24 @@ import TransactionField from "./TransactionField.jsx";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL_Fee } from "../../../../Config.js";
-import { useLocation, useParams } from "react-router-dom";
 
-export default function TransactionRow() {
+export default function TransactionRow({selectedStudent}) {
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false)
-    const { id } = useParams();
-    const location = useLocation();
 
-    const useQuery = () => {
-        return new URLSearchParams(location.search);
-      }
-    
-      const query = useQuery();
-      const session = query.get('session');
+
+
     useEffect(() => {
-        if (authState.accessToken) {
+        if (authState.accessToken && selectedStudent) {
             setLoading(true);
             fetchTransaction();
-        } else {
-            toast.error('No access token available');
         }
-    }, [authState.accessToken]);
+    }, [authState.accessToken,selectedStudent]);
 
     const fetchTransaction = async () => {
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/particularStudent/transactions?email=${id}&session=${session}`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/particularStudent/transactions?email=${selectedStudent.email}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }

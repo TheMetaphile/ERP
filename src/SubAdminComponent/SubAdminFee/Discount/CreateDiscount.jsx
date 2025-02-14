@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Fee } from '../../../Config';
+import { BASE_URL_Fee, BASE_URL_Login } from '../../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import StudentCard from '../StudentFee/utils/ProfileCard';
+import ApplicableDiscounts from '../StudentFee/utils/ApplicableDiscounts';
 
 function CreateDiscount({ selectedSession }) {
     const { authState } = useContext(AuthContext);
@@ -14,6 +16,7 @@ function CreateDiscount({ selectedSession }) {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const inputRef = useRef(null);
+    const [selectedDiscount, setSelectedDiscount] = useState(null);
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -48,24 +51,29 @@ function CreateDiscount({ selectedSession }) {
         }
     }, [selectedSuggestion]);
 
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
 
     useEffect(() => {
         if (temp) {
             const searchStudent = async () => {
                 try {
-                    const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/students/list?searchString=${temp}`, {
-                        headers: {
-                            Authorization: `Bearer ${authState.accessToken}`
-                        }
-                    });
-                    const StudentEmails = response.data.Students.map(Student => ({
-                        name: Student.name,
-                        profileLink: Student.profileLink,
-                        email: Student.email
+                    const response = await axios.post(`${BASE_URL_Login}/search/student`, {
+                        accessToken: authState.accessToken,
+                        searchString: temp,
+                        start: 0,
+                        end: 30
+                    })
+                    console.log(response.data)
+                    const teacherEmails = response.data.Teachers.map(teacher => ({
+                        _id: teacher._id,
+                        "currentClass": teacher.currentClass,
+                        "fatherName": teacher.fatherName,
+                        "rollNumber": teacher.rollNumber,
+                        "section": teacher.section,
+                        email: teacher.email,
+                        profileLink: teacher.profileLink,
+                        name: teacher.name
                     }));
-                    setSuggestions(StudentEmails);
+                    setSuggestions(teacherEmails);
                 } catch (error) {
                     console.error("Error searching for Students:", error);
                     toast.error("Error searching for students");
@@ -79,12 +87,11 @@ function CreateDiscount({ selectedSession }) {
         e.preventDefault();
         setIsLoading(true);
         try {
+            console.log(selectedDiscount);
             const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discount`,
                 {
-                    email: selectedSuggestion.email,
-                    amount: Number(amount),
-                    session: selectedSession,
-                    date: new Date()
+                    studentId: selectedSuggestion._id,
+                    discountId: selectedDiscount
                 },
                 {
                     headers: {
@@ -95,8 +102,6 @@ function CreateDiscount({ selectedSession }) {
 
             if (response.status === 200) {
                 toast.success('Discount created successfully');
-                setSelectedSuggestion({});
-                setAmount('');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -140,18 +145,16 @@ function CreateDiscount({ selectedSession }) {
                         </ul>
                     )}
                 </div>
-                <div>
-                    <label className="block text-gray-700 font-medium mb-2">Discount Amount</label>
-                    <input
-                        type="number"
-                        name="amount"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        required
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="Enter discount amount"
+                {
+                    selectedSuggestion && <StudentCard currentClass={selectedSuggestion.currentClass} email={selectedSuggestion.email}
+                        fatherName={selectedSuggestion.fatherName}
+                        name={selectedSuggestion.name}
+                        profileLink={selectedSuggestion.profileLink}
+                        rollNumber={selectedSuggestion.rollNumber}
+                        section={selectedSuggestion.section}
                     />
-                </div>
+                }
+                <ApplicableDiscounts selectedStudent={selectedSuggestion} selectedDiscount={selectedDiscount}  setSelectedDiscount={setSelectedDiscount}/>
             </div>
             <div className="flex justify-end">
                 <button

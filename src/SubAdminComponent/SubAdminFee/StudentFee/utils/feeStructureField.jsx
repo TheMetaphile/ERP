@@ -3,21 +3,17 @@ import useRazorpay from "react-razorpay";
 import axios from 'axios';
 import AuthContext from "../../../../Context/AuthContext";
 import { BASE_URL_Fee } from "../../../../Config";
-import { useLocation, useParams } from "react-router-dom";
-import FeeStructureHeader from "../../../../components/fees/utils/feestructureheader";
-import QuarterFeeHeader from "../../../../components/fees/utils/QuarterFeeHeader";
 import { motion } from 'framer-motion';
 import { FaMoneyBillWave, FaCalendarAlt, FaPercent, FaCheckCircle, FaCreditCard, FaUser, FaChalkboardTeacher, FaSchool } from 'react-icons/fa';
 
-export default function FeeStructureField({ fees, selectedOption, setFees }) {
+export default function FeeStructureField({ fees, selectedOption, setFees ,Student}) {
     const [Razorpay] = useRazorpay();
     const { authState } = useContext(AuthContext);
     const [mode, setMode] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [docId, setDocId] = useState('');
-    const location = useLocation();
-    const { id } = useParams();
+    const  id  = Student.email;
     const [clickedIndex, setClickedIndex] = useState(null);
 
 
@@ -25,14 +21,10 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
         setClickedIndex(index);
     };
 
-    const useQuery = () => {
-        return new URLSearchParams(location.search);
-    }
 
-    const query = useQuery();
-    const Class = query.get('Class');
-    const Name = query.get('name');
-    const Section = query.get('section');
+    const Class = Student.currentClass;
+    const Name = Student.name;
+    const Section =Student.section;
 
     const handleModeChange = (e, student, index) => {
         setMode(e.target.value);
@@ -205,9 +197,17 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
         <motion.thead  className="bg-purple-200 rounded-t-lg w-full">
             <tr className="w-full flex">
                 <th className="flex-1 p-4 text-center">Month</th>
-                <th className="flex-1 p-4 text-center">Amount</th>
-                <th className="flex-1 p-4 text-center">Discount</th>
+                <th className="flex-1 p-4 text-center">Total Fee</th>
+                <th className="flex-1 p-4 text-center">Paid Fee</th>
+                <th className="flex-1 p-4 text-center">Applied Discount (Manual + Category)</th>
+
+                <th className="flex-1 p-4 text-center">Pending Fee</th>
+                <th className="flex-1 p-4 text-center">Payment Method</th>
+                <th className="flex-1 p-4 text-center">Doc Id</th>
                 <th className="flex-1 p-4 text-center">Status</th>
+                <th className="flex-1 p-4 text-center">Discount</th>
+                <th className="flex-1 p-4 text-center">Amount</th>
+
                 <th className="flex-1 p-4 text-center">Payment Mode</th>
             </tr>
         </motion.thead>
@@ -218,18 +218,24 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
             <tr className="w-full flex">
                 <th className="flex-1 p-4 text-center">Months</th>
                 <th className="flex-1 p-4 text-center">Quarter</th>
-                <th className="flex-1 p-4 text-center">Amount</th>
-                <th className="flex-1 p-4 text-center">Discount</th>
+                <th className="flex-1 p-4 text-center">Total Fee</th>
+                <th className="flex-1 p-4 text-center">Paid Fee</th>
+                <th className="flex-1 p-4 text-center">Applied Discount</th>
+
                 <th className="flex-1 p-4 text-center">Pending Fee</th>
+                <th className="flex-1 p-4 text-center">Payment Method</th>
+                <th className="flex-1 p-4 text-center">Doc Id</th>
                 <th className="flex-1 p-4 text-center">Status</th>
+                <th className="flex-1 p-4 text-center">Discount</th>
+                <th className="flex-1 p-4 text-center">Amount</th>
+
                 <th className="flex-1 p-4 text-center">Payment Mode</th>
             </tr>
         </motion.thead>
     );
 
-    const Cell = ({ icon: Icon, content }) => (
+    const Cell = ({ content }) => (
         <td className="flex-1 p-4 text-center flex items-center justify-center">
-            {/* <Icon className="mr-2 text-blue-500" /> */}
             <span>{content}</span>
         </td>
     );
@@ -240,7 +246,6 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="container mx-auto p-4 "
         >
             {selectedOption === 'monthlyfee' && (
                 <>
@@ -254,8 +259,18 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
                         >
                             <tr className="w-full flex">
                                 <Cell icon={FaCalendarAlt} content={data.month} />
-                                <Cell icon={FaMoneyBillWave} content={data.amount} />
+                                <Cell icon={FaMoneyBillWave} content={data.totalFee} />
+                                <Cell icon={FaMoneyBillWave} content={data.paidFee} />
+                                <Cell icon={FaMoneyBillWave} content={data.manualDiscount + data.categoryDiscount} />
+                                <Cell icon={FaMoneyBillWave} content={data.totalFee - data.paidFee - data.manualDiscount - data.categoryDiscount} />
+
+
+                                <Cell icon={FaMoneyBillWave} content={data.totalFee} />
+                                <Cell icon={FaMoneyBillWave} content={data.totalFee} />
+                                <Cell icon={FaMoneyBillWave} content={data.totalFee} />
                                 <Cell icon={FaPercent} content={data.discountApplied} />
+
+
                                 <Cell icon={FaCheckCircle} content={data.status} />
                                 <td className="flex-1 p-4 text-center">
                                     {data.status === 'Submitted' ? (
@@ -294,9 +309,17 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
                             <tr className="w-full flex">
                                 <Cell icon={FaCalendarAlt} content={data.months.join(', ')} />
                                 <Cell icon={FaMoneyBillWave} content={data.quarter} />
-                                <Cell icon={FaMoneyBillWave} content={data.amount} />
-                                <Cell icon={FaPercent} content={data.discountApplied} />
-                                <Cell icon={FaMoneyBillWave} content={data.pendingFee} />
+                                <Cell icon={FaMoneyBillWave} content={data.totalFee} />
+                                <Cell icon={FaPercent} content={data.paidFee} />
+                                <Cell icon={FaPercent} content={data.manualDiscount + data.categoryDiscount} />
+                                <Cell icon={FaMoneyBillWave} content={data.totalFee - data.paidFee - data.manualDiscount - data.categoryDiscount} />
+
+
+                                <Cell icon={FaPercent} content={data.paidFee} />
+                                <Cell icon={FaPercent} content={data.paidFee} />
+                                <Cell icon={FaPercent} content={data.paidFee} />
+                                <Cell icon={FaPercent} content={data.paidFee} />
+
                                 <Cell icon={FaCheckCircle} content={data.status} />
                                 <td className="flex-1 p-4 text-center">
                                     {data.status === 'Submitted' ? (
