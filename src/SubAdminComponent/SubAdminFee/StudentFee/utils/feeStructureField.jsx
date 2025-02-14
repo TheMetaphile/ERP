@@ -5,15 +5,17 @@ import AuthContext from "../../../../Context/AuthContext";
 import { BASE_URL_Fee } from "../../../../Config";
 import { motion } from 'framer-motion';
 import { FaMoneyBillWave, FaCalendarAlt, FaPercent, FaCheckCircle, FaCreditCard, FaUser, FaChalkboardTeacher, FaSchool } from 'react-icons/fa';
+import FeePaymentRow from "./FeePaymentRow";
+import FeePaymentRowQuarter from "./FeePaymentRowQuarter";
 
-export default function FeeStructureField({ fees, selectedOption, setFees ,Student}) {
+export default function FeeStructureField({ fees, selectedOption, setFees, Student }) {
     const [Razorpay] = useRazorpay();
     const { authState } = useContext(AuthContext);
     const [mode, setMode] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [docId, setDocId] = useState('');
-    const  id  = Student.email;
+    const id = Student.email;
     const [clickedIndex, setClickedIndex] = useState(null);
 
 
@@ -24,7 +26,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees ,Stude
 
     const Class = Student.currentClass;
     const Name = Student.name;
-    const Section =Student.section;
+    const Section = Student.section;
 
     const handleModeChange = (e, student, index) => {
         setMode(e.target.value);
@@ -194,42 +196,38 @@ export default function FeeStructureField({ fees, selectedOption, setFees ,Stude
     };
 
     const FeeStructureHeader = () => (
-        <motion.thead  className="bg-purple-200 rounded-t-lg w-full">
-            <tr className="w-full flex">
-                <th className="flex-1 p-4 text-center">Month</th>
-                <th className="flex-1 p-4 text-center">Total Fee</th>
-                <th className="flex-1 p-4 text-center">Paid Fee</th>
-                <th className="flex-1 p-4 text-center">Applied Discount (Manual + Category)</th>
-
-                <th className="flex-1 p-4 text-center">Pending Fee</th>
-                <th className="flex-1 p-4 text-center">Payment Method</th>
-                <th className="flex-1 p-4 text-center">Doc Id</th>
-                <th className="flex-1 p-4 text-center">Status</th>
-                <th className="flex-1 p-4 text-center">Discount</th>
-                <th className="flex-1 p-4 text-center">Amount</th>
-
-                <th className="flex-1 p-4 text-center">Payment Mode</th>
+        <motion.thead className="bg-purple-200 rounded-t-lg w-full">
+            <tr>
+                <th scope="col" className="px-3 py-3">Month</th>
+                <th scope="col" className="px-3 py-3">Total Fee</th>
+                <th scope="col" className="px-3 py-3">Paid Fee</th>
+                <th scope="col" className="px-3 py-3">Applied Discount (Manual + Category)</th>
+                <th scope="col" className="px-3 py-3">Pending Fee</th>
+                <th scope="col" className="px-3 py-3">Payment Method</th>
+                <th scope="col" className="px-3 py-3">Doc Id</th>
+                <th scope="col" className="px-3 py-3">Status</th>
+                <th scope="col" className="px-3 py-3 text-center">Discount</th>
+                <th scope="col" className="px-3 py-3 text-center">Amount</th>
+                <th scope="col" className="px-3 py-3">Payment Mode</th>
             </tr>
         </motion.thead>
     );
 
     const QuarterFeeHeader = () => (
         <motion.thead variants={rowVariants} className="bg-purple-200 rounded-t-lg w-full">
-            <tr className="w-full flex">
-                <th className="flex-1 p-4 text-center">Months</th>
-                <th className="flex-1 p-4 text-center">Quarter</th>
-                <th className="flex-1 p-4 text-center">Total Fee</th>
-                <th className="flex-1 p-4 text-center">Paid Fee</th>
-                <th className="flex-1 p-4 text-center">Applied Discount</th>
-
-                <th className="flex-1 p-4 text-center">Pending Fee</th>
-                <th className="flex-1 p-4 text-center">Payment Method</th>
-                <th className="flex-1 p-4 text-center">Doc Id</th>
-                <th className="flex-1 p-4 text-center">Status</th>
-                <th className="flex-1 p-4 text-center">Discount</th>
-                <th className="flex-1 p-4 text-center">Amount</th>
-
-                <th className="flex-1 p-4 text-center">Payment Mode</th>
+            <tr>
+                <th scope="col" className="px-3 py-3">Months</th>
+                <th scope="col" className="px-3 py-3">Quarter</th>
+                <th scope="col" className="px-3 py-3">Total Fee</th>
+                <th scope="col" className="px-3 py-3">Paid Fee</th>
+                <th scope="col" className="px-3 py-3">Applied Discount</th>
+                <th scope="col" className="px-3 py-3">Pending Fee</th>
+                <th scope="col" className="px-3 py-3">Payment Method</th>
+                <th scope="col" className="px-3 py-3">Doc Id</th>
+                <th scope="col" className="px-3 py-3">Status</th>
+                <th scope="col" className="px-3 py-3 text-center">Discount</th>
+                <th scope="col" className="px-3 py-3 text-center">Amount</th>
+                <th scope="col" className="px-3 py-3">Payment Mode</th>
             </tr>
         </motion.thead>
     );
@@ -251,48 +249,53 @@ export default function FeeStructureField({ fees, selectedOption, setFees ,Stude
                 <>
                     <FeeStructureHeader />
                     {fees.monthlyStatus.map((data, index) => (
-                        <motion.tbody
-                            key={index}
-                            variants={rowVariants}
-                            className={`w-full rounded-lg shadow-md my-2 ${clickedIndex === index ? 'bg-blue-100' : 'bg-white'}`}
-                            onClick={() => handleClick(index)}
-                        >
-                            <tr className="w-full flex">
-                                <Cell icon={FaCalendarAlt} content={data.month} />
-                                <Cell icon={FaMoneyBillWave} content={data.totalFee} />
-                                <Cell icon={FaMoneyBillWave} content={data.paidFee} />
-                                <Cell icon={FaMoneyBillWave} content={data.manualDiscount + data.categoryDiscount} />
-                                <Cell icon={FaMoneyBillWave} content={data.totalFee - data.paidFee - data.manualDiscount - data.categoryDiscount} />
+                        <tbody>
+                            <FeePaymentRow student={data} key={index} />
+                        </tbody>
+                        
+                        // <motion.tbody
+                        //     key={index}
+                        //     variants={rowVariants}
+                        //     className={`w-full rounded-lg shadow-md my-2 ${clickedIndex === index ? 'bg-blue-100' : 'bg-white'}`}
+                        //     onClick={() => handleClick(index)}
+                        // >
+
+                        //   <tr className="w-full flex">
+                        //         <Cell icon={FaCalendarAlt} content={data.month} />
+                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee} />
+                        //         <Cell icon={FaMoneyBillWave} content={data.paidFee} />
+                        //         <Cell icon={FaMoneyBillWave} content={data.manualDiscount + data.categoryDiscount} />
+                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee - data.paidFee - data.manualDiscount - data.categoryDiscount} />
 
 
-                                <Cell icon={FaMoneyBillWave} content={data.totalFee} />
-                                <Cell icon={FaMoneyBillWave} content={data.totalFee} />
-                                <Cell icon={FaMoneyBillWave} content={data.totalFee} />
-                                <Cell icon={FaPercent} content={data.discountApplied} />
+                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee} />
+                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee} />
+                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee} />
+                        //         <Cell icon={FaPercent} content={data.discountApplied} />
 
 
-                                <Cell icon={FaCheckCircle} content={data.status} />
-                                <td className="flex-1 p-4 text-center">
-                                    {data.status === 'Submitted' ? (
-                                        <span className="text-green-500 font-semibold">Paid</span>
-                                    ) : (
-                                        <motion.select
-                                            whileHover={{ scale: 1.05 }}
-                                            className="w-full p-2 rounded-full bg-gradient-to-r from-blue-200 to-purple-300 text-black"
-                                            value={mode}
-                                            onChange={(e) => handleModeChange(e, data)}
-                                        >
-                                            <option value="none">Select Payment Mode</option>
-                                            <option value="Cash">Cash</option>
-                                            <option value="Online">Online</option>
-                                            <option value="RTGS">RTGS</option>
-                                            <option value="Cheque">Cheque</option>
-                                            <option value="Demand Draft">Demand Draft</option>
-                                        </motion.select>
-                                    )}
-                                </td>
-                            </tr>
-                        </motion.tbody>
+                        //         <Cell icon={FaCheckCircle} content={data.status} />
+                        //         <td className="flex-1 p-4 text-center">
+                        //             {data.status === 'Submitted' ? (
+                        //                 <span className="text-green-500 font-semibold">Paid</span>
+                        //             ) : (
+                        //                 <motion.select
+                        //                     whileHover={{ scale: 1.05 }}
+                        //                     className="w-full p-2 rounded-full bg-gradient-to-r from-blue-200 to-purple-300 text-black"
+                        //                     value={mode}
+                        //                     onChange={(e) => handleModeChange(e, data)}
+                        //                 >
+                        //                     <option value="none">Select Payment Mode</option>
+                        //                     <option value="Cash">Cash</option>
+                        //                     <option value="Online">Online</option>
+                        //                     <option value="RTGS">RTGS</option>
+                        //                     <option value="Cheque">Cheque</option>
+                        //                     <option value="Demand Draft">Demand Draft</option>
+                        //                 </motion.select>
+                        //             )}
+                        //         </td>
+                        //     </tr> 
+                        // </motion.tbody>
                     ))}
                 </>
             )}
@@ -301,47 +304,50 @@ export default function FeeStructureField({ fees, selectedOption, setFees ,Stude
                 <>
                     <QuarterFeeHeader />
                     {fees.quarterlyStatus.map((data, index) => (
-                        <motion.tbody
-                            key={index}
-                            variants={rowVariants}
-                            className="w-full rounded-lg shadow-md my-2 bg-white"
-                        >
-                            <tr className="w-full flex">
-                                <Cell icon={FaCalendarAlt} content={data.months.join(', ')} />
-                                <Cell icon={FaMoneyBillWave} content={data.quarter} />
-                                <Cell icon={FaMoneyBillWave} content={data.totalFee} />
-                                <Cell icon={FaPercent} content={data.paidFee} />
-                                <Cell icon={FaPercent} content={data.manualDiscount + data.categoryDiscount} />
-                                <Cell icon={FaMoneyBillWave} content={data.totalFee - data.paidFee - data.manualDiscount - data.categoryDiscount} />
+                        <tbody>
+                            <FeePaymentRowQuarter student={data} key={index} />
+                        </tbody>
+                        // <motion.tbody
+                        //     key={index}
+                        //     variants={rowVariants}
+                        //     className="w-full rounded-lg shadow-md my-2 bg-white"
+                        // >
+                        //     <tr className="w-full flex">
+                        //         <Cell icon={FaCalendarAlt} content={data.months.join(', ')} />
+                        //         <Cell icon={FaMoneyBillWave} content={data.quarter} />
+                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee} />
+                        //         <Cell icon={FaPercent} content={data.paidFee} />
+                        //         <Cell icon={FaPercent} content={data.manualDiscount + data.categoryDiscount} />
+                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee - data.paidFee - data.manualDiscount - data.categoryDiscount} />
 
 
-                                <Cell icon={FaPercent} content={data.paidFee} />
-                                <Cell icon={FaPercent} content={data.paidFee} />
-                                <Cell icon={FaPercent} content={data.paidFee} />
-                                <Cell icon={FaPercent} content={data.paidFee} />
+                        //         <Cell icon={FaPercent} content={data.paidFee} />
+                        //         <Cell icon={FaPercent} content={data.paidFee} />
+                        //         <Cell icon={FaPercent} content={data.paidFee} />
+                        //         <Cell icon={FaPercent} content={data.paidFee} />
 
-                                <Cell icon={FaCheckCircle} content={data.status} />
-                                <td className="flex-1 p-4 text-center">
-                                    {data.status === 'Submitted' ? (
-                                        <span className="text-green-500 font-semibold">Paid</span>
-                                    ) : (
-                                        <motion.select
-                                            whileHover={{ scale: 1.05 }}
-                                            className="w-full p-2 rounded-full bg-gradient-to-r from-blue-200 to-purple-300 text-black"
-                                            value={mode}
-                                            onChange={(e) => handleModeChange(e, data)}
-                                        >
-                                            <option value="none">Select Payment Mode</option>
-                                            <option value="Cash">Cash</option>
-                                            <option value="Online">Online</option>
-                                            <option value="RTGS">RTGS</option>
-                                            <option value="Cheque">Cheque</option>
-                                            <option value="Demand Draft">Demand Draft</option>
-                                        </motion.select>
-                                    )}
-                                </td>
-                            </tr>
-                        </motion.tbody>
+                        //         <Cell icon={FaCheckCircle} content={data.status} />
+                        //         <td className="flex-1 p-4 text-center">
+                        //             {data.status === 'Submitted' ? (
+                        //                 <span className="text-green-500 font-semibold">Paid</span>
+                        //             ) : (
+                        //                 <motion.select
+                        //                     whileHover={{ scale: 1.05 }}
+                        //                     className="w-full p-2 rounded-full bg-gradient-to-r from-blue-200 to-purple-300 text-black"
+                        //                     value={mode}
+                        //                     onChange={(e) => handleModeChange(e, data)}
+                        //                 >
+                        //                     <option value="none">Select Payment Mode</option>
+                        //                     <option value="Cash">Cash</option>
+                        //                     <option value="Online">Online</option>
+                        //                     <option value="RTGS">RTGS</option>
+                        //                     <option value="Cheque">Cheque</option>
+                        //                     <option value="Demand Draft">Demand Draft</option>
+                        //                 </motion.select>
+                        //             )}
+                        //         </td>
+                        //     </tr>
+                        // </motion.tbody>
                     ))}
                 </>
             )}
