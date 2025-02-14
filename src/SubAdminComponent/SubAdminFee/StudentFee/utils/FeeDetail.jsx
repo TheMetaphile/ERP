@@ -85,7 +85,7 @@ export default function FeeDetail() {
 
                     console.log("API response fees:", response.data);
                     setFee(response.data);
-                    
+
 
                 }
                 catch (error) {
@@ -144,11 +144,14 @@ export default function FeeDetail() {
                     section={selectedStudent.section} />
                 </>
             }
-            <ApplicableDiscounts 
-            selectedStudent={selectedStudent}
-              selectedDiscount={selectedDiscount} 
-              setSelectedDiscount={setSelectedDiscount}
-              />
+            {
+                selectedStudent && <ApplicableDiscounts
+                    selectedStudent={selectedStudent}
+                    selectedDiscount={selectedDiscount}
+                    setSelectedDiscount={setSelectedDiscount}
+                />
+            }
+
             <StudentDetails selectedOption={selectedOption} fees={Fee} setFees={setFee} selectedStudent={selectedStudent} />
             <h1 className="mb-2 text-2xl font-normal mobile:max-tablet:text-lg">Transaction History</h1>
             <TransactionRow selectedStudent={selectedStudent} />

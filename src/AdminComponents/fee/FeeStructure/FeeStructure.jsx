@@ -7,7 +7,7 @@ import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL_Login } from '../../../Config';
 import axios from 'axios';
 import DiscountRow from './DiscountRow';
-import GlobalDiscount from '../CompleteFee/GlobalDiscount';
+import GlobalDiscount from '../DiscountCategories/GlobalDiscount';
 import { MdAdd, MdRemove } from 'react-icons/md';
 
 const getSessions = () => {
@@ -24,35 +24,9 @@ const getSessions = () => {
 }
 
 function FeeStructure() {
-    const [discounts, setDiscounts] = useState([]);
-    const { authState } = useContext(AuthContext);
+
     const session = getSessions();
     const [selectedSession, setSelectedSession] = useState(session[0] || "");
-    const [majorDiscountStructure, setShowMajorDiscountStructure] = useState(false);
-
-    const handleToggleMajorDiscountStructure = () => {
-        setShowMajorDiscountStructure(!majorDiscountStructure);
-    };
-
-    useEffect(() => {
-        const fetchDiscounts = async () => {
-            try {
-                const response = await axios.get(`${BASE_URL_Login}/fee/apply/fetch/discountCategory`, {
-                    headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
-                    },
-                });
-                setDiscounts(response.data.discounts);
-            } catch (error) {
-                console.error("Failed to fetch discounts", error);
-                setDiscounts([]);
-            }
-        };
-
-        if (authState.accessToken) {
-            fetchDiscounts();
-        }
-    }, [authState.accessToken]);
 
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
@@ -68,21 +42,7 @@ function FeeStructure() {
     ];
 
 
-    const handleDeleteDiscount = async (discountId) => {
-        try {
-            const response = await axios.delete(`${BASE_URL_Login}/fee/apply/delete/discountCategory/${discountId}`, {
-                headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
-                },
-            });
 
-            toast.success('Deleted Successfully');
-            setDiscounts(discounts.filter((discount) => discount._id !== discountId));
-        } catch (error) {
-            console.error("Failed to delete discount", error);
-            toast.error("Failed to delete discount.");
-        }
-    };
 
     return (
         <div className="flex flex-col px-3 mobile:max-tablet:px-0 overflow-auto items-start mt-2 mb-3 no-scrollbar">
@@ -120,28 +80,7 @@ function FeeStructure() {
                 </table>
             </div>
 
-            <div className='overflow-auto w-full rounded-md mt-2'>
-                <div className='flex justify-between px-2'>
-                    <h1 className="text-2xl p-2 mobile:max-tablet:text-lg">Available Discounts</h1>
-                    <button
-                        className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${majorDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'}`}
-                        onClick={handleToggleMajorDiscountStructure}
-                    >
-                        {majorDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Bulk Discount Add</>}
-                    </button>
-                    {majorDiscountStructure && (
-                        <GlobalDiscount />
-                    )}
-                </div>
-                <table className="w-full mt-3 border rounded-lg shadow-lg border-gray-300">
-                    <Header headings={['Amount', 'Category', 'Type', 'Given By', 'Title', 'Duration', 'Permission', 'Action']} />
-                    <tbody className="bg-white divide-y divide-gray-200 last:rounded-b-lg last:border-b-gray-300">
-                        {discounts.map((discount) => (
-                            <DiscountRow key={discount._id} discount={discount} handleDeleteDiscount={handleDeleteDiscount} />
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+
         </div>
     );
 

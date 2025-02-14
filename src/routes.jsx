@@ -3,6 +3,7 @@ import React, { lazy, Suspense } from "react";
 import Loading from "./LoadingScreen/Loading.jsx";
 import StudentCard from "./AdminComponents/StudentDetails.jsx";
 import CompleteFee from "./AdminComponents/fee/CompleteFee/CompleteFee.jsx";
+import CreateCategory from "./AdminComponents/fee/DiscountCategories/CreateCategory.jsx";
 
 const SupAdminTeacherRegister = lazy(() => import("./SuperAdminComponents/Teacher/SupAdminTeacherRegister.jsx"));
 const Studentdetailscard = lazy(() => import("./TeacherComponents/studentdetailcard.jsx"));
@@ -534,6 +535,11 @@ const router = createBrowserRouter([
             path: '/Admin-Dashboard/StudentsFee/structure',
             element: <SuspenseWrapper fallback={Loading}>
               <FeeStructure /></SuspenseWrapper>
+          },
+          {
+            path: '/Admin-Dashboard/StudentsFee/discountCategory',
+            element: <SuspenseWrapper fallback={Loading}>
+              <CreateCategory /></SuspenseWrapper>
           },
           {
             path: '/Admin-Dashboard/StudentsFee/feediscount',

@@ -10,9 +10,9 @@ function GlobalDiscount() {
     const { authState } = useContext(AuthContext);
     const [amount, setAmount] = useState('');
     const [discountType, setDiscountType] = useState('fixed');
-    const [discountGivenBy, setDiscountGivenBy] = useState('');
+
     const [duration, setDuration] = useState('');
-    const [permission, setPermission] = useState('');
+
     const [title, setTitle] = useState('staff ward');
     const [isLoading, setIsLoading] = useState(false);
     const [discountTargetType, setDiscountTargetType] = useState('');
@@ -93,26 +93,22 @@ function GlobalDiscount() {
             const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discountCategory`, {
                 amount,
                 discountType,
-                discountGivenBy,
                 title,
                 discountTargetType,
                 classes,
                 selectedWing,
                 duration,
-                permission,
                 session
             }, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`,
                 },
             });
-            if(response.status===200){
+            if (response.status === 200) {
                 toast.success('Discount created successfully!');
                 setAmount('');
                 setDiscountType('fixed');
-                setDiscountGivenBy('');
                 setDuration('');
-                setPermission
                 setTitle('staff ward');
                 setDiscountTargetType('');
                 setClasses([]);
@@ -130,7 +126,7 @@ function GlobalDiscount() {
         <form onSubmit={handleSubmit} className="mt-4 w-full p-6 rounded-lg shadow-md border bg-white">
             <ToastContainer />
             <h2 className="text-2xl font-bold mb-6">Create Discount</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 tablet:max-laptop::grid-cols-3 laptop:grid-cols-4 gap-6 mb-6">
                 <div>
                     <label className="block text-gray-700 font-medium mb-2">Discount Type</label>
                     <select
@@ -165,54 +161,42 @@ function GlobalDiscount() {
                         placeholder={discountType === "percentage" ? "Enter percentage (0-100%)" : "Enter discount amount"}
                     />
                 </div>
-                <div>
-                    <label className="block text-gray-700 font-medium mb-2">Discount Given By</label>
-                    <input
-                        type="text"
-                        name="discountGivenBy"
-                        value={discountGivenBy}
-                        onChange={(e) => setDiscountGivenBy(e.target.value)}
-                        required
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="Enter who gave the discount"
-                    />
-                </div>
+
                 <div>
                     <label className="block text-gray-700 font-medium mb-2">Title</label>
                     <select
                         name="title"
                         value={title}
+                        required
                         onChange={(e) => setTitle(e.target.value)}
                         className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     >
+                        <option value="">Select Title</option>
+
                         <option value="staff ward">Staff Ward</option>
                         <option value="admin discount">Admin Discount</option>
                         <option value="superadmin discount">Superadmin Discount</option>
                     </select>
                 </div>
-                <div>
-                    <label className="block text-gray-700 font-medium mb-2">Permission</label>
-                    <input
-                        type="text"
-                        name="permission"
-                        value={permission}
-                        onChange={(e) => setPermission(e.target.value)}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="Enter permission details"
-                    />
-                </div>
+
                 <div>
                     <label className="block text-gray-700 font-medium mb-2">Duration (Months)</label>
-                    <input
-                        type="number"
+                    <select
                         name="duration"
                         value={duration}
-                        max={12}
-                        min={1}
+                        required
                         onChange={(e) => setDuration(e.target.value)}
                         className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="Enter duration in months"
-                    />
+                    >
+                        <option value="">Enter duration</option>
+                        <option value={-1}>Remainig Session</option>
+                        {
+                            Array.from({ length: 12 }, (_, i) => (
+                                <option key={i} value={i}>{i + 1} month</option>
+                            ))
+                        }
+                    </select>
+
                 </div>
                 <div>
                     <label className="block text-gray-700 font-medium mb-2">Discount Target Type</label>
@@ -221,10 +205,14 @@ function GlobalDiscount() {
                         value={discountTargetType}
                         onChange={(e) => setDiscountTargetType(e.target.value)}
                         className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        required
                     >
                         <option value="">Select Target Type</option>
-                        <option value="particular class">Particular Class</option>
+                        <option value="all">All</option>
                         <option value="wing">Wing</option>
+                        <option value="particular class">Particular Class</option>
+
+
                     </select>
                 </div>
             </div>

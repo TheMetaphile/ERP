@@ -9,14 +9,16 @@ import ApplicableDiscounts from '../StudentFee/utils/ApplicableDiscounts';
 
 function CreateDiscount({ selectedSession }) {
     const { authState } = useContext(AuthContext);
-    const [selectedSuggestion, setSelectedSuggestion] = useState({});
-    const [amount, setAmount] = useState('');
+    const [selectedSuggestion, setSelectedSuggestion] = useState();
+    const [appliedDis, setAppliedDis] = useState(null);
     const [temp, setTemp] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const inputRef = useRef(null);
     const [selectedDiscount, setSelectedDiscount] = useState(null);
+    const [searchInput, setSearchInput] = useState();
+
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -33,7 +35,7 @@ function CreateDiscount({ selectedSession }) {
 
     const handleEmailChange = (event) => {
         const value = event.target.value;
-        setSelectedSuggestion({ ...selectedSuggestion, 'name': value });
+        setSearchInput( value );
         setShowSuggestions(true);
     };
 
@@ -44,12 +46,12 @@ function CreateDiscount({ selectedSession }) {
 
     useEffect(() => {
         const handler = setTimeout(() => {
-            setTemp(selectedSuggestion.name);
+            setTemp(searchInput);
         }, 500);
         return () => {
             clearTimeout(handler);
         }
-    }, [selectedSuggestion]);
+    }, [searchInput]);
 
 
     useEffect(() => {
@@ -88,10 +90,12 @@ function CreateDiscount({ selectedSession }) {
         setIsLoading(true);
         try {
             console.log(selectedDiscount);
+            const date = new Date();
             const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discount`,
                 {
                     studentId: selectedSuggestion._id,
-                    discountId: selectedDiscount
+                    discountId: selectedDiscount,
+                    month: date.getMonth()
                 },
                 {
                     headers: {
@@ -101,7 +105,8 @@ function CreateDiscount({ selectedSession }) {
             );
 
             if (response.status === 200) {
-                toast.success('Discount created successfully');
+                setAppliedDis(selectedDiscount)
+                toast.success(response.data.message);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -121,7 +126,7 @@ function CreateDiscount({ selectedSession }) {
                     <input
                         type="text"
                         name="email"
-                        value={selectedSuggestion.name || ''}
+                        value={searchInput}
                         onChange={handleEmailChange}
                         required
                         className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -146,15 +151,24 @@ function CreateDiscount({ selectedSession }) {
                     )}
                 </div>
                 {
-                    selectedSuggestion && <StudentCard currentClass={selectedSuggestion.currentClass} email={selectedSuggestion.email}
-                        fatherName={selectedSuggestion.fatherName}
-                        name={selectedSuggestion.name}
-                        profileLink={selectedSuggestion.profileLink}
-                        rollNumber={selectedSuggestion.rollNumber}
-                        section={selectedSuggestion.section}
-                    />
+                    selectedSuggestion &&
+                    <>
+                        <StudentCard currentClass={selectedSuggestion.currentClass} email={selectedSuggestion.email}
+                            fatherName={selectedSuggestion.fatherName}
+                            name={selectedSuggestion.name}
+                            profileLink={selectedSuggestion.profileLink}
+                            rollNumber={selectedSuggestion.rollNumber}
+                            section={selectedSuggestion.section}
+                        />
+                        <ApplicableDiscounts
+                            selectedStudent={selectedSuggestion}
+                            selectedDiscount={selectedDiscount}
+                            setSelectedDiscount={setSelectedDiscount}
+                            appliedDis={appliedDis}
+                        />
+                    </>
                 }
-                <ApplicableDiscounts selectedStudent={selectedSuggestion} selectedDiscount={selectedDiscount}  setSelectedDiscount={setSelectedDiscount}/>
+
             </div>
             <div className="flex justify-end">
                 <button
