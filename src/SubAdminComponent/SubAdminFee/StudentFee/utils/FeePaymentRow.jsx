@@ -12,7 +12,7 @@ import logo from '../../../../assets/metaphile_logo.png';
 import Loading from '../../../../LoadingScreen/Loading';
 // import { useFilters } from '../../Students/utils/Filters';
 
-const FeePaymentRow = ({ student, key }) => {
+const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
     const { authState } = useContext(AuthContext);
     const dropdownRef = useRef(null);
     const [Razorpay] = useRazorpay();
@@ -26,7 +26,7 @@ const FeePaymentRow = ({ student, key }) => {
     // const { filters } = useFilters();
     // const { course, Semester, session } = filters;
     const session = '2024-25';
-    console.log(student)
+    console.log(student, selectedStudent, selectedDiscount)
     const payOnline = async (data) => {
         try {
             setLoading(true);
@@ -122,14 +122,33 @@ const FeePaymentRow = ({ student, key }) => {
     }
 
     const parseDate = (dateString) => {
-        const [day, month, yearAndTime] = dateString.split('-');
-        const [year, time] = yearAndTime.split(' ');
-        return new Date(`${year}-${month}-${day}T${time}`).getTime();
+        if (!dateString) return 'Invalid Date';
+
+        const parts = dateString.split(' ');
+        if (parts.length < 1) return 'Invalid Date';
+
+        const dateParts = parts[0].split('-');
+        if (dateParts.length < 3) return 'Invalid Date';
+
+        const timeParts = parts[1]?.split(':') || ['00', '00', '00'];
+
+        const day = parseInt(dateParts[0], 10);
+        const month = parseInt(dateParts[1], 10) - 1;
+        const year = parseInt(dateParts[2], 10);
+        const hours = parseInt(timeParts[0], 10) || 0;
+        const minutes = parseInt(timeParts[1], 10) || 0;
+        const seconds = parseInt(timeParts[2], 10) || 0;
+
+        if (isNaN(day) || isNaN(month) || isNaN(year)) return 'Invalid Date';
+
+        return new Date(year, month, day, hours, minutes, seconds).getTime();
     };
+
 
     const generateReceipt = (data) => {
         const safeValue = (value) => {
             if (!value) return 'N/A';
+
             if (typeof value === 'string' && value.includes('T')) {
                 const date = new Date(value);
                 const day = String(date.getDate()).padStart(2, '0');
@@ -137,6 +156,11 @@ const FeePaymentRow = ({ student, key }) => {
                 const year = date.getFullYear();
                 return `${day}-${month}-${year}`;
             }
+
+            if (typeof value === 'string' && value.match(/^\d{2}-\d{2}-\d{4}/)) {
+                return value.split(' ')[0];
+            }
+
             return String(value);
         };
 
@@ -164,9 +188,6 @@ const FeePaymentRow = ({ student, key }) => {
                 const centerY = 20;
                 const radius = 15;
 
-                doc.setFillColor(255, 255, 255);
-                doc.circle(centerX, centerY, radius, 'F');
-
                 doc.addImage(logo, 'PNG', centerX - radius, centerY - radius, radius * 2, radius * 2);
             }
         } catch (error) {
@@ -180,7 +201,7 @@ const FeePaymentRow = ({ student, key }) => {
         doc.text('OFFICIAL PAYMENT RECEIPT', 105, 20, { align: 'center' });
 
         doc.setFontSize(12);
-        doc.text(safeValue(authState.userDetails.collegeName), 105, 30, { align: 'center' });
+        doc.text(safeValue('Metaphile Public School'), 105, 30, { align: 'center' });
 
         doc.setDrawColor(colors.secondary);
         doc.setLineWidth(0.7);
@@ -193,14 +214,13 @@ const FeePaymentRow = ({ student, key }) => {
 
         const details = [
             { label: 'Receipt Number', value: safeValue(`${parseDate(data.date)}`) },
-            { label: 'Student Name', value: student?.name },
-            { label: 'Father Name', value: student?.fatherName },
-            { label: 'Course', value: student?.course },
-            { label: 'Semester', value: safeValue(data.semester) },
-            { label: 'Type of Fee', value: 'Semester Fee' },
+            { label: 'Student Name', value: selectedStudent.name },
+            { label: 'Father Name', value: selectedStudent.fatherName },
+            { label: 'Class & Section', value: `${selectedStudent.currentClass} - ${selectedStudent.section}` },
             { label: 'Payment Mode', value: data.signature },
-            { label: 'Payment ID', value: safeValue(data.payment_id) },
-            { label: 'Order ID', value: safeValue(data.order_id) },
+            { label: 'Payment ID', value: data.payment_id },
+            { label: 'Order ID', value: data.order_id },
+            { label: 'Installment ID', value: data.installment_id },
             { label: 'Payment Amount (In Digits)', value: safeValue(`${data.amount}`) },
             { label: 'Payment Amount (In Words)', value: convertToWords(data.amount) },
             { label: 'Transaction Date', value: safeValue(data.date) },
@@ -208,6 +228,7 @@ const FeePaymentRow = ({ student, key }) => {
 
         let yPosition = 75;
         details.forEach((detail) => {
+            if (!detail.value) detail.value = 'N/A';
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(10);
             doc.setTextColor(colors.textLight);
@@ -215,7 +236,7 @@ const FeePaymentRow = ({ student, key }) => {
 
             doc.setFont('helvetica', 'normal');
             doc.setTextColor(colors.text);
-            doc.text(detail.value, 110, yPosition);
+            doc.text(String(detail.value), 110, yPosition);
 
             yPosition += 15;
         });
@@ -253,14 +274,14 @@ const FeePaymentRow = ({ student, key }) => {
         try {
             console.log("triggered", data);
             const { token, ...requestData } = data;
-            const response = await axios.post(`${BASE_URL_Login}/payment/backFee`,
-                requestData,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-            console.log(response);
+            // const response = await axios.post(`${BASE_URL_Login}/fee/payment`,
+            //     requestData,
+            //     {
+            //         headers: {
+            //             'Authorization': `Bearer ${token}`
+            //         }
+            //     });
+            // console.log(response);
             if (response.status === 200 && response.data.status === true) {
                 // console.log(data);
 
@@ -276,30 +297,6 @@ const FeePaymentRow = ({ student, key }) => {
             toast.success("Fee payment successfull");
         } catch (error) {
             console.error('Error fetching back fee status:', error);
-            //console.error('Error fetching agents:', error.response.data.error);
-            if (error.response && error.response.data.error === 'You are not permitted to access this data. Please contact the admin') {
-                console.warn('Access denied. Attempting to refresh token...');
-
-                try {
-                    const refreshResponse = await axios.post(`${BASE_URL_Login}/token/newAccessToken`, {
-                        refreshToken: authState.refreshToken,
-                    });
-
-                    const newAccessToken = refreshResponse.data.accessToken;
-                    //console.log("newasdg", newAccessToken)
-                    updateAccessToken(newAccessToken, authState);
-
-                    authState.accessToken = newAccessToken;
-
-                    await SemesterFeePayment();
-                } catch (refreshError) {
-                    //console.error('Failed to refresh token:', refreshError);
-                    toast.error('Session Expired');
-                    logout();
-                }
-            } else {
-                toast.error(error.response.data.error);
-            }
         }
     };
 
@@ -308,26 +305,18 @@ const FeePaymentRow = ({ student, key }) => {
             if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && discount + amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                 try {
                     const datee = formatDateTime();
-                    await SemesterFeePayment({
+                    SemesterFeePayment({
                         token: authState.accessToken,
-                        studentID: student._id,
+                        studentID: selectedStudent._id,
                         amount: amount,
                         date: datee,
-                        payment_status: "Success",
-                        order_id: `Monthly/${parseInt(student.semester)}/${session}`,
+                        status: "Success",
+                        installment_id: `${datee}-${selectedStudent.email}`,
+                        order_id: `${student.month}`,
                         payment_id: `CASH-${Date.now()}`,
                         signature: "Cash",
                         discount: discount,
-                        
-                        
-                        // title: "Semester Fee",
-                        // id: student._id,
-                        // email: student.studentEmailId,
-                        // number: student.studentWhatsAppNo,
-                        // by: authState.userDetails._id,
-                        // course: student.course,
-                        // semester: parseInt(student.semester),
-                        // session: session,
+                        selectedDiscount: selectedDiscount
                     });
 
                 } catch (error) {
@@ -353,23 +342,22 @@ const FeePaymentRow = ({ student, key }) => {
             if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && documentNumber) {
                 if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && discount + amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                     const datee = formatDateTime();
+                    if (selectedDiscount === null) {
+                        toast.error('First select Discount');
+                        return;
+                    }
                     await SemesterFeePayment({
                         token: authState.accessToken,
-                        title: "Semester Fee",
-                        id: student._id,
+                        studentID: selectedStudent._id,
                         amount: amount,
-                        email: email,
-                        number: phone,
                         date: datee,
-                        by: authState.userDetails._id,
                         status: "Success",
-                        order_id: `Semester/${parseInt(student.semester)}/${session}`,
+                        installment_id: `${datee}-${selectedStudent.email}`,
+                        order_id: `${student.month}`,
                         payment_id: `DocNo-${documentNumber}`,
                         signature: paymentMode,
-                        semester: parseInt(student.semester),
-                        session: session,
-                        course: student.course,
-                        discount: discount
+                        discount: discount,
+                        selectedDiscount: selectedDiscount
                     });
                 }
                 else {

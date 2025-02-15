@@ -49,7 +49,7 @@ export default function TransactionRow({selectedStudent}) {
                 <div className='text-center'>No data available</div>
             ) : (
                 <div>
-                    <TransactionField data={data} />
+                    <TransactionField data={data} selectedStudent={selectedStudent}/>
                 </div>
             )}
 

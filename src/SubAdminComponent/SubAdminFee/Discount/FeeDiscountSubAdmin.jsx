@@ -18,7 +18,6 @@ const getSessions = () => {
 }
 
 function FeeDiscountSubAdmin() {
-    const [selectedClass, setSelectedClass] = useState("9th");
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const { authState } = useContext(AuthContext);
@@ -26,71 +25,46 @@ function FeeDiscountSubAdmin() {
     const session = getSessions();
     const [selectedSession, setSelectedSession] = useState(session[0]);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(1);
+    const end = 10
     const [allDataFetched, setAllDataFetched] = useState(false);
     const sentinelRef = useRef(null);
-
-    const handleClassChange = (e) => {
-        setSelectedClass(e.target.value);
-        setShowDiscountStructure(false);
-    };
 
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
     };
 
     useEffect(() => {
-        if (selectedClass !== "" && selectedSession !== "") {
-            setStart(0);
-            setDetails([]);
-            setAllDataFetched(false);
+        if (start === 0) fetchDiscount();
+    }, [start]);
+
+    const fetchDiscount = async () => {
+        if (loading || allDataFetched) return;
+        setLoading(true);
+        try {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/apply/fetch/discount?end=${end}&start=${start}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
+                }
+            });
+
+            if (response.status === 200) {
+                const fetchedData = response.data.list;
+                console.log(fetchedData)
+                if (fetchedData.length < end) {
+                    toast.success('All data fetched');
+                    setAllDataFetched(true);
+                }
+                setDetails(prevData => [...prevData, ...fetchedData]);
+            }
+        } catch (err) {
+            console.error("Error fetching data:", err);
+            toast.error('Error fetching data');
+        } finally {
             setLoading(false);
-        }
-    }, [selectedClass, selectedSession]);
-
-    useEffect(() => {
-        if (start === 0 && details.length === 0 && !allDataFetched && !loading) {
-            // fetchDiscount();
-        }
-    }, [start, details, allDataFetched, loading]);
-
-    const handleViewMore = () => {
-        if (!allDataFetched && !loading) {
-            setStart((prevStart) => prevStart + end);
         }
     };
 
-
-    // useEffect(() => {
-    //     if (start !== 0) {
-    //         fetchDiscount();
-    //     }
-    // }, [start]);
-
-    // const fetchDiscount = async () => {
-    //     if (loading || allDataFetched) return;
-    //     setLoading(true);
-    //     try {
-    //         const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/discount?end=${end}&start=${start}&class=${selectedClass}`, {
-    //             headers: {
-    //                 Authorization: `Bearer ${authState.accessToken}`
-    //             }
-    //         });
-    //         if (response.status === 200) {
-    //             const data = response.data.length;
-    //             if (data < end) {
-    //                 toast.success('All data fetched');
-    //                 setAllDataFetched(true);
-    //             }
-    //             setDetails(prevData => [...prevData, ...response.data]);
-    //             setLoading(false);
-    //         }
-    //     } catch (err) {
-    //         console.log(err);
-    //         setLoading(false);
-    //     }
-    // }
-
+    console.log(details)
     const handleDelete = async (index, id) => {
         try {
             const response = await axios.delete(`${BASE_URL_Fee}/fee/delete/discount?id=${id}`, {
@@ -98,9 +72,9 @@ function FeeDiscountSubAdmin() {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
             });
+
             if (response.status === 200) {
-                const updatedDiscount = details.filter((_, i) => i !== index);
-                setDetails(updatedDiscount);
+                setDetails(prevDetails => prevDetails.filter((_, i) => i !== index));
                 toast.success('Discount Deleted Successfully');
             }
         } catch (error) {
@@ -113,9 +87,7 @@ function FeeDiscountSubAdmin() {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && !allDataFetched && !loading) {
-                    console.log("Fetching more data...");
-                    handleViewMore();
-
+                    setStart(prevStart => prevStart + end);
                 }
             },
             { root: null, rootMargin: '0px', threshold: 1.0 }
@@ -144,12 +116,6 @@ function FeeDiscountSubAdmin() {
                                 <option key={index} value={session}>{session}</option>
                             ))}
                         </select>
-                        <select id="Class" name="Class" value={selectedClass} onChange={handleClassChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
-                            <option value="">Select Class</option>
-                            {["Pre-Nursery", "Nursery", "L.K.G", "U.K.G", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"].map(cls => (
-                                <option key={cls} value={cls}>{cls}</option>
-                            ))}
-                        </select>
                     </div>
 
                     <button className={`flex items-center mobile:max-tablet:justify-start gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'}`} onClick={() => setShowDiscountStructure(!showDiscountStructure)}>
@@ -163,7 +129,7 @@ function FeeDiscountSubAdmin() {
                     <table className="w-full">
                         <thead className="bg-purple-200 whitespace-nowrap">
                             <tr>
-                                {["Roll No.", "Student Name", "Current Class", "Session", "Discount", "By", "Employee ID", "Action"].map(header => (
+                                {["Roll No.", "Student Name", "Class & Section", "Discount Type", "Title", "Amount", "By", "Department", "Date", "Start Month", "End Month", "Action"].map(header => (
                                     <th key={header} className="py-3 px-4 text-left">{header}</th>
                                 ))}
                             </tr>
@@ -180,16 +146,21 @@ function FeeDiscountSubAdmin() {
                                         className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
                                     >
 
-                                        <td className="py-3 px-4">{detail.to.rollNumber}</td>
+                                        <td className="py-3 px-4">{detail.student.rollNumber}</td>
                                         <td className="py-3 px-4 flex items-center">
-                                            <img src={detail.to.profileLink} alt="profile" className="h-8 w-8 rounded-full mr-3 border-2 border-indigo-300" />
-                                            {detail.to.name}
+                                            <img src={detail.student.profileLink} alt="profile" className="h-8 w-8 rounded-full mr-3 border-2 border-indigo-300" />
+                                            {detail.student.name}
                                         </td>
-                                        <td className="py-3 px-4">{detail.to.currentClass}</td>
-                                        <td className="py-3 px-4">{detail.session}</td>
-                                        <td className="py-3 px-4 font-semibold text-green-600">{detail.amount}</td>
+                                        <td className="py-3 px-4">{detail.student.currentClass} {detail.student.section}</td>
+                                        <td className="py-3 px-4">{detail.discount.discountType}</td>
+                                        <td className="py-3 px-4">{detail.discount.title}</td>
+                                        <td className="py-3 px-4 font-semibold text-green-600">{detail.discount.amount}</td>
                                         <td className="py-3 px-4">{detail.by.name}</td>
-                                        <td className="py-3 px-4">{detail.by.employeeId}</td>
+                                        <td className="py-3 px-4">{detail.by.department}</td>
+                                        <td className="py-3 px-4"> {new Date(detail.date).toLocaleDateString('en-GB')}</td>
+                                        <td className="py-3 px-4">{detail.startMonth}</td>
+                                        <td className="py-3 px-4">{detail.endMonth}</td>
+
                                         <td className="py-3 px-4">
                                             <button className="text-red-500 hover:text-red-700 transition duration-200" onClick={() => handleDelete(index, detail._id)}>
                                                 <MdDeleteForever size={20} />

@@ -8,7 +8,7 @@ import { FaMoneyBillWave, FaCalendarAlt, FaPercent, FaCheckCircle, FaCreditCard,
 import FeePaymentRow from "./FeePaymentRow";
 import FeePaymentRowQuarter from "./FeePaymentRowQuarter";
 
-export default function FeeStructureField({ fees, selectedOption, setFees, Student }) {
+export default function FeeStructureField({ fees, selectedOption, setFees, Student, selectedDiscount }) {
     const [Razorpay] = useRazorpay();
     const { authState } = useContext(AuthContext);
     const [mode, setMode] = useState('');
@@ -17,7 +17,6 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
     const [docId, setDocId] = useState('');
     const id = Student.email;
     const [clickedIndex, setClickedIndex] = useState(null);
-
 
     const handleClick = (index) => {
         setClickedIndex(index);
@@ -250,9 +249,9 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                     <FeeStructureHeader />
                     {fees.monthlyStatus.map((data, index) => (
                         <tbody>
-                            <FeePaymentRow student={data} key={index} />
+                            <FeePaymentRow student={data} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
                         </tbody>
-                        
+
                         // <motion.tbody
                         //     key={index}
                         //     variants={rowVariants}
@@ -305,7 +304,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                     <QuarterFeeHeader />
                     {fees.quarterlyStatus.map((data, index) => (
                         <tbody>
-                            <FeePaymentRowQuarter student={data} key={index} />
+                            <FeePaymentRowQuarter student={data} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
                         </tbody>
                         // <motion.tbody
                         //     key={index}

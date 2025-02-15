@@ -12,7 +12,7 @@ import logo from '../../../../assets/metaphile_logo.png';
 import Loading from '../../../../LoadingScreen/Loading';
 // import { useFilters } from '../../Students/utils/Filters';
 
-const FeePaymentRowQuarter = ({ student, key }) => {
+const FeePaymentRowQuarter = ({ student, key, selectedStudent, selectedDiscount }) => {
     const { authState } = useContext(AuthContext);
     const dropdownRef = useRef(null);
     const [Razorpay] = useRazorpay();
@@ -51,30 +51,7 @@ const FeePaymentRowQuarter = ({ student, key }) => {
                 //console.error("Failed to initiate payment");
             }
         } catch (error) {
-            //console.error('Error fetching agents:', error.response.data.error);
-            if (error.response && error.response.data.error === 'You are not permitted to access this data. Please contact the admin') {
-                console.warn('Access denied. Attempting to refresh token...');
-
-                try {
-                    const refreshResponse = await axios.post(`${BASE_URL_Login}/token/newAccessToken`, {
-                        refreshToken: authState.refreshToken,
-                    });
-
-                    const newAccessToken = refreshResponse.data.accessToken;
-                    //console.log("newasdg", newAccessToken)
-                    updateAccessToken(newAccessToken, authState);
-
-                    authState.accessToken = newAccessToken;
-
-                    await SemesterFeePayment();
-                } catch (refreshError) {
-                    //console.error('Failed to refresh token:', refreshError);
-                    toast.error('Session Expired');
-                    logout();
-                }
-            } else {
-                toast.error(error.response.data.error);
-            }
+            console.error('Error fetching agents:', error.response.data.error);
         }
         setLoading(false);
     };
@@ -122,14 +99,32 @@ const FeePaymentRowQuarter = ({ student, key }) => {
     }
 
     const parseDate = (dateString) => {
-        const [day, month, yearAndTime] = dateString.split('-');
-        const [year, time] = yearAndTime.split(' ');
-        return new Date(`${year}-${month}-${day}T${time}`).getTime();
+        if (!dateString) return 'Invalid Date';
+
+        const parts = dateString.split(' ');
+        if (parts.length < 1) return 'Invalid Date';
+
+        const dateParts = parts[0].split('-');
+        if (dateParts.length < 3) return 'Invalid Date';
+
+        const timeParts = parts[1]?.split(':') || ['00', '00', '00'];
+
+        const day = parseInt(dateParts[0], 10);
+        const month = parseInt(dateParts[1], 10) - 1;
+        const year = parseInt(dateParts[2], 10);
+        const hours = parseInt(timeParts[0], 10) || 0;
+        const minutes = parseInt(timeParts[1], 10) || 0;
+        const seconds = parseInt(timeParts[2], 10) || 0;
+
+        if (isNaN(day) || isNaN(month) || isNaN(year)) return 'Invalid Date';
+
+        return new Date(year, month, day, hours, minutes, seconds).getTime();
     };
 
     const generateReceipt = (data) => {
         const safeValue = (value) => {
             if (!value) return 'N/A';
+
             if (typeof value === 'string' && value.includes('T')) {
                 const date = new Date(value);
                 const day = String(date.getDate()).padStart(2, '0');
@@ -137,6 +132,11 @@ const FeePaymentRowQuarter = ({ student, key }) => {
                 const year = date.getFullYear();
                 return `${day}-${month}-${year}`;
             }
+
+            if (typeof value === 'string' && value.match(/^\d{2}-\d{2}-\d{4}/)) {
+                return value.split(' ')[0];
+            }
+
             return String(value);
         };
 
@@ -164,9 +164,6 @@ const FeePaymentRowQuarter = ({ student, key }) => {
                 const centerY = 20;
                 const radius = 15;
 
-                doc.setFillColor(255, 255, 255);
-                doc.circle(centerX, centerY, radius, 'F');
-
                 doc.addImage(logo, 'PNG', centerX - radius, centerY - radius, radius * 2, radius * 2);
             }
         } catch (error) {
@@ -180,7 +177,7 @@ const FeePaymentRowQuarter = ({ student, key }) => {
         doc.text('OFFICIAL PAYMENT RECEIPT', 105, 20, { align: 'center' });
 
         doc.setFontSize(12);
-        doc.text(safeValue(authState.userDetails.collegeName), 105, 30, { align: 'center' });
+        doc.text(safeValue('Metaphile Public School'), 105, 30, { align: 'center' });
 
         doc.setDrawColor(colors.secondary);
         doc.setLineWidth(0.7);
@@ -193,14 +190,13 @@ const FeePaymentRowQuarter = ({ student, key }) => {
 
         const details = [
             { label: 'Receipt Number', value: safeValue(`${parseDate(data.date)}`) },
-            { label: 'Student Name', value: student?.name },
-            { label: 'Father Name', value: student?.fatherName },
-            { label: 'Course', value: student?.course },
-            { label: 'Semester', value: safeValue(data.semester) },
-            { label: 'Type of Fee', value: 'Semester Fee' },
+            { label: 'Student Name', value: selectedStudent.name },
+            { label: 'Father Name', value: selectedStudent.fatherName },
+            { label: 'Class & Section', value: `${selectedStudent.currentClass} - ${selectedStudent.section}` },
             { label: 'Payment Mode', value: data.signature },
-            { label: 'Payment ID', value: safeValue(data.payment_id) },
-            { label: 'Order ID', value: safeValue(data.order_id) },
+            { label: 'Payment ID', value: data.payment_id },
+            { label: 'Order ID', value: data.order_id },
+            { label: 'Installment ID', value: data.installment_id },
             { label: 'Payment Amount (In Digits)', value: safeValue(`${data.amount}`) },
             { label: 'Payment Amount (In Words)', value: convertToWords(data.amount) },
             { label: 'Transaction Date', value: safeValue(data.date) },
@@ -208,6 +204,7 @@ const FeePaymentRowQuarter = ({ student, key }) => {
 
         let yPosition = 75;
         details.forEach((detail) => {
+            if (!detail.value) detail.value = 'N/A';
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(10);
             doc.setTextColor(colors.textLight);
@@ -215,7 +212,7 @@ const FeePaymentRowQuarter = ({ student, key }) => {
 
             doc.setFont('helvetica', 'normal');
             doc.setTextColor(colors.text);
-            doc.text(detail.value, 110, yPosition);
+            doc.text(String(detail.value), 110, yPosition);
 
             yPosition += 15;
         });
@@ -253,7 +250,7 @@ const FeePaymentRowQuarter = ({ student, key }) => {
         try {
             //console.log("triggered", data, 'studetn', student.fatherName);
             const { token, ...requestData } = data;
-            const response = await axios.post(`${BASE_URL_Login}/payment/backFee`,
+            const response = await axios.post(`${BASE_URL_Login}/fee/payment`,
                 requestData,
                 {
                     headers: {
@@ -276,55 +273,30 @@ const FeePaymentRowQuarter = ({ student, key }) => {
             toast.success("Fee payment successfull");
         } catch (error) {
             console.error('Error fetching back fee status:', error);
-            //console.error('Error fetching agents:', error.response.data.error);
-            if (error.response && error.response.data.error === 'You are not permitted to access this data. Please contact the admin') {
-                console.warn('Access denied. Attempting to refresh token...');
-
-                try {
-                    const refreshResponse = await axios.post(`${BASE_URL_Login}/token/newAccessToken`, {
-                        refreshToken: authState.refreshToken,
-                    });
-
-                    const newAccessToken = refreshResponse.data.accessToken;
-                    //console.log("newasdg", newAccessToken)
-                    updateAccessToken(newAccessToken, authState);
-
-                    authState.accessToken = newAccessToken;
-
-                    await SemesterFeePayment();
-                } catch (refreshError) {
-                    //console.error('Failed to refresh token:', refreshError);
-                    toast.error('Session Expired');
-                    logout();
-                }
-            } else {
-                toast.error(error.response.data.error);
-            }
         }
     };
 
     const handleCashPayment = async () => {
-        if (amount + discount <= (student.totalFee - student.paidFee - parseInt(totalPaidAmount) - student.discount)) {
-            if (discount <= (student.totalFee - student.paidFee - parseInt(totalPaidAmount) - student.discount) && discount + amount <= (student.totalFee - student.paidFee - parseInt(totalPaidAmount) - student.discount)) {
+        if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
+            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && discount + amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                 try {
                     const datee = formatDateTime();
+                    if (selectedDiscount === null) {
+                        toast.error('First select Discount');
+                        return;
+                    }
                     await SemesterFeePayment({
                         token: authState.accessToken,
-                        title: "Semester Fee",
-                        id: student._id,
+                        studentID: selectedStudent._id,
                         amount: amount,
-                        email: student.studentEmailId,
-                        number: student.studentWhatsAppNo,
                         date: datee,
-                        by: authState.userDetails._id,
                         status: "Success",
-                        order_id: `Semester/${parseInt(student.semester)}/${session}`,
+                        installment_id: `${datee}-${selectedStudent.email}`,
+                        order_id: `${student.quarter}`,
                         payment_id: `CASH-${Date.now()}`,
-                        course: student.course,
                         signature: "Cash",
-                        semester: parseInt(student.semester),
-                        session: session,
-                        discount: discount
+                        discount: discount,
+                        selectedDiscount: selectedDiscount
                     });
 
                 } catch (error) {
@@ -347,26 +319,25 @@ const FeePaymentRowQuarter = ({ student, key }) => {
         }
 
         else {
-            if (amount + discount <= (student.totalFee - student.paidFee - parseInt(totalPaidAmount) - student.discount) && documentNumber) {
-                if (discount <= (student.totalFee - student.paidFee - parseInt(totalPaidAmount) - student.discount) && discount + amount <= (student.totalFee - student.paidFee - parseInt(totalPaidAmount) - student.discount)) {
+            if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && documentNumber) {
+                if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && discount + amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                     const datee = formatDateTime();
+                    if (selectedDiscount === null) {
+                        toast.error('First select Discount');
+                        return;
+                    }
                     await SemesterFeePayment({
                         token: authState.accessToken,
-                        title: "Semester Fee",
-                        id: student._id,
+                        studentID: selectedStudent._id,
                         amount: amount,
-                        email: email,
-                        number: phone,
                         date: datee,
-                        by: authState.userDetails._id,
                         status: "Success",
-                        order_id: `Semester/${parseInt(student.semester)}/${session}`,
+                        installment_id: `${datee}-${selectedStudent.email}`,
+                        order_id: `${student.quarter}`,
                         payment_id: `DocNo-${documentNumber}`,
                         signature: paymentMode,
-                        semester: parseInt(student.semester),
-                        session: session,
-                        course: student.course,
-                        discount: discount
+                        discount: discount,
+                        selectedDiscount: selectedDiscount
                     });
                 }
                 else {
@@ -380,8 +351,8 @@ const FeePaymentRowQuarter = ({ student, key }) => {
 
     useEffect(() => {
 
-        if (amount + discount <= (student.totalFee - student.paidFee - parseInt(totalPaidAmount) - student.discount)) {
-            if (discount <= (student.totalFee - student.paidFee - parseInt(totalPaidAmount) - student.discount) && discount + amount <= (student.totalFee - student.paidFee - parseInt(totalPaidAmount) - student.discount)) {
+        if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
+            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && discount + amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                 if (paymentMode === 'Online') {
                     const datee = formatDateTime();
 
@@ -405,7 +376,7 @@ const FeePaymentRowQuarter = ({ student, key }) => {
 
     const onAmountChange = (value) => {
         const numericValue = parseInt(value);
-        const calculatedMax = student.totalFee - student.paidFee - parseInt(totalPaidAmount) - student.discount;
+        const calculatedMax = student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount;
 
         if (numericValue >= 0 && numericValue <= calculatedMax) {
             setAmount(numericValue);
@@ -419,7 +390,7 @@ const FeePaymentRowQuarter = ({ student, key }) => {
 
     const onDiscountChange = (value) => {
         const numericValue = parseInt(value);
-        const calculatedMax = student.totalFee - student.paidFee - parseInt(totalPaidAmount) - student.discount;
+        const calculatedMax = student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount;
 
         if (numericValue >= 0 && numericValue <= calculatedMax) {
             setDiscount(numericValue);
