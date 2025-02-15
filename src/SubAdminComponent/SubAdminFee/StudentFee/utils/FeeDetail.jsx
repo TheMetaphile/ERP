@@ -14,12 +14,13 @@ export default function FeeDetail() {
     const [suggestions, setSuggestions] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [selectedDiscount, setSelectedDiscount] = useState(null);
-
-
+    const [removeDiscount, setRemoveDiscount] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [searchString, setsearchString] = useState('');
     const { authState } = useContext(AuthContext);
     const [Fee, setFee] = useState([]);
+    const [appliedDis, setAppliedDis] = useState(null);
 
     const handleDropdownChange = (e) => {
         setSelectedOption(e.target.value);
@@ -29,11 +30,30 @@ export default function FeeDetail() {
         setSelectedStudent(suggestion);
         setShowSuggestions(false);
     };
+    const fetchFees = async () => {
 
+        try {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student/detailedFee/${selectedStudent._id}`, {
+                headers: {
+                    'Authorization': `Bearer ${authState.accessToken}`
+                }
+            });
+
+            // console.log("API response fees:", response.data);
+            setFee(response.data);
+
+
+        }
+        catch (error) {
+            const errorMessage = error.response?.data?.error || 'An error occurred';
+            // console.log(error)
+            toast.error(errorMessage);
+        }
+    };
     useEffect(() => {
         console.log("Currently selected discount:", selectedDiscount);
     }, [selectedDiscount]);
-    
+
     useEffect(() => {
         if (searchString) {
             const handler = setTimeout(() => {
@@ -46,7 +66,7 @@ export default function FeeDetail() {
                             start: 0,
                             end: 30
                         })
-                        console.log(response.data)
+                        // console.log(response.data)
                         const teacherEmails = response.data.Teachers.map(teacher => ({
                             _id: teacher._id,
                             "currentClass": teacher.currentClass,
@@ -76,38 +96,57 @@ export default function FeeDetail() {
     }, [searchString, authState.accessToken]);
 
     useEffect(() => {
-        console.log(selectedStudent);
+        // console.log(selectedStudent);
         if (selectedStudent) {
-            const fetchFees = async () => {
 
-                try {
-                    const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student/detailedFee/${selectedStudent._id}`, {
-                        headers: {
-                            'Authorization': `Bearer ${authState.accessToken}`
-                        }
-                    });
-
-                    console.log("API response fees:", response.data);
-                    setFee(response.data);
-
-
-                }
-                catch (error) {
-                    const errorMessage = error.response?.data?.error || 'An error occurred';
-                    console.log(error)
-                    toast.error(errorMessage);
-                }
-            };
 
             fetchFees();
         }
     }, [selectedStudent]);
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        try {
+            console.log(selectedDiscount);
+            const date = new Date();
+            if (!selectedStudent || (!selectedDiscount && !removeDiscount)) {
+                return;
+            }
+            const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discount`,
+                {
+                    studentId: selectedStudent._id,
+                    discountId: selectedDiscount,
+                    removeId: removeDiscount,
+                    month: date.getMonth()
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`
+                    }
+                }
+            );
+
+            if (response.status === 200) {
+                setRemoveDiscount(null);
+                setSelectedDiscount(null);
+                setAppliedDis(selectedDiscount);
+                toast.success(response.data.message);
+                fetchFees();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error('Error creating discount');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className="flex flex-col w-full tablet:w-full mobile:max-tablet:w-screen overflow-y-auto no-scrollbar items-start mobile:max-tablet:mt-4 px-2 ">
             <ToastContainer />
             <div className='flex items-center justify-between w-full'>
-                <h1 className="mb-2 text-2xl font-normal mobile:max-tablet:text-lg">Fees Structure of {name}</h1>
+                <h1 className="mb-2 text-2xl font-normal mobile:max-tablet:text-lg">Fees Structure of {selectedStudent?.name || ""}</h1>
                 <div className='flex gap-3'>
                     <div className='relative w-full'>
                         <input type="text" value={searchString} onChange={(e) => { setsearchString(e.target.value) }} className='w-full px-2 py-2 border rounded-lg' placeholder="Enter Email" required />
@@ -126,15 +165,7 @@ export default function FeeDetail() {
                             </ul>
                         )}
                     </div>
-                    <select
-                        value={selectedOption}
-                        onChange={handleDropdownChange}
-                        className="border border-gray-300 rounded-lg p-2"
-                    >
-                        <option value="admissionFee">Admission Fee</option>
-                        <option value="monthlyfee">Monthly Fee</option>
-                        <option value="quarterFee">Quarterly Fee</option>
-                    </select>
+
                 </div>
             </div>
             {
@@ -149,14 +180,41 @@ export default function FeeDetail() {
                 </>
             }
             {
-                selectedStudent && <ApplicableDiscounts
-                    selectedStudent={selectedStudent}
-                    selectedDiscount={selectedDiscount}
-                    setSelectedDiscount={setSelectedDiscount}
-                />
+                selectedStudent &&
+                <>
+                    <ApplicableDiscounts
+                        selectedStudent={selectedStudent}
+                        selectedDiscount={selectedDiscount}
+                        setSelectedDiscount={setSelectedDiscount}
+                        appliedDis={appliedDis}
+                        removedDiscount={removeDiscount}
+                        setRemovedDiscount={setRemoveDiscount}
+                    />
+
+                    <div className="w-full flex justify-end gap-4 mt-3">
+                        <button
+                            className={`bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            type="submit"
+                            disabled={isLoading}
+                            onClick={handleSubmit}
+                        >
+                            {isLoading ? 'Apply...' : 'Apply'}
+                        </button>
+                        <select
+                            value={selectedOption}
+                            onChange={handleDropdownChange}
+                            className="border border-gray-300 rounded-lg p-2"
+                        >
+                            <option value="admissionFee">Admission Fee</option>
+                            <option value="monthlyfee">Monthly Fee</option>
+                            <option value="quarterFee">Quarterly Fee</option>
+                        </select>
+                    </div>
+
+                </>
             }
 
-            <StudentDetails selectedOption={selectedOption} fees={Fee} setFees={setFee} selectedStudent={selectedStudent} selectedDiscount={selectedDiscount}/>
+            <StudentDetails removeDiscount={removeDiscount} selectedOption={selectedOption} fees={Fee} setFees={setFee} selectedStudent={selectedStudent} selectedDiscount={selectedDiscount} />
             <h1 className="mb-2 text-2xl font-normal mobile:max-tablet:text-lg">Transaction History</h1>
             <TransactionRow selectedStudent={selectedStudent} />
         </div>

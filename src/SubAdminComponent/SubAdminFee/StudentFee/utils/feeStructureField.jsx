@@ -8,7 +8,7 @@ import { FaMoneyBillWave, FaCalendarAlt, FaPercent, FaCheckCircle, FaCreditCard,
 import FeePaymentRow from "./FeePaymentRow";
 import FeePaymentRowQuarter from "./FeePaymentRowQuarter";
 
-export default function FeeStructureField({ fees, selectedOption, setFees, Student, selectedDiscount }) {
+export default function FeeStructureField({ fees, selectedOption, setFees, Student, selectedDiscount ,removeDiscount}) {
     const [Razorpay] = useRazorpay();
     const { authState } = useContext(AuthContext);
     const [mode, setMode] = useState('');
@@ -18,6 +18,8 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
     const id = Student.email;
     const [clickedIndex, setClickedIndex] = useState(null);
 
+
+    console.log('SelectedDiscount: ',selectedDiscount, "removeDiscount: ", removeDiscount)
     const handleClick = (index) => {
         setClickedIndex(index);
     };

@@ -119,7 +119,7 @@ function FeeDiscountSubAdmin() {
                     </div>
 
                     <button className={`flex items-center mobile:max-tablet:justify-start gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'}`} onClick={() => setShowDiscountStructure(!showDiscountStructure)}>
-                        {showDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Add</>}
+                        {showDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Apply Discount</>}
                     </button>
                 </div>
             </div>

@@ -18,6 +18,7 @@ function CreateDiscount({ selectedSession }) {
     const inputRef = useRef(null);
     const [selectedDiscount, setSelectedDiscount] = useState(null);
     const [searchInput, setSearchInput] = useState();
+    const [removeDiscount, setRemoveDiscount] = useState(null);
 
 
     useEffect(() => {
@@ -35,7 +36,7 @@ function CreateDiscount({ selectedSession }) {
 
     const handleEmailChange = (event) => {
         const value = event.target.value;
-        setSearchInput( value );
+        setSearchInput(value);
         setShowSuggestions(true);
     };
 
@@ -91,10 +92,14 @@ function CreateDiscount({ selectedSession }) {
         try {
             console.log(selectedDiscount);
             const date = new Date();
+            if(!selectedSuggestion || (!selectedDiscount && !removeDiscount)){
+                return; 
+            }
             const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discount`,
                 {
                     studentId: selectedSuggestion._id,
                     discountId: selectedDiscount,
+                    removeId: removeDiscount,
                     month: date.getMonth()
                 },
                 {
@@ -105,7 +110,9 @@ function CreateDiscount({ selectedSession }) {
             );
 
             if (response.status === 200) {
-                setAppliedDis(selectedDiscount)
+                setRemoveDiscount(null);
+                setSelectedDiscount(null);
+                setAppliedDis(selectedDiscount);
                 toast.success(response.data.message);
             }
         } catch (error) {
@@ -128,7 +135,7 @@ function CreateDiscount({ selectedSession }) {
                         name="email"
                         value={searchInput}
                         onChange={handleEmailChange}
-                        required
+                        // required
                         className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                         placeholder="Start typing student name..."
                     />
@@ -165,6 +172,8 @@ function CreateDiscount({ selectedSession }) {
                             selectedDiscount={selectedDiscount}
                             setSelectedDiscount={setSelectedDiscount}
                             appliedDis={appliedDis}
+                            removedDiscount={removeDiscount}
+                            setRemovedDiscount={setRemoveDiscount}
                         />
                     </>
                 }
@@ -176,7 +185,7 @@ function CreateDiscount({ selectedSession }) {
                     type="submit"
                     disabled={isLoading}
                 >
-                    {isLoading ? 'Creating...' : 'Create Discount'}
+                    {isLoading ? 'Apply...' : 'Apply'}
                 </button>
             </div>
         </form>
