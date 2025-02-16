@@ -33,7 +33,7 @@ const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
             //console.log("triggered url", data);
 
             const response = await axios.post(
-                `${BASE_URL_Login}/encrypt/url`,
+                `${BASE_URL_Login}/fee/encrypt/url`,
                 data,
                 {
                     headers: {
@@ -51,30 +51,7 @@ const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
                 //console.error("Failed to initiate payment");
             }
         } catch (error) {
-            //console.error('Error fetching agents:', error.response.data.error);
-            if (error.response && error.response.data.error === 'You are not permitted to access this data. Please contact the admin') {
-                console.warn('Access denied. Attempting to refresh token...');
-
-                try {
-                    const refreshResponse = await axios.post(`${BASE_URL_Login}/token/newAccessToken`, {
-                        refreshToken: authState.refreshToken,
-                    });
-
-                    const newAccessToken = refreshResponse.data.accessToken;
-                    //console.log("newasdg", newAccessToken)
-                    updateAccessToken(newAccessToken, authState);
-
-                    authState.accessToken = newAccessToken;
-
-                    await SemesterFeePayment();
-                } catch (refreshError) {
-                    //console.error('Failed to refresh token:', refreshError);
-                    toast.error('Session Expired');
-                    logout();
-                }
-            } else {
-                toast.error(error.response.data.error);
-            }
+            console.error('Error fetching agents:', error.response.data.error);
         }
         setLoading(false);
     };
@@ -378,16 +355,16 @@ const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
 
                     payOnline({
                         amount: amount,
-                        id: student._id,
+                        id: selectedStudent._id,
                         by: authState.userDetails._id,
-                        title: "Semester Fee",
-                        email: student.studentEmailId,
-                        number: student.studentWhatsAppNo,
-                        semester: parseInt(student.semester),
+                        title: "Monthly Fee",
+                        email: selectedStudent.email,
+                        number: selectedStudent.fatherPhoneNumber,
+                        semester: selectedStudent.section,
                         session: session,
-                        course: student.course,
+                        course: selectedStudent.currentClass,
                         date: datee,
-                        discount: discount
+                        discount: selectedDiscount || 0
                     });
                 }
             }

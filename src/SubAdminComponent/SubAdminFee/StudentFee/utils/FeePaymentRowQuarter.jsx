@@ -358,16 +358,16 @@ const FeePaymentRowQuarter = ({ student, key, selectedStudent, selectedDiscount 
 
                     payOnline({
                         amount: amount,
-                        id: student._id,
+                        id: selectedStudent._id,
                         by: authState.userDetails._id,
-                        title: "Semester Fee",
-                        email: student.studentEmailId,
-                        number: student.studentWhatsAppNo,
-                        semester: parseInt(student.semester),
+                        title: "Quarterly Fee",
+                        email: selectedStudent.email,
+                        number: selectedStudent.fatherPhoneNumber,
+                        semester: selectedStudent.section,
                         session: session,
-                        course: student.course,
+                        course: selectedStudent.currentClass,
                         date: datee,
-                        discount: discount
+                        discount: selectedDiscount || 0
                     });
                 }
             }

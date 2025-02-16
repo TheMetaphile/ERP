@@ -73,6 +73,7 @@ export default function FeeDetail() {
                             "fatherName": teacher.fatherName,
                             "rollNumber": teacher.rollNumber,
                             "section": teacher.section,
+                            fatherPhoneNumber:teacher.fatherPhoneNumber,
                             email: teacher.email,
                             profileLink: teacher.profileLink,
                             name: teacher.name
