@@ -4,6 +4,9 @@ import Loading from "./LoadingScreen/Loading.jsx";
 import StudentCard from "./AdminComponents/StudentDetails.jsx";
 import CompleteFee from "./AdminComponents/fee/CompleteFee/CompleteFee.jsx";
 import CreateCategory from "./AdminComponents/fee/DiscountCategories/CreateCategory.jsx";
+import Transactions from "./SubAdminComponent/SubAdminFee/Transaction/Transactions.jsx";
+import BacklogTransaction from "./SubAdminComponent/SubAdminFee/Transaction/utils/BacklogFeeTransaction.jsx";
+import PendingFee from "./SubAdminComponent/SubAdminFee/Pending Fee/PendingFee.jsx";
 
 const SupAdminTeacherRegister = lazy(() => import("./SuperAdminComponents/Teacher/SupAdminTeacherRegister.jsx"));
 const Studentdetailscard = lazy(() => import("./TeacherComponents/studentdetailcard.jsx"));
@@ -1462,6 +1465,27 @@ const router = createBrowserRouter([
             path: '/Sub-Admin/StudentsFee/feediscount',
             element: <SuspenseWrapper fallback={Loading}>
               <FeeDiscountSubAdmin /></SuspenseWrapper>
+          },
+          {
+            path: "/Sub-Admin/StudentsFee/PendingFee",
+            element: <SuspenseWrapper><PendingFee /></SuspenseWrapper>
+          },
+          {
+            path: "/Sub-Admin/StudentsFee/Transactions",
+            element: (
+              <SuspenseWrapper>
+                <Transactions />
+              </SuspenseWrapper>
+            ),
+            children: [
+              { path: "", element: <SuspenseWrapper><BacklogTransaction /></SuspenseWrapper> },
+              { path: "/Sub-Admin/StudentsFee/Transactions/:tab", element: <SuspenseWrapper><BacklogTransaction /></SuspenseWrapper> },
+            ],
+          },
+          {
+            path: '/Sub-Admin/StudentsFee/discountCategory',
+            element: <SuspenseWrapper fallback={Loading}>
+              <CreateCategory /></SuspenseWrapper>
           },
           {
             path: '/Sub-Admin/StudentsFee/PreviousFeeSubAdmin',

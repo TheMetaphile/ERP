@@ -1,19 +1,54 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import FeeStatusRow from './utils/feesStatusRow';
 import FeeStructure from './utils/FeeStructure';
 import TransactionRow from './utils/TransactionHistoryRow';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { PaymentProvider } from './utils/PaymentContext';
+import AuthContext from '../../Context/AuthContext';
+import StudentCard from '../../SubAdminComponent/SubAdminFee/StudentFee/utils/ProfileCard';
+import axios from 'axios';
+import { BASE_URL_Fee } from '../../Config';
 
 const MotionSelect = motion.select;
 
 export default function Fees() {
     const [selectedOption, setSelectedOption] = useState('monthlyfee');
+    const [Fee, setFee] = useState([]);
+    const { authState } = useContext(AuthContext);
 
     const handleDropdownChange = (e) => {
         setSelectedOption(e.target.value);
     };
+    console.log('aaa',authState.userDetails)
+
+    const fetchFees = async () => {
+
+        try {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student/detailedFee/${authState?.userDetails?._id}`, {
+                headers: {
+                    'Authorization': `Bearer ${authState.accessToken}`
+                }
+            });
+
+            console.log("API response fees:", response.data);
+            setFee(response.data);
+
+
+        }
+        catch (error) {
+            const errorMessage = error.response?.data?.error || 'An error occurred';
+            // console.log(error)
+            toast.error(errorMessage);
+        }
+    };
+
+    useEffect(() => {
+        if (authState?.userDetails?._id && authState?.accessToken) {
+            fetchFees();
+        }
+    }, [authState?.userDetails, authState?.accessToken]);
+    
 
     const pageVariants = {
         initial: { opacity: 0, y: 20 },
@@ -38,7 +73,15 @@ export default function Fees() {
                 transition={{ duration: 0.5 }}
             >
                 <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-
+                <StudentCard
+                    currentClass={authState?.userDetails?.currentClass}
+                    email={authState?.userDetails?.email}
+                    fatherName={authState?.userDetails?.fatherName}
+                    name={authState?.userDetails?.name}
+                    profileLink={authState?.userDetails?.profileLink}
+                    rollNumber={authState?.userDetails?.rollNumber}
+                    section={authState?.userDetails?.section} />
+               
                 <motion.section variants={sectionVariants} transition={{ delay: 0.1 }}>
                     <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-gray-800 mb-4">Fee Status</h1>
                     <FeeStatusRow />
@@ -58,7 +101,7 @@ export default function Fees() {
                             <option value="quarterFee">Quarterly Fee</option>
                         </MotionSelect>
                     </div>
-                    <FeeStructure selectedOption={selectedOption} />
+                    <FeeStructure selectedOption={selectedOption} fees={Fee} setFees={setFee} />
                 </motion.section>
 
                 <motion.section variants={sectionVariants} transition={{ delay: 0.3 }}>

@@ -56,7 +56,7 @@ export default function Navbar({ onDrawerToggle, onEndDrawerToggle, isDrawerOpen
                 className="flex items-center space-x-4 focus:outline-none"
               >
                 <span className="flex items-center gap-2 font-medium">
-                  {authState.userDetails.name}
+                  {authState?.userDetails?.name}
                   <FaUserCircle className="text-3xl" />
                 </span>
               </button>

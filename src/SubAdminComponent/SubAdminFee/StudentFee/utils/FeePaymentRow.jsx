@@ -251,13 +251,13 @@ const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
         try {
             console.log("triggered", data);
             const { token, ...requestData } = data;
-            // const response = await axios.post(`${BASE_URL_Login}/fee/payment`,
-            //     requestData,
-            //     {
-            //         headers: {
-            //             'Authorization': `Bearer ${token}`
-            //         }
-            //     });
+            const response = await axios.post(`${BASE_URL_Login}/fee/payment`,
+                requestData,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
             // console.log(response);
             if (response.status === 200 && response.data.status === true) {
                 // console.log(data);

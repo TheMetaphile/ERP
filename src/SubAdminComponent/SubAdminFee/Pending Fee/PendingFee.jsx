@@ -1,0 +1,168 @@
+import React, { useEffect, useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaGraduationCap, FaLayerGroup } from 'react-icons/fa';
+// import { useFilters } from '../Students/utils/Filters';
+import AuthContext from '../../../Context/AuthContext';
+import { BASE_URL_Login } from '../../../Config';
+import axios from 'axios';
+import SemesterPendingFee from './utils/SemesterPendingFee';
+import { toast, ToastContainer } from 'react-toastify';
+
+const getSessions = () => {
+    const currentYear = new Date().getFullYear();
+    const newSessions = [];
+
+    for (let i = 0; i < 5; i++) {
+        const startYear = currentYear - i;
+        const endYear = startYear + 1;
+        newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
+    }
+
+    return newSessions;
+}
+
+const PendingFee = () => {
+    const { authState, logout, updateAccessToken } = useContext(AuthContext);
+    const session = getSessions();
+    const [selectedSession, setSelectedSession] = useState(session[0]);
+    const [selectedClass, setSelectedClass] = useState("");
+    const [section, setSelectedSection] = useState('');
+    const [sectionsDetails, setSectionsDetails] = useState([]);
+
+    const handleClassChange = (e) => {
+        const selectedClass = e.target.value;
+        setSelectedClass(selectedClass);
+
+        if (selectedClass) {
+            fetchSections(selectedClass);
+        } else {
+            setSectionsDetails([]);
+        }
+    };
+
+    const handleSectionChange = (e) => {
+        setSelectedSection(e.target.value);
+    };
+
+    const handleChange = (event) => {
+        setSelectedSession(event.target.value);
+    };
+
+    const fetchSections = async (selectedClass) => {
+        try {
+            const response = await axios.post(`${BASE_URL_Login}/classTeacher/fetch/sections`, {
+                accessToken: authState.accessToken,
+                class: selectedClass,
+            });
+            console.log(response.data, 'section')
+            const sectionsDetail = response.data.sections.map(sectionObj => sectionObj.section);
+            setSectionsDetails(sectionsDetail);
+        } catch (error) {
+            console.error("Error while fetching section:", error);
+        }
+    };
+
+
+    //console.log("Course options: ", courseOptions);
+
+
+    const handleDownload = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL_Login}/export/Pending/semesterFee?semester=${Semester}&course=${course}`, {
+                headers: {
+                    'Authorization': `Bearer ${authState.accessToken}`
+                },
+                responseType: 'blob'
+            });
+
+            const link = document.createElement('a');
+
+            const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+            const url = window.URL.createObjectURL(blob);
+
+            link.href = url;
+            link.setAttribute('download', `Pending_Fee_SemesterReport_${course}_Sem-${Semester}.xlsx`);
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            //console.error('Error fetching back fee status:', error);
+            //console.error('Error fetching agents:', error.response.data.error);
+            if (error.response && error.response.data.error === 'You are not permitted to access this data. Please contact the admin') {
+                console.warn('Access denied. Attempting to refresh token...');
+
+                try {
+                    const refreshResponse = await axios.post(`${BASE_URL_Login}/token/newAccessToken`, {
+                        refreshToken: authState.refreshToken,
+                    });
+
+                    const newAccessToken = refreshResponse.data.accessToken;
+                    //console.log("newasdg", newAccessToken)
+                    updateAccessToken(newAccessToken, authState);
+
+                    authState.accessToken = newAccessToken;
+
+                    await handleDownload();
+                } catch (refreshError) {
+                    //console.error('Failed to refresh token:', refreshError);
+                    toast.error('Session Expired');
+                    logout();
+                }
+            } else {
+                toast.error(error.response.data.error);
+            }
+        }
+    };
+
+    return (
+        <div className="flex flex-col flex-grow">
+            <ToastContainer />
+            <div className="bg-white flex-grow rounded-lg shadow-lg p-2">
+                <div className="flex justify-between items-center mb-4 mobile:max-tablet:flex-col">
+                    <h1 className="text-2xl font-bold mb-3 mobile:max-tablet:text-sm mobile:max-tablet:font-semibold">
+                        Session Pending Fee Dashboard
+                    </h1>
+                    <div className='flex justify-end gap-2 mobile:max-tablet:flex-col'>
+                        <div className=' flex gap-2'>
+                            <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                                {session.map((session, index) => (
+                                    <option key={index} value={session}>{session}</option>
+                                ))}
+                            </select>
+                            <select id="Class" name="Class" value={selectedClass} onChange={handleClassChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                                <option value="">Select Class</option>
+                                {["Pre-Nursery", "Nursery", "L.K.G", "U.K.G", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"].map(cls => (
+                                    <option key={cls} value={cls}>{cls}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <select id="section" value={section} onChange={handleSectionChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                            <option value="">Select Section</option>
+                            {sectionsDetails.map((section, index) => (
+                                <option key={index} value={section}>{section}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+                <div className="flex justify-end items-center mb-3">
+                    <button
+                        className="px-4 py-2 bg-purple-500 text-white font-semibold rounded hover:bg-purple-600 transition duration-200"
+                        onClick={handleDownload}
+                    >
+                        Download Report
+                    </button>
+                </div>
+
+                <SemesterPendingFee selectedClass={selectedClass} selectedSection={section} />
+            </div>
+        </div>
+    );
+};
+
+export default PendingFee;

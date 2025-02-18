@@ -36,19 +36,19 @@ export default function ProfileCard() {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4 mobile:max-tablet:flex-col mobile:max-tablet:text-center">
           <img 
-            src={authState.userDetails.profileLink || ProfileIcon} 
+            src={authState?.userDetails?.profileLink || ProfileIcon} 
             alt="Profile" 
             className="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover"
           />
           <div>
             <h2 className="text-2xl font-bold text-gray-800 mb-1">
-              Hi, {authState.userDetails.name}
+              Hi, {authState?.userDetails?.name}
             </h2>
             <div className="text-sm text-gray-600 space-y-1">
-              <p>Class: {authState.userDetails.currentClass}-{authState.userDetails.section} | Roll No. {authState.userDetails.rollNumber}</p>
+              <p>Class: {authState?.userDetails?.currentClass}-{authState?.userDetails?.section} | Roll No. {authState?.userDetails?.rollNumber}</p>
               <p>Class Teacher: {teacher || "Not found"}</p>
               <span className="inline-block px-3 py-1 bg-teal-100 text-teal-800 rounded-full font-medium">
-                {authState.userDetails.session}
+                {authState?.userDetails?.session}
               </span>
             </div>
           </div>

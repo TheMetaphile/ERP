@@ -41,7 +41,12 @@ function FeeSubAdmin() {
                             { path: '/Sub-Admin/StudentsFee/structure', label: 'Fee Structure' },
                             { path: '/Sub-Admin/StudentsFee/details', label: 'Fee Status' },
                             { path: '/Sub-Admin/StudentsFee/feediscount', label: 'Fee Discount' },
-                            { path: '/Sub-Admin/StudentsFee/PreviousFeeSubAdmin', label: 'Previous Session' }
+                            { path: '/Sub-Admin/StudentsFee/PreviousFeeSubAdmin', label: 'Previous Session' },
+                            { path: '/Sub-Admin/StudentsFee/discountCategory', label: 'Discount Category' },
+                            { path: '/Sub-Admin/StudentsFee/Transactions', label: 'Transactions' },
+                            { path: '/Sub-Admin/StudentsFee/PendingFee', label: 'Pending Fee' }
+
+
                         ].map((item) => (
                             <motion.div
                                 key={item.path}

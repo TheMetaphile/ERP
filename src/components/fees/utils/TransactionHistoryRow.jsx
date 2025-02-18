@@ -13,7 +13,8 @@ export default function TransactionRow() {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false)
     const paymentDetail = usePaymentContext();
-    const {setPaymentDetails} = paymentDetail;
+    const { setPaymentDetails } = paymentDetail;
+    const [data, setData] = useState([]);
 
     useEffect(() => {
         if (authState.accessToken) {
@@ -26,13 +27,13 @@ export default function TransactionRow() {
 
     const fetchTransaction = async () => {
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/transactions`, {
+            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/particularStudent/transactions?email=${authState?.userDetails?.email}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }
             });
             console.log("API response transaction:", response.data);
-            setPaymentDetails(response.data.transactions);
+            setData(response.data.transactions)
         }
         catch (error) {
             const errorMessage = error.response?.data?.error || 'An error occurred';
@@ -45,11 +46,14 @@ export default function TransactionRow() {
 
     return (
         <div className="w-full h-fit mb-4 shadow-md rounded-lg border border-gray-300   overflow-x-auto no-scrollbar">
+
             {loading ? (
                 <Loading />
+            ) : data.length === 0 ? (
+                <div className='text-center'>No data available</div>
             ) : (
                 <div>
-                    <TransactionField />
+                    <TransactionField data={data} />
                 </div>
             )}
 
