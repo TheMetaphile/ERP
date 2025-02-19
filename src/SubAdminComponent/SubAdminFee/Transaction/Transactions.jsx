@@ -26,15 +26,11 @@ const getSessions = () => {
 
 const Transactions = () => {
     const { authState, logout, updateAccessToken } = useContext(AuthContext);
-    // const { filters, setFilters, courseOptions } = useFilters();
-    // const x = useFilters();
-    //console.log(x);
+
     const session = getSessions();
     const [selectedSession, setSelectedSession] = useState(session[0]);
-    const [selectedClass, setSelectedClass] = useState("");
-    const [section, setSelectedSection] = useState('');
-    const [sectionsDetails, setSectionsDetails] = useState([]);
-    // const { course, Semester, session } = filters;
+
+
     const ref = useRef();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,8 +44,7 @@ const Transactions = () => {
     const [receiptNo, setReceiptNo] = useState("");
     const [subject, setSubject] = useState('');
     const [transactionType, setTransactionType] = useState('semester');
-    const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(9);
+
     const dropdownRef = useRef(null);
     const today = new Date();
     const tomorrow = new Date(today);
@@ -64,21 +59,6 @@ const Transactions = () => {
     const [endDate, setEndDate] = useState(tomorrow.toISOString().split("T")[0]);
     const [searchMain, setSearchMain] = useState("");
 
-
-    //console.log("Course options: ", courseOptions, tab, startDate, endDate);
-    const fetchSections = async (selectedClass) => {
-        try {
-            const response = await axios.post(`${BASE_URL_Login}/classTeacher/fetch/sections`, {
-                accessToken: authState.accessToken,
-                class: selectedClass,
-            });
-            console.log(response.data, 'section')
-            const sectionsDetail = response.data.sections.map(sectionObj => sectionObj.section);
-            setSectionsDetails(sectionsDetail);
-        } catch (error) {
-            console.error("Error while fetching section:", error);
-        }
-    };
 
     useEffect(() => {
         const handler = setTimeout(async () => {
@@ -226,10 +206,9 @@ const Transactions = () => {
             return;
         }
         try {
-            const response = await axios.post(`${BASE_URL_Login}/search/student`,
+            const response = await axios.post(`${BASE_URL_Login}/fetchSingle/student`,
                 {
-                    searchString: value,
-                    collegeName: authState?.userDetails?.collegeName
+                    email: value,
                 },
                 {
                     headers: { 'Authorization': `Bearer ${authState.accessToken}` },
@@ -241,30 +220,8 @@ const Transactions = () => {
         } catch (error) {
             setSuggestions([]);
             setShowSuggestions(false);
-            //console.error('Error fetching agents:', error.response.data.error);
-            if (error.response && error.response.data.error === 'You are not permitted to access this data. Please contact the admin') {
-                console.warn('Access denied. Attempting to refresh token...');
-
-                try {
-                    const refreshResponse = await axios.post(`${BASE_URL_Login}/token/newAccessToken`, {
-                        refreshToken: authState.refreshToken,
-                    });
-
-                    const newAccessToken = refreshResponse.data.accessToken;
-                    //console.log("newasdg", newAccessToken)
-                    updateAccessToken(newAccessToken, authState);
-
-                    authState.accessToken = newAccessToken;
-
-                    await fetchSuggestions();
-                } catch (refreshError) {
-                    //console.error('Failed to refresh token:', refreshError);
-                    toast.error('Session Expired');
-                    logout();
-                }
-            } else {
-                toast.error(error.response.data.error);
-            }
+            console.error('Error fetching agents:', error.response.data.error);
+         
         }
     };
 
@@ -280,22 +237,7 @@ const Transactions = () => {
         );
     };
 
-    const handleClassChange = (e) => {
-        const selectedClass = e.target.value;
-        setSelectedClass(selectedClass);
-        setStart(0);
 
-        if (selectedClass) {
-            fetchSections(selectedClass);
-        } else {
-            setSectionsDetails([]);
-        }
-    };
-
-    const handleSectionChange = (e) => {
-        setSelectedSection(e.target.value);
-        setStart(0);
-    };
 
     const handleChange = (event) => {
         setSelectedSession(event.target.value);
@@ -303,7 +245,7 @@ const Transactions = () => {
 
     const handleDownload = async () => {
         try {
-            await axios.get(`${BASE_URL_Login}/export/Transaction/backFee?semester=${Semester}&session=${session}&course=${course}&startDate=${startDate}&endDate=${endDate}`, {
+            await axios.get(`${BASE_URL_Login}/fee/export/Transaction?session=${selectedSession}&startDate=${startDate}&endDate=${endDate}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 },
@@ -317,7 +259,7 @@ const Transactions = () => {
                     const url = window.URL.createObjectURL(blob);
 
                     link.href = url;
-                    link.setAttribute('download', `Transaction_SemesterReport_${course}_Sem-${Semester}_${session}_${startDate}_${endDate}.xlsx`);
+                    link.setAttribute('download', `Transaction_${selectedSession}_${startDate}_${endDate}.xlsx`);
 
                     document.body.appendChild(link);
 
@@ -328,31 +270,9 @@ const Transactions = () => {
                 })
 
         } catch (error) {
-            //console.error('Error fetching back fee status:', error);
+            console.error('Error fetching back fee status:', error);
             //console.error('Error fetching agents:', error.response.data.error);
-            if (error.response && error.response.data.error === 'You are not permitted to access this data. Please contact the admin') {
-                console.warn('Access denied. Attempting to refresh token...');
 
-                try {
-                    const refreshResponse = await axios.post(`${BASE_URL_Login}/token/newAccessToken`, {
-                        refreshToken: authState.refreshToken,
-                    });
-
-                    const newAccessToken = refreshResponse.data.accessToken;
-                    //console.log("newasdg", newAccessToken)
-                    updateAccessToken(newAccessToken, authState);
-
-                    authState.accessToken = newAccessToken;
-
-                    await handleDownload();
-                } catch (refreshError) {
-                    //console.error('Failed to refresh token:', refreshError);
-                    toast.error('Session Expired');
-                    logout();
-                }
-            } else {
-                toast.error(error.response.data.error);
-            }
         }
     };
 
@@ -371,20 +291,10 @@ const Transactions = () => {
                                     <option key={index} value={session}>{session}</option>
                                 ))}
                             </select>
-                            <select id="Class" name="Class" value={selectedClass} onChange={handleClassChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
-                                <option value="">Select Class</option>
-                                {["Pre-Nursery", "Nursery", "L.K.G", "U.K.G", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"].map(cls => (
-                                    <option key={cls} value={cls}>{cls}</option>
-                                ))}
-                            </select>
+                           
                         </div>
-                        <select id="section" value={section} onChange={handleSectionChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
-                            <option value="">Select Section</option>
-                            {sectionsDetails.map((section, index) => (
-                                <option key={index} value={section}>{section}</option>
-                            ))}
-                        </select>
-                        <div className="relative" ref={ref}>
+
+                        {/* <div className="relative" ref={ref}>
                             <FaUser className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400 z-10" />
                             <input
                                 type="text"
@@ -393,7 +303,7 @@ const Transactions = () => {
                                 value={searchMain}
                                 onChange={(e) => setSearchMain(e.target.value)}
                             />
-                        </div>
+                        </div> */}
                         <button
                             className='bg-purple-500 hover:bg-purple-600 mobile:max-tablet:text-xs whitespace-nowrap rounded-lg shadow-md px-4 py-2 text-white flex items-center'
                             onClick={handleAddTransaction}
@@ -449,22 +359,6 @@ const Transactions = () => {
                         <div className="bg-white rounded-lg mobile:max-tablet:p-4 mobile:max-tablet:w-full mobile:max-tablet:mx-10 p-6 shadow-lg w-1/2">
                             <div className='flex justify-between'>
                                 <h2 className="text-xl font-bold mb-4 text-purple-600">Add Transaction</h2>
-
-                                <div className="flex justify-center items-center space-x-4">
-                                    <span className={`text-lg font-semibold ${transactionType === 'semester' ? 'text-purple-800' : 'text-gray-400'}`}>Semester</span>
-
-                                    <div
-                                        onClick={toggleWheel}
-                                        className="w-20 h-10  bg-gray-200 rounded-full relative cursor-pointer transition-all duration-300 ease-in-outshadow-inner">
-                                        <div className={`absolute top-1 w-8 h-8  bg-white rounded-full shadow-lg  transform transition-all duration-300 ease-in-out
-                                     ${transactionType === 'semester' ? 'translate-x-1' : 'translate-x-[calc(100%+4px)]'}`}>
-                                            <div className={` absolute inset-0 m-1 rounded-full bg-gradient-to-br transition-all duration-300
-                                    ${transactionType === 'semester' ? 'from-purple-500 to-purple-700' : 'from-gray-300 to-gray-500'}`}>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span className={`text-lg font-semibold ${transactionType === 'additional' ? 'text-purple-800' : 'text-gray-400'}`}>Additional</span>
-                                </div>
                             </div>
 
                             <div className="grid md:grid-cols-1 grid-cols-2 gap-6">
@@ -613,7 +507,7 @@ const Transactions = () => {
                         </div>
                     </div>
                 )}
-                <Outlet context={{ transactionData, startDate, endDate, searchMain }} />
+                <Outlet context={{ transactionData, startDate, endDate, searchMain, selectedSession }} />
             </div>
         </div >
     );

@@ -61,7 +61,7 @@ export default function () {
                     className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${majorDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'}`}
                     onClick={handleToggleMajorDiscountStructure}
                 >
-                    {majorDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Bulk Discount Add</>}
+                    {majorDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Create Category Discount</>}
                 </button>
 
             </div>

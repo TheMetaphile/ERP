@@ -25,6 +25,7 @@ const PendingFee = () => {
     const { authState, logout, updateAccessToken } = useContext(AuthContext);
     const session = getSessions();
     const [selectedSession, setSelectedSession] = useState(session[0]);
+    const [selectedMonth, setSelectedMonth] = useState("");
     const [selectedClass, setSelectedClass] = useState("");
     const [section, setSelectedSection] = useState('');
     const [sectionsDetails, setSectionsDetails] = useState([]);
@@ -38,6 +39,10 @@ const PendingFee = () => {
         } else {
             setSectionsDetails([]);
         }
+    };
+
+    const handleMonthChange = (e) => {
+        setSelectedMonth(e.target.value);
     };
 
     const handleSectionChange = (e) => {
@@ -68,7 +73,7 @@ const PendingFee = () => {
 
     const handleDownload = async () => {
         try {
-            const response = await axios.get(`${BASE_URL_Login}/export/Pending/semesterFee?semester=${Semester}&course=${course}`, {
+            const response = await axios.get(`${BASE_URL_Login}/fee/export/Pending/${selectedClass}/${section}/${selectedMonth}/${selectedSession}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 },
@@ -82,7 +87,7 @@ const PendingFee = () => {
             const url = window.URL.createObjectURL(blob);
 
             link.href = url;
-            link.setAttribute('download', `Pending_Fee_SemesterReport_${course}_Sem-${Semester}.xlsx`);
+            link.setAttribute('download', `Pending_Fee_${selectedClass}_${section}_${selectedMonth}_${selectedSession}.xlsx`);
 
             document.body.appendChild(link);
 
@@ -92,31 +97,8 @@ const PendingFee = () => {
             window.URL.revokeObjectURL(url);
 
         } catch (error) {
-            //console.error('Error fetching back fee status:', error);
+            console.error('Error fetching back fee status:', error);
             //console.error('Error fetching agents:', error.response.data.error);
-            if (error.response && error.response.data.error === 'You are not permitted to access this data. Please contact the admin') {
-                console.warn('Access denied. Attempting to refresh token...');
-
-                try {
-                    const refreshResponse = await axios.post(`${BASE_URL_Login}/token/newAccessToken`, {
-                        refreshToken: authState.refreshToken,
-                    });
-
-                    const newAccessToken = refreshResponse.data.accessToken;
-                    //console.log("newasdg", newAccessToken)
-                    updateAccessToken(newAccessToken, authState);
-
-                    authState.accessToken = newAccessToken;
-
-                    await handleDownload();
-                } catch (refreshError) {
-                    //console.error('Failed to refresh token:', refreshError);
-                    toast.error('Session Expired');
-                    logout();
-                }
-            } else {
-                toast.error(error.response.data.error);
-            }
         }
     };
 
@@ -148,6 +130,12 @@ const PendingFee = () => {
                                 <option key={index} value={section}>{section}</option>
                             ))}
                         </select>
+                        <select id="Month" name="Month" value={selectedMonth} onChange={handleMonthChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                            <option value="">Select Month</option>
+                            {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December",].map(mon => (
+                                <option key={mon} value={mon}>{mon}</option>
+                            ))}
+                        </select>
                     </div>
                 </div>
                 <div className="flex justify-end items-center mb-3">
@@ -159,7 +147,7 @@ const PendingFee = () => {
                     </button>
                 </div>
 
-                <SemesterPendingFee selectedClass={selectedClass} selectedSection={section} />
+                <SemesterPendingFee selectedClass={selectedClass} selectedSection={section} selectedMonth={selectedMonth} selectedSession={selectedSession}/>
             </div>
         </div>
     );

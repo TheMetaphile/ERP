@@ -5,46 +5,34 @@ const SemesterRow = ({ student }) => {
 
     return (
         <tr className="bg-white border-b hover:bg-gray-50">
-            <td className="px-3 py-4">{student.enrollmentNo}</td>
+            <td className="px-3 py-4">{student.rollNumber}</td>
             <td className="px-3 py-4">
-                <Link to={`/Department-Dashboard/student/${student.id}`} className="whitespace-nowrap rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
-                    {student.name}
-                </Link>
+                <h1 className="w-44 mobile:max-tablet:w- text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
+                    <img src={student.studentProfileLink} alt="profile pic" className='w-10 h-10 rounded-full mobile:max-sm:hidden' />
+                    <div className='w-32'>
+                        {student.studentName}
+                    </div>
+                </h1>
             </td>
-            <td className="px-3 py-4">{student.studentWhatsAppNo}</td>
+            <td className="px-3 py-4">{student.fatherNumber}</td>
             <td className="px-3 py-4">
                 <div className='text-blue-700 px-2 py-1 bg-blue-100 font-semibold border border-blue-600 rounded-full'>
-                    ₹ {student.totalSemesterFee}
+                    ₹ {student.totalFee}
                 </div>
             </td>
             <td className="px-3 py-4">
                 <div className='text-blue-700 px-2 py-1 bg-blue-100 font-semibold border border-blue-600 rounded-full'>
-                    ₹ {student.totalDiscount}
+                    ₹ {student.manualDiscount + student.categoryDiscount}
                 </div>
             </td>
             <td className="px-3 py-4">
                 <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
-                    ₹ {student.totalSemesterPaid}
+                    ₹ {student.paidFee}
                 </div>
             </td>
             <td className="px-3 py-4">
                 <div className='text-red-700 px-2 py-1 bg-red-100 font-semibold border border-red-600 rounded-full'>
-                    ₹ {student.totalSemesterFee - student.totalSemesterPaid - student.totalDiscount}
-                </div>
-            </td>
-            <td className="px-3 py-4">
-                <div className='text-blue-700 px-2 py-1 bg-blue-100 font-semibold border border-blue-600 rounded-full'>
-                    ₹ {student.totalAdditionalFee}
-                </div>
-            </td>
-            <td className="px-3 py-4">
-                <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
-                    ₹ {student.totalAdditionalPaid}
-                </div>
-            </td>
-            <td className="px-3 py-4">
-                <div className='text-red-700 px-2 py-1 bg-red-100 font-semibold border border-red-600 rounded-full'>
-                    ₹ {student.totalAdditionalFee - student.totalAdditionalPaid}
+                    ₹ {student.totalFee - student.manualDiscount - student.categoryDiscount - student.paidFee}
                 </div>
             </td>
         </tr>

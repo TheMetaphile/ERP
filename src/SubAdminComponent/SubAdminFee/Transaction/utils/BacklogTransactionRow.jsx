@@ -7,9 +7,9 @@ import { toast } from 'react-toastify';
 import { MdDeleteForever } from "react-icons/md";
 import jsPDF from 'jspdf';
 import { Link, useOutletContext } from 'react-router-dom';
-import logo from '../../../../assets/logo.png';
+import logo from '../../../../assets/metaphile_logo.png';
 
-const BacklogTransactionRow = ({ student, Semester, course, session, data }) => {
+const BacklogTransactionRow = ({ student, session, data }) => {
     const { authState, logout, updateAccessToken } = useContext(AuthContext);
     const [reason, setReason] = useState('');
     const { transactionData } = useOutletContext();
@@ -56,29 +56,43 @@ const BacklogTransactionRow = ({ student, Semester, course, session, data }) => 
     }
 
     const parseDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.getTime();
+        if (!dateString) return 'Invalid Date';
+
+        const parts = dateString.split(' ');
+        if (parts.length < 1) return 'Invalid Date';
+
+        const dateParts = parts[0].split('-');
+        if (dateParts.length < 3) return 'Invalid Date';
+
+        const timeParts = parts[1]?.split(':') || ['00', '00', '00'];
+
+        const day = parseInt(dateParts[0], 10);
+        const month = parseInt(dateParts[1], 10) - 1;
+        const year = parseInt(dateParts[2], 10);
+        const hours = parseInt(timeParts[0], 10) || 0;
+        const minutes = parseInt(timeParts[1], 10) || 0;
+        const seconds = parseInt(timeParts[2], 10) || 0;
+
+        if (isNaN(day) || isNaN(month) || isNaN(year)) return 'Invalid Date';
+
+        return new Date(year, month, day, hours, minutes, seconds).getTime();
     };
     const confirmDelete = async () => {
         if (reason.length < 1) {
             toast.error('Please Provide Reason First')
             return;
         }
-
-        if (!password) {
-            toast.error('Please enter your password');
-            return;
-        }
         let config = {
-            method: 'delete',
+            method: 'put',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_Login}/transaction/fetch/semesterFee/delete/${student._id}/${!student.flag}?session=${session}`,
+            url: `${BASE_URL_Login}/fee/update/transaction/${student._id}`,
             headers: {
                 'Authorization': `Bearer ${authState.accessToken}`
             },
             data: {
                 reason: reason,
-                password: password
+                flag: `${!student.flag}`,
+                session: session,
             }
         };
 
@@ -93,31 +107,8 @@ const BacklogTransactionRow = ({ student, Semester, course, session, data }) => 
             toast.success('Transaction deleted successfully');
             closePopup();
         } catch (error) {
-            //console.log(error);
+            console.log(error);
             //console.error('Error fetching agents:', error.response.data.error);
-            if (error.response && error.response.data.error === 'You are not permitted to access this data. Please contact the admin') {
-                console.warn('Access denied. Attempting to refresh token...');
-
-                try {
-                    const refreshResponse = await axios.post(`${BASE_URL_Login}/token/newAccessToken`, {
-                        refreshToken: authState.refreshToken,
-                    });
-
-                    const newAccessToken = refreshResponse.data.accessToken;
-                    //console.log("newasdg", newAccessToken)
-                    updateAccessToken(newAccessToken, authState);
-
-                    authState.accessToken = newAccessToken;
-
-                    await unDeleteTransaction();
-                } catch (refreshError) {
-                    //console.error('Failed to refresh token:', refreshError);
-                    toast.error('Session Expired');
-                    logout();
-                }
-            } else {
-                toast.error(error.response?.data?.error);
-            }
         }
     };
 
@@ -126,17 +117,23 @@ const BacklogTransactionRow = ({ student, Semester, course, session, data }) => 
     }
 
     const generateReceipt = (data) => {
-        console.log(data,data.student.name);
+        console.log(data, data.student.name);
         const safeValue = (value) => {
             if (!value) return 'N/A';
+
             if (typeof value === 'string' && value.includes('T')) {
                 const date = new Date(value);
                 const day = String(date.getDate()).padStart(2, '0');
                 const month = String(date.getMonth() + 1).padStart(2, '0');
                 const year = date.getFullYear();
-                return `${day}-${month}-${year} `;
+                return `${day}-${month}-${year}`;
             }
-            return `${value}`;
+
+            if (typeof value === 'string' && value.match(/^\d{2}-\d{2}-\d{4}/)) {
+                return value.split(' ')[0];
+            }
+
+            return String(value);
         };
 
         const doc = new jsPDF();
@@ -162,9 +159,6 @@ const BacklogTransactionRow = ({ student, Semester, course, session, data }) => 
                 const centerY = 20;
                 const radius = 15;
 
-                doc.setFillColor(255, 255, 255);
-                doc.circle(centerX, centerY, radius, 'F');
-
                 doc.addImage(logo, 'PNG', centerX - radius, centerY - radius, radius * 2, radius * 2);
             }
         } catch (error) {
@@ -177,7 +171,7 @@ const BacklogTransactionRow = ({ student, Semester, course, session, data }) => 
         doc.text('OFFICIAL PAYMENT RECEIPT', 105, 20, { align: 'center' });
 
         doc.setFontSize(12);
-        doc.text(safeValue(authState?.userDetails?.collegeName), 105, 30, { align: 'center' });
+        doc.text(safeValue('Metaphile Public School'), 105, 30, { align: 'center' });
 
         doc.setDrawColor(colors.secondary);
         doc.setLineWidth(0.7);
@@ -189,18 +183,19 @@ const BacklogTransactionRow = ({ student, Semester, course, session, data }) => 
         doc.setFont('helvetica', 'normal');
 
         const details = [
-            { label: 'Receipt Number', value: safeValue(`${parseDate(data.date)}`) },
+
+            { label: 'Receipt Number', value: safeValue(`${parseDate(data?.date)}`) },
             { label: 'Student Name', value: data.student?.name },
             { label: 'Father Name', value: data.student?.fatherName },
-            { label: 'Course', value: data.student?.course },
-            { label: 'Semester', value: safeValue(data.semester) },
-            { label: 'Type of Fee', value: 'Backlog Fee' },
-            { label: 'Payment Mode', value: data.signature },
-            { label: 'Payment ID', value: safeValue(data.payment_id) },
-            { label: 'Order ID', value: safeValue(data.order_id) },
-            { label: 'Payment Amount (In Digits)', value: safeValue(`${data.amount}`) },
-            { label: 'Payment Amount (In Words)', value: convertToWords(data.amount) },
-            { label: 'Transaction Date', value: safeValue(data.date) },
+            { label: 'Class', value: data?.class },
+            { label: 'Section', value: safeValue(data.section) },
+            { label: 'Type of Fee', value: 'School Fee' },
+            { label: 'Payment Mode', value: data?.signature },
+            { label: 'Payment ID', value: safeValue(data?.payment_id) },
+            { label: 'Order ID', value: safeValue(data?.order_id) },
+            { label: 'Payment Amount (In Digits)', value: safeValue(`${data?.amount}`) },
+            { label: 'Payment Amount (In Words)', value: convertToWords(data?.amount) },
+            { label: 'Transaction Date', value: safeValue(data?.date) },
         ];
 
         let yPosition = 75;
@@ -252,17 +247,19 @@ const BacklogTransactionRow = ({ student, Semester, course, session, data }) => 
                 <tr className="bg-white border-b hover:bg-gray-50">
                     <td className="px-3 py-4"><div className='flex flex-col'>
                         {transactionData.name}
-                        {transactionData.enrollmentNo}
+                        {transactionData.rollNumber}
+                    </div>
+                    </td>
 
-                    </div></td>
-                    <td className="px-3 py-4">{transactionData.email}</td>
                     <td className="px-3 py-4">{transactionData.date}</td>
-                    <td className="px-3 py-4">{transactionData.subject}</td>
+                    <td className="px-3 py-4">{transactionData.order_id}</td>
                     <td className="px-3 py-4">
                         <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
                             ₹ {transactionData.amount}
                         </div>
                     </td>
+
+                    <td className="px-3 py-4">{transactionData.discount}</td>
                     <td className="px-3 py-4">{transactionData.payment_id}</td>
                     <td className="px-3 py-4">{transactionData.signature}</td>
                     <td className="px-3 py-4">
@@ -290,14 +287,13 @@ const BacklogTransactionRow = ({ student, Semester, course, session, data }) => 
                             {student.student.name}
                         </div>
                         <div>
-                            {student.student.enrollmentNo}
+                            {student.student.rollNumber}
                         </div>
 
                     </Link>
                 </td>
-                <td className="px-3 py-4">{student.email}</td>
                 <td className="px-3 py-4">{student.date}</td>
-                <td className="px-3 py-4">{student.title ? student.title : 'N/A'}</td>
+                <td className="px-3 py-4">{student.order_id}</td>
                 <td className="px-3 py-4">
                     <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
                         ₹ {student.amount}
@@ -310,7 +306,7 @@ const BacklogTransactionRow = ({ student, Semester, course, session, data }) => 
                 </td>
                 <td className="px-3 py-4">{student.payment_id}</td>
                 <td className="px-3 py-4">{student.signature}</td>
-                <td className="px-3 py-4"><div className={`${student.status === 'Success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} rounded-full text-center px-3 py-2 font-semibold`}>{student.status}</div></td>
+                <td className="px-3 py-4"><div className={`${student.payment_status === 'Success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} rounded-full text-center px-3 py-2 font-semibold`}>{student.payment_status}</div></td>
                 <td className="px-3 py-4">
                     {student.flag ?
                         <div className='text-green-500 text-xl cursor-pointer' onClick={handleDeleteClick}><FaUndo /></div>
@@ -375,14 +371,14 @@ const BacklogTransactionRow = ({ student, Semester, course, session, data }) => 
                                     <span className="ml-2">{student.signature}</span>
                                 </p>
                                 <p className="text-gray-700 py-1.5 border-b border-gray-100">
-                                    <span className="font-semibold text-blue-600">Status:</span>
-                                    <span className="ml-2">{student.status}</span>
+                                    <span className="font-semibold text-blue-600">payment_status:</span>
+                                    <span className="ml-2">{student.payment_status}</span>
                                 </p>
                             </div>
                         </div>
 
                         <div className="border-t border-gray-200 pt-6 flex items-center justify-between mb-2 gap-2">
-                            <div className='w-full'>
+                            {/* <div className='w-full'>
                                 <p className="text-gray-600 mb-3 font-bold">Enter your password to confirm:</p>
                                 <input
                                     type="password"
@@ -391,7 +387,7 @@ const BacklogTransactionRow = ({ student, Semester, course, session, data }) => 
                                     placeholder="Enter password"
                                     className="w-full p-3 text-gray-700 bg-white border-2 border-indigo-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:border-indigo-700/90  transition duration-300 ease-in-out"
                                 />
-                            </div>
+                            </div> */}
                             <div className='w-full'>
                                 <p className="text-gray-600 mb-3 font-bold">Enter your Reason:</p>
                                 <input
