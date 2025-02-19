@@ -73,7 +73,7 @@ const PendingFee = () => {
 
     const handleDownload = async () => {
         try {
-            const response = await axios.get(`${BASE_URL_Login}/fee/export/Pending/${selectedClass}/${section}/${selectedMonth}/${selectedSession}`, {
+            const response = await axios.get(`${BASE_URL_Login}/fee/export/Pending/${selectedClass}/${section}/${selectedSession}/${selectedMonth}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 },

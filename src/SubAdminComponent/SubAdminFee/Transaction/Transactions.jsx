@@ -100,6 +100,7 @@ const Transactions = () => {
         };
     }, []);
 
+
     const formatDateTime = () => {
         const now = new Date();
         const day = String(now.getDate()).padStart(2, '0');
@@ -113,46 +114,22 @@ const Transactions = () => {
     };
 
     const handleSubmitTransaction = async () => {
-        const date = formatDateTime();
+        const datee = formatDateTime();
 
-        const transactionData = transactionType === 'semester' ? {
-            title: 'Semester Fee',
-            id: selectedStudent._id,
-            amount: amount,
-            email: selectedStudent.studentEmailId,
-            number: selectedStudent.studentPhoneNo,
-            by: authState?.userDetails?._id,
-            date: date,
-            status: "Success",
-            order_id: `Manual/${Semester}/${session}/${selectedStudent.name}`,
-            payment_id: `${mode}-${Date.now()}`,
-            signature: mode,
-            semester: Semester,
-            session: session,
-            course: course,
+
+        const requestData =  {
             token: authState.accessToken,
-            name: selectedStudent.name,
-        } :
-            {
-                title: subject,
-                id: selectedStudent._id,
-                amount: amount,
-                email: selectedStudent.studentEmailId,
-                number: selectedStudent.studentPhoneNo,
-                by: authState?.userDetails?._id,
-                date: date,
-                status: "Success",
-                order_id: `Manual/${Semester}/${session}/${selectedStudent.name}`,
-                payment_id: `${mode}-${Date.now()}`,
-                signature: mode,
-                semester: Semester,
-                session: session,
-                subject: subject,
-                course: course,
-                token: authState.accessToken,
-                name: selectedStudent.name,
-            };
-        setTransactionData(transactionData);
+            studentID: selectedStudent._id,
+            amount: amount,
+            date: datee,
+            status: "Success",
+            installment_id: `${datee}-${selectedStudent.email}`,
+            order_id: new Date().toLocaleString("en-US", { month: "long" }),
+            payment_id: `${mode}-${Date.now()}`,
+            signature: `${mode}`,
+            discount: 0,
+        } 
+        setTransactionData(requestData);
         setIsModalOpen(false);
         //console.log(course, transactionData, selectedStudent)
 
@@ -161,8 +138,8 @@ const Transactions = () => {
             return;
         }
         try {
-            const response = await axios.post(`${BASE_URL_Login}/payment/backFee`,
-                transactionData,
+            const response = await axios.post(`${BASE_URL_Login}/fee/payment`,
+                requestData,
                 {
                     headers: {
                         'Authorization': `Bearer ${authState.accessToken}`
@@ -171,31 +148,9 @@ const Transactions = () => {
             toast.success("Transaction added Successfully");
             handleCloseModal();
         } catch (error) {
-            //console.error('Error fetching back fee status:', error);
+            console.error('Error fetching back fee status:', error);
             //console.error('Error fetching agents:', error.response.data.error);
-            if (error.response && error.response.data.error === 'You are not permitted to access this data. Please contact the admin') {
-                console.warn('Access denied. Attempting to refresh token...');
-
-                try {
-                    const refreshResponse = await axios.post(`${BASE_URL_Login}/token/newAccessToken`, {
-                        refreshToken: authState.refreshToken,
-                    });
-
-                    const newAccessToken = refreshResponse.data.accessToken;
-                    //console.log("newasdg", newAccessToken)
-                    updateAccessToken(newAccessToken, authState);
-
-                    authState.accessToken = newAccessToken;
-
-                    await handleSubmitTransaction();
-                } catch (refreshError) {
-                    //console.error('Failed to refresh token:', refreshError);
-                    toast.error('Session Expired');
-                    logout();
-                }
-            } else {
-                toast.error(error.response.data.error);
-            }
+       
         }
     };
 
@@ -205,23 +160,24 @@ const Transactions = () => {
             setShowSuggestions(false);
             return;
         }
+
         try {
-            const response = await axios.post(`${BASE_URL_Login}/fetchSingle/student`,
-                {
-                    email: value,
-                },
-                {
-                    headers: { 'Authorization': `Bearer ${authState.accessToken}` },
-                }
-            );
+
+            const response = await axios.post(`${BASE_URL_Login}/search/student`, {
+                accessToken: authState.accessToken,
+                searchString: value,
+                start: 0,
+                end: 30
+            })
+
             //console.log(response.data.Students);
-            setSuggestions(response.data.Students);
+            setSuggestions(response.data.Teachers);
             setShowSuggestions(true);
         } catch (error) {
             setSuggestions([]);
             setShowSuggestions(false);
             console.error('Error fetching agents:', error.response.data.error);
-         
+
         }
     };
 
@@ -291,7 +247,7 @@ const Transactions = () => {
                                     <option key={index} value={session}>{session}</option>
                                 ))}
                             </select>
-                           
+
                         </div>
 
                         {/* <div className="relative" ref={ref}>
@@ -379,17 +335,18 @@ const Transactions = () => {
                                     {showSuggestions && search && (
                                         <div className="absolute z-10 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
                                             {suggestions.map((suggestion) => (
-                                                <div
+                                                <li
                                                     key={suggestion._id}
-                                                    className="p-2 hover:bg-gray-200 cursor-pointer"
+                                                    className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
                                                     onClick={() => {
                                                         setSearch(suggestion.name);
                                                         setSelectedStudent(suggestion);
                                                         setShowSuggestions(false);
                                                     }}
                                                 >
+                                                    <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
                                                     {suggestion.name}
-                                                </div>
+                                                </li>
                                             ))}
                                         </div>
                                     )}
@@ -405,29 +362,13 @@ const Transactions = () => {
                                         type="email"
                                         className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white"
                                         placeholder="Enter email"
-                                        value={selectedStudent.studentEmailId}
+                                        value={selectedStudent.email}
                                     // readOnly
                                     />
                                     <FaEnvelope className="absolute left-3 top-[2.6rem] text-purple-400" size={20} />
                                 </div>
 
-                                {transactionType === 'backlog' && (
-                                    <div className="relative">
-                                        <label className="mb-2 text-sm font-medium text-purple-800 flex items-center">
-                                            <FaBook className="mr-2 text-purple-600" size={20} />
-                                            Title
-                                        </label>
-                                        <input
-                                            type="text"
-                                            className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white"
-                                            placeholder="Enter title for additional fee"
-                                            value={subject}
-                                            onChange={(e) => setSubject(e.target.value)}
-                                        />
-                                        <FaBook className="absolute left-3 top-[2.6rem] text-purple-400" size={20} />
-                                    </div>
-                                )}
-
+                          
                                 <div className="relative">
                                     <label className="mb-2 text-sm font-medium text-purple-800 flex items-center">
                                         <FaRupeeSign className="mr-2 text-purple-600" size={20} />
@@ -507,7 +448,7 @@ const Transactions = () => {
                         </div>
                     </div>
                 )}
-                <Outlet context={{ transactionData, startDate, endDate, searchMain, selectedSession }} />
+                <Outlet context={{ transactionData, startDate, endDate, selectedStudent, searchMain, selectedSession }} />
             </div>
         </div >
     );

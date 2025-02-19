@@ -6,6 +6,7 @@ import AuthContext from '../../../../Context/AuthContext';
 import { BASE_URL_Login } from '../../../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import Loading from '../../../../LoadingScreen/Loading';
+import { FaQuestionCircle } from 'react-icons/fa';
 
 const BacklogTransaction = () => {
   const [data, setData] = useState([]);
@@ -14,7 +15,7 @@ const BacklogTransaction = () => {
   const end = 20;
   const [allDataFetched, setAllDataFetched] = useState(false);
   const { startDate, endDate, searchMain, selectedSession } = useOutletContext();
-
+  const { transactionData, selectedStudent } = useOutletContext();
   const [loading, setLoading] = useState(false);
 
   const fetchStudents = async () => {
@@ -68,6 +69,7 @@ const BacklogTransaction = () => {
     }
   }, [selectedSession, startDate, endDate, searchMain]);
 
+
   const handleViewMore = () => {
     setStart(prevStart => prevStart + end);
   };
@@ -99,6 +101,36 @@ const BacklogTransaction = () => {
           ))}
           {!allDataFetched && (
             <h1 className='text-purple-500 hover:text-purple-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+          )}
+          {transactionData && (
+            <tr className="bg-white border-b hover:bg-gray-50">
+              <td className="px-3 py-4"><div className='flex flex-col'>
+                {selectedStudent.name}
+                {transactionData.rollNumber}
+              </div>
+              </td>
+
+              <td className="px-3 py-4">{transactionData.date}</td>
+              <td className="px-3 py-4">{transactionData.order_id}</td>
+              <td className="px-3 py-4">
+                <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
+                  ₹ {transactionData.amount}
+                </div>
+              </td>
+              <td className="px-3 py-4">
+                <div className='text-blue-700 px-2 py-1 bg-blue-100 font-semibold border border-blue-600 rounded-full'>
+                  ₹ {transactionData.discount ? transactionData.discount : 0}
+                </div>
+              </td>
+              <td className="px-3 py-4">{transactionData.payment_id}</td>
+              <td className="px-3 py-4">{transactionData.signature}</td>
+              <td className="px-3 py-4">
+
+              </td>
+              <td className="px-3 py-4">
+
+              </td>
+            </tr>
           )}
         </tbody>
       </table>

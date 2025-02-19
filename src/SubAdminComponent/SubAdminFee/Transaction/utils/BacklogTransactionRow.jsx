@@ -6,13 +6,12 @@ import { FaQuestionCircle, FaUndo, FaDownload } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { MdDeleteForever } from "react-icons/md";
 import jsPDF from 'jspdf';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from '../../../../assets/metaphile_logo.png';
 
 const BacklogTransactionRow = ({ student, session, data }) => {
     const { authState, logout, updateAccessToken } = useContext(AuthContext);
     const [reason, setReason] = useState('');
-    const { transactionData } = useOutletContext();
     const [showPopup, setShowPopup] = useState(false);
     const [password, setPassword] = useState('');
 
@@ -25,7 +24,6 @@ const BacklogTransactionRow = ({ student, session, data }) => {
         setPassword('');
     };
 
-    //console.log('in back file ', transactionData)
     function convertToWords(amount) {
         const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
         const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
@@ -243,41 +241,7 @@ const BacklogTransactionRow = ({ student, session, data }) => {
 
     return (
         <>
-            {transactionData && (
-                <tr className="bg-white border-b hover:bg-gray-50">
-                    <td className="px-3 py-4"><div className='flex flex-col'>
-                        {transactionData.name}
-                        {transactionData.rollNumber}
-                    </div>
-                    </td>
-
-                    <td className="px-3 py-4">{transactionData.date}</td>
-                    <td className="px-3 py-4">{transactionData.order_id}</td>
-                    <td className="px-3 py-4">
-                        <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
-                            ₹ {transactionData.amount}
-                        </div>
-                    </td>
-
-                    <td className="px-3 py-4">{transactionData.discount}</td>
-                    <td className="px-3 py-4">{transactionData.payment_id}</td>
-                    <td className="px-3 py-4">{transactionData.signature}</td>
-                    <td className="px-3 py-4">
-                        <div className="relative">
-                            <FaQuestionCircle className="text-lg absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-700" />
-                            <input
-                                className={`w-full px-4 py-3 pl-10 text-gray-700 bg-white border-2 border-indigo-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:border-indigo-700/90 transition duration-300 ease-in-out`}
-                                name="reason" value={reason} onChange={handleChange}
-                                placeholder="Reason"
-                                required
-                            />
-                        </div>
-                    </td>
-                    <td className="px-3 py-4">
-
-                    </td>
-                </tr>
-            )}
+            
 
             <tr className="bg-white border-b hover:bg-gray-50">
                 <td className="px-3 py-4">
@@ -319,6 +283,8 @@ const BacklogTransactionRow = ({ student, session, data }) => {
                 </td>
 
             </tr>
+
+           
             {showPopup && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-4xl transform transition-all duration-300 scale-100 mx-4">
