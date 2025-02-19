@@ -359,7 +359,7 @@ const FeePaymentRowQuarter = ({ student, key, selectedStudent, selectedDiscount 
                     payOnline({
                         amount: amount,
                         id: selectedStudent._id,
-                        by: authState.userDetails._id,
+                        by: authState?.userDetails?._id,
                         title: "Quarterly Fee",
                         email: selectedStudent.email,
                         number: selectedStudent.fatherPhoneNumber,

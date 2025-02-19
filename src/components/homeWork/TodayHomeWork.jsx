@@ -51,12 +51,12 @@ export default function TodayHomeWork() {
     }, [start]);
 
     const fetchHomework = async () => {
-        console.log(authState.userDetails.currentClass, new Date().getMonth() + 1, authState.userDetails.academicYear, authState.userDetails.section, selectedSubject)
+        console.log(authState?.userDetails?.currentClass, new Date().getMonth() + 1, authState?.userDetails?.academicYear, authState?.userDetails?.section, selectedSubject)
         if (loading || allDataFetched) return;
 
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/student?class=${authState.userDetails.currentClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${authState.userDetails.section}&subject=${selectedSubject}&start=${start}&end=${end}`, {
+            const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/student?class=${authState?.userDetails?.currentClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${authState?.userDetails?.section}&subject=${selectedSubject}&start=${start}&end=${end}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`,
                 }

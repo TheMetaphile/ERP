@@ -31,7 +31,7 @@ export default function FeeStructureField({ fees }) {
             handler: function (response) {
                 const today = new Date();
                 const datee = new Date().toISOString().split('T')[0];
-                const email = authState.userDetails.email;
+                const email = authState?.userDetails?.email;
                 const installmentId = `${datee}-${email}`;
                 console.log(response, 'resssssssss', datee, email, installmentId)
 
@@ -57,7 +57,7 @@ export default function FeeStructureField({ fees }) {
         rzp1.on("payment.failed", function (response) {
             const today = new Date();
             const datee = new Date().toISOString().split('T')[0];
-            const email = authState.userDetails.email;
+            const email = authState?.userDetails?.email;
             const installmentId = `${datee}-${email}`;
             console.log(response, 'fffffffffff', datee, email, installmentId);
 

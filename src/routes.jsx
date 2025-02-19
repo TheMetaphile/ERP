@@ -1,13 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 import Loading from "./LoadingScreen/Loading.jsx";
-import StudentCard from "./AdminComponents/StudentDetails.jsx";
-import CompleteFee from "./AdminComponents/fee/CompleteFee/CompleteFee.jsx";
-import CreateCategory from "./AdminComponents/fee/DiscountCategories/CreateCategory.jsx";
-import Transactions from "./SubAdminComponent/SubAdminFee/Transaction/Transactions.jsx";
-import BacklogTransaction from "./SubAdminComponent/SubAdminFee/Transaction/utils/BacklogFeeTransaction.jsx";
-import PendingFee from "./SubAdminComponent/SubAdminFee/Pending Fee/PendingFee.jsx";
 
+
+const StudentCard = lazy(() => import("./AdminComponents/StudentDetails.jsx"));
+const CompleteFee = lazy(() => import("./AdminComponents/fee/CompleteFee/CompleteFee.jsx"));
+const CreateCategory = lazy(() => import("./AdminComponents/fee/DiscountCategories/CreateCategory.jsx"));
+const Transactions = lazy(() => import("./SubAdminComponent/SubAdminFee/Transaction/Transactions.jsx"));
+const BacklogTransaction = lazy(() => import("./SubAdminComponent/SubAdminFee/Transaction/utils/BacklogFeeTransaction.jsx"));
+const PendingFee = lazy(() => import("./SubAdminComponent/SubAdminFee/Pending Fee/PendingFee.jsx"));
 const SupAdminTeacherRegister = lazy(() => import("./SuperAdminComponents/Teacher/SupAdminTeacherRegister.jsx"));
 const Studentdetailscard = lazy(() => import("./TeacherComponents/studentdetailcard.jsx"));
 const Detailscard = lazy(() => import("./SubAdminComponent/Detailscard.jsx"));
@@ -210,7 +211,7 @@ const SuspenseWrapper = ({ children }) => (
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <SuspenseWrapper fallback={Loading}>
+    element: <SuspenseWrapper >
       <Login /></SuspenseWrapper>
 
 
@@ -218,36 +219,36 @@ const router = createBrowserRouter([
   },
   {
     path: "/resetpassword",
-    element: <SuspenseWrapper fallback={Loading}><ResetPassword /></SuspenseWrapper>
+    element: <SuspenseWrapper ><ResetPassword /></SuspenseWrapper>
     ,
   },
   {
     path: "/newPassword",
-    element: <SuspenseWrapper fallback={Loading}>
+    element: <SuspenseWrapper >
       <SetNewPassword /></SuspenseWrapper>,
   },
   {
     path: "/Student-Dashboard",
     element: (
       // <PrivateRoute>
-      <SuspenseWrapper fallback={Loading}>
+      <SuspenseWrapper >
         <Dashboard /></SuspenseWrapper>
       // </PrivateRoute>
     ),
     children: [
       {
         path: "",
-        element: <SuspenseWrapper fallback={Loading}>
+        element: <SuspenseWrapper >
           <Home /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/home",
-        element: <SuspenseWrapper fallback={Loading}>
+        element: <SuspenseWrapper >
           <Home /></SuspenseWrapper>,
       },
       {
         path: "/Student-Dashboard/profile",
-        element: <SuspenseWrapper fallback={Loading}>
+        element: <SuspenseWrapper>
           <UserProfile /></SuspenseWrapper>,
       },
       {

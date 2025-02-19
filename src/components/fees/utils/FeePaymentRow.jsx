@@ -6,10 +6,8 @@ import Loading from '../../../LoadingScreen/Loading';
 
 const FeePaymentRow = ({ student, key }) => {
     const { authState } = useContext(AuthContext);
-    const dropdownRef = useRef(null);
     const [paymentMode, setPaymentMode] = useState('');
     const [amount, setAmount] = useState(0);
-    const [discount, setDiscount] = useState(0);
     const [loading, setLoading] = useState(false);
 
     console.log(student)
@@ -49,25 +47,23 @@ const FeePaymentRow = ({ student, key }) => {
 
     useEffect(() => {
 
-        if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
-            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && discount + amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
-                if (paymentMode === 'Online') {
-                    const datee = formatDateTime();
+        if (amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
+            if (paymentMode === 'Online') {
+                const datee = formatDateTime();
 
-                    payOnline({
-                        amount: amount,
-                        id: authState?.userDetails?._id,
-                        by: authState?.userDetails?._id,
-                        title: "Monthly Fee",
-                        email: authState?.userDetails?.email,
-                        number: authState?.userDetails?.fatherPhoneNumber,
-                        semester: authState?.userDetails?.section,
-                        session: authState?.userDetails?.session,
-                        course: authState?.userDetails?.currentClass,
-                        date: datee,
-                        discount: 0
-                    });
-                }
+                payOnline({
+                    amount: amount,
+                    id: authState?.userDetails?._id,
+                    by: authState?.userDetails?._id,
+                    title: "Monthly Fee",
+                    email: authState?.userDetails?.email,
+                    number: authState?.userDetails?.fatherPhoneNumber,
+                    semester: authState?.userDetails?.section,
+                    session: authState?.userDetails?.session,
+                    course: authState?.userDetails?.currentClass,
+                    date: datee,
+                    discount: 0
+                });
             }
         }
     }, [paymentMode]);

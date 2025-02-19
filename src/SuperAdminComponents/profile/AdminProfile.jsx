@@ -22,7 +22,7 @@ const SuperAdminProfile = () => {
   const { authState } = useContext(AuthContext)
   const { userDetails } = authState;
 
-console.log(authState.userDetails)
+console.log(authState?.userDetails)
   return (
     <motion.div
       className=" min-h-screen tablet:p-8 mobile:max-tablet:p-2 p-4"

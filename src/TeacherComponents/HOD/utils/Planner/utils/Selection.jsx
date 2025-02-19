@@ -5,7 +5,7 @@ import axios from "axios";
 
 function Selection({ setClass, setSection, setSubject }) {
     const { authState } = useContext(AuthContext);
-    const co_ordinator_wing = authState.userDetails.co_ordinator_wing;
+    const co_ordinator_wing = authState?.userDetails?.co_ordinator_wing;
     const wingClasses = wingMap[co_ordinator_wing] || [];
 
     const [selectedClass, setSelectedClass] = useState('');

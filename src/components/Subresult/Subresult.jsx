@@ -13,7 +13,7 @@ const Result = () => {
     const [loading, setLoading] = useState(true);
     const { authState } = useContext(AuthContext);
     const [details, setDetails] = useState({ term1: [], term2: [] });
-    const profile = authState.userDetails;
+    const profile = authState?.userDetails;
     const [selectedTermValue, setSelectedTerm] = useState('term1');
     const [selectedTermlabel, setSelectedTermLabel] = useState('Term 1');
     const [attendance, SetAttendance] = useState({});

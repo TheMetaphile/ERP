@@ -26,12 +26,12 @@ function NewUpload({ onClose, onNewWork }) {
             return;
         }
 
-        console.log(subject, classLevel, section, topic, question, chapter, deadline, new Date().toISOString().slice(0, 10), authState.userDetails.email);
+        console.log(subject, classLevel, section, topic, question, chapter, deadline, new Date().toISOString().slice(0, 10), authState?.userDetails?.email);
         setLoading(true);
         try {
             const response = await axios.post(`${BASE_URL_Homework}/homework/upload`,
                 {
-                    email: authState.userDetails.email,
+                    email: authState?.userDetails?.email,
                     date: new Date().toISOString().slice(0, 10),
                     deadline: deadline,
                     class: classLevel,

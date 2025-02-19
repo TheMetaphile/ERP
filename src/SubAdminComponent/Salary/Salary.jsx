@@ -78,8 +78,8 @@ function Salary() {
         <div className="pt-4">
             <header className="p-4 mobile:max-tablet:p-2 flex justify-between items-center ">
                 <div>
-                    <h1 className="text-3xl font-semibold mb-2 mobile:max-laptop:text-lg whitespace-nowrap">Welcome {authState.userDetails.name}</h1>
-                    <p className="text-sm">{authState.userDetails.department}</p>
+                    <h1 className="text-3xl font-semibold mb-2 mobile:max-laptop:text-lg whitespace-nowrap">Welcome {authState?.userDetails?.name}</h1>
+                    <p className="text-sm">{authState?.userDetails?.department}</p>
                 </div>
                 <div className=" flex tablet:items-center">
                     {/* <div className="">
@@ -99,8 +99,8 @@ function Salary() {
                             <img src={profile} alt="profile.jpg" className=" h-10 w-10 rounded mr-2" />
                         </div>
                         <div className=" flex items- flex-col">
-                            <p className=" text-lg mobile:max-laptop:text-sm whitespace-nowrap"> {authState.userDetails.name}</p>
-                            <p className=" text-sm text-gray-500">{authState.userDetails.role}</p>
+                            <p className=" text-lg mobile:max-laptop:text-sm whitespace-nowrap"> {authState?.userDetails?.name}</p>
+                            <p className=" text-sm text-gray-500">{authState?.userDetails?.role}</p>
                         </div>
                     </div>
                 </div>

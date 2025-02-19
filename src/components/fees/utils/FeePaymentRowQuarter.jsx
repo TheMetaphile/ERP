@@ -18,7 +18,7 @@ const FeePaymentRowQuarter = ({ student, key }) => {
             console.log("triggered url", data);
 
             const response = await axios.post(
-                `${BASE_URL_Login}/encrypt/url`,
+                `${BASE_URL_Login}/fee/encrypt/url`,
                 data,
                 {
                     headers: {

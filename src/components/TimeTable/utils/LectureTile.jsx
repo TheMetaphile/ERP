@@ -25,7 +25,7 @@ export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, Time
               teacher={optSub.teacher}
               time={Time}
               isOptional={true}
-              mergeWithSection={optSub.mergeWithSection !== authState.userDetails.section ? optSub.mergeWithSection : null}
+              mergeWithSection={optSub.mergeWithSection !== authState?.userDetails?.section ? optSub.mergeWithSection : null}
             />
           )
         ))

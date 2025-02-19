@@ -78,7 +78,7 @@ function VideoStream({ onClose, onCapture }) {
         if (response.status === 200) {
           console.log('API response:', response.data.predicted_class);
           setUserName(response.data.predicted_class);
-          if (setUserName === authState.userDetails.name) {
+          if (setUserName === authState?.userDetails?.name) {
             setUserMatch(true);
             console.log("Attendence Marked");
           }

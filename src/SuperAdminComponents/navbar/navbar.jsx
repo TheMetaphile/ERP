@@ -38,12 +38,12 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
 
   const addBranch = async () => {
     const newBranch = prompt("Enter new branch name:");
-    console.log(authState.userDetails)
+    console.log(authState?.userDetails)
     if (newBranch && !branches.includes(newBranch)) {
       try {
         const response = await axios.post(
           `${BASE_URL_Login}/branch/create`,
-          { branch: newBranch, _id: authState.userDetails._id },
+          { branch: newBranch, _id: authState?.userDetails?._id },
           {
             headers: {
               Authorization: `Bearer ${authState.accessToken}`,
@@ -141,7 +141,7 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
                 className="flex items-center space-x-4 focus:outline-none "
               >
                 <span className="flex items-center gap-2 font-medium">
-                  {authState.userDetails.name}
+                  {authState?.userDetails?.name}
                   <FaUserCircle className="text-3xl" />
                 </span>
               </button>

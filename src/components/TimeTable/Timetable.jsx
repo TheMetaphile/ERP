@@ -18,7 +18,7 @@ export default function TimeTable() {
     const [lectureTimes, setLectureTimes] = useState([]);
 
     var ClassRange = null;
-    const Class = authState.userDetails.currentClass;
+    const Class = authState?.userDetails?.currentClass;
     useEffect(() => {
         if (Class === 'Pre-Nursery' || Class === 'L.K.G' || Class === 'U.K.G' || Class === 'U.K.J') {
             ClassRange = 'Pre-Nursery - U.K.J'
@@ -138,14 +138,14 @@ export default function TimeTable() {
     }, [fetchedTimeTableStructure, day]);
 
     const handleFetch = async () => {
-        console.log(authState.userDetails.currentClass, authState.userDetails.section, day);
+        console.log(authState?.userDetails?.currentClass, authState?.userDetails?.section, day);
         setLoading(true);
         try {
 
             const response = await axios.post(`${BASE_URL_TimeTable}/timetable/fetch/student`, {
                 accessToken: authState.accessToken,
-                class: authState.userDetails.currentClass,
-                section: authState.userDetails.section,
+                class: authState?.userDetails?.currentClass,
+                section: authState?.userDetails?.section,
                 day: day
             });
             if (response.status === 200) {

@@ -17,10 +17,10 @@ export default function Performance(props) {
 
     useEffect(() => {
         const fetchResult = async () => {
-            console.log(authState.userDetails.email, authState.userDetails.currentClass, authState.userDetails.session)
+            console.log(authState?.userDetails?.email, authState?.userDetails?.currentClass, authState?.userDetails?.session)
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Result}/result/fetch/student?email=${authState.userDetails.email}&class=${authState.userDetails.currentClass}&session=${authState.userDetails.session}`, {
+                const response = await axios.get(`${BASE_URL_Result}/result/fetch/student?email=${authState?.userDetails?.email}&class=${authState?.userDetails?.currentClass}&session=${authState?.userDetails?.session}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

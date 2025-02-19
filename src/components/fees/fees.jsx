@@ -20,7 +20,7 @@ export default function Fees() {
     const handleDropdownChange = (e) => {
         setSelectedOption(e.target.value);
     };
-    console.log('aaa',authState.userDetails)
+    console.log('aaa',authState?.userDetails)
 
     const fetchFees = async () => {
 

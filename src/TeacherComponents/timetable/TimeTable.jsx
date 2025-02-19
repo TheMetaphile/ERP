@@ -133,13 +133,13 @@ function TimeTable() {
     };
 
     const handleSearch = async () => {
-        console.log('hhha', authState.userDetails.email, day)
+        console.log('hhha', authState?.userDetails?.email, day)
         setLoading(true);
 
         try {
             const payload = {
                 accessToken: authState.accessToken,
-                email: authState.userDetails.email,
+                email: authState?.userDetails?.email,
                 day: day
             };
 

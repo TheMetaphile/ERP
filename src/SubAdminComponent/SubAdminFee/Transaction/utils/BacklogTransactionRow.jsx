@@ -177,7 +177,7 @@ const BacklogTransactionRow = ({ student, Semester, course, session, data }) => 
         doc.text('OFFICIAL PAYMENT RECEIPT', 105, 20, { align: 'center' });
 
         doc.setFontSize(12);
-        doc.text(safeValue(authState.userDetails.collegeName), 105, 30, { align: 'center' });
+        doc.text(safeValue(authState?.userDetails?.collegeName), 105, 30, { align: 'center' });
 
         doc.setDrawColor(colors.secondary);
         doc.setLineWidth(0.7);

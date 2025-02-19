@@ -19,7 +19,7 @@ export default function AdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
       setIsOpen(false);
     }
   };
-console.log(authState.userDetails)
+console.log(authState?.userDetails)
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -48,7 +48,7 @@ console.log(authState.userDetails)
                 className="flex items-center space-x-4 focus:outline-none "
               >
                 <span className="flex items-center gap-2 font-medium">
-                  {authState.userDetails.name}
+                  {authState?.userDetails?.name}
                   <FaUserCircle className="text-3xl" />
                 </span>
               </button>

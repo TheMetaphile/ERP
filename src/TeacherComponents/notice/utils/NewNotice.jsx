@@ -524,7 +524,7 @@ function NewNotice({ setShowModal }) {
             >
               <option value="Particular Students">Particular Students</option>
               <option value="Particular Classes">Particular Classes</option>
-              {authState.userDetails.co_ordinator_wing && authState.userDetails.co_ordinator_wing.trim() !== "" && (
+              {authState?.userDetails?.co_ordinator_wing && authState?.userDetails?.co_ordinator_wing.trim() !== "" && (
                 <option value="Particular Teachers">Particular Teachers</option>
               )}
             </motion.select>

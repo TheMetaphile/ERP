@@ -19,7 +19,7 @@ export default function TeacherDrawer({ isOpen }) {
       console.error("Logout failed", error);
     }
   };
-  console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ${authState.userDetails.co_ordinator_wing}", authState.userDetails);
+  console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ${authState?.userDetails?.co_ordinator_wing}", authState?.userDetails);
   const handleClick = (index) => {
     setActive(index)
   }
@@ -33,10 +33,10 @@ export default function TeacherDrawer({ isOpen }) {
         <h2 className="text-xl font-semibold">Dashboard</h2>
         <div className="mt-4">
           {menuItems.map((menuItem, index) => {
-            if (menuItem.title === 'Class Activity' && Object.keys(authState.ClassDetails).length === 0) {
+            if (menuItem.title === 'Class Activity' && Object.keys(authState?.ClassDetails).length === 0) {
               return null;
             }
-            if (menuItem.title === 'Coordinator' && authState.userDetails.co_ordinator_wing === "") {
+            if (menuItem.title === 'Coordinator' && authState?.userDetails?.co_ordinator_wing === "") {
               return null;
             }
             return (

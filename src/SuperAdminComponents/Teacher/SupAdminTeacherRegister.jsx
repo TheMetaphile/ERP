@@ -13,7 +13,7 @@ export default function SupAdminTeacherRegister() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-console.log(authState.userDetails.branch)
+console.log(authState?.userDetails?.branch)
   const [formData, setFormData] = useState(
     {
       name: '',
@@ -34,16 +34,16 @@ console.log(authState.userDetails.branch)
       permanentAddress: '',
       salary: '',
       accessToken: authState.accessToken,
-      branch: authState.userDetails.branch
+      branch: authState?.userDetails?.branch
     }
   );
 
   useEffect(() => {
     setFormData(prevFormData => ({
       ...prevFormData,
-      branch: authState.userDetails.branch
+      branch: authState?.userDetails?.branch
     }));
-  }, [authState.userDetails.branch]);
+  }, [authState?.userDetails?.branch]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;

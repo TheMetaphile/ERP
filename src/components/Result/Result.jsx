@@ -15,16 +15,16 @@ export default function Result() {
         <div className="flex flex-col w-full h-screen overflow-y-auto items-start mt-2 px-2 no-scrollbar">
             <h3 className="text-xl font-medium">Result</h3>
             <InfoCard
-                class={authState.userDetails.currentClass}
-                name={authState.userDetails.name}
-                profileImg={authState.userDetails.profileLink}
-                rollnumber={authState.userDetails.rollNumber}
-                dob={authState.userDetails.DOB}
-                bloodgroup={authState.userDetails.bloodGroup}
-                contactno={authState.userDetails.fatherPhoneNumber}
-                father={authState.userDetails.fatherName}
-                mother={authState.userDetails.motherName}
-                section={authState.userDetails.section}
+                class={authState?.userDetails?.currentClass}
+                name={authState?.userDetails?.name}
+                profileImg={authState?.userDetails?.profileLink}
+                rollnumber={authState?.userDetails?.rollNumber}
+                dob={authState?.userDetails?.DOB}
+                bloodgroup={authState?.userDetails?.bloodGroup}
+                contactno={authState?.userDetails?.fatherPhoneNumber}
+                father={authState?.userDetails?.fatherName}
+                mother={authState?.userDetails?.motherName}
+                section={authState?.userDetails?.section}
             />
             <Attendance term={[{ total: "249", attendance: "235" }, { total: "100", attendance: "72" }]} />
             <Performance />

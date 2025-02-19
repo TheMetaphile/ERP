@@ -26,7 +26,7 @@ export default function FeeStatus() {
     const fetchStatus = async () => {
         try {
             const response = await axios.get(
-                `${BASE_URL_Fee}/fee/fetch/stats?end=20&start=0&class=${authState.userDetails.currentClass}`,
+                `${BASE_URL_Fee}/fee/fetch/stats?end=20&start=0&class=${authState?.userDetails?.currentClass}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${authState.accessToken}`

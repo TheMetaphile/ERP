@@ -13,7 +13,7 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { logout, authState } = useContext(AuthContext);
-  console.log(authState.userDetails.role, authState.userDetails.department);
+  console.log(authState?.userDetails?.role, authState?.userDetails?.department);
 
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -47,7 +47,7 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
   return (
     <div className="flex flex-grow mobile:max-tablet:flex-col h-full  px-2 py-3 mb-2 mobile:max-tablet:mb-0 items-center justify-between bg-purple-300 rounded-lg shadow-md">
       <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-3 mobile:max-tablet:justify-between">
-        {authState.userDetails.role === 'Accountant' && (
+        {authState?.userDetails?.role === 'Accountant' && (
           <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-white shadow-lg cursor-pointer' />
         )}
         <div className=' flex items-center'>
@@ -73,7 +73,7 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
                 className="flex items-center space-x-4 focus:outline-none"
               >
                 <span className="flex items-center gap-2 font-medium">
-                  {authState.userDetails.name}
+                  {authState?.userDetails?.name}
                   <FaUserCircle className="text-3xl" />
                 </span>
               </button>
@@ -91,12 +91,12 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
                   >
                     Students
                   </Link>
-                  {authState.userDetails.role === 'Certificate' && authState.userDetails.department === 'Certificate' ? (
+                  {authState?.userDetails?.role === 'Certificate' && authState?.userDetails?.department === 'Certificate' ? (
                     <Link to="/Sub-Admin/Certificates" className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg">Certificate</Link>
                   ) : (
                     <></>
                   )}
-                  {authState.userDetails.role === 'Result' && authState.userDetails.department === 'Result' ? (
+                  {authState?.userDetails?.role === 'Result' && authState?.userDetails?.department === 'Result' ? (
                     <Link to="/Sub-Admin/Result" className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg">Result</Link>
                   ) : (
                     <></>

@@ -11,10 +11,10 @@ function ClassActivity() {
             title: "Show Result",
             route: "/Teacher-Dashboard/class_activity/reportcard"
         },
-        {
-            title: "Fee Status",
-            route: "/Teacher-Dashboard/class_activity/studentfee"
-        },
+        // {
+        //     title: "Fee Status",
+        //     route: "/Teacher-Dashboard/class_activity/studentfee"
+        // },
         {
             title: "Student Attendance",
             route: "/Teacher-Dashboard/class_activity/studentAttendence"

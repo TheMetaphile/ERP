@@ -20,8 +20,8 @@ export default function ProfileCard() {
     try {
       const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/fetch/single`, {
         accessToken: authState.accessToken,
-        class: authState.userDetails.currentClass,
-        section: authState.userDetails.section
+        class: authState?.userDetails?.currentClass,
+        section: authState?.userDetails?.section
       });
       if (response.status === 200) {
         setTeacher(response.data.name);

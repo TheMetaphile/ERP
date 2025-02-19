@@ -141,7 +141,7 @@ const Transactions = () => {
             amount: amount,
             email: selectedStudent.studentEmailId,
             number: selectedStudent.studentPhoneNo,
-            by: authState.userDetails._id,
+            by: authState?.userDetails?._id,
             date: date,
             status: "Success",
             order_id: `Manual/${Semester}/${session}/${selectedStudent.name}`,
@@ -159,7 +159,7 @@ const Transactions = () => {
                 amount: amount,
                 email: selectedStudent.studentEmailId,
                 number: selectedStudent.studentPhoneNo,
-                by: authState.userDetails._id,
+                by: authState?.userDetails?._id,
                 date: date,
                 status: "Success",
                 order_id: `Manual/${Semester}/${session}/${selectedStudent.name}`,
@@ -229,7 +229,7 @@ const Transactions = () => {
             const response = await axios.post(`${BASE_URL_Login}/search/student`,
                 {
                     searchString: value,
-                    collegeName: authState.userDetails.collegeName
+                    collegeName: authState?.userDetails?.collegeName
                 },
                 {
                     headers: { 'Authorization': `Bearer ${authState.accessToken}` },

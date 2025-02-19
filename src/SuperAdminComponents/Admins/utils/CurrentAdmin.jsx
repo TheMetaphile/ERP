@@ -20,7 +20,7 @@ export default function CurrentAdmin({ onNewWork, additionalDataNonAdmin }) {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/admins/admin?branch=${authState.userDetails.branch}`,
+      url: `${BASE_URL_Login}/admins/admin?branch=${authState?.userDetails?.branch}`,
       headers: {
         'Authorization': `Bearer ${authState.accessToken}`
       }
@@ -40,7 +40,7 @@ export default function CurrentAdmin({ onNewWork, additionalDataNonAdmin }) {
 
   useEffect(() => {
     fetchAdmins();
-  }, [authState.userDetails.branch])
+  }, [authState?.userDetails?.branch])
 
   const tableVariants = {
     hidden: { opacity: 0 },

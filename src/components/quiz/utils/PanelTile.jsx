@@ -10,7 +10,7 @@ export default function PanelTile(props) {
     return (
         <div className=" w-full p-2 flex flex-col laptop:flex-row items-center  justify-center">
 
-            <img src={authState.userDetails.profileLink || ProfileIcon} alt="ProfileIcon" className="w-28 h-28 rounded-full" />
+            <img src={authState?.userDetails?.profileLink || ProfileIcon} alt="ProfileIcon" className="w-28 h-28 rounded-full" />
             <div className='px-2 laptop:ml-10 w-full'>
                 <h1 className='font-normal text-2xl'>{props.name}</h1>
                 <div className='flex items-center justify-between'>

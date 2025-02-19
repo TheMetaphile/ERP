@@ -32,9 +32,9 @@ export default function FeeStructure() {
   const session = getCurrentSession();
 
   const fetchFees = async () => {
-    console.log(authState.userDetails.currentClass, 'Class')
+    console.log(authState?.userDetails?.currentClass, 'Class')
     try {
-      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/pendingFee?email=${authState.userDetails.email}`, {
+      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/pendingFee?email=${authState?.userDetails?.email}`, {
         headers: {
           'Authorization': `Bearer ${authState.accessToken}`
         }

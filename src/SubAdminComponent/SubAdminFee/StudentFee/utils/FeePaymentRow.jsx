@@ -356,7 +356,7 @@ const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
                     payOnline({
                         amount: amount,
                         id: selectedStudent._id,
-                        by: authState.userDetails._id,
+                        by: authState?.userDetails?._id,
                         title: "Monthly Fee",
                         email: selectedStudent.email,
                         number: selectedStudent.fatherPhoneNumber,

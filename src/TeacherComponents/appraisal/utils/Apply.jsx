@@ -17,15 +17,15 @@ function Apply() {
                 <div className="p-6 mobile:max-tablet:p-2">
                     <div className='flex flex-col md:flex-row md:space-x-10 items-center mb-8'>
                         <div className='flex flex-col items-center mb-4 md:mb-0'>
-                            <img src={authState.userDetails.profileLink} alt="Profile" className='w-32 h-32 rounded-full border-4 border-purple-500 shadow-lg' />
-                            <h2 className='mt-4 text-2xl font-semibold text-gray-800'>{authState.userDetails.name}</h2>
+                            <img src={authState?.userDetails?.profileLink} alt="Profile" className='w-32 h-32 rounded-full border-4 border-purple-500 shadow-lg' />
+                            <h2 className='mt-4 text-2xl font-semibold text-gray-800'>{authState?.userDetails?.name}</h2>
                         </div>
                         <div className='flex-1 grid grid-cols-4 mobile:max-tablet:grid-cols-1 gap-4'>
                             {[
-                                { icon: <FaUser />, label: "Employee ID", value: authState.userDetails.employeeId },
+                                { icon: <FaUser />, label: "Employee ID", value: authState?.userDetails?.employeeId },
                                 { icon: <FaGraduationCap />, label: "Department", value: "10th - 12th" },
                                 { icon: <FaBriefcase />, label: "Designation", value: "Teacher" },
-                                { icon: <FaEnvelope />, label: "Email", value: authState.userDetails.email },
+                                { icon: <FaEnvelope />, label: "Email", value: authState?.userDetails?.email },
                                 { icon: <FaCalendarAlt />, label: "Date of Joining", value: "10-06-2024" },
                                 { icon: <FaCalendarAlt />, label: "Last Increment", value: "10-07-2024" },
                             ].map((item, index) => (

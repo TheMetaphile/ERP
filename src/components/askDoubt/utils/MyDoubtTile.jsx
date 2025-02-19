@@ -23,7 +23,7 @@ export default function MyDoubtTile({ data }) {
 
     const handleDelete = async (index, id) => {
         try {
-            const response = await axios.delete(`${BASE_URL_AskDoubt}/doubts/delete?class=${authState.userDetails.currentClass}&doubtId=${id}`, {
+            const response = await axios.delete(`${BASE_URL_AskDoubt}/doubts/delete?class=${authState?.userDetails?.currentClass}&doubtId=${id}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -59,7 +59,7 @@ export default function MyDoubtTile({ data }) {
     const handleConfirmEdit = async (index, id) => {
         try {
             const response = await axios.put(`${BASE_URL_AskDoubt}/doubts/update/student?id=${id}`, {
-                class: authState.userDetails.currentClass,
+                class: authState?.userDetails?.currentClass,
                 question: editedData.question,
                 subject: editedData.subject
             }, {

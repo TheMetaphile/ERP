@@ -20,10 +20,10 @@ export default function SubjectHomeWork() {
 
     useEffect(() => {
         const fetchHomework = async () => {
-            console.log(authState.userDetails.currentClass, new Date().getMonth() + 1, authState.userDetails.academicYear, authState.userDetails.section, name)
+            console.log(authState?.userDetails?.currentClass, new Date().getMonth() + 1, authState?.userDetails?.academicYear, authState?.userDetails?.section, name)
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/student?class=${authState.userDetails.currentClass}&month=${new Date().getMonth() + 1}&year=${authState.userDetails.academicYear}&section=${authState.userDetails.section}&subject=${name}`, {
+                const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/student?class=${authState?.userDetails?.currentClass}&month=${new Date().getMonth() + 1}&year=${authState?.userDetails?.academicYear}&section=${authState?.userDetails?.section}&subject=${name}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

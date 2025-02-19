@@ -10,7 +10,7 @@ function SubjectSelection({ onSubjectSelect }) {
 
   // const fetchSubjects = async () => {
   //   try {
-  //     const response = await axios.get(`${BASE_URL_Subject}/fetch/subjects?class=${authState.userDetails.currentClass}&section=${authState.userDetails.section}`, {
+  //     const response = await axios.get(`${BASE_URL_Subject}/fetch/subjects?class=${authState?.userDetails?.currentClass}&section=${authState?.userDetails?.section}`, {
   //       headers: {
   //         Authorization: `Bearer ${authState.accessToken}`,
   //       }

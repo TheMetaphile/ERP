@@ -22,7 +22,7 @@ export default function TimeTableStudent() {
     const [lectureTimes, setLectureTimes] = useState([]);
 
     var ClassRange = null;
-    const Class = authState.userDetails.currentClass;
+    const Class = authState?.userDetails?.currentClass;
     useEffect(() => {
         if (Class === 'Pre-Nursery' || Class === 'L.K.G' || Class === 'U.K.G' || Class === 'U.K.J') {
             ClassRange = 'Pre-Nursery - U.K.J'

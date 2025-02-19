@@ -209,7 +209,7 @@ export default function AttendenceTable({ additionalData, status }) {
             >
               <div className="px-6 py-4 flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
                 <div className='flex items-center space-x-4'>
-                  <img src={authState.userDetails.profileLink} alt="" className='w-12 h-12 rounded-full' />
+                  <img src={authState?.userDetails?.profileLink} alt="" className='w-12 h-12 rounded-full' />
                   <div>
                     <div className="font-medium text-gray-800 mobile:max-sm:text-xs">
                       {editRowIndex === index ? (
