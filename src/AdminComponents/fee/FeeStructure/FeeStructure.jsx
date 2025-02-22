@@ -4,7 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from './Header';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import axios from 'axios';
 import DiscountRow from './DiscountRow';
 import GlobalDiscount from '../DiscountCategories/GlobalDiscount';

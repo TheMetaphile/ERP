@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from 'axios'
 import Loading from "../../../LoadingScreen/Loading.jsx";
 import AuthContext from "../../../Context/AuthContext.jsx";
-import { BASE_URL_Fee } from "../../../Config.js";
+import { BASE_URL } from "../../../Config.js";
 import { motion } from "framer-motion";
 
 export default function FeeStatusRow() {
@@ -23,7 +23,7 @@ export default function FeeStatusRow() {
   const fetchStatus = async () => {
     console.log(authState?.userDetails?.currentClass, 'Class')
     try {
-      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/stats?end=20&start=0&class=${authState?.userDetails?.currentClass}`, {
+      const response = await axios.get(`${BASE_URL}/fee/fetch/stats?end=20&start=0&class=${authState?.userDetails?.currentClass}`, {
         headers: {
           'Authorization': `Bearer ${authState.accessToken}`
         }

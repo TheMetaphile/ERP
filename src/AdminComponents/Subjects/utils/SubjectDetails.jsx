@@ -5,7 +5,7 @@ import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdDeleteForever } from "react-icons/md";
-import { BASE_URL_Login, BASE_URL_Subject } from '../../../Config';
+import { BASE_URL} from '../../../Config';
 import Switch from './switch';
 
 function SubjectDetails({ Class, section }) {
@@ -48,7 +48,7 @@ function SubjectDetails({ Class, section }) {
     const fetchSubject = async () => {
         console.log('class', Class, 'section', section)
         try {
-            const response = await axios.post(`${BASE_URL_Subject}/fetch${additionalLink}`, {
+            const response = await axios.post(`${BASE_URL}/fetch${additionalLink}`, {
                 accessToken: authState.accessToken,
                 class: Class,
                 section: section
@@ -68,7 +68,7 @@ function SubjectDetails({ Class, section }) {
 
         try {
             if (newRow.email) {
-                const response = await axios.post(`${BASE_URL_Subject}/assign${additionalLink}`, {
+                const response = await axios.post(`${BASE_URL}/assign${additionalLink}`, {
                     accessToken: authState.accessToken,
                     class: Class,
                     section: section,
@@ -115,7 +115,7 @@ function SubjectDetails({ Class, section }) {
                 setShowSuggestions(true);
                 const searchTeacher = async () => {
                     try {
-                        const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
+                        const response = await axios.post(`${BASE_URL}/search/teacher`, {
                             accessToken: authState.accessToken,
                             searchString: temp,
                             start: 0,
@@ -150,7 +150,7 @@ function SubjectDetails({ Class, section }) {
         console.log('Deleting ', Class, 'section:', section, 'email:', email, 'subject:', subject, authState.accessToken);
 
         try {
-            const response = await axios.delete(`${BASE_URL_Subject}/delete${additionalLink}`, {
+            const response = await axios.delete(`${BASE_URL}/delete${additionalLink}`, {
                 data: {
                     accessToken: authState.accessToken,
                     class: Class,

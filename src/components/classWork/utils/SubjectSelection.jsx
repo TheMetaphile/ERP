@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Subject } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 
 function SubjectSelection({ onSubjectSelect }) {
   const { authState } = useContext(AuthContext);
@@ -10,7 +10,7 @@ function SubjectSelection({ onSubjectSelect }) {
 
   // const fetchSubjects = async () => {
   //   try {
-  //     const response = await axios.get(`${BASE_URL_Subject}/fetch/subjects?class=${authState?.userDetails?.currentClass}&section=${authState?.userDetails?.section}`, {
+  //     const response = await axios.get(`${BASE_URL}/fetch/subjects?class=${authState?.userDetails?.currentClass}&section=${authState?.userDetails?.section}`, {
   //       headers: {
   //         Authorization: `Bearer ${authState.accessToken}`,
   //       }

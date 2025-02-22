@@ -3,7 +3,7 @@ import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios';
 import Selection from './utils/Selection';
-import { BASE_URL_Fee } from '../../Config';
+import { BASE_URL } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import { FaUserGraduate, FaMoneyBillWave, FaPercent, FaWallet, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
@@ -58,7 +58,7 @@ function StudentFee() {
 
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/classTeacher?&start=${start}&end=${end}&session=${session}`, {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/classTeacher?&start=${start}&end=${end}&session=${session}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

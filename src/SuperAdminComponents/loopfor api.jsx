@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { BASE_URL_TimeTableStructure, BASE_URL_TimeTable, BASE_URL_AskDoubt, BASE_URL_Attendence, BASE_URL_ClassTeacher, BASE_URL_ClassWork, BASE_URL_Exam, BASE_URL_Fee, BASE_URL_Homework, BASE_URL_Login, BASE_URL_Notice, BASE_URL_Result, BASE_URL_Student_Leave, BASE_URL_Subject, BASE_URL_TeacherLeave } from '../Config';
+import { BASE_URL} from '../Config';
 import AuthContext from '../Context/AuthContext';
 const FetchDataComponent = () => {
 
@@ -17,7 +17,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_TimeTableStructure}/timeTableStructure/fetch`,
+        url: `${BASE_URL}/timeTableStructure/fetch`,
         headers: {
           'Content-Type': 'application/json'
         },
@@ -42,7 +42,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_TimeTable}/timetable/fetch/teacher`,
+        url: `${BASE_URL}/timetable/fetch/teacher`,
         headers: {
           'Content-Type': 'application/json'
         },
@@ -62,7 +62,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_AskDoubt}/doubts/fetch/teacher?class=9th&section=A&subject=Maths`,
+        url: `${BASE_URL}/doubts/fetch/teacher?class=9th&section=A&subject=Maths`,
         headers: {
           'Authorization': `Bearer ${token}`
         },
@@ -82,7 +82,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_Attendence}/studentAttendance/fetch/student/stats?month=06&year=2024`,
+        url: `${BASE_URL}/studentAttendance/fetch/student/stats?month=06&year=2024`,
         headers: {
           'Authorization': `sd ${token}`
         },
@@ -100,7 +100,7 @@ const FetchDataComponent = () => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `${BASE_URL_ClassTeacher}/classTeacher/fetch/single`,
+      url: `${BASE_URL}/classTeacher/fetch/single`,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -127,7 +127,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_ClassWork}/classwork/fetch/teacher?class=9th&month=6&year=2024&section=A&subject=Physics`,
+        url: `${BASE_URL}/classwork/fetch/teacher?class=9th&month=6&year=2024&section=A&subject=Physics`,
         headers: {
           'Content-Type': 'application/json',
           "Authorization" : `token ${token}`
@@ -159,7 +159,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_Exam}/fetchExams`,
+        url: `${BASE_URL}/fetchExams`,
         headers: {
           'Content-Type': 'application/json'
         },
@@ -190,7 +190,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_Fee}/fee/fetch/structure?class=9th&session=2023-24`,
+        url: `${BASE_URL}/fee/fetch/structure?class=9th&session=2023-24`,
         headers: {
           'Content-Type': 'application/json',
           'Authorization' : `dsg ${token}`
@@ -220,7 +220,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_Homework}/homework/fetch/teacher?class=9th&month=6&year=2024&section=A&subject=Maths`,
+        url: `${BASE_URL}/homework/fetch/teacher?class=9th&month=6&year=2024&section=A&subject=Maths`,
         headers: {
           'Authorization': `s ${token}`
         }
@@ -238,7 +238,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_Result}/result/fetch/teacher?email=jioraaza@gmail.com&class=9th&session=2023-24`,
+        url: `${BASE_URL}/result/fetch/teacher?email=jioraaza@gmail.com&class=9th&session=2023-24`,
         headers: {
           'Authorization': `dsg ${token}`
         }
@@ -257,7 +257,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_Login}/login/Student`,
+        url: `${BASE_URL}/login/Student`,
         data : JSON.stringify({
           'email' : "jioraaza@gmail.com",
           'password' : "demo1234"
@@ -276,7 +276,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_Notice}/notice/fetch/teacher?start&limit&session=2024-25`,
+        url: `${BASE_URL}/notice/fetch/teacher?start&limit&session=2024-25`,
         headers: {
           'Authorization': `asdg ${token}`
         }
@@ -294,7 +294,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_Student_Leave}/leave/fetch/admin?start=0&end=1&session=2024-25`,
+        url: `${BASE_URL}/leave/fetch/admin?start=0&end=1&session=2024-25`,
         headers: {
           'Authorization': `sdg ${token}`,
         }
@@ -312,7 +312,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_Subject}/fetch`,
+        url: `${BASE_URL}/fetch`,
         data : JSON.stringify({
           "accessToken" : token,
           "class" : "9th",
@@ -332,7 +332,7 @@ const FetchDataComponent = () => {
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_TeacherLeave}/leave/fetch/stats?session=2024-25`,
+        url: `${BASE_URL}/leave/fetch/stats?session=2024-25`,
         headers: {
           'Authorization': `d ${token}`
         }

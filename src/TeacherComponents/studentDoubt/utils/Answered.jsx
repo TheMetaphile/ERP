@@ -3,7 +3,7 @@ import AnsweredTile from './AnsweredTile'
 import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext'
-import { BASE_URL_AskDoubt } from '../../../Config'
+import { BASE_URL } from '../../../Config'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -50,7 +50,7 @@ function Answered({ Class, Section, Subject }) {
         setLoading(true);
 
         try {
-            const response = await axios.get(`${BASE_URL_AskDoubt}/doubts/fetch/teacher?class=${Class}&section=${Section}&subject=${Subject}&status=${'Resolved'}&start=${start}&end=${end}`, {
+            const response = await axios.get(`${BASE_URL}/doubts/fetch/teacher?class=${Class}&section=${Section}&subject=${Subject}&status=${'Resolved'}&start=${start}&end=${end}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { BASE_URL_Login } from '../Config';
+import { BASE_URL } from '../Config';
 import AuthContext from '../Context/AuthContext';
 
 export default function Detailscard() {
@@ -21,7 +21,7 @@ export default function Detailscard() {
     const fetchUserData = async () => {
         setLoading(true);
         try {
-            const response = await axios.post(`${BASE_URL_Login}/fetchSingle/student`, {
+            const response = await axios.post(`${BASE_URL}/fetchSingle/student`, {
                 accessToken: authState.accessToken,
                 email: email
             });

@@ -3,7 +3,7 @@ import AllNotificationTile from './AllNotificationTile';
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
-import { BASE_URL_Notice } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { ToastContainer, toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { FaCalendarAlt, FaEye } from "react-icons/fa";
@@ -39,7 +39,7 @@ function NoticeSubAdmin() {
         if (loading || allDataFetched) return;
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/subAdmin?start=${start}&limit=${end}&session=${selectedSession}&type=for`, {
+            const response = await axios.get(`${BASE_URL}/notice/fetch/subAdmin?start=${start}&limit=${end}&session=${selectedSession}&type=for`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`,
                 }

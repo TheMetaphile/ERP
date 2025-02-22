@@ -6,7 +6,7 @@ import Switch from "./switch";
 import { motion } from 'framer-motion';
 import { FaSave, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { toast, ToastContainer } from "react-toastify";
-import { BASE_URL_Login } from '../../../Config'
+import { BASE_URL } from '../../../Config'
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -35,7 +35,7 @@ const RecordDetails = () => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/notebook/fetch/teacher/particular?docId=${id}&session=${session}`,
+      url: `${BASE_URL}/notebook/fetch/teacher/particular?docId=${id}&session=${session}`,
       headers: {
         'Authorization': `Bearer ${authState.accessToken}`
       }
@@ -66,7 +66,7 @@ const RecordDetails = () => {
     let config = {
       method: 'put',
       maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/notebook/update/submission`,
+      url: `${BASE_URL}/notebook/update/submission`,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authState.accessToken}`

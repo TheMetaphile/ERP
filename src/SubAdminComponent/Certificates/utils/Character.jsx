@@ -6,7 +6,7 @@ import html2canvas from 'html2canvas';
 import './Print.css';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 
 const PrintableComponent = React.forwardRef((props, ref) => {
     return (
@@ -74,7 +74,7 @@ const Character = () => {
 
     const fetchUserCc = async () => {
         try {
-            const response = await axios.get(`${BASE_URL_Login}/terminate/terminatedSingle?session=${sessions}&id=${tc}`, {
+            const response = await axios.get(`${BASE_URL}/terminate/terminatedSingle?session=${sessions}&id=${tc}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

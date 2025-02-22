@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AuthContext from '../../Context/AuthContext';
 import axios from 'axios';
-import { BASE_URL_Homework } from '../../Config';
+import { BASE_URL } from '../../Config';
 import { toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoMdCalendar, IoMdTime, IoMdCreate, IoMdTrash, IoMdCheckmark, IoMdClose } from 'react-icons/io';
@@ -30,7 +30,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
     const handleConfirmClick = async (index) => {
         const detail = editedDetails[index];
         try {
-            const response = await axios.put(`${BASE_URL_Homework}/homework/update?class=${Class}&id=${detail._id}&date=${detail.date}`,
+            const response = await axios.put(`${BASE_URL}/homework/update?class=${Class}&id=${detail._id}&date=${detail.date}`,
                 {
                     update: {
                         subject: detail.subject,
@@ -61,7 +61,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
         const currentYear = new Date().getFullYear();
         const detail = editedDetails[index];
         try {
-            const response = await axios.delete(`${BASE_URL_Homework}/homework/delete?class=${Class}&month=${new Date().getMonth() + 1}&year=${currentYear}&id=${detail._id}`,
+            const response = await axios.delete(`${BASE_URL}/homework/delete?class=${Class}&month=${new Date().getMonth() + 1}&year=${currentYear}&id=${detail._id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,

@@ -5,7 +5,7 @@ import Loading from "../../../../LoadingScreen/Loading.jsx";
 import TransactionField from "./TransactionField.jsx";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Fee } from "../../../../Config.js";
+import { BASE_URL } from "../../../../Config.js";
 
 export default function TransactionRow({selectedStudent}) {
     const { authState } = useContext(AuthContext);
@@ -23,7 +23,7 @@ export default function TransactionRow({selectedStudent}) {
 
     const fetchTransaction = async () => {
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/particularStudent/transactions?email=${selectedStudent.email}`, {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/particularStudent/transactions?email=${selectedStudent.email}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }

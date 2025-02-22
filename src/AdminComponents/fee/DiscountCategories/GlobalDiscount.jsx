@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Fee, BASE_URL_ClassTeacher } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaRegTimesCircle } from 'react-icons/fa';
@@ -29,7 +29,7 @@ function GlobalDiscount() {
     const fetchSections = async () => {
         try {
             setLoading(true);
-            const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/fetch/sections`, {
+            const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
                 accessToken: authState.accessToken,
                 class: selectedClass,
             });
@@ -90,7 +90,7 @@ function GlobalDiscount() {
         const date = new Date();
         const session = getSession(date);
         try {
-            const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discountCategory`, {
+            const response = await axios.post(`${BASE_URL}/fee/apply/discountCategory`, {
                 amount,
                 discountType,
                 title,

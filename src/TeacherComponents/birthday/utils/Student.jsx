@@ -3,7 +3,7 @@ import AuthContext from "../../../Context/AuthContext";
 import axios from "axios";
 import Loading from "../../../LoadingScreen/Loading";
 import StudentTile from './StudentTile';
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 
 export default function Student() {
     const { authState } = useContext(AuthContext);
@@ -24,7 +24,7 @@ export default function Student() {
             console.log(getFormattedDate());
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Login}/birthday/student?date=${getFormattedDate()}`, {
+                const response = await axios.get(`${BASE_URL}/birthday/student?date=${getFormattedDate()}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

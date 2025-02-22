@@ -6,7 +6,7 @@ import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import CreateDiscount from './CreateDiscount';
 import { MdDeleteForever, MdAdd, MdRemove } from "react-icons/md";
-import { BASE_URL_Fee } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { Link } from 'react-router-dom';
 
 const getSessions = () => {
@@ -64,7 +64,7 @@ function FeeDiscount() {
     const fetchDiscount = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/discount?end=${end}&start=${start}&class=${selectedClass}`, {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/discount?end=${end}&start=${start}&class=${selectedClass}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -87,7 +87,7 @@ function FeeDiscount() {
 
     const handleDelete = async (index, id) => {
         try {
-            const response = await axios.delete(`${BASE_URL_Fee}/fee/delete/discount?id=${id}`, {
+            const response = await axios.delete(`${BASE_URL}/fee/delete/discount?id=${id}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

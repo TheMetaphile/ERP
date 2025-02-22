@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import { MdCheck, MdCancel, MdOutlineModeEdit } from 'react-icons/md';
-import { BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 
@@ -25,7 +25,7 @@ function CurrentWeekRow({ details, index, mapId }) {
         try {
             const { description, status } = editedData;
 
-            await axios.put(`${BASE_URL_Login}/lessonPlan/update/teacher/${formattedYear}/${mapId}/${id}`, { description, status }, {
+            await axios.put(`${BASE_URL}/lessonPlan/update/teacher/${formattedYear}/${mapId}/${id}`, { description, status }, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`,
                 },

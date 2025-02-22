@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../../../../../Context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
-import { BASE_URL_Login } from "../../../../../Config";
+import { BASE_URL } from "../../../../../Config";
 import AllNoteBookRecordRow from "./AllNoteBookRecordRow";
 import { motion } from "framer-motion";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
@@ -38,7 +38,7 @@ const AllNoteBookRecordHOD = ({ Class, Section, Subject }) => {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/notebook/fetch/coordinator/all?class=${Class}&section=${Section}&subject=${Subject}&session=${session}&start=${start}&count=${end}`,
+      url: `${BASE_URL}/notebook/fetch/coordinator/all?class=${Class}&section=${Section}&subject=${Subject}&session=${session}&start=${start}&count=${end}`,
       headers: {
         Authorization: `Bearer ${authState.accessToken}`,
       },

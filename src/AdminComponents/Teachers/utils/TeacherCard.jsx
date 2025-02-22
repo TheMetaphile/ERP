@@ -3,7 +3,7 @@ import { userimg } from "./images/index.js";
 import { IoCameraOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import JSZip from 'jszip';
-import { BASE_URL_Login } from "../../../Config.js";
+import { BASE_URL } from "../../../Config.js";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext.jsx";
 import { toast } from "react-toastify";
@@ -113,7 +113,7 @@ export default function TeacherCard({ userData }) {
         setSelectedUserId(userId);
 
         try {
-            const response = await axios.get(`${BASE_URL_Login}/permission/fetch/${userId}`, {
+            const response = await axios.get(`${BASE_URL}/permission/fetch/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -142,7 +142,7 @@ export default function TeacherCard({ userData }) {
     const handleSave = async () => {
         try {
             const formattedPermissions = selectedPermissions.map(perm => ({ permission: perm }));
-            const response = await axios.post(`${BASE_URL_Login}/permission/update/${selectedUserId}`,
+            const response = await axios.post(`${BASE_URL}/permission/update/${selectedUserId}`,
                 { permissions: formattedPermissions },
                 {
                     headers: {

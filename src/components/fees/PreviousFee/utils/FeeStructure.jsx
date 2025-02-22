@@ -5,7 +5,7 @@ import Loading from '../../../../LoadingScreen/Loading.jsx';
 import FeeStructureField from './feeStructureField.jsx';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Fee } from "../../../../Config.js";
+import { BASE_URL } from "../../../../Config.js";
 
 
 export default function FeeStructure() {
@@ -34,7 +34,7 @@ export default function FeeStructure() {
   const fetchFees = async () => {
     console.log(authState?.userDetails?.currentClass, 'Class')
     try {
-      const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/pendingFee?email=${authState?.userDetails?.email}`, {
+      const response = await axios.get(`${BASE_URL}/fee/fetch/pendingFee?email=${authState?.userDetails?.email}`, {
         headers: {
           'Authorization': `Bearer ${authState.accessToken}`
         }

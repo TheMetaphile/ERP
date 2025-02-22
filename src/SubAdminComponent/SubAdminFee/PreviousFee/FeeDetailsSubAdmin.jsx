@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Fee } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { Link, Outlet } from 'react-router-dom';
 import { MdSchool } from 'react-icons/md';
 import { motion } from "framer-motion";
@@ -67,7 +67,7 @@ function PreviousFeeDetailsSubAdmin() {
 
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/pendingFeeStats?end=${end}&start=${start}`, {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/pendingFeeStats?end=${end}&start=${start}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

@@ -2,7 +2,7 @@
 // import useRazorpay from "react-razorpay";
 // import axios from 'axios';
 // import AuthContext from "../../../../Context/AuthContext";
-// import { BASE_URL_Fee } from "../../../../Config";
+// import { BASE_URL } from "../../../../Config";
 // import { useLocation, useParams } from "react-router-dom";
 // import FeeStructureHeader from "./feestructureheader";
 // import QuarterFeeHeader from "../../../../components/fees/utils/QuarterFeeHeader";
@@ -142,7 +142,7 @@
 //     const postPaymentDetails = async (paymentDetails) => {
 //         console.log('postpayment', paymentDetails)
 //         try {
-//             const response = await axios.post(`${BASE_URL_Fee}/fee/payment`,
+//             const response = await axios.post(`${BASE_URL}/fee/payment`,
 //                 paymentDetails,
 //                 {
 //                     headers: {

@@ -4,7 +4,7 @@ import SearchBar from "./utils/SearchBar";
 import axios from 'axios';
 import Loading from "../../../LoadingScreen/Loading";
 import AuthContext from "../../../Context/AuthContext";
-import { BASE_URL_Attendence } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { motion } from 'framer-motion';
 import { FaFilter } from 'react-icons/fa';
 
@@ -63,7 +63,7 @@ export default function StudentAttendance() {
 
                 console.log(Class, Section, Month, year)
 
-                const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/admin?month=${Month}&year=${year}&class=${Class}&section=${Section}`, {
+                const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/admin?month=${Month}&year=${year}&class=${Class}&section=${Section}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

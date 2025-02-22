@@ -6,7 +6,7 @@ import MyDoubtTile from "./utils/MyDoubtTile";
 import { IoCameraOutline, IoAddCircleOutline, IoBookOutline, IoFilterOutline } from "react-icons/io5";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-import { BASE_URL_AskDoubt } from '../../Config';
+import { BASE_URL } from '../../Config';
 import Loading from '../../LoadingScreen/Loading';
 import { Link } from 'react-router-dom';
 
@@ -57,7 +57,7 @@ export default function MyDoubts() {
         }
         const datee = getCurrentDate();
         try {
-            const response = await axios.post(`${BASE_URL_AskDoubt}/doubts/create`, {
+            const response = await axios.post(`${BASE_URL}/doubts/create`, {
                 question: doubtDescription,
                 date: datee,
                 subject: modalSubject
@@ -115,7 +115,7 @@ export default function MyDoubts() {
                 params += `&subject=${selectedSubject}`;
             }
             console.log('kkk', selectedSubject, params)
-            const response = await axios.get(`${BASE_URL_AskDoubt}/doubts/fetch/student?${params}`, {
+            const response = await axios.get(`${BASE_URL}/doubts/fetch/student?${params}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

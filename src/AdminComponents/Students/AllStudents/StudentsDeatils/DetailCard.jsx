@@ -8,7 +8,7 @@ import { CiEdit } from "react-icons/ci";
 import Loading from '../../../../LoadingScreen/Loading'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Login } from '../../../../Config';
+import { BASE_URL } from '../../../../Config';
 import { MdWork } from 'react-icons/md';
 
 export default function StudentBasicDetails() {
@@ -24,7 +24,7 @@ export default function StudentBasicDetails() {
     const fetchUserData = async () => {
         console.log(email)
         try {
-            const response = await axios.post(`${BASE_URL_Login}/fetchSingle/student`, {
+            const response = await axios.post(`${BASE_URL}/fetchSingle/student`, {
                 accessToken: authState.accessToken,
                 email: email
             });
@@ -61,7 +61,7 @@ export default function StudentBasicDetails() {
 
     const handleSave = async (field) => {
         try {
-            const response = await axios.put(`${BASE_URL_Login}/edit/student`, {
+            const response = await axios.put(`${BASE_URL}/edit/student`, {
                 accessToken: authState.accessToken,
                 email: userData.email,
                 [field]: tempData[field]

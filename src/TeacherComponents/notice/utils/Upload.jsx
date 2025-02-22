@@ -3,7 +3,7 @@ import UploadTile from './UploadTile';
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
-import { BASE_URL_Notice } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion } from 'framer-motion';
@@ -53,7 +53,7 @@ export default function Upload() {
         setLoading(true);
         console.log(start, 'start', end, 'end')
         try {
-            const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/teacher?start=${start}&limit=${end}&session=${getCurrentSession()}&type=${'by'}`, {
+            const response = await axios.get(`${BASE_URL}/notice/fetch/teacher?start=${start}&limit=${end}&session=${getCurrentSession()}&type=${'by'}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`,
                 }

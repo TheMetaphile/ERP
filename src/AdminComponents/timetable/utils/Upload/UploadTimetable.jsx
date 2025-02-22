@@ -6,7 +6,7 @@ import AuthContext from '../../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from "react-router-dom";
-import { BASE_URL_TimeTable } from '../../../../Config';
+import { BASE_URL } from '../../../../Config';
 
 export default function UploadTimetable({ fetchedTimeTableStructure, handleChange }) {
     const [lectureTimes, setLectureTimes] = useState([]);
@@ -148,7 +148,7 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
         console.log(timetableData, 'schedule', schedule);
 
         try {
-            const response = await axios.post(`${BASE_URL_TimeTable}/timetable/upload`, timetableData);
+            const response = await axios.post(`${BASE_URL}/timetable/upload`, timetableData);
             if (response.status === 200) {
                 console.log(response.data);
                 toast.success('Timetable uploaded successfully');

@@ -4,7 +4,7 @@ import { FaBars, FaUserCircle, FaBell } from 'react-icons/fa';
 import AuthContext from '../../Context/AuthContext';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { BASE_URL_Login } from '../../Config';
+import { BASE_URL } from '../../Config';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 
@@ -42,7 +42,7 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
     if (newBranch && !branches.includes(newBranch)) {
       try {
         const response = await axios.post(
-          `${BASE_URL_Login}/branch/create`,
+          `${BASE_URL}/branch/create`,
           { branch: newBranch, _id: authState?.userDetails?._id },
           {
             headers: {

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import FeeCard from './utils/CustomCard';
 import Loading from "../../../../LoadingScreen/Loading";
 import AuthContext from "../../../../Context/AuthContext";
-import { BASE_URL_Fee } from '../../../../Config';
+import { BASE_URL } from '../../../../Config';
 import Payable from './../../../../assets/coins.png';
 import Paid from './../../../../assets/paid.png';
 import Pending from './../../../../assets/pending.png';
@@ -26,7 +26,7 @@ export default function FeeStatus() {
     const fetchStatus = async () => {
         try {
             const response = await axios.get(
-                `${BASE_URL_Fee}/fee/fetch/stats?end=20&start=0&class=${authState?.userDetails?.currentClass}`,
+                `${BASE_URL}/fee/fetch/stats?end=20&start=0&class=${authState?.userDetails?.currentClass}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${authState.accessToken}`

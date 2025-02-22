@@ -8,7 +8,7 @@ import { PaymentProvider } from './utils/PaymentContext';
 import AuthContext from '../../Context/AuthContext';
 import StudentCard from '../../SubAdminComponent/SubAdminFee/StudentFee/utils/ProfileCard';
 import axios from 'axios';
-import { BASE_URL_Fee } from '../../Config';
+import { BASE_URL } from '../../Config';
 
 const MotionSelect = motion.select;
 
@@ -25,7 +25,7 @@ export default function Fees() {
     const fetchFees = async () => {
 
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student/detailedFee/${authState?.userDetails?._id}`, {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/student/detailedFee/${authState?.userDetails?._id}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }

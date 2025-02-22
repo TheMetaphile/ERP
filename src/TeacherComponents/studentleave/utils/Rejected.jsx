@@ -3,7 +3,7 @@ import RejectedTile from './RejectedTile'
 import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext'
-import { BASE_URL_Student_Leave } from '../../../Config'
+import { BASE_URL } from '../../../Config'
 
 export default  function Rejected() {
 
@@ -16,7 +16,7 @@ export default  function Rejected() {
         setLoading(true);
 
         try {
-            const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/classTeacher?start=${0}&end=${20}`, {
+            const response = await axios.get(`${BASE_URL}/leave/fetch/classTeacher?start=${0}&end=${20}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

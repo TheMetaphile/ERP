@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import AuthContext from '../../../../../Context/AuthContext';
-import { BASE_URL_AskDoubt } from '../../../../../Config';
+import { BASE_URL } from '../../../../../Config';
 
 const DoubtCard = ({ doubt, index, expanded, handleClick, handleDelete }) => {
     return (
@@ -105,7 +105,7 @@ export default function AnsweredTile({ data, Class }) {
 
     const handleDelete = async (index, id) => {
         try {
-            const response = await axios.delete(`${BASE_URL_AskDoubt}/doubts/delete?class=${Class}&doubtId=${id}`, {
+            const response = await axios.delete(`${BASE_URL}/doubts/delete?class=${Class}&doubtId=${id}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

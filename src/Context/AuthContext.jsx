@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { BASE_URL_Login } from "../Config";
+import { BASE_URL } from "../Config";
 import CryptoJS from 'crypto-js';
 import Loading from '../LoadingScreen/Loading';
 

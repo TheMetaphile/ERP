@@ -2,7 +2,7 @@ import { useState, useContext, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
-import { BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import Loading from "../../../LoadingScreen/Loading";
 import { ToastContainer, toast } from 'react-toastify';
 import { motion } from 'framer-motion';
@@ -93,7 +93,7 @@ const List = () => {
         console.log(start, 'start', end, 'end')
 
         try {
-            const response = await axios.get(`${BASE_URL_Login}/terminate/terminatedStudents?Class=${Class}&session=${selectedSession}&start=${start}&end=${end}`, {
+            const response = await axios.get(`${BASE_URL}/terminate/terminatedStudents?Class=${Class}&session=${selectedSession}&start=${start}&end=${end}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

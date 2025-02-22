@@ -4,7 +4,7 @@ import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Attendence } from "../../Config";
+import { BASE_URL } from "../../Config";
 import { motion } from "framer-motion";
 import { FaCheckCircle, FaTimesCircle, FaUserGraduate, FaCalendarAlt } from "react-icons/fa";
 import { IoMdRefresh } from "react-icons/io";
@@ -30,7 +30,7 @@ function StudentAttendance() {
         const today = new Date();
         const month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;
         const formattedDate = `${today.getFullYear()}-${month}-${today.getDate()}`;
-        const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/student/list?date=${formattedDate}&start=${start}&end=${end}`, {
+        const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/student/list?date=${formattedDate}&start=${start}&end=${end}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
           },
@@ -128,7 +128,7 @@ function StudentAttendance() {
     console.log(requestData);
     setMarkLoading(true);
     try {
-      const response = await axios.post(`${BASE_URL_Attendence}/studentAttendance/mark`, requestData);
+      const response = await axios.post(`${BASE_URL}/studentAttendance/mark`, requestData);
       if (response.status === 200) {
         console.log('Attendance marked:', response.data);
         toast.success('Attendance marked');

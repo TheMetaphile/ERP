@@ -3,7 +3,7 @@ import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
-import { BASE_URL_ClassWork } from '../../Config';
+import { BASE_URL } from '../../Config';
 import { motion } from 'framer-motion';
 import { FiBook, FiBookOpen, FiClipboard, FiFileText, FiMessageSquare } from 'react-icons/fi';
 
@@ -26,7 +26,7 @@ function NewUpload({ onClose, onNewWork }) {
         console.log(subject, classLevel, section, topic, question, chapter, new Date().toISOString().slice(0, 10), authState?.userDetails?.email);
         setLoading(true);
         try {
-            const response = await axios.post(`${BASE_URL_ClassWork}/classwork/upload`,
+            const response = await axios.post(`${BASE_URL}/classwork/upload`,
                 {
                     email: authState?.userDetails?.email,
                     date: new Date().toISOString().slice(0, 10),

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import useRazorpay from "react-razorpay";
 import axios from 'axios';
 import AuthContext from "../../../../Context/AuthContext.jsx";
-import { BASE_URL_Fee } from "../../../../Config";
+import { BASE_URL } from "../../../../Config";
 import Header from './feestructureheader.jsx';
 import { motion } from 'framer-motion';
 import { FaCheckCircle, FaCreditCard } from 'react-icons/fa';
@@ -81,7 +81,7 @@ export default function FeeStructureField({ fees }) {
     const postPaymentDetails = async (NewpaymentDetails) => {
         console.log('postpayment', NewpaymentDetails)
         try {
-            const response = await axios.post(`${BASE_URL_Fee}/fee/payment`,
+            const response = await axios.post(`${BASE_URL}/fee/payment`,
                 NewpaymentDetails,
                 {
                     headers: {

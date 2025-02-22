@@ -3,7 +3,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { FaChartBar, FaSpinner } from "react-icons/fa";
 import AuthContext from "../../../Context/AuthContext";
-import { BASE_URL_TeacherLeave } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import DoughnutSecond from "./DoughnutSecond";
 
 export default function Progress() {
@@ -55,7 +55,7 @@ export default function Progress() {
         const fetchStats = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_TeacherLeave}/teacherleave/fetch/stats?session=${getCurrentSession()}`, {
+                const response = await axios.get(`${BASE_URL}/teacherleave/fetch/stats?session=${getCurrentSession()}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

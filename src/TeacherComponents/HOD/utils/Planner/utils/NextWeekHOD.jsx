@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { BASE_URL_Login } from '../../../../../Config';
+import { BASE_URL } from '../../../../../Config';
 import axios from 'axios';
 import AuthContext from '../../../../../Context/AuthContext';
 import Loading from '../../../../../LoadingScreen/Loading';
@@ -63,7 +63,7 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
         const fetchPlan = async () => {
 
             try {
-                const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/coordinator?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${nextWeekFormattedDate}`, {
+                const response = await axios.get(`${BASE_URL}/lessonPlan/fetch/coordinator?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${nextWeekFormattedDate}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
                     }
@@ -109,7 +109,7 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
 
         try {
             const response = await axios.put(
-                `${BASE_URL_Login}/lessonPlan/update/coordinator?id=${id}&status=${status}&remark=${remark}&session=${session}`,
+                `${BASE_URL}/lessonPlan/update/coordinator?id=${id}&status=${status}&remark=${remark}&session=${session}`,
                 null,
                 {
                     headers: {

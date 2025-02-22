@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
-import { BASE_URL_Login, BASE_URL_Result } from '../../Config';
+import { BASE_URL } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import jsPDF from 'jspdf';
@@ -145,7 +145,7 @@ function ReportCardSubAdmin() {
         setLoading(true);
         try {
             console.log(start, "-", end);
-            const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
+            const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
                 accessToken: authState.accessToken,
                 currentClass: Class,
                 section: Section,
@@ -200,12 +200,12 @@ function ReportCardSubAdmin() {
         try {
             // Fetch student's result and profile
             const [resultResponse, profileResponse, attendanceResponse] = await Promise.all([
-                axios.get(`${BASE_URL_Result}/result/fetch/teacher?email=${studentData.email}`, {
+                axios.get(`${BASE_URL}/result/fetch/teacher?email=${studentData.email}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }
                 }),
-                axios.post(`${BASE_URL_Login}/fetchSingle/student`, {
+                axios.post(`${BASE_URL}/fetchSingle/student`, {
                     accessToken: authState.accessToken,
                     email: studentData.email
                 }),

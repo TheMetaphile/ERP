@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { toast, ToastContainer } from "react-toastify";
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaArrowUp } from "react-icons/fa";
@@ -20,7 +20,7 @@ export default function AllTeachers({ additionalDataAdmin, onNew }) {
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_Login}/admins/NonAdmin?branch=${authState?.userDetails?.branch}`,
+            url: `${BASE_URL}/admins/NonAdmin?branch=${authState?.userDetails?.branch}`,
             headers: {
                 'Authorization': `Bearer ${authState.accessToken}`
             }
@@ -45,7 +45,7 @@ export default function AllTeachers({ additionalDataAdmin, onNew }) {
         const config = {
             method: 'put',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_Login}/admins/add-admin`,
+            url: `${BASE_URL}/admins/add-admin`,
             headers: {
                 'Authorization': `Bearer ${authState.accessToken}`,
                 'Content-Type': 'application/json'

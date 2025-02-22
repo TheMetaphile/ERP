@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Fee } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { Link, Outlet } from 'react-router-dom';
 
 const getSessions = () => {
@@ -40,7 +40,7 @@ function FeeDetails() {
         const fetchSections = async () => {
             console.log(selectedClass)
             try {
-                const response = await axios.post(`${BASE_URL_Fee}/classTeacher/fetch/sections`, {
+                const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
                     accessToken: authState.accessToken,
                     class: selectedClass,
                 });
@@ -102,7 +102,7 @@ function FeeDetails() {
         console.log(selectedClass, selectedSession)
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/admin?class=${selectedClass}&start=${start}&end=${end}&session=${selectedSession}&section=${section}`, {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/admin?class=${selectedClass}&start=${start}&end=${end}&session=${selectedSession}&section=${section}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

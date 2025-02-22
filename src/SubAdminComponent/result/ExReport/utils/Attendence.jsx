@@ -3,7 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import Loading from "../../../../LoadingScreen/Loading";
 import AuthContext from "../../../../Context/AuthContext";
-import { BASE_URL_Login } from "../../../../Config";
+import { BASE_URL } from "../../../../Config";
 
 
 export default function Attendance(props) {
@@ -30,7 +30,7 @@ export default function Attendance(props) {
         try {
             setLoading(true);
 
-            const response = await axios.get(`${BASE_URL_Login}/studentAttendance/fetch/completeStats?id=${id}&class=${Class}&year=2024`, {
+            const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/completeStats?id=${id}&class=${Class}&year=2024`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

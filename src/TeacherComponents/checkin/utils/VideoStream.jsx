@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState, useContext } from 'react';
 import Webcam from 'react-webcam';
-import * as faceapi from 'face-api.js';
+
 import axios from 'axios';
 import Loading from '../../../LoadingScreen/Loading';
-import { BASE_URL_FaceDetection, BASE_URL_TeacherAttendence } from '../../../Config';
+import { BASE_URL} from '../../../Config';
 import image from '../../../assets/metaphile_logo.png';
 import AuthContext from '../../../Context/AuthContext';
 
@@ -69,7 +69,7 @@ function VideoStream({ onClose, onCapture }) {
         const formData = new FormData();
         formData.append('file', blob, 'image.jpg');
 
-        const response = await axios.post(`${BASE_URL_FaceDetection}/predict`, formData, {
+        const response = await axios.post(`${BASE_URL}/predict`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -90,7 +90,7 @@ function VideoStream({ onClose, onCapture }) {
               const formData = new FormData();
               formData.append('file', blob, 'image.jpg');
 
-              const response = await axios.post(`${BASE_URL_FaceDetection}/predict`, formData, {
+              const response = await axios.post(`${BASE_URL}/predict`, formData, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
                 },
@@ -141,7 +141,7 @@ function VideoStream({ onClose, onCapture }) {
     console.log(formattedDate, timeInMillis);
 
     // try {
-    //   const response = await axios.post(`${BASE_URL_TeacherAttendence}/teacherAttendance/checkin`, {
+    //   const response = await axios.post(`${BASE_URL}/teacherAttendance/checkin`, {
     //     headers: {
     //       Authorisation: `Bearer ${authState.accessToken}`
     //     },

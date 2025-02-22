@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback, useRef } from "react";
 import axios from "axios";
 import AuthContext from "../../../../Context/AuthContext";
-import { BASE_URL_Login, BASE_URL_TimeTable } from "../../../../Config";
+import { BASE_URL } from "../../../../Config";
 import { motion } from 'framer-motion';
 import { FaPlus, FaMinus } from 'react-icons/fa';
 
@@ -53,7 +53,7 @@ export default function OptionalRow({
     const searchTeacher = useCallback(async (searchString) => {
         if (!searchString) return [];
         try {
-            const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
+            const response = await axios.post(`${BASE_URL}/search/teacher`, {
                 accessToken: authState.accessToken,
                 searchString,
                 start: 0,
@@ -85,7 +85,7 @@ export default function OptionalRow({
         try {
             const config = {
                 method: 'get',
-                url: `${BASE_URL_TimeTable}/timetable/fetch/checkAvailability`,
+                url: `${BASE_URL}/timetable/fetch/checkAvailability`,
                 params: { lecture, day, email },
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`,

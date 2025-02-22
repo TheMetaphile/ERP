@@ -4,7 +4,7 @@ import TransactionRow from './TransactionHistoryRow';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../../../Context/AuthContext';
 import axios from 'axios';
-import { BASE_URL_Fee, BASE_URL_Login } from '../../../../Config';
+import { BASE_URL } from '../../../../Config';
 import StudentCard from './ProfileCard';
 import ApplicableDiscounts from './ApplicableDiscounts';
 
@@ -33,7 +33,7 @@ export default function FeeDetail() {
     const fetchFees = async () => {
 
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student/detailedFee/${selectedStudent._id}`, {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/student/detailedFee/${selectedStudent._id}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }
@@ -60,7 +60,7 @@ export default function FeeDetail() {
                 setShowSuggestions(true);
                 const searchTeacher = async () => {
                     try {
-                        const response = await axios.post(`${BASE_URL_Login}/search/student`, {
+                        const response = await axios.post(`${BASE_URL}/search/student`, {
                             accessToken: authState.accessToken,
                             searchString: searchString,
                             start: 0,
@@ -114,7 +114,7 @@ export default function FeeDetail() {
             if (!selectedStudent || (!selectedDiscount && !removeDiscount)) {
                 return;
             }
-            const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discount`,
+            const response = await axios.post(`${BASE_URL}/fee/apply/discount`,
                 {
                     studentId: selectedStudent._id,
                     discountId: selectedDiscount,

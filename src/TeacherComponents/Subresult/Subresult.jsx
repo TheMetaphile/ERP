@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import AuthContext from '../../Context/AuthContext';
 import Loading from './../../LoadingScreen/Loading';
 import axios from 'axios';
-import { BASE_URL_Result, BASE_URL_Login } from '../../Config';
+import { BASE_URL} from '../../Config';
 import ScholasticRow from './utils/ScholasticRow';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -71,7 +71,7 @@ const Result = () => {
         const fetchProfile = async () => {
             setProfileLoading(true);
             try {
-                const response = await axios.post(`${BASE_URL_Login}/fetchSingle/student`, {
+                const response = await axios.post(`${BASE_URL}/fetchSingle/student`, {
                     accessToken: authState.accessToken,
                     email: id
                 });
@@ -88,7 +88,7 @@ const Result = () => {
         const fetchResult = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Result}/result/fetch/teacher?email=${id}`, {
+                const response = await axios.get(`${BASE_URL}/result/fetch/teacher?email=${id}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

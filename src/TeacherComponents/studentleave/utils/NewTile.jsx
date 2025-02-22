@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown, FaUserGraduate, FaCalendarAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Student_Leave } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 
 export default function NewTile({ data, setData }) {
@@ -24,7 +24,7 @@ export default function NewTile({ data, setData }) {
         setLoading(true);
 
         try {
-            const response = await axios.put(`${BASE_URL_Student_Leave}/leave/update`,
+            const response = await axios.put(`${BASE_URL}/leave/update`,
                 {
                     status: status,
                     leaveId: leaveId

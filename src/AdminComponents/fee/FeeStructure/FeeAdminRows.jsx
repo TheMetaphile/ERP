@@ -4,7 +4,7 @@ import AuthContext from '../../../Context/AuthContext';
 import Loading from '../../../LoadingScreen/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { BASE_URL_Fee } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { MdCheck, MdCancel, MdOutlineModeEdit } from 'react-icons/md';
 
 export default function FeeAdminRows({ Class, session, key }) {
@@ -32,7 +32,7 @@ console.log(session)
         const classs = getClassNames(Class);
         const stream = getStream(Class);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/structure?class=${Class}&session=${session}`, {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/structure?class=${Class}&session=${session}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -66,7 +66,7 @@ console.log(session)
         const stream = getStream(Class);
 
         try {
-            const response = await axios.post(`${BASE_URL_Fee}/fee/create/structure`, {
+            const response = await axios.post(`${BASE_URL}/fee/create/structure`, {
                 class: classs,
                 session: session,
                 admissionFee: admissionFee,

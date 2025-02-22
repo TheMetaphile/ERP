@@ -4,7 +4,7 @@ import ProfileIcon from './../../../../assets/profileIcon.png';
 import NotificationIcon from './../../../../assets/notificationIcon.png';
 import AuthContext from '../../../../Context/AuthContext';
 import { Badge } from '@mui/material';
-import { BASE_URL_ClassTeacher } from "../../../../Config";
+import { BASE_URL } from "../../../../Config";
 
 export default function ProfileCard() {
   const { authState } = useContext(AuthContext);
@@ -18,7 +18,7 @@ export default function ProfileCard() {
 
   const fetchTeacher = async () => {
     try {
-      const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/fetch/single`, {
+      const response = await axios.post(`${BASE_URL}/classTeacher/fetch/single`, {
         accessToken: authState.accessToken,
         class: authState?.userDetails?.currentClass,
         section: authState?.userDetails?.section

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import AuthContext from "../../../../Context/AuthContext";
-import { BASE_URL_Login, BASE_URL_TimeTable } from "../../../../Config";
-import Switch from "./switch";
+import { BASE_URL} from "../../../../Config";
 import OptionalRow from "./OptionalRow";
 import { motion } from 'framer-motion';
 
@@ -59,7 +58,7 @@ export default function TimetableRow({
   const searchTeacher = useCallback(async (searchString) => {
     if (!searchString) return [];
     try {
-      const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
+      const response = await axios.post(`${BASE_URL}/search/teacher`, {
         accessToken: authState.accessToken,
         searchString,
         start: 0,
@@ -115,7 +114,7 @@ export default function TimetableRow({
     try {
       const config = {
         method: 'get',
-        url: `${BASE_URL_TimeTable}/timetable/fetch/checkAvailability`,
+        url: `${BASE_URL}/timetable/fetch/checkAvailability`,
         params: { lecture, day, email },
         headers: {
           'Authorization': `Bearer ${authState.accessToken}`,

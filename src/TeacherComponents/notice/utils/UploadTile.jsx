@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Notice } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import Logo from '../../../assets/metaphile_logo.png';
 import { toast } from "react-toastify";
 import { motion } from 'framer-motion';
@@ -38,7 +38,7 @@ export default function UploadTile({ details }) {
 
   const handleSave = async (index) => {
     try {
-      const response = await axios.put(`${BASE_URL_Notice}/notice/update?noticeId=${details[index]._id}&session=${session}`, editedNotice, {
+      const response = await axios.put(`${BASE_URL}/notice/update?noticeId=${details[index]._id}&session=${session}`, editedNotice, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }
@@ -58,7 +58,7 @@ export default function UploadTile({ details }) {
 
   const handleDelete = async (index) => {
     try {
-      await axios.delete(`${BASE_URL_Notice}/notice/delete?id=${details[index]._id}&session=${session}`, {
+      await axios.delete(`${BASE_URL}/notice/delete?id=${details[index]._id}&session=${session}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }

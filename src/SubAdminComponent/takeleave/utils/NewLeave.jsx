@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { BASE_URL_TeacherLeave } from './../../../Config';
+import { BASE_URL } from './../../../Config';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import Loading from '../../../LoadingScreen/Loading'
@@ -62,7 +62,7 @@ function NewLeave({ onClose, onNewLeave }) {
 
 
     try {
-      const response = await axios.post(`${BASE_URL_TeacherLeave}/teacherleave/apply`,
+      const response = await axios.post(`${BASE_URL}/teacherleave/apply`,
         {
           startDate: fromDate,
           endDate: toDate,

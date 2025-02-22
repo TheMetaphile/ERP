@@ -4,7 +4,7 @@ import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios';
 import TimeTableHeader from './utils/TimeTableHeader'
-import { BASE_URL_TimeTableStructure, BASE_URL_TimeTable } from '../../Config';
+import { BASE_URL} from '../../Config';
 
 const getCurrentDay = () => {
     const daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -106,7 +106,7 @@ export default function TimeTableStudent() {
         console.log(authState.accessToken)
         console.log('classaaa', ClassRange)
         try {
-            const response = await axios.post(`${BASE_URL_TimeTableStructure}/timeTableStructure/fetch`, {
+            const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
                 accessToken: authState.accessToken,
                 classRange: ClassRange,
             });
@@ -146,7 +146,7 @@ export default function TimeTableStudent() {
         setLoading(true);
         try {
 
-            const response = await axios.post(`${BASE_URL_TimeTable}/timetable/fetch/student`, {
+            const response = await axios.post(`${BASE_URL}/timetable/fetch/student`, {
                 accessToken: authState.accessToken,
                 class: authState.ClassDetails.class,
                 section: authState.ClassDetails.section,

@@ -4,7 +4,7 @@ import axios from 'axios';
 import Papa from 'papaparse'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import AuthContext from '../../../Context/AuthContext';
 
 export default function TeacherForm() {
@@ -73,7 +73,7 @@ export default function TeacherForm() {
 
         try {
             formData.password = formData.aadhaarNumber;
-            const response = await axios.post(`${BASE_URL_Login}/signup/teacher`, formData);
+            const response = await axios.post(`${BASE_URL}/signup/teacher`, formData);
             if (response.status === 200) {
                 toast.success('Teacher registered successfully!');
                 console.log(formData)
@@ -119,7 +119,7 @@ export default function TeacherForm() {
                 const userData = data[i];
                 userData.password = userData.aadhaarNumber;
 
-                await axios.post(`${BASE_URL_Login}/signup/teacher`, userData);
+                await axios.post(`${BASE_URL}/signup/teacher`, userData);
             }
             toast.success('All teachers registered successfully');
 

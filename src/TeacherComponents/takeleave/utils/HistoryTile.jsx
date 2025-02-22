@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_TeacherLeave } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { motion } from 'framer-motion';
 import { MdCheck, MdCancel, MdEdit, MdDeleteForever, MdExpandMore, MdExpandLess } from 'react-icons/md';
 
@@ -35,7 +35,7 @@ export default function HistoryTile({ details }) {
         if ((data[index].status) === "Pending") {
             try {
                 const response = await axios.delete(
-                    `${BASE_URL_TeacherLeave}/teacherleave/delete?leaveId=${id}&session=${session}`,
+                    `${BASE_URL}/teacherleave/delete?leaveId=${id}&session=${session}`,
                     {
                         headers: {
                             Authorization: `Bearer ${authState.accessToken}`
@@ -86,7 +86,7 @@ export default function HistoryTile({ details }) {
 
         try {
             const response = await axios.put(
-                `${BASE_URL_TeacherLeave}/teacherleave/update?leaveId=${id}&session=${session}`,
+                `${BASE_URL}/teacherleave/update?leaveId=${id}&session=${session}`,
                 editData,
                 {
                     headers: {

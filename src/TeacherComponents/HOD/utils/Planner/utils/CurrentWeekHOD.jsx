@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { BASE_URL_Login } from '../../../../../Config';
+import { BASE_URL } from '../../../../../Config';
 import axios from 'axios';
 import AuthContext from '../../../../../Context/AuthContext';
 import Loading from '../../../../../LoadingScreen/Loading';
@@ -40,7 +40,7 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
         const fetchPlan = async () => {
 
             try {
-                const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/coordinator?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${currentWeekFormattedDate}`, {
+                const response = await axios.get(`${BASE_URL}/lessonPlan/fetch/coordinator?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${currentWeekFormattedDate}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
                     }

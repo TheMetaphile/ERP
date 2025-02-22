@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Login } from "../../Config";
+import { BASE_URL } from "../../Config";
 import AuthContext from '../../Context/AuthContext';
 import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaIdCard, FaMapMarkerAlt, FaPray, FaBook, FaBirthdayCake, FaPhone, FaBriefcase, FaGraduationCap, FaMoneyBillWave, FaCloudUploadAlt, FaGoogle } from 'react-icons/fa';
@@ -89,7 +89,7 @@ console.log(authState?.userDetails?.branch)
 
     try {
       formData.password = formData.aadhaarNumber;
-      const response = await axios.post(`${BASE_URL_Login}/signup/SupAdmin/teacher`, formData,
+      const response = await axios.post(`${BASE_URL}/signup/SupAdmin/teacher`, formData,
       );
       if (response.status === 200) {
         toast.success('Teacher registered successfully!');

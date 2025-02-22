@@ -3,7 +3,7 @@ import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameMonth, isSun
 import { motion } from 'framer-motion';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
-import { BASE_URL_Attendence } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const Calendar = ({ month, year }) => {
@@ -20,7 +20,7 @@ const Calendar = ({ month, year }) => {
   const fetchStudentAttendance = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/student`, {
+      const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/student`, {
         params: {
           month: currentDate.getMonth() + 1,
           year: currentDate.getFullYear(),

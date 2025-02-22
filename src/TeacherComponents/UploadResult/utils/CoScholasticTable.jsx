@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import { toast } from "react-toastify";
-import { BASE_URL_Result } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { motion } from "framer-motion";
 import { FaSave, FaGraduationCap, FaUserGraduate, FaBook } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -38,7 +38,7 @@ export default function CoScholasticTable({ students, term, Class, section }) {
         try {
             const subjectArray = Subjects.map((item) => item.subject);
             const response = await axios.get(
-                `${BASE_URL_Result}/result/fetch/Coscholastic/${Class}/${section}/${term}?subject=${subjectArray}`,
+                `${BASE_URL}/result/fetch/Coscholastic/${Class}/${section}/${term}?subject=${subjectArray}`,
                 {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
@@ -125,7 +125,7 @@ export default function CoScholasticTable({ students, term, Class, section }) {
             term: `${term}_Co_scholastic`,
         };
         try {
-            const response = await axios.post(`${BASE_URL_Result}/result/create`,
+            const response = await axios.post(`${BASE_URL}/result/create`,
                 resultData,
                 {
                     headers: {

@@ -5,7 +5,7 @@ import StudentDetailTile from "../utils/StudentDetailTile";
 import axios from 'axios';
 import AuthContext from "../../../../Context/AuthContext";
 import Loading from '../../../../LoadingScreen/Loading';
-import { BASE_URL_Login } from "../../../../Config";
+import { BASE_URL } from "../../../../Config";
 
 export default function AllStudentsList() {
     const [name, setName] = useState('');
@@ -61,7 +61,7 @@ export default function AllStudentsList() {
     const fetchUserData = async () => {
         try {
             console.log(start, "-", end);
-            const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
+            const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
                 accessToken: authState.accessToken,
                 currentClass: Class,
                 section: Section,
@@ -134,7 +134,7 @@ export default function AllStudentsList() {
         try {
             setLoading(true);
             console.log("start");
-            const response = await axios.post(`${BASE_URL_Login}/assignRollNumber`, {
+            const response = await axios.post(`${BASE_URL}/assignRollNumber`, {
                 accessToken: authState.accessToken,
                 currentClass: Class,
                 section: Section

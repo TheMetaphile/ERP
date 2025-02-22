@@ -3,7 +3,7 @@ import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Exam } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { motion } from 'framer-motion';
 import { IoMdCloseCircleOutline } from "react-icons/io";
 
@@ -85,7 +85,7 @@ const NewExam = ({ onClose, addExam }) => {
 
     console.log('examData', examData)
     try {
-      const response = await axios.post(`${BASE_URL_Exam}/ScheduleExams`, examData);
+      const response = await axios.post(`${BASE_URL}/ScheduleExams`, examData);
 
       if (response.status === 200) {
         toast.success('Exam Added')

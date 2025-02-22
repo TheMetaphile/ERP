@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../../../../../Context/AuthContext";
-import { BASE_URL_ClassTeacher } from "../../../../../Config";
+import { BASE_URL } from "../../../../../Config";
 import axios from "axios";
 import { Rect } from "face-api.js";
 
@@ -53,7 +53,7 @@ function Selection({ setClass, setSection, setSubject }) {
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_ClassTeacher}/classTeacher/fetch/sections`,
+            url: `${BASE_URL}/classTeacher/fetch/sections`,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -76,7 +76,7 @@ function Selection({ setClass, setSection, setSubject }) {
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_ClassTeacher}/fetch/subjects?section=${selectedSection}&class=${selectedClass}`,
+            url: `${BASE_URL}/fetch/subjects?section=${selectedSection}&class=${selectedClass}`,
             headers: {
                 'Authorization': `Bearer ${authState.accessToken}`
             },

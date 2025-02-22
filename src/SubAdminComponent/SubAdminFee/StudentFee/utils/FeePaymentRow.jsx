@@ -2,7 +2,7 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import axios from 'axios';
 import AuthContext from '../../../../Context/AuthContext';
-import { BASE_URL_Login } from '../../../../Config';
+import { BASE_URL } from '../../../../Config';
 import useRazorpay from 'react-razorpay';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -33,7 +33,7 @@ const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
             //console.log("triggered url", data);
 
             const response = await axios.post(
-                `${BASE_URL_Login}/fee/encrypt/url`,
+                `${BASE_URL}/fee/encrypt/url`,
                 data,
                 {
                     headers: {
@@ -251,7 +251,7 @@ const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
         try {
             console.log("triggered", data);
             const { token, ...requestData } = data;
-            const response = await axios.post(`${BASE_URL_Login}/fee/payment`,
+            const response = await axios.post(`${BASE_URL}/fee/payment`,
                 requestData,
                 {
                     headers: {

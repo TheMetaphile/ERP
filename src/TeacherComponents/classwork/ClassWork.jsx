@@ -4,7 +4,7 @@ import NewUpload from './NewUpload';
 import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
-import { BASE_URL_ClassWork } from "../../Config";
+import { BASE_URL } from "../../Config";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -107,7 +107,7 @@ function ClassWork() {
         console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_ClassWork}/classwork/fetch/teacher?class=${selectedClass}&month=${new Date().getMonth() + 1}&year=2024&section=${selectedSection}&subject=${selectedSubject}&start=${start}&end=${end}`, {
+            const response = await axios.get(`${BASE_URL}/classwork/fetch/teacher?class=${selectedClass}&month=${new Date().getMonth() + 1}&year=2024&section=${selectedSection}&subject=${selectedSubject}&start=${start}&end=${end}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`,
                 }

@@ -7,7 +7,7 @@ import { CiEdit } from "react-icons/ci";
 import { MdDeleteForever, MdCheck, MdCancel, MdExpandMore, MdExpandLess } from "react-icons/md";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Student_Leave } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 
 export default function AttendenceTable({ additionalData, status }) {
   const [loading, setLoading] = useState(false);
@@ -53,7 +53,7 @@ export default function AttendenceTable({ additionalData, status }) {
 
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/particularStudent?start=${start}&end=${end}&status=${status}`, {
+      const response = await axios.get(`${BASE_URL}/leave/fetch/particularStudent?start=${start}&end=${end}&status=${status}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }
@@ -114,7 +114,7 @@ export default function AttendenceTable({ additionalData, status }) {
       return;
     }
     try {
-      const response = await axios.put(`${BASE_URL_Student_Leave}/leave/update`, {
+      const response = await axios.put(`${BASE_URL}/leave/update`, {
         ...updatedFields,
         leaveId: data[index]._id
       }, {
@@ -141,7 +141,7 @@ export default function AttendenceTable({ additionalData, status }) {
     if (data[index].status === "Pending") {
       try {
         const response = await axios.delete(
-          `${BASE_URL_Student_Leave}/leave/delete?leaveId=${id}`,
+          `${BASE_URL}/leave/delete?leaveId=${id}`,
           {
             headers: {
               Authorization: `Bearer ${authState.accessToken}`

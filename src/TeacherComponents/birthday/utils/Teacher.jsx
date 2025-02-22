@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import AuthContext from "../../../Context/AuthContext";
 import axios from "axios";
 import Loading from "../../../LoadingScreen/Loading";
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import TeacherTile from './TeacherTile';
 
 export default function Teacher() {
@@ -24,7 +24,7 @@ export default function Teacher() {
             console.log(getFormattedDate());
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Login}/birthday/teacher?date=${getFormattedDate()}`, {
+                const response = await axios.get(`${BASE_URL}/birthday/teacher?date=${getFormattedDate()}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

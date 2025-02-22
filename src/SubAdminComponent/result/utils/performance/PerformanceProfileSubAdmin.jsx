@@ -6,7 +6,7 @@ import AcademicMiddleTile from "./AcademicMiddleTile";
 import axios from "axios";
 import Loading from "../../../../LoadingScreen/Loading";
 import AuthContext from "../../../../Context/AuthContext";
-import { BASE_URL_Login, BASE_URL_Result } from "../../../../Config";
+import { BASE_URL} from "../../../../Config";
 import logo from '../../../../assets/school logo.png';
 import './Print.css';
 import jsPDF from 'jspdf';
@@ -110,7 +110,7 @@ const PerformanceProfileSubAdmin = () => {
     const fetchProfile = async () => {
       setProfileLoading(true);
       try {
-        const response = await axios.post(`${BASE_URL_Login}/fetchSingle/student`, {
+        const response = await axios.post(`${BASE_URL}/fetchSingle/student`, {
           accessToken: authState.accessToken,
           email: id
         });
@@ -129,7 +129,7 @@ const PerformanceProfileSubAdmin = () => {
       console.log(session, id, Class)
       setLoading(true);
       try {
-        const response = await axios.get(`${BASE_URL_Result}/result/fetch/admin?email=${id}&class=${Class}&session=${session}`, {
+        const response = await axios.get(`${BASE_URL}/result/fetch/admin?email=${id}&class=${Class}&session=${session}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
           }

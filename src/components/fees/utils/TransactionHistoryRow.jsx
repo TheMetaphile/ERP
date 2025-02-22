@@ -6,7 +6,7 @@ import TransactionHistoryHeader from "./TransactionHistoryHeader";
 import TransactionField from "./TransactionField.jsx";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Fee } from "../../../Config.js";
+import { BASE_URL } from "../../../Config.js";
 import { usePaymentContext } from "./PaymentContext.jsx";
 
 export default function TransactionRow() {
@@ -27,7 +27,7 @@ export default function TransactionRow() {
 
     const fetchTransaction = async () => {
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/particularStudent/transactions?email=${authState?.userDetails?.email}`, {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/particularStudent/transactions?email=${authState?.userDetails?.email}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }

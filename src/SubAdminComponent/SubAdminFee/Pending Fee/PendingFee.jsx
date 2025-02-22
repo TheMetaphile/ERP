@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaGraduationCap, FaLayerGroup } from 'react-icons/fa';
 // import { useFilters } from '../Students/utils/Filters';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import axios from 'axios';
 import SemesterPendingFee from './utils/SemesterPendingFee';
 import { toast, ToastContainer } from 'react-toastify';
@@ -55,7 +55,7 @@ const PendingFee = () => {
 
     const fetchSections = async (selectedClass) => {
         try {
-            const response = await axios.post(`${BASE_URL_Login}/classTeacher/fetch/sections`, {
+            const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
                 accessToken: authState.accessToken,
                 class: selectedClass,
             });
@@ -73,7 +73,7 @@ const PendingFee = () => {
 
     const handleDownload = async () => {
         try {
-            const response = await axios.get(`${BASE_URL_Login}/fee/export/Pending/${selectedClass}/${section}/${selectedSession}/${selectedMonth}`, {
+            const response = await axios.get(`${BASE_URL}/fee/export/Pending/${selectedClass}/${section}/${selectedSession}/${selectedMonth}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 },

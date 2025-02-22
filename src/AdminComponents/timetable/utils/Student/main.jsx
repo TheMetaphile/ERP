@@ -7,7 +7,7 @@ import Loading from '../../../../LoadingScreen/Loading';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_TimeTable } from '../../../../Config';
+import { BASE_URL } from '../../../../Config';
 import { useTimetableContext } from '../TimetableContext';
 
 function StudentsTimeTable() {
@@ -89,7 +89,7 @@ function StudentsTimeTable() {
         if (selectClass && selectedSection) {
             setLoading(true);
             try {
-                const url = `${BASE_URL_TimeTable}/timetable/fetch/student`;
+                const url = `${BASE_URL}/timetable/fetch/student`;
                 const payload = {
                     accessToken: authState.accessToken,
                     class: selectClass,

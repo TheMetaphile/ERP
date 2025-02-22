@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
-import { BASE_URL_TeacherLeave } from './../../../Config';
+import { BASE_URL } from './../../../Config';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import Loading from '../../../LoadingScreen/Loading'
@@ -63,7 +63,7 @@ function History({ additionalData }) {
         setLoading(true);
         console.log('start', start, 'end', end)
         try {
-            const response = await axios.get(`${BASE_URL_TeacherLeave}/teacherleave/fetch/teacher?start=${start}&end=${end}&session=${session}`, {
+            const response = await axios.get(`${BASE_URL}/teacherleave/fetch/teacher?start=${start}&end=${end}&session=${session}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }

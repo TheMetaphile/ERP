@@ -6,7 +6,7 @@ import TeacherNavbar from "./navbar/navbar.jsx";
 import TeacherEnddrawer from "./enddrawer/enddrawer.jsx";
 import { messaging, getToken, onMessage } from './../firebase';
 import AuthContext from "../Context/AuthContext.jsx";
-import { BASE_URL_Login } from "../Config.js";
+import { BASE_URL } from "../Config.js";
 import SendNotification from "../SendNotification.jsx";
 
 export default function TeacherDashboard() {

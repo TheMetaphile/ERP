@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import CoOrdinatorOnLeaveRow from "./CoOrdinatorOnLeaveRow";
 import { motion } from 'framer-motion';
 
@@ -17,7 +17,7 @@ export default function SubstituteTable() {
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_Login}/CoordinatorSubstitute/fetch/checkLeave?date=${formattedDate}&session=${session}`,
+            url: `${BASE_URL}/CoordinatorSubstitute/fetch/checkLeave?date=${formattedDate}&session=${session}`,
             headers: {
                 'Authorization': `Bearer ${authState.accessToken}`
             }

@@ -3,7 +3,7 @@ import AllNotificationTile from './AllNotificationTile';
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
-import { BASE_URL_Notice } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { toast } from "react-toastify";
 
 function AllNotification() {
@@ -43,7 +43,7 @@ function AllNotification() {
             setFetchingMore(true);
         }
         try {
-            const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/student?start=${start}&limit=${end}`, {
+            const response = await axios.get(`${BASE_URL}/notice/fetch/student?start=${start}&limit=${end}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`,
                 }

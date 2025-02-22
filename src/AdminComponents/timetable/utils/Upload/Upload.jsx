@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import CreateTimetableStrucutre from './createTimetableStructure';
 import UploadTimetable from './UploadTimetable';
 import Loading from './../../../../LoadingScreen/Loading';
-import { BASE_URL_TimeTableStructure } from '../../../../Config';
+import { BASE_URL } from '../../../../Config';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaCalendarAlt, FaCog } from 'react-icons/fa';
 
@@ -130,7 +130,7 @@ const Upload = () => {
         };
         console.log(createStructureData)
         try {
-            const structureResponse = await axios.post(`${BASE_URL_TimeTableStructure}/timeTableStructure/create`, createStructureData);
+            const structureResponse = await axios.post(`${BASE_URL}/timeTableStructure/create`, createStructureData);
 
             if (structureResponse.status === 200) {
                 console.log(structureResponse, 'OK', structureData.Class)
@@ -165,7 +165,7 @@ const Upload = () => {
         console.log(ClassRange)
         try {
 
-            const response = await axios.post(`${BASE_URL_TimeTableStructure}/timeTableStructure/fetch`, {
+            const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
                 accessToken: authState.accessToken,
                 classRange: ClassRange,
             });

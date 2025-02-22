@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../../../Context/AuthContext";
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { FaTimes } from "react-icons/fa";
 import { MdCheck, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -67,7 +67,7 @@ export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session })
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_Login}/CoordinatorSubstitute/create`,
+            url: `${BASE_URL}/CoordinatorSubstitute/create`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${authState.accessToken}`
@@ -106,7 +106,7 @@ export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session })
         console.log('payload', payload);
 
         try {
-            const response = await axios.post(`${BASE_URL_Login}/notice/upload/teacher`,
+            const response = await axios.post(`${BASE_URL}/notice/upload/teacher`,
                 payload,
                 {
                     headers: {
@@ -138,7 +138,7 @@ export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session })
         if (temp) {
             const searchTeacher = async () => {
                 try {
-                    const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
+                    const response = await axios.post(`${BASE_URL}/search/teacher`, {
                         accessToken: authState.accessToken,
                         searchString: temp,
                         start: 0,

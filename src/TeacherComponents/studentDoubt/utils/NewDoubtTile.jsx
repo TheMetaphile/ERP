@@ -4,7 +4,7 @@ import { FaChevronUp, FaChevronDown, FaUserGraduate, FaQuestionCircle, FaPen } f
 import { IoMdSend } from "react-icons/io";
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_AskDoubt } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdDeleteForever } from "react-icons/md";
@@ -117,7 +117,7 @@ export default function NewDoubtTile({ data, Class }) {
 
   const handleDelete = async (index, id) => {
     try {
-      const response = await axios.delete(`${BASE_URL_AskDoubt}/doubts/delete?class=${Class}&doubtId=${id}`, {
+      const response = await axios.delete(`${BASE_URL}/doubts/delete?class=${Class}&doubtId=${id}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }
@@ -160,7 +160,7 @@ export default function NewDoubtTile({ data, Class }) {
 
     setLoading(true);
     try {
-      const response = await axios.put(`${BASE_URL_AskDoubt}/doubts/update/teacher?id=${id}`, {
+      const response = await axios.put(`${BASE_URL}/doubts/update/teacher?id=${id}`, {
         class: Class,
         solution: answers[index],
         replyDate: new Date().toISOString().split('T')[0]

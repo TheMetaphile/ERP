@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { toast } from "react-toastify";
 import AdmissionInputs from './AdmissionInputs';
 import { motion } from "framer-motion";
@@ -71,7 +71,7 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
         }
         console.log(email, session);
         try {
-            const response = await axios.put(`${BASE_URL_Login}/promote/readmit`,
+            const response = await axios.put(`${BASE_URL}/promote/readmit`,
                 {
                     email: email,
                     subjects: subject,

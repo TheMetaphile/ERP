@@ -7,7 +7,7 @@ import html2canvas from 'html2canvas';
 import './Print.css';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import TCRow from './Tc_Row';
 
 const PrintableComponent = React.forwardRef((props, ref) => {
@@ -209,7 +209,7 @@ const Transfer = () => {
     const fetchUserTc = async () => {
         console.log('hit', authState.accessToken, tc, className, secttions)
         try {
-            const response = await axios.get(`${BASE_URL_Login}/terminate/terminatedSingle?session=${sessions}&id=${tc}`, {
+            const response = await axios.get(`${BASE_URL}/terminate/terminatedSingle?session=${sessions}&id=${tc}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -242,7 +242,7 @@ const Transfer = () => {
     const fetchSubjects = async () => {
         console.log('hit', authState.accessToken, tc, className, secttions)
         try {
-            const response = await axios.get(`${BASE_URL_Login}/fetch/subjects?class=${className}&section=${secttions}`, {
+            const response = await axios.get(`${BASE_URL}/fetch/subjects?class=${className}&section=${secttions}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -271,7 +271,7 @@ const Transfer = () => {
     const fetchResult = async () => {
         console.log('hit', authState.accessToken, tc, className, secttions)
         try {
-            const response = await axios.get(`${BASE_URL_Login}/result/fetch/status?id=${tc}&session=${sessions}`, {
+            const response = await axios.get(`${BASE_URL}/result/fetch/status?id=${tc}&session=${sessions}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -298,7 +298,7 @@ const Transfer = () => {
         try {
             const year = sessions.split('-')[0];
             console.log(year);
-            const response = await axios.get(`${BASE_URL_Login}/studentAttendance/fetch/completeStats?id=${tc}&class=${className}&year=${year}`, {
+            const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/completeStats?id=${tc}&class=${className}&year=${year}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

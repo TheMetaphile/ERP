@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import AdminRow from "./AdminRow";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { motion } from 'framer-motion';
 
 export default function CurrentAdmin({ onNewWork, additionalDataNonAdmin }) {
@@ -20,7 +20,7 @@ export default function CurrentAdmin({ onNewWork, additionalDataNonAdmin }) {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/admins/admin?branch=${authState?.userDetails?.branch}`,
+      url: `${BASE_URL}/admins/admin?branch=${authState?.userDetails?.branch}`,
       headers: {
         'Authorization': `Bearer ${authState.accessToken}`
       }

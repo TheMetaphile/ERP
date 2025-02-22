@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Fee, BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import StudentCard from '../StudentFee/utils/ProfileCard';
@@ -59,7 +59,7 @@ function CreateDiscount({ selectedSession }) {
         if (temp) {
             const searchStudent = async () => {
                 try {
-                    const response = await axios.post(`${BASE_URL_Login}/search/student`, {
+                    const response = await axios.post(`${BASE_URL}/search/student`, {
                         accessToken: authState.accessToken,
                         searchString: temp,
                         start: 0,
@@ -95,7 +95,7 @@ function CreateDiscount({ selectedSession }) {
             if(!selectedSuggestion || (!selectedDiscount && !removeDiscount)){
                 return; 
             }
-            const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discount`,
+            const response = await axios.post(`${BASE_URL}/fee/apply/discount`,
                 {
                     studentId: selectedSuggestion._id,
                     discountId: selectedDiscount,

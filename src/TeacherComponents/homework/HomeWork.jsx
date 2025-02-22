@@ -4,7 +4,7 @@ import NewUpload from './NewUpload';
 import axios from 'axios';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
-import { BASE_URL_Homework } from "../../Config";
+import { BASE_URL } from "../../Config";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -107,7 +107,7 @@ function HomeWork() {
 
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/teacher?class=${selectedClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${selectedSection}&subject=${selectedSubject}&start=${start}&end=${end}`, {
+      const response = await axios.get(`${BASE_URL}/homework/fetch/teacher?class=${selectedClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${selectedSection}&subject=${selectedSubject}&start=${start}&end=${end}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`,
         }

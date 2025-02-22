@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_TeacherLeave } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion } from "framer-motion";
@@ -38,7 +38,7 @@ export default function TeacherLeavesTile({ data }) {
         const session = getCurrentSession();
         try {
             const response = await axios.put(
-                `${BASE_URL_TeacherLeave}/teacherleave/update?leaveId=${id}&session=${session}`,
+                `${BASE_URL}/teacherleave/update?leaveId=${id}&session=${session}`,
                 { status: actionType },
                 {
                     headers: {

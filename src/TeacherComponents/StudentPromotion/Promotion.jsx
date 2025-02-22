@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { FaUserGraduate, FaChalkboardTeacher, FaBookOpen, FaSave } from 'react-icons/fa';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
-import { BASE_URL_Login } from '../../Config';
+import { BASE_URL } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PromotionRow from './utils/PromotionRow';
@@ -64,7 +64,7 @@ function Promotion() {
     const fetchStudents = async () => {
         setLoading(true);
         try {
-            const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
+            const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
                 accessToken: authState.accessToken,
                 currentClass: authState.ClassDetails.class,
                 section: authState.ClassDetails.section,
@@ -108,7 +108,7 @@ function Promotion() {
         };
 
         try {
-            const response = await axios.put(`${BASE_URL_Login}/promote/student?session=${session}&class=${currentClass}&section=${authState.ClassDetails.section}`, payload, {
+            const response = await axios.put(`${BASE_URL}/promote/student?session=${session}&class=${currentClass}&section=${authState.ClassDetails.section}`, payload, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }

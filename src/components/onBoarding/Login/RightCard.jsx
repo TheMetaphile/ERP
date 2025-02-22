@@ -1,13 +1,13 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import logo from '../../../assets/Bds_logo.png'
+import logo from '../../../assets/metaphile_logo.png'
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { messaging, getToken } from '../../../firebase';
 
 
@@ -54,7 +54,7 @@ export default function RightCard() {
                             rolee === "Sup-Admin" ? "/login/SupAdmin" :
                                 "/login/student";
 
-            await axios.post(`${BASE_URL_Login}${endpoint}`, {
+            await axios.post(`${BASE_URL}${endpoint}`, {
                 email,
                 password
             }).then(async (response) => {
@@ -82,7 +82,7 @@ export default function RightCard() {
                             let config = {
                                 method: 'get',
                                 maxBodyLength: Infinity,
-                                url: `${BASE_URL_Login}/classTeacherSubstitute/fetch/checkSubstitute?date=${date}&session=${session}`,
+                                url: `${BASE_URL}/classTeacherSubstitute/fetch/checkSubstitute?date=${date}&session=${session}`,
                                 headers: {
                                     'Authorization': `Bearer ${tokens.accessToken}`
                                 }
@@ -105,7 +105,7 @@ export default function RightCard() {
                         let config = {
                             method: 'get',
                             maxBodyLength: Infinity,
-                            url: `${BASE_URL_Login}/CoordinatorSubstitute/fetch/checkSubstitute?date=${date}&session=${session}`,
+                            url: `${BASE_URL}/CoordinatorSubstitute/fetch/checkSubstitute?date=${date}&session=${session}`,
                             headers: {
                                 'Authorization': `Bearer ${tokens.accessToken}`
                             }
@@ -163,7 +163,7 @@ export default function RightCard() {
 
     const sendToken = async (token, accessToken) => {
         try {
-            const response = await axios.put(`${BASE_URL_Login}/notification/addToken`,
+            const response = await axios.put(`${BASE_URL}/notification/addToken`,
                 {
                     token: token
                 },

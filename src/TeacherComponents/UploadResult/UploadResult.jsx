@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
-import { BASE_URL_Login } from '../../Config';
+import { BASE_URL } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Switch from './utils/switch';
@@ -70,7 +70,7 @@ function UploadResult() {
 
     setLoading(true);
     try {
-      const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
+      const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
         accessToken: authState.accessToken,
         currentClass: Class,
         section: Section,

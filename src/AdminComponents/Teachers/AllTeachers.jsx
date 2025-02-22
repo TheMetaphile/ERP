@@ -6,7 +6,7 @@ import { chatLogo, profilelogo } from "./utils/images/index.js";
 import axios from 'axios';
 import AuthContext from "../../Context/AuthContext.jsx";
 import Loading from "../../LoadingScreen/Loading.jsx"
-import { BASE_URL_Login, BASE_URL_Git } from "../../Config.js";
+import { BASE_URL} from "../../Config.js";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -61,7 +61,7 @@ export default function AllTeachers() {
             formData.append('label', pklFile);
 
             try {
-                const response = await axios.post(`${BASE_URL_Git}/upload`, formData, {
+                const response = await axios.post(`${BASE_URL}/upload`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
@@ -85,7 +85,7 @@ export default function AllTeachers() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/teacher`, {
+                const response = await axios.post(`${BASE_URL}/fetchMultiple/teacher`, {
                     accessToken: authState.accessToken
                 });
                 console.log("API response:", response.data);

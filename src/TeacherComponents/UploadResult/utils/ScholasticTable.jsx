@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { BASE_URL_Result } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import AuthContext from "../../../Context/AuthContext";
 import { motion } from "framer-motion";
 import { FaSave, FaUserGraduate, FaBook, FaPencilAlt, FaFlask, FaClipboardCheck } from "react-icons/fa";
@@ -40,7 +40,7 @@ console.log(subject)
             if (!subject) return;
 
             const response = await axios.get(
-                `${BASE_URL_Result}/result/fetch/scholastic/${Class}/${section}/${subject}/${term}`,
+                `${BASE_URL}/result/fetch/scholastic/${Class}/${section}/${subject}/${term}`,
                 {
                   headers: {
                     Authorization: `Bearer ${authState.accessToken}`
@@ -128,7 +128,7 @@ console.log(subject)
             term: term,
         };
         try {
-            const response = await axios.post(`${BASE_URL_Result}/result/create`,
+            const response = await axios.post(`${BASE_URL}/result/create`,
                 resultData,
                 {
                     headers: {

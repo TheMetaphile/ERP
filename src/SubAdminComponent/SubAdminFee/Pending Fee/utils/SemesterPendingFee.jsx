@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import SemesterRow from './SemesterRow';
 import axios from 'axios';
 import AuthContext from '../../../../Context/AuthContext';
-import { BASE_URL_Login } from '../../../../Config';
+import { BASE_URL } from '../../../../Config';
 import { toast } from 'react-toastify';
 import Loading from '../../../../LoadingScreen/Loading';
 
@@ -23,7 +23,7 @@ const SemesterPendingFee = ({ selectedClass, selectedSection, selectedMonth, sel
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/fee/fetch/pendingFeeReport/${selectedClass}/${selectedSection}/${selectedSession}/${selectedMonth}`,
+      url: `${BASE_URL}/fee/fetch/pendingFeeReport/${selectedClass}/${selectedSection}/${selectedSession}/${selectedMonth}`,
       headers: {
         'Authorization': `Bearer ${authState.accessToken}`
       },

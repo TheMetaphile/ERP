@@ -6,7 +6,7 @@ import NewTile from './utils/NewTile';
 import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
-import { BASE_URL_Student_Leave } from '../../Config';
+import { BASE_URL } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 
 function StudentLeave() {
@@ -56,7 +56,7 @@ function StudentLeave() {
             const today = new Date();
             var month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;
             const formattedDate = `${today.getFullYear()}-${month}-${today.getDate()}`;
-            const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/classTeacher?start=${start}&end=${end}&status=${status}&date=${formattedDate}`, {
+            const response = await axios.get(`${BASE_URL}/leave/fetch/classTeacher?start=${start}&end=${end}&status=${status}&date=${formattedDate}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import AuthContext from '../../../../../Context/AuthContext';
-import { BASE_URL_Login } from '../../../../../Config';
+import { BASE_URL } from '../../../../../Config';
 
 function Selection({ handleClassChange, handleSectionChange, handleSessionChange, Class, Section, Session }) {
   const { authState } = useContext(AuthContext);
@@ -32,7 +32,7 @@ function Selection({ handleClassChange, handleSectionChange, handleSessionChange
 
   const fetchSections = async (selectedClass) => {
     try {
-      const response = await axios.post(`${BASE_URL_Login}/classTeacher/fetch/sections`, {
+      const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
         accessToken: authState.accessToken,
         class: selectedClass
       });

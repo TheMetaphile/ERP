@@ -5,7 +5,7 @@ import jsPDF from 'jspdf';
 import logo from '../../../../assets/metaphile_logo.png';
 import { MdDeleteForever } from 'react-icons/md';
 import AuthContext from '../../../../Context/AuthContext';
-import { BASE_URL_Login } from '../../../../Config';
+import { BASE_URL } from '../../../../Config';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -24,6 +24,8 @@ export default function TransactionField({ data, selectedStudent }) {
   const [clickedIndex, setClickedIndex] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [password, setPassword] = useState('');
+  const [trans, setTrans] = useState('');
+
   const [reason, setReason] = useState('');
 
   const handleClick = (index) => {
@@ -209,7 +211,7 @@ export default function TransactionField({ data, selectedStudent }) {
 
   const handleDelete = async (index, id) => {
     try {
-      const response = await axios.delete(`${BASE_URL_Fee}/fee/delete/discount?id=${id}`, {
+      const response = await axios.delete(`${BASE_URL}/fee/delete/discount?id=${id}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }
@@ -225,8 +227,9 @@ export default function TransactionField({ data, selectedStudent }) {
     }
   };
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = (value) => {
     setShowPopup(true);
+    setTrans(value)
   };
 
   const closePopup = () => {
@@ -243,7 +246,7 @@ export default function TransactionField({ data, selectedStudent }) {
     let config = {
       method: 'delete',
       maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/fee/delete/transaction/particular/${stud._id}/${!stud.flag}`,
+      url: `${BASE_URL}/fee/delete/transaction/particular/${stud._id}/${!stud.flag}`,
       headers: {
         'Authorization': `Bearer ${authState.accessToken}`
       },
@@ -329,79 +332,15 @@ export default function TransactionField({ data, selectedStudent }) {
               </td>
               <td className="flex justify-center items-center gap-2 px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                 {value.flag ?
-                  <div className='text-green-500 text-xl cursor-pointer' onClick={handleDeleteClick}><FaUndo /></div>
+                  <div className='text-green-500 text-xl cursor-pointer' onClick={()=>handleDeleteClick(value)}><FaUndo /></div>
                   :
                   <div className='flex gap-3 items-center'>
-                    <div className='text-red-500 text-2xl cursor-pointer' onClick={handleDeleteClick}><MdDeleteForever /></div>
+                    <div className='text-red-500 text-2xl cursor-pointer' onClick={() => { handleDeleteClick(value) }}><MdDeleteForever /></div>
                     <div className='text-green-500 text-xl cursor-pointer' onClick={() => generateReceipt(value)}><FaDownload /></div>
                   </div>
                 }
               </td>
-              {showPopup && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center  backdrop-blur-sm">
-                  <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-4xl transform transition-all duration-300 scale-100 mx-4">
-                    <div className="relative mb-8">
-                      <h2 className="text-2xl font-bold text-blue-600 pb-2 border-b-2 border-blue-500">Transaction Details</h2>
-                      <div className="absolute -bottom-0.5 left-0 w-24 h-1 bg-blue-500 rounded-full"></div>
-                    </div>
 
-                    <div className="space-y-3">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-4">Transaction Information</h3>
-                      <p className="text-gray-700 py-1.5 border-b border-gray-100">
-                        <span className="font-semibold text-blue-600">Date:</span>
-                        <span className="ml-2">{value.date}</span>
-                      </p>
-                      <p className="text-gray-700 py-1.5 border-b border-gray-100">
-                        <span className="font-semibold text-blue-600">Order ID:</span>
-                        <span className="ml-2">{value.order_id}</span>
-                      </p>
-                      <p className="text-gray-700 py-1.5 border-b border-gray-100">
-                        <span className="font-semibold text-blue-600">Discount:</span>
-                        <span className="ml-2">{value.discount}</span>
-                      </p>
-                      <p className="text-gray-700 py-1.5 border-b border-gray-100">
-                        <span className="font-semibold text-blue-600">Payment ID:</span>
-                        <span className="ml-2">{value.payment_id}</span>
-                      </p>
-                      <p className="text-gray-700 py-1.5 border-b border-gray-100">
-                        <span className="font-semibold text-blue-600">Mode:</span>
-                        <span className="ml-2">{value.signature}</span>
-                      </p>
-                      <p className="text-gray-700 py-1.5 border-b border-gray-100">
-                        <span className="font-semibold text-blue-600">Status:</span>
-                        <span className="ml-2">{value.payment_status}</span>
-                      </p>
-                    </div>
-
-
-                    <div className="border-t border-gray-200 pt-6 flex items-center justify-between mb-2 gap-2">
-                      <div className='w-full'>
-                        <p className="text-gray-600 mb-3 font-bold">Enter your Reason:</p>
-                        <input
-                          className={`w-full p-3 text-gray-700 bg-white border-2 border-indigo-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:border-indigo-700/90  transition duration-300 ease-in-out`}
-                          name="reason" value={reason} onChange={handleChange}
-                          placeholder="Reason"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="flex justify-end space-x-4">
-                      <button
-                        onClick={() => confirmDelete(value)}
-                        className="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-lg font-medium shadow-lg hover:from-red-600 hover:to-red-700 transform hover:-translate-y-0.5 transition-all duration-200"
-                      >
-                        Confirm
-                      </button>
-                      <button
-                        onClick={closePopup}
-                        className="bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 px-6 py-3 rounded-lg font-medium hover:from-blue-200 hover:to-blue-300 transform hover:-translate-y-0.5 transition-all duration-200"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
             </motion.tr>
           )) : null}
 
@@ -409,6 +348,73 @@ export default function TransactionField({ data, selectedStudent }) {
 
         </tbody>
       </table>
+      
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center  backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-4xl transform transition-all duration-300 scale-100 mx-4">
+            <div className="relative mb-8">
+              <h2 className="text-2xl font-bold text-blue-600 pb-2 border-b-2 border-blue-500">Transaction Details</h2>
+              <div className="absolute -bottom-0.5 left-0 w-24 h-1 bg-blue-500 rounded-full"></div>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Transaction Information</h3>
+              <p className="text-gray-700 py-1.5 border-b border-gray-100">
+                <span className="font-semibold text-blue-600">Date:</span>
+                <span className="ml-2">{trans.date}</span>
+              </p>
+              <p className="text-gray-700 py-1.5 border-b border-gray-100">
+                <span className="font-semibold text-blue-600">Order ID:</span>
+                <span className="ml-2">{trans.order_id}</span>
+              </p>
+              <p className="text-gray-700 py-1.5 border-b border-gray-100">
+                <span className="font-semibold text-blue-600">Discount:</span>
+                <span className="ml-2">{trans.discount}</span>
+              </p>
+              <p className="text-gray-700 py-1.5 border-b border-gray-100">
+                <span className="font-semibold text-blue-600">Payment ID:</span>
+                <span className="ml-2">{trans.payment_id}</span>
+              </p>
+              <p className="text-gray-700 py-1.5 border-b border-gray-100">
+                <span className="font-semibold text-blue-600">Mode:</span>
+                <span className="ml-2">{trans.signature}</span>
+              </p>
+              <p className="text-gray-700 py-1.5 border-b border-gray-100">
+                <span className="font-semibold text-blue-600">Status:</span>
+                <span className="ml-2">{trans.payment_status}</span>
+              </p>
+            </div>
+
+
+            <div className="border-t border-gray-200 pt-6 flex items-center justify-between mb-2 gap-2">
+              <div className='w-full'>
+                <p className="text-gray-600 mb-3 font-bold">Enter your Reason:</p>
+                <input
+                  className={`w-full p-3 text-gray-700 bg-white border-2 border-indigo-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:border-indigo-700/90  transition duration-300 ease-in-out`}
+                  name="reason" value={reason} onChange={handleChange}
+                  placeholder="Reason"
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => confirmDelete(trans)}
+                className="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-lg font-medium shadow-lg hover:from-red-600 hover:to-red-700 transform hover:-translate-y-0.5 transition-all duration-200"
+              >
+                Confirm
+              </button>
+              <button
+                onClick={closePopup}
+                className="bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 px-6 py-3 rounded-lg font-medium hover:from-blue-200 hover:to-blue-300 transform hover:-translate-y-0.5 transition-all duration-200"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </motion.div>
   );
 }

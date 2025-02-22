@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AuthContext from "../../../../../Context/AuthContext";
-import { BASE_URL_Login } from "../../../../../Config";
+import { BASE_URL } from "../../../../../Config";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -21,7 +21,7 @@ export default function ClassTeacherSubstitutionHistory() {
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_Login}/LectureSubstitute/fetch/completeHistory?date=${formattedDate}&start=${start}&end=${end}&session=${session}`,
+            url: `${BASE_URL}/LectureSubstitute/fetch/completeHistory?date=${formattedDate}&start=${start}&end=${end}&session=${session}`,
             headers: {
                 'Authorization': `Bearer ${authState.accessToken}`
             }

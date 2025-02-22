@@ -5,7 +5,7 @@ import AuthContext from '../../../Context/AuthContext';
 import Loading from '../../../LoadingScreen/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { BASE_URL_Fee } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 
 export default function FeeAdminRow({ Class, session }) {
     const [expanded, setExpanded] = useState(false);
@@ -34,7 +34,7 @@ export default function FeeAdminRow({ Class, session }) {
     const fetchStructure = async () => {
         console.log(Class)
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/structure?class=${Class}&session=${session}`, {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/structure?class=${Class}&session=${session}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -63,7 +63,7 @@ export default function FeeAdminRow({ Class, session }) {
         console.log(structure)
 
         try {
-            const response = await axios.post(`${BASE_URL_Fee}/fee/create/structure`, {
+            const response = await axios.post(`${BASE_URL}/fee/create/structure`, {
                 class: Class,
                 session: session,
                 structure: structure
@@ -91,7 +91,7 @@ export default function FeeAdminRow({ Class, session }) {
         console.log(Class)
         console.log(id)
         try {
-            const response = await axios.delete(`${BASE_URL_Fee}/fee/delete/structure`, {
+            const response = await axios.delete(`${BASE_URL}/fee/delete/structure`, {
 
                 data: {
                     class: Class,

@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -28,7 +28,7 @@ export default function StudentDetailTile({ userData }) {
         setLoading(true);
         setLoadingIndex(index);
         try {
-            const response = await axios.delete(`${BASE_URL_Login}/terminate/student`, {
+            const response = await axios.delete(`${BASE_URL}/terminate/student`, {
                 data: {
                     email: email,
                     accessToken: authState.accessToken

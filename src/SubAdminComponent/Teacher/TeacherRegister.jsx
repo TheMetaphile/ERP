@@ -3,7 +3,7 @@ import axios from 'axios';
 import Papa from 'papaparse'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Login } from "../../Config";
+import { BASE_URL } from "../../Config";
 import AuthContext from '../../Context/AuthContext';
 import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaIdCard, FaMapMarkerAlt, FaPray, FaBook, FaBirthdayCake, FaPhone, FaBriefcase, FaGraduationCap, FaMoneyBillWave, FaCloudUploadAlt, FaGoogle } from 'react-icons/fa';
@@ -80,7 +80,7 @@ export default function TeacherRegister() {
 
     try {
       formData.password = formData.aadhaarNumber;
-      const response = await axios.post(`${BASE_URL_Login}/signup/teacher`, formData,
+      const response = await axios.post(`${BASE_URL}/signup/teacher`, formData,
       );
       if (response.status === 200) {
         toast.success('Teacher registered successfully!');
@@ -127,7 +127,7 @@ export default function TeacherRegister() {
         const userData = data[i];
         userData.password = userData.aadhaarNumber;
 
-        await axios.post(`${BASE_URL_Login}/signup/teacher`, userData);
+        await axios.post(`${BASE_URL}/signup/teacher`, userData);
       }
       toast.success('All teachers registered successfully');
 

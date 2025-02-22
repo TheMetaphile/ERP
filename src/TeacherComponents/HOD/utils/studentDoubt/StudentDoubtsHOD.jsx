@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import NewDoubt from './utils/NewDoubt';
 import Answered from './utils/Answered';
 import axios from 'axios';
-import { BASE_URL_Login } from '../../../../Config';
+import { BASE_URL } from '../../../../Config';
 
 function StudentDoubtsHOD() {
     const { authState } = useContext(AuthContext);
@@ -32,7 +32,7 @@ function StudentDoubtsHOD() {
 
     const fetchSections = async (selectedClass) => {
         try {
-            const response = await axios.post(`${BASE_URL_Login}/classTeacher/fetch/sections`, {
+            const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
                 accessToken: authState.accessToken,
                 class: selectedClass
             });
@@ -47,7 +47,7 @@ function StudentDoubtsHOD() {
     const fetchSubject = async () => {
         console.log(Class, Section)
         try {
-            const response = await axios.post(`${BASE_URL_Login}/fetch`, {
+            const response = await axios.post(`${BASE_URL}/fetch`, {
                 accessToken: authState.accessToken,
                 class: Class,
                 section: Section

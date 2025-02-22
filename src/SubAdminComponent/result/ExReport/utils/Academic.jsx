@@ -4,7 +4,7 @@ import AcademicBottonTile from "./AcademicBottomTile";
 import AcademicMiddleTile from "./AcademicMiddleTile";
 import AcademicTopTile from "./AcademicTopTile";
 import { MdEdit } from "react-icons/md";
-import { BASE_URL_Result } from "../../../../Config";
+import { BASE_URL } from "../../../../Config";
 import AuthContext from "../../../../Context/AuthContext";
 import Loading from "../../../../LoadingScreen/Loading";
 import axios from "axios";
@@ -21,7 +21,7 @@ export default function Academic(props) {
             console.log({ id })
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Result}/result/fetch/teacher?email=${id}`, {
+                const response = await axios.get(`${BASE_URL}/result/fetch/teacher?email=${id}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

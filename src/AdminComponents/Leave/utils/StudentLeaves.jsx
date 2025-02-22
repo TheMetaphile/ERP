@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import Loading from "../../../LoadingScreen/Loading.jsx";
 import AuthContext from "../../../Context/AuthContext.jsx";
 import axios from "axios";
-import { BASE_URL_Student_Leave } from "../../../Config.js";
+import { BASE_URL } from "../../../Config.js";
 import { ToastContainer, toast } from "react-toastify";
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -57,7 +57,7 @@ export default function StudentLeaves() {
     if (loading || allDataFetched) return;
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/admin?start=${start}&end=${end}&status=${status}`, {
+      const response = await axios.get(`${BASE_URL}/leave/fetch/admin?start=${start}&end=${end}&status=${status}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }

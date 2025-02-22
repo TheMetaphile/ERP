@@ -8,7 +8,7 @@ import Loading from './../../../LoadingScreen/Loading';
 import AuthContext from "../../../Context/AuthContext";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 
 export default function AddmissionForm() {
     const [loading, setLoading] = useState(false);
@@ -107,7 +107,7 @@ export default function AddmissionForm() {
 
         try {
             formData.password = formData.aadhaarNumber;
-            const response = await axios.post(`${BASE_URL_Login}/signup/student`, formData);
+            const response = await axios.post(`${BASE_URL}/signup/student`, formData);
             if (response.status === 200) {
                 toast.success('Student registered successfully!');
                 console.log(formData)
@@ -159,7 +159,7 @@ export default function AddmissionForm() {
                 if (!userData.name) {
                     return;
                 }
-                return axios.post(`${BASE_URL_Login}/signup/student`, userData).catch((err) => {
+                return axios.post(`${BASE_URL}/signup/student`, userData).catch((err) => {
                     const error = JSON.parse(err.request.response);
                     toast.error(error.error + " " + userData.name);
                 });

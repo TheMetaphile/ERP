@@ -6,7 +6,7 @@ import Switch from "./switch";
 import { toast, ToastContainer } from "react-toastify";
 import { FaSave, FaBookOpen } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import { BASE_URL_Login } from '../../../Config'
+import { BASE_URL } from '../../../Config'
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -77,7 +77,7 @@ const NewNoteBookRecord = () => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/fetchMultiple/student`,
+      url: `${BASE_URL}/fetchMultiple/student`,
       headers: {
         'Content-Type': 'application/json'
       },
@@ -114,7 +114,7 @@ const NewNoteBookRecord = () => {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: `${BASE_URL_Login}/notebook/upload/`,
+        url: `${BASE_URL}/notebook/upload/`,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authState.accessToken}`

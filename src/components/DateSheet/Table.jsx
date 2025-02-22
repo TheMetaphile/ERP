@@ -6,7 +6,7 @@ import signature from './../../assets/signature.jpg';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Exam } from "../../Config";
+import { BASE_URL } from "../../Config";
 
 export default function Table() {
   const { authState } = useContext(AuthContext);
@@ -16,7 +16,7 @@ export default function Table() {
   const fetchDateSheet = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post(`${BASE_URL_Exam}/fetchDateSheet`, {
+      const response = await axios.post(`${BASE_URL}/fetchDateSheet`, {
         accessToken: authState.accessToken,
         class: authState?.userDetails?.currentClass
       });

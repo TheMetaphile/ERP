@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import Loading from '../../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
-import { BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import AuthContext from '../../../Context/AuthContext';
 import { motion } from "framer-motion";
 import { FaUser, FaGraduationCap, FaUniversity, FaPhone, FaEnvelope, FaBirthdayCake, FaTint, FaIdCard, FaMapMarkerAlt, FaBuilding, FaUserTie, FaLink } from "react-icons/fa";
@@ -74,7 +74,7 @@ const Preview = ({ prevStep, formData }) => {
         setLoading(true);
         console.log(payload)
         try {
-            const response = await axios.post(`${BASE_URL_Login}/signup/SubAdmin`, payload);
+            const response = await axios.post(`${BASE_URL}/signup/SubAdmin`, payload);
             if (response.status === 200) {
                 toast.success('Sub Admin registered successfully!');
                 console.log(response.data)

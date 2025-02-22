@@ -6,7 +6,7 @@ import AcademicMiddleTile from "./AcademicMiddleTile";
 import axios from "axios";
 import Loading from "../../../../LoadingScreen/Loading";
 import AuthContext from "../../../../Context/AuthContext";
-import { BASE_URL_Login, BASE_URL_Result } from "../../../../Config";
+import { BASE_URL} from "../../../../Config";
 import logo from '../../../../assets/school logo.png';
 import './Print.css';
 import jsPDF from 'jspdf';
@@ -95,7 +95,7 @@ const PerformanceProfile = () => {
     const fetchProfile = async () => {
       setProfileLoading(true);
       try {
-        const response = await axios.post(`${BASE_URL_Login}/fetchSingle/student`, {
+        const response = await axios.post(`${BASE_URL}/fetchSingle/student`, {
           accessToken: authState.accessToken,
           email: id
         });
@@ -112,7 +112,7 @@ const PerformanceProfile = () => {
     const fetchResult = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${BASE_URL_Result}/result/fetch/teacher?email=${id}`, {
+        const response = await axios.get(`${BASE_URL}/result/fetch/teacher?email=${id}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
           }

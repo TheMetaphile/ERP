@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../../../../../Context/AuthContext";
-import { BASE_URL_Login } from "../../../../../Config";
+import { BASE_URL } from "../../../../../Config";
 import { FaTimes } from "react-icons/fa";
 import { MdCheck, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -66,7 +66,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_Login}/LectureSubstitute/create`,
+            url: `${BASE_URL}/LectureSubstitute/create`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${authState.accessToken}`
@@ -103,7 +103,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
         console.log('payload', payload);
 
         try {
-            const response = await axios.post(`${BASE_URL_Login}/notice/upload/teacher`,
+            const response = await axios.post(`${BASE_URL}/notice/upload/teacher`,
                 payload,
                 {
                     headers: {
@@ -135,7 +135,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
         if (temp) {
             const searchTeacher = async () => {
                 try {
-                    const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
+                    const response = await axios.post(`${BASE_URL}/search/teacher`, {
                         accessToken: authState.accessToken,
                         searchString: temp,
                         start: 0,
@@ -178,7 +178,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_Login}/timetable/fetch/checkAvailability?lecture=${lecture}&day=${day}&email=${email}`,
+            url: `${BASE_URL}/timetable/fetch/checkAvailability?lecture=${lecture}&day=${day}&email=${email}`,
             headers: {
                 'Authorization': `Bearer ${authState.accessToken}`
             }

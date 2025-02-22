@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Fee } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { Link, Outlet } from 'react-router-dom';
 
 const getSessions = () => {
@@ -52,7 +52,7 @@ function PreviousFeeDetailsAdmin() {
     const fetchDetails = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/pendingFeeStats`, {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/pendingFeeStats`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import { MdCheck, MdCancel, MdOutlineModeEdit } from 'react-icons/md';
-import { BASE_URL_ClassTeacher } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 
@@ -20,7 +20,7 @@ export default function StudentDetailTile({ userData, Class }) {
         console.log(selectedSection.toUpperCase());
 
         try {
-            const response = await axios.put(`${BASE_URL_ClassTeacher}/newStudents/section?id=${id}&section=${selectedSection.toUpperCase()}`,
+            const response = await axios.put(`${BASE_URL}/newStudents/section?id=${id}&section=${selectedSection.toUpperCase()}`,
                 {},
                 {
                     headers: {

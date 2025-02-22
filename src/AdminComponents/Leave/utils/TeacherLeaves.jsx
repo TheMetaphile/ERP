@@ -3,7 +3,7 @@ import { userimg } from "../../Teachers/utils/images/index.js";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext.jsx";
 import Loading from "../../../LoadingScreen/Loading.jsx";
-import { BASE_URL_TeacherLeave } from "../../../Config.js";
+import { BASE_URL } from "../../../Config.js";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TeacherLeavesTile from "./TeacherLeavesTile.jsx";
@@ -55,7 +55,7 @@ export default function TeacherLeaves() {
     setLoading(true);
 
     try {
-      const response = await axios.get(`${BASE_URL_TeacherLeave}/teacherleave/fetch/admin?start=${start}&end=${end}&session=${session}`, {
+      const response = await axios.get(`${BASE_URL}/teacherleave/fetch/admin?start=${start}&end=${end}&session=${session}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }

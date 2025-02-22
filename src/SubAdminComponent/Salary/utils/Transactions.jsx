@@ -3,7 +3,7 @@ import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
 import { ToastContainer, toast } from "react-toastify";
-import { BASE_URL_Fee } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { motion } from "framer-motion";
 
 const getSessions = () => {
@@ -81,7 +81,7 @@ const Transactions = ({ transactions }) => {
         console.log(start, 'start', end, 'end', status)
 
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/allTransactions?start=${start}&end=${end}&status=${status}&session=${selectedSession}`, {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/allTransactions?start=${start}&end=${end}&status=${status}&session=${selectedSession}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

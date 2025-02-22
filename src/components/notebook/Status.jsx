@@ -5,7 +5,7 @@ import axios from "axios";
 import Switch from "./utils/switch";
 import { toast, ToastContainer } from "react-toastify";
 import Loading from '../../LoadingScreen/Loading';
-import { BASE_URL_Fee } from "../../Config";
+import { BASE_URL } from "../../Config";
 import SubjectSelection from "../classWork/utils/SubjectSelection";
 
 const Status = () => {
@@ -25,7 +25,7 @@ const Status = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Fee}/notebook/fetch/student?subject=${selectedSubject}`, {
+                const response = await axios.get(`${BASE_URL}/notebook/fetch/student?subject=${selectedSubject}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import Row from './Row';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
-import { BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 
 function Assign() {
@@ -20,7 +20,7 @@ function Assign() {
 
     const fetchCoordinator = async () => {
         try {
-            const response = await axios.get(`${BASE_URL_Login}/co_ordinator/fetch`, {
+            const response = await axios.get(`${BASE_URL}/co_ordinator/fetch`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }

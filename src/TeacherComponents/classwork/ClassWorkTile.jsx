@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
-import { BASE_URL_ClassWork } from '../../Config';
+import { BASE_URL } from '../../Config';
 import { toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoMdCheckmark, IoMdClose, IoMdCreate, IoMdTrash, IoMdCalendar } from 'react-icons/io';
@@ -34,7 +34,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
         console.log(Class)
         const detail = editedDetails[index];
         try {
-            const response = await axios.put(`${BASE_URL_ClassWork}/classwork/update?class=${Class}&id=${detail._id}&date=${detail.date}`,
+            const response = await axios.put(`${BASE_URL}/classwork/update?class=${Class}&id=${detail._id}&date=${detail.date}`,
                 {
                     update: {
                         subject: detail.subject,
@@ -67,7 +67,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
         console.log(Class)
         const detail = editedDetails[index];
         try {
-            const response = await axios.delete(`${BASE_URL_ClassWork}/classwork/delete?class=${Class}&month=${new Date().getMonth() + 1}&year=2024&id=${detail._id}`,
+            const response = await axios.delete(`${BASE_URL}/classwork/delete?class=${Class}&month=${new Date().getMonth() + 1}&year=2024&id=${detail._id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,

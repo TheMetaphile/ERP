@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import Loading from './../../../LoadingScreen/Loading';
-import { BASE_URL_Notice, BASE_URL_ClassTeacher, BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -87,7 +87,7 @@ function NewNotice({ setShowModal }) {
       setLoading(true);
 
       try {
-        const response = await axios.post(`${BASE_URL_Notice}/notice/upload/teacher`,
+        const response = await axios.post(`${BASE_URL}/notice/upload/teacher`,
           payload,
           {
             headers: {
@@ -113,7 +113,7 @@ function NewNotice({ setShowModal }) {
   const fetchSections = async () => {
     try {
       setLoading(true);
-      const response = await axios.post(`${BASE_URL_ClassTeacher}/classTeacher/fetch/sections`, {
+      const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
         accessToken: authState.accessToken,
         class: selectedClass,
       });
@@ -187,7 +187,7 @@ function NewNotice({ setShowModal }) {
   const searchStudents = async (query) => {
     console.log(query)
     try {
-      const response = await axios.post(`${BASE_URL_Login}/search/student`, {
+      const response = await axios.post(`${BASE_URL}/search/student`, {
         accessToken: authState.accessToken,
         searchString: query,
 
@@ -201,7 +201,7 @@ function NewNotice({ setShowModal }) {
 
   const searchUsers = async (query) => {
     try {
-      const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
+      const response = await axios.post(`${BASE_URL}/search/teacher`, {
         accessToken: authState.accessToken,
         searchString: query,
       });

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Fee } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateDiscount from '../Discount/CreateDiscount';
@@ -76,7 +76,7 @@ function CompleteFee({ selectedSession }) {
         if (temp) {
             const searchStudent = async () => {
                 try {
-                    const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/students/list?searchString=${temp}`, {
+                    const response = await axios.get(`${BASE_URL}/fee/fetch/students/list?searchString=${temp}`, {
                         headers: {
                             Authorization: `Bearer ${authState.accessToken}`
                         }
@@ -107,7 +107,7 @@ function CompleteFee({ selectedSession }) {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discount`,
+            const response = await axios.post(`${BASE_URL}/fee/apply/discount`,
                 {
                     email: selectedSuggestion.email,
                     amount: Number(amount),
@@ -151,7 +151,7 @@ function CompleteFee({ selectedSession }) {
 
     const handleApplyDiscount = async (discountData) => {
         try {
-            const response = await axios.post(`${BASE_URL_Fee}/fee/apply/discount`,
+            const response = await axios.post(`${BASE_URL}/fee/apply/discount`,
                 {
                     // email: selectedSuggestion.email,
                     // amount: Number(amount),

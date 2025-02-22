@@ -5,7 +5,7 @@ import Papa from 'papaparse'
 import Loading from '../../LoadingScreen/Loading';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Login } from "../../Config";
+import { BASE_URL } from "../../Config";
 import AuthContext from "../../Context/AuthContext";
 import SubjectInputs from "./SubjectInputs";
 import { FaUser, FaHome, FaVenusMars, FaGraduationCap, FaIdCard, FaEnvelope, FaAddressCard, FaBriefcase, FaPhone, FaStream, FaCalendarAlt, FaTint, FaUsers, FaGlobe, FaPercentage, FaCloudUploadAlt } from 'react-icons/fa';
@@ -142,7 +142,7 @@ export default function StudentRegister() {
 
             formData.password = formData.aadhaarNumber;
 
-            const response = await axios.post(`${BASE_URL_Login}/signup/student`, formData);
+            const response = await axios.post(`${BASE_URL}/signup/student`, formData);
             if (response.status === 200) {
                 toast.success('Student registered successfully!');
                 handleReset();
@@ -215,7 +215,7 @@ export default function StudentRegister() {
                 if (!userData.name) {
                     return;
                 }
-                return axios.post(`${BASE_URL_Login}/signup/student`, userData).catch((err) => {
+                return axios.post(`${BASE_URL}/signup/student`, userData).catch((err) => {
                     const error = JSON.parse(err.request.response);
                     toast.error(error.error + " " + userData.name);
                 });

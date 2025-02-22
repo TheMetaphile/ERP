@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
-import { BASE_URL_Notice } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { MdEdit, MdCheck, MdCancel, MdDeleteForever } from 'react-icons/md';
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from 'framer-motion';
@@ -72,7 +72,7 @@ const TeacherNotice = () => {
     setLoading(true);
 
     try {
-      const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${type}`, {
+      const response = await axios.get(`${BASE_URL}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${type}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }
@@ -101,7 +101,7 @@ const TeacherNotice = () => {
     const session = getCurrentSession();
 
     try {
-      const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${'For Students'}`, {
+      const response = await axios.get(`${BASE_URL}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${'For Students'}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }
@@ -117,7 +117,7 @@ const TeacherNotice = () => {
 
   const handleDelete = async (index) => {
     try {
-      await axios.delete(`${BASE_URL_Notice}/notice/delete?id=${data[index]._id}&session=${session}`, {
+      await axios.delete(`${BASE_URL}/notice/delete?id=${data[index]._id}&session=${session}`, {
         headers: {
           Authorization: `Bearer ${authState.accessToken}`
         }

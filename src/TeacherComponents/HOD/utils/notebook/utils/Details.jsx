@@ -4,7 +4,7 @@ import AuthContext from "../../../../../Context/AuthContext";
 import axios from "axios";
 import Switch from "./switch";
 import { ToastContainer } from "react-toastify";
-import { BASE_URL_Login } from "../../../../../Config";
+import { BASE_URL } from "../../../../../Config";
 import { motion } from "framer-motion";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
@@ -34,7 +34,7 @@ const RecordDetailsHOD = () => {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/notebook/fetch/teacher/particular?docId=${id}&session=${session}`,
+      url: `${BASE_URL}/notebook/fetch/teacher/particular?docId=${id}&session=${session}`,
       headers: {
         Authorization: `Bearer ${authState.accessToken}`,
       },

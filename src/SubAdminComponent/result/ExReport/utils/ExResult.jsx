@@ -3,7 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import AuthContext from "../../../../Context/AuthContext";
 import axios from "axios";
 import Loading from "../../../../LoadingScreen/Loading";
-import { BASE_URL_Login, BASE_URL_Result } from "../../../../Config";
+import { BASE_URL} from "../../../../Config";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import ScholasticRow from './ScholasticRow';
@@ -88,7 +88,7 @@ const ExResult = () => {
     const fetchUser = async () => {
       console.log(session, id);
       try {
-        const response = await axios.get(`${BASE_URL_Login}/terminate/terminatedSingle?session=${session}&id=${id}`, {
+        const response = await axios.get(`${BASE_URL}/terminate/terminatedSingle?session=${session}&id=${id}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`
           }
@@ -105,7 +105,7 @@ const ExResult = () => {
     const fetchResult = async () => {
       console.log(session, id)
       try {
-        const response = await axios.get(`${BASE_URL_Login}/result/fetch/ex-student?session=${session}&id=${id}`, {
+        const response = await axios.get(`${BASE_URL}/result/fetch/ex-student?session=${session}&id=${id}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`
           }

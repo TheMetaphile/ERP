@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { BASE_URL_Login } from "../../../../Config";
+import { BASE_URL } from "../../../../Config";
 import AuthContext from "../../../../Context/AuthContext";
 
 export default function ApplicableDiscounts({ selectedStudent, selectedDiscount, setSelectedDiscount, appliedDis, removedDiscount, setRemovedDiscount }) {
@@ -13,7 +13,7 @@ export default function ApplicableDiscounts({ selectedStudent, selectedDiscount,
         const fetchDiscounts = async () => {
             try {
                 const date = new Date();
-                const response = await axios.post(BASE_URL_Login + '/fee/fetch/applicable-discounts/' + selectedStudent._id, { month: date.getMonth() }, {
+                const response = await axios.post(BASE_URL + '/fee/fetch/applicable-discounts/' + selectedStudent._id, { month: date.getMonth() }, {
                     headers: {
                         'Authorization': "Bearer " + authState.accessToken
                     }

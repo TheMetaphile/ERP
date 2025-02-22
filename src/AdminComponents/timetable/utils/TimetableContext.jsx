@@ -1,6 +1,6 @@
 // TimetableContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { BASE_URL_TimeTableStructure } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 
@@ -25,7 +25,7 @@ export const StructureProvider = ({ children }) => {
         console.log(authState.accessToken);
         console.log('classRange', classRange);
         try {
-            const response = await axios.post(`${BASE_URL_TimeTableStructure}/timeTableStructure/fetch`, {
+            const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
                 accessToken: authState.accessToken,
                 classRange: classRange,
             });

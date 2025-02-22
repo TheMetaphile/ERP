@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../../../Context/AuthContext";
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { FaArrowDown } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { motion } from 'framer-motion';
@@ -14,7 +14,7 @@ export default function AdminRow({ Teacher, index, onNewWork, setAdmins }) {
         const config = {
             method: 'put',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_Login}/admins/remove-admin`,
+            url: `${BASE_URL}/admins/remove-admin`,
             headers: {
                 'Authorization': `Bearer ${authState.accessToken}`,
                 'Content-Type': 'application/json'

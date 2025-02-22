@@ -5,7 +5,7 @@ import StudentDetailTile from './utils/StudentDetailTile';
 import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
-import { BASE_URL_Login } from '../../Config';
+import { BASE_URL } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 
@@ -64,7 +64,7 @@ function NewAdmission() {
         setLoading(true);
         console.log(start)
         try {
-            const response = await axios.get(`${BASE_URL_Login}/newStudents/students?class=${Class}&start=${start}&end=${end}`, {
+            const response = await axios.get(`${BASE_URL}/newStudents/students?class=${Class}&start=${start}&end=${end}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -91,7 +91,7 @@ function NewAdmission() {
     const fetchUserStat = async () => {
         setStatLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Login}/newStudents/stats?class=${Class}`, {
+            const response = await axios.get(`${BASE_URL}/newStudents/stats?class=${Class}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -109,7 +109,7 @@ function NewAdmission() {
     const handleDistribute = async () => {
         alert(`You are distributing students based on ${distributionMethod} for class ${Class}`);
         try {
-            const response = await axios.put(`${BASE_URL_Login}/newStudents/distribute?class=${Class}&type=${distributionMethod}`,
+            const response = await axios.put(`${BASE_URL}/newStudents/distribute?class=${Class}&type=${distributionMethod}`,
                 {},
                 {
                     headers: {

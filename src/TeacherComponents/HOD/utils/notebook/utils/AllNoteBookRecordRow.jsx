@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { MdCheck, MdEdit } from "react-icons/md";
 import { FaTimes } from "react-icons/fa";
-import { BASE_URL_Login } from "../../../../../Config";
+import { BASE_URL } from "../../../../../Config";
 import AuthContext from "../../../../../Context/AuthContext";
 import { motion } from "framer-motion";
 
@@ -29,7 +29,7 @@ function AllNoteBookRecordRow({ record, index }) {
       let config = {
         method: "put",
         maxBodyLength: Infinity,
-        url: `${BASE_URL_Login}/notebook/update/remark?docId=${record._id}&session=${session}`,
+        url: `${BASE_URL}/notebook/update/remark?docId=${record._id}&session=${session}`,
         headers: {
           Authorization: `Bearer ${authState.accessToken}`,
         },

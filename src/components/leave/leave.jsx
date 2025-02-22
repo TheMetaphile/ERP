@@ -8,7 +8,7 @@ import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js/auto";
 import axios from 'axios';
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
-import { BASE_URL_Student_Leave } from "../../Config";
+import { BASE_URL } from "../../Config";
 import { FaCalendarAlt } from "react-icons/fa";
 import Calendar from "../Attendance/utils/CalendarTile";
 import { ToastContainer } from "react-toastify";
@@ -26,7 +26,7 @@ export default function Leave() {
         const fetchStats = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Student_Leave}/leave/fetch/stats`, {
+                const response = await axios.get(`${BASE_URL}/leave/fetch/stats`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

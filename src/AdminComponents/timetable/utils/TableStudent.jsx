@@ -4,7 +4,7 @@ import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_Result, BASE_URL_TimeTable } from '../../../Config';
+import { BASE_URL} from '../../../Config';
 import { motion } from 'framer-motion';
 import { FaEdit, FaSave, FaUtensils, FaBookOpen, FaChalkboardTeacher, FaClock } from 'react-icons/fa';
 
@@ -45,7 +45,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
 
     const handleSaveClick = async (lectureId) => {
         try {
-            const url = `${BASE_URL_TimeTable}/timetable/update`;
+            const url = `${BASE_URL}/timetable/update`;
             const updates = {
                 periodId: lectureId,
                 ...editedData
@@ -100,7 +100,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
             return;
         }
         try {
-            const response = await axios.post(`${BASE_URL_Result}/search/teacher`, {
+            const response = await axios.post(`${BASE_URL}/search/teacher`, {
                 accessToken: authState.accessToken,
                 searchString,
                 start: 0,

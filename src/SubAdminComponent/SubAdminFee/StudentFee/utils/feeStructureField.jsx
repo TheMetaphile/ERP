@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import useRazorpay from "react-razorpay";
 import axios from 'axios';
 import AuthContext from "../../../../Context/AuthContext";
-import { BASE_URL_Fee } from "../../../../Config";
+import { BASE_URL } from "../../../../Config";
 import { motion } from 'framer-motion';
 import { FaMoneyBillWave, FaCalendarAlt, FaPercent, FaCheckCircle, FaCreditCard, FaUser, FaChalkboardTeacher, FaSchool } from 'react-icons/fa';
 import FeePaymentRow from "./FeePaymentRow";
@@ -141,7 +141,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
     const postPaymentDetails = async (paymentDetails) => {
         console.log('postpayment', paymentDetails)
         try {
-            const response = await axios.post(`${BASE_URL_Fee}/fee/payment`,
+            const response = await axios.post(`${BASE_URL}/fee/payment`,
                 paymentDetails,
                 {
                     headers: {

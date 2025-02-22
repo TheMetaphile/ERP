@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import ClassTeacherOnLeaveRow from "./ClassTeachersOnLeaveRow";
 import axios from "axios";
 import AuthContext from "../../../../../Context/AuthContext";
-import { BASE_URL_Login } from "../../../../../Config";
+import { BASE_URL } from "../../../../../Config";
 import { motion } from 'framer-motion';
 
 export default function ClassTeacherOnLeaveTable() {
@@ -17,7 +17,7 @@ export default function ClassTeacherOnLeaveTable() {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/classTeacherSubstitute/fetch/checkLeave?date=${formattedDate}&session=${session}`,
+      url: `${BASE_URL}/classTeacherSubstitute/fetch/checkLeave?date=${formattedDate}&session=${session}`,
       headers: {
         'Authorization': `Bearer ${authState.accessToken}`
       }

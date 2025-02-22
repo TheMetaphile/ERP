@@ -3,7 +3,7 @@ import Loading from "../../LoadingScreen/Loading";
 import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL_Homework } from "../../Config";
+import { BASE_URL } from "../../Config";
 import SubjectHomeWorkTile from "./utils/SubjectHomeWorkTile";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -56,7 +56,7 @@ export default function TodayHomeWork() {
 
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Homework}/homework/fetch/student?class=${authState?.userDetails?.currentClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${authState?.userDetails?.section}&subject=${selectedSubject}&start=${start}&end=${end}`, {
+            const response = await axios.get(`${BASE_URL}/homework/fetch/student?class=${authState?.userDetails?.currentClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${authState?.userDetails?.section}&subject=${selectedSubject}&start=${start}&end=${end}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`,
                 }

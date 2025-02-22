@@ -5,7 +5,7 @@ import StudentDetailTile from "./utils/AdmissionTile";
 import axios from 'axios';
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
-import { BASE_URL_Login } from "../../Config";
+import { BASE_URL } from "../../Config";
 import { ToastContainer } from "react-toastify";
 
 export default function AllAdmission() {
@@ -57,7 +57,7 @@ export default function AllAdmission() {
     const fetchUserData = async () => {
         try {
             console.log(start, "-", end);
-            const response = await axios.post(`${BASE_URL_Login}/fetchMultiple/student`, {
+            const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
                 accessToken: authState.accessToken,
                 currentClass: Class,
                 section: Section,

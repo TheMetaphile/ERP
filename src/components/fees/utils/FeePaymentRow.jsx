@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import Loading from '../../../LoadingScreen/Loading';
 
 const FeePaymentRow = ({ student, key }) => {
@@ -17,7 +17,7 @@ const FeePaymentRow = ({ student, key }) => {
             //console.log("triggered url", data);
 
             const response = await axios.post(
-                `${BASE_URL_Login}/fee/encrypt/url`,
+                `${BASE_URL}/fee/encrypt/url`,
                 data,
                 {
                     headers: {

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import AuthContext from "../../../../Context/AuthContext";
-import { BASE_URL_Login } from "../../../../Config";
+import { BASE_URL } from "../../../../Config";
 
 export default function SearchBar({ handleClassChange, handleSectionChange,handleMonthChange, handlebothEventsCalled, Class, Section, Month }) {
     const { authState } = useContext(AuthContext);
@@ -9,7 +9,7 @@ export default function SearchBar({ handleClassChange, handleSectionChange,handl
 
     const fetchSections = async (selectedClass) => {
         try {
-            const response = await axios.post(`${BASE_URL_Login}/classTeacher/fetch/sections`, {
+            const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
                 accessToken: authState.accessToken,
                 class: selectedClass,
             });

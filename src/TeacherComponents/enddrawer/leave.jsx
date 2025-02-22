@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
-import { BASE_URL_TeacherLeave } from "../../Config";
+import { BASE_URL } from "../../Config";
 import { FaCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
 
@@ -27,7 +27,7 @@ export default function Leave() {
             console.log(getCurrentSession());
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_TeacherLeave}/teacherleave/fetch/stats?session=${getCurrentSession()}`, {
+                const response = await axios.get(`${BASE_URL}/teacherleave/fetch/stats?session=${getCurrentSession()}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }

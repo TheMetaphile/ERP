@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import Loading from '../../../LoadingScreen/Loading';
@@ -66,7 +66,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
         console.log(data);
 
         try {
-            const response = await axios.post(`${BASE_URL_Login}/lessonPlan/create`, data, {
+            const response = await axios.post(`${BASE_URL}/lessonPlan/create`, data, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -87,7 +87,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
         const fetchPlan = async () => {
             if (!Class || !section || !subject) return;
             try {
-                const response = await axios.get(`${BASE_URL_Login}/lessonPlan/fetch/teacher?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${nextWeekFormattedDate}`, {
+                const response = await axios.get(`${BASE_URL}/lessonPlan/fetch/teacher?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${nextWeekFormattedDate}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
                     }

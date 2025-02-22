@@ -4,7 +4,7 @@ import Table from './utils/Table'
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
-import { BASE_URL_TimeTableStructure, BASE_URL_TimeTable } from '../../Config';
+import { BASE_URL} from '../../Config';
 import TableSubstitute from './utils/TableSubstitue';
 
 function TimeTable() {
@@ -96,7 +96,7 @@ function TimeTable() {
         console.log(authState.accessToken)
         console.log('classaaa', ClassRange)
         try {
-            const response = await axios.post(`${BASE_URL_TimeTableStructure}/timeTableStructure/fetch`, {
+            const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
                 accessToken: authState.accessToken,
                 classRange: ClassRange,
             });
@@ -143,7 +143,7 @@ function TimeTable() {
                 day: day
             };
 
-            const response = await axios.post(`${BASE_URL_TimeTable}/timetable/fetch/teacher`, payload);
+            const response = await axios.post(`${BASE_URL}/timetable/fetch/teacher`, payload);
             if (response.status === 200) {
                 console.log('response from fetchhh', response.data);
                 setData(response.data);
@@ -166,7 +166,7 @@ function TimeTable() {
         console.log(formattedDate, session)
         setFetchLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_TimeTable}/LectureSubstitute/fetch/checkSubstitute?date=${formattedDate}&session=${session}`,
+            const response = await axios.get(`${BASE_URL}/LectureSubstitute/fetch/checkSubstitute?date=${formattedDate}&session=${session}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${authState.accessToken}`

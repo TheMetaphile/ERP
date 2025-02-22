@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import TeacherTile from './TeacherTile';
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext";
-import { BASE_URL_Notice } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion } from 'framer-motion';
@@ -53,7 +53,7 @@ export default function Teacher() {
         setLoading(true);
         console.log(start, 'start', end, 'end')
         try {
-            const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/teacher?start=${start}&limit=${end}&session=${getCurrentSession()}&type=${'for'}`, {
+            const response = await axios.get(`${BASE_URL}/notice/fetch/teacher?start=${start}&limit=${end}&session=${getCurrentSession()}&type=${'for'}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`,
                 }

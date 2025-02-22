@@ -6,7 +6,7 @@
 // import FeeStructureField from './feeStructureField.jsx';
 // import { toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
-// import { BASE_URL_Fee } from "../../../../Config";
+// import { BASE_URL } from "../../../../Config";
 
 // function StudentDetails({ selectedOption }) {
 //   const { id } = useParams();
@@ -40,7 +40,7 @@
 //   const fetchFees = async () => {
 
 //     try {
-//       const response = await axios.get(`${BASE_URL_Fee}/fee/fetch/student/detailedFee?email=${id}&session=${session}`, {
+//       const response = await axios.get(`${BASE_URL}/fee/fetch/student/detailedFee?email=${id}&session=${session}`, {
 //         headers: {
 //           'Authorization': `Bearer ${authState.accessToken}`
 //         }

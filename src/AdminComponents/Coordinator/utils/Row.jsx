@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../../../Context/AuthContext";
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import { BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 import { MdCheck, MdEdit } from "react-icons/md";
 import { FaTimes } from "react-icons/fa";
@@ -35,7 +35,7 @@ export default function Row({ con }) {
         const timerId = setTimeout(() => {
             const fetchSuggestions = async () => {
                 try {
-                    const response = await axios.post(`${BASE_URL_Login}/search/teacher`, {
+                    const response = await axios.post(`${BASE_URL}/search/teacher`, {
                         accessToken: authState.accessToken,
                         searchString: email,
                         start: 0,
@@ -59,7 +59,7 @@ export default function Row({ con }) {
 
     const handleSave = async () => {
         try {
-            const response = await axios.post(`${BASE_URL_Login}/co_ordinator/create`, {
+            const response = await axios.post(`${BASE_URL}/co_ordinator/create`, {
                 wing: con.classRange,
                 email: selectedTeacher.email
             }, {

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import AuthContext from '../../../../Context/AuthContext';
-import { BASE_URL_Login } from '../../../../Config';
+import { BASE_URL } from '../../../../Config';
 import { FaQuestionCircle, FaUndo, FaDownload } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { MdDeleteForever } from "react-icons/md";
@@ -83,7 +83,7 @@ const BacklogTransactionRow = ({ student, session, data }) => {
         let config = {
             method: 'put',
             maxBodyLength: Infinity,
-            url: `${BASE_URL_Login}/fee/update/transaction/${student._id}`,
+            url: `${BASE_URL}/fee/update/transaction/${student._id}`,
             headers: {
                 'Authorization': `Bearer ${authState.accessToken}`
             },

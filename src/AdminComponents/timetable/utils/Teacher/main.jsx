@@ -6,10 +6,9 @@ import SelectionTeacher from './../SelectionTeacher';
 import Loading from '../../../../LoadingScreen/Loading'
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FaSearch, FaEnvelope, FaUser, FaCalendarAlt } from 'react-icons/fa';
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL_TimeTableStructure, BASE_URL_TimeTable } from '../../../../Config';
+import { BASE_URL } from '../../../../Config';
 import { useTimetableContext } from '../TimetableContext';
 
 function TeachersTimeTable() {
@@ -88,7 +87,7 @@ function TeachersTimeTable() {
             setLoading(true);
             console.log(teacherEmail, dayTeacher)
             try {
-                const url = `${BASE_URL_TimeTable}/timetable/fetch/teacher`;
+                const url = `${BASE_URL}/timetable/fetch/teacher`;
                 const payload = {
                     accessToken: authState.accessToken,
                     email: teacherEmail,

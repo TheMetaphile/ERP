@@ -6,7 +6,7 @@ import AllSubjectProgress from './utils/SubjectProgress/AllSubjectProgress';
 import axios from 'axios';
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
-import { BASE_URL_Attendence } from "../../Config";
+import { BASE_URL } from "../../Config";
 
 export default function Home() {
   const { authState } = useContext(AuthContext);
@@ -34,7 +34,7 @@ export default function Home() {
         const today = new Date();
         const month = today.getMonth() + 1;
         const year = today.getFullYear();
-        const response = await axios.get(`${BASE_URL_Attendence}/studentAttendance/fetch/student/stats?month=${month}&year=${year}`, {
+        const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/student/stats?month=${month}&year=${year}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
           }

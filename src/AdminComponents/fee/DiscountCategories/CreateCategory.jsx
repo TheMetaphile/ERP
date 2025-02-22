@@ -4,7 +4,7 @@ import Header from "../FeeStructure/Header";
 import DiscountRow from "../FeeStructure/DiscountRow";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import AuthContext from "../../../Context/AuthContext";
 
 export default function () {
@@ -20,7 +20,7 @@ export default function () {
     useEffect(() => {
         const fetchDiscounts = async () => {
             try {
-                const response = await axios.get(`${BASE_URL_Login}/fee/fetch/discountCategory`, {
+                const response = await axios.get(`${BASE_URL}/fee/fetch/discountCategory`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
                     },
@@ -39,7 +39,7 @@ export default function () {
 
     const handleDeleteDiscount = async (discountId) => {
         try {
-            await axios.delete(`${BASE_URL_Login}/fee/delete/discountCategory/${discountId}`, {
+            await axios.delete(`${BASE_URL}/fee/delete/discountCategory/${discountId}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`,
                 },

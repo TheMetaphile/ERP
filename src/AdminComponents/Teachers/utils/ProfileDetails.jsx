@@ -9,7 +9,7 @@ import { CiEdit } from "react-icons/ci";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from "../../../LoadingScreen/Loading";
-import { BASE_URL_Login } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 
 export default function ProfileDetails() {
     const [error, setError] = useState(null);
@@ -24,7 +24,7 @@ export default function ProfileDetails() {
 
     const fetchUserData = async () => {
         try {
-            const response = await axios.post(`${BASE_URL_Login}/fetchSingle/teacher`, {
+            const response = await axios.post(`${BASE_URL}/fetchSingle/teacher`, {
                 accessToken: authState.accessToken,
                 employeeId
             });
@@ -62,7 +62,7 @@ export default function ProfileDetails() {
 
     const handleSave = async (field) => {
         try {
-            const response = await axios.put(`${BASE_URL_Login}/edit/teacher`, {
+            const response = await axios.put(`${BASE_URL}/edit/teacher`, {
                 accessToken: authState.accessToken,
                 email: userData.email,
                 [field]: tempData[field]

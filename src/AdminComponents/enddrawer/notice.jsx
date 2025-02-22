@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
-import { BASE_URL_Notice } from "../../Config";
+import { BASE_URL } from "../../Config";
 import { motion } from 'framer-motion';
 import { FaBell, FaCalendarAlt, FaSpinner } from 'react-icons/fa';
 
@@ -31,7 +31,7 @@ export default function Notice(props) {
     const fetchNotice = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${BASE_URL_Notice}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${'For All'}`, {
+        const response = await axios.get(`${BASE_URL}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${'For All'}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
           }

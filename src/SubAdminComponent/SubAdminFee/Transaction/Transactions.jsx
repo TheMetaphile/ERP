@@ -6,7 +6,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { FaUser, FaEnvelope, FaRupeeSign, FaGraduationCap, FaCalendarAlt, FaLayerGroup, FaBook } from 'react-icons/fa';
 import { MdOutlinePayments } from "react-icons/md";
 import { IoReceiptSharp } from "react-icons/io5";
-import { BASE_URL_Login } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRef } from 'react';
@@ -138,7 +138,7 @@ const Transactions = () => {
             return;
         }
         try {
-            const response = await axios.post(`${BASE_URL_Login}/fee/payment`,
+            const response = await axios.post(`${BASE_URL}/fee/payment`,
                 requestData,
                 {
                     headers: {
@@ -163,7 +163,7 @@ const Transactions = () => {
 
         try {
 
-            const response = await axios.post(`${BASE_URL_Login}/search/student`, {
+            const response = await axios.post(`${BASE_URL}/search/student`, {
                 accessToken: authState.accessToken,
                 searchString: value,
                 start: 0,
@@ -201,7 +201,7 @@ const Transactions = () => {
 
     const handleDownload = async () => {
         try {
-            await axios.get(`${BASE_URL_Login}/fee/export/Transaction?session=${selectedSession}&startDate=${startDate}&endDate=${endDate}`, {
+            await axios.get(`${BASE_URL}/fee/export/Transaction?session=${selectedSession}&startDate=${startDate}&endDate=${endDate}`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 },

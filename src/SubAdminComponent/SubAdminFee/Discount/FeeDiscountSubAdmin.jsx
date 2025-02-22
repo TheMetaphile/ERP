@@ -6,7 +6,7 @@ import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import CreateDiscount from './CreateDiscount';
 import { MdDeleteForever, MdAdd, MdRemove, MdSchool } from "react-icons/md";
-import { BASE_URL_Fee } from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { motion } from "framer-motion";
 
 const getSessions = () => {
@@ -41,7 +41,7 @@ function FeeDiscountSubAdmin() {
         if (loading || allDataFetched) return;
         setLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL_Fee}/fee/apply/fetch/discount?end=${end}&start=${start}`, {
+            const response = await axios.get(`${BASE_URL}/fee/apply/fetch/discount?end=${end}&start=${start}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -67,7 +67,7 @@ function FeeDiscountSubAdmin() {
     console.log(details)
     const handleDelete = async (index, id) => {
         try {
-            const response = await axios.delete(`${BASE_URL_Fee}/fee/delete/discount?id=${id}`, {
+            const response = await axios.delete(`${BASE_URL}/fee/delete/discount?id=${id}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }

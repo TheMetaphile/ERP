@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import AuthContext from "../../../Context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
-import { BASE_URL_Login } from '../../../Config'
+import { BASE_URL } from '../../../Config'
 import { motion } from "framer-motion";
 import { FaEye, FaComment } from "react-icons/fa";
 
@@ -46,7 +46,7 @@ const AllNoteBookRecord = () => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${BASE_URL_Login}/notebook/fetch/teacher/all?class=${Class}&section=${Section}&subject=${Subject}&session=${session}&start=${start}&count=${end}`,
+      url: `${BASE_URL}/notebook/fetch/teacher/all?class=${Class}&section=${Section}&subject=${Subject}&session=${session}&start=${start}&count=${end}`,
       headers: {
         'Authorization': `Bearer ${authState.accessToken}`
       }

@@ -5,7 +5,7 @@ import AuthContext from "../../../Context/AuthContext";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from "../../../LoadingScreen/Loading";
-import { BASE_URL_Exam } from "../../../Config";
+import { BASE_URL } from "../../../Config";
 import { MdEdit, MdDeleteForever, MdCheck, MdCancel } from "react-icons/md";
 import { motion } from 'framer-motion';
 
@@ -70,7 +70,7 @@ export default function AllExam() {
     const deleteExam = async (index) => {
         const examToDelete = exams[index];
         try {
-            const response = await axios.delete(`${BASE_URL_Exam}/deleteExam`, {
+            const response = await axios.delete(`${BASE_URL}/deleteExam`, {
                 data: {
                     accessToken: authState.accessToken,
                     examId: examToDelete._id,
@@ -102,7 +102,7 @@ export default function AllExam() {
 
         setLoading(true);
         try {
-            const response = await axios.post(`${BASE_URL_Exam}/fetchExams`, {
+            const response = await axios.post(`${BASE_URL}/fetchExams`, {
                 accessToken: authState.accessToken,
                 start: start,
                 end: end,
@@ -164,7 +164,7 @@ export default function AllExam() {
             class: examToEdit.class
         };
         try {
-            const response = await axios.put(`${BASE_URL_Exam}/updateExam`, {
+            const response = await axios.put(`${BASE_URL}/updateExam`, {
                 accessToken: authState.accessToken,
                 examId: examToEdit._id,
                 class: examToEdit.class,

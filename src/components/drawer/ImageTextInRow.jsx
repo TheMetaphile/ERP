@@ -5,7 +5,7 @@ import axios from 'axios';
 import { FaRegCircleXmark } from "react-icons/fa6";
 import { motion, AnimatePresence } from 'framer-motion';
 import {  FaEye, FaEyeSlash, FaLock, FaEnvelope } from 'react-icons/fa';
-import { BASE_URL_Login } from "../../Config";
+import { BASE_URL } from "../../Config";
 
 export default function ImageTextInRow(props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -51,7 +51,7 @@ export default function ImageTextInRow(props) {
       return;
     }
     try {
-      const response = await axios.post(`${BASE_URL_Login}/password/change/student`, {
+      const response = await axios.post(`${BASE_URL}/password/change/student`, {
         email,
         oldPassword,
         newPassword

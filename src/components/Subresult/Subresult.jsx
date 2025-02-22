@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import AuthContext from '../../Context/AuthContext';
 import Loading from './../../LoadingScreen/Loading';
 import axios from 'axios';
-import { BASE_URL_Result, BASE_URL_Login } from '../../Config';
+import { BASE_URL} from '../../Config';
 import ScholasticRow from './utils/ScholasticRow';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -70,7 +69,7 @@ const Result = () => {
         const fetchResult = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BASE_URL_Result}/result/fetch/student?email=${profile.email}`, {
+                const response = await axios.get(`${BASE_URL}/result/fetch/student?email=${profile.email}`, {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`,
                     }
