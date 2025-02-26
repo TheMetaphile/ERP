@@ -33,7 +33,7 @@ const FeePaymentRowQuarter = ({ student, key, selectedStudent, selectedDiscount 
             //console.log("triggered url", data);
 
             const response = await axios.post(
-                `${BASE_URL}/encrypt/url`,
+                `${BASE_URL}/fee/encrypt/url`,
                 data,
                 {
                     headers: {
@@ -278,13 +278,10 @@ const FeePaymentRowQuarter = ({ student, key, selectedStudent, selectedDiscount 
 
     const handleCashPayment = async () => {
         if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
-            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && discount + amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
+            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) &&  amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                 try {
                     const datee = formatDateTime();
-                    if (selectedDiscount === null) {
-                        toast.error('First select Discount');
-                        return;
-                    }
+
                     await SemesterFeePayment({
                         token: authState.accessToken,
                         studentID: selectedStudent._id,
@@ -320,12 +317,9 @@ const FeePaymentRowQuarter = ({ student, key, selectedStudent, selectedDiscount 
 
         else {
             if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && documentNumber) {
-                if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && discount + amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
+                if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) &&  amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                     const datee = formatDateTime();
-                    if (selectedDiscount === null) {
-                        toast.error('First select Discount');
-                        return;
-                    }
+
                     await SemesterFeePayment({
                         token: authState.accessToken,
                         studentID: selectedStudent._id,
@@ -352,7 +346,7 @@ const FeePaymentRowQuarter = ({ student, key, selectedStudent, selectedDiscount 
     useEffect(() => {
 
         if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
-            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && discount + amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
+            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) &&  amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                 if (paymentMode === 'Online') {
                     const datee = formatDateTime();
 
@@ -428,7 +422,7 @@ const FeePaymentRowQuarter = ({ student, key, selectedStudent, selectedDiscount 
             </td>
             <td className="px-3 py-4 whitespace-nowrap">
                 <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
-                    ₹ {student.paidFee}
+                    ₹ {student.paidFee + parseInt(totalPaidAmount)}
                 </div>
             </td>
             <td className="px-3 py-4">

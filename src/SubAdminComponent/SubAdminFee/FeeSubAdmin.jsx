@@ -20,6 +20,11 @@ function FeeSubAdmin() {
         exit: { opacity: 0, y: -20 }
     };
 
+    const tabVariants = {
+        inactive: { backgroundColor: "#E5E7EB", color: "#4B5563" },
+        active: { backgroundColor: "#c6a4eb", color: "#FFFFFF" }
+    };
+
     return (
         <motion.div
             className="flex flex-col px-2 overflow-auto items-start  no-scrollbar pt-4  min-h-screen"
@@ -56,10 +61,12 @@ function FeeSubAdmin() {
                             >
                                 <Link to={item.path} onClick={() => handleLinkSelect(item.path)}>
                                     <motion.h1
-                                        className={`p-2 mx-1 font-semibold text-lg transition-colors duration-300 ${selectedLink === item.path
-                                            ? "text-purple-600 border-b-2 border-purple-600"
-                                            : "text-gray-600 hover:text-purple-400"
-                                            }`}
+                                        className={`px-4 py-2 rounded-full text-sm font-medium focus:outline-none`}
+                                        variants={tabVariants}
+                                        animate={selectedLink === item.path ? "active" : "inactive"}
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+
                                     >
                                         {item.label}
                                     </motion.h1>

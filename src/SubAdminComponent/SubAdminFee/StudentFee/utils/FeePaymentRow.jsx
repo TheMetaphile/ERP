@@ -12,7 +12,7 @@ import logo from '../../../../assets/metaphile_logo.png';
 import Loading from '../../../../LoadingScreen/Loading';
 // import { useFilters } from '../../Students/utils/Filters';
 
-const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
+const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount, setFees }) => {
     const { authState } = useContext(AuthContext);
     const dropdownRef = useRef(null);
     const [Razorpay] = useRazorpay();
@@ -260,13 +260,13 @@ const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
                 });
             // console.log(response);
             if (response.status === 200 && response.data.status === true) {
-                // console.log(data);
-
                 generateReceipt(data);
-                // console.log("here2");
-
                 setTotalPaidAmount((prev) => prev + parseInt(data.amount));
+
+                // Refresh the page
+                window.location.reload();
             }
+
             // fetchBackFeeStatus();
             setShowSuggestion(false);
             setPaymentMode("");
@@ -279,7 +279,7 @@ const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
 
     const handleCashPayment = async () => {
         if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
-            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && discount + amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
+            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                 try {
                     const datee = formatDateTime();
                     SemesterFeePayment({
@@ -317,12 +317,9 @@ const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
 
         else {
             if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && documentNumber) {
-                if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && discount + amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
+                if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                     const datee = formatDateTime();
-                    if (selectedDiscount === null) {
-                        toast.error('First select Discount');
-                        return;
-                    }
+
                     await SemesterFeePayment({
                         token: authState.accessToken,
                         studentID: selectedStudent._id,
@@ -349,7 +346,7 @@ const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
     useEffect(() => {
 
         if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
-            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && discount + amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
+            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                 if (paymentMode === 'Online') {
                     const datee = formatDateTime();
 
@@ -424,7 +421,7 @@ const FeePaymentRow = ({ student, key, selectedStudent, selectedDiscount }) => {
             </td>
             <td className="px-3 py-4 whitespace-nowrap">
                 <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
-                    ₹ {student.paidFee}
+                    ₹ {student.paidFee + parseInt(totalPaidAmount)}
                 </div>
             </td>
             <td className="px-3 py-4">

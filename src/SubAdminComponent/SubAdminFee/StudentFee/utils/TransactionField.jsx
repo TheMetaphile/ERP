@@ -19,7 +19,7 @@ const rowVariants = {
   visible: { opacity: 1, y: 0 }
 };
 
-export default function TransactionField({ data, selectedStudent }) {
+export default function TransactionField({ data, selectedStudent, setData }) {
   const { authState } = useContext(AuthContext);
   const [clickedIndex, setClickedIndex] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
@@ -243,6 +243,7 @@ export default function TransactionField({ data, selectedStudent }) {
       return;
     }
 
+
     let config = {
       method: 'delete',
       maxBodyLength: Infinity,
@@ -258,16 +259,13 @@ export default function TransactionField({ data, selectedStudent }) {
 
     try {
       const response = await axios.request(config);
-      console.log(response.data);
+      setData(data.map((item) => {
+        return item._id === stud._id ? { ...item, flag: !item.flag } : item
+      })
 
-      if (data && Array.isArray(data.transactions)) {
-        data = {
-          ...data,
-          transactions: data.transactions.map(item =>
-            item._id === stud._id ? { ...item, flag: !item.flag } : item
-          )
-        };
-      }
+      );
+
+
 
       toast.success('Transaction deleted successfully');
       closePopup();
@@ -332,7 +330,7 @@ export default function TransactionField({ data, selectedStudent }) {
               </td>
               <td className="flex justify-center items-center gap-2 px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                 {value.flag ?
-                  <div className='text-green-500 text-xl cursor-pointer' onClick={()=>handleDeleteClick(value)}><FaUndo /></div>
+                  <div className='text-green-500 text-xl cursor-pointer' onClick={() => handleDeleteClick(value)}><FaUndo /></div>
                   :
                   <div className='flex gap-3 items-center'>
                     <div className='text-red-500 text-2xl cursor-pointer' onClick={() => { handleDeleteClick(value) }}><MdDeleteForever /></div>
@@ -348,7 +346,7 @@ export default function TransactionField({ data, selectedStudent }) {
 
         </tbody>
       </table>
-      
+
       {showPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center  backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-4xl transform transition-all duration-300 scale-100 mx-4">
