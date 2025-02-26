@@ -215,7 +215,7 @@ export default function FeeDetail() {
                 </>
             }
 
-            <StudentDetails removeDiscount={removeDiscount} selectedOption={selectedOption} fees={Fee} setFees={setFee} selectedStudent={selectedStudent} selectedDiscount={selectedDiscount} />
+            <StudentDetails removeDiscount={removeDiscount} selectedOption={selectedOption} fetchFees={fetchFees} fees={Fee} setFees={setFee} selectedStudent={selectedStudent} selectedDiscount={selectedDiscount} />
             <h1 className="mb-2 text-2xl font-normal mobile:max-tablet:text-lg">Transaction History</h1>
             <TransactionRow selectedStudent={selectedStudent} />
         </div>

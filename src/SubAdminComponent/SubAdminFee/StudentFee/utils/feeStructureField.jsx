@@ -4,11 +4,11 @@ import axios from 'axios';
 import AuthContext from "../../../../Context/AuthContext";
 import { BASE_URL } from "../../../../Config";
 import { motion } from 'framer-motion';
-import { FaMoneyBillWave, FaCalendarAlt, FaPercent, FaCheckCircle, FaCreditCard, FaUser, FaChalkboardTeacher, FaSchool } from 'react-icons/fa';
+import { FaMoneyBillWave, FaCalendarAlt, FaPercent, FaCreditCard, FaUser, FaChalkboardTeacher, FaSchool } from 'react-icons/fa';
 import FeePaymentRow from "./FeePaymentRow";
 import FeePaymentRowQuarter from "./FeePaymentRowQuarter";
 
-export default function FeeStructureField({ fees, selectedOption, setFees, Student, selectedDiscount ,removeDiscount}) {
+export default function FeeStructureField({ fees, selectedOption, setFees, Student,fetchFees, selectedDiscount ,removeDiscount}) {
     const [Razorpay] = useRazorpay();
     const { authState } = useContext(AuthContext);
     const [mode, setMode] = useState('');
@@ -251,7 +251,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                     <FeeStructureHeader />
                     {fees.monthlyStatus.map((data, index) => (
                         <tbody>
-                            <FeePaymentRow student={data} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
+                            <FeePaymentRow student={data} fetchFees={fetchFees} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
                         </tbody>
 
                         // <motion.tbody
@@ -306,7 +306,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                     <QuarterFeeHeader />
                     {fees.quarterlyStatus.map((data, index) => (
                         <tbody>
-                            <FeePaymentRowQuarter student={data} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
+                            <FeePaymentRowQuarter student={data} fetchFees={fetchFees} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
                         </tbody>
                         // <motion.tbody
                         //     key={index}
