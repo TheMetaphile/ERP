@@ -1,16 +1,18 @@
 import { motion } from "framer-motion";
 import menuItems from "./helper.js";
-import { useState } from "react";
-import { Link } from 'react-router-dom';
+import { useContext, useState } from "react";
+// import { Link } from 'react-router-dom';
 import ExpansionTile from "../../AdminComponents/utils/ExpansionTile.jsx";
+import AuthContext from "../../Context/AuthContext.jsx";
 
 export default function SubadminDrawer({ isOpen }) {
     const [active, setActive] = useState(null);
-
+    const { authState } = useContext(AuthContext);
     const handleClick = (index) => {
         setActive(index)
     }
 
+    console.log(authState.userDetails.permissions)
     const drawerVariants = {
         open: { opacity: 1, x: 0 },
         closed: { opacity: 0, x: "-100%" },
@@ -36,6 +38,7 @@ export default function SubadminDrawer({ isOpen }) {
 
             <div className="mt-4">
                 {menuItems.map((menuItem, index) => (
+                    (menuItem.title === 'Dashboard' || menuItem.title === 'Notice' || menuItem.title === 'Take Leave' || authState?.userDetails?.permissions.includes(menuItem.title) || (menuItem.children && menuItem.children.some((child => authState?.userDetails?.permissions.includes(child.text))))) &&
                     <div
                         key={index}
                         onClick={() => handleClick(index)}
@@ -46,7 +49,7 @@ export default function SubadminDrawer({ isOpen }) {
                             image={menuItem.image}
                             alternateText={menuItem.alt}
                             title={menuItem.title}
-                            childrens={menuItem.children}
+                            childrens={menuItem.children.filter(child => authState?.userDetails?.permissions.includes(child.text))}
                             route={menuItem.route}
                         />
                     </div>

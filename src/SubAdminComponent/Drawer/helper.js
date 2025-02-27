@@ -39,14 +39,14 @@ const menuItems = [
   {
     image: teacher,
     alt: "Teacher image",
-    title: "Register Teacher",
+    title: "Teacher Registration",
     route: "/Sub-Admin/registerTeacher",
     children: [],
   },
   {
     image: student,
     alt: "Student image",
-    title: "Register Student",
+    title: "Student Registration",
     route: "/Sub-Admin/registerStudent",
     children: [],
   },
@@ -119,7 +119,7 @@ const menuItems = [
     title: "Substitute",
     children: [
       {
-        text: "Substitute Co-ord",
+        text: "Substitute Coordinator",
         route: "/Sub-Admin/Substitutecoordinator",
       },
       {
@@ -135,8 +135,15 @@ const menuItems = [
   {
     image: dashboardLeaveImage,
     alt: "Notice image",
-    title: "Register Sub-Admin",
+    title: "SubAdmin Registration",
     route: "/Sub-Admin/Employee",
+    children: [],
+  },
+  {
+    image: dashboardLeaveImage,
+    alt: "Notice image",
+    title: "Access Control",
+    route: "/Sub-Admin/SubAdmin",
     children: [],
   },
 ];

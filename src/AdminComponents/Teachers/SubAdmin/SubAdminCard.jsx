@@ -8,36 +8,22 @@ import { MdOutlineSecurity } from "react-icons/md";
 
 export default function SubAdminCard({ userData, setUserData }) {
     const { authState } = useContext(AuthContext);
-
+    console.log(userData);
     const [permission, setPermission] = useState(false);
     const [selectedPermissions, setSelectedPermissions] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState(null);
 
-    const availablePermissions = ["Exam", "Certificate", "Result", "Fee", "Student Registration", "Teacher Registeration", "SubAdmin Registration", "Readmission", "New Admission", "New Section", "Assign Subject",
-        "Time Table", "Assign Coordinator", "Substitute Coordinator", "ClassTeacher Substitute", "Lecture Substitute"
+    const availablePermissions = ["Exam", "Certificate", "Result", "Student Fees", "Student Registration", "Teacher Registration", "SubAdmin Registration", "Readmission", "New Admission", "New Section", "Assign Subject",
+        "Time Table", "Assign Coordinator", "Substitute Coordinator", "ClassTeacher Substitute", "Lecture Substitute","Access Control"
     ];
 
 
     const handlePermission = async (userId) => {
-        setSelectedUserId(userId);
+        const user = userData.filter((user) => user._id === userId);
+        setSelectedUserId(user[0]);
 
-        try {
-            const response = await axios.get(`${BASE_URL}/permission/fetch/subAdmin/${userId}`, {
-                headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
-                }
-            });
-
-            if (response.status === 200) {
-                const extractedPermissions = response.data.permissions.map(p => p.permission);
-                setSelectedPermissions(response.data.permissions);
-            }
-        } catch (error) {
-            toast.error(error?.response?.data?.message || "Error while getting Permission")
-            console.error("Error fetching permissions:", error);
-        }
+        setSelectedPermissions(user[0]?.permissions || []);
         setPermission(true);
-
     };
 
     const handlePermissionChange = (perm) => {
@@ -51,7 +37,7 @@ export default function SubAdminCard({ userData, setUserData }) {
     const handleSave = async () => {
         try {
             const formattedPermissions = selectedPermissions.map(perm => perm);
-            const response = await axios.post(`${BASE_URL}/permission/update/subAdmin/${selectedUserId}`,
+            const response = await axios.post(`${BASE_URL}/permission/update/subAdmin/${selectedUserId._id}`,
                 { permissions: formattedPermissions },
                 {
                     headers: {
@@ -62,9 +48,9 @@ export default function SubAdminCard({ userData, setUserData }) {
 
             if (response.status === 200) {
                 const updatedUserData = userData.map(user =>
-                    user._id === selectedUserId ? { ...user, permissions: formattedPermissions } : user
+                    user._id === selectedUserId._id ? { ...user, permissions: formattedPermissions } : user
                 );
-    
+
                 setUserData(updatedUserData);
                 toast.success('Permissions updated successfully!');
                 setPermission(false);
@@ -129,7 +115,7 @@ export default function SubAdminCard({ userData, setUserData }) {
                     <div className="bg-white rounded-xl shadow-2xl w-4/5 transform transition-all">
                         <div className="border-b p-6">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-2xl font-bold text-purple-600">Manage Permissions</h2>
+                                <h2 className="text-2xl font-bold text-purple-600">Manage Permissions for {selectedUserId.name}</h2>
                             </div>
                             <p className="mt-2">Select the permissions you want to enable</p>
                         </div>
@@ -149,7 +135,7 @@ export default function SubAdminCard({ userData, setUserData }) {
                                                 onChange={() => handlePermissionChange(perm)}
                                                 className="appearance-none w-6 h-6 border-2 rounded-md border-gray-300 checked:border-purple-500 checked:bg-purple-500 transition-all duration-200"
                                             />
-                                            <span className="absolute text-white font-bold pointer-events-none opacity-0 transform scale-0 transition-all duration-200 checked:opacity-100 checked:scale-100">
+                                            <span className="absolute text-white font-bold pointer-events-none  transform  transition-all duration-200 checked:opacity-100 checked:scale-100">
                                                 ✓
                                             </span>
                                         </div>

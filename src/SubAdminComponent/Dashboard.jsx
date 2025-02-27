@@ -37,7 +37,7 @@ export default function SubAdminDashboard() {
       </div>
       <div className="flex flex-grow h-screen">
         {authState?.userDetails?.role === 'Accountant' && (
-          <div className={`mobile:max-tablet:absolute z-10 mt-2 flex-shrink-0 transition-all duration-300 mobile:max-tablet:mt-2. ${isDrawerOpen ? 'w-60 h-full' : 'w-0'} overflow-y-auto no-scrollbar`}>
+          <div className={`mobile:max-tablet:absolute z-10 mt-2 flex-shrink-0 transition-all duration-300 mobile:max-tablet:mt-2. ${isDrawerOpen ? 'w-64 h-full' : 'w-0'} overflow-y-auto no-scrollbar`}>
             <SubadminDrawer isOpen={isDrawerOpen} />
           </div>
         )}
