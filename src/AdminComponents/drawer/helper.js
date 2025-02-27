@@ -85,6 +85,10 @@ const menuItems = [
         text: "Add New Teacher",
         route: "/Admin-Dashboard/AddTeachers",
       },
+      {
+        text: "Sub Admin",
+        route: "/Admin-Dashboard/SubAdmin",
+      },
       // {
       //   text: "Teachers Sallery",
       //   route: "/Admin-Dashboard/TeachersSalary",

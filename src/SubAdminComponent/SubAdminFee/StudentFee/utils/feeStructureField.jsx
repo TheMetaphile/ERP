@@ -8,7 +8,7 @@ import { FaMoneyBillWave, FaCalendarAlt, FaPercent, FaCreditCard, FaUser, FaChal
 import FeePaymentRow from "./FeePaymentRow";
 import FeePaymentRowQuarter from "./FeePaymentRowQuarter";
 
-export default function FeeStructureField({ fees, selectedOption, setFees, Student,fetchFees, selectedDiscount ,removeDiscount}) {
+export default function FeeStructureField({ fees, selectedOption, setFees, Student,fetchFees, selectedDiscount ,removeDiscount, fetchTransaction}) {
     const [Razorpay] = useRazorpay();
     const { authState } = useContext(AuthContext);
     const [mode, setMode] = useState('');
@@ -251,7 +251,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                     <FeeStructureHeader />
                     {fees.monthlyStatus.map((data, index) => (
                         <tbody>
-                            <FeePaymentRow student={data} fetchFees={fetchFees} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
+                            <FeePaymentRow student={data} fetchFees={fetchFees} fetchTransaction={fetchTransaction} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
                         </tbody>
 
                         // <motion.tbody
@@ -306,7 +306,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                     <QuarterFeeHeader />
                     {fees.quarterlyStatus.map((data, index) => (
                         <tbody>
-                            <FeePaymentRowQuarter student={data} fetchFees={fetchFees} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
+                            <FeePaymentRowQuarter student={data} fetchFees={fetchFees} fetchTransaction={fetchTransaction} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
                         </tbody>
                         // <motion.tbody
                         //     key={index}

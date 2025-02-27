@@ -85,22 +85,22 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
                   >
                     Profile
                   </Link>
-                  <Link
+                  {/* <Link
                     to="/Sub-Admin/Students"
                     className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg"
                   >
                     Students
                   </Link>
                   {authState?.userDetails?.role === 'Certificate' && authState?.userDetails?.department === 'Certificate' ? (
-                    <Link to="/Sub-Admin/Certificates" className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg">Certificate</Link>
+                  <Link to="/Sub-Admin/Certificates" className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg">Certificate</Link>
                   ) : (
                     <></>
                   )}
                   {authState?.userDetails?.role === 'Result' && authState?.userDetails?.department === 'Result' ? (
-                    <Link to="/Sub-Admin/Result" className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg">Result</Link>
+                  <Link to="/Sub-Admin/Result" className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg">Result</Link>
                   ) : (
                     <></>
-                  )}
+                  )} */}
                   <button
                     onClick={handleLogout}
 

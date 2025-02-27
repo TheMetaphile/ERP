@@ -1,7 +1,7 @@
 import FeeStructureField from './feeStructureField.jsx';
 import 'react-toastify/dist/ReactToastify.css';
 
-function StudentDetails({ selectedOption, fees, setFees, selectedStudent, selectedDiscount,removeDiscount,fetchFees }) {
+function StudentDetails({ selectedOption, fees, setFees, selectedStudent, selectedDiscount,removeDiscount,fetchFees, fetchTransaction }) {
 
   return (
     <div className="w-full h-fit mb-4 mt-3 rounded-lg shadow-md overflow-auto border border-gray-300">
@@ -10,7 +10,7 @@ function StudentDetails({ selectedOption, fees, setFees, selectedStudent, select
           <div className='text-center'>No data available</div>
         ) : (
           <div className="w-full">
-            <FeeStructureField fees={fees} fetchFees={fetchFees} selectedOption={selectedOption} setFees={setFees} Student={selectedStudent} selectedDiscount={selectedDiscount} removeDiscount={removeDiscount}/>
+            <FeeStructureField fees={fees} fetchFees={fetchFees} fetchTransaction={fetchTransaction} selectedOption={selectedOption} setFees={setFees} Student={selectedStudent} selectedDiscount={selectedDiscount} removeDiscount={removeDiscount}/>
           </div>
         )}
       </table>

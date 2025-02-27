@@ -1,8 +1,19 @@
 import { createBrowserRouter } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 import Loading from "./LoadingScreen/Loading.jsx";
+import ClassTeacherSubstituteSubAdmin from "./SubAdminComponent/ClassTeacherSubstitute/main.jsx";
+import LectureSubstituteSubAdmin from "./SubAdminComponent/LectureSubstitute/main.jsx";
+import AllSubAdmin from "./AdminComponents/Teachers/SubAdmin/AllSubAdmin.jsx";
 
-
+const NewAdmissionSubAdmin = lazy(() => import("./SubAdminComponent/New Admission/NewAdmissionSubAdmin.jsx"));
+const AssignTeacherSubAdmin = lazy(() => import("./SubAdminComponent/Classes/utils/AssignTeacherSubAdmin.jsx"));
+const AssignSubjectSubAdmin = lazy(() => import("./SubAdminComponent/Subjects/utils/AssignSubjectSubAdmin"));
+const TimeTableSubAdmin = lazy(() => import("./SubAdminComponent/timetable/TimeTableSubAdmin.jsx"));
+const TeachersTimeTableSubAdmin = lazy(() => import("./SubAdminComponent/timetable/utils/Teacher/main.jsx"));
+const StudentsTimeTableSubAdmin = lazy(() => import("./SubAdminComponent/timetable/utils/Student/main.jsx"));
+const UploadSubAdmin = lazy(() => import("./SubAdminComponent/timetable/utils/Upload/Upload.jsx"));
+const AssigncoordinatorSubAdmin = lazy(() => import("./SubAdminComponent/Coordinator/AssigncoordinatorSubAdmin.jsx"));
+const SubstituteCoordinatorSubAdmin = lazy(() => import("./SubAdminComponent/SubstituteCoordinator/SubstituteCoordinatorSubAdmin.jsx"));
 const StudentCard = lazy(() => import("./AdminComponents/StudentDetails.jsx"));
 const CompleteFee = lazy(() => import("./AdminComponents/fee/CompleteFee/CompleteFee.jsx"));
 const CreateCategory = lazy(() => import("./AdminComponents/fee/DiscountCategories/CreateCategory.jsx"));
@@ -471,7 +482,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-  
+
   {
     path: "/Admin-Dashboard",
     element: (
@@ -694,6 +705,12 @@ const router = createBrowserRouter([
         path: "/Admin-Dashboard/Teachers",
         element: <SuspenseWrapper fallback={Loading}>
           <AllTeachers /></SuspenseWrapper>,
+        children: []
+      },
+      {
+        path: "/Admin-Dashboard/SubAdmin",
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllSubAdmin /></SuspenseWrapper>,
         children: []
       },
       {
@@ -1524,6 +1541,82 @@ const router = createBrowserRouter([
         path: '/Sub-Admin/TakeLeave',
         element: <SuspenseWrapper fallback={Loading}>
           <TakeLeaveSubAdmin /></SuspenseWrapper>
+      },
+      {
+        path: "/Sub-Admin/NewAdmission",
+        element: <SuspenseWrapper fallback={Loading}>
+          <NewAdmissionSubAdmin /></SuspenseWrapper>,
+        children: []
+      },
+      {
+        path: "/Sub-Admin/Assignteacher",
+        element: <SuspenseWrapper fallback={Loading}>
+          <AssignTeacherSubAdmin /></SuspenseWrapper>,
+        children: []
+      },
+      {
+        path: "/Sub-Admin/Assignsubject",
+        element: <SuspenseWrapper fallback={Loading}>
+          <AssignSubjectSubAdmin /></SuspenseWrapper>,
+        children: []
+      },
+      {
+        path: "/Sub-Admin/TimeTable",
+        element: <SuspenseWrapper fallback={Loading}>
+          <TimeTableSubAdmin /></SuspenseWrapper>,
+        children: [
+          {
+            path: "",
+            element: <SuspenseWrapper fallback={Loading}>
+              <StudentsTimeTableSubAdmin /></SuspenseWrapper>,
+            children: []
+          },
+          {
+            path: "upload",
+            element: <SuspenseWrapper fallback={Loading}>
+              <UploadSubAdmin /></SuspenseWrapper>,
+            children: []
+          },
+          {
+            path: "teacher",
+            element: <SuspenseWrapper fallback={Loading}>
+              <TeachersTimeTableSubAdmin /></SuspenseWrapper>,
+            children: []
+          },
+          {
+            path: "student",
+            element: <SuspenseWrapper fallback={Loading}>
+              <StudentsTimeTableSubAdmin /></SuspenseWrapper>,
+            children: []
+          },
+        ]
+      },
+      {
+        path: "/Sub-Admin/Assigncoordinator",
+        element: <SuspenseWrapper fallback={Loading}>
+          <AssigncoordinatorSubAdmin /></SuspenseWrapper>,
+        children: [],
+      },
+      {
+        path: "/Sub-Admin/Substitutecoordinator",
+        element: <SuspenseWrapper fallback={Loading}>
+          <SubstituteCoordinatorSubAdmin /></SuspenseWrapper>,
+        children: [],
+      },
+      {
+        path: "/Sub-Admin/classTeacherSubstitute",
+        element: <SuspenseWrapper fallback={Loading}>
+          <ClassTeacherSubstituteSubAdmin /></SuspenseWrapper>,
+      },
+      {
+        path: "/Sub-Admin/lectureSubstitute",
+        element: <SuspenseWrapper fallback={Loading}>
+          <LectureSubstituteSubAdmin /></SuspenseWrapper>,
+      },
+      {
+        path: "/Sub-Admin/Employee",
+        element: <SuspenseWrapper fallback={Loading}>
+          <Employee /></SuspenseWrapper>,
       },
     ]
   },

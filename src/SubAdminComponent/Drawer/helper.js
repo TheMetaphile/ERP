@@ -5,6 +5,7 @@ import teacher from "../../assets/teachers.png";
 import student from "../../assets/student.png";
 import fee from "../../assets/Dashboard_fee.png";
 import dashboardLeaveImage from "../../assets/Dashboard_leave.png";
+import classImage from "../../assets/class.png";
 
 const menuItems = [
   {
@@ -15,12 +16,26 @@ const menuItems = [
     children: [],
   },
   {
-    image: salary,
-    alt: "Salary image",
-    title: "Transaction History",
-    route: "/Sub-Admin/Salary",
+    image: homeImage,
+    alt: "Attendance image",
+    title: "Certificate",
+    route: "/Sub-Admin/Certificates",
     children: [],
   },
+  {
+    image: homeImage,
+    alt: "Attendance image",
+    title: "Result",
+    route: "/Sub-Admin/Result",
+    children: [],
+  },
+  // {
+  //   image: salary,
+  //   alt: "Salary image",
+  //   title: "Transaction History",
+  //   route: "/Sub-Admin/Salary",
+  //   children: [],
+  // },
   {
     image: teacher,
     alt: "Teacher image",
@@ -61,6 +76,67 @@ const menuItems = [
     alt: "Notice image",
     title: "Take Leave",
     route: "/Sub-Admin/TakeLeave",
+    children: [],
+  },
+  {
+    image: classImage,
+    alt: "Notice image",
+    title: "New Admission",
+    route: "/Sub-Admin/NewAdmission",
+    children: [],
+  },
+  {
+    image: dashboardLeaveImage,
+    alt: "Notice image",
+    title: "New Section",
+    route: "/Sub-Admin/Assignteacher",
+    children: [],
+  },
+  {
+    image: dashboardLeaveImage,
+    alt: "Notice image",
+    title: "Assign Subject",
+    route: "/Sub-Admin/Assignsubject",
+    children: [],
+  },
+  {
+    image: dashboardLeaveImage,
+    alt: "Notice image",
+    title: "Time Table",
+    route: "/Sub-Admin/TimeTable",
+    children: [],
+  },
+  {
+    image: dashboardLeaveImage,
+    alt: "Notice image",
+    title: "Assign Coordinator",
+    route: "/Sub-Admin/Assigncoordinator",
+    children: [],
+  },
+  {
+    image: dashboardLeaveImage,
+    alt: "img",
+    title: "Substitute",
+    children: [
+      {
+        text: "Substitute Co-ord",
+        route: "/Sub-Admin/Substitutecoordinator",
+      },
+      {
+        text: "ClassTeacher Substitute",
+        route: "/Sub-Admin/classTeacherSubstitute",
+      },
+      {
+        text: "Lecture Substitute",
+        route: "/Sub-Admin/lectureSubstitute",
+      },
+    ],
+  },
+  {
+    image: dashboardLeaveImage,
+    alt: "Notice image",
+    title: "Register Sub-Admin",
+    route: "/Sub-Admin/Employee",
     children: [],
   },
 ];

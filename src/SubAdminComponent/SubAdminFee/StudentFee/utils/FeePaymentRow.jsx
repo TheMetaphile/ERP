@@ -12,7 +12,7 @@ import logo from '../../../../assets/metaphile_logo.png';
 import Loading from '../../../../LoadingScreen/Loading';
 // import { useFilters } from '../../Students/utils/Filters';
 
-const FeePaymentRow = ({ student, key,fetchFees, selectedStudent, selectedDiscount }) => {
+const FeePaymentRow = ({ student, key,fetchFees, selectedStudent, selectedDiscount, fetchTransaction }) => {
     const { authState } = useContext(AuthContext);
     const dropdownRef = useRef(null);
     const [Razorpay] = useRazorpay();
@@ -262,6 +262,7 @@ const FeePaymentRow = ({ student, key,fetchFees, selectedStudent, selectedDiscou
             if (response.status === 200 && response.data.status === true) {
                 generateReceipt(data);
                 await fetchFees();
+                await fetchTransaction();
 
                 // Refresh the page
                 // window.location.reload();

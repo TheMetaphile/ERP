@@ -2,13 +2,14 @@ import { motion } from "framer-motion";
 import menuItems from "./helper.js";
 import { useState } from "react";
 import { Link } from 'react-router-dom';
+import ExpansionTile from "../../AdminComponents/utils/ExpansionTile.jsx";
 
 export default function SubadminDrawer({ isOpen }) {
     const [active, setActive] = useState(null);
 
     const handleClick = (index) => {
-        setActive(index === active ? null : index);
-    };
+        setActive(index)
+    }
 
     const drawerVariants = {
         open: { opacity: 1, x: 0 },
@@ -33,28 +34,22 @@ export default function SubadminDrawer({ isOpen }) {
                 <span className="text-purple-700 font-bold text-3xl">Accounts</span>
             </motion.div>
 
-            <div className="space-y-2 ">
+            <div className="mt-4">
                 {menuItems.map((menuItem, index) => (
-                    <motion.div
+                    <div
                         key={index}
                         onClick={() => handleClick(index)}
-                        className={`cursor-pointer rounded-lg  overflow-hidden ${active === index ? "bg-purple-100" : "hover:bg-purple-50"
-                            }`}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        className={`cursor-pointer rounded-lg ${active === index ? 'bg-purple-300' : ''}`}
                     >
-                        <Link to={menuItem.route} className="flex items-center space-x-3 py-3 px-1">
-                            <img
-                                src={menuItem.image}
-                                alt={menuItem.alt}
-                                className="w-6 h-6"
-                            />
-                            <span className="text-lg font-medium text-gray-800">
-                                {menuItem.title}
-                            </span>
-                        </Link>
+                        <ExpansionTile
 
-                    </motion.div>
+                            image={menuItem.image}
+                            alternateText={menuItem.alt}
+                            title={menuItem.title}
+                            childrens={menuItem.children}
+                            route={menuItem.route}
+                        />
+                    </div>
                 ))}
             </div>
         </motion.div>

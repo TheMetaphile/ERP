@@ -21,6 +21,8 @@ export default function FeeDetail() {
     const { authState } = useContext(AuthContext);
     const [Fee, setFee] = useState([]);
     const [appliedDis, setAppliedDis] = useState(null);
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const handleDropdownChange = (e) => {
         setSelectedOption(e.target.value);
@@ -143,6 +145,32 @@ export default function FeeDetail() {
         }
     };
 
+    useEffect(() => {
+        if (authState.accessToken && selectedStudent) {
+            setLoading(true);
+            fetchTransaction();
+        }
+    }, [authState.accessToken,selectedStudent]);
+
+    const fetchTransaction = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/fee/fetch/particularStudent/transactions?email=${selectedStudent.email}`, {
+                headers: {
+                    'Authorization': `Bearer ${authState.accessToken}`
+                }
+            });
+            console.log("API response transaction:", response.data);
+            setData(response.data.transactions)
+        }
+        catch (error) {
+            const errorMessage = error.response?.data?.error || 'An error occurred';
+            toast.error(errorMessage);
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <div className="flex flex-col w-full tablet:w-full mobile:max-tablet:w-screen overflow-y-auto no-scrollbar items-start mobile:max-tablet:mt-4 px-2 ">
             <ToastContainer />
@@ -215,9 +243,9 @@ export default function FeeDetail() {
                 </>
             }
 
-            <StudentDetails removeDiscount={removeDiscount} selectedOption={selectedOption} fetchFees={fetchFees} fees={Fee} setFees={setFee} selectedStudent={selectedStudent} selectedDiscount={selectedDiscount} />
+            <StudentDetails removeDiscount={removeDiscount} selectedOption={selectedOption} fetchFees={fetchFees} fetchTransaction={fetchTransaction} fees={Fee} setFees={setFee} selectedStudent={selectedStudent} selectedDiscount={selectedDiscount} />
             <h1 className="mb-2 text-2xl font-normal mobile:max-tablet:text-lg">Transaction History</h1>
-            <TransactionRow selectedStudent={selectedStudent} />
+            <TransactionRow selectedStudent={selectedStudent} data={data} setData={setData}/>
         </div>
     );
 }
