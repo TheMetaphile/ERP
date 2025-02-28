@@ -8,9 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../Config";
 import AuthContext from "../../Context/AuthContext";
 import SubjectInputs from "./SubjectInputs";
-import { FaUser, FaHome, FaVenusMars, FaGraduationCap, FaIdCard, FaEnvelope, FaAddressCard, FaBriefcase, FaPhone, FaStream, FaCalendarAlt, FaTint, FaUsers, FaGlobe, FaPercentage, FaCloudUploadAlt } from 'react-icons/fa';
+import { FaUser, FaHome, FaVenusMars, FaGraduationCap, FaIdCard, FaEnvelope, FaAddressCard, FaBriefcase, FaPhone, FaStream, FaCalendarAlt, FaTint, FaUsers, FaGlobe, FaPercentage, FaCloudUploadAlt, FaPlus } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-
 
 const containerVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -76,6 +75,38 @@ export default function StudentRegister() {
             percentage: ''
         }
     );
+    const [customFields, setCustomFields] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newField, setNewField] = useState({
+        label: "",
+        name: "",
+        type: "text",
+        required: false,
+        options: "",
+    });
+
+    const handleFieldChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setNewField((prev) => ({
+            ...prev,
+            [name]: type === "checkbox" ? checked : value,
+        }));
+    };
+
+    const handleAddField = () => {
+        if (!newField.label || !newField.name) {
+            toast.error("Field name and label are required!");
+            return;
+        }
+        const fieldData = { ...newField };
+        if (newField.type === "dropdown") {
+            fieldData.options = newField.options.split(",").map((opt) => opt.trim());
+        }
+        setCustomFields([...customFields, fieldData]);
+        setIsModalOpen(false);
+        setNewField({ label: "", name: "", type: "text", required: false, options: "" });
+    };
+
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         setFormData((prevData) => ({
@@ -281,10 +312,18 @@ export default function StudentRegister() {
                 <InputField icon={<FaPercentage />} label="Percentage" name="percentage" type="number" value={formData.percentage} onChange={handleChange} required />
                 <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} />
                 <SelectField icon={<FaStream />} label="Stream" name="stream" value={formData.stream} onChange={handleChange} options={['General', 'PCM', 'PCB', 'PCMB', 'Commerce', 'Arts']} required />
-
+                {customFields.map((field, index) => (
+                    field.type === "dropdown" ? (
+                        <SelectField key={index} label={field.label} name={field.name} options={field.options} required={field.required} />
+                    ) : (
+                        <InputField key={index} label={field.label} name={field.name} type={field.type} required={field.required} />
+                    )
+                ))}
                 <motion.div className="col-span-full flex justify-center gap-4 mt-6" variants={itemVariants}>
                     <SubjectInputs stream={formData.stream} setSubject={setSubjects} subjects={subjects} />
                 </motion.div>
+
+               
 
                 <div className="col-span-full flex justify-center gap-4 mt-2">
                     <motion.button
@@ -306,7 +345,13 @@ export default function StudentRegister() {
                     </motion.button>
                 </div>
 
-                <motion.div className="col-span-full flex justify-center mt-6" variants={itemVariants}>
+                <motion.div className="col-span-full flex gap-3 justify-center mt-6" variants={itemVariants}>
+                    <motion.button
+                        className="bg-blue-500 text-white font-bold py-2 px-6 rounded flex items-center gap-2"
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        <FaPlus /> Add Field
+                    </motion.button>
                     <motion.label
                         className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 flex items-center"
                         whileHover={{ scale: 1.05 }}
@@ -317,6 +362,51 @@ export default function StudentRegister() {
                     </motion.label>
                 </motion.div>
             </form>
+
+            {isModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                        <h2 className="text-xl font-bold mb-4">Add New Field</h2>
+                        <div className="grid gap-4">
+                            <InputField label="Field Label" name="label" value={newField.label} onChange={handleFieldChange} required />
+                            <InputField label="Field Name (key)" name="name" value={newField.name} onChange={handleFieldChange} required />
+                            <SelectField
+                                label="Field Type"
+                                name="type"
+                                value={newField.type}
+                                onChange={handleFieldChange}
+                                options={["text", "number", "email", "date", "boolean", "dropdown"]}
+                            />
+                            {newField.type === "dropdown" && (
+                                <InputField label="Dropdown Options (comma-separated)" name="options" value={newField.options} onChange={handleFieldChange} />
+                            )}
+                            <div className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    id="required"
+                                    name="required"
+                                    checked={newField.required || false}
+                                    onChange={(e) => handleFieldChange({ target: { name: "required", value: e.target.checked } })}
+                                    className="peer hidden"
+                                />
+                                <div className="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center cursor-pointer peer-checked:bg-green-500 peer-checked:border-green-500">
+                                    {newField.required && <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586l-2.293-2.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" clipRule="evenodd" />
+                                    </svg>}
+                                </div>
+                                <label htmlFor="required" className="text-gray-700 cursor-pointer">Required Field</label>
+                            </div>
+
+                            <div className="flex justify-end gap-2">
+                                <button className="bg-gray-300 text-black py-2 px-4 rounded" onClick={() => setIsModalOpen(false)}>Cancel</button>
+                                <button className="bg-green-500 text-white py-2 px-4 rounded" onClick={handleAddField}>Add Field</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
         </motion.div>
 
 

@@ -146,6 +146,13 @@ const menuItems = [
     route: "/Sub-Admin/SubAdmin",
     children: [],
   },
+  {
+    image: dashboardLeaveImage,
+    alt: "Notice image",
+    title: "Dynamic Register",
+    route: "/Sub-Admin/DynamicRegister",
+    children: [],
+  },
 ];
 
 export default menuItems;

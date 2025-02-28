@@ -6,14 +6,35 @@ import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../Config";
 import AuthContext from '../../Context/AuthContext';
 import { motion } from 'framer-motion';
-import { FaUser, FaEnvelope, FaIdCard, FaMapMarkerAlt, FaPray, FaBook, FaBirthdayCake, FaPhone, FaBriefcase, FaGraduationCap, FaMoneyBillWave, FaCloudUploadAlt, FaGoogle } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaIdCard, FaMapMarkerAlt, FaPray, FaBook, FaBirthdayCake, FaPhone, FaBriefcase, FaGraduationCap, FaMoneyBillWave, FaCloudUploadAlt, FaGoogle, FaPlus } from 'react-icons/fa';
 import { MdAdminPanelSettings } from 'react-icons/md';
+
+const initialFields = [
+  { name: "name", label: "Name", icon: <FaUser />, type: "text" },
+  { name: "gender", label: "Gender", icon: <FaUser />, type: "select", options: ["Select gender", "Male", "Female", "Other"] },
+  { name: "email", label: "Email", icon: <FaEnvelope />, type: "email" },
+  { name: "admin", label: "Admin", icon: <MdAdminPanelSettings />, type: "select", options: ["Select admin", "False", "True"] },
+  { name: "aadhaarNumber", label: "Aadhaar Number", icon: <FaIdCard />, type: "text" },
+  { name: "permanentAddress", label: "Permanent Address", icon: <FaMapMarkerAlt />, type: "text" },
+  { name: "religion", label: "Religion", icon: <FaPray />, type: "select", options: ["Select religion", "Hindu", "Christian", "Other"] },
+  { name: "subject", label: "Subject", icon: <FaBook />, type: "text" },
+  { name: "employeeId", label: "ID Number", icon: <FaIdCard />, type: "text" },
+  { name: "DOB", label: "Date of Birth", icon: <FaBirthdayCake />, type: "date" },
+  { name: "phoneNumber", label: "Phone Number", icon: <FaPhone />, type: "text" },
+  { name: "experience", label: "Experience", icon: <FaBriefcase />, type: "text" },
+  { name: "education", label: "Education", icon: <FaGraduationCap />, type: "text" },
+  { name: "salary", label: "Salary", icon: <FaMoneyBillWave />, type: "text" },
+  { name: "profileLink", label: "Google Drive Link for Photo", icon: <FaGoogle />, type: "text" },
+];
+
 
 export default function TeacherRegister() {
   const { authState } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
+  const [formFields, setFormFields] = useState(initialFields);
+  const [showModal, setShowModal] = useState(false);
+  const [newField, setNewField] = useState({ name: "", label: "", type: "text", required: false, options: "" });
 
   const [formData, setFormData] = useState(
     {
@@ -37,6 +58,22 @@ export default function TeacherRegister() {
       accessToken: authState.accessToken
     }
   );
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleAddField = () => {
+    const fieldToAdd = { ...newField };
+    if (newField.type === "select") {
+      fieldToAdd.options = newField.options.split(",").map((opt) => opt.trim());
+    }
+    setFormFields([...formFields, fieldToAdd]);
+    setShowModal(false);
+    setNewField({ name: "", label: "", type: "text", required: false, options: "" });
+  };
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setFormData((prevData) => ({
@@ -144,23 +181,6 @@ export default function TeacherRegister() {
   const inputClasses = "border-2 border-purple-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300";
   const labelClasses = "block text-lg mb-2 text-purple-700 font-semibold";
 
-  const formFields = [
-    { name: "name", label: "Name", icon: <FaUser />, type: "text" },
-    { name: "gender", label: "Gender", icon: <FaUser />, type: "select", options: ["Select gender", "Male", "Female", "Other"] },
-    { name: "email", label: "Email", icon: <FaEnvelope />, type: "email" },
-    { name: "admin", label: "Admin", icon: <MdAdminPanelSettings />, type: "select", options: ["Select admin", "False", "True"] },
-    { name: "aadhaarNumber", label: "Aadhaar Number", icon: <FaIdCard />, type: "text" },
-    { name: "permanentAddress", label: "Permanent Address", icon: <FaMapMarkerAlt />, type: "text" },
-    { name: "religion", label: "Religion", icon: <FaPray />, type: "select", options: ["Select religion", "Hindu", "Christian", "Other"] },
-    { name: "subject", label: "Subject", icon: <FaBook />, type: "text" },
-    { name: "employeeId", label: "ID Number", icon: <FaIdCard />, type: "text" },
-    { name: "DOB", label: "Date of Birth", icon: <FaBirthdayCake />, type: "date" },
-    { name: "phoneNumber", label: "Phone Number", icon: <FaPhone />, type: "text" },
-    { name: "experience", label: "Experience", icon: <FaBriefcase />, type: "text" },
-    { name: "education", label: "Education", icon: <FaGraduationCap />, type: "text" },
-    { name: "salary", label: "Salary", icon: <FaMoneyBillWave />, type: "text" },
-    { name: "profileLink", label: "Google Drive Link for Photo", icon: <FaGoogle />, type: "text" },
-  ];
 
   return (
     <motion.div
@@ -235,7 +255,17 @@ export default function TeacherRegister() {
         </motion.button>
       </div>
 
-      <div className="flex justify-center mt-6">
+      <div className="flex justify-center gap-2 mt-6">
+        <motion.label
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setShowModal(true)}
+          className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300 flex items-center cursor-pointer"
+        >
+          Add Field
+          <FaPlus className="ml-2" />
+        </motion.label>
+
         <motion.label
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -246,6 +276,49 @@ export default function TeacherRegister() {
           <FaCloudUploadAlt className="ml-2" />
         </motion.label>
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-bold mb-4">Add New Field</h2>
+            <input className="w-full p-2 border rounded mb-2" placeholder="Field Name" value={newField.name} onChange={(e) => setNewField({ ...newField, name: e.target.value })} />
+            <input className="w-full p-2 border rounded mb-2" placeholder="Label" value={newField.label} onChange={(e) => setNewField({ ...newField, label: e.target.value })} />
+            <select className="w-full p-2 border rounded mb-2" value={newField.type} onChange={(e) => setNewField({ ...newField, type: e.target.value })}>
+              <option value="text">Text</option>
+              <option value="number">Number</option>
+              <option value="email">Email</option>
+              <option value="boolean">Boolean (Checkbox)</option>
+              <option value="select">Dropdown</option>
+            </select>
+            {newField.type === "select" && (
+              <input className="w-full p-2 border rounded mb-2" placeholder="Comma separated options" value={newField.options} onChange={(e) => setNewField({ ...newField, options: e.target.value })} />
+            )}
+
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="required"
+                name="required"
+                checked={newField.required || false}
+                onChange={(e) => setNewField({ ...newField, required: e.target.checked })}
+                className="peer hidden"
+              />
+              <div className="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center cursor-pointer peer-checked:bg-green-500 peer-checked:border-green-500">
+                {newField.required && <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586l-2.293-2.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" clipRule="evenodd" />
+                </svg>}
+              </div>
+              <label htmlFor="required" className="text-gray-700 cursor-pointer">Required Field</label>
+            </div>
+
+
+            <div className="flex justify-between mt-2">
+              <button onClick={() => setShowModal(false)} className="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600">Cancel</button>
+              <button onClick={handleAddField} className="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600">Add Field</button>
+            </div>
+          </div>
+        </div>
+      )}
     </motion.div>
   )
 }

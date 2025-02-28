@@ -4,6 +4,8 @@ import Loading from "./LoadingScreen/Loading.jsx";
 import ClassTeacherSubstituteSubAdmin from "./SubAdminComponent/ClassTeacherSubstitute/main.jsx";
 import LectureSubstituteSubAdmin from "./SubAdminComponent/LectureSubstitute/main.jsx";
 import AllSubAdmin from "./AdminComponents/Teachers/SubAdmin/AllSubAdmin.jsx";
+import SubAdminProfile from "./AdminComponents/Teachers/SubAdmin/SubAdminProfile.jsx";
+import StudentRegisterDynamic from "./SubAdminComponent/DynamicRegistration/StudentRegisterDynamic.jsx";
 
 const NewAdmissionSubAdmin = lazy(() => import("./SubAdminComponent/New Admission/NewAdmissionSubAdmin.jsx"));
 const AssignTeacherSubAdmin = lazy(() => import("./SubAdminComponent/Classes/utils/AssignTeacherSubAdmin.jsx"));
@@ -711,6 +713,12 @@ const router = createBrowserRouter([
         path: "/Admin-Dashboard/SubAdmin",
         element: <SuspenseWrapper fallback={Loading}>
           <AllSubAdmin /></SuspenseWrapper>,
+        children: []
+      },
+      {
+        path: "/Admin-Dashboard/SubAdmin/Profile/:id",
+        element: <SuspenseWrapper fallback={Loading}>
+          <SubAdminProfile /></SuspenseWrapper>,
         children: []
       },
       {
@@ -1552,6 +1560,12 @@ const router = createBrowserRouter([
         path: "/Sub-Admin/NewAdmission",
         element: <SuspenseWrapper fallback={Loading}>
           <NewAdmissionSubAdmin /></SuspenseWrapper>,
+        children: []
+      },
+      {
+        path: "/Sub-Admin/DynamicRegister",
+        element: <SuspenseWrapper fallback={Loading}>
+          <StudentRegisterDynamic /></SuspenseWrapper>,
         children: []
       },
       {

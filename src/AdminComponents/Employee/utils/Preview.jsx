@@ -5,11 +5,18 @@ import { toast } from 'react-toastify';
 import { BASE_URL } from '../../../Config';
 import AuthContext from '../../../Context/AuthContext';
 import { motion } from "framer-motion";
-import { FaUser, FaGraduationCap, FaUniversity, FaPhone, FaEnvelope, FaBirthdayCake, FaTint, FaIdCard, FaMapMarkerAlt, FaBuilding, FaUserTie, FaLink } from "react-icons/fa";
+import { FaUser,FaPlus, FaGraduationCap, FaUniversity, FaPhone, FaEnvelope, FaBirthdayCake, FaTint, FaIdCard, FaMapMarkerAlt, FaBuilding, FaUserTie, FaLink } from "react-icons/fa";
 
 const Preview = ({ prevStep, formData }) => {
     const [loading, setLoading] = useState(false);
     const { authState } = useContext(AuthContext);
+    const [additionalFields, setAdditionalFields] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [newField, setNewField] = useState({
+        name: "",
+        required: false,
+        type: "string",
+    });
 
     const {
         name,
@@ -69,7 +76,7 @@ const Preview = ({ prevStep, formData }) => {
             residentialPincode,
             department,
             role,
-            accessToken : authState.accessToken
+            accessToken: authState.accessToken
         };
         setLoading(true);
         console.log(payload)
@@ -89,6 +96,32 @@ const Preview = ({ prevStep, formData }) => {
             setLoading(false);
 
         }
+    };
+
+    const toggleModal = () => setShowModal(!showModal);
+
+    const handleFieldChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setNewField((prev) => ({
+            ...prev,
+            [name]: type === "checkbox" ? checked : value,
+        }));
+    };
+
+    const addNewField = () => {
+        if (newField.name.trim() === "") return;
+
+        setAdditionalFields((prev) => [
+            ...prev,
+            {
+                icon: <FaPlus />,
+                label: newField.name,
+                value: newField.required ? "Required Field" : "Optional Field",
+            },
+        ]);
+
+        setShowModal(false);
+        setNewField({ name: "", required: false, type: "string" });
     };
 
     const infoItems = [
@@ -152,6 +185,15 @@ const Preview = ({ prevStep, formData }) => {
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
+                        onClick={toggleModal}
+                        className="bg-green-500 text-white px-6 py-2 rounded-full shadow-md hover:bg-green-600 transition duration-300"
+                    >
+                        Add Field
+                    </motion.button>
+
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={prevStep}
                         className="bg-purple-500 text-white px-6 py-2 rounded-full shadow-md hover:bg-purple-600 transition duration-300"
                     >
@@ -167,6 +209,70 @@ const Preview = ({ prevStep, formData }) => {
                     </motion.button>
                 </motion.div>
             </div>
+
+            {showModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white p-6 rounded-lg shadow-lg space-y-4">
+                        <h3 className="text-xl font-semibold">Add New Field</h3>
+
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Field Name"
+                            value={newField.name}
+                            onChange={handleFieldChange}
+                            className="w-full border p-2 rounded"
+                        />
+                        <input className="w-full p-2 border rounded mb-2" placeholder="Label" value={newField.label} onChange={handleFieldChange} />
+
+                        <select
+                            name="type"
+                            value={newField.type}
+                            onChange={handleFieldChange}
+                            className="w-full border p-2 rounded"
+                        >
+                            <option value="string">Text</option>
+                            <option value="number">Number</option>
+                            <option value="boolean">Boolean (Yes/No)</option>
+                            <option value="dropdown">Dropdown (e.g., Gender)</option>
+                        </select>
+
+                        <div className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="required"
+                                name="required"
+                                checked={newField.required}
+                                onChange={handleFieldChange}
+                                className="peer hidden"
+                            />
+                            <div className="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center cursor-pointer peer-checked:bg-green-500 peer-checked:border-green-500">
+                                {newField.required && <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586l-2.293-2.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" clipRule="evenodd" />
+                                </svg>}
+                            </div>
+                            <label htmlFor="required" className="text-gray-700 cursor-pointer">Required Field</label>
+                        </div>
+
+
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                onClick={toggleModal}
+                                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={addNewField}
+                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                            >
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </motion.div>
     );
 };

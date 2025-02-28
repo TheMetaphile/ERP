@@ -38,7 +38,7 @@ export default function SubadminDrawer({ isOpen }) {
 
             <div className="mt-4">
                 {menuItems.map((menuItem, index) => (
-                    (menuItem.title === 'Dashboard' || menuItem.title === 'Notice' || menuItem.title === 'Take Leave' || authState?.userDetails?.permissions.includes(menuItem.title) || (menuItem.children && menuItem.children.some((child => authState?.userDetails?.permissions.includes(child.text))))) &&
+                    (menuItem.title === 'Dashboard' || menuItem.title === 'Notice' || menuItem.title === 'Dynamic Register' || menuItem.title === 'Take Leave' || authState?.userDetails?.permissions.includes(menuItem.title) || (menuItem.children && menuItem.children.some((child => authState?.userDetails?.permissions.includes(child.text))))) &&
                     <div
                         key={index}
                         onClick={() => handleClick(index)}

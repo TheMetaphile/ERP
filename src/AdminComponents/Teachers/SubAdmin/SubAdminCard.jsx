@@ -4,7 +4,9 @@ import { BASE_URL } from "../../../Config.js";
 import axios from "axios";
 import AuthContext from "../../../Context/AuthContext.jsx";
 import { toast } from "react-toastify";
-import { MdOutlineSecurity } from "react-icons/md";
+import { MdEmail, MdOutlineSecurity } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { CgProfile } from "react-icons/cg";
 
 export default function SubAdminCard({ userData, setUserData }) {
     const { authState } = useContext(AuthContext);
@@ -14,7 +16,7 @@ export default function SubAdminCard({ userData, setUserData }) {
     const [selectedUserId, setSelectedUserId] = useState(null);
 
     const availablePermissions = ["Exam", "Certificate", "Result", "Student Fees", "Student Registration", "Teacher Registration", "SubAdmin Registration", "Readmission", "New Admission", "New Section", "Assign Subject",
-        "Time Table", "Assign Coordinator", "Substitute Coordinator", "ClassTeacher Substitute", "Lecture Substitute","Access Control"
+        "Time Table", "Assign Coordinator", "Substitute Coordinator", "ClassTeacher Substitute", "Lecture Substitute", "Access Control"
     ];
 
 
@@ -79,30 +81,47 @@ export default function SubAdminCard({ userData, setUserData }) {
                 </thead>
                 <tbody>
                     {userData.map((user, index) => (
-                        <tr key={user._id || index} className="border">
+                        <tr key={user._id || index} className="hover:bg-purple-50 transition-colors duration-150">
                             <td className="border p-2 text-center">
-                                <img src={user.profileLogo || userimg} alt="" className="h-16 w-16 rounded-full mx-auto" />
+                                <img src={user.profileLogo || userimg} alt={`${user.name}'s profile`} className="h-16 w-16 rounded-full mx-auto" />
                             </td>
-                            <td className="border p-2 text-center">{user.name}</td>
-                            <td className="border p-2 text-center">{user.email}</td>
-                            <td className="border p-2 text-center">
-                                <div className="grid grid-cols-3 gap-2">
+                            <td className="p-4">
+                                <Link
+                                    to={`/Admin-Dashboard/SubAdmin/Profile/${user._id}`}
+                                    className="font-medium text-purple-700 hover:text-purple-900 transition-colors duration-150 text-lg block"
+                                >
+                                    {user.name}
+                                </Link>
+                            </td>
+
+                            <td className="p-4">
+                                <div className="flex items-center">
+                                    <MdEmail className="text-gray-400 mr-2" />
+                                    <span className="text-gray-700">{user.email}</span>
+                                </div>
+                            </td>
+
+                            <td className="p-4">
+                                <div className="flex flex-wrap gap-2">
                                     {(user.permissions || []).map((permission, i) => (
-                                        <span key={i} className="bg-blue-200 rounded-md px-2 py-1 text-sm text-center">
+                                        <span
+                                            key={i}
+                                            className="bg-gradient-to-r from-purple-400 to-purple-500 text-white rounded-full px-3 py-1 text-xs font-medium shadow-sm"
+                                        >
                                             {permission}
                                         </span>
                                     ))}
                                 </div>
                             </td>
-                            <td className="border p-2 text-center">
-                                <div className="flex flex-wrap justify-center gap-2">
-                                    <button
-                                        className="flex items-center bg-blue-300 text-white px-2 py-1 rounded-md"
-                                        onClick={() => handlePermission(user._id)}
-                                    >
-                                        <MdOutlineSecurity className="mr-1" /> Permissions
-                                    </button>
-                                </div>
+
+                            <td className="p-4">
+                                <button
+                                    className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 group"
+                                    onClick={() => handlePermission(user._id)}
+                                >
+                                    <MdOutlineSecurity className="mr-2 group-hover:animate-pulse" />
+                                    <span>Permissions</span>
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -111,53 +130,70 @@ export default function SubAdminCard({ userData, setUserData }) {
 
 
             {permission && (
-                <div className="mt-2 fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-                    <div className="bg-white rounded-xl shadow-2xl w-4/5 transform transition-all">
-                        <div className="border-b p-6">
-                            <div className="flex items-center justify-between">
-                                <h2 className="text-2xl font-bold text-purple-600">Manage Permissions for {selectedUserId.name}</h2>
-                            </div>
-                            <p className="mt-2">Select the permissions you want to enable</p>
+                <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center p-4 z-50 transition-opacity duration-300 ease-in-out">
+                    <div className="bg-white rounded-2xl shadow-2xl w-11/12 md:w-4/5 max-w-5xl h-4/5 transform transition-all duration-300 scale-100 flex flex-col overflow-hidden">
+                        <div className="relative bg-gradient-to-r from-purple-600 to-indigo-600 p-4 md:p-6 lg:p-8 text-white">
+                            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold flex items-center">
+                                <MdOutlineSecurity className="mr-2 group-hover:animate-pulse" />
+                                Manage Permissions
+                            </h2>
+                            <p className="mt-1 md:mt-2 text-purple-100 text-sm md:text-base lg:text-lg">
+                                Configuring access for <span className="font-bold underline decoration-2 decoration-purple-300">{selectedUserId.name}</span>
+                            </p>
+
+                            <div className="absolute -bottom-6 md:-bottom-8 lg:-bottom-10 left-0 right-0 h-6 md:h-8 lg:h-10 bg-white rounded-t-3xl"></div>
                         </div>
 
-                        <div className="p-6">
-                            <div className="grid grid-cols-4 gap-4">
-                                {availablePermissions.map((perm) => (
-                                    <label
-                                        key={perm}
-                                        className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer group"
-                                    >
-                                        <div className="relative flex items-center justify-center">
-                                            <input
-                                                type="checkbox"
-                                                value={perm}
-                                                checked={selectedPermissions.includes(perm)}
-                                                onChange={() => handlePermissionChange(perm)}
-                                                className="appearance-none w-6 h-6 border-2 rounded-md border-gray-300 checked:border-purple-500 checked:bg-purple-500 transition-all duration-200"
-                                            />
-                                            <span className="absolute text-white font-bold pointer-events-none  transform  transition-all duration-200 checked:opacity-100 checked:scale-100">
-                                                ✓
-                                            </span>
-                                        </div>
-                                        <span className="ml-3 text-gray-700 font-medium group-hover:text-gray-900">
-                                            {perm}
-                                        </span>
-                                    </label>
-                                ))}
+                        <div className="flex-grow p-4 md:p-6 lg:p-8 pt-2 md:pt-3 lg:pt-4 overflow-y-auto mt-4">
+
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+                                {availablePermissions.map((perm) => {
+                                    const isSelected = selectedPermissions.includes(perm);
+                                    return (
+                                        <label
+                                            key={perm}
+                                            className={`flex items-center p-3 md:p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer hover:shadow-md ${isSelected
+                                                ? "border-purple-500 bg-purple-50 shadow-sm"
+                                                : "border-gray-200 hover:border-purple-300"
+                                                }`}
+                                        >
+                                            <div className="relative flex items-center justify-center">
+                                                <input
+                                                    type="checkbox"
+                                                    value={perm}
+                                                    checked={isSelected}
+                                                    onChange={() => handlePermissionChange(perm)}
+                                                    className="appearance-none w-5 h-5 md:w-6 md:h-6 border-2 rounded-md border-gray-300 checked:border-purple-500 checked:bg-purple-500 transition-all duration-200"
+                                                />
+                                                <span className="absolute text-white font-bold pointer-events-none  transform  transition-all duration-200 checked:opacity-100 checked:scale-100">
+                                                    ✓
+                                                </span>
+                                            </div>
+
+                                            <div className="ml-3">
+                                                <span className={`text-sm md:text-base font-medium ${isSelected ? "text-purple-700" : "text-gray-700"}`}>
+                                                    {perm}
+                                                </span>
+                                            </div>
+                                        </label>
+                                    );
+                                })}
                             </div>
                         </div>
 
-                        <div className="border-t p-6 bg-gray-50 rounded-b-xl">
-                            <div className="flex gap-4 justify-end">
+                        <div className="border-t p-3 md:p-4 lg:p-6 bg-gray-50 rounded-b-xl flex justify-end sm:flex-row items-center gap-3">
+
+                            <div className="flex gap-3 w-full sm:w-auto">
                                 <button
                                     onClick={handleCancelPermission}
-                                    className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors font-medium"
+                                    className="w-full sm:w-auto px-4 py-2 rounded-lg border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors font-medium flex items-center justify-center"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     onClick={handleSave}
-                                    className="px-4 py-2 rounded-lg bg-purple-500 text-white hover:bg-purple-600 transition-colors font-medium"
+                                    className="flex-1 sm:flex-initial px-6 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:shadow-lg transition-all duration-200 font-medium flex items-center justify-center group"
                                 >
                                     Save Changes
                                 </button>
@@ -166,9 +202,6 @@ export default function SubAdminCard({ userData, setUserData }) {
                     </div>
                 </div>
             )}
-
-
-
         </div>
     );
 }
