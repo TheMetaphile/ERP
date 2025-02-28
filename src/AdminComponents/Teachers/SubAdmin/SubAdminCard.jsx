@@ -6,7 +6,7 @@ import AuthContext from "../../../Context/AuthContext.jsx";
 import { toast } from "react-toastify";
 import { MdEmail, MdOutlineSecurity } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { CgProfile } from "react-icons/cg";
+
 
 export default function SubAdminCard({ userData, setUserData }) {
     const { authState } = useContext(AuthContext);
@@ -16,7 +16,7 @@ export default function SubAdminCard({ userData, setUserData }) {
     const [selectedUserId, setSelectedUserId] = useState(null);
 
     const availablePermissions = ["Exam", "Certificate", "Result", "Student Fees", "Student Registration", "Teacher Registration", "SubAdmin Registration", "Readmission", "New Admission", "New Section", "Assign Subject",
-        "Time Table", "Assign Coordinator", "Substitute Coordinator", "ClassTeacher Substitute", "Lecture Substitute", "Access Control"
+        "Time Table", "Assign Coordinator", "Substitute Coordinator", "ClassTeacher Substitute", "Lecture Substitute", "Access Control", "Custom Registration Builder"
     ];
 
 

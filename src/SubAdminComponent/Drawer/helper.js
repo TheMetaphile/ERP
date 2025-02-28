@@ -149,7 +149,7 @@ const menuItems = [
   {
     image: dashboardLeaveImage,
     alt: "Notice image",
-    title: "Dynamic Register",
+    title: "Custom Registration Builder",
     route: "/Sub-Admin/DynamicRegister",
     children: [],
   },

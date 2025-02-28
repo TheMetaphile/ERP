@@ -50,7 +50,7 @@ export default function AllSubAdmin() {
             {loading ? (
                 <Loading />
             ) : (
-                <SubAdminCard userData={userData} setUserData={setUserData}/>
+                <SubAdminCard userData={userData} setUserData={setUserData} />
             )}
 
         </div>
