@@ -72,7 +72,6 @@ export default function Template() {
     const [userType, setUserType] = useState("TC");
     const [isLoading, setIsLoading] = useState(false);
     const [showTypeOptions, setShowTypeOptions] = useState(false);
-    const [fileName, setFileName] = useState('');
     const fileInputRefs = useRef([]);
 
     const userTypeOptions = ["TC", "CC", "Result", "Bonafide", "Admit Card"];
@@ -100,10 +99,6 @@ export default function Template() {
             updatedFields[index].file = file;
             setFields(updatedFields);
         }
-    };
-
-    const addField = () => {
-        setFields([...fields, { referenceNo: "", file: null }]);
     };
 
     // Handle removing a row
@@ -199,8 +194,7 @@ export default function Template() {
             });
 
             if (response.status === 200) {
-                setFetchedFields(response.data?.fields?.fields || []);
-                setDocId(response.data?.fields?._id || null);
+                setFetchedFields(response.data || []);
                 toast.success(`${type} form fields loaded successfully`);
             }
         } catch (error) {
@@ -214,15 +208,6 @@ export default function Template() {
         }
     };
 
-    const getFieldTypeIcon = (type) => {
-        switch (type) {
-            case 'text': return 'Aa';
-            case 'number': return '123';
-            case 'select': return '▼';
-            case 'document': return '📄';
-            default: return 'Aa';
-        }
-    };
 
 
     return (
@@ -296,9 +281,8 @@ export default function Template() {
                     <table className="w-full border-collapse">
                         <thead>
                             <tr className="bg-gray-50">
-                                <th className="p-3 text-left font-semibold text-gray-600 border-b">Label</th>
-                                <th className="p-3 text-left font-semibold text-gray-600 border-b">Type</th>
-                                <th className="p-3 text-center font-semibold text-gray-600 border-b">Required</th>
+                                <th className="p-3 text-left font-semibold text-gray-600 border-b">Refrence  No.</th>
+                                <th className="p-3 text-left font-semibold text-gray-600 border-b">File</th>
                                 <th className="p-3 text-center font-semibold text-gray-600 border-b">Actions</th>
                             </tr>
                         </thead>
@@ -314,27 +298,9 @@ export default function Template() {
                                             animate="visible"
                                             exit="hidden"
                                         >
-                                            <td className="p-3 font-medium text-gray-700">{field.label}</td>
+                                            <td className="p-3 font-medium text-gray-700">{field.referenceNo}</td>
                                             <td className="p-3">
-                                                <div className="flex items-center gap-2">
-                                                    <span className=" w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-mono text-sm">
-                                                        {getFieldTypeIcon(field.type)}
-                                                    </span>
-                                                    <div>
-                                                        <div className="font-medium capitalize">{field.type}</div>
-                                                        {field.type === "select" && field.options.length > 0 && (
-                                                            <div className="text-xs text-gray-500 mt-1">
-                                                                Options: {field.options.join(", ")}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="p-3 text-center">
-                                                {field.required ?
-                                                    <FaRegCheckCircle className="inline-block text-green-500 text-xl" /> :
-                                                    <FaRegTimesCircle className="inline-block text-red-400 text-xl" />
-                                                }
+                                                {userType}_{field.referenceNo}.{field.documentType}
                                             </td>
                                             <td className="p-3 text-center">
                                                 <button
