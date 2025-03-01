@@ -10,6 +10,7 @@ import AuthContext from "../../Context/AuthContext";
 import SubjectInputs from "./SubjectInputs";
 import { FaUser, FaHome, FaVenusMars, FaGraduationCap, FaIdCard, FaEnvelope, FaAddressCard, FaBriefcase, FaPhone, FaStream, FaCalendarAlt, FaTint, FaUsers, FaGlobe, FaPercentage, FaCloudUploadAlt, FaPlus } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import FileUploadField from "./FileUploadField";
 
 const containerVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -33,48 +34,18 @@ export default function StudentRegister() {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    // const [success, setSuccess] = useState('');
     const currentYear = (new Date().getFullYear()).toString();
-
     const [subjects, setSubjects] = useState([Array(5).fill('')]);
+
     const [formData, setFormData] = useState(
         {
-            name: '',
-            email: '',
-            password: '',
-            aadhaarNumber: '',
             academicYear: currentYear,
-            admissionClass: '',
-            currentClass: '',
-            section: '',
-            subjects: [],
-            admissionDate: '',
-            oldAdmissionNumber: '',
-            emergencyContactNumber: '',
-            DOB: '',
-            fatherEmailId: '',
-            motherEmailId: '',
-            motherName: '',
-            fatherName: '',
-            permanentAddress: '',
-            fathersOccupation: '',
-            motherOccupation: '',
-            fatherPhoneNumber: '',
-            motherPhoneNumber: '',
-            profileLink: '',
-            bloodGroup: '',
-            guardiansName: '',
-            guardiansOccupation: '',
-            guardiansPhoneNumber: '',
-            gender: '',
-            religion: '',
-            category: '',
-            nationality: '',
-            stream: '',
             accessToken: authState.accessToken,
-            percentage: ''
         }
     );
+
+    const [extraFormData, setExtraFormData] = useState([]);
+
     const [customFields, setCustomFields] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newField, setNewField] = useState({
@@ -84,7 +55,6 @@ export default function StudentRegister() {
         required: false,
         options: "",
     });
-
     const handleFieldChange = (e) => {
         const { name, value, type, checked } = e.target;
         setNewField((prev) => ({
@@ -108,72 +78,77 @@ export default function StudentRegister() {
     };
 
     const handleChange = (e) => {
-        const { name, value, files } = e.target;
+        const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            [name]: name === 'photo' ? files[0] : value,
-        }));
-    };
-    const handleSubject = (event) => {
-        const { name, value } = event.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
             [name]: value,
         }));
     };
 
+    const handleCustomFieldValueChange = (e) => {
+        const { name, value, files, type } = e.target;
+
+        setExtraFormData((prevData) => {
+            // Clone existing custom fields or initialize an empty array
+            const updatedCustomFields = [...(prevData || [])];
+
+            // Find index of the field if it exists
+            const fieldIndex = updatedCustomFields.findIndex(field => field.label === name);
+
+            // Prepare new field object
+            const newField = {
+                label: name,
+                value: type === "file" ? files[0] : value,
+            };
+
+            if (fieldIndex !== -1) {
+                // Update existing field
+                updatedCustomFields[fieldIndex] = newField;
+            } else {
+                // Add new field
+                updatedCustomFields.push(newField);
+            }
+            console.log(updatedCustomFields);
+            return updatedCustomFields;
+        });
+    };
+
+
+
     const handleReset = () => {
         setFormData({
-            name: '',
-            email: '',
-            password: '',
-            aadhaarNumber: '',
-            academicYear: '',
-            subjects: [],
-            admissionClass: '',
-            currentClass: '',
-            section: '',
-            admissionDate: '',
-            oldAdmissionNumber: '',
-            emergencyContactNumber: '',
-            DOB: '',
-            fatherEmailId: '',
-            motherEmailId: '',
-            motherName: '',
-            fatherName: '',
-            permanentAddress: '',
-            fathersOccupation: '',
-            motherOccupation: '',
-            fatherPhoneNumber: '',
-            motherPhoneNumber: '',
-            profileLink: '',
-            bloodGroup: '',
-            guardiansName: '',
-            guardiansOccupation: '',
-            guardiansPhoneNumber: '',
-            gender: '',
-            religion: '',
-            category: '',
-            nationality: '',
-            stream: '',
-            percentage: ''
+            academicYear: currentYear,
+            accessToken: authState.accessToken,
         });
+        setExtraFormData([]);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
-        console.log(formData);
+        console.log(extraFormData);
         try {
             const [year, month, day] = formData.DOB.split('-');
             const formattedDate = `${day}-${month}-${year}`;
             formData.DOB = formattedDate
             formData.subjects = subjects;
-
             formData.password = formData.aadhaarNumber;
+            const payload = new FormData();
+            for (const key in formData) {
 
-            const response = await axios.post(`${BASE_URL}/signup/student`, formData);
+                payload.append(key, formData[key]); // Append files properly
+
+            }
+            extraFormData.forEach((item, index) => {
+                if (item.value instanceof File) {
+                    payload.append(`extra[${index}][label]`, item.label);
+                    payload.append(`extra[${index}][value]`, item.value);
+                }
+            });
+
+            payload.append("extraFields", JSON.stringify(extraFormData));
+            const response = await axios.post(`${BASE_URL}/signup/student`, payload);
             if (response.status === 200) {
                 toast.success('Student registered successfully!');
                 handleReset();
@@ -208,6 +183,25 @@ export default function StudentRegister() {
             reader.readAsText(file);
         }
     }
+
+    const fetchFieldsForUserType = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/registrationFields/fetch/Student`, {
+                headers: {
+                    'Authorization': `Bearer ${authState.accessToken}`
+                }
+            });
+            if (response.status === 200) {
+                setCustomFields(response.data?.fields?.fields || []);
+            }
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || 'An error occurred';
+            console.log(error);
+            toast.error(errorMessage);
+            setFetchedFields([]);
+            setDocId(null);
+        }
+    };
 
     useEffect(() => {
         console.log("here")
@@ -265,8 +259,9 @@ export default function StudentRegister() {
         }
     }
 
-
-
+    useEffect(() => {
+        fetchFieldsForUserType();
+    }, [authState]);
     return (
         <motion.div
             className=" p-6 rounded-lg shadow-lg h-screen overflow-y-auto "
@@ -277,54 +272,87 @@ export default function StudentRegister() {
             <ToastContainer />
             <h1
                 className="text-3xl mobile:max-tablet:text-lg font-bold mb-6 text-center text-purple-700 "
-
             >
                 Add New Student
             </h1>
             <form onSubmit={handleSubmit} className="grid grid-cols-3 mobile:max-tablet:grid-cols-1 gap-6">
                 <InputField icon={<FaUser />} label="Name" name="name" value={formData.name} onChange={handleChange} required />
-                <InputField icon={<FaHome />} label="Permanent Address" name="permanentAddress" value={formData.permanentAddress} onChange={handleChange} required />
                 <SelectField icon={<FaVenusMars />} label="Gender" name="gender" value={formData.gender} onChange={handleChange} options={['male', 'female', 'other']} required />
                 <SelectField icon={<FaGraduationCap />} label="Current Class" name="currentClass" value={formData.currentClass} onChange={handleChange} options={['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']} required />
-                <InputField icon={<FaIdCard />} label="Old Admission Number" name="oldAdmissionNumber" value={formData.oldAdmissionNumber} onChange={handleChange} />
                 <InputField icon={<FaEnvelope />} label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required />
                 <InputField icon={<FaAddressCard />} label="Aadhaar Number" name="aadhaarNumber" type="number" value={formData.aadhaarNumber} onChange={handleChange} required />
-                <SelectField icon={<FaUsers />} label="Religion" name="religion" value={formData.religion} onChange={handleChange} options={['Hindu', 'Sikh', 'Muslim', 'Christian', 'Other']} required />
                 <SelectField icon={<FaGraduationCap />} label="Admission Class" name="admissionClass" value={formData.admissionClass} onChange={handleChange} options={['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']} required />
-                <InputField icon={<FaCalendarAlt />} label="Admission Date" name="admissionDate" type="date" value={formData.admissionDate} onChange={handleChange} required />
-                <InputField icon={<FaUser />} label="Father Name" name="fatherName" value={formData.fatherName} onChange={handleChange} required />
-                <InputField icon={<FaEnvelope />} label="Father Email" name="fatherEmailId" type="email" value={formData.fatherEmailId} onChange={handleChange} required />
-                <InputField icon={<FaBriefcase />} label="Father Occupation" name="fathersOccupation" value={formData.fathersOccupation} onChange={handleChange} required />
-                <InputField icon={<FaPhone />} label="Father Phone Number" name="fatherPhoneNumber" type="tel" value={formData.fatherPhoneNumber} onChange={handleChange} required />
-                <InputField icon={<FaUser />} label="Mother Name" name="motherName" value={formData.motherName} onChange={handleChange} required />
-                <InputField icon={<FaEnvelope />} label="Mother Email" name="motherEmailId" type="email" value={formData.motherEmailId} onChange={handleChange} required />
-                <InputField icon={<FaBriefcase />} label="Mother Occupation" name="motherOccupation" value={formData.motherOccupation} onChange={handleChange} required />
-                <InputField icon={<FaPhone />} label="Mother Phone Number" name="motherPhoneNumber" type="tel" value={formData.motherPhoneNumber} onChange={handleChange} required />
                 <InputField icon={<FaCalendarAlt />} label="Date of Birth" name="DOB" type="date" value={formData.DOB} onChange={handleChange} required />
-                <SelectField icon={<FaTint />} label="Blood Group" name="bloodGroup" value={formData.bloodGroup} onChange={handleChange} options={['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']} required />
                 <SelectField icon={<FaUsers />} label="Section" name="section" value={formData.section} onChange={handleChange} options={['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']} />
-                <InputField icon={<FaUser />} label="Guardian Name" name="guardiansName" value={formData.guardiansName} onChange={handleChange} required />
-                <InputField icon={<FaBriefcase />} label="Guardian Occupation" name="guardiansOccupation" value={formData.guardiansOccupation} onChange={handleChange} required />
-                <InputField icon={<FaPhone />} label="Guardian Phone Number" name="guardiansPhoneNumber" type="tel" value={formData.guardiansPhoneNumber} onChange={handleChange} required />
-                <InputField icon={<FaPhone />} label="Emergency Contact Number" name="emergencyContactNumber" type="tel" value={formData.emergencyContactNumber} onChange={handleChange} required />
-                <SelectField icon={<FaUsers />} label="Category" name="category" value={formData.category} onChange={handleChange} options={['General', 'OBC', 'SC', 'ST', 'EWS']} required />
-                <SelectField icon={<FaGlobe />} label="Nationality" name="nationality" value={formData.nationality} onChange={handleChange} options={['Indian', 'Nepali', 'Tibetan']} required />
-                <InputField icon={<FaPercentage />} label="Percentage" name="percentage" type="number" value={formData.percentage} onChange={handleChange} required />
+                {/* <InputField icon={<FaBriefcase />} label="Guardian Occupation" name="guardiansOccupation" value={formData.guardiansOccupation} onChange={handleChange} required />               */}
                 <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} />
                 <SelectField icon={<FaStream />} label="Stream" name="stream" value={formData.stream} onChange={handleChange} options={['General', 'PCM', 'PCB', 'PCMB', 'Commerce', 'Arts']} required />
-                {customFields.map((field, index) => (
-                    field.type === "dropdown" ? (
-                        <SelectField key={index} label={field.label} name={field.name} options={field.options} required={field.required} />
-                    ) : (
-                        <InputField key={index} label={field.label} name={field.name} type={field.type} required={field.required} />
-                    )
-                ))}
+                {customFields.map((field, index) => {
+                    switch (field.type) {
+                        case "select":
+                            return (
+                                <SelectField
+                                    key={index}
+                                    label={field.label}
+                                    name={field.label}
+                                    options={field.options}
+                                    onChange={handleCustomFieldValueChange}
+                                    value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                                    required={field.required}
+                                />
+                            );
+                        case "text":
+                            return (
+                                <InputField
+                                    key={index}
+                                    label={field.label}
+                                    name={field.label}
+                                    value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                                    onChange={handleCustomFieldValueChange}
+                                    type="text"
+                                    required={field.required}
+                                />
+                            );
+                        case "number":
+                            return (
+                                <InputField
+                                    key={index}
+                                    label={field.label}
+                                    name={field.label}
+                                    value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                                    onChange={handleCustomFieldValueChange}
+                                    type="number"
+                                    required={field.required}
+                                />
+                            );
+                        case "document":
+                            return (
+                                <FileUploadField
+                                    key={index}
+                                    label={field.label}
+                                    name={field.label}
+                                    required={field.required}
+                                    value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                                    onChange={handleCustomFieldValueChange}
+                                />
+                            );
+                        default:
+                            return (
+                                <InputField
+                                    key={index}
+                                    label={field.label}
+                                    name={field.label}
+                                    type={field.type}
+                                    value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                                    onChange={handleCustomFieldValueChange}
+                                    required={field.required}
+                                />
+                            );
+                    }
+                })}
                 <motion.div className="col-span-full flex justify-center gap-4 mt-6" variants={itemVariants}>
                     <SubjectInputs stream={formData.stream} setSubject={setSubjects} subjects={subjects} />
                 </motion.div>
-
-               
-
                 <div className="col-span-full flex justify-center gap-4 mt-2">
                     <motion.button
                         className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded transition duration-300 ease-in-out transform hover:scale-105"
@@ -362,7 +390,6 @@ export default function StudentRegister() {
                     </motion.label>
                 </motion.div>
             </form>
-
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -405,15 +432,9 @@ export default function StudentRegister() {
                     </div>
                 </div>
             )}
-
-
         </motion.div>
-
-
-
     );
 }
-
 const InputField = ({ icon, label, name, type = "text", value, onChange, required }) => (
     <motion.div className="mb-4" variants={itemVariants}>
         <label className="flex items-center text-lg mb-2 text-purple-700 font-semibold">
@@ -431,7 +452,6 @@ const InputField = ({ icon, label, name, type = "text", value, onChange, require
         />
     </motion.div>
 );
-
 const SelectField = ({ icon, label, name, value, onChange, options, required }) => (
     <motion.div className="mb-4" variants={itemVariants}>
         <label className="flex items-center text-lg mb-2 text-purple-700 font-semibold">
