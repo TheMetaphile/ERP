@@ -129,7 +129,7 @@ export default function Template() {
 
         // Append all reference numbers and files
         fields.forEach((field, index) => {
-            formData.append(`referenceNo[${index}]`, field.referenceNo);
+            formData.append('referenceNo', field.referenceNo);
             if (field.file) {
                 formData.append(`file[${index}]`, field.file);
             }
