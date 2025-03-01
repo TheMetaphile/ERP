@@ -26,7 +26,7 @@ import {
     FaRegTimesCircle,
     FaUpload
 } from 'react-icons/fa';
-
+import { AiOutlineDownload } from "react-icons/ai";
 const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -68,11 +68,68 @@ export default function Template() {
     const [fields, setFields] = useState([
         { referenceNo: "", file: null },
     ]);
-    const [DocId, setDocId] = useState(null);
     const [userType, setUserType] = useState("TC");
     const [isLoading, setIsLoading] = useState(false);
     const [showTypeOptions, setShowTypeOptions] = useState(false);
     const fileInputRefs = useRef([]);
+
+
+    const getPresignedUrl = async (fileName) => {
+        try {
+            console.log(fileName);
+            const response = await axios.get(`${BASE_URL}/fetch/url/${encodeURIComponent(fileName)}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`, // Pass the JWT token for authentication
+                },
+            });
+            return response.data.signedUrl; // Return the pre-signed URL
+        } catch (error) {
+            console.error("Error fetching pre-signed URL:", error.response?.data || error.message);
+            return null;
+        }
+    };
+
+    const downloadFile = async (doc) => {
+        try {
+            console.log(authState.userDetails);
+            const fileName = "documents/" + authState.userDetails.branch + '/' + userType + "/" + doc.referenceNo + '.' + doc.documentType
+            const signedUrl = await getPresignedUrl(fileName);
+            if (!signedUrl) {
+                alert("Failed to get download URL");
+                return;
+            }
+
+            console.log(signedUrl);
+            // Fetch the file and trigger download
+            const fileResponse = await fetch(signedUrl);
+            const blob = await fileResponse.blob();
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", fileName.split("/").pop()); // Use only the file name for download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error("Error downloading file:", error);
+        }
+    };
+
+    const openFile = async (doc) => {
+        try {
+            console.log(authState.userDetails);
+            const fileName = "documents/" + authState.userDetails.branch + '/' + userType + "/" + doc.referenceNo + '.' + doc.documentType
+            const signedUrl = await getPresignedUrl(fileName);
+            if (!signedUrl) {
+                alert("Failed to get download URL");
+                return;
+            }
+
+            window.open(signedUrl, "_blank");
+
+        } catch (error) {
+            console.error("Error downloading file:", error);
+        }
+    }
 
     const userTypeOptions = ["TC", "CC", "Result", "Bonafide", "Admit Card"];
     const userTypeIcons = {
@@ -124,12 +181,12 @@ export default function Template() {
 
         // Append all reference numbers and files
         fields.forEach((field, index) => {
-            formData.append('referenceNo', field.referenceNo);
+            formData.append(`referenceNo[${index}]`, field.referenceNo);
             if (field.file) {
                 formData.append(`file[${index}]`, field.file);
             }
         });
-
+        // console.log(formData, fields);
         setIsLoading(true);
         try {
 
@@ -144,12 +201,15 @@ export default function Template() {
             );
 
             if (response.status === 200) {
-                setFetchedFields(prev => [...prev, ...fields]);
+
+                console.log(typeof fields[0].file.name);
+                setFetchedFields(prev => [...prev, ...fields.map((field) => { return { ...field, _id: response.data.ids[field.referenceNo], documentType: field.file.name.split('.').pop() } })]);
+                console.log(fetchedFields);
                 setFields([]);
                 toast.success("Form saved successfully!");
             }
         } catch (error) {
-            toast.error("Error saving form: " + (error.response?.data?.message || "Unknown error"));
+            toast.error("Error saving form: " + (error.response?.data?.message || error));
         } finally {
             setIsLoading(false);
         }
@@ -159,7 +219,7 @@ export default function Template() {
         setIsLoading(true);
         try {
             const response = await axios.delete(
-                `${BASE_URL}/registrationFields/delete/${DocId}/${fieldId}`,
+                `${BASE_URL}/templates/delete/${fieldId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${authState.accessToken}`
@@ -169,7 +229,7 @@ export default function Template() {
 
             if (response.status === 200) {
                 setFetchedFields(prev => prev.filter((field) => field._id !== fieldId));
-                toast.success("Field deleted successfully!");
+                toast.success(response.data.message);
             }
         } catch (error) {
             toast.error("Error deleting field: " + (error.response?.data?.message || "Unknown error"));
@@ -182,12 +242,12 @@ export default function Template() {
 
     useEffect(() => {
         fetchFieldsForUserType(userType);
-    }, [userType, authState.accessToken]);
+    }, [authState.accessToken]);
 
     const fetchFieldsForUserType = async (type) => {
         setIsLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL}/templates/fetch/${type}`, {
+            const response = await axios.get(`${BASE_URL}/templates/fetch`, {
                 headers: {
                     'Authorization': `Bearer ${authState.accessToken}`
                 }
@@ -202,7 +262,6 @@ export default function Template() {
             console.log(error);
             toast.error(errorMessage);
             setFetchedFields([]);
-            setDocId(null);
         } finally {
             setIsLoading(false);
         }
@@ -288,8 +347,8 @@ export default function Template() {
                         </thead>
                         <tbody>
                             <AnimatePresence>
-                                {fetchedFields.length > 0 ? (
-                                    fetchedFields.map((field, index) => (
+                                {fetchedFields.filter(field => field.documentName == userType).length > 0 ? (
+                                    fetchedFields.filter(field => field.documentName == userType).map((field, index) => (
                                         <motion.tr
                                             key={`fetched-${field._id || index}`}
                                             className="border-b hover:bg-blue-50 transition-colors"
@@ -299,17 +358,25 @@ export default function Template() {
                                             exit="hidden"
                                         >
                                             <td className="p-3 font-medium text-gray-700">{field.referenceNo}</td>
-                                            <td className="p-3">
+                                            <td className="p-3 text-blue-600 hover:cursor-pointer" onClick={() => { openFile(field) }}>
                                                 {userType}_{field.referenceNo}.{field.documentType}
                                             </td>
-                                            <td className="p-3 text-center">
+                                            <td className="p-3 text-center flex justify-center gap-3">
                                                 <button
-                                                    className="p-2 bg-red-50 text-red-500 rounded-full hover:bg-red-100 transition-colors"
+                                                    className="p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-colors"
                                                     onClick={() => handleDelete(field._id)}
                                                     disabled={isLoading}
                                                 >
                                                     <MdDelete size={20} />
                                                 </button>
+                                                <button
+                                                    className="p-2 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition-colors"
+                                                    onClick={() => downloadFile(field)}
+                                                    disabled={isLoading}
+                                                >
+                                                    <AiOutlineDownload size={20} />
+                                                </button>
+
                                             </td>
                                         </motion.tr>
                                     ))
