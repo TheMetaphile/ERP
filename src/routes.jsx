@@ -6,6 +6,7 @@ import LectureSubstituteSubAdmin from "./SubAdminComponent/LectureSubstitute/mai
 import AllSubAdmin from "./AdminComponents/Teachers/SubAdmin/AllSubAdmin.jsx";
 import SubAdminProfile from "./AdminComponents/Teachers/SubAdmin/SubAdminProfile.jsx";
 import StudentRegisterDynamic from "./SubAdminComponent/DynamicRegistration/StudentRegisterDynamic.jsx";
+import Template from "./SubAdminComponent/Template/Template.jsx";
 
 const NewAdmissionSubAdmin = lazy(() => import("./SubAdminComponent/New Admission/NewAdmissionSubAdmin.jsx"));
 const AssignTeacherSubAdmin = lazy(() => import("./SubAdminComponent/Classes/utils/AssignTeacherSubAdmin.jsx"));
@@ -1566,6 +1567,12 @@ const router = createBrowserRouter([
         path: "/Sub-Admin/DynamicRegister",
         element: <SuspenseWrapper fallback={Loading}>
           <StudentRegisterDynamic /></SuspenseWrapper>,
+        children: []
+      },
+      {
+        path: "/Sub-Admin/Template",
+        element: <SuspenseWrapper fallback={Loading}>
+          <Template /></SuspenseWrapper>,
         children: []
       },
       {

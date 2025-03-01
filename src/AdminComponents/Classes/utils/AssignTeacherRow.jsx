@@ -4,7 +4,7 @@ import AuthContext from '../../../Context/AuthContext';
 import Loading from './../../../LoadingScreen/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { BASE_URL} from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { MdEdit, MdDeleteForever, MdCheck, MdCancel, MdAdd } from "react-icons/md";
 import { motion, AnimatePresence } from 'framer-motion';
 export default function AssignTeacherRow({ Class }) {
@@ -37,6 +37,7 @@ export default function AssignTeacherRow({ Class }) {
 
     const handleEmailChange = (e) => {
         const email = e.target.value;
+        setName(email);
         setEmail(email);
         setTemp(email);
     }
@@ -84,10 +85,14 @@ export default function AssignTeacherRow({ Class }) {
     }, [temp, authState.accessToken])
 
 
-    const getNextAsciiValues = (inputString) => {
-        setNewSection(String.fromCharCode(inputString.charCodeAt(0) + 1));
+    const addNewRow = () => {
         setShowNewRow(true);
     };
+
+    const handleSectionChange = (e) => {
+        const section = e.target.value;
+        setNewSection(section);
+    }
 
     const fetchSections = async () => {
         try {
@@ -145,7 +150,9 @@ export default function AssignTeacherRow({ Class }) {
 
     const handleUpdateClick = (index) => {
         setEditingRow(index);
-        setEmail(sectionsDetails[index].name);
+        setEmail(sectionsDetails[index].email);
+        setName(sectionsDetails[index].name);
+        setNewSection(sectionsDetails[index].section);
     };
 
     const handleCancelEdit = () => {
@@ -160,14 +167,15 @@ export default function AssignTeacherRow({ Class }) {
                 const response = await axios.post(`${BASE_URL}/classTeacher/assign`, {
                     accessToken: authState.accessToken,
                     class: Class,
-                    section: sectionsDetails[index].section,
+                    section: newSection,
                     teacherEmail: email
                 });
                 if (response.status === 200) {
                     toast.success('Teacher Updated successfully');
                     const updatedSection = {
                         ...sectionsDetails[index],
-                        name: name
+                        name: name,
+                        section: newSection
                     };
 
                     const updatedSections = [
@@ -262,14 +270,27 @@ export default function AssignTeacherRow({ Class }) {
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ delay: index * 0.1 }}
                                         >
-                                            <h1 className="w-36 text-lg font-medium text-secondary-800">{details.section}</h1>
+                                            <h1 className="w-36 text-lg font-medium text-secondary-800">
+                                                {editingRow === index ? (
+                                                    <input
+                                                        type="text"
+                                                        className="w-36 px-2 border border-secondary-300 rounded-lg text-lg font-medium"
+                                                        placeholder="Section"
+                                                        value={newSection}
+                                                        onChange={handleSectionChange}
+                                                        required
+                                                    />
+                                                ) : (
+                                                    <h1 className="w-36 text-lg font-medium text-secondary-700">{details.section}</h1>
+                                                )}
+                                            </h1>
                                             <div className='relative'>
                                                 {editingRow === index ? (
                                                     <input
                                                         type="text"
                                                         className="w-36 px-2 border border-secondary-300 rounded-lg text-lg font-medium"
                                                         placeholder="Teacher"
-                                                        value={email}
+                                                        value={name}
                                                         onChange={handleEmailChange}
                                                         required
                                                     />
@@ -349,14 +370,21 @@ export default function AssignTeacherRow({ Class }) {
                                 className={`flex justify-between w-full py-2 px-4 h-fit border border-secondary-300 ${sectionsDetails.length > 0 ? "rounded-b-lg" : "rounded-lg"} bg-secondary-50`}
                             >
                                 <h1 className="w-36 text-lg font-medium text-secondary-800">
-                                    {newSection}
+                                    <input
+                                        type="text"
+                                        className="w-36 px-2 border border-secondary-300 rounded-lg text-lg font-medium"
+                                        placeholder="Section"
+                                        value={newSection}
+                                        onChange={handleSectionChange}
+                                        required
+                                    />
                                 </h1>
                                 <div className='relative'>
                                     <input
                                         type="text"
                                         className="w-36 px-2 border border-secondary-300 rounded-lg text-lg font-medium"
                                         placeholder="Teacher"
-                                        value={email}
+                                        value={name}
                                         onChange={handleEmailChange}
                                         required
                                     />
@@ -402,7 +430,7 @@ export default function AssignTeacherRow({ Class }) {
                         >
                             <motion.button
                                 className='px-4 py-2 rounded-lg flex items-center bg-purple-300 text-black'
-                                onClick={() => getNextAsciiValues(sectionsDetails.length > 0 ? sectionsDetails[sectionsDetails.length - 1].section : '@')}
+                                onClick={() => addNewRow()}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >

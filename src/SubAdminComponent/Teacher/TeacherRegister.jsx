@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from 'axios';
 import Papa from 'papaparse'
 import { ToastContainer, toast } from 'react-toastify';
@@ -6,8 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../Config";
 import AuthContext from '../../Context/AuthContext';
 import { motion } from 'framer-motion';
-import { FaUser, FaEnvelope, FaIdCard, FaMapMarkerAlt, FaPray, FaBook, FaBirthdayCake, FaPhone, FaBriefcase, FaGraduationCap, FaMoneyBillWave, FaCloudUploadAlt, FaGoogle, FaPlus } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaIdCard, FaMapMarkerAlt, FaPray, FaBook, FaBirthdayCake, FaPhone, FaBriefcase, FaGraduationCap, FaMoneyBillWave, FaCloudUploadAlt, FaGoogle, FaPlus, FaAddressCard, FaVenusMars, FaCalendarAlt } from 'react-icons/fa';
 import { MdAdminPanelSettings } from 'react-icons/md';
+import FileUploadField from "../Student/FileUploadField";
 
 const initialFields = [
   { name: "name", label: "Name", icon: <FaUser />, type: "text" },
@@ -27,6 +28,14 @@ const initialFields = [
   { name: "profileLink", label: "Google Drive Link for Photo", icon: <FaGoogle />, type: "text" },
 ];
 
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 50 }
+  }
+};
 
 export default function TeacherRegister() {
   const { authState } = useContext(AuthContext);
@@ -34,90 +43,122 @@ export default function TeacherRegister() {
   const [error, setError] = useState('');
   const [formFields, setFormFields] = useState(initialFields);
   const [showModal, setShowModal] = useState(false);
-  const [newField, setNewField] = useState({ name: "", label: "", type: "text", required: false, options: "" });
+  const currentYear = (new Date().getFullYear()).toString();
+
 
   const [formData, setFormData] = useState(
     {
-      name: '',
-      email: '',
-      password: '',
-      gender: '',
-      profileLink: '',
-      religion: '',
-      subject: '',
-      employeeId: '',
-      phoneNumber: '',
-      experience: '',
-      education: '',
-      token: '',
-      aadhaarNumber: '',
-      admin: false,
-      DOB: '',
-      permanentAddress: '',
-      salary: '',
-      accessToken: authState.accessToken
+      accessToken: authState.accessToken,
     }
   );
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const [extraFormData, setExtraFormData] = useState([]);
+
+  const [customFields, setCustomFields] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newField, setNewField] = useState({
+    label: "",
+    name: "",
+    type: "text",
+    required: false,
+    options: "",
+  });
+  const handleFieldChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setNewField((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleAddField = () => {
-    const fieldToAdd = { ...newField };
-    if (newField.type === "select") {
-      fieldToAdd.options = newField.options.split(",").map((opt) => opt.trim());
+    if (!newField.label || !newField.name) {
+      toast.error("Field name and label are required!");
+      return;
     }
-    setFormFields([...formFields, fieldToAdd]);
-    setShowModal(false);
-    setNewField({ name: "", label: "", type: "text", required: false, options: "" });
+    const fieldData = { ...newField };
+    if (newField.type === "dropdown") {
+      fieldData.options = newField.options.split(",").map((opt) => opt.trim());
+    }
+    setCustomFields([...customFields, fieldData]);
+    setIsModalOpen(false);
+    setNewField({ label: "", name: "", type: "text", required: false, options: "" });
   };
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === 'photo' ? files[0] : value,
+      [name]: value,
     }));
   };
+
+  const handleCustomFieldValueChange = (e) => {
+    const { name, value, files, type } = e.target;
+
+    setExtraFormData((prevData) => {
+      // Clone existing custom fields or initialize an empty array
+      const updatedCustomFields = [...(prevData || [])];
+
+      // Find index of the field if it exists
+      const fieldIndex = updatedCustomFields.findIndex(field => field.label === name);
+
+      // Prepare new field object
+      const newField = {
+        label: name,
+        value: type === "file" ? files[0] : value,
+      };
+
+      if (fieldIndex !== -1) {
+        // Update existing field
+        updatedCustomFields[fieldIndex] = newField;
+      } else {
+        // Add new field
+        updatedCustomFields.push(newField);
+      }
+      console.log(updatedCustomFields);
+      return updatedCustomFields;
+    });
+  };
+
+
+
   const handleReset = () => {
     setFormData({
-      name: '',
-      email: '',
-      password: '',
-      gender: '',
-      profileLink: '',
-      religion: '',
-      subject: '',
-      employeeId: '',
-      phoneNumber: '',
-      experience: '',
-      education: '',
-      token: '',
-      aadhaarNumber: '',
-      admin: false,
-      DOB: '',
-      permanentAddress: '',
-      salary: '',
+      accessToken: authState.accessToken,
     });
-
+    setExtraFormData([]);
   };
+
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    console.log(formData, authState.accessToken)
+    console.log(extraFormData);
+
     const [year, month, day] = formData.DOB.split('-');
     const formattedDate = `${day}-${month}-${year}`;
-    formData.DOB = formattedDate
-    console.log(formData, authState.accessToken)
+    formData.DOB = formattedDate;
+    formData.password = formData.aadhaarNumber;
 
     try {
-      formData.password = formData.aadhaarNumber;
-      const response = await axios.post(`${BASE_URL}/signup/teacher`, formData,
+      const payload = new FormData();
+      for (const key in formData) {
+
+        payload.append(key, formData[key]); // Append files properly
+
+      }
+      extraFormData.forEach((item, index) => {
+        if (item.value instanceof File) {
+          payload.append(`extra[${index}][label]`, item.label);
+          payload.append(`extra[${index}][value]`, item.value);
+        }
+      });
+
+      payload.append("extraFields", JSON.stringify(extraFormData));
+      const response = await axios.post(`${BASE_URL}/signup/teacher`, payload,
       );
       if (response.status === 200) {
         toast.success('Teacher registered successfully!');
@@ -156,6 +197,26 @@ export default function TeacherRegister() {
     }
   }
 
+  const fetchFieldsForUserType = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/registrationFields/fetch/Teacher`, {
+        headers: {
+          'Authorization': `Bearer ${authState.accessToken}`
+        }
+      });
+      if (response.status === 200) {
+        console.log(response.data)
+        setCustomFields(response.data?.fields?.fields || []);
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || 'An error occurred';
+      console.log(error);
+      toast.error(errorMessage);
+      setFetchedFields([]);
+      setDocId(null);
+    }
+  };
+
   const handleMultiSignUp = async (data) => {
     setLoading(true);
 
@@ -178,6 +239,10 @@ export default function TeacherRegister() {
     }
   }
 
+  useEffect(() => {
+    fetchFieldsForUserType();
+  }, [authState]);
+
   const inputClasses = "border-2 border-purple-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300";
   const labelClasses = "block text-lg mb-2 text-purple-700 font-semibold";
 
@@ -189,10 +254,18 @@ export default function TeacherRegister() {
       transition={{ duration: 0.5 }}
       className="mx-4 pt-4 bg-gradient-to-br from-purple-50 to-white rounded-lg shadow-xl p-8 mobile:max-tablet:p-2 mobile:max-tablet:mx-2 mobile:max-tablet:mt-2"
     >
-
+      <ToastContainer />
       <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-purple-700 mb-8 text-center">Add New Teacher</h1>
       <form className="grid grid-cols-3 mobile:max-tablet:grid-cols-1 gap-6">
-        {formFields.map((field, index) => (
+        <InputField icon={<FaUser />} label="Name" name="name" value={formData.name} onChange={handleChange} required />
+        <InputField icon={<FaEnvelope />} label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required />
+        <InputField icon={<FaAddressCard />} label="Aadhaar Number" name="aadhaarNumber" type="text" value={formData.aadhaarNumber} onChange={handleChange} required />
+        <SelectField icon={<FaVenusMars />} label="Gender" name="gender" value={formData.gender} onChange={handleChange} options={['male', 'female', 'other']} required />
+        <SelectField icon={<MdAdminPanelSettings />} label="Admin" name="admin" value={formData.admin} onChange={handleChange} options={["False", "True"]} required />
+        <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} />
+        <InputField icon={<FaCalendarAlt />} label="Date of Birth" name="DOB" type="date" value={formData.DOB} onChange={handleChange} required />
+
+        {/* {formFields.map((field, index) => (
           <motion.div
             key={field.name}
             initial={{ opacity: 0, x: -20 }}
@@ -231,7 +304,72 @@ export default function TeacherRegister() {
               )}
             </label>
           </motion.div>
-        ))}
+        ))} */}
+
+        {customFields.map((field, index) => {
+          switch (field.type) {
+            case "select":
+              return (
+                <SelectField
+                  key={index}
+                  label={field.label}
+                  name={field.label}
+                  options={field.options}
+                  onChange={handleCustomFieldValueChange}
+                  value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                  required={field.required}
+                />
+              );
+            case "text":
+              return (
+                <InputField
+                  key={index}
+                  label={field.label}
+                  name={field.label}
+                  value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                  onChange={handleCustomFieldValueChange}
+                  type="text"
+                  required={field.required}
+                />
+              );
+            case "number":
+              return (
+                <InputField
+                  key={index}
+                  label={field.label}
+                  name={field.label}
+                  value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                  onChange={handleCustomFieldValueChange}
+                  type="number"
+                  required={field.required}
+                />
+              );
+            case "document":
+              return (
+                <FileUploadField
+                  key={index}
+                  label={field.label}
+                  name={field.label}
+                  required={field.required}
+                  value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                  onChange={handleCustomFieldValueChange}
+                />
+              );
+            default:
+              return (
+                <InputField
+                  key={index}
+                  label={field.label}
+                  name={field.label}
+                  type={field.type}
+                  value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                  onChange={handleCustomFieldValueChange}
+                  required={field.required}
+                />
+              );
+          }
+        })}
+
       </form>
 
       <div className="flex justify-center mt-8 space-x-4">
@@ -322,3 +460,43 @@ export default function TeacherRegister() {
     </motion.div>
   )
 }
+
+
+const InputField = ({ icon, label, name, type = "text", value, onChange, required }) => (
+  <motion.div className="mb-4" variants={itemVariants}>
+    <label className="flex items-center text-lg mb-2 text-purple-700 font-semibold">
+      {icon} <span className="ml-2">{label}</span>
+    </label>
+    <motion.input
+      className="border-2 border-purple-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+      id={name}
+      type={type}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required={required}
+      whileFocus={{ scale: 1.02 }}
+    />
+  </motion.div>
+);
+const SelectField = ({ icon, label, name, value, onChange, options, required }) => (
+  <motion.div className="mb-4" variants={itemVariants}>
+    <label className="flex items-center text-lg mb-2 text-purple-700 font-semibold">
+      {icon} <span className="ml-2">{label}</span>
+    </label>
+    <motion.select
+      className="border-2 border-purple-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+      id={name}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required={required}
+      whileFocus={{ scale: 1.02 }}
+    >
+      <option value="">Select {label}</option>
+      {options.map(option => (
+        <option key={option} value={option}>{option}</option>
+      ))}
+    </motion.select>
+  </motion.div>
+);
