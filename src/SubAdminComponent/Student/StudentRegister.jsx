@@ -78,7 +78,14 @@ export default function StudentRegister() {
     };
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value,files,type } = e.target;
+        if(type === 'file'){
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: files[0],
+            }));
+            return ;
+        }
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -146,8 +153,9 @@ export default function StudentRegister() {
                     payload.append(`extra[${index}][value]`, item.value);
                 }
             });
-
+            
             payload.append("extraFields", JSON.stringify(extraFormData));
+            console.log(payload);
             const response = await axios.post(`${BASE_URL}/signup/student`, payload);
             if (response.status === 200) {
                 toast.success('Student registered successfully!');
@@ -278,15 +286,34 @@ export default function StudentRegister() {
             <form onSubmit={handleSubmit} className="grid grid-cols-3 mobile:max-tablet:grid-cols-1 gap-6">
                 <InputField icon={<FaUser />} label="Name" name="name" value={formData.name} onChange={handleChange} required />
                 <SelectField icon={<FaVenusMars />} label="Gender" name="gender" value={formData.gender} onChange={handleChange} options={['male', 'female', 'other']} required />
+                <InputField icon={<FaCalendarAlt />} label="Date of Birth" name="DOB" type="date" value={formData.DOB} onChange={handleChange} required />
+                <InputField icon={<FaBriefcase />} label="Nationality" name="nationality" value={formData.nationality} onChange={handleChange} required />
+                <SelectField icon={<FaUsers />} label="Category" name="category" value={formData.category} onChange={handleChange} options={["General", "EWS", "OBC", "SC", "ST"]} />
+
+                <SelectField icon={<FaGraduationCap />} label="Admission Class" name="admissionClass" value={formData.admissionClass} onChange={handleChange} options={['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']} required />
                 <SelectField icon={<FaGraduationCap />} label="Current Class" name="currentClass" value={formData.currentClass} onChange={handleChange} options={['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']} required />
+                <SelectField icon={<FaStream />} label="Stream" name="stream" value={formData.stream} onChange={handleChange} options={['General', 'PCM', 'PCB', 'PCMB', 'Commerce', 'Arts']} required />
+                <SelectField icon={<FaUsers />} label="Section" name="section" value={formData.section} onChange={handleChange} options={['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']} />
+                <InputField icon={<FaCalendarAlt />} label="Date of Admission" name="admissionDate" type="date" value={formData.admissionDate} onChange={handleChange} required />
+
                 <InputField icon={<FaEnvelope />} label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required />
                 <InputField icon={<FaAddressCard />} label="Aadhaar Number" name="aadhaarNumber" type="number" value={formData.aadhaarNumber} onChange={handleChange} required />
-                <SelectField icon={<FaGraduationCap />} label="Admission Class" name="admissionClass" value={formData.admissionClass} onChange={handleChange} options={['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']} required />
-                <InputField icon={<FaCalendarAlt />} label="Date of Birth" name="DOB" type="date" value={formData.DOB} onChange={handleChange} required />
-                <SelectField icon={<FaUsers />} label="Section" name="section" value={formData.section} onChange={handleChange} options={['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']} />
-                {/* <InputField icon={<FaBriefcase />} label="Guardian Occupation" name="guardiansOccupation" value={formData.guardiansOccupation} onChange={handleChange} required />               */}
-                <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} />
-                <SelectField icon={<FaStream />} label="Stream" name="stream" value={formData.stream} onChange={handleChange} options={['General', 'PCM', 'PCB', 'PCMB', 'Commerce', 'Arts']} required />
+
+                <InputField icon={<FaBriefcase />} label="Father's Name" name="fatherName" value={formData.fatherName} onChange={handleChange} required />
+                <InputField icon={<FaBriefcase />} label="Mother's Name" name="motherName" value={formData.motherName} onChange={handleChange} required />
+                <InputField icon={<FaBriefcase />} label="Guardian's Name" name="guardiansName" value={formData.guardiansName} onChange={handleChange} required />
+
+                {/* <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} /> */}
+                <FileUploadField
+
+                    label="Profile Photo"
+                    name="profileLink"
+                    value={formData?.profileLink || ""}
+                    onChange={handleChange}
+                    accept=".jpeg,.jpg,.png "
+                />
+
+
                 {customFields.map((field, index) => {
                     switch (field.type) {
                         case "select":

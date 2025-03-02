@@ -147,6 +147,41 @@ const Certificates = () => {
         };
     }, [allDataFetched, loading]);
 
+    const downloadTransferCertificate = async (studentId) => {
+        try {
+            // API URL (Update this with your actual backend URL)
+            const apiUrl = `${BASE_URL}/certificate/cc/${studentId}/${selectedSession}`;
+    
+            // Make a request to get the generated PDF
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}` // If token is needed
+                },
+                responseType: "blob" // Important: Response as a Blob (Binary Data)
+            });
+    
+            // Create a Blob URL for the PDF
+            const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+    
+            // Create a hidden download link and trigger the download
+            const link = document.createElement("a");
+            link.href = pdfUrl;
+            link.download = "Transfer_Certificate.pdf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+    
+            // Revoke the Blob URL after download to free memory
+            URL.revokeObjectURL(pdfUrl);
+    
+            console.log("Transfer Certificate downloaded successfully!");
+        } catch (error) {
+            console.error("Error downloading Transfer Certificate:", error);
+            alert("Failed to download the Transfer Certificate. Please try again.");
+        }
+    };
+    
     return (
         <div className="mx-auto p-4">
             <ToastContainer />
@@ -244,15 +279,16 @@ const Certificates = () => {
                                         <td className="p-3 text-center">{item.section}</td>
                                         <td className="p-3 text-center">
                                             <div className="flex justify-center space-x-2">
-                                                <Link to={`/Sub-Admin/Certificates/character/${item._id}/${item.currentClass}/${item.section}/${selectedSession}`}>
+                                                {/* <Link to={`/Sub-Admin/Certificates/character/${item._id}/${item.currentClass}/${item.section}/${selectedSession}`}> */}
                                                     <motion.button
                                                         whileHover={{ scale: 1.05 }}
                                                         whileTap={{ scale: 0.95 }}
+                                                        onClick={()=>{downloadTransferCertificate(item._id)}}
                                                         className="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-purple-600 transition-colors duration-200"
                                                     >
                                                         CC
                                                     </motion.button>
-                                                </Link>
+                                                {/* </Link> */}
                                                 <Link to={`/Sub-Admin/Certificates/transfer/${item._id}/${item.currentClass}/${item.section}/${selectedSession}`}>
                                                     <motion.button
                                                         whileHover={{ scale: 1.05 }}

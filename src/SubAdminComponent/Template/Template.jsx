@@ -437,7 +437,7 @@ export default function Template() {
                                         <td className="p-3 flex items-center space-x-2">
                                             <input
                                                 type="file"
-                                                accept=".pdf, .doc, .docx"
+                                                accept=".docx"
                                                 className="hidden"
                                                 ref={(el) => (fileInputRefs.current[index] = el)}
                                                 onChange={(e) => handleFileChange(index, e)}
