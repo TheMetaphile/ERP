@@ -2,7 +2,7 @@ import { useState, useContext, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
-import { BASE_URL} from '../../Config';
+import { BASE_URL } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import { motion } from "framer-motion";
 
@@ -12,13 +12,16 @@ const Certificates = () => {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
     const [Class, setClass] = useState('9th');
+    const [selectedSection, setSelectedSection] = useState('');
+
     const [sectionsDetails, setSections] = useState([]);
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(10);
+    const end = 10;
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [sessions, setSessions] = useState([]);
     const [selectedSession, setSelectedSession] = useState('2024-25');
     const [clickedIndex, setClickedIndex] = useState(null);
+    const [selectedStudents, setSelectedStudents] = useState([]);
     const sentinelRef = useRef(null);
 
     const handleClick = (index) => {
@@ -43,6 +46,9 @@ const Certificates = () => {
         setSelectedSession(selectedValue);
     };
 
+    const handleSectionChange = (e) => {
+        setSelectedSection(e.target.value);
+    }
 
     useEffect(() => {
         if (selectedSession) {
@@ -51,7 +57,7 @@ const Certificates = () => {
             setAllDataFetched(false);
             setLoading(false);
         }
-    }, [selectedSession, Class]);
+    }, [selectedSession, Class, selectedSection]);
 
     useEffect(() => {
         if (start === 0 && tcData.length === 0 && !allDataFetched && !loading) {
@@ -79,7 +85,7 @@ const Certificates = () => {
         console.log(start, 'start', end, 'end')
 
         try {
-            const response = await axios.get(`${BASE_URL}/terminate/terminatedStudents?Class=${Class}&session=${selectedSession}&start=${start}&end=${end}`, {
+            const response = await axios.get(`${BASE_URL}/terminate/terminatedStudents?Class=${Class}&section=${selectedSection}&session=${selectedSession}&start=${start}&end=${end}`, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}`
                 }
@@ -109,20 +115,25 @@ const Certificates = () => {
     const fetchSections = async () => {
         console.log()
         try {
-            if (sectionsDetails.length <= 0 && Class) {
-                const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-                    accessToken: authState.accessToken,
-                    class: Class,
-                });
-                console.log('section', response.data)
-                const sectionsdetail = response.data.sections;
-                setSections(sectionsdetail);
-            }
+
+            const response = await axios.get(`${BASE_URL}/terminate/sections/${Class}/${selectedSession}`, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
+                }
+            });
+
+            console.log('section', response.data)
+            const sectionsdetail = response.data.sections;
+            setSections(sectionsdetail);
+
         } catch (error) {
             console.error("Error while fetching section:", error);
         }
     };
 
+    useEffect(() => {
+        fetchSections();
+    }, [Class])
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -147,23 +158,25 @@ const Certificates = () => {
         };
     }, [allDataFetched, loading]);
 
-    const downloadTransferCertificate = async (studentId) => {
+    const downloadTransferCertificate = async () => {
         try {
             // API URL (Update this with your actual backend URL)
-            const apiUrl = `${BASE_URL}/certificate/cc/${studentId}/${selectedSession}`;
-    
+            const apiUrl = `${BASE_URL}/certificate/cc/${selectedSession}`;
+
             // Make a request to get the generated PDF
-            const response = await axios.get(apiUrl, {
+            const response = await axios.post(apiUrl, {
+                students: selectedStudents
+            }, {
                 headers: {
                     Authorization: `Bearer ${authState.accessToken}` // If token is needed
                 },
                 responseType: "blob" // Important: Response as a Blob (Binary Data)
             });
-    
+
             // Create a Blob URL for the PDF
             const pdfBlob = new Blob([response.data], { type: "application/pdf" });
             const pdfUrl = URL.createObjectURL(pdfBlob);
-    
+
             // Create a hidden download link and trigger the download
             const link = document.createElement("a");
             link.href = pdfUrl;
@@ -171,17 +184,23 @@ const Certificates = () => {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-    
+
             // Revoke the Blob URL after download to free memory
             URL.revokeObjectURL(pdfUrl);
-    
+
             console.log("Transfer Certificate downloaded successfully!");
         } catch (error) {
             console.error("Error downloading Transfer Certificate:", error);
             alert("Failed to download the Transfer Certificate. Please try again.");
         }
     };
-    
+
+    const toggleRow = (id) => {
+        setSelectedStudents((prev) =>
+            prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id]
+        );
+    };
+
     return (
         <div className="mx-auto p-4">
             <ToastContainer />
@@ -209,6 +228,8 @@ const Certificates = () => {
                         <option value="12th">12th</option>
                     </select>
 
+
+
                     <div>
                         <select id="school-sessions" value={selectedSession} onChange={handleSessionChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
                             <option value="">Select Session</option>
@@ -217,6 +238,16 @@ const Certificates = () => {
                                     {session}
                                 </option>
                             ))}
+                        </select>
+
+                        <select id="section" value={selectedSection} onChange={handleSectionChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
+                            <option value="">Select Section</option>
+                            {
+                                sectionsDetails.map((section) => {
+                                    return <option value={section}>{section}</option>
+
+                                })
+                            }
                         </select>
                     </div>
                 </div>
@@ -235,7 +266,36 @@ const Certificates = () => {
                             <th className="font-semibold text-lg p-3">Name</th>
                             <th className="font-semibold text-lg p-3">Class</th>
                             <th className="font-semibold text-lg p-3">Section</th>
-                            <th className="font-semibold text-lg p-3 rounded-tr-lg">Action</th>
+                            <th className="font-semibold text-lg p-3">Action</th>
+                            <th className="font-semibold text-lg p-3 rounded-tr-lg flex gap-3">Select
+
+                                <div className="relative flex justify-center items-center" >
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedStudents.length === tcData.length}
+                                        onChange={(e) => {
+                                            setSelectedStudents(e.target.checked ? tcData.map((row) => row._id) : []);
+                                        }}
+                                        className="peer appearance-none w-6 h-6 border-2 border-blue-500 rounded cursor-pointer checked:border-blue-500 hover:shadow-md hover:shadow-blue-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all duration-200"
+                                    />
+                                    {/* Green checkmark that only appears when checkbox is checked */}
+                                    <svg
+                                        className="absolute w-6 h-6 text-green-500 pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity duration-200"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    >
+                                        <polyline points="6 12 10 16 18 8"></polyline>
+                                    </svg>
+                                </div>
+
+
+                            </th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -280,14 +340,14 @@ const Certificates = () => {
                                         <td className="p-3 text-center">
                                             <div className="flex justify-center space-x-2">
                                                 {/* <Link to={`/Sub-Admin/Certificates/character/${item._id}/${item.currentClass}/${item.section}/${selectedSession}`}> */}
-                                                    <motion.button
-                                                        whileHover={{ scale: 1.05 }}
-                                                        whileTap={{ scale: 0.95 }}
-                                                        onClick={()=>{downloadTransferCertificate(item._id)}}
-                                                        className="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-purple-600 transition-colors duration-200"
-                                                    >
-                                                        CC
-                                                    </motion.button>
+                                                <motion.button
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    onClick={() => { downloadTransferCertificate(item._id) }}
+                                                    className="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-purple-600 transition-colors duration-200"
+                                                >
+                                                    CC
+                                                </motion.button>
                                                 {/* </Link> */}
                                                 <Link to={`/Sub-Admin/Certificates/transfer/${item._id}/${item.currentClass}/${item.section}/${selectedSession}`}>
                                                     <motion.button
@@ -299,6 +359,27 @@ const Certificates = () => {
                                                     </motion.button>
                                                 </Link>
                                             </div>
+                                        </td>
+                                        <td className="relative flex justify-center items-center py-4" >
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedStudents.includes(item._id)}
+                                                onChange={() => toggleRow(item._id)}
+                                                className="peer appearance-none w-6 h-6 border-2 border-blue-500 rounded cursor-pointer checked:border-blue-500 hover:shadow-md hover:shadow-blue-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all duration-200"
+                                            />
+                                            {/* Green checkmark that only appears when checkbox is checked */}
+                                            <svg
+                                                className="absolute w-6 h-6 text-green-500 pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity duration-200"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="4"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            >
+                                                <polyline points="6 12 10 16 18 8"></polyline>
+                                            </svg>
                                         </td>
                                     </motion.tr>
                                 ))}
