@@ -9,8 +9,8 @@ import { MdDashboard, MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/
 export default function SubadminDrawer({ isOpen }) {
     const [active, setActive] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const [darkMode, setDarkMode] = useState(false);
-    const { authState } = useContext(AuthContext);
+    // const [darkMode, setDarkMode] = useState(false);
+    const { authState , darkMode,setdarkMode} = useContext(AuthContext);
     const [filteredMenuItems, setFilteredMenuItems] = useState([]);
 
     useEffect(() => {
@@ -34,7 +34,7 @@ export default function SubadminDrawer({ isOpen }) {
     };
 
     const toggleDarkMode = () => {
-        setDarkMode(!darkMode);
+        setdarkMode(!darkMode);
     };
 
     const drawerVariants = {

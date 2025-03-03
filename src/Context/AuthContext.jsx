@@ -19,6 +19,8 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [authState, setAuthState] = useState(null);
+    const [darkMode, setdarkMode] = useState(false);
+
 
     const navigate = useCallback((path) => {
         //console.log("Here")
@@ -36,7 +38,10 @@ export const AuthProvider = ({ children }) => {
         };
 
         const storedAuthState = localStorage.getItem('authState');
+        const storedMode = localStorage.getItem('mode');
+        setdarkMode(storedMode==='dark');
         //console.log("stored", storedAuthState);
+        
         if (storedAuthState) {
             try {
                 const decryptedAuthState = unhashData(storedAuthState);
@@ -67,6 +72,10 @@ export const AuthProvider = ({ children }) => {
         checkAuthState();
     }, []);
 
+    useEffect(()=>{
+        localStorage.setItem("mode",darkMode ? 'dark' :"");
+    },[darkMode]);
+
     const updateAccessToken = useCallback((accessToken, authState) => {
         const newAuthState = { ...authState, accessToken };
         const hashedAuthState = hashData(newAuthState);
@@ -80,7 +89,7 @@ export const AuthProvider = ({ children }) => {
     }, [authState]);
 
     const login = useCallback((userDetails, tokens, subject, ClassDetails, Co_scholastic, subjects, token) => {
-        console.log(userDetails,tokens, subject, ClassDetails, Co_scholastic, subjects, token)
+        console.log(userDetails, tokens, subject, ClassDetails, Co_scholastic, subjects, token)
         const newAuthState = {
             userDetails,
             role: userDetails.rolee,
@@ -181,6 +190,8 @@ export const AuthProvider = ({ children }) => {
             setAuthState,
             checkAuthState,
             updateAccessToken,
+            darkMode, 
+            setdarkMode,
             isLoading
         }}>
 
