@@ -195,10 +195,10 @@ const List = () => {
                                     >
                                         <td className="py-3 px-4 text-center">{item.rollNumber}</td>
                                         <td className="py-3 px-4 text-center">
-                                            <div className="flex items-center space-x-3">
+                                            <Link to={`/Sub-Admin/Students/details/${item.email}`} className="flex gap-2 items-center rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
                                                 <img src={item.profileLink} alt="" className="w-10 h-10 rounded-full object-cover border-2 border-purple-300" />
-                                                <span>{item.name}</span>
-                                            </div>
+                                                {item.name}
+                                            </Link>
                                         </td>
                                         <td className="py-3 px-4 text-center whitespace-nowrap">{item.currentClass}</td>
                                         <td className="py-3 px-4 text-center whitespace-nowrap">{item.section}</td>

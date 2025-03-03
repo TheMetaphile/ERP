@@ -48,6 +48,9 @@ export default function StudentRegister() {
 
     const [customFields, setCustomFields] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [sectionsDetails, setSectionsDetails] = useState([]);
+
+   
     const [newField, setNewField] = useState({
         label: "",
         name: "",
@@ -75,6 +78,31 @@ export default function StudentRegister() {
         setCustomFields([...customFields, fieldData]);
         setIsModalOpen(false);
         setNewField({ label: "", name: "", type: "text", required: false, options: "" });
+    };
+
+    const fetchSections = async (selectedClass) => {
+        try {
+            const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
+                accessToken: authState.accessToken,
+                class: selectedClass,
+            });
+
+            console.log(response.data, "section");
+            const sectionsDetail = response.data.sections.map(sectionObj => sectionObj.section);
+            setSectionsDetails(sectionsDetail);
+        } catch (error) {
+            console.error("Error while fetching section:", error);
+        }
+    };
+
+    const handleClassChangeWithFetch = (e) => {
+        const selectedClass = e.target.value;
+        handleChange(e);
+        if (selectedClass) {
+            fetchSections(selectedClass);
+        } else {
+            setSectionsDetails([]);
+        }
     };
 
     const handleChange = (e) => {
@@ -142,6 +170,7 @@ export default function StudentRegister() {
             formData.subjects = subjects;
             formData.password = formData.aadhaarNumber;
             const payload = new FormData();
+            console.log(extraFormData)
             for (const key in formData) {
 
                 payload.append(key, formData[key]); // Append files properly
@@ -291,9 +320,10 @@ export default function StudentRegister() {
                 <SelectField icon={<FaUsers />} label="Category" name="category" value={formData.category} onChange={handleChange} options={["General", "EWS", "OBC", "SC", "ST"]} />
 
                 <SelectField icon={<FaGraduationCap />} label="Admission Class" name="admissionClass" value={formData.admissionClass} onChange={handleChange} options={['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']} required />
-                <SelectField icon={<FaGraduationCap />} label="Current Class" name="currentClass" value={formData.currentClass} onChange={handleChange} options={['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']} required />
+                <SelectField icon={<FaGraduationCap />} label="Current Class" name="currentClass" value={formData.currentClass} onChange={handleClassChangeWithFetch} options={['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']} required />
                 <SelectField icon={<FaStream />} label="Stream" name="stream" value={formData.stream} onChange={handleChange} options={['General', 'PCM', 'PCB', 'PCMB', 'Commerce', 'Arts']} required />
-                <SelectField icon={<FaUsers />} label="Section" name="section" value={formData.section} onChange={handleChange} options={['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']} />
+                <SelectField icon={<FaUsers />} label="Section" name="section" value={formData.section} onChange={handleChange} options={sectionsDetails.length > 0 ? sectionsDetails : ["No sections available"]}
+                disabled={sectionsDetails.length === 0} />
                 <InputField icon={<FaCalendarAlt />} label="Date of Admission" name="admissionDate" type="date" value={formData.admissionDate} onChange={handleChange} required />
 
                 <InputField icon={<FaEnvelope />} label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required />

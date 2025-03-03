@@ -7,12 +7,10 @@ const SemesterRow = ({ student }) => {
         <tr className="bg-white border-b hover:bg-gray-50">
             <td className="px-3 py-4">{student.rollNumber}</td>
             <td className="px-3 py-4">
-                <h1 className="w-44 mobile:max-tablet:w- text-lg flex items-center gap-2 text-center mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap">
-                    <img src={student.studentProfileLink} alt="profile pic" className='w-10 h-10 rounded-full mobile:max-sm:hidden' />
-                    <div className='w-32'>
-                        {student.studentName}
-                    </div>
-                </h1>
+                <Link to={`/Sub-Admin/Students/details/${student.email}`} className="rounded-full flex items-center gap-2 text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
+                    <img src={student.studentProfileLink} alt="profile pic" className=' w-8 h-8 rounded-full mobile:max-sm:hidden' />
+                    {student.studentName}
+                </Link>
             </td>
             <td className="px-3 py-4">{student.fatherNumber}</td>
             <td className="px-3 py-4">

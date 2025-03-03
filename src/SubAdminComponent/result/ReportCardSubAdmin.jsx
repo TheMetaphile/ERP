@@ -12,41 +12,41 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 const scholastic = [
-    { range: "91-100", grade: "A1" },
-    { range: "81-90", grade: "A2" },
-    { range: "71-80", grade: "B1" },
-    { range: "61-70", grade: "B2" },
-    { range: "51-60", grade: "C1" },
-    { range: "41-50", grade: "C2" },
-    { range: "33-40", grade: "D" },
-    { range: "32 & below", grade: "E" },
+  { range: "91-100", grade: "A1" },
+  { range: "81-90", grade: "A2" },
+  { range: "71-80", grade: "B1" },
+  { range: "61-70", grade: "B2" },
+  { range: "51-60", grade: "C1" },
+  { range: "41-50", grade: "C2" },
+  { range: "33-40", grade: "D" },
+  { range: "32 & below", grade: "E" },
 ];
 const coscholastic = [
-    { range: "OUTSTANDING", grade: "A" },
-    { range: "VERY GOOD", grade: "B" },
-    { range: "FAIR", grade: "C" },
+  { range: "OUTSTANDING", grade: "A" },
+  { range: "VERY GOOD", grade: "B" },
+  { range: "FAIR", grade: "C" },
 ];
 
 function ScholasticRow(area, index) {
-    console.log(area, 'in row func')
-    const totalobtained = parseInt(area.obtainedNoteBookMarks) + parseInt(area.obtainedSubjectEnrichmentMarks) + parseInt(area.marksObtained);
-    const total = parseInt(area.totalMarks) + parseInt(area.totalNoteBookMarks) + parseInt(area.totalSubjectEnrichmentMarks);
-    const percentage = total !== 0 ? (totalobtained / total) * 100 : 0;
+  console.log(area, 'in row func')
+  const totalobtained = parseInt(area.obtainedNoteBookMarks) + parseInt(area.obtainedSubjectEnrichmentMarks) + parseInt(area.marksObtained);
+  const total = parseInt(area.totalMarks) + parseInt(area.totalNoteBookMarks) + parseInt(area.totalSubjectEnrichmentMarks);
+  const percentage = total !== 0 ? (totalobtained / total) * 100 : 0;
 
-    const scholastic = [
-        { lower: 91, grade: "A1", upper: 100 },
-        { lower: 81, grade: "A2", upper: 90 },
-        { lower: 71, grade: "B1", upper: 80 },
-        { lower: 61, grade: "B2", upper: 70 },
-        { lower: 51, grade: "C1", upper: 60 },
-        { lower: 41, grade: "C2", upper: 50 },
-        { lower: 33, grade: "D", upper: 40 },
-        { lower: 0, grade: "E", upper: 32 }
-    ];
+  const scholastic = [
+    { lower: 91, grade: "A1", upper: 100 },
+    { lower: 81, grade: "A2", upper: 90 },
+    { lower: 71, grade: "B1", upper: 80 },
+    { lower: 61, grade: "B2", upper: 70 },
+    { lower: 51, grade: "C1", upper: 60 },
+    { lower: 41, grade: "C2", upper: 50 },
+    { lower: 33, grade: "D", upper: 40 },
+    { lower: 0, grade: "E", upper: 32 }
+  ];
 
-    const grade = scholastic.find(range => percentage >= range.lower && percentage <= range.upper)?.grade || 'N/A';
+  const grade = scholastic.find(range => percentage >= range.lower && percentage <= range.upper)?.grade || 'N/A';
 
-    return `
+  return `
         <tr class="text-center text-lg font-normal" key="${index}">
             <td class="px-4 pb-4 border-x border-gray-200">${area.subject}</td>
             <td class="px-4 pb-4 border-x border-gray-200">${area.obtainedNoteBookMarks}</td>
@@ -61,173 +61,173 @@ function ScholasticRow(area, index) {
 
 
 function ReportCardSubAdmin() {
-    const { authState } = useContext(AuthContext);
-    const [loading, setLoading] = useState(false)
-    // State to control the dropdown visibility
-    const [Class, setClass] = useState(localStorage.getItem('Class') || '');
-    const [Section, setSection] = useState(localStorage.getItem('Section') || '');
-    const [selectedSession, setSelectedSession] = useState(localStorage.getItem('selectedSession') || '');
-    const [error, setError] = useState(null);
-    const containerRef = useRef(null);
-    const [userData, setUserData] = useState([]);
-    const [start, setStart] = useState(0);
-    const end = 10;
-    const [allDataFetched, setAllDataFetched] = useState(false);
-    const sentinelRef = useRef(null);
-    const [selectedTermValue, setSelectedTermValue] = useState('');
+  const { authState } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false)
+  // State to control the dropdown visibility
+  const [Class, setClass] = useState(localStorage.getItem('Class') || '');
+  const [Section, setSection] = useState(localStorage.getItem('Section') || '');
+  const [selectedSession, setSelectedSession] = useState(localStorage.getItem('selectedSession') || '');
+  const [error, setError] = useState(null);
+  const containerRef = useRef(null);
+  const [userData, setUserData] = useState([]);
+  const [start, setStart] = useState(0);
+  const end = 10;
+  const [allDataFetched, setAllDataFetched] = useState(false);
+  const sentinelRef = useRef(null);
+  const [selectedTermValue, setSelectedTermValue] = useState('');
 
-    useEffect(() => {
-        localStorage.setItem('Class', Class);
-        localStorage.setItem('Section', Section);
-        localStorage.setItem('selectedSession', selectedSession);
-    }, [Class, Section, selectedSession]);
+  useEffect(() => {
+    localStorage.setItem('Class', Class);
+    localStorage.setItem('Section', Section);
+    localStorage.setItem('selectedSession', selectedSession);
+  }, [Class, Section, selectedSession]);
 
-    const handleClassChange = (event) => {
-        setUserData([]);
-        setAllDataFetched(false);
-        setClass(event.target.value);
-        setStart(0);
-    };
+  const handleClassChange = (event) => {
+    setUserData([]);
+    setAllDataFetched(false);
+    setClass(event.target.value);
+    setStart(0);
+  };
 
-    const handleSectionChange = (event) => {
+  const handleSectionChange = (event) => {
 
-        setUserData([]);
-        setAllDataFetched(false);
-        setSection(event.target.value);
-        setStart(0);
-    };
+    setUserData([]);
+    setAllDataFetched(false);
+    setSection(event.target.value);
+    setStart(0);
+  };
 
-    const handleSessionChange = (session) => {
-        setSelectedSession(session);
-    };
+  const handleSessionChange = (session) => {
+    setSelectedSession(session);
+  };
 
-    const handleViewMore = () => {
-        if (!allDataFetched && !loading) {
-            setStart((prevStart) => prevStart + end);
+  const handleViewMore = () => {
+    if (!allDataFetched && !loading) {
+      setStart((prevStart) => prevStart + end);
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !allDataFetched && !loading) {
+          console.log("Fetching more data...");
+          handleViewMore();
         }
+      },
+      { root: null, rootMargin: '0px', threshold: 1.0 }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+      if (sentinelRef.current) {
+        observer.unobserve(sentinelRef.current);
+      }
     };
+  }, [allDataFetched, loading]);
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                if (entries[0].isIntersecting && !allDataFetched && !loading) {
-                    console.log("Fetching more data...");
-                    handleViewMore();
-                }
-            },
-            { root: null, rootMargin: '0px', threshold: 1.0 }
-        );
+  useEffect(() => {
+    if (start !== 0) {
+      fetchStudents();
+    }
+  }, [start]);
 
-        if (sentinelRef.current) {
-            observer.observe(sentinelRef.current);
+  console.log('ll', Class, Section, selectedSession)
+  useEffect(() => {
+    fetchStudents();
+  }, [authState.accessToken, Class, Section]);
+
+  const fetchStudents = async () => {
+    if (loading || allDataFetched) return;
+    setLoading(true);
+    try {
+      console.log(start, "-", end);
+      const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
+        accessToken: authState.accessToken,
+        currentClass: Class,
+        section: Section,
+        end: end,
+        start: start
+      });
+      console.log("API response:", response.data, response.data.Students.length);
+
+      if (response.data.Students) {
+        // const users = response.data.Students.map(user => ({
+        //     ...user,
+        //     profileLogo: user.profileLink || profilelogo,
+        // }));
+
+        const list = response.data.Students.length;
+        if (list < end) {
+          toast.success('All data fetched');
+          console.log('All data fetched')
+          setAllDataFetched(true);
         }
-
-        return () => {
-            if (sentinelRef.current) {
-                observer.unobserve(sentinelRef.current);
-            }
-        };
-    }, [allDataFetched, loading]);
-
-    useEffect(() => {
-        if (start !== 0) {
-            fetchStudents();
-        }
-    }, [start]);
-
-    console.log('ll', Class, Section, selectedSession)
-    useEffect(() => {
-        fetchStudents();
-    }, [authState.accessToken, Class, Section]);
-
-    const fetchStudents = async () => {
-        if (loading || allDataFetched) return;
-        setLoading(true);
-        try {
-            console.log(start, "-", end);
-            const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
-                accessToken: authState.accessToken,
-                currentClass: Class,
-                section: Section,
-                end: end,
-                start: start
-            });
-            console.log("API response:", response.data, response.data.Students.length);
-
-            if (response.data.Students) {
-                // const users = response.data.Students.map(user => ({
-                //     ...user,
-                //     profileLogo: user.profileLink || profilelogo,
-                // }));
-
-                const list = response.data.Students.length;
-                if (list < end) {
-                    toast.success('All data fetched');
-                    console.log('All data fetched')
-                    setAllDataFetched(true);
-                }
-                setUserData(prevUsers => [...prevUsers, ...response.data.Students]);
+        setUserData(prevUsers => [...prevUsers, ...response.data.Students]);
 
 
-            } else {
-                setError('Unexpected response format');
-                setTimeout(() => {
-                    setError('');
-                }, 2000);
-            }
+      } else {
+        setError('Unexpected response format');
+        setTimeout(() => {
+          setError('');
+        }, 2000);
+      }
 
-            setLoading(false);
-        } catch (err) {
-            setError(err.message);
-            console.log(err);
-            setTimeout(() => {
-                setError('');
-            }, 2000);
-            setLoading(false);
-        }
-    };
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      console.log(err);
+      setTimeout(() => {
+        setError('');
+      }, 2000);
+      setLoading(false);
+    }
+  };
 
 
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [progress, setProgress] = useState(0);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-    const generateStudentResult = async (studentData, term) => {
-        // Create temporary container
-        const container = document.createElement('div');
-        container.className = 'report-card border border-black';
-        document.body.appendChild(container);
+  const generateStudentResult = async (studentData, term) => {
+    // Create temporary container
+    const container = document.createElement('div');
+    container.className = 'report-card border border-black';
+    document.body.appendChild(container);
 
-        try {
-            // Fetch student's result and profile
-            const [resultResponse, profileResponse, attendanceResponse] = await Promise.all([
-                axios.get(`${BASE_URL}/result/fetch/teacher?email=${studentData.email}`, {
-                    headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
-                    }
-                }),
-                axios.post(`${BASE_URL}/fetchSingle/student`, {
-                    accessToken: authState.accessToken,
-                    email: studentData.email
-                }),
-                // axios.get(`http://13.201.247.28:8000/studentAttendance/fetch/completeStats`, {
-                //     params: {
-                //         class: studentData.currentClass,
-                //         id: studentData.id,
-                //         year: '2024'
-                //     },
-                //     headers: {
-                //         Authorization: `Bearer ${authState.accessToken}`
-                //     }
-                // })
-            ]);
+    try {
+      // Fetch student's result and profile
+      const [resultResponse, profileResponse, attendanceResponse] = await Promise.all([
+        axios.get(`${BASE_URL}/result/fetch/teacher?email=${studentData.email}`, {
+          headers: {
+            Authorization: `Bearer ${authState.accessToken}`,
+          }
+        }),
+        axios.post(`${BASE_URL}/fetchSingle/student`, {
+          accessToken: authState.accessToken,
+          email: studentData.email
+        }),
+        // axios.get(`http://13.201.247.28:8000/studentAttendance/fetch/completeStats`, {
+        //     params: {
+        //         class: studentData.currentClass,
+        //         id: studentData.id,
+        //         year: '2024'
+        //     },
+        //     headers: {
+        //         Authorization: `Bearer ${authState.accessToken}`
+        //     }
+        // })
+      ]);
 
-            const profile = profileResponse.data.StudentDetails[0];
-            const details = resultResponse.data;
-            console.log(details, 'nn', details[term])
-            const attendance = attendanceResponse;
+      const profile = profileResponse.data.StudentDetails[0];
+      const details = resultResponse.data;
+      console.log(details, 'nn', details[term])
+      const attendance = attendanceResponse;
 
-            // Populate container with result content
-            container.innerHTML = `
+      // Populate container with result content
+      container.innerHTML = `
               <div class="p-2 w-full">
                 <div class="border border-black">
                   <div class="border-b border-black py-3 items-center bg-gradient-to-r from-blue-200 to-blue-100 text-center">
@@ -353,170 +353,174 @@ function ReportCardSubAdmin() {
             `;
 
 
-            // Convert to canvas
-            const canvas = await html2canvas(container, {
-                scale: 2,
-                useCORS: true,
-                logging: true,
-                allowTaint: true,
-            });
+      // Convert to canvas
+      const canvas = await html2canvas(container, {
+        scale: 2,
+        useCORS: true,
+        logging: true,
+        allowTaint: true,
+      });
 
-            // Clean up
-            document.body.removeChild(container);
+      // Clean up
+      document.body.removeChild(container);
 
-            return canvas.toDataURL('image/png');
-        } catch (error) {
-            console.error(`Error generating result for ${studentData.name}:`, error);
-            throw error;
+      return canvas.toDataURL('image/png');
+    } catch (error) {
+      console.error(`Error generating result for ${studentData.name}:`, error);
+      throw error;
+    }
+  };
+
+  const handleBulkDownload = async () => {
+    if (!selectedTermValue) {
+      alert('Please select a term before downloading.');
+      return;
+    }
+    setIsGenerating(true);
+    setProgress(0);
+    if (!Class) return;
+    console.log(userData, 'in bulk')
+    const pdf = new jsPDF('p', 'mm', 'a4', true);
+    const pageWidth = pdf.internal.pageSize.width;
+    const pageHeight = pdf.internal.pageSize.height;
+    const margin = 10;
+
+    try {
+      let isFirstPage = true;
+      for (let i = 0; i < userData.length; i++) {
+        const student = userData[i];
+        const imgData = await generateStudentResult(student, selectedTermValue);
+
+        if (!isFirstPage) {
+          pdf.addPage();
         }
-    };
 
-    const handleBulkDownload = async () => {
-        if (!selectedTermValue) {
-            alert('Please select a term before downloading.');
-            return;
-        }
-        setIsGenerating(true);
-        setProgress(0);
-        if (!Class) return;
-        console.log(userData, 'in bulk')
-        const pdf = new jsPDF('p', 'mm', 'a4', true);
-        const pageWidth = pdf.internal.pageSize.width;
-        const pageHeight = pdf.internal.pageSize.height;
-        const margin = 10;
+        // Add image to PDF
+        const imgProps = pdf.getImageProperties(imgData);
+        const imgWidth = pageWidth - (2 * margin);
+        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
 
-        try {
-            let isFirstPage = true;
-            for (let i = 0; i < userData.length; i++) {
-                const student = userData[i];
-                const imgData = await generateStudentResult(student, selectedTermValue);
+        isFirstPage = false;
+        setProgress(((i + 1) / userData.length) * 100);
+      }
 
-                if (!isFirstPage) {
-                    pdf.addPage();
-                }
+      // Save the PDF
+      pdf.save(`Class_${Class}_Results_${selectedSession}_Term_${selectedTermValue}.pdf`);
+    } catch (error) {
+      console.error('Error generating bulk PDF:', error);
+      alert('Error generating PDF. Please try again.');
+    } finally {
+      setIsGenerating(false);
+      setProgress(0);
+    }
+  };
 
-                // Add image to PDF
-                const imgProps = pdf.getImageProperties(imgData);
-                const imgWidth = pageWidth - (2 * margin);
-                const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-                pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
+  return (
+    <>
+      <div className='   '>
+        <ToastContainer />
+        <div className="flex items-center justify-between px-3 py-2">
 
-                isFirstPage = false;
-                setProgress(((i + 1) / userData.length) * 100);
-            }
+          <h1 className="text-xl font-medium mb-2 ">Report Card</h1>
+          <span className='w-fit flex items-center gap-2 mobile:max-laptop:hidden'>
+            <Selection
+              Class={Class}
+              Section={Section}
+              Session={selectedSession}
+              handleClassChange={handleClassChange}
+              handleSectionChange={handleSectionChange}
+              handleSessionChange={handleSessionChange}
+            />
 
-            // Save the PDF
-            pdf.save(`Class_${Class}_Results_${selectedSession}_Term_${selectedTermValue}.pdf`);
-        } catch (error) {
-            console.error('Error generating bulk PDF:', error);
-            alert('Error generating PDF. Please try again.');
-        } finally {
-            setIsGenerating(false);
-            setProgress(0);
-        }
-    };
+            <select
+              value={selectedTermValue}
+              onChange={(e) => setSelectedTermValue(e.target.value)}
+              className="border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 p-2 rounded"
+            >
+              <option value="" disabled>Select Term</option>
+              <option value="term1">Term 1</option>
+              <option value="halfYearly">Half Yearly</option>
+              <option value="term2">Term 2</option>
+              <option value="final">Final</option>
 
-    return (
-        <>
-            <div className='   '>
-                <ToastContainer />
-                <div className="flex items-center justify-between px-3 py-2">
+            </select>
+            <div className="flex justify-between items-center">
+              <motion.button
+                className="bg-green-500 text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-green-600 transition-colors duration-200 disabled:bg-gray-400"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleBulkDownload}
+                disabled={isGenerating}
+              >
+                {isGenerating ? `Generating... ${Math.round(progress)}%` : 'Download All Results'}
+              </motion.button>
+            </div>
+          </span>
+        </div>
 
-                    <h1 className="text-xl font-medium mb-2 ">Report Card</h1>
-                    <span className='w-fit flex items-center gap-2 mobile:max-laptop:hidden'>
-                        <Selection
-                            Class={Class}
-                            Section={Section}
-                            Session={selectedSession}
-                            handleClassChange={handleClassChange}
-                            handleSectionChange={handleSectionChange}
-                            handleSessionChange={handleSessionChange}
-                        />
-
-                        <select
-                            value={selectedTermValue}
-                            onChange={(e) => setSelectedTermValue(e.target.value)}
-                            className="border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 p-2 rounded"
+      </div>
+      <div className=" w-full items-start overflow-y-auto  px-2 no-scrollbar mobile:max-tablet:mt-2 ">
+        {loading && start == 0 ? (
+          <Loading />
+        ) : userData.length === 0 ? (
+          <>No student found</>
+        ) : (
+          <motion.div
+            className='rounded-lg shadow-lg border border-purple-200 w-full mb-4 overflow-hidden bg-white'
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            ref={containerRef}
+          >
+            <table className="min-w-full border-collapse border border-gray-200">
+              <Header headings={['Name', 'Class', 'Section', 'Email', 'Action']} />
+              <tbody>
+                {userData.map((detail, index) => (
+                  <motion.tr
+                    className='hover:bg-purple-100 transition-colors duration-200 border-b border-gray-200'
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+                  >
+                    <td className="py-3 px-6 text-center text-gray-800 whitespace-nowrap">
+                      <Link to={`/Sub-Admin/Students/details/${detail.email}`} className="rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
+                        {detail.name}
+                      </Link>
+                    </td>
+                    <td className='py-3 px-6 text-center text-gray-800 whitespace-nowrap'>{detail.currentClass}</td >
+                    <td className='py-3 px-6 text-center text-gray-800 whitespace-nowrap'>{detail.section}</td >
+                    <td className='py-3 px-6 text-center text-gray-800 whitespace-nowrap flex items-center gap-3'>
+                      <img src={detail.profileLink} alt={detail.name} className='w-8 h-8 rounded-full object-cover border-2 border-purple-300 mobile:max-tablet:hidden' />
+                      <span className='text-purple-600'>{detail.email}</span>
+                    </td >
+                    <td className="py-3 px-4 text-center whitespace-nowrap">
+                      <Link to={`/Sub-Admin/Result/${detail.email}?session=${selectedSession}&Class=${Class}`} key={index}>
+                        <motion.button
+                          className="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-purple-600 transition-colors duration-200"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
                         >
-                            <option value="" disabled>Select Term</option>
-                            <option value="term1">Term 1</option>
-                            <option value="halfYearly">Half Yearly</option>
-                            <option value="term2">Term 2</option>
-                            <option value="final">Final</option>
+                          Result
+                        </motion.button>
+                      </Link>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+              <div ref={sentinelRef} className="h-10"></div>
+              {loading && start > 0 && (
+                <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+              )}
 
-                        </select>
-                        <div className="flex justify-between items-center">
-                            <motion.button
-                                className="bg-green-500 text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-green-600 transition-colors duration-200 disabled:bg-gray-400"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={handleBulkDownload}
-                                disabled={isGenerating}
-                            >
-                                {isGenerating ? `Generating... ${Math.round(progress)}%` : 'Download All Results'}
-                            </motion.button>
-                        </div>
-                    </span>
-                </div>
+            </table>
+          </motion.div>
+        )}
 
-            </div>
-            <div className=" w-full items-start overflow-y-auto  px-2 no-scrollbar mobile:max-tablet:mt-2 ">
-                {loading && start == 0 ? (
-                    <Loading />
-                ) : userData.length === 0 ? (
-                    <>No student found</>
-                ) : (
-                    <motion.div
-                        className='rounded-lg shadow-lg border border-purple-200 w-full mb-4 overflow-hidden bg-white'
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        ref={containerRef}
-                    >
-                        <table className="min-w-full border-collapse border border-gray-200">
-                            <Header headings={['Name', 'Class', 'Section', 'Email', 'Action']} />
-                            <tbody>
-                                {userData.map((detail, index) => (
-                                    <motion.tr
-                                        className='hover:bg-purple-100 transition-colors duration-200 border-b border-gray-200'
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                                        whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-                                    >
-                                        <td className="py-3 px-6 text-center text-gray-800 whitespace-nowrap">{detail.name}</td>
-                                        <td className='py-3 px-6 text-center text-gray-800 whitespace-nowrap'>{detail.currentClass}</td >
-                                        <td className='py-3 px-6 text-center text-gray-800 whitespace-nowrap'>{detail.section}</td >
-                                        <td className='py-3 px-6 text-center text-gray-800 whitespace-nowrap flex items-center gap-3'>
-                                            <img src={detail.profileLink} alt={detail.name} className='w-8 h-8 rounded-full object-cover border-2 border-purple-300 mobile:max-tablet:hidden' />
-                                            <span className='text-purple-600'>{detail.email}</span>
-                                        </td >
-                                        <td className="py-3 px-4 text-center whitespace-nowrap">
-                                            <Link to={`/Sub-Admin/Result/${detail.email}?session=${selectedSession}&Class=${Class}`} key={index}>
-                                                <motion.button
-                                                    className="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-purple-600 transition-colors duration-200"
-                                                    whileHover={{ scale: 1.05 }}
-                                                    whileTap={{ scale: 0.95 }}
-                                                >
-                                                    Result
-                                                </motion.button>
-                                            </Link>
-                                        </td>
-                                    </motion.tr>
-                                ))}
-                            </tbody>
-                            <div ref={sentinelRef} className="h-10"></div>
-                            {loading && start > 0 && (
-                                <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
-                            )}
-
-                        </table>
-                    </motion.div>
-                )}
-
-            </div>
-        </>
-    )
+      </div>
+    </>
+  )
 }
 
 export default ReportCardSubAdmin

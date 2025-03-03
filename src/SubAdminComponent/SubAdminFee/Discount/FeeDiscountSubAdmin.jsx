@@ -8,6 +8,7 @@ import CreateDiscount from './CreateDiscount';
 import { MdDeleteForever, MdAdd, MdRemove, MdSchool } from "react-icons/md";
 import { BASE_URL } from '../../../Config';
 import { motion } from "framer-motion";
+import { Link } from 'react-router-dom';
 
 const getSessions = () => {
     const currentYear = new Date().getFullYear();
@@ -147,9 +148,11 @@ function FeeDiscountSubAdmin() {
                                     >
 
                                         <td className="py-3 px-4">{detail.student.rollNumber}</td>
-                                        <td className="py-3 px-4 flex items-center">
-                                            <img src={detail.student.profileLink} alt="profile" className="h-8 w-8 rounded-full mr-3 border-2 border-indigo-300" />
-                                            {detail.student.name}
+                                        <td className="py-3 px-4">
+                                            <Link to={`/Sub-Admin/Students/details/${detail.student.email}`} className=" text-center px-3 py-2 font-semibold  text-blue-800 flex w-fit">
+                                                <img src={detail.student.profileLink} alt="profile" className="h-6 w-6 rounded-full mr-3 border-2 border-indigo-300" />
+                                                {detail.student.name}
+                                            </Link>
                                         </td>
                                         <td className="py-3 px-4">{detail.student.currentClass} {detail.student.section}</td>
                                         <td className="py-3 px-4">{detail.discount.discountType}</td>

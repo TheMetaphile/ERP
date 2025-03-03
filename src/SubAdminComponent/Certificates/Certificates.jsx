@@ -9,7 +9,8 @@ import {
     FiDownload, FiCheck, FiX, FiFilter,
     FiFile, FiFileText, FiAlertCircle, FiUsers,
     FiArrowDown, FiRefreshCw, FiCheckCircle, FiBook,
-    FiGrid
+    FiGrid,
+    FiSearch
 } from "react-icons/fi";
 
 const Certificates = () => {
@@ -34,6 +35,110 @@ const Certificates = () => {
     const [customTCDialogOpen, setCustomTCDialogOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [error, setError] = useState(null);
+    const [suggestions, setSuggestions] = useState([]);
+    const [searchString, setsearchString] = useState('');
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [searchedStudent, setSearchedStudent] = useState(null);
+
+    const handleSuggestionClick = (suggestion) => {
+        console.log("here", suggestion);
+        setSearchedStudent(suggestion);
+        setShowSuggestions(false);
+
+    };
+
+    const [formData, setFormData] = useState({
+        name: "",
+        motherName: "",
+        fatherName: "",
+        dob: "",
+        nationality: "",
+        category: "",
+        firstAdmissionDate: "",
+        lastClass: "",
+        examResult: "",
+        subjects: "",
+        promotionStatus: "",
+        paidTillMonth: "",
+        workingDays: "",
+        presentDays: "",
+        activities: "",
+        conduct: "",
+        applicationDate: "",
+        issueDate: "",
+        reasonForLeaving: "",
+        remark: "",
+    });
+
+    const handleInputChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (type, customTemplate = null) => {
+        setDownloadLoading(true);
+
+        try {
+
+            let selectedTemplate;
+            let endpoint;
+
+            if (type === 'CC') {
+                selectedTemplate = customTemplate || selectedCCReference;
+                if (!selectedTemplate) {
+                    toast.warn("Please select CC Template");
+                    setDownloadLoading(false);
+                    return;
+                }
+                endpoint = 'cc';
+            } else if (type === 'TC') {
+                selectedTemplate = customTemplate || selectedTCReference;
+                if (!selectedTemplate) {
+                    toast.warn("Please select TC Template");
+                    setDownloadLoading(false);
+                    return;
+                }
+                endpoint = 'tc';
+            }
+
+            const apiUrl = `${BASE_URL}/certificate/custom/${endpoint}/${selectedSession}/${selectedTemplate}`;
+
+            const response = await axios.post(apiUrl, {
+                formData: formData,
+                templateReference: selectedTemplate
+            }, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`
+                },
+                responseType: "blob"
+            });
+
+            const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+
+            const link = document.createElement("a");
+            link.href = pdfUrl;
+            link.download = `${type === 'CC' ? 'Character_Certificate' : 'Transfer_Certificate'}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            URL.revokeObjectURL(pdfUrl);
+
+            toast.success(`${type} downloaded successfully!`);
+
+            // Close dialog if open
+            if (type === 'CC' && customCCDialogOpen) setCustomCCDialogOpen(false);
+            if (type === 'TC' && customTCDialogOpen) setCustomTCDialogOpen(false);
+
+        } catch (error) {
+            console.error(`Error downloading ${type}:`, error);
+            const errorMessage = error.response?.data?.error || `Failed to download ${type}`;
+            toast.error(errorMessage);
+            setError(errorMessage);
+        } finally {
+            setDownloadLoading(false);
+        }
+    };
 
     // Theme-based style classes
     const themeClasses = {
@@ -145,6 +250,7 @@ const Certificates = () => {
         if (selectedSession) {
             setStart(0);
             setTcData([]);
+            setSelectedStudent([]);
             setAllDataFetched(false);
             setLoading(false);
         }
@@ -348,6 +454,49 @@ const Certificates = () => {
         setSelectedStudent(null);
     };
 
+    useEffect(() => {
+        if (searchString) {
+            const handler = setTimeout(() => {
+                setShowSuggestions(true);
+                const searchTeacher = async () => {
+                    try {
+                        const response = await axios.post(`${BASE_URL}/search/Exstudent`, {
+                            accessToken: authState.accessToken,
+                            session: selectedSession,
+                            searchString: searchString,
+                            start: 0,
+                            end: 30
+                        })
+                        // console.log(response.data)
+                        const teacherEmails = response.data.Teachers.map(teacher => ({
+                            _id: teacher._id,
+                            "currentClass": teacher.currentClass,
+                            "fatherName": teacher.fatherName,
+                            "rollNumber": teacher.rollNumber,
+                            "section": teacher.section,
+                            fatherPhoneNumber: teacher.fatherPhoneNumber,
+                            email: teacher.email,
+                            profileLink: teacher.profileLink,
+                            name: teacher.name
+                        }));
+                        setSuggestions(teacherEmails);
+
+                    }
+                    catch (error) {
+                        console.error("Error searching for teachers:", error);
+                    }
+                }
+                searchTeacher();
+            }, 500);
+
+            return () => {
+                clearTimeout(handler);
+            }
+        } else {
+            setShowSuggestions(false);
+        }
+    }, [searchString]);
+
     return (
         <motion.div
             initial="hidden"
@@ -494,6 +643,27 @@ const Certificates = () => {
                             <FiFile className="absolute right-3 top-1/2 transform -translate-y-1/2" />
                         </div>
                     </div>
+                    <div className="relative">
+                        <label className="block text-sm font-medium mb-1">Search</label>
+                        <div className="relative">
+                            <input type="text" value={searchString} onChange={(e) => { setsearchString(e.target.value) }} className={`w-full rounded-lg px-3 py-2 appearance-none border transition-colors duration-300 ${themeClasses.input}`} placeholder="Enter Email" required />
+                            {showSuggestions && suggestions.length > 0 && (
+                                <ul className="absolute z-10 w-72 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto">
+                                    {suggestions.map((suggestion, idx) => (
+                                        <li
+                                            key={idx}
+                                            className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                            onClick={() => handleSuggestionClick(suggestion)}
+                                        >
+                                            <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                            {suggestion.email}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                            <FiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2" />
+                        </div>
+                    </div>
                 </div>
 
                 <div className="flex flex-wrap gap-2 mb-6">
@@ -560,6 +730,59 @@ const Certificates = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y transition-colors duration-300">
+                            {
+                                searchedStudent && <><motion.tr
+                                    key={searchedStudent._id}
+                                    variants={fadeInVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    // className={`transition-colors duration-200 ${themeClasses.table.row} ${index % 2 ? themeClasses.table.altRow : ''}`}
+                                    whileHover={{ backgroundColor: darkMode ? '#2d3748' : '#f8f5ff' }}
+                                >
+                                    <td className="px-6 py-4 whitespace-nowrap">{searchedStudent.rollNumber || '-'}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{searchedStudent.admissionNo || '-'}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap font-medium">
+                                        <Link to={`/Sub-Admin/Students/details/${searchedStudent.email}`} className="rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
+                                            {searchedStudent.name}
+                                        </Link>
+
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{searchedStudent.currentClass}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{searchedStudent.section}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="flex space-x-2">
+                                            <button
+                                                onClick={() => openCustomCCDialog(searchedStudent._id)}
+                                                className={`px-3 py-1 rounded-full text-xs flex items-center ${themeClasses.button.secondary}`}
+                                            >
+                                                <FiFile className="mr-1" />
+                                                Custom CC
+                                            </button>
+                                            <button
+                                                onClick={() => openCustomTCDialog(searchedStudent._id)}
+                                                className={`px-3 py-1 rounded-full text-xs flex items-center ${themeClasses.button.secondary}`}
+                                            >
+                                                <FiFileText className="mr-1" />
+                                                Custom TC
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="relative flex items-center justify-center">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedStudents.includes(searchedStudent._id)}
+                                                onChange={() => toggleRow(searchedStudent._id)}
+                                                className={`appearance-none w-5 h-5 border rounded cursor-pointer transition-all duration-200 ${themeClasses.checkbox}`}
+                                            />
+                                            {selectedStudents.includes(searchedStudent._id) && (
+                                                <FiCheck className="absolute text-white pointer-events-none" />
+                                            )}
+                                        </div>
+                                    </td>
+                                </motion.tr>
+                                </>
+                            }
                             {loading && tcData.length === 0 ? (
                                 <tr>
                                     <td colSpan="7" className="px-6 py-4 text-center">
@@ -591,7 +814,12 @@ const Certificates = () => {
                                     >
                                         <td className="px-6 py-4 whitespace-nowrap">{item.rollNumber || '-'}</td>
                                         <td className="px-6 py-4 whitespace-nowrap">{item.admissionNo || '-'}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap font-medium">{item.name}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap font-medium">
+                                            <Link to={`/Sub-Admin/Students/details/${item.email}`} className="rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
+                                                {item.name}
+                                            </Link>
+
+                                        </td>
                                         <td className="px-6 py-4 whitespace-nowrap">{item.currentClass}</td>
                                         <td className="px-6 py-4 whitespace-nowrap">{item.section}</td>
                                         <td className="px-6 py-4 whitespace-nowrap">
@@ -707,6 +935,25 @@ const Certificates = () => {
                                 </select>
                             </div>
 
+                            <div className="w-full mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                                {[
+                                    { label: "Name of the Student", field: "name" },
+                                    { label: "Father's Name/Guardian's Name", field: "fatherName" },
+                                    { label: "Class in which the Student last studied", field: "lastClass" },
+                                ].map(({ label, field }, index) => (
+                                    <div key={index} className="mb-3">
+                                        <label className="block text-sm font-medium mb-1">{label}</label>
+                                        <input
+                                            type="text"
+                                            name={field}
+                                            value={formData[field]}
+                                            onChange={handleInputChange}
+                                            className={`w-full border px-3 py-2 rounded-lg transition-colors duration-300 ${themeClasses.input}`}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+
                             <div className="flex justify-end space-x-3 mt-4">
                                 <button
                                     onClick={closeCustomDialog}
@@ -715,7 +962,7 @@ const Certificates = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    onClick={() => downloadCertificate('CC', selectedStudent, selectedCCReference)}
+                                    onClick={() => handleSubmit('CC', selectedCCReference)}
                                     disabled={!selectedCCReference || downloadLoading}
                                     className={`flex items-center px-4 py-2 rounded-lg ${!selectedCCReference || downloadLoading
                                         ? themeClasses.button.disabled
@@ -742,7 +989,7 @@ const Certificates = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center"
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4"
                     >
                         <div
                             className={`absolute inset-0 ${themeClasses.dialog.overlay}`}
@@ -752,10 +999,10 @@ const Certificates = () => {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className={`relative rounded-lg shadow-xl p-6 w-full max-w-md transition-colors duration-300 ${themeClasses.dialog.container}`}
+                            className={`relative rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-5xl transition-colors duration-300 max-h-[90vh] overflow-y-auto ${themeClasses.dialog.container}`}
                         >
                             <div className="flex justify-between items-center mb-4 pb-2 border-b transition-colors duration-300">
-                                <h3 className="text-lg font-semibold">Custom Transfer Certificate</h3>
+                                <h3 className="text-lg font-semibold text-purple-500">Custom Transfer Certificate</h3>
                                 <button
                                     onClick={closeCustomDialog}
                                     className="text-gray-500 hover:text-gray-700 transition-colors"
@@ -785,7 +1032,43 @@ const Certificates = () => {
                                 </select>
                             </div>
 
-                            <div className="flex justify-end space-x-3 mt-4">
+                            <div className="w-full mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                                {[
+                                    { label: "Name of the Student", field: "name" },
+                                    { label: "Mother's Name", field: "motherName" },
+                                    { label: "Father's Name/Guardian's Name", field: "fatherName" },
+                                    { label: "Date of Birth", field: "dob" },
+                                    { label: "Nationality", field: "nationality" },
+                                    { label: "Category (SC, ST, OBC, GEN, EWS)", field: "category" },
+                                    { label: "Date of first Admission", field: "firstAdmissionDate" },
+                                    { label: "Class in which the Student last studied", field: "lastClass" },
+                                    { label: "School/ Board Annual Examination last taken with results", field: "examResult" },
+                                    { label: "Main Subjects", field: "subjects" },
+                                    { label: "Whether qualified for promotion", field: "promotionStatus" },
+                                    { label: "Last Fee Submitted Date", field: "paidTillMonth" },
+                                    { label: "Total Working Days", field: "workingDays" },
+                                    { label: "Total Days Present", field: "presentDays" },
+                                    { label: "Extra Co-curricular Activities", field: "activities" },
+                                    { label: "General Conduct", field: "conduct" },
+                                    { label: "Date of Application", field: "applicationDate" },
+                                    { label: "Date of Issue", field: "issueDate" },
+                                    { label: "Reason for Leaving", field: "reasonForLeaving" },
+                                    { label: "Remarks", field: "remark" },
+                                ].map(({ label, field }, index) => (
+                                    <div key={index} className="mb-3">
+                                        <label className="block text-sm font-medium mb-1">{label}</label>
+                                        <input
+                                            type="text"
+                                            name={field}
+                                            value={formData[field]}
+                                            onChange={handleInputChange}
+                                            className={`w-full border px-3 py-2 rounded-lg transition-colors duration-300 ${themeClasses.input}`}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="flex justify-end space-x-3 mt-6">
                                 <button
                                     onClick={closeCustomDialog}
                                     className={`px-4 py-2 rounded-lg ${themeClasses.button.secondary}`}
@@ -793,7 +1076,7 @@ const Certificates = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    onClick={() => downloadCertificate('TC', selectedStudent, selectedTCReference)}
+                                    onClick={() => handleSubmit('TC', selectedTCReference)}
                                     disabled={!selectedTCReference || downloadLoading}
                                     className={`flex items-center px-4 py-2 rounded-lg ${!selectedTCReference || downloadLoading
                                         ? themeClasses.button.disabled
