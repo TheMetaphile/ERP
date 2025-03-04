@@ -8,7 +8,9 @@ const TimetableContext = createContext();
 
 export const StructureProvider = ({ children }) => {
     const { authState } = useContext(AuthContext);
-    const [structureDetails, setStructureDetails] = useState(null);
+    const [structureDetails, setStructureDetails] = useState({});
+
+
     const [selectClass, setClass] = useState('3rd');
     const [classRange, setClassRange] = useState('1st-12th'); // use state for classRange
     const [selectedSection, setSection] = useState('C');
@@ -35,16 +37,10 @@ export const StructureProvider = ({ children }) => {
                 });
 
             if (response.status === 200) {
-                console.log('response from fetch', response.data.lectureStructure);
+                console.log('response from fetch', response.data);
                 if (response.data.lectureStructure) {
-                    const scheduleArray = [];
-                    for (let i = 0; i < response.data.lectureStructure.length; i++) {
-                        scheduleArray.push({
-                            subject: '',
-                            teacher: ''
-                        });
-                    }
-                    setStructureDetails(response.data.lectureStructure);
+
+                    setStructureDetails(response.data);
                     console.log('response', response.data);
                 }
             }
@@ -64,10 +60,10 @@ export const StructureProvider = ({ children }) => {
                 setClassRange('1st-12th');
             }
         }
-    }, [selectClass, classRange]); // Update effect to depend on both selectClass and classRange
+    }, [selectClass]); // Update effect to depend on both selectClass and classRange
 
     return (
-        <TimetableContext.Provider value={{ structureDetails, selectClass, setClass, selectedSection, setSection, dayStudent, setDayStudent, dayTeacher, setDayTeacher }}>
+        <TimetableContext.Provider value={{ structureDetails,setStructureDetails, selectClass, setClass,classRange,setClassRange, selectedSection, setSection, dayStudent, setDayStudent, dayTeacher, setDayTeacher }}>
             {children}
         </TimetableContext.Provider>
     );

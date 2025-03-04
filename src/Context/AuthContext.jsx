@@ -19,7 +19,10 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [authState, setAuthState] = useState(null);
-    const [darkMode, setdarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(() => {
+        const savedMode = localStorage.getItem('darkMode');
+        return savedMode ? JSON.parse(savedMode) : false;
+      });
 
 
     const navigate = useCallback((path) => {
@@ -38,8 +41,7 @@ export const AuthProvider = ({ children }) => {
         };
 
         const storedAuthState = localStorage.getItem('authState');
-        const storedMode = localStorage.getItem('mode');
-        setdarkMode(storedMode==='dark');
+
         //console.log("stored", storedAuthState);
         
         if (storedAuthState) {
@@ -72,9 +74,18 @@ export const AuthProvider = ({ children }) => {
         checkAuthState();
     }, []);
 
-    useEffect(()=>{
-        localStorage.setItem("mode",darkMode ? 'dark' :"");
-    },[darkMode]);
+    useEffect(() => {
+        if (darkMode) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        localStorage.setItem('darkMode', JSON.stringify(darkMode));
+      }, [darkMode]);
+    
+      const toggleDarkMode = () => {
+        setDarkMode(prevMode => !prevMode);
+      };
 
     const updateAccessToken = useCallback((accessToken, authState) => {
         const newAuthState = { ...authState, accessToken };
@@ -191,7 +202,7 @@ export const AuthProvider = ({ children }) => {
             checkAuthState,
             updateAccessToken,
             darkMode, 
-            setdarkMode,
+            toggleDarkMode,
             isLoading
         }}>
 

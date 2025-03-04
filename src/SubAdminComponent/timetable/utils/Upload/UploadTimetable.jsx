@@ -3,150 +3,91 @@ import TimetableHeader from './../timetableHeader';
 import TimetableRow from './Timetablerow';
 import axios from 'axios';
 import AuthContext from '../../../../Context/AuthContext';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link } from "react-router-dom";
 import { BASE_URL } from '../../../../Config';
+import { motion } from 'framer-motion';
+import { useTimetableContext } from '../TimetableContext';
 
-export default function UploadTimetable({ fetchedTimeTableStructure, handleChange }) {
-    const [lectureTimes, setLectureTimes] = useState([]);
-    console.log(fetchedTimeTableStructure)
-    const [schedule, setSchedule] = useState(
-        fetchedTimeTableStructure.lectureStructure.map((lecture) => ({
-            subject: '',
-            teacher: '',
-            lectureNo: lecture.lectureNo,
-            optional: false,
-            optionalSubjects: []
-        }))
-    );
-    const subjects = ["Hindi", "English", "Mathematics", "Science", " Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", " Accounts"];
-    const [selectedSubjects, setSelectedSubjects] = useState([]);
-    const [selectedTeachers, setSelectedTeachers] = useState([]);
+export default function UploadTimetable({ handleChange }) {
+    const days = ["monday", 'tuesday', 'wednesday', 'thursday', "friday", 'saturday'];
+    const [sectionsDetails, setSectionsDetails] = useState([]);
+    const subjects = ["Hindi", "English", "Mathematics", "Science", "Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", "Accounts"];
     const { authState } = useContext(AuthContext);
+    const { setClass, structureDetails } = useTimetableContext();
 
-    const handleSubjectChange = (index, newSubject) => {
-        const updatedSubjects = [...selectedSubjects];
-        updatedSubjects[index] = newSubject;
-        setSelectedSubjects(updatedSubjects);
-    };
+    const [schedule, setSchedule] = useState(() => {
+        let initialSchedule = {};
 
-    const handleTeacherChange = (index, newTeacher) => {
-        const updatedTeachers = [...selectedTeachers];
-        updatedTeachers[index] = newTeacher;
-        setSelectedTeachers(updatedTeachers);
-    };
+        days.forEach((day) => {
+            initialSchedule[day] = structureDetails.lectureStructure.map((lecture) => ({
+                subject: '',
+                teacher: '',
+                lectureNo: lecture.lectureNo,
+                merge: false,
+                mergeWithSection: ''
+            }));
+        });
 
+        return initialSchedule;
+    });
 
-    const convertToDate = (timeString) => {
-        const [time, modifier] = timeString.split(' ');
-        let [hours, minutes] = time.split(':');
-
-        if (hours === '12') {
-            hours = '0';
-        }
-        if (modifier === 'pm') {
-            hours = parseInt(hours, 10) + 12;
-        }
-
-        const date = new Date();
-        date.setHours(hours);
-        date.setMinutes(minutes);
-        date.setSeconds(0);
-
-        return date;
-    };
-
-
-
-    const calculateLectureTimes = () => {
-        const { firstLectureTiming, durationOfEachLeacture, numberOfLeacturesBeforeLunch, durationOfLunch, numberOfLecture } = fetchedTimeTableStructure;
-
-        const times = [];
-        let currentTime = convertToDate(firstLectureTiming);
-        const lectureDuration = parseInt(durationOfEachLeacture.split(' ')[0], 10);
-        const lunchDuration = parseInt(durationOfLunch.split(' ')[0], 10);
-
-        for (let i = 1; i <= numberOfLecture; i++) {
-            const endTime = new Date(currentTime.getTime() + lectureDuration * 60000);
-            times.push({ start: new Date(currentTime), end: new Date(endTime) });
-
-            currentTime = endTime;
-
-            if (i === numberOfLeacturesBeforeLunch) {
-
-                currentTime = new Date(currentTime.getTime() + lunchDuration * 60000);
-            }
-
-
-        }
-
-        setLectureTimes(times);
-    };
-
-    // useEffect(() => {
-    //     calculateLectureTimes();
-    // }, [fetchedTimeTableStructure]);
-
-    const formatTime = (date) => {
-        let hours = date.getHours();
-        const minutes = date.getMinutes();
-        const ampm = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12;
-        hours = hours ? hours : 12;
-        const strMinutes = minutes < 10 ? '0' + minutes : minutes;
-        return `${hours}:${strMinutes} ${ampm}`;
-    };
-    const [selectedClass, setSelectedClass] = useState('');
     useEffect(() => {
-        if (selectedClass != "") {
+
+        let initialSchedule = {};
+
+        days.forEach((day) => {
+            initialSchedule[day] = structureDetails.lectureStructure.map((lecture) => ({
+                subject: '',
+                teacher: '',
+                lectureNo: lecture.lectureNo,
+                merge: false,
+                mergeWithSection: ''
+            }));
+        });
+
+        setSchedule(initialSchedule);
+
+    }, [structureDetails])
+
+    const [selectedClass, setSelectedClass] = useState('');
+    const [selectedSection, setSection] = useState('');
+
+    const fetchSections = async (selectedClass) => {
+        try {
+            const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
+                accessToken: authState.accessToken,
+                class: selectedClass,
+            });
+
+            const sectionsDetail = response.data.sections.map(sectionObj => sectionObj.section);
+            setSectionsDetails(sectionsDetail);
+        } catch (error) {
+            console.error("Error while fetching section:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (selectedClass !== "") {
             const e = { target: { name: "Class", value: selectedClass } };
             handleChange(0, e);
+            fetchSections(selectedClass);
+            setClass(selectedClass);
         }
     }, [selectedClass]);
 
-
-    const [selectedSection, setSection] = useState('');
     useEffect(() => {
-        if (selectedSection != "") {
+        if (selectedSection !== "") {
             const e = { target: { name: "section", value: selectedSection } };
             handleChange(0, e);
         }
     }, [selectedSection]);
 
-    const [selectedDay, setDay] = useState('');
-    useEffect(() => {
-        if (selectedDay != "") {
-            const e = { target: { name: "day", value: selectedDay } };
-            handleChange(0, e);
-        }
-    }, [selectedDay]);
-
-    const handleScheduleUpdate = (index, updates) => {
-        setSchedule(prevSchedule => {
-            const newSchedule = [...prevSchedule];
-            newSchedule[index] = {
-                ...newSchedule[index],
-                ...updates
-            };
-            return newSchedule;
-        });
-    };
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!selectedClass || !selectedSection || !selectedDay || !authState.accessToken) {
+        if (!selectedClass || !selectedSection) {
             toast.error("Please ensure class, section, and day are selected.");
-            return;
-        }
-
-        // Validate schedule data
-        const isScheduleValid = schedule.every(lecture => 
-            lecture.subject && lecture.teacher && lecture.lectureNo
-        );
-
-        if (!isScheduleValid) {
-            toast.error("Please fill in all lecture details");
             return;
         }
 
@@ -154,7 +95,6 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
             accessToken: authState.accessToken,
             class: selectedClass,
             section: selectedSection,
-            day: selectedDay.toLowerCase(),
             schedule: schedule
         };
 
@@ -169,114 +109,107 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
         }
     };
 
-    return (
-        <form onSubmit={handleSubmit} className=' w-full px-3 mobile:max-tablet:px-1'>
-            {/* {uploadTimetableData.map((value, index) => ( */}
-            {/* <ToastContainer /> */}
 
-            <div className=" mb-4 rounded-lg">
-                <div className="grid grid-cols-3 gap-4 mb-4 mt-4">
+    const fetchTimeTable= async()=>{
+        try {
+            const response = await axios.post(`${BASE_URL}/timetable/fetch/student`, 
+                { class: selectedClass, section: selectedSection },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${authState?.accessToken}`  // Safe access
+                    }
+                }
+            );
+            console.log("Timetable Data:", response.data);
+            if (response.status === 200) {
+                setSchedule(response.data);
+            }
+        } catch (error) {
+            console.error("Error fetching timetable:", error.response?.data || error.message);
+        }
+        
+
+    }
+
+    useEffect(()=>{
+        if(selectedClass && selectedSection) fetchTimeTable();
+    },[selectedClass,selectedSection])
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-full "
+        >
+            <form onSubmit={handleSubmit} className='w-full  '>
+                <div className="grid grid-cols-2 gap-4 mb-4 mt-4">
                     <div>
-                        <label className='text-black font-medium'>Class</label>
+                        <label className='text-black dark:text-white font-medium'>Class</label>
                         <select
-                            className="w-full border p-2 rounded-md "
+                            className="w-full border p-2 rounded-md dark:bg-dark-100 dark:border-dark-300"
                             name="Class"
                             value={selectedClass}
-                            onChange={(e) => {
-                                setSelectedClass(e.target.value)
-
-                            }}
+                            onChange={(e) => setSelectedClass(e.target.value)}
                             required
                         >
                             <option value="" disabled>Select Class</option>
-                            <option value="Pre-Nursery" >Pre-Nursery</option>
-                            <option value="L.K.G">L.K.G</option>
-                            <option value="U.K.G">U.K.G</option>
-                            <option value="U.K.J">U.K.J</option>
-                            <option value="1st">1st</option>
-                            <option value="2nd">2nd</option>
-                            <option value="3rd">3rd</option>
-                            <option value="4th">4th</option>
-                            <option value="5th">5th</option>
-                            <option value="6th">6th</option>
-                            <option value="7th">7th</option>
-                            <option value="8th">8th</option>
-                            <option value="9th">9th</option>
-                            <option value="10th">10th</option>
-                            <option value="11th">11th</option>
-                            <option value="12th">12th</option>
+                            {['Pre-Nursery', 'L.K.G', 'U.K.G', 'U.K.J', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'].map((cls) => (
+                                <option key={cls} value={cls}>{cls}</option>
+                            ))}
                         </select>
                     </div>
                     <div>
-                        <label className='text-black font-medium'>Section</label>
+                        <label className='text-black dark:text-white font-medium'>Section</label>
                         <select
                             type="text"
                             name="section"
                             value={selectedSection}
-                            onChange={(e) => { setSection(e.target.value) }}
+                            onChange={(e) => setSection(e.target.value)}
                             required
-                            className="w-full border p-2 rounded-md"
+                            className="w-full border p-2 rounded-md dark:bg-dark-100 dark:border-dark-300"
                         >
                             <option value="">Select Section</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
-                            <option value="E">E</option>
-                            <option value="F">F</option>
-                            <option value="G">G</option>
-                            <option value="H">H</option>
-                            <option value="I">I</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className='text-black font-medium'>Day</label>
-                        <select
-                            type="text"
-                            name="day"
-                            value={selectedDay}
-                            onChange={(e) => { setDay(e.target.value) }}
-                            required
-                            className="w-full border p-2 rounded-md"
-                        >
-                            <option value="" disabled>Select Day</option>
-                            <option value="monday">Monday</option>
-                            <option value="tuesday">Tuesday</option>
-                            <option value="wednesday">Wednesday</option>
-                            <option value="thursday">Thursday</option>
-                            <option value="friday">Friday</option>
-                            <option value="saturday">Saturday</option>
+                            {sectionsDetails.map((section, index) => (
+                                <option key={index} value={section}>
+                                    {section}
+                                </option>
+                            ))}
                         </select>
                     </div>
                 </div>
-                <div className=' overflow-auto border rounded-md'>
-                    <table className='rounded-lg shadow-md w-full border border-gray-300 whitespace-nowrap'>
-                        <TimetableHeader />
 
+                <div className='border rounded-md  max-w-[1080p] overflow-auto dark:border-dark-300'>
+                    <table className=' border-collapse'>
+                        <TimetableHeader fields={structureDetails.lectureStructure} numberOfLecturesBeforeLunch={structureDetails.numberOfLeacturesBeforeLunch} />
                         <tbody>
-                            {fetchedTimeTableStructure.lectureStructure.map((time, index) => (
-                                <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} 
-                                 numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange} handleSchedule={setSchedule} day={selectedDay} />
+                            {days.map((day, index) => (
+                                <TimetableRow
+                                    key={index}
+                                    schedule={schedule[day]}
+                                    lectureStructure={structureDetails.lectureStructure}
+                                    numberOfLeacturesBeforeLunch={structureDetails.numberOfLeacturesBeforeLunch}
+                                    subjects={subjects}
+                                    handleSchedule={setSchedule}
+                                    sections={sectionsDetails}
+                                    selectedSection={selectedSection}
+                                    day={day}
+                                />
                             ))}
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div className="flex items-center justify-between mt-4">
-                <button
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    type="submit"
-                >
-                    Upload
-                </button>
-                <Link
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    to={'/Admin-Dashboard/timetable'}
-                >
-                    Cancel
-                </Link>
-            </div>
-        </form>
+                <div className="flex items-center justify-center mt-4">
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="bg-primary-500 hover:bg-primary-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        type="submit"
+                    >
+                        Upload
+                    </motion.button>
+                </div>
+            </form>
+        </motion.div>
     )
 }
-

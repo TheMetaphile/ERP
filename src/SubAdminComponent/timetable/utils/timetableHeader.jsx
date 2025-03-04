@@ -1,24 +1,41 @@
 import { motion } from 'framer-motion';
-import { FaGraduationCap, FaClock, FaBook, FaUserTie, FaComments } from 'react-icons/fa';
 
-export default function TimetableHeader() {
+export default function TimetableHeader({ fields = [], numberOfLecturesBeforeLunch }) {
     return (
         <motion.thead
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-gradient-to-r from-purple-200 to-purple-100 text-black rounded-t-lg  text-xl w-full"
+            className="bg-primary-100 dark:bg-dark-200 w-full text-black dark:text-white"
         >
-            <tr>
-                {['Lecture', 'Timing', 'Subject', 'Optional', 'Teacher', 'Remark'].map((header, index) => (
-                    <th key={index} className="px-4 py-3 text-center border-r border-purple-400 items-center">
-                        {header === 'Lecture' && <FaGraduationCap className="inline mr-2" />}
-                        {header === 'Timing' && <FaClock className="inline mr-2" />}
-                        {header === 'Subject' && <FaBook className="inline mr-2" />}
-                        {header === 'Teacher' && <FaUserTie className="inline mr-2" />}
-                        {header === 'Remark' && <FaComments className="inline mr-2" />}
-                        {header}
-                    </th>
+            <tr className='w-full'>
+                {['', ...fields].map((header, index) => (
+                    numberOfLecturesBeforeLunch && numberOfLecturesBeforeLunch === index  ?
+                        (<>
+                            <th
+                                key={index}
+                                className="px-4 py-3 text-center border border-primary-300 dark:border-dark-300 text-sm whitespace-nowrap"
+                            >
+                                <div>Lecture: {header.lectureNo || '-'}</div>
+                                <div>{header.startTime} - {header.endTime}</div>
+                            </th>
+                            <th
+                                key={index}
+                                className="px-4 py-3 bg-yellow-600 text-center border border-primary-300 dark:border-dark-300 text-sm whitespace-nowrap"
+                            >
+
+                            </th>
+                        </>)
+                        :
+                        (
+                            <th
+                                key={index}
+                                className="px-4 py-3 text-center border border-primary-300 dark:border-dark-300 text-sm whitespace-nowrap"
+                            >
+                                <div>Lecture: {header.lectureNo || '-'}</div>
+                                <div>{header.startTime} - {header.endTime}</div>
+                            </th>
+                        )
                 ))}
             </tr>
         </motion.thead>

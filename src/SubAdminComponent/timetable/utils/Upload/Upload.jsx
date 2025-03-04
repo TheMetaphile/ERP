@@ -1,43 +1,17 @@
-import React, { useState, useContext, useEffect } from 'react';
-import axios from 'axios';
-import AuthContext from '../../../../Context/AuthContext';
-import { ToastContainer, toast } from 'react-toastify';
+import React, { useState } from 'react';
+
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import CreateTimetableStrucutre from './createTimetableStructure';
 import UploadTimetable from './UploadTimetable';
-import Loading from './../../../../LoadingScreen/Loading';
-import { BASE_URL } from '../../../../Config';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaCalendarAlt, FaCog } from 'react-icons/fa';
+
+import { motion } from 'framer-motion';
+import { FaCalendarAlt } from 'react-icons/fa';
 
 const UploadSubAdmin = () => {
-    const { authState } = useContext(AuthContext);
-    const [showTimetableStructure, setShowTimetableStructure] = useState(false);
-    const [showTimetable, setShowTimetable] = useState(true);
-    const [loading, setLoading] = useState(true);
+
     const [ClassRange, setClassRange] = useState('1st-12th');
 
-    const [formData, setFormData] = useState({
-        classRange: '1st-12th',
-        numberOfLeacturesBeforeLunch: '',
-        lectureStructure: []
-    });
 
-    // useEffect(() => {
-    //     setLoading(true);
-    //     handleFetch();
-    // }, []);
-
-    const [structureData, setStructureData] = useState(
-        {
-            Class: ClassRange,
-            start: '',
-            before: '',
-            lecture: '',
-            break: '',
-            duration: ''
-        },
-    );
     const [uploadTimetableData, setUploadData] = useState(
         {
             Class: '',
@@ -51,12 +25,9 @@ const UploadSubAdmin = () => {
             ]
         }
     );
-    const [fetchedTimeTableStructure, setTimetableStructure] = useState(null);
 
-    useEffect(() => {
-        //setLoading(true);
-        handleFetch();
-    }, [formData.classRange]);
+
+
 
 
 
@@ -103,105 +74,6 @@ const UploadSubAdmin = () => {
 
     }
 
-    const convertTo12HourFormat = (time24) => {
-        const [hour, minute] = time24.split(':');
-        let period = 'am';
-        let hour12 = parseInt(hour, 10);
-
-        if (hour12 >= 12) {
-            period = 'pm';
-            if (hour12 > 12) hour12 -= 12;
-        }
-        if (hour12 === 0) hour12 = 12;
-
-        return `${hour12}:${minute} ${period}`;
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post(`${BASE_URL}/timeTableStructure/create`, {
-                ...formData,
-
-            }, {
-                headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
-                },
-            });
-
-            if (response.data.status) {
-                toast.success('Timetable structure created successfully!');
-            }
-        } catch (error) {
-            toast.error(error.response?.data?.error || 'Something went wrong!');
-        }
-    };
-
-    const handleFetch = async (e) => {
-        //e.preventDefault();
-        console.log(authState.accessToken)
-        console.log(ClassRange)
-        try {
-
-            const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
-                classRange: formData.classRange,
-            },
-                {
-                    headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
-                    },
-                });
-
-            if (response.status === 200) {
-
-                console.log('response from fetch', response.data);
-                if (response.data) {
-                    console.log("here", response.data.lectureStructure);
-                    // const scheduleArray = [];
-                    // for (let i = 0; i < response.data.lectureStructure; i++) {
-                    //     scheduleArray.push({
-                    //         subject: '',
-                    //         teacher: ''
-                    //     });
-                    // }
-
-                    // setUploadData(prevState => ({
-                    //     ...prevState,
-                    //     schedule: scheduleArray
-                    // }))
-                    setTimetableStructure(response.data);
-                    if (response.data) {
-                        setFormData((prev) => ({
-                            ...prev, numberOfLeacturesBeforeLunch: response.data.numberOfLeacturesBeforeLunch,
-                            lectureStructure: response.data.lectureStructure
-                        }))
-
-                    }
-                    else {
-                        setFormData((prev) => ({
-                            ...prev, numberOfLeacturesBeforeLunch: '',
-                            lectureStructure: []
-                        }))
-                    }
-                    // setShowTimetableStructure(false);
-                    setShowTimetable(true);
-
-
-                } else {
-                    setShowTimetable(false);
-                    setShowTimetableStructure(true);
-                }
-            }
-
-            if (loading) {
-                setLoading(false);
-                console.log("Fetch successful")
-            }
-        } catch (err) {
-            console.error(err);
-
-        }
-    }
 
 
     const containerVariants = {
@@ -214,84 +86,43 @@ const UploadSubAdmin = () => {
         visible: { y: 0, opacity: 1, transition: { duration: 0.5 } }
     };
 
-
     return (
-
         <motion.div
-            className="flex flex-col w-full mobile:max-tablet:px-2 h-screen overflow-y-auto items-start mt-4 mb-6 no-scrollbar border bg-purple-50 p-3 rounded-lg shadow-lg"
+            className="flex flex-col  overflow-auto h-fit mobile:max-tablet:px-2 overflow-y-auto items-start mt-4 mb-6 no-scrollbar border bg-purple-50 p-3 rounded-lg shadow-lg"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
             <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 
-            <motion.div className='w-full flex flex-wrap justify-between items-center mb-3 px-4 mobile:max-tablet:px-2 gap-2' variants={itemVariants}>
-                <motion.h1 className='text-3xl mobile:max-tablet:text-lg whitespace-nowrap font-bold text-purple-800 flex items-center'>
-                    <FaCalendarAlt className="mr-2" />
-                    Schedule Time Table
-                </motion.h1>
-                <motion.button
-                    className='px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md flex items-center'
-                    onClick={() => setShowTimetableStructure(!showTimetableStructure)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                >
-                    <FaCog className="mr-2" />
-                    {showTimetableStructure ? 'Cancel' : 'Change Layout'}
-                </motion.button>
+            <motion.div className=' flex w-full flex-wrap text-3xl mobile:max-tablet:text-lg whitespace-nowrap font-bold text-purple-800 justify-center items-center mb-3 px-4 mobile:max-tablet:px-2 gap-2' variants={itemVariants}>
+
+                <FaCalendarAlt className="mr-2" />
+                Schedule Time Table
+
+
             </motion.div>
 
-            {loading ? (
-                <motion.div variants={itemVariants}>
-                    <Loading />
-                </motion.div>
-            ) : (
-                <motion.div className='w-full' variants={itemVariants}>
-                    <AnimatePresence>
-                        {showTimetableStructure && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <CreateTimetableStrucutre
-                                    formData={formData}
-                                    setFormData={setFormData}
-                                    handleSubmit={handleSubmit}
 
-                                />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+            <motion.div className='w-full' variants={itemVariants}>
 
-                    <AnimatePresence>
-                        {showTimetable && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                 <UploadTimetable
-                                    fetchedTimeTableStructure={fetchedTimeTableStructure}
-                                    uploadTimetableData={uploadTimetableData}
-                                    handleChange={handleTimetableChange}
-                                /> 
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className='w-full  '
+                >
+                    <UploadTimetable
+                        uploadTimetableData={uploadTimetableData}
+                        handleChange={handleTimetableChange}
+                    />
                 </motion.div>
-            )}
+
+            </motion.div>
+
         </motion.div>
-
-
-
     );
 };
 
 export default UploadSubAdmin;
-
-
-
-

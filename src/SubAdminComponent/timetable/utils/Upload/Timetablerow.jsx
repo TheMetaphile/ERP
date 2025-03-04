@@ -1,287 +1,589 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext, useCallback, useRef } from "react";
 import axios from "axios";
+import {
+  FaBook,
+  FaCalendarAlt,
+  FaCheckCircle,
+  FaTimesCircle
+} from 'react-icons/fa';
 import AuthContext from "../../../../Context/AuthContext";
-import { BASE_URL} from "../../../../Config";
-import OptionalRow from "./OptionalRow";
-import { motion } from 'framer-motion';
+import { BASE_URL } from "../../../../Config";
+import { motion } from "framer-motion";
+
+// Remark Tooltip Component
+const RemarkTooltip = ({ children, message, isDarkMode }) => (
+  <div className="group relative inline-block">
+    {children}
+    {message && (
+      <div className={`
+        absolute z-10 bottom-full left-1/2 transform -translate-x-1/2 
+        mb-2 px-3 py-2 text-xs rounded-md opacity-0 group-hover:opacity-100 
+        transition-opacity duration-300
+        ${isDarkMode
+          ? 'bg-gray-700 text-white border border-gray-600'
+          : 'bg-gray-800 text-white'}
+      `}>
+        {message}
+      </div>
+    )}
+  </div>
+);
 
 export default function TimetableRow({
-  index,
-  lectureNo,
-  Time,
-  numberOfLeacturesBeforeLunch,
-  Subject,
-  Teacher,
-  handleSubjectChange,
-  handleTeacherChange,
+  lectureStructure = [],
+  schedule = [],
   handleSchedule,
-  subjects,
+  subjects = [],
+  sections = [],
+  selectedSection,
+  numberOfLeacturesBeforeLunch,
   day
 }) {
+  const { darkMode, authState } = useContext(AuthContext);
+  const suggestionsRef = useRef(null);
 
-  const [rowState, setRowState] = useState({
-    teacherInput: Teacher,
-    remark: 'Select Teacher',
-    suggestions: [],
-    optional: false,
-    showSuggestions: false,
-    selectedTeacherEmail: "",
-    selectedSection: '',
-  });
-  const [email, setEmail] = useState('');
+  // Initialize row state for each lecture
+  const [rowState, setRowState] = useState(() =>
+    lectureStructure.reduce((acc, lecture) => ({
+      ...acc,
+      [lecture.lectureNo]: {
+        teacherInput: "",
+        suggestions: [],
+        showSuggestions: false,
+        remark: "",
+      }
+    }), {})
+  );
 
-  const [optionalRows, setOptionalRows] = useState([
-    {
-      subject: '',
-      section: '',
-      teacher: '',
-    },
-  ]);
+  // Search Teachers Function
+  const searchTeachers = useCallback(async (searchText) => {
+    if (!searchText) return [];
 
-  const { authState } = useContext(AuthContext);
-
-  const addNewRow = () => {
-    setOptionalRows([
-      ...optionalRows,
-      {
-        subject: '',
-        section: '',
-        teacher: '',
-      },
-    ]);
-  };
-
-  const removeRow = (rowIndex) => {
-    setOptionalRows(prevRows => prevRows.filter((_, index) => index !== rowIndex));
-  };
-
-  const searchTeacher = useCallback(async (searchString) => {
-    if (!searchString) return [];
     try {
       const response = await axios.post(`${BASE_URL}/search/teacher`, {
         accessToken: authState.accessToken,
-        searchString,
+        searchString: searchText,
         start: 0,
         end: 30,
       });
-      return response.data.Teachers.map((teacher) => ({
+
+      return response.data.Teachers.map(teacher => ({
+        id: teacher._id,
         name: teacher.name,
         profileLink: teacher.profileLink,
         email: teacher.email,
+        employmentNumber: teacher.employmentNumber,
       }));
     } catch (error) {
-      console.error("Error searching for teachers:", error);
+      console.error("Teacher search error:", error);
       return [];
     }
   }, [authState.accessToken]);
 
-  useEffect(() => {
-    const handler = setTimeout(async () => {
-      const suggestions = await searchTeacher(rowState.teacherInput);
-      setRowState(prev => ({ ...prev, suggestions }));
-    }, 500);
+  // Handle Teacher Selection
+  const selectTeacher = async (lectureNo, teacher) => {
+    try {
+      const remark = await fetchTeacherAvailability(lectureNo, teacher.id);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [rowState.teacherInput, searchTeacher]);
+      setRowState(prev => ({
+        ...prev,
+        [lectureNo]: {
+          ...prev[lectureNo],
+          teacherInput: teacher.name,
+          showSuggestions: false,
+          remark,
+        }
+      }));
 
-  useEffect(() => {
-    fetchRemark(index + 1, rowState.selectedTeacherEmail, day);
-  }, [rowState.selectedTeacherEmail, day, index]);
-
-  const handleSuggestionClick = (suggestion) => {
-    setRowState(prev => ({
-      ...prev,
-      teacherInput: suggestion.name,
-      selectedTeacherEmail: suggestion.email,
-      showSuggestions: false,
-    }));
-    setEmail(suggestion.email);
-    handleTeacherChange(index, suggestion.email);
-  };
-
-  const handleChange = (event) => {
-    handleSubjectChange(index, event.target.value);
-  };
-
-  const fetchRemark = async (lecture, email, day) => {
-    if (!lecture || !email || !day) {
-      setRowState(prev => ({ ...prev, remark: "Please select all required fields" }));
-      return;
+      // Update schedule
+      handleSchedule(prev => {
+        const daySchedule = prev[day] || [];
+        return {
+          ...prev,
+          [day]: daySchedule.map(lec =>
+            lec.lectureNo === lectureNo
+              ? { ...lec, teacher: teacher.id }
+              : lec
+          )
+        };
+      });
+    } catch (error) {
+      console.error("Teacher selection error:", error);
     }
+  };
+
+  // Fetch Teacher Availability
+  const fetchTeacherAvailability = async (lecture, email) => {
+    if (!lecture || !email || !day) return "Incomplete information";
 
     try {
-      const config = {
-        method: 'get',
-        url: `${BASE_URL}/timetable/fetch/checkAvailability`,
+      const response = await axios.get(`${BASE_URL}/timetable/fetch/checkAvailability`, {
         params: { lecture, day, email },
         headers: {
           'Authorization': `Bearer ${authState.accessToken}`,
           'Content-Type': 'application/json',
         }
-      };
-
-      const response = await axios(config);
-      setRowState(prev => ({ ...prev, remark: response.data.remark }));
+      });
+      return response.data.remark;
     } catch (error) {
-      console.error('Error fetching availability:', error);
-      setRowState(prev => ({ ...prev, remark: "Error checking availability" }));
+      console.error('Availability check failed:', error);
+      return "Availability unknown";
     }
   };
 
-  const handleTeacher = (event) => {
-    setRowState(prev => ({
-      ...prev,
-      teacherInput: event.target.value,
-      showSuggestions: true,
-    }));
-  };
+  // Debounced Teacher Search
+  useEffect(() => {
+    const searchTimer = setTimeout(async () => {
+      for (let lecture of lectureStructure) {
+        const { teacherInput, showSuggestions, suggestions } = rowState[lecture.lectureNo];
 
-  const handleOptionalRowChange = async (index, field, value) => {
-    const updatedRows = [...optionalRows];
-    updatedRows[index] = { ...updatedRows[index], [field]: value };
+        if (teacherInput.trim() && showSuggestions && suggestions.length === 0) {
+          const suggestions = await searchTeachers(teacherInput);
 
-    if (field === 'teacher') {
-      updatedRows[index].showSuggestions = true;
-      const suggestions = await searchTeacher(value);
-      updatedRows[index].suggestions = suggestions;
+          setRowState(prev => ({
+            ...prev,
+            [lecture.lectureNo]: {
+              ...prev[lecture.lectureNo],
+              suggestions,
+              showSuggestions: suggestions.length > 0
+            }
+          }));
+        } else {
+          if(!teacherInput.trim()){
+            setRowState(prev => ({
+              ...prev,
+              [lecture.lectureNo]: {
+                teacherInput: "",
+                suggestions: [],
+                showSuggestions: false,
+                remark: "",
+              }
+            }));
+          }
+        }
+      }
+    }, 500);
+
+    return () => clearTimeout(searchTimer);
+  }, [rowState, searchTeachers]);
+
+  const handleClickOutside = (event) => {
+    if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
+      setTimeout(() => {
+        setRowState((prev) => {
+          const newState = { ...prev };
+          for (let key in newState) {
+            newState[key].showSuggestions = false;
+          }
+          return newState;
+        });
+      }, 150);  // Delay to allow suggestion click to register
     }
-
-    setOptionalRows(updatedRows);
   };
 
-  const handleOptionalSuggestionClick = (rowIndex, suggestion) => {
-    const updatedRows = optionalRows.map((row, idx) =>
-      idx === rowIndex
-        ? { ...row, teacher: suggestion.name, showSuggestions: false }
-        : row
-    );
-    setOptionalRows(updatedRows);
-  };
 
   useEffect(() => {
-    handleSchedule(prev => {
-      const updatedRows = [...prev];
-      updatedRows[lectureNo - 1] = {
-        subject: !rowState.optional ? Subject : "",
-        teacher: !rowState.optional ? email : "",
-        lectureNo: lectureNo,
-        optional: rowState.optional,
-        optionalSubjects: rowState.optional ? optionalRows.map(row => ({
-          optionalSubject: row.subject,
-          mergeWithSection: row.section,
-          teacher: row.teacher,
-        })) : []
-      }
-      return updatedRows;
-    }
-    );
-  }, [Subject, rowState, optionalRows, lectureNo]);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <>
-    {numberOfLeacturesBeforeLunch === index && (
-      <motion.tr
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
-        className="bg-purple-200 text-purple-800 font-bold"
-      >
-        <td colSpan="6" className="h-10 text-xl text-center">LUNCH</td>
-      </motion.tr>
-    )}
     <motion.tr
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.1 }}
-      className={`bg-white hover:bg-purple-50 transition-colors duration-200 ${!rowState.optional ? "border-b border-purple-200" : ""}`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className={` border border-black/50
+        ${darkMode
+          ? 'bg-gray-800 hover:bg-gray-700'
+          : 'bg-white hover:bg-purple-50'} 
+        transition-colors duration-200
+      `}
     >
-      <td className="text-center py-3">{lectureNo}</td>
-      <td className="text-center py-3">{Time}</td>
-      <td className="text-center py-3">
-        {!rowState.optional && (
-          <select
-            className="w-full bg-purple-50 border border-purple-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            name="Subject"
-            value={Subject}
-            onChange={handleChange}
-            required
-          >
-            <option value="" disabled>Select a subject</option>
-            {subjects.map((subject, idx) => (
-              <option key={idx} value={subject}>{subject}</option>
-            ))}
-          </select>
-        )}
+      <td className={`px-3 flex flex-col gap-2  mt-3 justify-center font-bold ${darkMode ? 'text-gray-200' : 'text-gray-800'} items-center capitalize`}>
+        <FaCalendarAlt />
+
+        {day.split("").map((letter, index) => (
+          <div key={index}>{letter}</div> // Return each letter inside a <div>
+        ))}
+
       </td>
-      <td className="flex justify-center py-3 mt-3">
-        <motion.div
-          whileTap={{ scale: 0.95 }}
-        >
-          <input
-            type="checkbox"
-            checked={rowState.optional}
-            onChange={(e) => setRowState(prev => ({ ...prev, optional: e.target.checked }))}
-            className="form-checkbox h-5 w-5 text-purple-600 transition duration-150 ease-in-out"
-          />
-        </motion.div>
-      </td>
-      <td className="relative py-3">
-        {!rowState.optional && (
+
+      {lectureStructure.map((lecture, idx) => (
+        
+          numberOfLeacturesBeforeLunch && numberOfLeacturesBeforeLunch === idx +1 ?
           <>
-            <input
-              type="text"
-              className="border border-purple-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-              value={rowState.teacherInput}
-              onChange={handleTeacher}
-              required
-            />
-            {rowState.showSuggestions && rowState.suggestions.length > 0 && (
-              <motion.ul
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="absolute z-10 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto w-full shadow-lg"
-              >
-                {rowState.suggestions.map((suggestion, indx) => (
-                  <motion.li
-                    key={indx}
-                    whileHover={{ backgroundColor: '#F3E8FF' }}
-                    className="flex items-center p-2 cursor-pointer"
-                    onClick={() => handleSuggestionClick(suggestion)}
+          <td
+          ref={suggestionsRef}
+
+          key={idx}
+          className={`p-3 border border-black/50 ${rowState[lecture.lectureNo]?.remark === 'Good to go'
+            ? (darkMode ? 'bg-green-900/30' : 'bg-green-100')
+            : (darkMode ? 'bg-red-900/30' : '')
+            }`}
+        >
+          <RemarkTooltip
+            message={rowState[lecture.lectureNo]?.remark || ''}
+          >
+            <div className="flex flex-col space-y-4">
+              {/* Subject Selector */}
+
+              <div className=" gap-4">
+                <div>
+                  <label
+                    className={`block mb-1 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
                   >
-                    <img
-                      src={suggestion.profileLink}
-                      alt="Profile"
-                      className="w-10 h-10 rounded-full mr-2"
+                    Subject
+                  </label>
+                  <div className="relative">
+                    <FaBook className={`absolute left-3 top-3 ${darkMode ? 'text-gray-400' : 'text-purple-500'}`} />
+                    <select
+                      className={`
+                    w-fit pl-10 rounded-md px-3 py-2 border
+                    ${darkMode
+                          ? 'bg-gray-900 text-gray-200 border-gray-700'
+                          : 'bg-purple-50 text-purple-900 border-purple-300'}
+                    focus:outline-none focus:ring-2
+                  `}
+                      value={schedule[lecture.lectureNo - 1]?.subject || ""}
+                      onChange={(e) => {
+                        handleSchedule(prev => {
+                          const daySchedule = prev[day] || [];
+                          return {
+                            ...prev,
+                            [day]: daySchedule.map(lec =>
+                              lec.lectureNo === lecture.lectureNo
+                                ? { ...lec, subject: e.target.value }
+                                : lec
+                            )
+                          };
+                        });
+                      }}
+                      required
+                    >
+                      <option value="">Select Subject</option>
+                      {subjects.map((subject, i) => (
+                        <option key={i} value={subject}>{subject}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+
+                {/* Section Merger */}
+                <div>
+                  <label
+                    className={`block mb-1 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
+                  >
+                    Merge with Section
+                  </label>
+                  <select
+                    className={`
+                 rounded-md px-3 py-2 border
+                  ${darkMode
+                        ? 'bg-gray-900 text-gray-200 border-gray-700'
+                        : 'bg-purple-50 text-purple-900 border-purple-300'}
+                  focus:outline-none focus:ring-2
+                `}
+                    value={schedule[lecture.lectureNo - 1]?.mergeWithSection || ""}
+                    onChange={(e) => {
+                      handleSchedule(prev => {
+                        const daySchedule = prev[day] || [];
+                        return {
+                          ...prev,
+                          [day]: daySchedule.map(lec =>
+                            lec.lectureNo === lecture.lectureNo
+                              ? { ...lec, mergeWithSection: e.target.value, merge: e.target.value != "" }
+                              : lec
+                          )
+                        };
+                      });
+                    }}
+                  >
+                    <option value="">Select Section to Merge</option>
+                    {sections.filter(sec => sec !== selectedSection).map((section, i) => (
+                      <option key={i} value={section}>{section}</option>
+                    ))}
+                  </select>
+                </div>
+
+              </div>
+
+
+              <div className="flex gap-4 items-end" >
+
+                {/* Teacher Search */}
+                <div>
+                  <label
+                    className={`block mb-1 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
+                  >
+                    Teacher
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Search Teacher"
+                      value={rowState[lecture.lectureNo]?.teacherInput || ''}
+                      onChange={(e) => {
+                        setRowState(prev => ({
+                          ...prev,
+                          [lecture.lectureNo]: {
+                            ...prev[lecture.lectureNo],
+                            teacherInput: e.target.value,
+                            showSuggestions: true
+                          }
+                        }));
+                      }}
+                      required
+                      className={`
+                    w-full rounded-md px-3 py-2 border
+                    ${darkMode
+                          ? 'bg-gray-900 text-gray-200 border-gray-700'
+                          : 'bg-white text-purple-900 border-purple-300'}
+                    focus:outline-none focus:ring-2
+                  `}
                     />
-                    <span className="text-purple-800">{suggestion.name}</span>
-                  </motion.li>
-                ))}
-              </motion.ul>
-            )}
+                    {rowState[lecture.lectureNo]?.showSuggestions && (
+                      <div
+                        className={`
+                      absolute z-10 w-full mt-1 max-h-40 overflow-y-auto rounded-md
+                      ${darkMode ? 'bg-gray-700 text-gray-200' : 'bg-white text-gray-800'}
+                      shadow-lg
+                    `}
+                      >
+                        {rowState[lecture.lectureNo].suggestions.map((teacher, index) => (
+                          <div
+                            key={index}
+                            onClick={() => selectTeacher(lecture.lectureNo, teacher)}
+                            className={`
+                          flex items-center p-2 cursor-pointer 
+                          ${darkMode
+                                ? 'hover:bg-gray-600'
+                                : 'hover:bg-purple-100'}
+                        `}
+                          >
+                            <img
+                              src={teacher.profileLink}
+                              alt={teacher.name}
+                              className="w-8 h-8 rounded-full mr-2"
+                            />
+                            <div>
+                              <div>{teacher.name}</div>
+                              <small>{teacher.employmentNumber}</small>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+
+
+                {/* Availability Status */}
+                <div className="flex items-center justify-center mb-3">
+
+                  {rowState[lecture.lectureNo]?.remark === 'Good to go' ? (
+                    <FaCheckCircle className={`text-xl ${darkMode ? 'text-green-400' : 'text-green-600'}`} />
+                  ) : (
+                    <FaTimesCircle className={`text-xl ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
+                  )}
+                </div>
+              </div>
+            </div>
+          </RemarkTooltip>
+
+        </td>
+        <td
+
+          key={idx}
+          className={`p-3 border border-black/50 bg-yellow-900/30 `}
+        >
+
+        </td>
           </>
-        )}
-      </td>
-      <td className={`text-center py-3 ${rowState.remark.includes("Good") ? "text-green-600" : "text-red-600"}`}>
-        {!rowState.optional && <>{rowState.remark}</>}
-      </td>
+          :
+          <td
+            ref={suggestionsRef}
+  
+            key={idx}
+            className={`p-3 border border-black/50 ${rowState[lecture.lectureNo]?.remark === 'Good to go'
+              ? (darkMode ? 'bg-green-900/30' : 'bg-green-100')
+              : (darkMode ? 'bg-red-900/30' : '')
+              }`}
+          >
+            <RemarkTooltip
+              message={rowState[lecture.lectureNo]?.remark || ''}
+            >
+              <div className="flex flex-col space-y-4">
+                {/* Subject Selector */}
+  
+                <div className=" gap-4">
+                  <div>
+                    <label
+                      className={`block mb-1 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
+                    >
+                      Subject
+                    </label>
+                    <div className="relative">
+                      <FaBook className={`absolute left-3 top-3 ${darkMode ? 'text-gray-400' : 'text-purple-500'}`} />
+                      <select
+                        className={`
+                      w-fit pl-10 rounded-md px-3 py-2 border
+                      ${darkMode
+                            ? 'bg-gray-900 text-gray-200 border-gray-700'
+                            : 'bg-purple-50 text-purple-900 border-purple-300'}
+                      focus:outline-none focus:ring-2
+                    `}
+                        value={schedule[lecture.lectureNo - 1]?.subject || ""}
+                        onChange={(e) => {
+                          handleSchedule(prev => {
+                            const daySchedule = prev[day] || [];
+                            return {
+                              ...prev,
+                              [day]: daySchedule.map(lec =>
+                                lec.lectureNo === lecture.lectureNo
+                                  ? { ...lec, subject: e.target.value }
+                                  : lec
+                              )
+                            };
+                          });
+                        }}
+                        required
+                      >
+                        <option value="">Select Subject</option>
+                        {subjects.map((subject, i) => (
+                          <option key={i} value={subject}>{subject}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+  
+  
+                  {/* Section Merger */}
+                  <div>
+                    <label
+                      className={`block mb-1 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
+                    >
+                      Merge with Section
+                    </label>
+                    <select
+                      className={`
+                   rounded-md px-3 py-2 border
+                    ${darkMode
+                          ? 'bg-gray-900 text-gray-200 border-gray-700'
+                          : 'bg-purple-50 text-purple-900 border-purple-300'}
+                    focus:outline-none focus:ring-2
+                  `}
+                      value={schedule[lecture.lectureNo - 1]?.mergeWithSection || ""}
+                      onChange={(e) => {
+                        handleSchedule(prev => {
+                          const daySchedule = prev[day] || [];
+                          return {
+                            ...prev,
+                            [day]: daySchedule.map(lec =>
+                              lec.lectureNo === lecture.lectureNo
+                                ? { ...lec, mergeWithSection: e.target.value, merge: e.target.value != "" }
+                                : lec
+                            )
+                          };
+                        });
+                      }}
+                    >
+                      <option value="">Select Section to Merge</option>
+                      {sections.filter(sec => sec !== selectedSection).map((section, i) => (
+                        <option key={i} value={section}>{section}</option>
+                      ))}
+                    </select>
+                  </div>
+  
+                </div>
+  
+  
+                <div className="flex gap-4 items-end" >
+  
+                  {/* Teacher Search */}
+                  <div>
+                    <label
+                      className={`block mb-1 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
+                    >
+                      Teacher
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Search Teacher"
+                        value={rowState[lecture.lectureNo]?.teacherInput || ''}
+                        onChange={(e) => {
+                          setRowState(prev => ({
+                            ...prev,
+                            [lecture.lectureNo]: {
+                              ...prev[lecture.lectureNo],
+                              teacherInput: e.target.value,
+                              showSuggestions: true
+                            }
+                          }));
+                        }}
+                        required
+                        className={`
+                      w-full rounded-md px-3 py-2 border
+                      ${darkMode
+                            ? 'bg-gray-900 text-gray-200 border-gray-700'
+                            : 'bg-white text-purple-900 border-purple-300'}
+                      focus:outline-none focus:ring-2
+                    `}
+                      />
+                      {rowState[lecture.lectureNo]?.showSuggestions && (
+                        <div
+                          className={`
+                        absolute z-10 w-full mt-1 max-h-40 overflow-y-auto rounded-md
+                        ${darkMode ? 'bg-gray-700 text-gray-200' : 'bg-white text-gray-800'}
+                        shadow-lg
+                      `}
+                        >
+                          {rowState[lecture.lectureNo].suggestions.map((teacher, index) => (
+                            <div
+                              key={index}
+                              onClick={() => selectTeacher(lecture.lectureNo, teacher)}
+                              className={`
+                            flex items-center p-2 cursor-pointer 
+                            ${darkMode
+                                  ? 'hover:bg-gray-600'
+                                  : 'hover:bg-purple-100'}
+                          `}
+                            >
+                              <img
+                                src={teacher.profileLink}
+                                alt={teacher.name}
+                                className="w-8 h-8 rounded-full mr-2"
+                              />
+                              <div>
+                                <div>{teacher.name}</div>
+                                <small>{teacher.employmentNumber}</small>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+  
+  
+  
+                  {/* Availability Status */}
+                  <div className="flex items-center justify-center mb-3">
+  
+                    {rowState[lecture.lectureNo]?.remark === 'Good to go' ? (
+                      <FaCheckCircle className={`text-xl ${darkMode ? 'text-green-400' : 'text-green-600'}`} />
+                    ) : (
+                      <FaTimesCircle className={`text-xl ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </RemarkTooltip>
+  
+          </td>)
+        
+      )}
     </motion.tr>
-    {rowState.optional && optionalRows.map((data, idx) => (
-      <OptionalRow
-        key={idx}
-        lectureNo={lectureNo}
-        addNewRow={addNewRow}
-        RemoveNewRow={() => removeRow(idx)}
-        data={data}
-        handleOptionalRowChange={handleOptionalRowChange}
-        handleOptionalSuggestionClick={handleOptionalSuggestionClick}
-        optionalRows={optionalRows}
-        subjects={subjects}
-        idx={idx}
-        day={day}
-      />
-    ))}
-  </>
   );
 }

@@ -1,15 +1,60 @@
 // TimeTableStructure.jsx
-import React, { useContext, useState } from 'react';
-import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FiSun, FiMoon, FiPlus, FiClock, FiTrash2 } from 'react-icons/fi';
-import { BASE_URL } from '../../../../Config';
+import { FiPlus, FiClock, FiTrash2 } from 'react-icons/fi';
 import AuthContext from '../../../../Context/AuthContext';
+import { useTimetableContext } from '../TimetableContext';
+import { BASE_URL } from '../../../../Config';
+import axios from 'axios';
 
-const TimeTableStructure = ({formData, setFormData, handleSubmit}) => {
-    const [darkMode, setIsDarkMode] = useState(false);
-    const { authState } = useContext(AuthContext);
+const TimeTableStructure = () => {
+    // const [darkMode, setIsDarkMode] = useState(false);
+
+    const { classRange, setClassRange, structureDetails, setStructureDetails } = useTimetableContext();
+
+    console.log("classRange", classRange)
+    const [formData, setFormData] = useState({
+        classRange: classRange,
+        ...structureDetails
+    });
+
+
+    const { darkMode, authState } = useContext(AuthContext);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const structureResponse = await axios.post(`${BASE_URL}/timeTableStructure/create`, formData, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`,
+                },
+            });
+
+            if (structureResponse.status === 200) {
+                setStructureDetails(formData);
+                toast.success('Time table structure created successfully!');
+            }
+        }
+        catch (error) {
+            console.error('Error creating time table structure:', error);
+            toast.error('Failed to create time table structure!');
+        }
+    };
+
+
+    useEffect(() => {
+        console.log("test");
+        setClassRange(formData.classRange)
+    }, [formData.classRange]);
+    useEffect(() => {
+        console.log("test");
+        setFormData({
+            classRange: classRange,
+            ...structureDetails
+        })
+    }, [structureDetails]);
 
     const handleAddLecture = () => {
         setFormData(prev => ({
@@ -46,19 +91,9 @@ const TimeTableStructure = ({formData, setFormData, handleSubmit}) => {
 
 
     return (
-        <div className={`min-h-screen p-4 md:p-8 transition-colors duration-300 ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
-            {/* Dark Mode Toggle */}
-            {/* <button
-        onClick={() => setIsDarkMode(!darkMode)}
-        className={`fixed top-4 right-4 p-3 rounded-full ${
-          darkMode ? 'bg-gray-700 text-yellow-400' : 'bg-gray-200 text-gray-700'
-        } transition-all duration-300 hover:scale-110`}
-      >
-        {darkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
-      </button> */}
+        <div className={`p-4  md:p-8 transition-colors duration-300 ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
 
-            {/* Main Form Container */}
-            <div className={`max-w-4xl mx-auto ${darkMode ? 'bg-gray-800' : 'bg-white'
+            <div className={`mx-auto ${darkMode ? 'bg-gray-800' : 'bg-white'
                 } rounded-xl shadow-lg p-6 md:p-8 transition-all duration-300`}>
                 <h1 className="text-3xl font-bold text-center mb-8 text-blue-500">
                     Create Timetable Structure
@@ -66,13 +101,13 @@ const TimeTableStructure = ({formData, setFormData, handleSubmit}) => {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Basic Information */}
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-2 gap-6">
                         <div>
                             <label className="block text-sm font-medium mb-2">Class Range</label>
                             <select
                                 className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500 bg-white"
                                 name="classRange"
-                                value={formData.classRange}
+                                value={formData?.classRange || ''}
                                 onChange={(e) => setFormData(prev => ({ ...prev, classRange: e.target.value }))}
                                 required
                             >
@@ -88,7 +123,7 @@ const TimeTableStructure = ({formData, setFormData, handleSubmit}) => {
                             <label className="block text-sm font-medium mb-2">Lectures Before Lunch</label>
                             <input
                                 type="number"
-                                value={formData.numberOfLeacturesBeforeLunch}
+                                value={formData?.numberOfLeacturesBeforeLunch || ''}
                                 onChange={(e) => setFormData(prev => ({ ...prev, numberOfLeacturesBeforeLunch: e.target.value }))}
                                 className={`w-full p-3 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-300'
                                     } focus:ring-2 focus:ring-blue-500 outline-none`}
