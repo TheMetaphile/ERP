@@ -1,184 +1,219 @@
-import { useEffect, useState } from "react";
-import { motion } from 'framer-motion';
-import { FaBookOpen, FaClock, FaListOl, FaHourglassHalf, FaUtensils, FaPause } from 'react-icons/fa';
+// TimeTableStructure.jsx
+import React, { useContext, useState } from 'react';
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { FiSun, FiMoon, FiPlus, FiClock, FiTrash2 } from 'react-icons/fi';
+import { BASE_URL } from '../../../../Config';
+import AuthContext from '../../../../Context/AuthContext';
 
-export default function CreateTimetableStrucutre({ handleSubmit, handleChange }) {
-    const [selectedClass, setSelectedClass] = useState('');
-    useEffect(() => {
-        if (selectedClass != "") {
-            const e = { target: { name: "Class", value: selectedClass } };
-            handleChange(e);
-        }
-    }, [selectedClass]);
+const TimeTableStructure = ({formData, setFormData, handleSubmit}) => {
+    const [darkMode, setIsDarkMode] = useState(false);
+    const { authState } = useContext(AuthContext);
 
-    const [selectLectureNumber, setSelectedLectureNumber] = useState('');
-    useEffect(() => {
-        if (selectLectureNumber != "") {
-            const e = { target: { name: "lecture", value: selectLectureNumber } };
-            handleChange(e);
-        }
-    }, [selectLectureNumber]);
+    const handleAddLecture = () => {
+        setFormData(prev => ({
+            ...prev,
+            lectureStructure: [
+                ...prev.lectureStructure,
+                { startTime: '', endTime: '', lectureNo: prev.lectureStructure.length + 1 }
+            ]
+        }));
+    };
 
-    const [selectStart, setStart] = useState('');
-    useEffect(() => {
-        if (selectStart != "") {
-            const e = { target: { name: "start", value: selectStart } };
-            handleChange(e);
-        }
-    }, [selectStart]);
+    const handleLectureChange = (index, field, value) => {
+        const updatedStructure = [...formData.lectureStructure];
+        updatedStructure[index] = {
+            ...updatedStructure[index],
+            [field]: value
+        };
+        setFormData(prev => ({
+            ...prev,
+            lectureStructure: updatedStructure
+        }));
+    };
 
-    const [selectbefore, setbefore] = useState('');
-    useEffect(() => {
-        if (selectbefore != "") {
-            const e = { target: { name: "before", value: selectbefore } };
-            handleChange(e);
-        }
-    }, [selectbefore]);
-
-    const [selectDuration, setDuration] = useState('');
-    useEffect(() => {
-        if (selectDuration != "") {
-            const e = { target: { name: "duration", value: selectDuration } };
-            handleChange(e);
-        }
-    }, [selectDuration]);
-
-    const [selectbreak, setBreak] = useState('');
-    useEffect(() => {
-        if (selectbreak != "") {
-            const e = { target: { name: "break", value: selectbreak } };
-            handleChange(e);
-        }
-    }, [selectbreak]);
+    const handleRemoveLecture = (index) => {
+        const updatedStructure = formData.lectureStructure.filter((_, i) => i !== index);
+        setFormData(prev => ({
+            ...prev,
+            lectureStructure: updatedStructure.map((lecture, i) => ({
+                ...lecture,
+                lectureNo: i + 1
+            }))
+        }));
+    };
 
 
     return (
-        <motion.form
-            onSubmit={handleSubmit}
-            className='mt-6 w-full p-6 rounded-lg shadow-lg bg-purple-50 border'
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-        >
-            <div className="grid grid-cols-1 gap-6 mb-6 rounded-lg">
-                <motion.h1
-                    className='text-2xl font-bold text-purple-800'
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                >
-                    Create Structure
-                </motion.h1>
-                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <FormField icon={FaBookOpen} label="Class Range" isSelect={true}>
-                        <select
-                            className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500 bg-white"
-                            name="Class"
-                            value={selectedClass}
-                            onChange={(e) => setSelectedClass(e.target.value)}
-                            required
-                        >
-                            <option value="" disabled>Select Class</option>
-                            <option value="Pre-Nursery - U.K.J">Pre-Nursery - U.K.J</option>
-                            <option value="1st-12th">1st - 12th</option>
-                        </select>
-                    </FormField>
+        <div className={`min-h-screen p-4 md:p-8 transition-colors duration-300 ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+            {/* Dark Mode Toggle */}
+            {/* <button
+        onClick={() => setIsDarkMode(!darkMode)}
+        className={`fixed top-4 right-4 p-3 rounded-full ${
+          darkMode ? 'bg-gray-700 text-yellow-400' : 'bg-gray-200 text-gray-700'
+        } transition-all duration-300 hover:scale-110`}
+      >
+        {darkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
+      </button> */}
 
-                    <FormField icon={FaClock} label="Starting Time">
-                        <input
-                            type="time"
-                            name="start"
-                            value={selectStart}
-                            onChange={(e) => setStart(e.target.value)}
-                            required
-                            className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500"
-                        />
-                    </FormField>
+            {/* Main Form Container */}
+            <div className={`max-w-4xl mx-auto ${darkMode ? 'bg-gray-800' : 'bg-white'
+                } rounded-xl shadow-lg p-6 md:p-8 transition-all duration-300`}>
+                <h1 className="text-3xl font-bold text-center mb-8 text-blue-500">
+                    Create Timetable Structure
+                </h1>
 
-                    <FormField icon={FaListOl} label="Number Of Lectures" isSelect={true}>
-                        <select
-                            name="lecture"
-                            value={selectLectureNumber}
-                            onChange={(e) => setSelectedLectureNumber(e.target.value)}
-                            required
-                            className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500 bg-white"
-                        >
-                            <option value="" disabled>Select Lecture</option>
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
-                                <option key={num} value={num}>{num}</option>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Basic Information */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label className="block text-sm font-medium mb-2">Class Range</label>
+                            <select
+                                className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500 bg-white"
+                                name="classRange"
+                                value={formData.classRange}
+                                onChange={(e) => setFormData(prev => ({ ...prev, classRange: e.target.value }))}
+                                required
+                            >
+                                <option value="" disabled>Select Class</option>
+                                <option value="Pre-Nursery - U.K.J">Pre-Nursery - U.K.J</option>
+                                <option value="1st-12th">1st - 12th</option>
+                            </select>
+
+                        </div>
+
+
+                        <div>
+                            <label className="block text-sm font-medium mb-2">Lectures Before Lunch</label>
+                            <input
+                                type="number"
+                                value={formData.numberOfLeacturesBeforeLunch}
+                                onChange={(e) => setFormData(prev => ({ ...prev, numberOfLeacturesBeforeLunch: e.target.value }))}
+                                className={`w-full p-3 rounded-lg border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-300'
+                                    } focus:ring-2 focus:ring-blue-500 outline-none`}
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    {/* Lecture Structure */}
+                    <div className="mt-8">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-xl font-semibold">Lecture Structure</h2>
+                            <button
+                                type="button"
+                                onClick={handleAddLecture}
+                                className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                            >
+                                <FiPlus /> Add Lecture
+                            </button>
+                        </div>
+
+                        <div className="space-y-4">
+                            {formData?.lectureStructure?.map((lecture, index) => (
+                                index + 1 == formData.numberOfLeacturesBeforeLunch ?
+                                    <>
+                                        <div
+                                            key={index}
+                                            className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'
+                                                } flex flex-wrap items-center gap-4`}
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <FiClock className="text-blue-500" />
+                                                <span className="font-medium">Lecture {lecture.lectureNo}</span>
+                                            </div>
+
+                                            <div className="flex flex-1 items-center gap-4">
+                                                <input
+                                                    type="time"
+                                                    value={lecture.startTime}
+                                                    onChange={(e) => handleLectureChange(index, 'startTime', e.target.value)}
+                                                    className={`p-2 rounded border ${darkMode ? 'bg-gray-600 border-gray-500' : 'bg-white border-gray-300'
+                                                        }`}
+                                                    required
+                                                />
+                                                <span>to</span>
+                                                <input
+                                                    type="time"
+                                                    value={lecture.endTime}
+                                                    onChange={(e) => handleLectureChange(index, 'endTime', e.target.value)}
+                                                    className={`p-2 rounded border ${darkMode ? 'bg-gray-600 border-gray-500' : 'bg-white border-gray-300'
+                                                        }`}
+                                                    required
+                                                />
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                onClick={() => handleRemoveLecture(index)}
+                                                className="p-2 text-red-500 hover:bg-red-100 rounded-full transition-colors"
+                                            >
+                                                <FiTrash2 />
+                                            </button>
+                                        </div>
+                                        <div
+                                            key={index}
+                                            className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'
+                                                } flex flex-wrap items-center gap-4 text-center`}
+                                        >
+                                            LUNCH
+                                        </div>
+                                    </>
+                                    :
+                                    <div
+                                        key={index}
+                                        className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'
+                                            } flex flex-wrap items-center gap-4`}
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            <FiClock className="text-blue-500" />
+                                            <span className="font-medium">Lecture {lecture.lectureNo}</span>
+                                        </div>
+
+                                        <div className="flex flex-1 items-center gap-4">
+                                            <input
+                                                type="time"
+                                                value={lecture.startTime}
+                                                onChange={(e) => handleLectureChange(index, 'startTime', e.target.value)}
+                                                className={`p-2 rounded border ${darkMode ? 'bg-gray-600 border-gray-500' : 'bg-white border-gray-300'
+                                                    }`}
+                                                required
+                                            />
+                                            <span>to</span>
+                                            <input
+                                                type="time"
+                                                value={lecture.endTime}
+                                                onChange={(e) => handleLectureChange(index, 'endTime', e.target.value)}
+                                                className={`p-2 rounded border ${darkMode ? 'bg-gray-600 border-gray-500' : 'bg-white border-gray-300'
+                                                    }`}
+                                                required
+                                            />
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveLecture(index)}
+                                            className="p-2 text-red-500 hover:bg-red-100 rounded-full transition-colors"
+                                        >
+                                            <FiTrash2 />
+                                        </button>
+                                    </div>
                             ))}
-                        </select>
-                    </FormField>
+                        </div>
+                    </div>
 
-                    <FormField icon={FaHourglassHalf} label="Lecture Duration" isSelect={true}>
-                        <select
-                            name="duration"
-                            value={selectDuration}
-                            onChange={(e) => setDuration(e.target.value)}
-                            required
-                            className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500 bg-white"
-                        >
-                            <option value="" disabled>Select Duration</option>
-                            {['30 m', '35 m', '40 m', '45 m', '50 m'].map(duration => (
-                                <option key={duration} value={duration}>{duration}</option>
-                            ))}
-                        </select>
-                    </FormField>
-
-                    <FormField icon={FaUtensils} label="No. Of Lectures Before Lunch">
-                        <input
-                            type="number"
-                            name="before"
-                            value={selectbefore}
-                            onChange={(e) => setbefore(e.target.value)}
-                            required
-                            className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500"
-                        />
-                    </FormField>
-
-                    <FormField icon={FaPause} label="Duration Of Lunch" isSelect={true}>
-                        <select
-                            name="break"
-                            value={selectbreak}
-                            onChange={(e) => setBreak(e.target.value)}
-                            required
-                            className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500 bg-white"
-                        >
-                            <option value="" disabled>Select Duration</option>
-                            {['30 m', '35 m', '40 m', '45 m', '50 m'].map(duration => (
-                                <option key={duration} value={duration}>{duration}</option>
-                            ))}
-                        </select>
-                    </FormField>
-                </div>
+                    <button
+                        type="submit"
+                        className="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors mt-8"
+                    >
+                        Create Structure
+                    </button>
+                </form>
             </div>
-            <div className="flex items-center justify-end mt-6">
-                <motion.button
-                    className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-300"
-                    type="submit"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                >
-                    Create Structure
-                </motion.button>
-            </div>
-        </motion.form>
-    )
-}
-
-const inputVariants = {
-    hover: { scale: 1.02, transition: { duration: 0.2 } },
-    tap: { scale: 0.98 }
+            <ToastContainer position="bottom-right" theme={darkMode ? 'dark' : 'light'} />
+        </div>
+    );
 };
 
-const FormField = ({ icon: Icon, label, children, isSelect }) => (
-    <motion.div variants={inputVariants} whileHover="hover" whileTap="tap">
-        <label className='text-purple-800 font-medium mb-1 block'>{label}</label>
-        <div className="relative">
-            <Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-600" />
-            <div className={`pl-10 ${isSelect ? '' : 'pr-3'}`}>
-                {children}
-            </div>
-        </div>
-    </motion.div>
-);
+export default TimeTableStructure;

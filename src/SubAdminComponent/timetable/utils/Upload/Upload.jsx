@@ -17,10 +17,16 @@ const UploadSubAdmin = () => {
     const [loading, setLoading] = useState(true);
     const [ClassRange, setClassRange] = useState('1st-12th');
 
-    useEffect(() => {
-        setLoading(true);
-        handleFetch();
-    }, []);
+    const [formData, setFormData] = useState({
+        classRange: '1st-12th',
+        numberOfLeacturesBeforeLunch: '',
+        lectureStructure: []
+    });
+
+    // useEffect(() => {
+    //     setLoading(true);
+    //     handleFetch();
+    // }, []);
 
     const [structureData, setStructureData] = useState(
         {
@@ -50,16 +56,10 @@ const UploadSubAdmin = () => {
     useEffect(() => {
         //setLoading(true);
         handleFetch();
-    }, [ClassRange]);
+    }, [formData.classRange]);
 
-    const handleStructureChange = (e) => {
-        const { name, value } = e.target;
 
-        setStructureData(prevState => ({
-            ...prevState,
-            [`${name}`]: value
-        }))
-    };
+
     const handleTimetableChange = (index = 0, e) => {
         const { name, value } = e.target;
 
@@ -119,43 +119,21 @@ const UploadSubAdmin = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const createStructureData = {
-            accessToken: authState.accessToken,
-            classRange: structureData.Class,
-            numberOfLecture: structureData.lecture,
-            durationOfEachLeacture: structureData.duration,
-            firstLectureTiming: convertTo12HourFormat(structureData.start),
-            numberOfLeacturesBeforeLunch: structureData.before,
-            durationOfLunch: structureData.break
-        };
-        console.log(createStructureData)
         try {
-            const structureResponse = await axios.post(`${BASE_URL}/timeTableStructure/create`, createStructureData);
+            const response = await axios.post(`${BASE_URL}/timeTableStructure/create`, {
+                ...formData,
 
-            if (structureResponse.status === 200) {
-                console.log(structureResponse, 'OK', structureData.Class)
-                toast.success('Time table structure created successfully!');
+            }, {
+                headers: {
+                    Authorization: `Bearer ${authState.accessToken}`,
+                },
+            });
 
-                const scheduleArray = [];
-                for (let i = 0; i < structureData.lecture; i++) {
-                    scheduleArray.push({
-                        subject: '',
-                        teacher: ''
-                    });
-                }
-
-                setUploadData(prevState => ({
-                    ...prevState,
-                    schedule: scheduleArray
-                }))
-                setTimetableStructure(createStructureData);
-                // setShowTimetableStructure(false);
-                setShowTimetable(true);
+            if (response.data.status) {
+                toast.success('Timetable structure created successfully!');
             }
-        }
-        catch (error) {
-            console.error('Error creating time table structure:', error);
-            toast.error('Failed to create time table structure!');
+        } catch (error) {
+            toast.error(error.response?.data?.error || 'Something went wrong!');
         }
     };
 
@@ -166,29 +144,46 @@ const UploadSubAdmin = () => {
         try {
 
             const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
-                accessToken: authState.accessToken,
-                classRange: ClassRange,
-            });
+                classRange: formData.classRange,
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    },
+                });
 
             if (response.status === 200) {
 
                 console.log('response from fetch', response.data);
                 if (response.data) {
-                    console.log("here", response.data.numberOfLecture);
-                    const scheduleArray = [];
-                    for (let i = 0; i < response.data.numberOfLecture; i++) {
-                        scheduleArray.push({
-                            subject: '',
-                            teacher: ''
-                        });
-                    }
+                    console.log("here", response.data.lectureStructure);
+                    // const scheduleArray = [];
+                    // for (let i = 0; i < response.data.lectureStructure; i++) {
+                    //     scheduleArray.push({
+                    //         subject: '',
+                    //         teacher: ''
+                    //     });
+                    // }
 
-                    setUploadData(prevState => ({
-                        ...prevState,
-                        schedule: scheduleArray
-                    }))
+                    // setUploadData(prevState => ({
+                    //     ...prevState,
+                    //     schedule: scheduleArray
+                    // }))
                     setTimetableStructure(response.data);
-                    setShowTimetableStructure(false);
+                    if (response.data) {
+                        setFormData((prev) => ({
+                            ...prev, numberOfLeacturesBeforeLunch: response.data.numberOfLeacturesBeforeLunch,
+                            lectureStructure: response.data.lectureStructure
+                        }))
+
+                    }
+                    else {
+                        setFormData((prev) => ({
+                            ...prev, numberOfLeacturesBeforeLunch: '',
+                            lectureStructure: []
+                        }))
+                    }
+                    // setShowTimetableStructure(false);
                     setShowTimetable(true);
 
 
@@ -261,9 +256,10 @@ const UploadSubAdmin = () => {
                                 transition={{ duration: 0.3 }}
                             >
                                 <CreateTimetableStrucutre
-                                    handleChange={handleStructureChange}
-                                    structureData={structureData}
+                                    formData={formData}
+                                    setFormData={setFormData}
                                     handleSubmit={handleSubmit}
+
                                 />
                             </motion.div>
                         )}
@@ -277,11 +273,11 @@ const UploadSubAdmin = () => {
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <UploadTimetable
+                                 <UploadTimetable
                                     fetchedTimeTableStructure={fetchedTimeTableStructure}
                                     uploadTimetableData={uploadTimetableData}
                                     handleChange={handleTimetableChange}
-                                />
+                                /> 
                             </motion.div>
                         )}
                     </AnimatePresence>

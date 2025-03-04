@@ -28,8 +28,8 @@ function StudentsTimeTableSubAdmin() {
     
         const times = [];
         let currentTime = convertToDate(firstLectureTiming);
-        const lectureDuration = parseInt(durationOfEachLeacture.split(' ')[0], 10);
-        const lunchDuration = parseInt(durationOfLunch.split(' ')[0], 10);
+        // const lectureDuration = parseInt(durationOfEachLeacture.split(' ')[0], 10);
+        // const lunchDuration = parseInt(durationOfLunch.split(' ')[0], 10);
     
         if (isNaN(lectureDuration) || isNaN(lunchDuration)) {
             console.error('Parsed durations are NaN:', { lectureDuration, lunchDuration });
@@ -70,9 +70,9 @@ function StudentsTimeTableSubAdmin() {
     };
     
 
-    useEffect(() => {
-        if (structureDetails) calculateLectureTimes();
-    }, [structureDetails]);
+    // useEffect(() => {
+    //     if (structureDetails) calculateLectureTimes();
+    // }, [structureDetails]);
 
     useEffect(() => {
         if (structureDetails) {
@@ -102,7 +102,7 @@ function StudentsTimeTableSubAdmin() {
                 }
                 console.log(response.data)
             } catch (error) {
-                toast.error('Error fetching data.');
+                toast.error(error.response.data.error);
                 console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);

@@ -26,21 +26,25 @@ export const StructureProvider = ({ children }) => {
         console.log('classRange', classRange);
         try {
             const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
-                accessToken: authState.accessToken,
                 classRange: classRange,
-            });
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    },
+                });
 
             if (response.status === 200) {
-                console.log('response from fetch', response.data);
-                if (response.data) {
+                console.log('response from fetch', response.data.lectureStructure);
+                if (response.data.lectureStructure) {
                     const scheduleArray = [];
-                    for (let i = 0; i < response.data.numberOfLecture; i++) {
+                    for (let i = 0; i < response.data.lectureStructure.length; i++) {
                         scheduleArray.push({
                             subject: '',
                             teacher: ''
                         });
                     }
-                    setStructureDetails(response.data);
+                    setStructureDetails(response.data.lectureStructure);
                     console.log('response', response.data);
                 }
             }

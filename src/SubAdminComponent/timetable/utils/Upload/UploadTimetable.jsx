@@ -10,21 +10,16 @@ import { BASE_URL } from '../../../../Config';
 
 export default function UploadTimetable({ fetchedTimeTableStructure, handleChange }) {
     const [lectureTimes, setLectureTimes] = useState([]);
-    const [schedule, setSchedule] = useState(Array(fetchedTimeTableStructure.numberOfLecture).fill(
-        {
+    console.log(fetchedTimeTableStructure)
+    const [schedule, setSchedule] = useState(
+        fetchedTimeTableStructure.lectureStructure.map((lecture) => ({
             subject: '',
             teacher: '',
-            lectureNo: '',
+            lectureNo: lecture.lectureNo,
             optional: false,
-            optionalSubjects: [
-                {
-                    optionalSubject: '',
-                    mergeWithSection: '',
-                    teacher: '',
-                }
-            ]
-        }
-    ));
+            optionalSubjects: []
+        }))
+    );
     const subjects = ["Hindi", "English", "Mathematics", "Science", " Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", " Accounts"];
     const [selectedSubjects, setSelectedSubjects] = useState([]);
     const [selectedTeachers, setSelectedTeachers] = useState([]);
@@ -89,9 +84,9 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
         setLectureTimes(times);
     };
 
-    useEffect(() => {
-        calculateLectureTimes();
-    }, [fetchedTimeTableStructure]);
+    // useEffect(() => {
+    //     calculateLectureTimes();
+    // }, [fetchedTimeTableStructure]);
 
     const formatTime = (date) => {
         let hours = date.getHours();
@@ -127,36 +122,49 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
         }
     }, [selectedDay]);
 
-
+    const handleScheduleUpdate = (index, updates) => {
+        setSchedule(prevSchedule => {
+            const newSchedule = [...prevSchedule];
+            newSchedule[index] = {
+                ...newSchedule[index],
+                ...updates
+            };
+            return newSchedule;
+        });
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!selectedSubjects.length || !selectedTeachers.length || !selectedClass || !selectedSection || !selectedDay || !authState.accessToken) {
-            toast.error("Please ensure all fields are filled out correctly.");
+        if (!selectedClass || !selectedSection || !selectedDay || !authState.accessToken) {
+            toast.error("Please ensure class, section, and day are selected.");
             return;
         }
 
+        // Validate schedule data
+        const isScheduleValid = schedule.every(lecture => 
+            lecture.subject && lecture.teacher && lecture.lectureNo
+        );
+
+        if (!isScheduleValid) {
+            toast.error("Please fill in all lecture details");
+            return;
+        }
 
         const timetableData = {
             accessToken: authState.accessToken,
             class: selectedClass,
             section: selectedSection,
-            day: selectedDay,
-            schedule,
+            day: selectedDay.toLowerCase(),
+            schedule: schedule
         };
-
-        console.log(timetableData, 'schedule', schedule);
 
         try {
             const response = await axios.post(`${BASE_URL}/timetable/upload`, timetableData);
             if (response.status === 200) {
-                console.log(response.data);
                 toast.success('Timetable uploaded successfully');
-            } else {
-                toast.error('Failed to upload timetable');
             }
         } catch (error) {
-            const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+            const errorMessage = error.response?.data?.error || 'Failed to upload timetable';
             toast.error(errorMessage);
         }
     };
@@ -246,8 +254,9 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
                         <TimetableHeader />
 
                         <tbody>
-                            {lectureTimes.map((time, index) => (
-                                <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} Time={`${formatTime(time.start)}-${formatTime(time.end)}`} numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange} handleSchedule={setSchedule} day={selectedDay} />
+                            {fetchedTimeTableStructure.lectureStructure.map((time, index) => (
+                                <TimetableRow key={index} index={index} Subject={selectedSubjects[index] || subjects[0]} lectureNo={`${index + 1} `} 
+                                 numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch} subjects={subjects} handleSubjectChange={handleSubjectChange} handleTeacherChange={handleTeacherChange} handleSchedule={setSchedule} day={selectedDay} />
                             ))}
                         </tbody>
                     </table>
