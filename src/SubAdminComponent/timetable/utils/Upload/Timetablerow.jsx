@@ -58,8 +58,21 @@ export default function TimetableRow({
   );
 
   useEffect(() => {
-    if (rowStateWeek) {
+    if (rowStateWeek && Object.keys(rowStateWeek).length > 0) {
       setRowState(rowStateWeek);
+    } else {
+      console.log("Resetting row state");
+      setRowState(
+        lectureStructure.reduce((acc, lecture) => ({
+          ...acc,
+          [lecture.lectureNo]: {
+            teacherInput: "",
+            suggestions: [],
+            showSuggestions: false,
+            remark: "",
+          }
+        }), {})
+      )
     }
   }, [rowStateWeek])
   // Search Teachers Function
@@ -162,7 +175,7 @@ export default function TimetableRow({
     }, 500);
 
     return () => clearTimeout(searchTimer);
-  }, [searchTeachers,rowState]);
+  }, [searchTeachers, rowState]);
 
   const handleClickOutside = (event) => {
     if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {

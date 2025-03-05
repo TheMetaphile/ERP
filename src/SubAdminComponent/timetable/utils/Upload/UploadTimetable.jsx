@@ -143,6 +143,20 @@ export default function UploadTimetable({ handleChange }) {
             }
         } catch (error) {
             console.error("Error fetching timetable:", error.response?.data || error.message);
+            setRowState({});
+            let initialSchedule = {};
+
+            days.forEach((day) => {
+                initialSchedule[day] = structureDetails.lectureStructure.map((lecture) => ({
+                    subject: '',
+                    teacher: '',
+                    lectureNo: lecture.lectureNo,
+                    merge: false,
+                    mergeWithSection: ''
+                }));
+            });
+            setSchedule(initialSchedule);
+
         }
 
 
