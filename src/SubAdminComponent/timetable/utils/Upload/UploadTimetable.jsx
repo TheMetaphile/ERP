@@ -85,39 +85,44 @@ export default function UploadTimetable({ handleChange }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        try {
+            if (!selectedClass || !selectedSection) {
+                toast.error("Please ensure class and section are selected.");
+                setIsLoading(false);
+                return;
+            }
+            const timetable = structuredClone(schedule);
 
-        if (!selectedClass || !selectedSection) {
-            toast.error("Please ensure class and section are selected.");
-            setIsLoading(false);
-            return;
-        }
-        const timetable = schedule;
-        for (const day of Object.keys(timetable)) {
-            for (const lecture of timetable[day]) {
-                lecture.teacher = lecture.teacher._id;
-                if(lecture.optional && lecture.optionalSubjects.length >0){
-                    for(const optional of lecture.optionalSubjects){
-                        optional.teacher = optional.teacher.id;
+
+            console.log("upload", timetable);
+
+            for (const day of Object.keys(timetable)) {
+                for (const lecture of timetable[day]) {
+                    lecture.teacher = lecture.teacher._id;
+                    if (lecture.optional && lecture.optionalSubjects.length > 0) {
+                        for (const optional of lecture.optionalSubjects) {
+                            optional.teacher = optional?.teacher?._id;
+                        }
                     }
                 }
             }
-        }
 
 
 
-        const timetableData = {
-            accessToken: authState.accessToken,
-            class: selectedClass,
-            section: selectedSection,
-            schedule: timetable
-        };
+            const timetableData = {
+                accessToken: authState.accessToken,
+                class: selectedClass,
+                section: selectedSection,
+                schedule: timetable
+            };
 
-        try {
+
             const response = await axios.post(`${BASE_URL}/timetable/upload`, timetableData);
             if (response.status === 200) {
                 toast.success('Timetable uploaded successfully');
             }
         } catch (error) {
+            console.log(error);
             const errorMessage = error.response?.data?.error || 'Failed to upload timetable';
             toast.error(errorMessage);
         } finally {
@@ -151,6 +156,8 @@ export default function UploadTimetable({ handleChange }) {
                         };
                     }
                 }
+                console.log("upload", response.data);
+
                 setSchedule(response.data);
                 setRowState(rowState);
             }

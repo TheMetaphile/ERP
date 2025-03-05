@@ -87,7 +87,7 @@ export default function TimetableRow({
       });
 
       return response.data.Teachers.map(teacher => ({
-        id: teacher._id,
+        _id: teacher._id,
         name: teacher.name,
         profileLink: teacher.profileLink,
         email: teacher.email,
@@ -120,6 +120,10 @@ export default function TimetableRow({
     });
   };
 
+
+  useEffect(()=>{
+    console.log('schedule',schedule)
+  },[schedule])
   const addOptionalSubject = (lectureNo) => {
     handleSchedule(prev => {
       const daySchedule = prev[day] || [];
@@ -161,7 +165,7 @@ export default function TimetableRow({
 
   const selectTeacher = async (lectureNo, teacher) => {
     try {
-      const remark = await fetchTeacherAvailability(lectureNo, teacher.id, day);
+      const remark = await fetchTeacherAvailability(lectureNo, teacher._id, day);
 
       setRowState(prev => ({
         ...prev,
@@ -179,7 +183,7 @@ export default function TimetableRow({
           ...prev,
           [day]: daySchedule.map(lec =>
             lec.lectureNo === lectureNo
-              ? { ...lec, teacher: teacher.id }
+              ? { ...lec, teacher: teacher._id }
               : lec
           )
         };
@@ -279,6 +283,9 @@ export default function TimetableRow({
                     addOptionalSubject={addOptionalSubject}
                     handleOptionalSubjectUpdate={handleOptionalSubjectUpdate}
                     removeOptionalSubject={removeOptionalSubject}
+                    searchTeachers={searchTeachers}
+                    selectTeacher={selectTeacher}
+                    setRowState={setRowState}
                   />
                 </RemarkTooltip>
               </td>
@@ -345,6 +352,7 @@ const LectureCell = ({
   const [showMainSuggestions, setShowMainSuggestions] = useState(false);
   const [showOptionalSuggestions, setShowOptionalSuggestions] = useState({});
   const suggestionRef = useRef(null);
+
   const handleTeacherSearch = async (value, isOptional = false, optionalIndex = null) => {
     if (!value.trim()) {
       if (isOptional) {
@@ -386,21 +394,25 @@ const LectureCell = ({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (suggestionRef.current && !suggestionRef.current.contains(event.target)) {
-        setShowMainSuggestions(false);
-        setShowOptionalSuggestions({});
+        setTimeout(() => {
+          setShowMainSuggestions(false);
+          setShowOptionalSuggestions({});
+        }, 100); // Delay closing so that handleTeacherSelect executes first
       }
     };
-
+  
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+  
   // In LectureCell component
   const handleTeacherSelect = async (teacher, isOptional = false, optionalIndex = null) => {
+    console.log("teacher",teacher);
     if (isOptional) {
       handleOptionalSubjectUpdate(lecture.lectureNo, optionalIndex, 'teacher', {
-        id: teacher.id,
+        _id: teacher._id,
         name: teacher.name
       });
       setShowOptionalSuggestions(prev => ({
@@ -413,11 +425,12 @@ const LectureCell = ({
       }));
     } else {
       await selectTeacher(lecture.lectureNo, teacher);
-      setShowMainSuggestions(false);
+      // setShowMainSuggestions(false);
       setMainTeacherSuggestions([]);
     }
   };
 
+  // console.log("test",schedule[lecture?.lectureNo]?.['optionalSubjects']?.[0]?.teacher);
   return (
     <div className="space-y-4">
       <div className="flex flex-col space-y-2">
@@ -460,6 +473,7 @@ const LectureCell = ({
             type="text"
             value={rowState[lecture?.lectureNo]?.teacherInput || ''}
             onChange={(e) => {
+              console.log(e.target.value)
               handleTeacherSearch(e.target.value);
               setRowState(prev => ({
                 ...prev,
@@ -542,7 +556,7 @@ const LectureCell = ({
             <div className="flex-1 relative" ref={suggestionRef}>
               <input
                 type="text"
-                value={optSubject.teacher.name || ''}
+                value={optSubject?.teacher?.name || ''}
                 onChange={(e) => {
                   handleTeacherSearch(e.target.value, true, index);
                   handleOptionalSubjectUpdate(lecture.lectureNo, index, 'teacher', e.target.value);
@@ -595,7 +609,7 @@ const LectureCell = ({
             </div>
 
             <select
-              value={optSubject.mergeWithSection || ''}
+              value={optSubject?.mergeWithSection || ''}
               onChange={(e) => handleOptionalSubjectUpdate(lecture.lectureNo, index, 'mergeWithSection', e.target.value)}
               className={`flex-1 rounded-md px-3 py-2 border ${darkMode
                 ? 'bg-gray-800 text-gray-200 border-gray-600'
