@@ -16,6 +16,7 @@ export default function UploadTimetable({ handleChange }) {
     const { authState } = useContext(AuthContext);
     const { setClass, structureDetails } = useTimetableContext();
 
+
     const [schedule, setSchedule] = useState(() => {
         let initialSchedule = {};
 
@@ -31,6 +32,10 @@ export default function UploadTimetable({ handleChange }) {
 
         return initialSchedule;
     });
+
+
+    const [rowState, setRowState] = useState(null);
+
 
     useEffect(() => {
 
@@ -110,9 +115,9 @@ export default function UploadTimetable({ handleChange }) {
     };
 
 
-    const fetchTimeTable= async()=>{
+    const fetchTimeTable = async () => {
         try {
-            const response = await axios.post(`${BASE_URL}/timetable/fetch/student`, 
+            var response = await axios.post(`${BASE_URL}/timetable/fetch/student`,
                 { class: selectedClass, section: selectedSection },
                 {
                     headers: {
@@ -120,20 +125,50 @@ export default function UploadTimetable({ handleChange }) {
                     }
                 }
             );
-            console.log("Timetable Data:", response.data);
-            if (response.status === 200) {
+            // console.log("Timetable Data:", response.data);
+            if (response.status === 200 && response.data) {
+                var rowState = {};
+                for (const day of Object.keys(response.data)) {
+                    rowState[day] = {};
+                    for (const lecture of response.data[day]) {
+                        console.log(lecture, day);
+                        // const remark = await fetchTeacherAvailability(lecture.lectureNo, lecture.teacher._id, day)
+                        rowState[day][`${lecture.lectureNo}`] = { teacherInput: lecture.teacher.name, suggestions: [], showSuggestions: false, remark: 'Good to go' };
+                    }
+                };
+
                 setSchedule(response.data);
+                setRowState(rowState);
+                console.log(rowState, "cjecsudghilau");
             }
         } catch (error) {
             console.error("Error fetching timetable:", error.response?.data || error.message);
         }
-        
+
 
     }
 
-    useEffect(()=>{
-        if(selectedClass && selectedSection) fetchTimeTable();
-    },[selectedClass,selectedSection])
+    useEffect(() => {
+        if (selectedClass && selectedSection) fetchTimeTable();
+    }, [selectedClass, selectedSection])
+
+    const fetchTeacherAvailability = async (lecture, email, day) => {
+        if (!lecture || !email || !day) return "Incomplete information";
+
+        try {
+            const response = await axios.get(`${BASE_URL}/timetable/fetch/checkAvailability`, {
+                params: { lecture, day, email },
+                headers: {
+                    'Authorization': `Bearer ${authState.accessToken}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+            return response.data.remark;
+        } catch (error) {
+            console.error('Availability check failed:', error);
+            return "Availability unknown";
+        }
+    };
 
     return (
         <motion.div
@@ -194,6 +229,9 @@ export default function UploadTimetable({ handleChange }) {
                                     sections={sectionsDetails}
                                     selectedSection={selectedSection}
                                     day={day}
+                                    fetchTeacherAvailability={fetchTeacherAvailability}
+                                    rowStateWeek={rowState?.[day] || ""}
+
                                 />
                             ))}
                         </tbody>

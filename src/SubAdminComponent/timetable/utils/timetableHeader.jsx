@@ -10,7 +10,7 @@ export default function TimetableHeader({ fields = [], numberOfLecturesBeforeLun
         >
             <tr className='w-full'>
                 {['', ...fields].map((header, index) => (
-                    numberOfLecturesBeforeLunch && numberOfLecturesBeforeLunch === index  ?
+                    numberOfLecturesBeforeLunch && numberOfLecturesBeforeLunch === index ?
                         (<>
                             <th
                                 key={index}
@@ -20,7 +20,7 @@ export default function TimetableHeader({ fields = [], numberOfLecturesBeforeLun
                                 <div>{header.startTime} - {header.endTime}</div>
                             </th>
                             <th
-                                key={index}
+                                key={"lunch"}
                                 className="px-4 py-3 bg-yellow-600 text-center border border-primary-300 dark:border-dark-300 text-sm whitespace-nowrap"
                             >
 

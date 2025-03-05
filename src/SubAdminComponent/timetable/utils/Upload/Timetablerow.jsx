@@ -37,7 +37,9 @@ export default function TimetableRow({
   sections = [],
   selectedSection,
   numberOfLeacturesBeforeLunch,
-  day
+  day,
+  rowStateWeek,
+  fetchTeacherAvailability
 }) {
   const { darkMode, authState } = useContext(AuthContext);
   const suggestionsRef = useRef(null);
@@ -55,6 +57,11 @@ export default function TimetableRow({
     }), {})
   );
 
+  useEffect(() => {
+    if (rowStateWeek) {
+      setRowState(rowStateWeek);
+    }
+  }, [rowStateWeek])
   // Search Teachers Function
   const searchTeachers = useCallback(async (searchText) => {
     if (!searchText) return [];
@@ -83,7 +90,7 @@ export default function TimetableRow({
   // Handle Teacher Selection
   const selectTeacher = async (lectureNo, teacher) => {
     try {
-      const remark = await fetchTeacherAvailability(lectureNo, teacher.id);
+      const remark = await fetchTeacherAvailability(lectureNo, teacher.id,day);
 
       setRowState(prev => ({
         ...prev,
@@ -113,31 +120,17 @@ export default function TimetableRow({
   };
 
   // Fetch Teacher Availability
-  const fetchTeacherAvailability = async (lecture, email) => {
-    if (!lecture || !email || !day) return "Incomplete information";
 
-    try {
-      const response = await axios.get(`${BASE_URL}/timetable/fetch/checkAvailability`, {
-        params: { lecture, day, email },
-        headers: {
-          'Authorization': `Bearer ${authState.accessToken}`,
-          'Content-Type': 'application/json',
-        }
-      });
-      return response.data.remark;
-    } catch (error) {
-      console.error('Availability check failed:', error);
-      return "Availability unknown";
-    }
-  };
 
+  console.log(rowState);
   // Debounced Teacher Search
   useEffect(() => {
     const searchTimer = setTimeout(async () => {
+
       for (let lecture of lectureStructure) {
         const { teacherInput, showSuggestions, suggestions } = rowState[lecture.lectureNo];
+        if (teacherInput && teacherInput.trim() && showSuggestions && suggestions.length === 0) {
 
-        if (teacherInput.trim() && showSuggestions && suggestions.length === 0) {
           const suggestions = await searchTeachers(teacherInput);
 
           setRowState(prev => ({
@@ -149,7 +142,11 @@ export default function TimetableRow({
             }
           }));
         } else {
-          if(!teacherInput.trim()){
+          console.log("Reset ", teacherInput);
+
+          if (!teacherInput.trim()) {
+
+
             setRowState(prev => ({
               ...prev,
               [lecture.lectureNo]: {
@@ -165,7 +162,7 @@ export default function TimetableRow({
     }, 500);
 
     return () => clearTimeout(searchTimer);
-  }, [rowState, searchTeachers]);
+  }, [searchTeachers]);
 
   const handleClickOutside = (event) => {
     if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
@@ -208,202 +205,202 @@ export default function TimetableRow({
       </td>
 
       {lectureStructure.map((lecture, idx) => (
-        
-          numberOfLeacturesBeforeLunch && numberOfLeacturesBeforeLunch === idx +1 ?
+
+        numberOfLeacturesBeforeLunch && numberOfLeacturesBeforeLunch === idx + 1 ?
           <>
-          <td
-          ref={suggestionsRef}
+            <td
+              ref={suggestionsRef}
 
-          key={idx}
-          className={`p-3 border border-black/50 ${rowState[lecture.lectureNo]?.remark === 'Good to go'
-            ? (darkMode ? 'bg-green-900/30' : 'bg-green-100')
-            : (darkMode ? 'bg-red-900/30' : '')
-            }`}
-        >
-          <RemarkTooltip
-            message={rowState[lecture.lectureNo]?.remark || ''}
-          >
-            <div className="flex flex-col space-y-4">
-              {/* Subject Selector */}
+              key={idx}
+              className={`p-3 border border-black/50 ${rowState[lecture.lectureNo]?.remark === 'Good to go'
+                ? (darkMode ? 'bg-green-900/30' : 'bg-green-100')
+                : (darkMode ? 'bg-red-900/30' : '')
+                }`}
+            >
+              <RemarkTooltip
+                message={rowState[lecture.lectureNo]?.remark || ''}
+              >
+                <div className="flex flex-col space-y-4">
+                  {/* Subject Selector */}
 
-              <div className=" gap-4">
-                <div>
-                  <label
-                    className={`block mb-1 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
-                  >
-                    Subject
-                  </label>
-                  <div className="relative">
-                    <FaBook className={`absolute left-3 top-3 ${darkMode ? 'text-gray-400' : 'text-purple-500'}`} />
-                    <select
-                      className={`
+                  <div className=" gap-4">
+                    <div>
+                      <label
+                        className={`block mb-1 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
+                      >
+                        Subject
+                      </label>
+                      <div className="relative">
+                        <FaBook className={`absolute left-3 top-3 ${darkMode ? 'text-gray-400' : 'text-purple-500'}`} />
+                        <select
+                          className={`
                     w-fit pl-10 rounded-md px-3 py-2 border
                     ${darkMode
-                          ? 'bg-gray-900 text-gray-200 border-gray-700'
-                          : 'bg-purple-50 text-purple-900 border-purple-300'}
+                              ? 'bg-gray-900 text-gray-200 border-gray-700'
+                              : 'bg-purple-50 text-purple-900 border-purple-300'}
                     focus:outline-none focus:ring-2
                   `}
-                      value={schedule[lecture.lectureNo - 1]?.subject || ""}
-                      onChange={(e) => {
-                        handleSchedule(prev => {
-                          const daySchedule = prev[day] || [];
-                          return {
-                            ...prev,
-                            [day]: daySchedule.map(lec =>
-                              lec.lectureNo === lecture.lectureNo
-                                ? { ...lec, subject: e.target.value }
-                                : lec
-                            )
-                          };
-                        });
-                      }}
-                      required
-                    >
-                      <option value="">Select Subject</option>
-                      {subjects.map((subject, i) => (
-                        <option key={i} value={subject}>{subject}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
+                          value={schedule[lecture.lectureNo - 1]?.subject || ""}
+                          onChange={(e) => {
+                            handleSchedule(prev => {
+                              const daySchedule = prev[day] || [];
+                              return {
+                                ...prev,
+                                [day]: daySchedule.map(lec =>
+                                  lec.lectureNo === lecture.lectureNo
+                                    ? { ...lec, subject: e.target.value }
+                                    : lec
+                                )
+                              };
+                            });
+                          }}
+                          required
+                        >
+                          <option value="">Select Subject</option>
+                          {subjects.map((subject, i) => (
+                            <option key={i} value={subject}>{subject}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
 
 
-                {/* Section Merger */}
-                <div>
-                  <label
-                    className={`block mb-1 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
-                  >
-                    Merge with Section
-                  </label>
-                  <select
-                    className={`
+                    {/* Section Merger */}
+                    <div>
+                      <label
+                        className={`block mb-1 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
+                      >
+                        Merge with Section
+                      </label>
+                      <select
+                        className={`
                  rounded-md px-3 py-2 border
                   ${darkMode
-                        ? 'bg-gray-900 text-gray-200 border-gray-700'
-                        : 'bg-purple-50 text-purple-900 border-purple-300'}
+                            ? 'bg-gray-900 text-gray-200 border-gray-700'
+                            : 'bg-purple-50 text-purple-900 border-purple-300'}
                   focus:outline-none focus:ring-2
                 `}
-                    value={schedule[lecture.lectureNo - 1]?.mergeWithSection || ""}
-                    onChange={(e) => {
-                      handleSchedule(prev => {
-                        const daySchedule = prev[day] || [];
-                        return {
-                          ...prev,
-                          [day]: daySchedule.map(lec =>
-                            lec.lectureNo === lecture.lectureNo
-                              ? { ...lec, mergeWithSection: e.target.value, merge: e.target.value != "" }
-                              : lec
-                          )
-                        };
-                      });
-                    }}
-                  >
-                    <option value="">Select Section to Merge</option>
-                    {sections.filter(sec => sec !== selectedSection).map((section, i) => (
-                      <option key={i} value={section}>{section}</option>
-                    ))}
-                  </select>
-                </div>
+                        value={schedule[lecture.lectureNo - 1]?.mergeWithSection || ""}
+                        onChange={(e) => {
+                          handleSchedule(prev => {
+                            const daySchedule = prev[day] || [];
+                            return {
+                              ...prev,
+                              [day]: daySchedule.map(lec =>
+                                lec.lectureNo === lecture.lectureNo
+                                  ? { ...lec, mergeWithSection: e.target.value, merge: e.target.value != "" }
+                                  : lec
+                              )
+                            };
+                          });
+                        }}
+                      >
+                        <option value="">Select Section to Merge</option>
+                        {sections.filter(sec => sec !== selectedSection).map((section, i) => (
+                          <option key={i} value={section}>{section}</option>
+                        ))}
+                      </select>
+                    </div>
 
-              </div>
+                  </div>
 
 
-              <div className="flex gap-4 items-end" >
+                  <div className="flex gap-4 items-end" >
 
-                {/* Teacher Search */}
-                <div>
-                  <label
-                    className={`block mb-1 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
-                  >
-                    Teacher
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Search Teacher"
-                      value={rowState[lecture.lectureNo]?.teacherInput || ''}
-                      onChange={(e) => {
-                        setRowState(prev => ({
-                          ...prev,
-                          [lecture.lectureNo]: {
-                            ...prev[lecture.lectureNo],
-                            teacherInput: e.target.value,
-                            showSuggestions: true
-                          }
-                        }));
-                      }}
-                      required
-                      className={`
+                    {/* Teacher Search */}
+                    <div>
+                      <label
+                        className={`block mb-1 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
+                      >
+                        Teacher
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          placeholder="Search Teacher"
+                          value={rowState[lecture.lectureNo]?.teacherInput || ''}
+                          onChange={(e) => {
+                            setRowState(prev => ({
+                              ...prev,
+                              [lecture.lectureNo]: {
+                                ...prev[lecture.lectureNo],
+                                teacherInput: e.target.value,
+                                showSuggestions: true
+                              }
+                            }));
+                          }}
+                          required
+                          className={`
                     w-full rounded-md px-3 py-2 border
                     ${darkMode
-                          ? 'bg-gray-900 text-gray-200 border-gray-700'
-                          : 'bg-white text-purple-900 border-purple-300'}
+                              ? 'bg-gray-900 text-gray-200 border-gray-700'
+                              : 'bg-white text-purple-900 border-purple-300'}
                     focus:outline-none focus:ring-2
                   `}
-                    />
-                    {rowState[lecture.lectureNo]?.showSuggestions && (
-                      <div
-                        className={`
+                        />
+                        {rowState[lecture.lectureNo]?.showSuggestions && (
+                          <div
+                            className={`
                       absolute z-10 w-full mt-1 max-h-40 overflow-y-auto rounded-md
                       ${darkMode ? 'bg-gray-700 text-gray-200' : 'bg-white text-gray-800'}
                       shadow-lg
                     `}
-                      >
-                        {rowState[lecture.lectureNo].suggestions.map((teacher, index) => (
-                          <div
-                            key={index}
-                            onClick={() => selectTeacher(lecture.lectureNo, teacher)}
-                            className={`
+                          >
+                            {rowState[lecture.lectureNo].suggestions.map((teacher, index) => (
+                              <div
+                                key={index}
+                                onClick={() => selectTeacher(lecture.lectureNo, teacher)}
+                                className={`
                           flex items-center p-2 cursor-pointer 
                           ${darkMode
-                                ? 'hover:bg-gray-600'
-                                : 'hover:bg-purple-100'}
+                                    ? 'hover:bg-gray-600'
+                                    : 'hover:bg-purple-100'}
                         `}
-                          >
-                            <img
-                              src={teacher.profileLink}
-                              alt={teacher.name}
-                              className="w-8 h-8 rounded-full mr-2"
-                            />
-                            <div>
-                              <div>{teacher.name}</div>
-                              <small>{teacher.employmentNumber}</small>
-                            </div>
+                              >
+                                <img
+                                  src={teacher.profileLink}
+                                  alt={teacher.name}
+                                  className="w-8 h-8 rounded-full mr-2"
+                                />
+                                <div>
+                                  <div>{teacher.name}</div>
+                                  <small>{teacher.employmentNumber}</small>
+                                </div>
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                        )}
                       </div>
-                    )}
+                    </div>
+
+
+
+                    {/* Availability Status */}
+                    <div className="flex items-center justify-center mb-3">
+
+                      {rowState[lecture.lectureNo]?.remark === 'Good to go' ? (
+                        <FaCheckCircle className={`text-xl ${darkMode ? 'text-green-400' : 'text-green-600'}`} />
+                      ) : (
+                        <FaTimesCircle className={`text-xl ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
+                      )}
+                    </div>
                   </div>
                 </div>
+              </RemarkTooltip>
 
+            </td>
+            <td
 
+              key={'l'}
+              className={`p-3 border border-black/50 bg-yellow-900/30 `}
+            >
 
-                {/* Availability Status */}
-                <div className="flex items-center justify-center mb-3">
-
-                  {rowState[lecture.lectureNo]?.remark === 'Good to go' ? (
-                    <FaCheckCircle className={`text-xl ${darkMode ? 'text-green-400' : 'text-green-600'}`} />
-                  ) : (
-                    <FaTimesCircle className={`text-xl ${darkMode ? 'text-red-400' : 'text-red-600'}`} />
-                  )}
-                </div>
-              </div>
-            </div>
-          </RemarkTooltip>
-
-        </td>
-        <td
-
-          key={idx}
-          className={`p-3 border border-black/50 bg-yellow-900/30 `}
-        >
-
-        </td>
+            </td>
           </>
           :
           <td
             ref={suggestionsRef}
-  
+
             key={idx}
             className={`p-3 border border-black/50 ${rowState[lecture.lectureNo]?.remark === 'Good to go'
               ? (darkMode ? 'bg-green-900/30' : 'bg-green-100')
@@ -415,7 +412,7 @@ export default function TimetableRow({
             >
               <div className="flex flex-col space-y-4">
                 {/* Subject Selector */}
-  
+
                 <div className=" gap-4">
                   <div>
                     <label
@@ -456,8 +453,8 @@ export default function TimetableRow({
                       </select>
                     </div>
                   </div>
-  
-  
+
+
                   {/* Section Merger */}
                   <div>
                     <label
@@ -494,12 +491,12 @@ export default function TimetableRow({
                       ))}
                     </select>
                   </div>
-  
+
                 </div>
-  
-  
+
+
                 <div className="flex gap-4 items-end" >
-  
+
                   {/* Teacher Search */}
                   <div>
                     <label
@@ -565,12 +562,12 @@ export default function TimetableRow({
                       )}
                     </div>
                   </div>
-  
-  
-  
+
+
+
                   {/* Availability Status */}
                   <div className="flex items-center justify-center mb-3">
-  
+
                     {rowState[lecture.lectureNo]?.remark === 'Good to go' ? (
                       <FaCheckCircle className={`text-xl ${darkMode ? 'text-green-400' : 'text-green-600'}`} />
                     ) : (
@@ -580,9 +577,9 @@ export default function TimetableRow({
                 </div>
               </div>
             </RemarkTooltip>
-  
+
           </td>)
-        
+
       )}
     </motion.tr>
   );
