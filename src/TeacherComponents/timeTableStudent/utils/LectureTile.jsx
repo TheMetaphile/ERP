@@ -1,103 +1,88 @@
-import React, {  useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { FaBook, FaChalkboardTeacher, FaClock, FaGraduationCap, FaUtensils } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { motion } from 'framer-motion';
+import { FaUtensils, FaBook, FaCalendarAlt } from 'react-icons/fa';
 
 
-export default function LectureTile({ index, numberOfLecturesBeforeLunch, Time, data, day }) {
-    const [lectures, setLectures] = useState(null);
+export default function LeactureTile({ index, day, data, fetchedTimeTableStructure }) {
+  const [lectures, setLectures] = useState([]);
 
-    useEffect(() => {
-        setLectures(data && data[day] ? data[day][index] : {})
-    }, [day, data]);
+  // console.log(lectureStructure, data, day, numberOfLeacturesBeforeLunch, '11111')
 
-    const rowVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0 },
-    };
-
-    const LectureCell = ({ icon: Icon, content, imageUrl, imageName }) => (
-        <motion.td 
-            className="px-4 py-3 text-center border-r border-gray-300"
-            whileHover={{ backgroundColor: "#e5e7eb" }}
-        >
-            <motion.div 
-                className="flex items-center justify-center space-x-2"
-                whileHover={{ scale: 1.05 }}
-            >
-                <Icon className="text-gray-600" />
-                {imageUrl ? (
-                    <img src={imageUrl} alt={imageName} className="w-8 h-8 rounded-full" />
-                ) : null}
-                <span className="text-sm whitespace-nowrap">{content}</span>
-            </motion.div>
-        </motion.td>
-    );
-
-    if (numberOfLecturesBeforeLunch === index) {
-        return (
-            <motion.tr
-                variants={rowVariants}
-                initial="hidden"
-                animate="visible"
-                transition={{ duration: 0.5 }}
-                className="bg-yellow-100"
-            >
-                <td colSpan="4" className="px-4 py-3 text-center border-t border-b border-gray-400">
-                    <motion.div 
-                        className="flex items-center justify-center space-x-2 text-xl"
-                        whileHover={{ scale: 1.05 }}
-                    >
-                        <FaUtensils className="text-yellow-600" />
-                        <span>LUNCH</span>
-                    </motion.div>
-                </td>
-            </motion.tr>
-        );
+  useEffect(() => {
+    if (data && data[day]) {
+      setLectures(data[day]);
     }
+  }, [day, data]);
 
-    if (lectures && lectures.optional) {
-        return lectures.optionalSubjects.map((optSub, optSubIndex) => (
-            <motion.tr
-                key={optSubIndex}
-                variants={rowVariants}
-                initial="hidden"
-                animate="visible"
-                transition={{ duration: 0.5, delay: optSubIndex * 0.1 }}
-                className="bg-gradient-to-r from-green-50 to-blue-50"
-            >
-                <LectureCell icon={FaGraduationCap} content={lectures.lectureNo} />
-                <LectureCell icon={FaBook} content={optSub.optionalSubject} />
-                <LectureCell 
-                    icon={FaChalkboardTeacher} 
-                    content={optSub.teacher.name}
-                    imageUrl={optSub.teacher.profileLink}
-                    imageName={optSub.teacher.name}
-                />
-                <LectureCell icon={FaClock} content={Time} />
-            </motion.tr>
-        ));
-    }
+  const lectureStructure = fetchedTimeTableStructure?.lectureStructure || [];
+  const numberOfLeacturesBeforeLunch = fetchedTimeTableStructure?.numberOfLeacturesBeforeLunch || 0;
 
-    if (lectures && Object.keys(lectures).length > 0) {
-        return (
-            <motion.tr
-                variants={rowVariants}
-                initial="hidden"
-                animate="visible"
-                transition={{ duration: 0.5 }}
-            >
-                <LectureCell icon={FaGraduationCap} content={lectures.lectureNo} />
-                <LectureCell icon={FaBook} content={lectures.subject} />
-                <LectureCell 
-                    icon={FaChalkboardTeacher} 
-                    content={lectures.teacher.name}
-                    imageUrl={lectures.teacher.profileLink}
-                    imageName={lectures.teacher.name}
-                />
-                <LectureCell icon={FaClock} content={Time} />
-            </motion.tr>
-        );
-    }
 
-    return null;
+  // console.log(lectures, 'adfhfbhdb')
+  return (
+    <>
+      <motion.tr
+        className="bg-white"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+
+        <td className="border-b  border-gray-200 flex flex-col gap-2 justify-center bg-green-100 text-center font-bold text-green-800 px-4 py-3 items-center">
+          <FaCalendarAlt />
+          {day.split("").map((letter, index) => (
+            <div key={index}>{letter.toUpperCase()}</div>
+          ))}
+        </td>
+
+        {lectureStructure.map((lectureSlot, index) => {
+          const lecture = lectures.find((l) => l.lectureNo === lectureSlot.lectureNo);
+
+          if (numberOfLeacturesBeforeLunch && lectureSlot.lectureNo === numberOfLeacturesBeforeLunch + 1) {
+            return (
+              <React.Fragment key={`lunch-${index}`}>
+                <LunchBreakColumn />
+                {lecture ? <LectureColumn lecture={lecture} /> : <EmptyColumn />}
+              </React.Fragment>
+            );
+          }
+
+          return lecture ? <LectureColumn key={lecture._id} lecture={lecture} /> : <EmptyColumn key={`empty-${index}`} />;
+        })}
+
+      </motion.tr>
+
+    </>
+  );
 }
+
+const LectureColumn = ({ lecture }) => (
+  <td className="border border-gray-300 px-4 py-3">
+    <div className="flex items-center">
+      <FaBook className="text-blue-600 mr-2" />
+      <span>{lecture.subject}</span>
+      {lecture.merge && lecture.mergeWithSection && (
+        <span className="ml-2 text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">
+          Merge: {lecture.mergeWithSection}
+        </span>
+      )}
+    </div>
+
+    <div className="flex items-center mt-1">
+      {lecture.teacher?.profileLink && (
+        <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full mr-2" />
+      )}
+      <span className="text-sm">{lecture.teacher?.name || "Unknown Teacher"}</span>
+    </div>
+
+  </td>
+);
+
+const LunchBreakColumn = () => (
+  <td className="border border-gray-300 px-4 py-3 bg-yellow-100 text-yellow-800 text-center font-bold">
+    <FaUtensils className="mr-2 inline" />
+    LUNCH BREAK
+  </td>
+);
+
+const EmptyColumn = () => <td className="border border-gray-300 px-4 py-3 bg-gray-100"></td>;

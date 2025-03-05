@@ -1,50 +1,43 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { FaBookOpen, FaUserTie, FaClock, FaChalkboardTeacher } from 'react-icons/fa';
 
-
-const HeaderItem = ({ icon, text }) => (
-    <motion.th
-      className="px-6 py-4"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+export default function TimeTableHeader({ fields = [], numberOfLecturesBeforeLunch }) {
+  return (
+    <motion.thead
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-blue-100 dark:bg-dark-200 w-full text-black dark:text-white"
     >
-      <motion.div
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="flex items-center justify-center space-x-2 text-black"
-      >
-        {icon}
-        <motion.h2
-          className="text-sm font-semibold text-gray-700"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          {text}
-        </motion.h2>
-      </motion.div>
-    </motion.th>
+      <tr className='w-full'>
+        {['', ...fields].map((header, index) => (
+          numberOfLecturesBeforeLunch && numberOfLecturesBeforeLunch === index ?
+            (<>
+              <th
+                key={index}
+                className="px-4 py-3 text-center border border-blue-300 dark:border-dark-300 text-sm whitespace-nowrap"
+              >
+                <div>Lecture: {header.lectureNo || '-'}</div>
+                <div>{header.startTime} - {header.endTime}</div>
+              </th>
+              <th
+                key={"lunch"}
+                className="px-4 py-3 bg-yellow-600 text-center border border-blue-300 dark:border-dark-300 text-sm whitespace-nowrap"
+              >
+
+              </th>
+            </>)
+            :
+            (
+              <th
+                key={index}
+                className="px-4 py-3 text-center border border-blue-300 dark:border-dark-300 text-sm whitespace-nowrap"
+              >
+                <div>Lecture: {header.lectureNo || '-'}</div>
+                <div>{header.startTime} - {header.endTime}</div>
+              </th>
+            )
+        ))}
+      </tr>
+    </motion.thead>
   );
-  
-  
-  
-  export default function TimeTableHeader() {
-    return (
-      <motion.thead
-        className="bg-gradient-to-r from-blue-200 to-blue-100 rounded-t-lg shadow-lg"
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <tr className="w-full">
-          <HeaderItem icon={<FaChalkboardTeacher size={24} />} text="Lecture" />
-          <HeaderItem icon={<FaBookOpen size={24} />} text="Subject" />
-          <HeaderItem icon={<FaUserTie size={24} />} text="Teacher" />
-          <HeaderItem icon={<FaClock size={24} />} text="Timing" />
-        </tr>
-      </motion.thead>
-    );
-  }
-  
+}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaSearch, FaCalendarAlt, FaChalkboard, FaUsers } from 'react-icons/fa';
 
-function Selection({ selectClass, selectedSection, onClassChange, onSectionChange, onStudentDayChange, onSearch }) {
+function Selection({ selectClass, selectedSection, sectionsDetails, onClassChange, onSectionChange, onStudentDayChange, onSearch }) {
     const [day, setDay] = useState('tuesday');
     const handleDayChange = (event) => {
         const value = event.target.value;
@@ -53,10 +53,13 @@ function Selection({ selectClass, selectedSection, onClassChange, onSectionChang
                                 value={selectedSection}
                                 onChange={(e) => onSectionChange(e.target.value)}
                             >
-                                <option value="">Select Section</option>
-                                {["A", "B", "C", "D", "E", "F", "G", "H", "I"].map(
-                                    (section) => <option key={section} value={section}>{section}</option>
-                                )}
+                                
+                                 <option value="">Select Section</option>
+                            {sectionsDetails.map((section, index) => (
+                                <option key={index} value={section}>
+                                    {section}
+                                </option>
+                            ))}
                             </select>
                         </div>
                     </motion.div>

@@ -171,7 +171,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                         <td className="py-3 px-6 text-left">
                                             <div className="flex items-center">
                                                 <FaClock className="mr-2" />
-                                                {`${formatTime(Time[lecture.lectureNo - 1].start)}-${formatTime(Time[lecture.lectureNo - 1].end)}`}
+                                                {/* {`${formatTime(Time[lecture.lectureNo - 1].start)}-${formatTime(Time[lecture.lectureNo - 1].end)}`} */}
                                             </div>
                                         </td>
                                         <td className="py-3 px-6 text-left">

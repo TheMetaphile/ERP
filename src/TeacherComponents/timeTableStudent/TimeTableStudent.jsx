@@ -4,22 +4,15 @@ import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
 import axios from 'axios';
 import TimeTableHeader from './utils/TimeTableHeader'
-import { BASE_URL} from '../../Config';
-
-const getCurrentDay = () => {
-    const daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    const currentDayIndex = new Date().getDay();
-    return daysOfWeek[currentDayIndex];
-  };
+import { BASE_URL } from '../../Config';
+import { motion } from 'framer-motion';
 
 export default function TimeTableStudent() {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
-    const [day, setDay] = useState(getCurrentDay());
     const [fetchedTimeTableStructure, setTimetableStructure] = useState(null);
-
-    const [lectureTimes, setLectureTimes] = useState([]);
+    const days = ["monday", 'tuesday', 'wednesday', 'thursday', "friday", 'saturday'];
 
     var ClassRange = null;
     const Class = authState?.userDetails?.currentClass;
@@ -38,90 +31,22 @@ export default function TimeTableStudent() {
         }
     }, [ClassRange]);
 
-
-    const handleDayChange = (event) => {
-        const value = event.target.value;
-        setDay(value);
-    };
-
-
-    const calculateLectureTimes = () => {
-        if (!fetchedTimeTableStructure) {
-            return;
-        }
-        const { firstLectureTiming, durationOfEachLeacture, numberOfLeacturesBeforeLunch, durationOfLunch, numberOfLecture } = fetchedTimeTableStructure;
-
-        const times = [];
-        let currentTime = convertToDate(firstLectureTiming);
-        const lectureDuration = parseInt(durationOfEachLeacture.split(' ')[0], 10);
-        const lunchDuration = parseInt(durationOfLunch.split(' ')[0], 10);
-
-        for (let i = 1; i <= numberOfLecture; i++) {
-            const endTime = new Date(currentTime.getTime() + lectureDuration * 60000);
-            times.push({ start: new Date(currentTime), end: new Date(endTime) });
-
-            currentTime = endTime;
-            if (i === numberOfLeacturesBeforeLunch) {
-                currentTime = new Date(currentTime.getTime() + lunchDuration * 60000);
-            }
-        }
-        setLectureTimes(times);
-    };
-
-    const convertToDate = (timeString) => {
-        const [time, modifier] = timeString.split(' ');
-        let [hours, minutes] = time.split(':');
-        if (hours === '12') {
-            hours = '0';
-        }
-        if (modifier === 'pm') {
-            hours = parseInt(hours, 10) + 12;
-        }
-        const date = new Date();
-        date.setHours(hours);
-        date.setMinutes(minutes);
-        date.setSeconds(0);
-
-        return date;
-    };
-
-
-    useEffect(() => {
-        calculateLectureTimes();
-    }, [fetchedTimeTableStructure]);
-
-    const formatTime = (date) => {
-        let hours = date.getHours();
-        const minutes = date.getMinutes();
-        const ampm = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12;
-        hours = hours ? hours : 12;
-        const strMinutes = minutes < 10 ? '0' + minutes : minutes;
-        return `${hours}:${strMinutes} ${ampm}`;
-    };
-
-
-
     const handleTimeFetch = async () => {
         console.log(authState.accessToken)
         console.log('classaaa', ClassRange)
         try {
             const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
-                accessToken: authState.accessToken,
                 classRange: ClassRange,
-            });
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    },
+                });
 
             if (response.status === 200) {
                 console.log('response from fetch', response.data);
                 if (response.data) {
-                    console.log("here", response.data.numberOfLecture);
-                    const scheduleArray = [];
-                    for (let i = 0; i < response.data.numberOfLecture; i++) {
-                        scheduleArray.push({
-                            subject: '',
-                            teacher: ''
-                        });
-                    }
                     setTimetableStructure(response.data);
                     console.log('ressssss', response.data)
                 } else {
@@ -139,26 +64,27 @@ export default function TimeTableStudent() {
         if (fetchedTimeTableStructure != null) {
             handleFetch();
         }
-    }, [fetchedTimeTableStructure, day]);
+    }, [fetchedTimeTableStructure]);
 
     const handleFetch = async () => {
-        console.log(authState.ClassDetails.class, authState.ClassDetails.section, day);
+        console.log(authState?.userDetails?.currentClass, authState?.userDetails?.section);
         setLoading(true);
         try {
-
             const response = await axios.post(`${BASE_URL}/timetable/fetch/student`, {
-                accessToken: authState.accessToken,
-                class: authState.ClassDetails.class,
-                section: authState.ClassDetails.section,
-                day: day
-            });
+                class: authState?.ClassDetails?.class,
+                section: authState?.ClassDetails?.section,
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    },
+                });
+
             if (response.status === 200) {
                 console.log('response from fetchh', response.data);
-                if (response.data[day].length > 0) {
-                    setData(response.data);
-                } else {
-                    setData([]);
-                }
+
+                setData(response.data);
+
             }
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -166,68 +92,43 @@ export default function TimeTableStudent() {
         finally {
             setLoading(false);
         }
-
     };
 
     return (
-        <div className=" flex flex-col w-full  items-start  py-3 px-3 ">
-            <div className="flex w-full justify-between mb-3">
-
-                <h1 className="text-3xl mobile:max-tablet:text-lg font-medium text-black mb-2"> Time Table</h1>
-
-
-                <select
-                    type="text"
-                    className=" px-4 py-2  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile:max-tablet:text-sm"
-                    placeholder="Day"
-                    value={day}
-                    onChange={handleDayChange}
-                >
-                    <option value="">Select Day</option>
-                    <option value="monday">Monday</option>
-                    <option value="tuesday">Tuesday</option>
-                    <option value="wednesday">Wednesday</option>
-                    <option value="thursday">Thursday</option>
-                    <option value="friday">Friday</option>
-                    <option value="saturday">Saturday</option>
-                    <option value="sunday">Sunday</option>
-
-                </select>
+        <motion.div
+            className="flex flex-col w-full bg-gray-50 rounded-lg shadow-lg p-6 mobile:max-tablet:px-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-3xl mobile:max-laptop:text-lg font-bold text-gray-800 mb-4 mobile:max-laptop:mb-0">
+                    Time Table
+                </h1>
             </div>
 
-
-            <div className='w-full rounded-lg border border-gray-400 overflow-auto '>
+            <div className="w-full bg-white rounded-lg shadow overflow-auto">
                 <table className='w-full'>
-                    <TimeTableHeader />
-                    <tbody className=' w-full '>
+                    <TimeTableHeader fields={fetchedTimeTableStructure?.lectureStructure} numberOfLecturesBeforeLunch={fetchedTimeTableStructure?.numberOfLeacturesBeforeLunch} />
+                    <tbody>
                         {loading ? (
-                            <Loading />
-                        ) : data === null || data.length === 0 ? (
-                            <tr className='border border-gray-300 px-4 py-2 text-center text-blue-500'>
-                                <td colspan='4'>No data available</td>
-                            </tr>
+                            <tr><td colSpan="4"><Loading /></td></tr>
+                        ) : data.length === 0 ? (
+                            <tr><td colSpan="4" className="px-4 py-8 text-center text-gray-500">No data available</td></tr>
                         ) : (
-                            <>
-                                {lectureTimes.map((time, index) => {
-                                    return (
-                                        <LeactureTile
-                                            key={index}
-                                            index={index}
-                                            lectureNo={`${index + 1} `}
-                                            Time={`${formatTime(time.start)}-${formatTime(time.end)}`}
-                                            numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}
-                                            data={data}
-                                            day={day}
-                                        />
-                                    )
-
-                                })}
-                            </>
+                            days.map((day, index) => (
+                                <LeactureTile
+                                    fetchedTimeTableStructure={fetchedTimeTableStructure}
+                                    day={day}
+                                    data={data}
+                                    index={index}
+                                    key={index}
+                                />
+                            ))
                         )}
                     </tbody>
                 </table>
             </div>
-
-        </div>
-    )
+        </motion.div>
+    );
 }

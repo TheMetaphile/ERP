@@ -4,11 +4,12 @@ import Table from './utils/Table'
 import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import Loading from '../../LoadingScreen/Loading';
-import { BASE_URL} from '../../Config';
+import { BASE_URL } from '../../Config';
 import TableSubstitute from './utils/TableSubstitue';
+import TimeTableHeader from './utils/TimeTableHeader';
 
 function TimeTable() {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);
     const { authState } = useContext(AuthContext);
     const [day, setDay] = useState('tuesday');
     const [loading, setLoading] = useState(false);
@@ -17,6 +18,7 @@ function TimeTable() {
     const [fetchedTimeTableStructure, setTimetableStructure] = useState(null);
     const [lectureTimes, setLectureTimes] = useState([]);
     const [subsData, setSubsData] = useState([]);
+    const days = ["monday", 'tuesday', 'wednesday', 'thursday', "friday", 'saturday'];
 
     var ClassRange = null;
     const Class = selectClass;
@@ -38,41 +40,41 @@ function TimeTable() {
 
     }, [ClassRange]);
 
-    useEffect(() => {
-        calculateLectureTimes();
-    }, [fetchedTimeTableStructure]);
+    // useEffect(() => {
+    //     calculateLectureTimes();
+    // }, [fetchedTimeTableStructure]);
 
     useEffect(() => {
         if (fetchedTimeTableStructure != null) {
             handleSearch();
             fetchSubstitute();
         }
-    }, [fetchedTimeTableStructure, day]);
+    }, [fetchedTimeTableStructure]);
 
 
 
-    const calculateLectureTimes = () => {
-        if (!fetchedTimeTableStructure) {
-            return;
-        }
-        const { firstLectureTiming, durationOfEachLeacture, numberOfLeacturesBeforeLunch, durationOfLunch, numberOfLecture } = fetchedTimeTableStructure;
+    // const calculateLectureTimes = () => {
+    //     if (!fetchedTimeTableStructure) {
+    //         return;
+    //     }
+    //     const { firstLectureTiming, durationOfEachLeacture, numberOfLeacturesBeforeLunch, durationOfLunch, numberOfLecture } = fetchedTimeTableStructure;
 
-        const times = [];
-        let currentTime = convertToDate(firstLectureTiming);
-        const lectureDuration = parseInt(durationOfEachLeacture.split(' ')[0], 10);
-        const lunchDuration = parseInt(durationOfLunch.split(' ')[0], 10);
+    //     const times = [];
+    //     let currentTime = convertToDate(firstLectureTiming);
+    //     const lectureDuration = parseInt(durationOfEachLeacture.split(' ')[0], 10);
+    //     const lunchDuration = parseInt(durationOfLunch.split(' ')[0], 10);
 
-        for (let i = 1; i <= numberOfLecture; i++) {
-            const endTime = new Date(currentTime.getTime() + lectureDuration * 60000);
-            times.push({ start: new Date(currentTime), end: new Date(endTime) });
+    //     for (let i = 1; i <= numberOfLecture; i++) {
+    //         const endTime = new Date(currentTime.getTime() + lectureDuration * 60000);
+    //         times.push({ start: new Date(currentTime), end: new Date(endTime) });
 
-            currentTime = endTime;
-            if (i === numberOfLeacturesBeforeLunch) {
-                currentTime = new Date(currentTime.getTime() + lunchDuration * 60000);
-            }
-        }
-        setLectureTimes(times);
-    };
+    //         currentTime = endTime;
+    //         if (i === numberOfLeacturesBeforeLunch) {
+    //             currentTime = new Date(currentTime.getTime() + lunchDuration * 60000);
+    //         }
+    //     }
+    //     setLectureTimes(times);
+    // };
 
     const convertToDate = (timeString) => {
         const [time, modifier] = timeString.split(' ');
@@ -97,27 +99,20 @@ function TimeTable() {
         console.log('classaaa', ClassRange)
         try {
             const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
-                accessToken: authState.accessToken,
                 classRange: ClassRange,
-            });
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    },
+                });
 
             if (response.status === 200) {
-                console.log('response from fetch', response.data);
-                if (response.data) {
-                    console.log("here", response.data.numberOfLecture);
-                    const scheduleArray = [];
-                    for (let i = 0; i < response.data.numberOfLecture; i++) {
-                        scheduleArray.push({
-                            subject: '',
-                            teacher: ''
-                        });
-                    }
-                    setTimetableStructure(response.data);
-                    console.log('ressssss', response.data)
-                } else {
-                    // setShowTimetable(false);
-                }
+                setTimetableStructure(response.data);
+                console.log('ressssss', response.data)
             }
+
+
         } catch (err) {
             console.error(err);
 
@@ -137,13 +132,17 @@ function TimeTable() {
         setLoading(true);
 
         try {
-            const payload = {
-                accessToken: authState.accessToken,
+
+            const response = await axios.post(`${BASE_URL}/timetable/fetch/teacher`, {
                 email: authState?.userDetails?.email,
                 day: day
-            };
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken}`,
+                    },
+                });
 
-            const response = await axios.post(`${BASE_URL}/timetable/fetch/teacher`, payload);
             if (response.status === 200) {
                 console.log('response from fetchhh', response.data);
                 setData(response.data);
@@ -192,7 +191,7 @@ function TimeTable() {
                 <h1 className="text-3xl mobile:max-tablet:text-lg font-medium text-black mb-2 ">Time Table</h1>
 
 
-                <Selection onDayChange={handleDayChange} />
+                {/* <Selection onDayChange={handleDayChange} /> */}
             </div>
 
             <div className='w-full mobile:max-tablet:px-2 mt-4 mobile:max-tablet:mt-2'>
@@ -203,11 +202,28 @@ function TimeTable() {
                         <div className='text-blue-500'>No Data available</div>
                     ) :
                     (
-                        <Table
-                            data={data}
-                            Time={lectureTimes}
-                            numberOfLeacturesBeforeLunch={fetchedTimeTableStructure.numberOfLeacturesBeforeLunch}
-                        />
+                        <table className='w-full'>
+                            <TimeTableHeader fields={fetchedTimeTableStructure?.lectureStructure} numberOfLecturesBeforeLunch={fetchedTimeTableStructure?.numberOfLeacturesBeforeLunch} />
+                            <tbody>
+                                {loading ? (
+                                    <tr><td colSpan="4"><Loading /></td></tr>
+                                ) : data.length === 0 ? (
+                                    <tr><td colSpan="4" className="px-4 py-8 text-center text-gray-500">No data available</td></tr>
+                                ) : (
+                                    days.map((day, index) => (
+                                        <Table
+                                            fetchedTimeTableStructure={fetchedTimeTableStructure}
+                                           
+                                            day={day}
+                                            data={data}
+                                            index={index}
+                                            key={index}
+                                        />
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+
                     )}
             </div>
 
