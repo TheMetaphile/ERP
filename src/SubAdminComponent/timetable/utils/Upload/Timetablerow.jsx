@@ -90,7 +90,7 @@ export default function TimetableRow({
   // Handle Teacher Selection
   const selectTeacher = async (lectureNo, teacher) => {
     try {
-      const remark = await fetchTeacherAvailability(lectureNo, teacher.id,day);
+      const remark = await fetchTeacherAvailability(lectureNo, teacher.id, day);
 
       setRowState(prev => ({
         ...prev,
@@ -162,7 +162,7 @@ export default function TimetableRow({
     }, 500);
 
     return () => clearTimeout(searchTimer);
-  }, [searchTeachers]);
+  }, [searchTeachers,rowState]);
 
   const handleClickOutside = (event) => {
     if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
@@ -320,12 +320,16 @@ export default function TimetableRow({
                           placeholder="Search Teacher"
                           value={rowState[lecture.lectureNo]?.teacherInput || ''}
                           onChange={(e) => {
+
+                            const remark = e.target.value.trim() ? "" : rowState[lecture.lectureNo]?.remark;
                             setRowState(prev => ({
                               ...prev,
                               [lecture.lectureNo]: {
                                 ...prev[lecture.lectureNo],
                                 teacherInput: e.target.value,
-                                showSuggestions: true
+                                showSuggestions: true,
+                                suggestions: [],
+                                remark
                               }
                             }));
                           }}
@@ -510,12 +514,16 @@ export default function TimetableRow({
                         placeholder="Search Teacher"
                         value={rowState[lecture.lectureNo]?.teacherInput || ''}
                         onChange={(e) => {
+
+                          const remark = e.target.value.trim() ? "" : rowState[lecture.lectureNo]?.remark;
                           setRowState(prev => ({
                             ...prev,
                             [lecture.lectureNo]: {
                               ...prev[lecture.lectureNo],
                               teacherInput: e.target.value,
-                              showSuggestions: true
+                              showSuggestions: true,
+                              suggestions: [],
+                              remark
                             }
                           }));
                         }}
