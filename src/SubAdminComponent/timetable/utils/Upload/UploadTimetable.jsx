@@ -98,7 +98,7 @@ export default function UploadTimetable({ handleChange }) {
 
             for (const day of Object.keys(timetable)) {
                 for (const lecture of timetable[day]) {
-                    lecture.teacher = lecture.teacher._id;
+                    lecture.teacher = typeof lecture.teacher === 'object' ? lecture.teacher._id : lecture.teacher;
                     if (lecture.optional && lecture.optionalSubjects.length > 0) {
                         for (const optional of lecture.optionalSubjects) {
                             optional.teacher = optional?.teacher?._id;
