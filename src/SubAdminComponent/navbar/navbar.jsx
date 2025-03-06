@@ -3,19 +3,16 @@ import logo from './../../assets/metaphile_logo.png';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import logout1 from "../../assets/logout.png"
-import { FaBars, FaUserCircle, FaBell } from 'react-icons/fa';
-
-
+import { FaBars, FaUserCircle, FaBell, FaMoon, FaSun } from 'react-icons/fa';
 
 export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
-  // const { logout, authState } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { logout, authState } = useContext(AuthContext);
-  console.log(authState?.userDetails?.role, authState?.userDetails?.department);
-
+  const { logout, authState, toggleDarkMode } = useContext(AuthContext);
+  const darkMode = authState?.darkMode || false;
+  
   const navigate = useNavigate();
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -24,8 +21,6 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
       console.error("Logout failed", error);
     }
   };
-
-
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -45,76 +40,138 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
   }, []);
 
   return (
-    <div className="flex flex-grow mobile:max-tablet:flex-col h-full  px-2 py-3 mb-2 mobile:max-tablet:mb-0 items-center justify-between bg-purple-300 rounded-lg shadow-md">
+    <div className={`flex flex-grow mobile:max-tablet:flex-col h-full px-4 py-3 mb-2 mobile:max-tablet:mb-0 items-center justify-between rounded-lg shadow-md transition-colors duration-300 ${
+      darkMode 
+        ? 'bg-gray-800 text-white' 
+        : 'bg-gradient-to-r from-purple-300 to-purple-200 text-gray-800'
+    }`}>
       <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-3 mobile:max-tablet:justify-between">
         {authState?.userDetails?.role === 'Accountant' && (
-          <FaBars onClick={onDrawerToggle} className='w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-white shadow-lg cursor-pointer' />
+          <FaBars 
+            onClick={onDrawerToggle} 
+            className={`w-11 h-fit mr-4 px-3 py-2 rounded-lg cursor-pointer transform hover:scale-105 transition-transform ${
+              darkMode 
+                ? 'bg-gray-700 text-white hover:bg-gray-600' 
+                : 'bg-white shadow-lg hover:bg-gray-100'
+            }`} 
+          />
         )}
-        <div className=' flex items-center'>
-          <img src={logo} alt="Metaphile Public School" className="w-10" />
-          <span className="tablet:text-lg font-medium mobile:text-sm ">etaphile Public School</span>
+        <div className='flex items-center gap-2'>
+          <img 
+            src={logo} 
+            alt="Metaphile Public School" 
+            className="w-10 h-10 object-contain" 
+          />
+          <span className={`tablet:text-lg font-medium mobile:text-sm ${
+            darkMode ? 'text-white' : 'text-gray-800'
+          }`}>
+            etaphile Public School
+          </span>
         </div>
-        <div>
-          <FaBell onClick={onEndDrawerToggle} className="text-black font-medium hover:bg-blue-500 hover:text-white  py-1 mobile:max-laptop:w-6 mobile:max-laptop:h-6 rounded-lg tablet:hidden " />
+        <div className="tablet:hidden">
+          <FaBell 
+            onClick={onEndDrawerToggle} 
+            className={`font-medium py-1 mobile:max-laptop:w-6 mobile:max-laptop:h-6 rounded-lg transform hover:scale-110 transition-transform ${
+              darkMode 
+                ? 'text-white hover:text-yellow-300' 
+                : 'text-black hover:bg-blue-500 hover:text-white'
+            }`} 
+          />
         </div>
       </div>
 
-      <h1 className='text-2xl font-medium mobile:max-tablet:text-xl'>
+      <h1 className={`text-2xl font-medium mobile:max-tablet:text-xl ${
+        darkMode ? 'text-white' : 'text-gray-800'
+      }`}>
         Sub Admin Panel
       </h1>
+      
       <nav className='mobile:max-tablet:w-full mobile:max-tablet:py-1'>
-        <ul className="flex w-full items-center mobile:max-tablet:text-sm gap-3 mobile:max-tablet:justify-center mobile:max-tablet:gap-20">
-
-
+        <ul className="flex w-full items-center mobile:max-tablet:text-sm gap-3 mobile:max-tablet:justify-center mobile:max-tablet:gap-8">
+          <li>
+            <button 
+              onClick={toggleDarkMode} 
+              className={`p-2 rounded-full transform hover:scale-110 transition-transform ${
+                darkMode 
+                  ? 'bg-gray-700 text-yellow-300 hover:bg-gray-600' 
+                  : 'bg-purple-100 text-gray-700 hover:bg-purple-200'
+              }`}
+              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {darkMode ? <FaSun /> : <FaMoon />}
+            </button>
+          </li>
+          
           <li className="flex items-center space-x-4">
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={toggleDropdown}
-                className="flex items-center space-x-4 focus:outline-none"
+                className="flex items-center space-x-2 focus:outline-none"
+                aria-expanded={isOpen}
+                aria-haspopup="true"
               >
-                <span className="flex items-center gap-2 font-medium">
+                <span className={`flex items-center gap-2 font-medium ${
+                  darkMode ? 'text-white' : 'text-gray-800'
+                }`}>
                   {authState?.userDetails?.name}
-                  <FaUserCircle className="text-3xl" />
+                  <FaUserCircle className={`text-3xl ${
+                    darkMode ? 'text-purple-300' : 'text-purple-800'
+                  }`} />
                 </span>
               </button>
+              
               {isOpen && (
-                <div className="absolute right-0 mt-1 w-40 bg-white rounded-lg shadow-lg  font-medium text-black">
+                <div className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg overflow-hidden z-10 ${
+                  darkMode 
+                    ? 'bg-gray-700 text-white border border-gray-600' 
+                    : 'bg-white text-gray-800 border border-gray-200'
+                }`}>
                   <Link
                     to="/Sub-Admin/Profile"
-                    className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg"
+                    className={`block px-4 py-3 font-medium hover:transition-colors duration-200 ${
+                      darkMode 
+                        ? 'hover:bg-gray-600' 
+                        : 'hover:bg-purple-200'
+                    }`}
                   >
-                    Profile
+                    <div className="flex items-center gap-2">
+                      <FaUserCircle />
+                      Profile
+                    </div>
                   </Link>
-                  {/* <Link
-                    to="/Sub-Admin/Students"
-                    className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg"
-                  >
-                    Students
-                  </Link>
-                  {authState?.userDetails?.role === 'Certificate' && authState?.userDetails?.department === 'Certificate' ? (
-                  <Link to="/Sub-Admin/Certificates" className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg">Certificate</Link>
-                  ) : (
-                    <></>
-                  )}
-                  {authState?.userDetails?.role === 'Result' && authState?.userDetails?.department === 'Result' ? (
-                  <Link to="/Sub-Admin/Result" className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg">Result</Link>
-                  ) : (
-                    <></>
-                  )} */}
+                  
                   <button
                     onClick={handleLogout}
-
-                    className="block w-full text-left px-4 py-2 hover:bg-purple-200 rounded-b-lg"
+                    className={`block w-full text-left px-4 py-3 font-medium transition-colors duration-200 ${
+                      darkMode 
+                        ? 'hover:bg-gray-600 text-red-300' 
+                        : 'hover:bg-purple-200 text-red-600'
+                    }`}
                   >
-                    Logout
+                    <div className="flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v1a1 1 0 102 0V9z" clipRule="evenodd" />
+                      </svg>
+                      Logout
+                    </div>
                   </button>
                 </div>
               )}
             </div>
           </li>
-
+          
+          <li className="hidden tablet:block">
+            <FaBell 
+              onClick={onEndDrawerToggle} 
+              className={`text-xl cursor-pointer p-2 rounded-full transform hover:scale-110 transition-transform ${
+                darkMode 
+                  ? 'bg-gray-700 text-yellow-300 hover:bg-gray-600' 
+                  : 'bg-purple-100 text-gray-700 hover:bg-purple-200'
+              }`} 
+              
+            />
+          </li>
         </ul>
-
       </nav>
     </div>
   );

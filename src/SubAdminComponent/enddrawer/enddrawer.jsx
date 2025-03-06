@@ -1,10 +1,15 @@
+import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from "react-router-dom";
-import { FaBell, FaBook, FaChevronRight } from 'react-icons/fa';
+import { FaBell, FaChevronRight, FaMoon, FaSun } from 'react-icons/fa';
 import Notice from './notice.jsx';
-
+import AuthContext from '../../Context/AuthContext';
 
 export default function Enddrawer() {
+  const { darkMode } = useContext(AuthContext);
+
+
+  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -28,34 +33,98 @@ export default function Enddrawer() {
     }
   };
 
+  // Title animation
+  const titleVariants = {
+    hidden: { x: -30, opacity: 0 },
+    visible: { 
+      x: 0, 
+      opacity: 1,
+      transition: { 
+        type: "spring", 
+        stiffness: 120 
+      }
+    }
+  };
 
   return (
     <motion.div
-      className=" h-full overflow-auto px-2 py-1 bg-white "
+      className={`h-full overflow-auto no-scrollbar px-4 py-3 transition-colors duration-300 ${
+        darkMode 
+          ? 'bg-gray-800 text-white' 
+          : 'bg-white text-gray-800'
+      }`}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      <h2 className="flex justify-between items-center text-xl font-bold mb-2 text-gray-800">
-        <div className="flex items-center text-lg whitespace-nowrap">
-          <FaBell className="mr-2 text-purple-500" />
-          Daily Notice
+      <motion.h2 
+        className="flex justify-between items-center text-xl font-bold mb-4"
+        variants={titleVariants}
+      >
+        <div className="flex items-center gap-2 text-lg whitespace-nowrap">
+          <FaBell className={`text-lg ${darkMode ? 'text-purple-300' : 'text-purple-500'}`} />
+          <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+            Daily Notice
+          </span>
         </div>
-        <Link to="/Sub-Admin/Notice" className="text-purple-600 hover:text-purple-800 text-sm flex items-center">
+        <Link 
+          to="/Sub-Admin/Notice" 
+          className={`${
+            darkMode 
+              ? 'text-purple-300 hover:text-purple-200' 
+              : 'text-purple-600 hover:text-purple-800'
+          } text-sm flex items-center gap-1 transition-colors duration-200 font-medium`}
+        >
           See All
-          <FaChevronRight className="ml-1" />
+          <FaChevronRight className="text-xs" />
         </Link>
-      </h2>
-      <motion.section className="mb-6 h-1/2" variants={itemVariants}>
+      </motion.h2>
 
+      <motion.section className="mb-6 h-full" variants={itemVariants}>
         <motion.div
-          className="bg-white rounded-lg shadow-md h-full overflow-y-auto hover:shadow-xl transition-shadow duration-300"
-          whileHover={{ scale: 1.02 }}
+          className={`rounded-lg shadow-md h-full overflow-y-auto transition-all duration-300 ${
+            darkMode 
+              ? 'bg-gray-700 hover:shadow-lg hover:shadow-purple-900/20' 
+              : 'bg-white hover:shadow-xl hover:shadow-purple-300/30'
+          }`}
+          whileHover={{ scale: 1.01 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
-          <Notice />
+          <div className={`p-1 ${darkMode ? 'bg-gray-700' : 'bg-white'}`}>
+            <Notice />
+          </div>
         </motion.div>
       </motion.section>
+
+      {/* Info card at the bottom */}
+      <motion.div
+        variants={itemVariants}
+        className={`rounded-lg p-4 mt-4 ${
+          darkMode 
+            ? 'bg-gray-700' 
+            : 'bg-purple-50'
+        }`}
+      >
+        <div className="flex items-start">
+          <div className={`p-2 rounded-full mr-3 ${
+            darkMode 
+              ? 'bg-gray-600 text-purple-300' 
+              : 'bg-purple-100 text-purple-600'
+          }`}>
+            {darkMode ? <FaMoon /> : <FaSun />}
+          </div>
+          <div>
+            <h3 className={`font-medium mb-1 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+              {darkMode ? 'Dark Mode Active' : 'Light Mode Active'}
+            </h3>
+            <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              {darkMode 
+                ? 'Switch to light mode from the navbar for better daytime visibility.' 
+                : 'Switch to dark mode from the navbar for reduced eye strain at night.'}
+            </p>
+          </div>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }

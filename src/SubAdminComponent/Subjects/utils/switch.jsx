@@ -1,15 +1,26 @@
-import { Check, X } from "react-feather"
+import React from 'react';
+import { Check, X } from "react-feather";
 
-export default function Switch ({checked,changeRole}) {
-    const handle = (checked)=>{
+function Switch({ checked, changeRole, darkMode }) {
+    const handle = (checked) => {
         changeRole(checked);
     };
-    return (<label className="cursor-pointer" onClick={()=>handle(!checked)}>
-        <div className={`w-14 p-1 rounded-full ${checked ? "bg-purple-200" : "bg-gray-200"}`}>
-            <div className={`w-fit p-0.5 shadow-sm rounded-full transition-all duration-300 text-white ${checked ? "bg-purple-500 translate-x-6" : "bg-gray-400 -rotate-180"}`}>
-                {checked ? <Check size={20} /> : <X size={20} />}
+
+    return (
+        <label className="cursor-pointer" onClick={() => handle(!checked)}>
+            <div className={`w-14 p-1 rounded-full transition-colors duration-200 ${checked
+                    ? darkMode ? "bg-purple-900" : "bg-purple-200"
+                    : darkMode ? "bg-gray-700" : "bg-gray-200"
+                }`}>
+                <div className={`w-fit p-0.5 shadow-sm rounded-full transition-all duration-300 text-white ${checked
+                        ? `${darkMode ? "bg-purple-600" : "bg-purple-500"} translate-x-6`
+                        : `${darkMode ? "bg-gray-600" : "bg-gray-400"} -rotate-180`
+                    }`}>
+                    {checked ? <Check size={20} /> : <X size={20} />}
+                </div>
             </div>
-        </div>
-    </label>);
+        </label>
+    );
 }
 
+export default Switch;
