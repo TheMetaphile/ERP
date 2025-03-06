@@ -134,8 +134,7 @@ function TimeTable() {
         try {
 
             const response = await axios.post(`${BASE_URL}/timetable/fetch/teacher`, {
-                email: authState?.userDetails?.email,
-                day: day
+                
             },
                 {
                     headers: {
@@ -212,8 +211,7 @@ function TimeTable() {
                                 ) : (
                                     days.map((day, index) => (
                                         <Table
-                                            fetchedTimeTableStructure={fetchedTimeTableStructure}
-                                           
+                                            fetchedTimeTableStructure={fetchedTimeTableStructure}   
                                             day={day}
                                             data={data}
                                             index={index}

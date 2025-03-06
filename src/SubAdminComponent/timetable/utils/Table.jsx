@@ -1,75 +1,85 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaChalkboardTeacher, FaClock, FaUsers, FaBookOpen } from 'react-icons/fa';
+import { FaChalkboardTeacher, FaClock, FaUsers, FaBookOpen, FaCalendarAlt, FaBook, FaUtensils } from 'react-icons/fa';
 
-function Table({ data, Time, numberOfLeacturesBeforeLunch }) {
+function Table({ day, data, fetchedTimeTableStructure }) {
+  const [lectures, setLectures] = useState([]);
 
-    const formatTime = (date) => {
-        let hours = date.getHours();
-        const minutes = date.getMinutes();
-        const ampm = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12;
-        hours = hours ? hours : 12;
-        const strMinutes = minutes < 10 ? '0' + minutes : minutes;
-        return `${hours}:${strMinutes} ${ampm}`;
-    };
 
-    const timetable = data?.timetable || [];
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="w-full overflow-auto mt-4 rounded-lg border border-purple-400 shadow-lg "
-        >
-            <table className="w-full items-center rounded-lg whitespace-nowrap">
-                <thead className="bg-gradient-to-r from-purple-200 to-purple-100 text-black">
-                    <tr>
-                        <th className="px-4 py-3 font-medium"><FaChalkboardTeacher className="inline mr-2" />Lecture</th>
-                        <th className="px-4 py-3 font-medium"><FaClock className="inline mr-2" />Timing</th>
-                        <th className="px-4 py-3 font-medium"><FaUsers className="inline mr-2" />Class</th>
-                        <th className="px-4 py-3 font-medium">Section</th>
-                        <th className="px-4 py-3 font-medium"><FaBookOpen className="inline mr-2" />Subject</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {timetable.length > 0 ? (
-                        timetable.sort((a, b) => a.lectureNo - b.lectureNo).map((item, idx) => (
-                            <React.Fragment key={item._id}>
-                                {numberOfLeacturesBeforeLunch === item.lectureNo - 1 && (
-                                    <motion.tr
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ duration: 0.3 }}
-                                        className="w-full h-10 bg-purple-200 text-xl text-center font-semibold"
-                                    >
-                                        <td colSpan="5">LUNCH BREAK</td>
-                                    </motion.tr>
-                                )}
-                                <motion.tr
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ duration: 0.3, delay: idx * 0.1 }}
-                                    className='text-center hover:bg-purple-100 transition-colors duration-200'
-                                >
-                                    <td className="px-4 py-3">{item.lectureNo}</td>
-                                    <td className="px-4 py-3 ">{`${formatTime(Time[item.lectureNo - 1].start)}-${formatTime(Time[item.lectureNo - 1].end)}`}</td>
-                                    <td className="px-4 py-3 ">{item.class}</td>
-                                    <td className="px-4 py-3 ">{item.section}</td>
-                                    <td className="px-4 py-3 ">{item.subject}</td>
-                                </motion.tr>
-                            </React.Fragment>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="5" className="text-center py-6 text-purple-600">No data available</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-        </motion.div>
+  useEffect(() => {
+    if (data?.timetable) {
+      const timetable = data.timetable.filter((entry) => entry.day === day);
+      const sortedLectures = [...timetable].sort((a, b) => a.lectureNo - b.lectureNo);
+      setLectures(sortedLectures);
+    } else {
+      setLectures([]);
+    }
+  }, [day, data]);
 
+  const lectureStructure = fetchedTimeTableStructure?.lectureStructure || [];;
+  const numberOfLeacturesBeforeLunch = fetchedTimeTableStructure?.numberOfLeacturesBeforeLunch || 0;
+
+   return (
+      <motion.tr
+        className="bg-white"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <td className="border-b border-gray-200 flex flex-col gap-2 justify-center bg-green-200 text-center font-bold text-green-800 px-4 py-3 items-center">
+          <FaCalendarAlt size={18} />
+          <span className="uppercase">{day}</span>
+        </td>
+  
+        {lectureStructure.map((lectureSlot, index) => {
+          const lecture = lectures.find((l) => l.lectureNo === lectureSlot.lectureNo);
+  
+          if (numberOfLeacturesBeforeLunch && lectureSlot.lectureNo === numberOfLeacturesBeforeLunch + 1) {
+            return (
+              <React.Fragment key={`lunch-${index}`}>
+                <LunchBreakColumn />
+                {lecture ? <LectureColumn lecture={lecture} /> : <EmptyColumn />}
+              </React.Fragment>
+            );
+          }
+  
+          return lecture ? <LectureColumn key={index} lecture={lecture} /> : <EmptyColumn key={`empty-${index}`} />;
+        })}
+      </motion.tr>
     );
-}
+  }
+  
+  const LectureColumn = ({ lecture }) => (
+    <td className="border border-gray-300 px-4 py-3">
+      <div className="flex items-center gap-2">
+        <FaBook className="text-blue-600" />
+        <span className="font-medium">{lecture.subject}</span>
+      </div>
+  
+      <div className="mt-1 text-sm">
+        <span className="font-semibold">Class:</span> {lecture.class}
+      </div>
+      <div className="mt-1 text-sm">
+        <span className="font-semibold">Section:</span> {lecture.section}
+      </div>
+  
+      {lecture.merge && lecture.mergeWithSection && (
+        <div className="mt-2 flex items-center text-xs bg-red-100 text-red-800 px-2 py-1 rounded-md">
+          <FaUsers className="mr-1" />
+          Merge: {lecture.mergeWithSection}
+        </div>
+      )}
+    </td>
+  );
+  
+  const LunchBreakColumn = () => (
+    <td className="border border-gray-300 px-4 py-3 bg-yellow-200 text-yellow-900 text-center font-bold">
+      <FaUtensils className="mr-2 inline" />
+      LUNCH BREAK
+    </td>
+  );
+  
+  const EmptyColumn = () => <td className="border border-gray-300 px-4 py-3 bg-gray-100"></td>;
+  
 
 export default Table;

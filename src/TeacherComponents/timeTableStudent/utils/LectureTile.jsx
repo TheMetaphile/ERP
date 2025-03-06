@@ -20,39 +20,39 @@ export default function LeactureTile({ index, day, data, fetchedTimeTableStructu
 
   // console.log(lectures, 'adfhfbhdb')
   return (
-    <>
-      <motion.tr
-        className="bg-white"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
+    <motion.tr
+      className="bg-white"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
 
-        <td className="border-b  border-gray-200 flex flex-col gap-2 justify-center bg-green-100 text-center font-bold text-green-800 px-4 py-3 items-center">
-          <FaCalendarAlt />
-          {day.split("").map((letter, index) => (
-            <div key={index}>{letter.toUpperCase()}</div>
-          ))}
-        </td>
+      <td className="border-b border-gray-200 flex flex-col gap-2 justify-center bg-green-100 text-center font-bold text-green-800 px-4 py-3 items-center">
+        <FaCalendarAlt />
+        {day.split("").map((letter, index) => (
+          <div key={index}>{letter.toUpperCase()}</div>
+        ))}
+      </td>
 
-        {lectureStructure.map((lectureSlot, index) => {
-          const lecture = lectures.find((l) => l.lectureNo === lectureSlot.lectureNo);
+      {lectureStructure.map((lectureSlot, index) => {
+        const lecture = lectures.find((l) => l.lectureNo === lectureSlot.lectureNo);
 
-          if (numberOfLeacturesBeforeLunch && lectureSlot.lectureNo === numberOfLeacturesBeforeLunch + 1) {
-            return (
-              <React.Fragment key={`lunch-${index}`}>
-                <LunchBreakColumn />
-                {lecture ? <LectureColumn lecture={lecture} /> : <EmptyColumn />}
-              </React.Fragment>
-            );
-          }
+        if (numberOfLeacturesBeforeLunch && lectureSlot.lectureNo === numberOfLeacturesBeforeLunch + 1) {
+          return (
+            <React.Fragment key={`lunch-${index}`}>
+              <LunchBreakColumn />
+              {lecture ? <LectureColumn lecture={lecture} /> : <EmptyColumn />}
+            </React.Fragment>
+          );
+        }
 
-          return lecture ? <LectureColumn key={lecture._id} lecture={lecture} /> : <EmptyColumn key={`empty-${index}`} />;
-        })}
-
-      </motion.tr>
-
-    </>
+        return lecture ? (
+          <LectureColumn key={lecture._id || `lecture-${index}`} lecture={lecture} />
+        ) : (
+          <EmptyColumn key={`empty-${index}`} />
+        );
+      })}
+    </motion.tr>
   );
 }
 
@@ -61,9 +61,9 @@ const LectureColumn = ({ lecture }) => (
     <div className="flex items-center">
       <FaBook className="text-blue-600 mr-2" />
       <span>{lecture.subject}</span>
-      {lecture.merge && lecture.mergeWithSection && (
+      {lecture?.optional && (
         <span className="ml-2 text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">
-          Merge: {lecture.mergeWithSection}
+          Merge: {lecture?.optionalSubjects?.[0].mergeWithSection}
         </span>
       )}
     </div>
@@ -75,6 +75,19 @@ const LectureColumn = ({ lecture }) => (
       <span className="text-sm">{lecture.teacher?.name || "Unknown Teacher"}</span>
     </div>
 
+    {lecture.optionalSubjects?.length > 0 && (
+      <div className="mt-2 text-xs text-gray-700">
+        <strong>Optional:</strong>
+        {lecture.optionalSubjects.map((sub, idx) => (
+          <div key={sub._id || idx} className="flex items-center mt-1">
+            {sub.teacher?.profileLink && (
+              <img src={sub.teacher.profileLink} alt={sub.teacher.name} className="w-6 h-6 rounded-full mr-1" />
+            )}
+            {sub.subject} ({sub.teacher?.name || "Unknown Teacher"})
+          </div>
+        ))}
+      </div>
+    )}
   </td>
 );
 

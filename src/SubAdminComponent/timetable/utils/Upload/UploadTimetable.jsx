@@ -21,7 +21,7 @@ export default function UploadTimetable({ handleChange }) {
     const [schedule, setSchedule] = useState(() => {
         let initialSchedule = {};
         days.forEach((day) => {
-            initialSchedule[day] = structureDetails.lectureStructure.map((lecture) => ({
+            initialSchedule[day] = structureDetails?.lectureStructure?.map((lecture) => ({
                 subject: '',
                 teacher: '',
                 lectureNo: lecture.lectureNo,
@@ -39,7 +39,7 @@ export default function UploadTimetable({ handleChange }) {
     useEffect(() => {
         let initialSchedule = {};
         days.forEach((day) => {
-            initialSchedule[day] = structureDetails.lectureStructure.map((lecture) => ({
+            initialSchedule[day] = structureDetails?.lectureStructure?.map((lecture) => ({
                 subject: '',
                 teacher: '',
                 lectureNo: lecture.lectureNo,

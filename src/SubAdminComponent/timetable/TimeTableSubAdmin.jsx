@@ -8,7 +8,7 @@ import { MdCloudUpload, MdTableChart } from 'react-icons/md';
 
 function TimeTableSubAdmin() {
   const navigate = useNavigate();
-  const [role, setRole] = useState('Student');
+  const [role, setRole] = useState('Upload');
 
   const handleRoleChange = (event) => {
     const selectedRole = event.target.value;
@@ -64,7 +64,7 @@ function TimeTableSubAdmin() {
             </motion.label>
 
 
-            <motion.label className={`flex items-center cursor-pointer ${role === "Student" ? 'text-purple-700' : 'text-gray-600'}`}>
+            {/* <motion.label className={`flex items-center cursor-pointer ${role === "Student" ? 'text-purple-700' : 'text-gray-600'}`}>
               <input
                 type="radio"
                 name="role"
@@ -81,7 +81,7 @@ function TimeTableSubAdmin() {
                 <FaUserGraduate className="mr-2" />
                 Student
               </motion.div>
-            </motion.label>
+            </motion.label> */}
 
             <motion.label className={`flex items-center cursor-pointer ${role === "Upload" ? 'text-purple-700' : 'text-gray-600'}`}>
               <input

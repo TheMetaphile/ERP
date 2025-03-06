@@ -1601,7 +1601,7 @@ const router = createBrowserRouter([
           {
             path: "",
             element: <SuspenseWrapper fallback={Loading}>
-              <StudentsTimeTableSubAdmin /></SuspenseWrapper>,
+              <UploadSubAdmin /></SuspenseWrapper>,
             children: []
           },
           {
@@ -1622,12 +1622,12 @@ const router = createBrowserRouter([
               <TeachersTimeTableSubAdmin /></SuspenseWrapper>,
             children: []
           },
-          {
-            path: "student",
-            element: <SuspenseWrapper fallback={Loading}>
-              <StudentsTimeTableSubAdmin /></SuspenseWrapper>,
-            children: []
-          },
+          // {
+          //   path: "student",
+          //   element: <SuspenseWrapper fallback={Loading}>
+          //     <StudentsTimeTableSubAdmin /></SuspenseWrapper>,
+          //   children: []
+          // },
         ]
       },
       {
