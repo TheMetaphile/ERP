@@ -123,27 +123,42 @@ export default function TimetableRow({
 
   useEffect(()=>{
     console.log('schedule',schedule)
-  },[schedule])
-  const addOptionalSubject = (lectureNo) => {
-    handleSchedule(prev => {
-      const daySchedule = prev[day] || [];
-      return {
-        ...prev,
-        [day]: daySchedule.map(lec =>
-          lec.lectureNo === lectureNo
-            ? {
-              ...lec,
+  },[schedule]);
+
+const addOptionalSubject = (lectureNo) => {
+  handleSchedule(prev => {
+    const daySchedule = prev[day] || [];
+
+    // Check if the lectureNo exists in the schedule
+    const lectureExists = daySchedule.some(lec => lec.lectureNo === lectureNo);
+
+    return {
+      ...prev,
+      [day]: lectureExists
+        ? daySchedule.map(lec =>
+            lec.lectureNo === lectureNo
+              ? {
+                  ...lec,
+                  optional: true,
+                  optionalSubjects: [
+                    ...(lec.optionalSubjects || []),
+                    { subject: '', teacher: '', mergeWithSection: '' }
+                  ]
+                }
+              : lec
+          )
+        : [
+            ...daySchedule,
+            {
+              lectureNo,
               optional: true,
-              optionalSubjects: [
-                ...(lec.optionalSubjects || []),
-                { subject: '', teacher: '', mergeWithSection: '' }
-              ]
+              optionalSubjects: [{ subject: '', teacher: '', mergeWithSection: '' }]
             }
-            : lec
-        )
-      };
-    });
-  };
+          ]
+    };
+  });
+};
+
 
   const removeOptionalSubject = (lectureNo, index) => {
     handleSchedule(prev => {
@@ -196,7 +211,7 @@ export default function TimetableRow({
   useEffect(() => {
     const searchTimer = setTimeout(async () => {
       for (let lecture of lectureStructure) {
-        const { teacherInput, showSuggestions, suggestions } = rowState[lecture.lectureNo];
+        const { teacherInput, showSuggestions, suggestions } = rowState[lecture?.lectureNo];
         if (teacherInput && teacherInput.trim() && showSuggestions && suggestions.length === 0) {
           const suggestions = await searchTeachers(teacherInput);
           setRowState(prev => ({
@@ -638,7 +653,7 @@ const LectureCell = ({
 
       <button
         onClick={() => addOptionalSubject(lecture.lectureNo)}
-        className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md ${darkMode
+        className={`w-full flex items-center justify-center text-left gap-2 px-3 py-2 rounded-md ${darkMode
           ? 'bg-blue-600 hover:bg-blue-700'
           : 'bg-blue-500 hover:bg-blue-600'
           } text-white`}
