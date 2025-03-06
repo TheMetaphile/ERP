@@ -9,6 +9,7 @@ import StudentRegisterDynamic from "./SubAdminComponent/DynamicRegistration/Stud
 import Template from "./SubAdminComponent/Template/Template.jsx";
 import TimeTableStructure from "./SubAdminComponent/timetable/utils/Upload/createTimetableStructure.jsx";
 import SubjectManagement from "./SubAdminComponent/SubjectManagement/SubjectManagement.jsx";
+import AllStudentsListSubject from "./SubAdminComponent/AllocateSubject/AllStudentsListSubject.jsx";
 
 const NewAdmissionSubAdmin = lazy(() => import("./SubAdminComponent/New Admission/NewAdmissionSubAdmin.jsx"));
 const AssignTeacherSubAdmin = lazy(() => import("./SubAdminComponent/Classes/utils/AssignTeacherSubAdmin.jsx"));
@@ -1656,6 +1657,11 @@ const router = createBrowserRouter([
         path: "/Sub-Admin/Employee",
         element: <SuspenseWrapper fallback={Loading}>
           <Employee /></SuspenseWrapper>,
+      },
+      {
+        path: '/Sub-Admin/SubjectAllocate',
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllStudentsListSubject /></SuspenseWrapper>
       },
     ]
   },

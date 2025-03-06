@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AssignSubjectRow from './AssignSubjectRow';
 import { motion } from 'framer-motion';
 import { FaChalkboardTeacher } from 'react-icons/fa';
@@ -22,6 +22,8 @@ function AssignSubjectSubAdmin() {
         { class: '11th' },
         { class: '12th' },
     ];
+    const streams = ['Science', 'Commerce', 'Arts', 'General'];
+    const [selectedStream, setSelectedStream] = useState('');
 
     return (
         <motion.div
@@ -30,13 +32,30 @@ function AssignSubjectSubAdmin() {
             transition={{ duration: 0.5 }}
             className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mb-3 no-scrollbar bg-secondary-50 mobile:max-tablet:mx-2.5"
         >
-            <motion.h1
-                initial={{ y: -50 }}
-                animate={{ y: 0 }}
-                transition={{ type: "spring", stiffness: 100 }}
-                className="text-3xl p-4 mobile:max-tablet:text-lg font-medium text-black400 flex items-center"
-            >
-                <FaChalkboardTeacher className="mr-2" />Assign Subject Teacher </motion.h1>
+            <div className='flex justify-between items-center w-full'>
+                <motion.h1
+                    initial={{ y: -50 }}
+                    animate={{ y: 0 }}
+                    transition={{ type: "spring", stiffness: 100 }}
+                    className="text-3xl p-4 mobile:max-tablet:text-lg font-medium text-black400 flex items-center"
+                >
+                    <FaChalkboardTeacher className="mr-2" />Assign Subject Teacher </motion.h1>
+
+                <div>
+                    <select
+                        value={selectedStream}
+                        onChange={(e) => setSelectedStream(e.target.value)}
+                        className={`w-full p-3 rounded-md border 'bg-gray-50 border-gray-300 text-gray-900' focus:ring-blue-500 focus:border-blue-500`}
+                    >
+                        <option value="">Select Stream</option>
+                        {streams.map((stream) => (
+                            <option key={stream} value={stream}>
+                                {stream}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
 
             <motion.div
                 initial={{ y: 50, opacity: 0 }}
@@ -52,7 +71,7 @@ function AssignSubjectSubAdmin() {
                         transition={{ delay: index * 0.1 }}
                         className='w-full'
                     >
-                        <AssignSubjectRow Class={con.class} key={index} />
+                        <AssignSubjectRow Class={con.class} key={index} selectedStream={selectedStream}/>
                     </motion.div>
 
                 ))}
