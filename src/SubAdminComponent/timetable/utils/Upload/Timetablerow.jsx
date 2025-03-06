@@ -249,7 +249,7 @@ export default function TimetableRow({
       animate={{ opacity: 1 }}
       className={`border ${darkMode
         ? 'bg-gray-800 hover:bg-gray-700 border-gray-600'
-        : 'bg-white hover:bg-purple-50 border-gray-300'
+        : 'bg-white hover:bg-blue-50 border-gray-300'
         } transition-colors duration-200`}
     >
 
@@ -639,8 +639,8 @@ const LectureCell = ({
       <button
         onClick={() => addOptionalSubject(lecture.lectureNo)}
         className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md ${darkMode
-          ? 'bg-purple-600 hover:bg-purple-700'
-          : 'bg-purple-500 hover:bg-purple-600'
+          ? 'bg-blue-600 hover:bg-blue-700'
+          : 'bg-blue-500 hover:bg-blue-600'
           } text-white`}
         type="button"
 

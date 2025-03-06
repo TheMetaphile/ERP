@@ -147,7 +147,7 @@ const Certificates = () => {
         button: {
             primary: darkMode
                 ? "bg-indigo-600 hover:bg-indigo-700 text-white"
-                : "bg-purple-600 hover:bg-purple-700 text-white",
+                : "bg-blue-600 hover:bg-blue-700 text-white",
             secondary: darkMode
                 ? "bg-gray-700 hover:bg-gray-600 text-gray-200"
                 : "bg-gray-200 hover:bg-gray-300 text-gray-800",
@@ -157,11 +157,11 @@ const Certificates = () => {
         },
         input: darkMode
             ? "bg-gray-700 border-gray-600 text-white focus:ring-indigo-500 focus:border-indigo-500"
-            : "bg-white border-purple-300 text-gray-800 focus:ring-purple-500 focus:border-purple-500",
+            : "bg-white border-blue-300 text-gray-800 focus:ring-blue-500 focus:border-blue-500",
         table: {
-            header: darkMode ? "bg-gray-800 text-gray-200" : "bg-purple-100 text-gray-800",
-            row: darkMode ? "border-gray-700 hover:bg-gray-700" : "border-gray-200 hover:bg-purple-50",
-            altRow: darkMode ? "bg-gray-750" : "bg-purple-50"
+            header: darkMode ? "bg-gray-800 text-gray-200" : "bg-blue-100 text-gray-800",
+            row: darkMode ? "border-gray-700 hover:bg-gray-700" : "border-gray-200 hover:bg-blue-50",
+            altRow: darkMode ? "bg-gray-750" : "bg-blue-50"
         },
         dialog: {
             overlay: darkMode ? "bg-black bg-opacity-70" : "bg-black bg-opacity-50",
@@ -169,9 +169,9 @@ const Certificates = () => {
         },
         checkbox: darkMode
             ? "border-indigo-500 checked:bg-indigo-600"
-            : "border-purple-500 checked:bg-purple-600",
-        icon: darkMode ? "text-indigo-400" : "text-purple-500",
-        loading: darkMode ? "text-indigo-400" : "text-purple-500",
+            : "border-blue-500 checked:bg-blue-600",
+        icon: darkMode ? "text-indigo-400" : "text-blue-500",
+        loading: darkMode ? "text-indigo-400" : "text-blue-500",
         header: darkMode ? "border-gray-700" : "border-gray-300",
         error: darkMode ? "bg-red-900 border-red-700" : "bg-red-100 border-red-300"
     };
@@ -1002,7 +1002,7 @@ const Certificates = () => {
                             className={`relative rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-5xl transition-colors duration-300 max-h-[90vh] overflow-y-auto ${themeClasses.dialog.container}`}
                         >
                             <div className="flex justify-between items-center mb-4 pb-2 border-b transition-colors duration-300">
-                                <h3 className="text-lg font-semibold text-purple-500">Custom Transfer Certificate</h3>
+                                <h3 className="text-lg font-semibold text-blue-500">Custom Transfer Certificate</h3>
                                 <button
                                     onClick={closeCustomDialog}
                                     className="text-gray-500 hover:text-gray-700 transition-colors"

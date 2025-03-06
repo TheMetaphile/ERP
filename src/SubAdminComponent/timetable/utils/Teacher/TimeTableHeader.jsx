@@ -6,7 +6,7 @@ export default function TimeTableHeader({ fields = [], numberOfLecturesBeforeLun
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-purple-100 dark:bg-dark-200 w-full text-black dark:text-white"
+      className="bg-blue-100 dark:bg-dark-200 w-full text-black dark:text-white"
     >
       <tr className='w-full'>
         {['', ...fields].map((header, index) => (
@@ -14,14 +14,14 @@ export default function TimeTableHeader({ fields = [], numberOfLecturesBeforeLun
             (<>
               <th
                 key={index}
-                className="px-4 py-3 text-center border border-purple-300 dark:border-dark-300 text-sm whitespace-nowrap"
+                className="px-4 py-3 text-center border border-blue-300 dark:border-dark-300 text-sm whitespace-nowrap"
               >
                 <div>Lecture: {header.lectureNo || '-'}</div>
                 <div>{header.startTime} - {header.endTime}</div>
               </th>
               <th
                 key={"lunch"}
-                className="px-4 py-3 bg-yellow-600 text-center border border-purple-300 dark:border-dark-300 text-sm whitespace-nowrap"
+                className="px-4 py-3 bg-yellow-600 text-center border border-blue-300 dark:border-dark-300 text-sm whitespace-nowrap"
               >
 
               </th>
@@ -30,7 +30,7 @@ export default function TimeTableHeader({ fields = [], numberOfLecturesBeforeLun
             (
               <th
                 key={index}
-                className="px-4 py-3 text-center border border-purple-300 dark:border-dark-300 text-sm whitespace-nowrap"
+                className="px-4 py-3 text-center border border-blue-300 dark:border-dark-300 text-sm whitespace-nowrap"
               >
                 <div>Lecture: {header.lectureNo || '-'}</div>
                 <div>{header.startTime} - {header.endTime}</div>

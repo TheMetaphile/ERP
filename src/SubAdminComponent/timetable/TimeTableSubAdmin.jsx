@@ -44,7 +44,7 @@ function TimeTableSubAdmin() {
             whileHover={{ boxShadow: "0px 0px 8px rgba(0,0,0,0.2)" }}
           >
 
-            <motion.label className={`flex items-center cursor-pointer ${role === "Teacher" ? 'text-purple-700' : 'text-gray-600'}`}>
+            <motion.label className={`flex items-center cursor-pointer ${role === "Teacher" ? 'text-blue-700' : 'text-gray-600'}`}>
               <input
                 type="radio"
                 name="role"
@@ -64,7 +64,7 @@ function TimeTableSubAdmin() {
             </motion.label>
 
 
-            {/* <motion.label className={`flex items-center cursor-pointer ${role === "Student" ? 'text-purple-700' : 'text-gray-600'}`}>
+            {/* <motion.label className={`flex items-center cursor-pointer ${role === "Student" ? 'text-blue-700' : 'text-gray-600'}`}>
               <input
                 type="radio"
                 name="role"
@@ -83,7 +83,7 @@ function TimeTableSubAdmin() {
               </motion.div>
             </motion.label> */}
 
-            <motion.label className={`flex items-center cursor-pointer ${role === "Upload" ? 'text-purple-700' : 'text-gray-600'}`}>
+            <motion.label className={`flex items-center cursor-pointer ${role === "Upload" ? 'text-blue-700' : 'text-gray-600'}`}>
               <input
                 type="radio"
                 name="role"
@@ -102,7 +102,7 @@ function TimeTableSubAdmin() {
               </motion.div>
             </motion.label>
 
-            <motion.label className={`flex items-center cursor-pointer ${role === "Structure" ? 'text-purple-700' : 'text-gray-600'}`}>
+            <motion.label className={`flex items-center cursor-pointer ${role === "Structure" ? 'text-blue-700' : 'text-gray-600'}`}>
               <input
                 type="radio"
                 name="role"

@@ -236,7 +236,7 @@ function Employee() {
         //         Employee Registration
         //     </motion.h1>
 
-        //     <div className="flex flex-col items-center justify-center w-full bg-purple-50 rounded-xl shadow-lg p-8 mobile:max-tablet:px-2">
+        //     <div className="flex flex-col items-center justify-center w-full bg-blue-50 rounded-xl shadow-lg p-8 mobile:max-tablet:px-2">
         //         <ProgressBar step={step} />
         //         <div className="relative w-full">
         //             <AnimatePresence mode='wait'>
@@ -259,10 +259,10 @@ function Employee() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mx-4 pt-4 bg-gradient-to-br from-purple-50 to-white rounded-lg shadow-xl p-8 mobile:max-tablet:p-2 mobile:max-tablet:mx-2 mobile:max-tablet:mt-2"
+            className="mx-4 pt-4 bg-gradient-to-br from-blue-50 to-white rounded-lg shadow-xl p-8 mobile:max-tablet:p-2 mobile:max-tablet:mx-2 mobile:max-tablet:mt-2"
         >
             <ToastContainer />
-            <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-purple-700 mb-8 text-center">Add New Employee</h1>
+            <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-blue-700 mb-8 text-center">Add New Employee</h1>
             <form className="grid grid-cols-3 mobile:max-tablet:grid-cols-1 gap-6">
                 <InputField icon={<FaUser />} label="Name" name="name" value={formData.name} onChange={handleChange} required />
                 <InputField icon={<FaEnvelope />} label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required />
@@ -367,11 +367,11 @@ export default Employee;
 
 const InputField = ({ icon, label, name, type = "text", value, onChange, required }) => (
     <motion.div className="mb-4" variants={itemVariants}>
-        <label className="flex items-center text-lg mb-2 text-purple-700 font-semibold">
+        <label className="flex items-center text-lg mb-2 text-blue-700 font-semibold">
             {icon} <span className="ml-2">{label}</span>
         </label>
         <motion.input
-            className="border-2 border-purple-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+            className="border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
             id={name}
             type={type}
             name={name}
@@ -384,11 +384,11 @@ const InputField = ({ icon, label, name, type = "text", value, onChange, require
 );
 const SelectField = ({ icon, label, name, value, onChange, options, required }) => (
     <motion.div className="mb-4" variants={itemVariants}>
-        <label className="flex items-center text-lg mb-2 text-purple-700 font-semibold">
+        <label className="flex items-center text-lg mb-2 text-blue-700 font-semibold">
             {icon} <span className="ml-2">{label}</span>
         </label>
         <motion.select
-            className="border-2 border-purple-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+            className="border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
             id={name}
             name={name}
             value={value}

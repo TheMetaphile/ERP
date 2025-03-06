@@ -34,7 +34,7 @@ function FeeStructureSubAdmin() {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3 }}
-      className="min-h-screen p-2 bg-gradient-to-br from-purple-50 to-white">
+      className="min-h-screen p-2 bg-gradient-to-br from-blue-50 to-white">
       <ToastContainer />
       <div className='flex justify-between items-center mb-8 mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
         <PageTitle icon={FaGraduationCap} title="Fee Structure Management" />

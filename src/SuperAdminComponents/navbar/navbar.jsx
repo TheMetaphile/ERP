@@ -102,9 +102,9 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
   }, []);
 
   return (
-    <div className="flex flex-grow mobile:max-tablet:flex-col h-full mt-1 px-2 py-3 mb-2 mobile:max-tablet:mb-0 items-center justify-between bg-gradient-to-r from-purple-200 to-purple-100 rounded-lg shadow-md mobile:max-tablet:gap-2">
+    <div className="flex flex-grow mobile:max-tablet:flex-col h-full mt-1 px-2 py-3 mb-2 mobile:max-tablet:mb-0 items-center justify-between bg-gradient-to-r from-blue-200 to-blue-100 rounded-lg shadow-md mobile:max-tablet:gap-2">
       <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-0 mobile:max-tablet:justify-center">
-        <FaBars onClick={onDrawerToggle} className="w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-white hover:bg-purple-200 shadow-lg cursor-pointer" />
+        <FaBars onClick={onDrawerToggle} className="w-11 h-fit mr-4 px-3 py-2 rounded-lg bg-white hover:bg-blue-200 shadow-lg cursor-pointer" />
         <img src={logo} alt="Metaphile Public School" className="w-10" />
         <span className="tablet:text-lg font-medium  mobile:text-sm mr-2">etaphile Public School</span>
         <div className=' tablet:hidden'>
@@ -122,7 +122,7 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
                 id="branch"
                 value={selectedBranch}
                 onChange={handleBranchChange}
-                className="border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight"
+                className="border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight"
               >
                 <option>Select Branch</option>
                 {branches.map((branch, index) => (
@@ -149,19 +149,19 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
                 <div className="absolute right-0 mt-1 w-40 bg-white rounded-lg shadow-lg font-medium text-black">
                   <Link
                     to="/Sup-Admin/Profile"
-                    className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg"
+                    className="block px-4 py-2 hover:bg-blue-200 rounded-t-lg"
                   >
                     Profile
                   </Link>
                   <Link
                     to=""
-                    className="block px-4 py-2 hover:bg-purple-200 rounded-t-lg"
+                    className="block px-4 py-2 hover:bg-blue-200 rounded-t-lg"
                   >
                     Home
                   </Link>
                   <button
                     onClick={logout}
-                    className="block w-full px-4 py-2 hover:bg-purple-200 rounded-b-lg"
+                    className="block w-full px-4 py-2 hover:bg-blue-200 rounded-b-lg"
                   >
                     Logout
                   </button>

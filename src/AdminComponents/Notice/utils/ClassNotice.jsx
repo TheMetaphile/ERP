@@ -162,7 +162,7 @@ const ClassNotice = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="mt-8 mx-auto bg-purple-50  border rounded-xl shadow-lg p-6 mobile:max-tablet:p-2"
+      className="mt-8 mx-auto bg-blue-50  border rounded-xl shadow-lg p-6 mobile:max-tablet:p-2"
 
     >
 
@@ -174,7 +174,7 @@ const ClassNotice = () => {
           <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="text-center text-purple-600 font-semibold"
+            className="text-center text-blue-600 font-semibold"
           >
             No notices available
           </motion.div>
@@ -187,12 +187,12 @@ const ClassNotice = () => {
                   initial={{ y: 50, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className="bg-white shadow-lg rounded-lg p-3 border-l-4 border-purple-500 "
+                  className="bg-white shadow-lg rounded-lg p-3 border-l-4 border-blue-500 "
                 >
                   <div className="flex items-center justify-between mb-2 mobile:max-sm:flex-col mobile:max-sm:items-start">
                     <motion.h3
                       whileHover={{ scale: 1.05 }}
-                      className="text-xl font-semibold text-purple-700 cursor-pointer"
+                      className="text-xl font-semibold text-blue-700 cursor-pointer"
                       onClick={() => handleClick(index)}
                     >
                       {editingIndex === index ? (
@@ -202,14 +202,14 @@ const ClassNotice = () => {
                           value={editedNotice.title}
                           onChange={handleChange}
                           onClick={handleFieldClick}
-                          className="border-2 border-purple-300 rounded-lg px-3 py-1 focus:outline-none focus:border-purple-500 "
+                          className="border-2 border-blue-300 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 "
                         />
                       ) : (
                         notice.title
                       )}
                     </motion.h3>
                     <div className="flex items-center space-x-2">
-                      <span className="text-purple-600">{notice.type}</span>
+                      <span className="text-blue-600">{notice.type}</span>
                       {editingIndex === index ? (
                         <>
                           <motion.button
@@ -234,7 +234,7 @@ const ClassNotice = () => {
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
-                            className="bg-purple-500 text-white p-2 rounded-full shadow-md"
+                            className="bg-blue-500 text-white p-2 rounded-full shadow-md"
                             onClick={() => handleEdit(index)}
                           >
                             <MdEdit size={20} />
@@ -268,7 +268,7 @@ const ClassNotice = () => {
                               value={editedNotice.description}
                               onChange={handleChange}
                               onClick={handleFieldClick}
-                              className="w-full mt-2 border-2 border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500"
+                              className="w-full mt-2 border-2 border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500"
                             />
                           ) : (
                             notice.description
@@ -279,15 +279,15 @@ const ClassNotice = () => {
                             {editedNotice.forClasses.map((classInfo, idx) => (
                               <motion.div
                                 key={idx}
-                                className="flex flex-wrap items-center gap-2 bg-purple-100 p-2 rounded-md"
+                                className="flex flex-wrap items-center gap-2 bg-blue-100 p-2 rounded-md"
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: idx * 0.1 }}
                               >
-                                <p className="font-medium text-purple-700">Class: {classInfo.Class}</p>
+                                <p className="font-medium text-blue-700">Class: {classInfo.Class}</p>
                                 <div className="flex flex-wrap gap-1">
                                   {classInfo.sections.map((section, sIdx) => (
-                                    <span key={sIdx} className="bg-purple-200 text-purple-800 px-2 py-1 rounded-full text-sm">
+                                    <span key={sIdx} className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full text-sm">
                                       {section}
                                     </span>
                                   ))}
@@ -298,20 +298,20 @@ const ClassNotice = () => {
                         )}
                         {(notice.type === 'Particular Classes' && notice.forClasses.length > 0) && (
                           <div className="mt-2">
-                            <p className="text-purple-700 font-medium">For Classes:</p>
+                            <p className="text-blue-700 font-medium">For Classes:</p>
                             <div className="space-y-2 mt-1">
                               {notice.forClasses.map((classInfo, index) => (
                                 <motion.div
                                   key={index}
-                                  className="flex flex-wrap items-center gap-2 bg-purple-100 p-2 rounded-md"
+                                  className="flex flex-wrap items-center gap-2 bg-blue-100 p-2 rounded-md"
                                   initial={{ opacity: 0, x: -20 }}
                                   animate={{ opacity: 1, x: 0 }}
                                   transition={{ delay: index * 0.1 }}
                                 >
-                                  <span className="font-medium text-purple-700">Class {classInfo.Class}:</span>
+                                  <span className="font-medium text-blue-700">Class {classInfo.Class}:</span>
                                   <div className="flex flex-wrap gap-1">
                                     {classInfo.sections.map((section, sIdx) => (
-                                      <span key={sIdx} className="bg-purple-200 text-purple-800 px-2 py-1 rounded-full text-sm">
+                                      <span key={sIdx} className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full text-sm">
                                         {section}
                                       </span>
                                     ))}
@@ -329,13 +329,13 @@ const ClassNotice = () => {
                     <p>Date: {notice.date}</p>
                     <div className="flex items-center space-x-2">
                       <span>By:</span>
-                      <div className="flex items-center bg-purple-100 rounded-full px-3 py-1">
+                      <div className="flex items-center bg-blue-100 rounded-full px-3 py-1">
                         {notice.from.profileLink ? (
                           <img src={notice.from.profileLink} alt="" className="w-6 h-6 rounded-full mr-2" />
                         ) : (
-                          <FaUserCircle className="w-6 h-6 text-purple-500 mr-2" />
+                          <FaUserCircle className="w-6 h-6 text-blue-500 mr-2" />
                         )}
-                        <span className="text-purple-700">{notice.from.name}</span>
+                        <span className="text-blue-700">{notice.from.name}</span>
                       </div>
                     </div>
                   </div>
@@ -344,7 +344,7 @@ const ClassNotice = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => handleClick(index)}
-                    className="mt-4 w-full text-purple-600 hover:text-purple-800 focus:outline-none"
+                    className="mt-4 w-full text-blue-600 hover:text-blue-800 focus:outline-none"
                   >
                     {expanded === index ? (
                       <FaChevronUp className="mx-auto" />

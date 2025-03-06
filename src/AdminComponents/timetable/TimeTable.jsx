@@ -45,7 +45,7 @@ function TimeTable() {
             className="flex gap-6 px-4 py-3 mt-4 mobile:max-tablet:mt-0 text-lg justify-between border bg-white rounded-full shadow-md"
             whileHover={{ boxShadow: "0px 0px 8px rgba(0,0,0,0.2)" }}
           >
-            <motion.label className={`flex items-center cursor-pointer ${role === "Teacher" ? 'text-purple-700' : 'text-gray-600'}`}>
+            <motion.label className={`flex items-center cursor-pointer ${role === "Teacher" ? 'text-blue-700' : 'text-gray-600'}`}>
               <input
                 type="radio"
                 name="role"
@@ -63,7 +63,7 @@ function TimeTable() {
                 Teacher
               </motion.div>
             </motion.label>
-            <motion.label className={`flex items-center cursor-pointer ${role === "Student" ? 'text-purple-700' : 'text-gray-600'}`}>
+            <motion.label className={`flex items-center cursor-pointer ${role === "Student" ? 'text-blue-700' : 'text-gray-600'}`}>
               <input
                 type="radio"
                 name="role"

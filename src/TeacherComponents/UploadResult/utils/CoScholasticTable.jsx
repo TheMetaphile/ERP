@@ -151,7 +151,7 @@ export default function CoScholasticTable({ students, term, Class, section }) {
         >
             <table className="min-w-full whitespace-nowrap bg-white border border-gray-300 rounded-lg">
                 <thead>
-                    <tr className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-lg leading-normal">
+                    <tr className="bg-gradient-to-r from-blue-500 to-blue-500 text-white text-lg leading-normal">
                         <th className="py-3 px-6 text-center rounded-tl-lg"><FaUserGraduate className="inline mr-2" />Roll No.</th>
                         <th className="py-3 px-6 text-center"><FaGraduationCap className="inline mr-2" />Name</th>
                         {Subjects.map((Subject, index) => (

@@ -113,7 +113,7 @@ export default function TeacherLeaves() {
       {loading ? (
         <Loading />
       ) : data === null ? (
-        <div className="text-purple-500 font-bold text-2xl">No data available</div>
+        <div className="text-blue-500 font-bold text-2xl">No data available</div>
       ) : (
         <>
           <motion.div

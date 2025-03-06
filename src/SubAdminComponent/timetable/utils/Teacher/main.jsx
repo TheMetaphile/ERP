@@ -94,22 +94,22 @@ function TeachersTimeTableSubAdmin() {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.5 }}
                         >
-                            <div className="flex items-center mobile:max-tablet:flex-col  mobile:max-tablet:px-0 bg-purple-200 p-4 rounded-lg shadow-md">
-                                <span className="px-2 text-xl mobile:max-tablet:text-sm whitespace-nowrap font-semibold text-purple-800">
+                            <div className="flex items-center mobile:max-tablet:flex-col  mobile:max-tablet:px-0 bg-blue-200 p-4 rounded-lg shadow-md">
+                                <span className="px-2 text-xl mobile:max-tablet:text-sm whitespace-nowrap font-semibold text-blue-800">
                                     Showing Timetable for Teacher:
                                 </span>
                                 <div className="flex-1 flex-wrap flex items-center gap-2 mobile:max-tablet:text-sm">
                                     <img
                                         src={Teacher.profileLink}
                                         alt="profilepic"
-                                        className="ml-2 w-12 h-12 rounded-full mr-2 border-2 border-purple-500"
+                                        className="ml-2 w-12 h-12 rounded-full mr-2 border-2 border-blue-500"
                                     />
 
-                                    <span className="text-lg mobile:max-tablet:text-sm whitespace-nowrap font-medium text-purple-700">
+                                    <span className="text-lg mobile:max-tablet:text-sm whitespace-nowrap font-medium text-blue-700">
                                         {Teacher.name}
                                     </span>
 
-                                    <div className="text-sm text-purple-600">{Teacher.employeeId}</div>
+                                    <div className="text-sm text-blue-600">{Teacher.employeeId}</div>
                                 </div>
                             </div>
 
@@ -134,12 +134,12 @@ function TeachersTimeTableSubAdmin() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="py-4 text-center bg-purple-100 rounded-lg shadow-md"
+                            className="py-4 text-center bg-blue-100 rounded-lg shadow-md"
                         >
-                            <p className="text-purple-700 mb-3">No Timetable found. Please upload one.</p>
+                            <p className="text-blue-700 mb-3">No Timetable found. Please upload one.</p>
                             <Link
                                 to="/Admin-Dashboard/timetable/upload"
-                                className="px-6 py-2 rounded-md bg-purple-600 text-white hover:bg-purple-700 transition-colors duration-300 shadow-md"
+                                className="px-6 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-300 shadow-md"
                             >
                                 Upload Timetable
                             </Link>

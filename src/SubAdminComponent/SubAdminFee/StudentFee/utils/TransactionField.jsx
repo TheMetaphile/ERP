@@ -286,7 +286,7 @@ export default function TransactionField({ data, selectedStudent, setData }) {
       className="w-full overflow-x-auto"
     >
       <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead className="bg-purple-200 text-black">
+        <thead className="bg-blue-200 text-black">
           <tr>
             <th className="px-4 py-3 text-left text-xs font-medium  uppercase tracking-wider">#</th>
             <th className="px-4 py-3 text-left text-xs font-medium  uppercase tracking-wider">Order ID</th>

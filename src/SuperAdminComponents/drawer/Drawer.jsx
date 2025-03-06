@@ -30,14 +30,14 @@ export default function SuperAdminDrawer({ isOpen }) {
         <img src={schoolImage} alt="school_image" className="w-1/3" />
         <span className="text-black font-medium ">Metaphile Public School</span>
       </div>
-      <div className="mt-5 bg-gradient-to-r from-purple-200 to-purple-100 px-2 py-4 rounded-2xl shadow-lg">
+      <div className="mt-5 bg-gradient-to-r from-blue-200 to-blue-100 px-2 py-4 rounded-2xl shadow-lg">
         <h2 className="text-xl font-semibold">Dashboard</h2>
         <div className="mt-4">
           {menuItems.map((menuItem, index) => (
             <div
               key={index}
               onClick={() => handleClick(index)}
-              className={`cursor-pointer rounded-lg ${active === index ? 'bg-purple-300' : ''}`}
+              className={`cursor-pointer rounded-lg ${active === index ? 'bg-blue-300' : ''}`}
             >
               <ExpansionTile
 

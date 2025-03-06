@@ -186,7 +186,7 @@ export default function TimetableRow({
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="bg-purple-200 text-purple-800 font-bold"
+        className="bg-blue-200 text-blue-800 font-bold"
       >
         <td colSpan="6" className="h-10 text-xl text-center">LUNCH</td>
       </motion.tr>
@@ -195,14 +195,14 @@ export default function TimetableRow({
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay: index * 0.1 }}
-      className={`bg-white hover:bg-purple-50 transition-colors duration-200 ${!rowState.optional ? "border-b border-purple-200" : ""}`}
+      className={`bg-white hover:bg-blue-50 transition-colors duration-200 ${!rowState.optional ? "border-b border-blue-200" : ""}`}
     >
       <td className="text-center py-3">{lectureNo}</td>
       <td className="text-center py-3">{Time}</td>
       <td className="text-center py-3">
         {!rowState.optional && (
           <select
-            className="w-full bg-purple-50 border border-purple-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full bg-blue-50 border border-blue-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             name="Subject"
             value={Subject}
             onChange={handleChange}
@@ -223,7 +223,7 @@ export default function TimetableRow({
             type="checkbox"
             checked={rowState.optional}
             onChange={(e) => setRowState(prev => ({ ...prev, optional: e.target.checked }))}
-            className="form-checkbox h-5 w-5 text-purple-600 transition duration-150 ease-in-out"
+            className="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out"
           />
         </motion.div>
       </td>
@@ -232,7 +232,7 @@ export default function TimetableRow({
           <>
             <input
               type="text"
-              className="border border-purple-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="border border-blue-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={rowState.teacherInput}
               onChange={handleTeacher}
               required
@@ -255,7 +255,7 @@ export default function TimetableRow({
                       alt="Profile"
                       className="w-10 h-10 rounded-full mr-2"
                     />
-                    <span className="text-purple-800">{suggestion.name}</span>
+                    <span className="text-blue-800">{suggestion.name}</span>
                   </motion.li>
                 ))}
               </motion.ul>

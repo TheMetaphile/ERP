@@ -241,7 +241,7 @@ export default function AllExam() {
                 >
                     <div>
                         <select
-                            className="mobile:max-tablet:px-0  border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight  mobile:max-tablet:mt-0"
+                            className="mobile:max-tablet:px-0  border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight  mobile:max-tablet:mt-0"
                             id="Class"
                             name="Class"
                             value={selectedClass}
@@ -269,7 +269,7 @@ export default function AllExam() {
                     </div>
                     <div>
                         <motion.button
-                            className="py-2 mobile:max-tablet:text-sm rounded-lg border bg-purple-300 hover:bg-purple-400 px-3  "
+                            className="py-2 mobile:max-tablet:text-sm rounded-lg border bg-blue-300 hover:bg-blue-400 px-3  "
                             onClick={togglePopUp}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
@@ -291,7 +291,7 @@ export default function AllExam() {
                         <Loading />
                     ) : (
                         <table className="min-w-full ">
-                            <thead className="bg-gradient-to-r from-purple-200 to-purple-100 text-center text-xl font-normal ">
+                            <thead className="bg-gradient-to-r from-blue-200 to-blue-100 text-center text-xl font-normal ">
                                 <tr>
                                     <th className="px-6 py-3  ">
                                         Class
@@ -322,7 +322,7 @@ export default function AllExam() {
                                     >
                                         <td
                                             colSpan={6}
-                                            className="px-4 py-2 whitespace-nowrap text-lg border-r text-center text-purple-600 font-medium"
+                                            className="px-4 py-2 whitespace-nowrap text-lg border-r text-center text-blue-600 font-medium"
                                         >
                                             No Exam Found
                                         </td>

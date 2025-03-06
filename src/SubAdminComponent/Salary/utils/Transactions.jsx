@@ -137,7 +137,7 @@ const Transactions = ({ transactions }) => {
                     <label className="mr-2">To</label>
                     <input type="date" className="p-1 border rounded" />
                 </div> */}
-                <select id="status" value={status} onChange={handleStatusChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 mr-3 ">
+                <select id="status" value={status} onChange={handleStatusChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 mr-3 ">
                     <option value="">Search Filter</option>
                     <option value="Success">Success</option>
                     <option value="Failed">Failed</option>
@@ -158,7 +158,7 @@ const Transactions = ({ transactions }) => {
             </div>
             <div className=" overflow-x-auto rounded-md">
                 <table className="w-full border border-collapse whitespace-nowrap">
-                    <thead className=" bg-purple-200">
+                    <thead className=" bg-blue-200">
                         <tr className=" text-center">
                             <th className=" border-y p-2 text-start">S.No.</th>
                             <th className=" border-y p-2 text-center">Name</th>
@@ -177,7 +177,7 @@ const Transactions = ({ transactions }) => {
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.3, delay: index * 0.1 }}
-                                className={`${clickedIndex === index ? 'bg-purple-100 text-center' : ''}`} onClick={() => handleClick(index)}
+                                className={`${clickedIndex === index ? 'bg-blue-100 text-center' : ''}`} onClick={() => handleClick(index)}
                             >
 
                                 <td className=" text-center border-y p-2">{index + 1}</td>

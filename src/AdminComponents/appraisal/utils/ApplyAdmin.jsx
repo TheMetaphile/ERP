@@ -18,14 +18,14 @@ function ApplyAdmin() {
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-                <div className="bg-gradient-to-r from-purple-500 to-indigo-600 py-6">
+                <div className="bg-gradient-to-r from-blue-500 to-indigo-600 py-6">
                     <h1 className='text-3xl font-bold text-white text-center'>Employee Profile</h1>
                 </div>
 
                 <div className="p-6">
                     <div className='flex flex-col md:flex-row md:space-x-10 items-center mb-8'>
                         <div className='flex flex-col items-center mb-4 md:mb-0'>
-                            <img src={authState?.userDetails?.profileLink} alt="Profile" className='w-32 h-32 rounded-full border-4 border-purple-500 shadow-lg' />
+                            <img src={authState?.userDetails?.profileLink} alt="Profile" className='w-32 h-32 rounded-full border-4 border-blue-500 shadow-lg' />
                             <h2 className='mt-4 text-2xl font-semibold text-gray-800'>{id}</h2>
                         </div>
                         <div className='flex-1 grid grid-cols-4 md:grid-cols-2 gap-4'>
@@ -38,7 +38,7 @@ function ApplyAdmin() {
                                 { icon: <FaCalendarAlt />, label: "Last Increment", value: "10-07-2024" },
                             ].map((item, index) => (
                                 <div key={index} className="flex items-center space-x-3 bg-gray-100 p-3 rounded-lg">
-                                    <div className="text-purple-600">{item.icon}</div>
+                                    <div className="text-blue-600">{item.icon}</div>
                                     <div>
                                         <p className="text-sm text-gray-600">{item.label}</p>
                                         <p className="font-medium text-gray-800">{item.value}</p>
@@ -193,7 +193,7 @@ function ApplyAdmin() {
                     </div>
 
                     <div className="mt-8 flex justify-end">
-                        <button className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white py-2 px-4 rounded-lg shadow-md hover:from-purple-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300">
+                        <button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300">
                             Submit Application
                         </button>
                     </div>
@@ -207,7 +207,7 @@ function Section({ title, icon, children }) {
     return (
         <div className="mt-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                <span className="mr-2 text-purple-600">{icon}</span>
+                <span className="mr-2 text-blue-600">{icon}</span>
                 {title}
             </h2>
             {children}

@@ -743,7 +743,7 @@ export default function AddmissionForm() {
                             ?
                             <Loading />
                             :
-                            <label className="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded mt-2 w-1/4 mobile:max-tablet:w-1/2 tablet:w-1/2 flex justify-center items-center cursor-pointer whitespace-nowrap">
+                            <label className="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded mt-2 w-1/4 mobile:max-tablet:w-1/2 tablet:w-1/2 flex justify-center items-center cursor-pointer whitespace-nowrap">
                                 Upload CSV
                                 <input type="file" accept=".csv" className="hidden" onChange={handleUpload} />
                                 <FaCloudUploadAlt className="ml-2" />

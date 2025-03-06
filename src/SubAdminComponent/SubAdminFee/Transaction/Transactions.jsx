@@ -242,7 +242,7 @@ const Transactions = () => {
 
                     <div className='flex justify-end gap-2 mobile:max-tablet:flex-col'>
                         <div className=' flex gap-2'>
-                            <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                            <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-blue-300 rounded-md py-2 px-4 text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
                                 {session.map((session, index) => (
                                     <option key={index} value={session}>{session}</option>
                                 ))}
@@ -261,7 +261,7 @@ const Transactions = () => {
                             />
                         </div> */}
                         <button
-                            className='bg-purple-500 hover:bg-purple-600 mobile:max-tablet:text-xs whitespace-nowrap rounded-lg shadow-md px-4 py-2 text-white flex items-center'
+                            className='bg-blue-500 hover:bg-blue-600 mobile:max-tablet:text-xs whitespace-nowrap rounded-lg shadow-md px-4 py-2 text-white flex items-center'
                             onClick={handleAddTransaction}
                         >
                             <IoAddCircleOutline className="mr-2" />
@@ -282,7 +282,7 @@ const Transactions = () => {
                                     value={startDate}
                                     onChange={(e) => setStartDate(e.target.value)}
                                     max={endDate}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50"
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                 />
                             </div>
                             <div>
@@ -292,13 +292,13 @@ const Transactions = () => {
                                     value={endDate}
                                     onChange={(e) => setEndDate(e.target.value)}
                                     min={startDate}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50"
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                 />
                             </div>
                         </div>
 
                         <button
-                            className="px-4 py-2 bg-purple-500 text-white font-semibold rounded hover:bg-purple-600 transition duration-200"
+                            className="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition duration-200"
                             onClick={handleDownload}
                         >
                             Download Report
@@ -314,23 +314,23 @@ const Transactions = () => {
                     >
                         <div className="bg-white rounded-lg mobile:max-tablet:p-4 mobile:max-tablet:w-full mobile:max-tablet:mx-10 p-6 shadow-lg w-1/2">
                             <div className='flex justify-between'>
-                                <h2 className="text-xl font-bold mb-4 text-purple-600">Add Transaction</h2>
+                                <h2 className="text-xl font-bold mb-4 text-blue-600">Add Transaction</h2>
                             </div>
 
                             <div className="grid md:grid-cols-1 grid-cols-2 gap-6">
                                 <div className="relative">
-                                    <label className="mb-2 text-sm font-medium text-purple-800 flex items-center">
-                                        <FaUser className="mr-2 text-purple-600" size={20} />
+                                    <label className="mb-2 text-sm font-medium text-blue-800 flex items-center">
+                                        <FaUser className="mr-2 text-blue-600" size={20} />
                                         Name
                                     </label>
                                     <input
                                         type="text"
-                                        className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white"
+                                        className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-blue-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white"
                                         placeholder="Enter student name"
                                         value={search}
                                         onChange={handleSearch}
                                     />
-                                    <FaUser className="absolute left-3 top-[2.6rem] text-purple-400" size={20} />
+                                    <FaUser className="absolute left-3 top-[2.6rem] text-blue-400" size={20} />
 
                                     {showSuggestions && search && (
                                         <div className="absolute z-10 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
@@ -353,25 +353,25 @@ const Transactions = () => {
                                 </div>
 
                                 <div className="relative">
-                                    <label className="mb-2 text-sm font-medium text-purple-800 flex items-center">
-                                        <FaEnvelope className="mr-2 text-purple-600" size={20} />
+                                    <label className="mb-2 text-sm font-medium text-blue-800 flex items-center">
+                                        <FaEnvelope className="mr-2 text-blue-600" size={20} />
                                         Email
                                     </label>
                                     <input
                                         id="email"
                                         type="email"
-                                        className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white"
+                                        className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-blue-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white"
                                         placeholder="Enter email"
                                         value={selectedStudent.email}
                                     // readOnly
                                     />
-                                    <FaEnvelope className="absolute left-3 top-[2.6rem] text-purple-400" size={20} />
+                                    <FaEnvelope className="absolute left-3 top-[2.6rem] text-blue-400" size={20} />
                                 </div>
 
                           
                                 <div className="relative">
-                                    <label className="mb-2 text-sm font-medium text-purple-800 flex items-center">
-                                        <FaRupeeSign className="mr-2 text-purple-600" size={20} />
+                                    <label className="mb-2 text-sm font-medium text-blue-800 flex items-center">
+                                        <FaRupeeSign className="mr-2 text-blue-600" size={20} />
                                         Amount
                                     </label>
                                     <input
@@ -383,22 +383,22 @@ const Transactions = () => {
                                             }
                                         }}
                                         onWheel={(e) => e.target.blur()}
-                                        className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white"
+                                        className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-blue-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white"
                                         placeholder="Enter the amount"
                                         value={amount}
                                         onChange={(e) => setAmount(e.target.value)}
                                     />
-                                    <FaRupeeSign className="absolute left-3 top-[2.6rem] text-purple-400" size={20} />
+                                    <FaRupeeSign className="absolute left-3 top-[2.6rem] text-blue-400" size={20} />
                                 </div>
 
                                 <div className="relative">
-                                    <label className="mb-2 text-sm font-medium text-purple-800 flex items-center">
-                                        <MdOutlinePayments className="mr-2 text-purple-600" size={20} />
+                                    <label className="mb-2 text-sm font-medium text-blue-800 flex items-center">
+                                        <MdOutlinePayments className="mr-2 text-blue-600" size={20} />
                                         Mode
                                     </label>
                                     <select
                                         id="mode"
-                                        className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white appearance-none"
+                                        className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-blue-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white appearance-none"
                                         value={mode}
                                         onChange={(e) => setMode(e.target.value)}
                                     >
@@ -413,14 +413,14 @@ const Transactions = () => {
                                 </div>
                                 {mode && mode !== "Cash" && (
                                     <div className="relative">
-                                        <label className="mb-2 text-sm font-medium text-purple-800 flex items-center" htmlFor="receiptNo">
-                                            <IoReceiptSharp className="mr-2 text-purple-600" size={20} />
+                                        <label className="mb-2 text-sm font-medium text-blue-800 flex items-center" htmlFor="receiptNo">
+                                            <IoReceiptSharp className="mr-2 text-blue-600" size={20} />
                                             Receipt No.
                                         </label>
                                         <input
                                             type="text"
                                             id="receiptNo"
-                                            className="w-full pl-4 pr-4 py-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-300 bg-white"
+                                            className="w-full pl-4 pr-4 py-3 rounded-xl border-2 border-blue-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white"
                                             placeholder="Enter Receipt Number"
                                             value={receiptNo}
                                             onChange={(e) => setReceiptNo(e.target.value)}
@@ -439,7 +439,7 @@ const Transactions = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl py-3 hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
+                                    className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl py-3 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
                                     onClick={handleSubmitTransaction}
                                 >
                                     Submit Transaction

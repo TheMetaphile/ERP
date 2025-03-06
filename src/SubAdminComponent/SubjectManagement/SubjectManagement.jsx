@@ -183,7 +183,7 @@ const SubjectManagement = () => {
             {/* Core Subjects */}
             <div className={`p-6 rounded-lg shadow-md ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
               <div className="flex items-center mb-4">
-                <FaChalkboardTeacher className="mr-2 text-purple-500" />
+                <FaChalkboardTeacher className="mr-2 text-blue-500" />
                 <h2 className="text-xl font-semibold">Core Subjects</h2>
               </div>
 

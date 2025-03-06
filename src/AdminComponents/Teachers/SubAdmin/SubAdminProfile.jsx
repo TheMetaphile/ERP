@@ -82,7 +82,7 @@ const SubAdminProfile = () => {
 
     return (
         <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300 mx-3">
-            <div className="bg-gradient-to-r from-purple-200 to-purple-400 p-3 flex justify-between items-center">
+            <div className="bg-gradient-to-r from-blue-200 to-blue-400 p-3 flex justify-between items-center">
                 <div>
                     <h2 className="text-3xl font-bold">{subAdmin.name}</h2>
                     <p className="text-lg">Staff Profile</p>
@@ -106,7 +106,7 @@ const SubAdminProfile = () => {
                     ) : (
                         <button
                             onClick={handleEdit}
-                            className="bg-white text-purple-500 px-4 py-2 rounded-full hover:bg-purple-100 transition duration-300"
+                            className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 transition duration-300"
                         >
                             <FaEdit className="inline mr-2" /> Edit
                         </button>
@@ -127,7 +127,7 @@ const SubAdminProfile = () => {
 
 const ProfileItem = ({ icon, label, value, editMode, name, onChange, editedValue }) => (
     <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg transition duration-300 hover:bg-gray-100">
-        <div className="text-purple-500 text-xl">{icon}</div>
+        <div className="text-blue-500 text-xl">{icon}</div>
         <div className="flex-grow">
             <p className="text-sm text-gray-500">{label}</p>
             {editMode ? (

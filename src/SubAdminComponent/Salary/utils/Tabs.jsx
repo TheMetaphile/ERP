@@ -13,7 +13,7 @@ const Tabs = ({ selectedTab, onTabChange }) => {
           {tabs.map((tab) => (
             <button
               key={tab}
-              className={`p-2 mx-1 ${selectedTab === tab ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600 "}`}
+              className={`p-2 mx-1 ${selectedTab === tab ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600 "}`}
               onClick={() => onTabChange(tab)}
             >
               {tab}
@@ -21,7 +21,7 @@ const Tabs = ({ selectedTab, onTabChange }) => {
           ))}
         </div>
         {/* <div className="">
-          <button className="bg-purple-500 text-white p-2 rounded flex gap-2 items-center whitespace-nowrap">
+          <button className="bg-blue-500 text-white p-2 rounded flex gap-2 items-center whitespace-nowrap">
             <FiUpload /> Export Data</button>
         </div> */}
       </div>

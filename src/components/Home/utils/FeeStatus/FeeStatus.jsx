@@ -52,7 +52,7 @@ export default function FeeStatus() {
             <div className="grid grid-cols-1 mobile:grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-4 gap-3 tablet:gap-4">
                 <FeeCard img={Payable} amount={details.total} title='Total Payable' color="bg-blue-100" />
                 <FeeCard img={Paid} amount={details.paid} title='Total Paid' color="bg-green-100" />
-                <FeeCard img={Pending} amount={details.discount} title='Total Discount' color="bg-purple-100" />
+                <FeeCard img={Pending} amount={details.discount} title='Total Discount' color="bg-blue-100" />
                 <FeeCard img={Pending} amount={details.total - details.discount - details.paid} title='Pending' color="bg-yellow-100" />
             </div>
         </div>

@@ -42,7 +42,7 @@ function CompleteCreateDiscount({ onApplyDiscount }) {
                             setDiscountType(e.target.value);
                             setAmount("");
                         }}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="fixed">Fixed Amount</option>
                         <option value="percentage">Percentage</option>
@@ -63,7 +63,7 @@ function CompleteCreateDiscount({ onApplyDiscount }) {
                             setAmount(value);
                         }}
                         required
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder={discountType === "percentage" ? "Enter percentage (0-100%)" : "Enter discount amount"}
                     />
                 </div>
@@ -76,7 +76,7 @@ function CompleteCreateDiscount({ onApplyDiscount }) {
                         name="givenBy"
                         value={givenBy}
                         onChange={(e) => setGivenBy(e.target.value)}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Enter who gave the discount"
                     />
                 </div>
@@ -87,7 +87,7 @@ function CompleteCreateDiscount({ onApplyDiscount }) {
                         name="permission"
                         value={permission}
                         onChange={(e) => setPermission(e.target.value)}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Enter permission details"
                     />
                 </div>
@@ -97,7 +97,7 @@ function CompleteCreateDiscount({ onApplyDiscount }) {
                         name="title"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="staff">Staff Ward</option>
                         <option value="admin">Admin Discount</option>
@@ -113,14 +113,14 @@ function CompleteCreateDiscount({ onApplyDiscount }) {
                         max={12}
                         min={1}
                         onChange={(e) => setDuration(e.target.value)}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Enter duration in months"
                     />
                 </div>
             </div>
             <div className="flex justify-end">
                 <button
-                    className={`bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out `}
+                    className={`bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out `}
                     type="submit" 
                 >
                     Create

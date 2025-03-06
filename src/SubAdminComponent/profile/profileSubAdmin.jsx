@@ -23,14 +23,14 @@ const ProfileSubAdmin = () => {
 
   return (
     <motion.div
-      className="bg-gradient-to-br from-purple-100 to-blue-100 min-h-screen tablet:p-8 mobile:max-tablet:p-2 p-4"
+      className="bg-gradient-to-br from-blue-100 to-blue-100 min-h-screen tablet:p-8 mobile:max-tablet:p-2 p-4"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       <motion.div className=" mx-auto bg-white rounded-lg shadow-lg overflow-hidden" variants={itemVariants}>
         <div className="relative">
-          <div className="h-32 bg-gradient-to-r from-purple-300 to-blue-300"></div>
+          <div className="h-32 bg-gradient-to-r from-blue-300 to-blue-300"></div>
           <img 
             className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 h-32 w-32 rounded-full border-4 border-white object-cover"
             src={userDetails.profileLink} 
@@ -71,7 +71,7 @@ const InfoItem = ({ icon, label, value }) => (
     whileHover={{ scale: 1.03 }}
     whileTap={{ scale: 0.98 }}
   >
-    <div className="bg-gradient-to-r from-blue-400 to-purple-500 p-3 rounded-full">
+    <div className="bg-gradient-to-r from-blue-400 to-blue-500 p-3 rounded-full">
       <span className="text-white text-xl">{icon}</span>
     </div>
     <div className="flex-grow">

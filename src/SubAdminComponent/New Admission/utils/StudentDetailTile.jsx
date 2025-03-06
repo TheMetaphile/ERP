@@ -53,7 +53,7 @@ export default function StudentDetailTile({ userData, Class }) {
             {userData.map((user, index) => (
                 <motion.tr
                     key={index}
-                    className="hover:bg-purple-50 transition duration-300"
+                    className="hover:bg-blue-50 transition duration-300"
                     variants={rowVariants}
                     initial="hidden"
                     animate="visible"
@@ -62,19 +62,19 @@ export default function StudentDetailTile({ userData, Class }) {
                     <td className="px-4 py-3">
                         <div className="flex items-center space-x-3">
                             <img src={user.profileLink} alt="" className="h-8 w-8 rounded-full object-cover" />
-                            <span className="font-medium text-purple-800">{user.name}</span>
+                            <span className="font-medium text-blue-800">{user.name}</span>
                         </div>
                     </td>
-                    <td className="px-4 py-3 text-purple-700">{Class}</td>
-                    <td className="px-4 py-3 text-purple-700">{user.gender}</td>
-                    <td className="px-4 py-3 text-purple-700">{user.percentage}%</td>
-                    <td className="px-4 py-3 text-purple-700">{user.fatherPhoneNumber}</td>
-                    <td className="px-4 py-3 text-purple-700 truncate max-w-xs">{user.email}</td>
+                    <td className="px-4 py-3 text-blue-700">{Class}</td>
+                    <td className="px-4 py-3 text-blue-700">{user.gender}</td>
+                    <td className="px-4 py-3 text-blue-700">{user.percentage}%</td>
+                    <td className="px-4 py-3 text-blue-700">{user.fatherPhoneNumber}</td>
+                    <td className="px-4 py-3 text-blue-700 truncate max-w-xs">{user.email}</td>
                     <td className="px-4 py-3">
                         {editMode === index ? (
                             <motion.div className="flex items-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                                 <input
-                                    className="p-2 border border-purple-300 rounded-md w-24 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                    className="p-2 border border-blue-300 rounded-md w-24 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     id="section"
                                     type="text"
                                     value={selectedSection}
@@ -100,7 +100,7 @@ export default function StudentDetailTile({ userData, Class }) {
                             </motion.div>
                         ) : (
                             <motion.button
-                                className="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded-full shadow-md flex items-center justify-center"
+                                className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-md flex items-center justify-center"
                                 onClick={() => handleEditToggle(index, user)}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}

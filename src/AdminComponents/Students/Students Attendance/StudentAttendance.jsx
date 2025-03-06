@@ -117,7 +117,7 @@ export default function StudentAttendance() {
                     Student's Attendance Details
                 </h1>
                 <motion.button
-                    className="p-2 bg-purple-500 rounded-full shadow-md hover:bg-purple-400 transition-colors duration-200 mobile:max-tablet:block hidden"
+                    className="p-2 bg-blue-500 rounded-full shadow-md hover:bg-blue-400 transition-colors duration-200 mobile:max-tablet:block hidden"
                     onClick={() => setDropdownVisible(!isDropdownVisible)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -164,11 +164,11 @@ export default function StudentAttendance() {
                 {loading ? (
                     <Loading />
                 ) : error ? (
-                    <div className=" flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 text-purple-600 text-center pt-3">
+                    <div className=" flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 text-blue-600 text-center pt-3">
                         {error}
                     </div>
                 ) : !data ? (
-                    <div className=" flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 text-purple-600 text-center pt-3">
+                    <div className=" flex flex-col shadow-lg rounded-lg border-gray-200 mb-4 text-blue-600 text-center pt-3">
                         <div className="mx-4 text-xl px-4 mt-4">
                             No data available
                         </div>

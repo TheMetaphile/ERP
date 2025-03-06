@@ -43,7 +43,7 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
     <div className={`flex flex-grow mobile:max-tablet:flex-col h-full px-4 py-3 mb-2 mobile:max-tablet:mb-0 items-center justify-between rounded-lg shadow-md transition-colors duration-300 ${
       darkMode 
         ? 'bg-gray-800 text-white' 
-        : 'bg-gradient-to-r from-purple-300 to-purple-200 text-gray-800'
+        : 'bg-gradient-to-r from-blue-300 to-blue-200 text-gray-800'
     }`}>
       <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-3 mobile:max-tablet:justify-between">
         {authState?.userDetails?.role === 'Accountant' && (
@@ -94,7 +94,7 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
               className={`p-2 rounded-full transform hover:scale-110 transition-transform ${
                 darkMode 
                   ? 'bg-gray-700 text-yellow-300 hover:bg-gray-600' 
-                  : 'bg-purple-100 text-gray-700 hover:bg-purple-200'
+                  : 'bg-blue-100 text-gray-700 hover:bg-blue-200'
               }`}
               aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
@@ -115,7 +115,7 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
                 }`}>
                   {authState?.userDetails?.name}
                   <FaUserCircle className={`text-3xl ${
-                    darkMode ? 'text-purple-300' : 'text-purple-800'
+                    darkMode ? 'text-blue-300' : 'text-blue-800'
                   }`} />
                 </span>
               </button>
@@ -131,7 +131,7 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
                     className={`block px-4 py-3 font-medium hover:transition-colors duration-200 ${
                       darkMode 
                         ? 'hover:bg-gray-600' 
-                        : 'hover:bg-purple-200'
+                        : 'hover:bg-blue-200'
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -145,7 +145,7 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
                     className={`block w-full text-left px-4 py-3 font-medium transition-colors duration-200 ${
                       darkMode 
                         ? 'hover:bg-gray-600 text-red-300' 
-                        : 'hover:bg-purple-200 text-red-600'
+                        : 'hover:bg-blue-200 text-red-600'
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -166,7 +166,7 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
               className={`text-xl cursor-pointer p-2 rounded-full transform hover:scale-110 transition-transform ${
                 darkMode 
                   ? 'bg-gray-700 text-yellow-300 hover:bg-gray-600' 
-                  : 'bg-purple-100 text-gray-700 hover:bg-purple-200'
+                  : 'bg-blue-100 text-gray-700 hover:bg-blue-200'
               }`} 
               
             />

@@ -112,25 +112,25 @@ const PendingFee = () => {
                     </h1>
                     <div className='flex justify-end gap-2 mobile:max-tablet:flex-col'>
                         <div className=' flex gap-2'>
-                            <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                            <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-blue-300 rounded-md py-2 px-4 text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
                                 {session.map((session, index) => (
                                     <option key={index} value={session}>{session}</option>
                                 ))}
                             </select>
-                            <select id="Class" name="Class" value={selectedClass} onChange={handleClassChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                            <select id="Class" name="Class" value={selectedClass} onChange={handleClassChange} className="bg-white border-2 border-blue-300 rounded-md py-2 px-4 text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
                                 <option value="">Select Class</option>
                                 {["Pre-Nursery", "Nursery", "L.K.G", "U.K.G", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"].map(cls => (
                                     <option key={cls} value={cls}>{cls}</option>
                                 ))}
                             </select>
                         </div>
-                        <select id="section" value={section} onChange={handleSectionChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                        <select id="section" value={section} onChange={handleSectionChange} className="bg-white border-2 border-blue-300 rounded-md py-2 px-4 text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
                             <option value="">Select Section</option>
                             {sectionsDetails.map((section, index) => (
                                 <option key={index} value={section}>{section}</option>
                             ))}
                         </select>
-                        <select id="Month" name="Month" value={selectedMonth} onChange={handleMonthChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                        <select id="Month" name="Month" value={selectedMonth} onChange={handleMonthChange} className="bg-white border-2 border-blue-300 rounded-md py-2 px-4 text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
                             <option value="">Select Month</option>
                             {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December",].map(mon => (
                                 <option key={mon} value={mon}>{mon}</option>
@@ -140,7 +140,7 @@ const PendingFee = () => {
                 </div>
                 <div className="flex justify-end items-center mb-3">
                     <button
-                        className="px-4 py-2 bg-purple-500 text-white font-semibold rounded hover:bg-purple-600 transition duration-200"
+                        className="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition duration-200"
                         onClick={handleDownload}
                     >
                         Download Report

@@ -63,17 +63,17 @@ export default function Notice(props) {
 
   return (
     <motion.div
-      className="bg-gradient-to-r from-purple-100 to-indigo-50 p-3 border border-gray-200 rounded-xl shadow-lg px-3"
+      className="bg-gradient-to-r from-blue-100 to-indigo-50 p-3 border border-gray-200 rounded-xl shadow-lg px-3"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       {loading ? (
         <div className="flex justify-center items-center h-40">
-          <FaSpinner className="animate-spin text-4xl text-purple-600" />
+          <FaSpinner className="animate-spin text-4xl text-blue-600" />
         </div>
       ) : details.length === 0 ? (
-        <div className="text-center text-purple-600 py-10">
+        <div className="text-center text-blue-600 py-10">
           <FaBell className="text-5xl mb-4 mx-auto" />
           <p className="text-xl font-semibold">No notices available</p>
         </div>
@@ -84,11 +84,11 @@ export default function Notice(props) {
             className="mb-6 last:mb-0"
             variants={itemVariants}
           >
-            <h3 className="text-xl font-bold text-purple-800 mb-2">{detail.title}</h3>
-            <p className="text-purple-600 text-opacity-80 leading-relaxed line-clamp-4">
+            <h3 className="text-xl font-bold text-blue-800 mb-2">{detail.title}</h3>
+            <p className="text-blue-600 text-opacity-80 leading-relaxed line-clamp-4">
               {detail.description}
             </p>
-            <div className="flex justify-end items-center text-purple-600 border-t border-gray-400 text-xs mt-2">
+            <div className="flex justify-end items-center text-blue-600 border-t border-gray-400 text-xs mt-2">
               <FaCalendarAlt className="mr-1" />
               Date: {detail.date}
             </div>

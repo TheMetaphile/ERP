@@ -172,11 +172,11 @@ export default function MyDoubts() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col w-full mobile:max-tablet:mt-4 bg-gradient-to-br from-purple-100 to-blue-100 p-2 rounded-lg shadow-lg"
+            className="flex flex-col w-full mobile:max-tablet:mt-4 bg-gradient-to-br from-blue-100 to-blue-100 p-2 rounded-lg shadow-lg"
         >
             <ToastContainer />
             <div className='flex justify-between bg-white p-4 rounded-lg shadow-md mobile:max-tablet:flex-col'>
-                <Link className="text-2xl font-bold text-purple-600 hover:text-purple-800 transition-colors duration-300 mobile:max-laptop:text-lg whitespace-nowrap flex items-center">
+                <Link className="text-2xl font-bold text-blue-600 hover:text-blue-800 transition-colors duration-300 mobile:max-laptop:text-lg whitespace-nowrap flex items-center">
                     <IoBookOutline className="mr-2" />
                     My Doubts
                 </Link>
@@ -195,7 +195,7 @@ export default function MyDoubts() {
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className='bg-purple-500 hover:bg-purple-600 mobile:max-tablet:text-xs whitespace-nowrap rounded-lg shadow-md px-4 py-2 text-white flex items-center'
+                            className='bg-blue-500 hover:bg-blue-600 mobile:max-tablet:text-xs whitespace-nowrap rounded-lg shadow-md px-4 py-2 text-white flex items-center'
                             onClick={handleAskDoubt}
                         >
                             <IoAddCircleOutline className="mr-2" />
@@ -237,7 +237,7 @@ export default function MyDoubts() {
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         className="bg-white rounded-lg mobile:max-tablet:p-4 mobile:max-tablet:w-full mobile:max-tablet:mx-10 p-6 shadow-lg w-1/2"
                     >
-                        <h2 className="text-xl font-bold mb-4 text-purple-600">Ask Your Doubt</h2>
+                        <h2 className="text-xl font-bold mb-4 text-blue-600">Ask Your Doubt</h2>
                         <p className="text-base text-gray-600 mb-4">Select a subject and write your question. You can also attach photos for reference.</p>
 
                         <div className="flex flex-col tablet:flex-row justify-between items-center gap-3 w-full">
@@ -260,7 +260,7 @@ export default function MyDoubts() {
                         <h1 className="mb-2 mt-2 font-semibold text-gray-700">Your Question</h1>
 
                         <textarea
-                            className="w-full px-3 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-300"
+                            className="w-full px-3 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300"
                             placeholder="Write your question here..."
                             rows={4}
                             value={doubtDescription}
@@ -269,7 +269,7 @@ export default function MyDoubts() {
 
                         <div className="flex justify-between items-center">
                             <div className='flex items-center'>
-                                <IoCameraOutline className='w-6 h-6 mobile:max-tablet:w-5 mobile:max-tablet:h-5 text-purple-500 cursor-pointer' />
+                                <IoCameraOutline className='w-6 h-6 mobile:max-tablet:w-5 mobile:max-tablet:h-5 text-blue-500 cursor-pointer' />
                             </div>
                             <div>
                                 <motion.button
@@ -283,7 +283,7 @@ export default function MyDoubts() {
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="bg-purple-600 text-white rounded-lg mobile:max-tablet:px-2 mobile:max-tablet:py-1 px-4 py-2 hover:bg-purple-700 transition-colors duration-300"
+                                    className="bg-blue-600 text-white rounded-lg mobile:max-tablet:px-2 mobile:max-tablet:py-1 px-4 py-2 hover:bg-blue-700 transition-colors duration-300"
                                     onClick={handleSubmitDoubt}
                                 >
                                     {loading ? <Loading /> : 'Submit'}

@@ -436,7 +436,7 @@ function ReportCardSubAdmin() {
             <select
               value={selectedTermValue}
               onChange={(e) => setSelectedTermValue(e.target.value)}
-              className="border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 p-2 rounded"
+              className="border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 p-2 rounded"
             >
               <option value="" disabled>Select Term</option>
               <option value="term1">Term 1</option>
@@ -467,7 +467,7 @@ function ReportCardSubAdmin() {
           <>No student found</>
         ) : (
           <motion.div
-            className='rounded-lg shadow-lg border border-purple-200 w-full mb-4 overflow-hidden bg-white'
+            className='rounded-lg shadow-lg border border-blue-200 w-full mb-4 overflow-hidden bg-white'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -478,7 +478,7 @@ function ReportCardSubAdmin() {
               <tbody>
                 {userData.map((detail, index) => (
                   <motion.tr
-                    className='hover:bg-purple-100 transition-colors duration-200 border-b border-gray-200'
+                    className='hover:bg-blue-100 transition-colors duration-200 border-b border-gray-200'
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
@@ -492,13 +492,13 @@ function ReportCardSubAdmin() {
                     <td className='py-3 px-6 text-center text-gray-800 whitespace-nowrap'>{detail.currentClass}</td >
                     <td className='py-3 px-6 text-center text-gray-800 whitespace-nowrap'>{detail.section}</td >
                     <td className='py-3 px-6 text-center text-gray-800 whitespace-nowrap flex items-center gap-3'>
-                      <img src={detail.profileLink} alt={detail.name} className='w-8 h-8 rounded-full object-cover border-2 border-purple-300 mobile:max-tablet:hidden' />
-                      <span className='text-purple-600'>{detail.email}</span>
+                      <img src={detail.profileLink} alt={detail.name} className='w-8 h-8 rounded-full object-cover border-2 border-blue-300 mobile:max-tablet:hidden' />
+                      <span className='text-blue-600'>{detail.email}</span>
                     </td >
                     <td className="py-3 px-4 text-center whitespace-nowrap">
                       <Link to={`/Sub-Admin/Result/${detail.email}?session=${selectedSession}&Class=${Class}`} key={index}>
                         <motion.button
-                          className="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-purple-600 transition-colors duration-200"
+                          className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-600 transition-colors duration-200"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >

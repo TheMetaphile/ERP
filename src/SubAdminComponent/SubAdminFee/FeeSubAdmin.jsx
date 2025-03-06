@@ -76,7 +76,7 @@ function FeeSubAdmin() {
                     </div>
                 </div>
                 <motion.hr
-                    className='border-t-2 bg-purple-200 mt-2 mb-3'
+                    className='border-t-2 bg-blue-200 mt-2 mb-3'
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ duration: 0.5 }}

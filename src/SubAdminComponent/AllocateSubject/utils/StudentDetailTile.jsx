@@ -95,7 +95,7 @@ export default function StudentDetailTile({ userData }) {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="border-b border-gray-200 hover:bg-purple-100 transition-colors mb-2"
+                    className="border-b border-gray-200 hover:bg-blue-100 transition-colors mb-2"
                 >
                     <div className="flex text-center items-center justify-evenly border rounded-lg py-2 pl-2">
                         <Link
@@ -125,7 +125,7 @@ export default function StudentDetailTile({ userData }) {
                                         repeat: Infinity,
                                         ease: "linear",
                                     }}
-                                    className="w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full"
+                                    className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full"
                                 />
                             </div>
                         ) : (
@@ -133,7 +133,7 @@ export default function StudentDetailTile({ userData }) {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => fetchSubjects(user)}
-                                className="bg-purple-100 text-purple-500 px-3 py-1 rounded-full text-sm font-medium hover:bg-purple-200 transition-colors"
+                                className="bg-blue-100 text-blue-500 px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors"
                             >
                                 Optional Subject
                             </motion.button>
@@ -145,7 +145,7 @@ export default function StudentDetailTile({ userData }) {
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center p-4 z-50">
                     <div className="bg-white rounded-2xl shadow-2xl w-11/12 md:w-4/5 max-w-5xl h-fit flex flex-col overflow-hidden">
-                        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-6 text-white">
+                        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
                             <h2 className="text-2xl font-bold">Select Optional Subjects for <span className="italic">{selectedUser?.name}</span></h2>
                         </div>
 
@@ -157,14 +157,14 @@ export default function StudentDetailTile({ userData }) {
                                     {optionalSubjects.map((subject) => (
                                         <label
                                             key={subject}
-                                            className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${selectedSubjects.includes(subject) ? "border-purple-500 bg-purple-50 shadow-sm" : "border-gray-200 hover:border-purple-300"}`}
+                                            className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${selectedSubjects.includes(subject) ? "border-blue-500 bg-blue-50 shadow-sm" : "border-gray-200 hover:border-blue-300"}`}
                                         >
                                             <input
                                                 type="checkbox"
                                                 value={subject}
                                                 checked={selectedSubjects.includes(subject)}
                                                 onChange={() => handleCheckboxChange(subject)}
-                                                className="appearance-none w-6 h-6 border-2 rounded-md border-gray-300 checked:border-purple-500 checked:bg-purple-500 transition-all"
+                                                className="appearance-none w-6 h-6 border-2 rounded-md border-gray-300 checked:border-blue-500 checked:bg-blue-500 transition-all"
                                             />
                                             <span className="ml-3 text-base font-medium">
                                                 {subject}
@@ -184,7 +184,7 @@ export default function StudentDetailTile({ userData }) {
                             </button>
                             <button
                                 onClick={submitSubjects}
-                                className="px-6 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:shadow-lg transition-all font-medium"
+                                className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:shadow-lg transition-all font-medium"
                             >
                                 Save Changes
                             </button>

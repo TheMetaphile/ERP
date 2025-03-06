@@ -145,7 +145,7 @@ function FeeDiscount() {
                         <option value="12th">12th</option>
                     </select>
                     <button
-                        className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'
+                        className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'
                             }`}
                         onClick={() => setShowDiscountStructure(!showDiscountStructure)}
                     >
@@ -157,7 +157,7 @@ function FeeDiscount() {
                 {showDiscountStructure && <CreateDiscount selectedSession={selectedSession} />}
                 <div className='mt-8 bg-white border rounded-lg shadow-md overflow-auto'>
                     <table className="w-full">
-                        <thead className="bg-gradient-to-r whitespace-nowrap from-purple-400 to-purple-500 text-white">
+                        <thead className="bg-gradient-to-r whitespace-nowrap from-blue-400 to-blue-500 text-white">
                             <tr>
                                 <th className="py-3 px-4 text-left">Roll No.</th>
                                 <th className="py-3 px-4 text-left">Student Name</th>

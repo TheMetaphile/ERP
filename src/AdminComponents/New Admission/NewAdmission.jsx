@@ -178,7 +178,7 @@ function NewAdmission() {
                             id="class"
                             value={Class}
                             onChange={handleClassChange}
-                            className="rounded-full shadow-lg w-1/2 px-4 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg bg-white text-purple-700"
+                            className="rounded-full shadow-lg w-1/2 px-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 text-lg bg-white text-blue-700"
                             whileHover={{ scale: 1.05 }}
                         >
                             <option value="">Search by Class</option>
@@ -203,7 +203,7 @@ function NewAdmission() {
                             id="distribution"
                             value={distributionMethod}
                             onChange={handleDistributionChange}
-                            className="rounded-full shadow-lg px-4 w-1/2 py-2 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 text-lg bg-white text-purple-700"
+                            className="rounded-full shadow-lg px-4 w-1/2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 text-lg bg-white text-blue-700"
                             whileHover={{ scale: 1.05 }}
                         >
                             <option value="">Select Distribution Method</option>
@@ -213,7 +213,7 @@ function NewAdmission() {
                         </motion.select>
                     </div>
                     <motion.button
-                        className="px-6 py-2 bg-purple-400 text-white rounded-full shadow-lg text-lg font-semibold hover:bg-purple-600 transition duration-300 "
+                        className="px-6 py-2 bg-blue-400 text-white rounded-full shadow-lg text-lg font-semibold hover:bg-blue-600 transition duration-300 "
                         onClick={handleDistribute}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -243,11 +243,11 @@ function NewAdmission() {
                         <thead className="">
                             <Header headings={['Name', 'Class', 'Gender', 'Percentage', 'Phone No.', 'E-mail', 'Action']} />
                         </thead>
-                        <tbody className="divide-y divide-purple-200">
+                        <tbody className="divide-y divide-blue-200">
                             {loading && userData.length < 1 ? (
                                 <tr><td colSpan="7"><Loading /></td></tr>
                             ) : userData.length === 0 ? (
-                                <tr><td colSpan="7" className="text-center py-4 text-purple-600">No students found</td></tr>
+                                <tr><td colSpan="7" className="text-center py-4 text-blue-600">No students found</td></tr>
                             ) : (
                                 <StudentDetailTile userData={userData} Class={Class} />
                             )}

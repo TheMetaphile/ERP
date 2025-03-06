@@ -288,8 +288,8 @@ export default function UploadTimetable({ handleChange }) {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className={`flex items-center gap-2 px-6 py-2 rounded-md font-bold ${darkMode
-                            ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                            : 'bg-purple-500 hover:bg-purple-600 text-white'
+                            ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                            : 'bg-blue-500 hover:bg-blue-600 text-white'
                             } ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                         type="submit"
                         disabled={isLoading}

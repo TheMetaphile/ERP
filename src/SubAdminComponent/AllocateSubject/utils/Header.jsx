@@ -1,6 +1,6 @@
 export default function Header(props) {
     return (
-        <div className="flex justify-evenly items-center py-3 pl-2 rounded-t-lg w-full tablet:max-laptop:w-fit gap-2 tablet:max-laptop:gap-3 overflow-hidden bg-purple-200 shadow-md">
+        <div className="flex justify-evenly items-center py-3 pl-2 rounded-t-lg w-full tablet:max-laptop:w-fit gap-2 tablet:max-laptop:gap-3 overflow-hidden bg-blue-200 shadow-md">
             {props.headings.map((heading, index) => (
                 <h1
                     key={index}

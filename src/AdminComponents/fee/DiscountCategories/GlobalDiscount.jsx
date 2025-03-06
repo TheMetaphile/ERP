@@ -136,7 +136,7 @@ function GlobalDiscount() {
                             setDiscountType(e.target.value);
                             setAmount("");
                         }}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="fixed">Fixed Amount</option>
                         <option value="percentage">Percentage</option>
@@ -157,7 +157,7 @@ function GlobalDiscount() {
                             setAmount(value);
                         }}
                         required
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder={discountType === "percentage" ? "Enter percentage (0-100%)" : "Enter discount amount"}
                     />
                 </div>
@@ -169,7 +169,7 @@ function GlobalDiscount() {
                         value={title}
                         required
                         onChange={(e) => setTitle(e.target.value)}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="">Select Title</option>
 
@@ -186,7 +186,7 @@ function GlobalDiscount() {
                         value={duration}
                         required
                         onChange={(e) => setDuration(e.target.value)}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="">Enter duration</option>
                         <option value={-1}>Remainig Session</option>
@@ -204,7 +204,7 @@ function GlobalDiscount() {
                         name="discountTargetType"
                         value={discountTargetType}
                         onChange={(e) => setDiscountTargetType(e.target.value)}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                     >
                         <option value="">Select Target Type</option>
@@ -290,7 +290,7 @@ function GlobalDiscount() {
 
             <div className="flex justify-end mt-6">
                 <button
-                    className={`bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     type="submit"
                     disabled={isLoading}
                 >

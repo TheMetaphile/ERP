@@ -43,7 +43,7 @@ function Mark() {
                         {!checkIn ? (
                             <button
                                 onClick={handleCheckIn}
-                                className="flex w-64 shadow-md rounded-2xl py-2 mb-2 mt-2 justify-center bg-purple-300"
+                                className="flex w-64 shadow-md rounded-2xl py-2 mb-2 mt-2 justify-center bg-blue-300"
                             >
                                 <h1 className="font-medium text-2xl mobile:max-laptop:text-lg text-white">Check In</h1>
                             </button>
@@ -51,13 +51,13 @@ function Mark() {
                             <>
                                 <button
                                     onClick={handleCheckOut}
-                                    className=" flex w-64 shadow-md rounded-2xl py-2 mb-2 mt-2 justify-center bg-purple-300 mr-2"
+                                    className=" flex w-64 shadow-md rounded-2xl py-2 mb-2 mt-2 justify-center bg-blue-300 mr-2"
                                 >
                                     <h1 className="font-medium text-2xl mobile:max-laptop:text-lg text-white">Check Out</h1>
                                 </button>
                                 <button
                                     onClick={handleTakeBreak}
-                                    className="flex w-64 shadow-md rounded-2xl py-2 mb-2 mt-2 justify-center bg-purple-300"
+                                    className="flex w-64 shadow-md rounded-2xl py-2 mb-2 mt-2 justify-center bg-blue-300"
                                 >
                                     <h1 className="font-medium text-2xl mobile:max-laptop:text-lg text-white">{onBreak ? "Resume work" : "Take Break"}</h1>
                                 </button>

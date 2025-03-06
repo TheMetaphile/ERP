@@ -88,8 +88,8 @@ export default function Notice(props) {
     <motion.div
       className={`p-4 border rounded-xl transition-colors duration-300 ${
         darkMode 
-          ? 'bg-gradient-to-r from-gray-800 to-gray-700 border-gray-600 shadow-lg shadow-purple-900/10' 
-          : 'bg-gradient-to-r from-purple-100 to-indigo-50 border-gray-200 shadow-lg shadow-purple-200/30'
+          ? 'bg-gradient-to-r from-gray-800 to-gray-700 border-gray-600 shadow-lg shadow-blue-900/10' 
+          : 'bg-gradient-to-r from-blue-100 to-indigo-50 border-gray-200 shadow-lg shadow-blue-200/30'
       }`}
       variants={containerVariants}
       initial="hidden"
@@ -110,10 +110,10 @@ export default function Notice(props) {
                   : "linear-gradient(90deg, #F9FAFB 0%, #F3F4F6 50%, #F9FAFB 100%)"
               }}
             >
-              <div className={`h-6 w-3/4 rounded mb-3 ${darkMode ? 'bg-gray-600' : 'bg-purple-200/50'}`}></div>
-              <div className={`h-4 w-full rounded mb-2 ${darkMode ? 'bg-gray-600' : 'bg-purple-200/50'}`}></div>
-              <div className={`h-4 w-full rounded mb-2 ${darkMode ? 'bg-gray-600' : 'bg-purple-200/50'}`}></div>
-              <div className={`h-4 w-2/3 rounded ${darkMode ? 'bg-gray-600' : 'bg-purple-200/50'}`}></div>
+              <div className={`h-6 w-3/4 rounded mb-3 ${darkMode ? 'bg-gray-600' : 'bg-blue-200/50'}`}></div>
+              <div className={`h-4 w-full rounded mb-2 ${darkMode ? 'bg-gray-600' : 'bg-blue-200/50'}`}></div>
+              <div className={`h-4 w-full rounded mb-2 ${darkMode ? 'bg-gray-600' : 'bg-blue-200/50'}`}></div>
+              <div className={`h-4 w-2/3 rounded ${darkMode ? 'bg-gray-600' : 'bg-blue-200/50'}`}></div>
             </motion.div>
           ))}
         </div>
@@ -140,12 +140,12 @@ export default function Notice(props) {
       ) : details.length === 0 ? (
         <motion.div 
           className={`text-center py-10 px-4 rounded-lg ${
-            darkMode ? 'bg-gray-700/50 text-gray-300' : 'bg-white/50 text-purple-600'
+            darkMode ? 'bg-gray-700/50 text-gray-300' : 'bg-white/50 text-blue-600'
           }`}
           variants={itemVariants}
         >
           <FaBell className={`text-5xl mb-4 mx-auto ${
-            darkMode ? 'text-purple-400' : 'text-purple-500'
+            darkMode ? 'text-blue-400' : 'text-blue-500'
           }`} />
           <p className="text-xl font-semibold">No notices available</p>
           <p className={`mt-2 text-sm ${
@@ -168,7 +168,7 @@ export default function Notice(props) {
           >
             <div className="flex justify-between items-start mb-2">
               <h3 className={`text-xl font-bold ${
-                darkMode ? 'text-purple-300' : 'text-purple-600'
+                darkMode ? 'text-blue-300' : 'text-blue-600'
               }`}>
                 {detail.title}
               </h3>
@@ -184,7 +184,7 @@ export default function Notice(props) {
             </div>
             
             <p className={`leading-relaxed line-clamp-4 mb-2 ${
-              darkMode ? 'text-gray-300' : 'text-purple-600 text-opacity-80'
+              darkMode ? 'text-gray-300' : 'text-blue-600 text-opacity-80'
             }`}>
               {detail.description}
             </p>
@@ -192,15 +192,15 @@ export default function Notice(props) {
             {detail.forClass && (
               <div className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-2 ${
                 darkMode 
-                  ? 'bg-gray-600 text-purple-300' 
-                  : 'bg-purple-100 text-purple-700'
+                  ? 'bg-gray-600 text-blue-300' 
+                  : 'bg-blue-100 text-blue-700'
               }`}>
                 For: {detail.forClass}
               </div>
             )}
             
             <div className={`mt-3 h-px ${
-              darkMode ? 'bg-gray-600' : 'bg-purple-200'
+              darkMode ? 'bg-gray-600' : 'bg-blue-200'
             }`}></div>
           </motion.div>
         ))

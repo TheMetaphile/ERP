@@ -151,7 +151,7 @@ function ReportCardAdmin() {
       >
         <h1 className="text-3xl font-semibold mobile:max-tablet:text-lg">Report Card</h1>
         <motion.button
-          className="p-2 bg-purple-500 rounded-full shadow-md hover:bg-purple-400 transition-colors duration-200 mobile:max-tablet:block hidden"
+          className="p-2 bg-blue-500 rounded-full shadow-md hover:bg-blue-400 transition-colors duration-200 mobile:max-tablet:block hidden"
           onClick={() => setDropdownVisible(!isDropdownVisible)}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -214,7 +214,7 @@ function ReportCardAdmin() {
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
-                className="divide-y divide-purple-200"
+                className="divide-y divide-blue-200"
               >
                 {userData.map((detail) => (
                   <motion.tr
@@ -262,7 +262,7 @@ function ReportCardAdmin() {
                 transition={{ delay: 0.5 }}
               >
                 <motion.button
-                  className="text-purple-600 hover:text-purple-800 font-semibold"
+                  className="text-blue-600 hover:text-blue-800 font-semibold"
                   onClick={handleViewMore}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

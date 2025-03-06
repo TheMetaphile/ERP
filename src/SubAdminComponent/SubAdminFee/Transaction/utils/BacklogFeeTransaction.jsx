@@ -82,7 +82,7 @@ const BacklogTransaction = () => {
     <div className="overflow-x-auto shadow-md rounded-lg">
       <ToastContainer />
       <table className="w-full text-sm text-left ">
-        <thead className="text-xs whitespace-nowrap  uppercase bg-gradient-to-r from-purple-300 to-purple-100">
+        <thead className="text-xs whitespace-nowrap  uppercase bg-gradient-to-r from-blue-300 to-blue-100">
           <tr>
             <th scope="col" className="px-3 py-3">Name</th>
             <th scope="col" className="px-3 py-3">Date</th>
@@ -100,7 +100,7 @@ const BacklogTransaction = () => {
             <BacklogTransactionRow key={student._id} student={student} session={selectedSession} data={setData} />
           ))}
           {!allDataFetched && (
-            <h1 className='text-purple-500 hover:text-purple-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
+            <h1 className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center' onClick={handleViewMore}>View More</h1>
           )}
           {transactionData && (
             <tr className="bg-white border-b hover:bg-gray-50">

@@ -222,7 +222,7 @@ export default function FeeDetail() {
 
                     <div className="w-full flex justify-end gap-4 mt-3">
                         <button
-                            className={`bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className={`bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                             type="submit"
                             disabled={isLoading}
                             onClick={handleSubmit}

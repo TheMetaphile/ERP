@@ -126,7 +126,7 @@ export default function OptionalRow({
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-white border-b border-purple-200 hover:bg-purple-50 transition-colors duration-200"
+            className="bg-white border-b border-blue-200 hover:bg-blue-50 transition-colors duration-200"
         >
             <td className="text-center py-3"></td>
             <td className="text-center py-3">
@@ -157,7 +157,7 @@ export default function OptionalRow({
             </td>
             <td className="text-center py-3">
                 <select
-                    className="w-full bg-purple-50 border border-purple-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-200"
+                    className="w-full bg-blue-50 border border-blue-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
                     name="Subject"
                     value={data.subject}
                     onChange={(e) => handleOptionalRowChange(idx, 'subject', e.target.value)}
@@ -171,7 +171,7 @@ export default function OptionalRow({
             </td>
             <td className="py-3">
                 <select
-                    className="w-full bg-purple-50 border border-purple-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-200"
+                    className="w-full bg-blue-50 border border-blue-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
                     value={data.section}
                     onChange={(e) => handleOptionalRowChange(idx, 'section', e.target.value)}
                 >
@@ -185,7 +185,7 @@ export default function OptionalRow({
                 <input
                     type="text"
                     ref={inputRef}
-                    className="w-full bg-purple-50 border border-purple-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-200"
+                    className="w-full bg-blue-50 border border-blue-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
                     value={teacherInput}
                     onClick={handleClickInside}
                     onChange={(e) => setTeacherInput(e.target.value)}
@@ -196,7 +196,7 @@ export default function OptionalRow({
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute z-10 bg-white border border-purple-200 rounded-md mt-1 max-h-40 overflow-y-auto w-full shadow-lg"
+                        className="absolute z-10 bg-white border border-blue-200 rounded-md mt-1 max-h-40 overflow-y-auto w-full shadow-lg"
                         ref={suggestionsRef}
                     >
                         {suggestions.map((suggestion, indx) => (
@@ -211,7 +211,7 @@ export default function OptionalRow({
                                     alt="Profile"
                                     className="w-10 h-10 rounded-full mr-2"
                                 />
-                                <span className="text-purple-800">{suggestion.name}</span>
+                                <span className="text-blue-800">{suggestion.name}</span>
                             </motion.li>
                         ))}
                     </motion.ul>

@@ -83,7 +83,7 @@ export default function Table() {
         ) : (
           <table className="w-full bg-white rounded-lg overflow-hidden whitespace-nowrap">
             <thead>
-              <tr className="bg-gradient-to-r from-blue-300 to-purple-200 text-black">
+              <tr className="bg-gradient-to-r from-blue-300 to-blue-200 text-black">
                 <th className="py-3 px-6 text-left"><FaCalendarAlt className="inline mr-2" />Date</th>
                 <th className="py-3 px-6 text-left"><FaBook className="inline mr-2" />Subject</th>
                 <th className="py-3 px-6 text-left"><FaClock className="inline mr-2" />Time</th>

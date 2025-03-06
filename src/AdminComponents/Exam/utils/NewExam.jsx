@@ -122,7 +122,7 @@ const NewExam = ({ onClose, addExam }) => {
           <IoMdCloseCircleOutline />
         </motion.button>
         <motion.h2
-          className="text-2xl mobile:max-tablet:text-lg mb-4 text-purple-600 font-bold"
+          className="text-2xl mobile:max-tablet:text-lg mb-4 text-blue-600 font-bold"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -139,12 +139,12 @@ const NewExam = ({ onClose, addExam }) => {
             <div className="mb-4 w-full md:w-1/3">
               <label
                 htmlFor="class"
-                className="block font-bold mb-2 text-purple-600"
+                className="block font-bold mb-2 text-blue-600"
               >
                 Select Class
               </label>
               <select
-                className="w-full p-2 border border-purple-400 rounded-md"
+                className="w-full p-2 border border-blue-400 rounded-md"
                 name="Class"
                 value={classs}
                 onChange={handleClassChange}
@@ -175,7 +175,7 @@ const NewExam = ({ onClose, addExam }) => {
             <div className="mb-4 w-full md:w-1/3">
               <label
                 htmlFor="term"
-                className="block font-bold mb-2 text-purple-600"
+                className="block font-bold mb-2 text-blue-600"
               >
                 Select Term
               </label>
@@ -184,7 +184,7 @@ const NewExam = ({ onClose, addExam }) => {
                 name="term"
                 value={selectedTerm}
                 onChange={handleTermChange}
-                className="w-full p-2 border border-purple-400 rounded-md"
+                className="w-full p-2 border border-blue-400 rounded-md"
                 required
               >
                 <option value="" disabled>
@@ -198,7 +198,7 @@ const NewExam = ({ onClose, addExam }) => {
             <div className="mb-4 w-full md:w-1/3">
               <label
                 htmlFor="stream"
-                className="block font-bold mb-2 text-purple-600"
+                className="block font-bold mb-2 text-blue-600"
               >
                 Stream
               </label>
@@ -207,7 +207,7 @@ const NewExam = ({ onClose, addExam }) => {
                 name="stream"
                 value={stream}
                 onChange={handleStreamChange}
-                className="w-full p-2 border border-purple-400 rounded-md"
+                className="w-full p-2 border border-blue-400 rounded-md"
               >
                 <option value="" disabled>
                   Select Stream (optional)
@@ -229,10 +229,10 @@ const NewExam = ({ onClose, addExam }) => {
             >
               <thead>
                 <tr>
-                  <th className="py-2 text-purple-600 font-medium">Subject</th>
-                  <th className="py-2 text-purple-600 font-medium">Date</th>
-                  <th className="py-2 text-purple-600 font-medium">Time</th>
-                  <th className="py-2 text-purple-600 font-medium">Duration</th>
+                  <th className="py-2 text-blue-600 font-medium">Subject</th>
+                  <th className="py-2 text-blue-600 font-medium">Date</th>
+                  <th className="py-2 text-blue-600 font-medium">Time</th>
+                  <th className="py-2 text-blue-600 font-medium">Duration</th>
                 </tr>
               </thead>
               <tbody>

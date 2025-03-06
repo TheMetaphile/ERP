@@ -308,7 +308,7 @@ export default function StudentRegister() {
         >
             <ToastContainer />
             <h1
-                className="text-3xl mobile:max-tablet:text-lg font-bold mb-6 text-center text-purple-700 "
+                className="text-3xl mobile:max-tablet:text-lg font-bold mb-6 text-center text-blue-700 "
             >
                 Add New Student
             </h1>
@@ -438,7 +438,7 @@ export default function StudentRegister() {
                         <FaPlus /> Add Field
                     </motion.button>
                     <motion.label
-                        className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 flex items-center"
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 flex items-center"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >
@@ -494,11 +494,11 @@ export default function StudentRegister() {
 }
 const InputField = ({ icon, label, name, type = "text", value, onChange, required }) => (
     <motion.div className="mb-4" variants={itemVariants}>
-        <label className="flex items-center text-lg mb-2 text-purple-700 font-semibold">
+        <label className="flex items-center text-lg mb-2 text-blue-700 font-semibold">
             {icon} <span className="ml-2">{label}</span>
         </label>
         <motion.input
-            className="border-2 border-purple-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+            className="border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
             id={name}
             type={type}
             name={name}
@@ -511,11 +511,11 @@ const InputField = ({ icon, label, name, type = "text", value, onChange, require
 );
 const SelectField = ({ icon, label, name, value, onChange, options, required }) => (
     <motion.div className="mb-4" variants={itemVariants}>
-        <label className="flex items-center text-lg mb-2 text-purple-700 font-semibold">
+        <label className="flex items-center text-lg mb-2 text-blue-700 font-semibold">
             {icon} <span className="ml-2">{label}</span>
         </label>
         <motion.select
-            className="border-2 border-purple-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+            className="border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
             id={name}
             name={name}
             value={value}

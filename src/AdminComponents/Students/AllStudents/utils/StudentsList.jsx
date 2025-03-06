@@ -217,7 +217,7 @@ export default function StudentsList() {
             >
                 <h1 className="text-3xl mobile:max-tablet:text-lg font-medium text-black">All Students Data</h1>
                 <motion.button
-                    className="p-2 block tablet:hidden bg-purple-600 text-white rounded-md shadow-md hover:bg-purple-700 transition duration-300 ease-in-out"
+                    className="p-2 block tablet:hidden bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition duration-300 ease-in-out"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setDropdownVisible(!isDropdownVisible)}
@@ -271,7 +271,7 @@ export default function StudentsList() {
 
                 {showAddRollNumberButton && Class && Section && !loading && (
                     <motion.button
-                        className="mb-4 px-4 py-2 bg-purple-600 text-white rounded-md shadow-md hover:bg-purple-700 transition duration-300 ease-in-out"
+                        className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition duration-300 ease-in-out"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handleRollNumber}

@@ -55,14 +55,14 @@ export default function CreateTimetableStrucutre({ handleSubmit, handleChange })
     return (
         <motion.form
             onSubmit={handleSubmit}
-            className='mt-6 w-full p-6 rounded-lg shadow-lg bg-purple-50 border'
+            className='mt-6 w-full p-6 rounded-lg shadow-lg bg-blue-50 border'
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
             <div className="grid grid-cols-1 gap-6 mb-6 rounded-lg">
                 <motion.h1
-                    className='text-2xl font-bold text-purple-800'
+                    className='text-2xl font-bold text-blue-800'
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
@@ -72,7 +72,7 @@ export default function CreateTimetableStrucutre({ handleSubmit, handleChange })
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <FormField icon={FaBookOpen} label="Class Range" isSelect={true}>
                         <select
-                            className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500 bg-white"
+                            className="w-full border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500 bg-white"
                             name="Class"
                             value={selectedClass}
                             onChange={(e) => setSelectedClass(e.target.value)}
@@ -91,7 +91,7 @@ export default function CreateTimetableStrucutre({ handleSubmit, handleChange })
                             value={selectStart}
                             onChange={(e) => setStart(e.target.value)}
                             required
-                            className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500"
+                            className="w-full border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
                         />
                     </FormField>
 
@@ -101,7 +101,7 @@ export default function CreateTimetableStrucutre({ handleSubmit, handleChange })
                             value={selectLectureNumber}
                             onChange={(e) => setSelectedLectureNumber(e.target.value)}
                             required
-                            className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500 bg-white"
+                            className="w-full border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500 bg-white"
                         >
                             <option value="" disabled>Select Lecture</option>
                             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
@@ -116,7 +116,7 @@ export default function CreateTimetableStrucutre({ handleSubmit, handleChange })
                             value={selectDuration}
                             onChange={(e) => setDuration(e.target.value)}
                             required
-                            className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500 bg-white"
+                            className="w-full border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500 bg-white"
                         >
                             <option value="" disabled>Select Duration</option>
                             {['30 m', '35 m', '40 m', '45 m', '50 m'].map(duration => (
@@ -132,7 +132,7 @@ export default function CreateTimetableStrucutre({ handleSubmit, handleChange })
                             value={selectbefore}
                             onChange={(e) => setbefore(e.target.value)}
                             required
-                            className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500"
+                            className="w-full border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500"
                         />
                     </FormField>
 
@@ -142,7 +142,7 @@ export default function CreateTimetableStrucutre({ handleSubmit, handleChange })
                             value={selectbreak}
                             onChange={(e) => setBreak(e.target.value)}
                             required
-                            className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500 bg-white"
+                            className="w-full border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500 bg-white"
                         >
                             <option value="" disabled>Select Duration</option>
                             {['30 m', '35 m', '40 m', '45 m', '50 m'].map(duration => (
@@ -154,7 +154,7 @@ export default function CreateTimetableStrucutre({ handleSubmit, handleChange })
             </div>
             <div className="flex items-center justify-end mt-6">
                 <motion.button
-                    className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-300"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-300"
                     type="submit"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -173,9 +173,9 @@ const inputVariants = {
 
 const FormField = ({ icon: Icon, label, children, isSelect }) => (
     <motion.div variants={inputVariants} whileHover="hover" whileTap="tap">
-        <label className='text-purple-800 font-medium mb-1 block'>{label}</label>
+        <label className='text-blue-800 font-medium mb-1 block'>{label}</label>
         <div className="relative">
-            <Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-600" />
+            <Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600" />
             <div className={`pl-10 ${isSelect ? '' : 'pr-3'}`}>
                 {children}
             </div>

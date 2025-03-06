@@ -147,8 +147,8 @@ export default function StudentBasicDetails() {
             variants={itemVariants}
         >
             <div className="flex items-center w-2/5">
-                <span className="text-purple-500 mr-2">{getIcon(apiField)}</span>
-                <h1 className='font-medium text-purple-600'>{label}</h1>
+                <span className="text-blue-500 mr-2">{getIcon(apiField)}</span>
+                <h1 className='font-medium text-blue-600'>{label}</h1>
             </div>
             {editMode[apiField] ? (
                 <motion.input
@@ -157,7 +157,7 @@ export default function StudentBasicDetails() {
                     value={tempData[apiField] || ''}
                     onChange={handleChange}
                     onBlur={() => handleSave(apiField)}
-                    className='border-b border-purple-300 p-1 focus:outline-none focus:border-purple-500 transition-colors duration-300'
+                    className='border-b border-blue-300 p-1 focus:outline-none focus:border-blue-500 transition-colors duration-300'
                     initial={{ scale: 0.95 }}
                     animate={{ scale: 1 }}
                     transition={{ type: 'spring', stiffness: 300 }}
@@ -178,7 +178,7 @@ export default function StudentBasicDetails() {
             >
                 {editMode[apiField] ? 
                     <FaCheck className='text-green-400' /> : 
-                    <CiEdit className='text-purple-500' />
+                    <CiEdit className='text-blue-500' />
                 }
             </motion.div>
         </motion.div>
@@ -196,18 +196,18 @@ export default function StudentBasicDetails() {
                 className="flex justify-between flex-grow items-center mb-6"
                 variants={itemVariants}
             >
-                <h1 className="text-2xl font-bold text-purple-700">
+                <h1 className="text-2xl font-bold text-blue-700">
                     <FaUser className="inline-block mr-2" /> All Details
                 </h1>
             </motion.div>
-            <motion.div className='border-purple-200 border-t-2 mb-6' variants={itemVariants} />
+            <motion.div className='border-blue-200 border-t-2 mb-6' variants={itemVariants} />
             <div className='tablet:flex mt-2'>
                 <motion.div className='tablet:w-1/2 pr-4' variants={containerVariants}>
-                    <h2 className="text-xl font-semibold text-purple-600 mb-4">Student Details</h2>
+                    <h2 className="text-xl font-semibold text-blue-600 mb-4">Student Details</h2>
                     {Object.entries(studentDetails).map(([apiField, label]) => renderField(apiField, label, studentDetails))}
                 </motion.div>
                 <motion.div className='tablet:w-1/2 pl-4' variants={containerVariants}>
-                    <h2 className="text-xl font-semibold text-purple-600 mb-4">Parent Details</h2>
+                    <h2 className="text-xl font-semibold text-blue-600 mb-4">Parent Details</h2>
                     {Object.entries(parentsDetails).map(([apiField, label]) => renderField(apiField, label, parentsDetails))}
                 </motion.div>
             </div>

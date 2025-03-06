@@ -94,27 +94,27 @@ export default function TeacherLeavesTile({ data }) {
                                                     alt=""
                                                     className="h-10 w-10 mobile:max-tablet:hidden rounded-full"
                                                 />
-                                                <p className="px-2 mobile:max-tablet:text-lg text-purple-500">
+                                                <p className="px-2 mobile:max-tablet:text-lg text-blue-500">
                                                     {teacher.AppliedBy[0].name}
                                                 </p>
                                             </>
                                         )}
                                     </div>
-                                    <span className="text-purple-500 whitespace-nowrap">
+                                    <span className="text-blue-500 whitespace-nowrap">
                                         wants a {teacher.type}
                                     </span>
                                     &nbsp;from&nbsp;
                                     <div className="flex">
-                                        <span className="text-purple-500 whitespace-nowrap">
+                                        <span className="text-blue-500 whitespace-nowrap">
                                             {teacher.startDate}
                                         </span>
                                         &nbsp;to&nbsp;
-                                        <span className="text-purple-500 whitespace-nowrap">
+                                        <span className="text-blue-500 whitespace-nowrap">
                                             {teacher.endDate}
                                         </span>
                                     </div>
                                 </div>
-                                <div className="items-center px-3 cursor-pointer text-purple-500">
+                                <div className="items-center px-3 cursor-pointer text-blue-500">
                                     {expanded === `${teacherIndex}` ? (
                                         <FaChevronUp />
                                     ) : (
@@ -158,7 +158,7 @@ export default function TeacherLeavesTile({ data }) {
                                                         alt=""
                                                         className="h-8 w-8 mobile:max-tablet:hidden rounded-full"
                                                     />
-                                                    <p className="px-2 mobile:max-tablet:text-lg text-purple-500">
+                                                    <p className="px-2 mobile:max-tablet:text-lg text-blue-500">
                                                         {teacher.ApprovedBy[0].name}
                                                     </p>
                                                 </>
@@ -182,7 +182,7 @@ export default function TeacherLeavesTile({ data }) {
                                                         alt=""
                                                         className="h-8 w-8 mobile:max-tablet:hidden rounded-full"
                                                     />
-                                                    <p className="px-2 mobile:max-tablet:text-lg text-purple-500">
+                                                    <p className="px-2 mobile:max-tablet:text-lg text-blue-500">
                                                         {teacher.AppliedBy[0].name}
                                                     </p>
                                                 </>
@@ -212,7 +212,7 @@ export default function TeacherLeavesTile({ data }) {
                     </motion.div>
                 ))
             ) : (
-                <div className="text-purple-500 font-bold text-2xl">No new leave</div>
+                <div className="text-blue-500 font-bold text-2xl">No new leave</div>
             )}
         </motion.div>
 

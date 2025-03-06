@@ -26,7 +26,7 @@ export default function StudentDetailTile({ userData }) {
           variants={rowVariants}
           initial="hidden"
           animate="visible"
-          className="border-b border-gray-200 hover:bg-purple-50 transition-colors  text-left  duration-300"
+          className="border-b border-gray-200 hover:bg-blue-50 transition-colors  text-left  duration-300"
         >
           <motion.td variants={cellVariants} className="py-3 px-6 whitespace-nowrap">
             <div className="flex items-center">
@@ -57,7 +57,7 @@ export default function StudentDetailTile({ userData }) {
                 pathname: `/Admin-Dashboard/Students/studentdetails`,
                 search: `?email=${user.email}&name=${user.name}&rollNumber=${user.rollNumber}&classs=${user.currentClass}`,
               }}
-              className="text-purple-600 hover:text-purple-900"
+              className="text-blue-600 hover:text-blue-900"
             >
               View Details
             </Link>

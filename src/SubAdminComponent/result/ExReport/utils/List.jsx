@@ -138,7 +138,7 @@ const List = () => {
             </div>
             <div className="overflow-x-auto border-1 rounded-lg pt-2">
                 <table className="table w-full border-2">
-                    <thead className=" bg-purple-200">
+                    <thead className=" bg-blue-200">
                         <tr className="border border-gray-300 table-row whitespace-nowrap rounded-md ">
                             <th className=" font-normal mobile:max-laptop:text-base text-xl p-2">Roll No.</th>
                             <th className=" font-normal mobile:max-laptop:text-base text-xl p-2">Admission No</th>
@@ -172,7 +172,7 @@ const List = () => {
 
                                         <td className="p-2 whitespace-nowrap">
                                             <Link to={`/Sub-Admin/Result/exStudent/${item._id}?Class=${item.currentClass}&session=${selectedSession}`}>
-                                                <button className="bg-purple-100 text-purple-500 px-2 py-0.5 mr-2 rounded">Result</button>
+                                                <button className="bg-blue-100 text-blue-500 px-2 py-0.5 mr-2 rounded">Result</button>
                                             </Link>
 
                                         </td>

@@ -39,10 +39,10 @@ export default function SuperAdminEnddrawer() {
     >
       <h2 className="flex justify-between items-center text-xl font-bold mb-2 text-gray-800">
         <div className="flex items-center text-lg whitespace-nowrap">
-          <FaBell className="mr-2 text-purple-500" />
+          <FaBell className="mr-2 text-blue-500" />
           Daily Notice
         </div>
-        <Link to="/Admin-Dashboard/Notice" className="text-purple-600 hover:text-purple-800 text-sm flex items-center">
+        <Link to="/Admin-Dashboard/Notice" className="text-blue-600 hover:text-blue-800 text-sm flex items-center">
           See All
           <FaChevronRight className="ml-1" />
         </Link>

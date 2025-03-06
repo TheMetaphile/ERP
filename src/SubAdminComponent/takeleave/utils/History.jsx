@@ -97,7 +97,7 @@ function History({ additionalData }) {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
             >
-                <h1 className='text-3xl font-bold text-purple-700 flex items-center mobile:max-tablet:text-2xl'>
+                <h1 className='text-3xl font-bold text-blue-700 flex items-center mobile:max-tablet:text-2xl'>
                     <FaHistory className="mr-2" />
                     Leave History
                 </h1>
@@ -116,7 +116,7 @@ function History({ additionalData }) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
-                    className="text-center py-12 text-purple-600 font-medium"
+                    className="text-center py-12 text-blue-600 font-medium"
                 >
                     No data available
                 </motion.div>
@@ -140,7 +140,7 @@ function History({ additionalData }) {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="inline-flex items-center text-purple-600 hover:text-purple-800 font-medium transition duration-300"
+                                className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition duration-300"
                                 onClick={handleViewMore}
                             >
                                 View More

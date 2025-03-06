@@ -30,7 +30,7 @@ export default function AllAdmins() {
         >Current Admins
         </motion.h1>
 
-        <Link to="/Sup-Admin/AddTeachers" className="bg-purple-200 p-2 block text-center rounded-md">
+        <Link to="/Sup-Admin/AddTeachers" className="bg-blue-200 p-2 block text-center rounded-md">
           Register
         </Link>
       </div>

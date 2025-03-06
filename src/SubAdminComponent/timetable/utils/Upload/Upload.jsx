@@ -76,7 +76,7 @@ const UploadSubAdmin = () => {
             className={`flex flex-col overflow-auto h-fit mobile:max-tablet:px-2 overflow-y-auto items-start mt-4 mb-6 no-scrollbar border p-3 rounded-lg shadow-lg ${
                 darkMode 
                     ? 'bg-gray-800 border-gray-700' 
-                    : 'bg-purple-50 border-purple-100'
+                    : 'bg-blue-50 border-blue-100'
             }`}
             variants={containerVariants}
             initial="hidden"
@@ -97,7 +97,7 @@ const UploadSubAdmin = () => {
             
             <motion.div 
                 className={`flex w-full flex-wrap text-3xl mobile:max-tablet:text-lg whitespace-nowrap font-bold justify-center items-center mb-3 px-4 mobile:max-tablet:px-2 gap-2 ${
-                    darkMode ? 'text-purple-300' : 'text-purple-800'
+                    darkMode ? 'text-blue-300' : 'text-blue-800'
                 }`} 
                 variants={itemVariants}
             >

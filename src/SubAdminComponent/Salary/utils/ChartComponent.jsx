@@ -45,15 +45,15 @@ const ChartComponent = ({ chartData, collectionReport }) => {
                     <div className=' shadow-md w-full p-4 gap-5 flex flex-col'>
                         <h2 className="text-xl font-semibold">Collection Report</h2>
                         <div className=' border-b'>
-                            <p className=' flex justify-between items-center' >Total Expected Amount <span><FaExternalLinkAlt className=' text-purple-400 h-5 w-5 cursor-pointer' /></span></p>
+                            <p className=' flex justify-between items-center' >Total Expected Amount <span><FaExternalLinkAlt className=' text-blue-400 h-5 w-5 cursor-pointer' /></span></p>
                             <p className=' text-2xl text-yellow-400'>₹ 5,20,200</p>
                         </div>
                         <div className=' border-b'>
-                            <p className=' flex justify-between items-center'>Total Collected Amount <span><FaExternalLinkAlt className=' text-purple-400 h-5 w-5 cursor-pointer' /></span></p>
+                            <p className=' flex justify-between items-center'>Total Collected Amount <span><FaExternalLinkAlt className=' text-blue-400 h-5 w-5 cursor-pointer' /></span></p>
                             <p className=' text-2xl text-green-400'>₹ 5,20,200</p>
                         </div>
                         <div className=' border-b'>
-                            <p className=' flex justify-between items-center'>Total Remaining Amount <span><FaExternalLinkAlt className=' text-purple-400 h-5 w-5 cursor-pointer' /></span></p>
+                            <p className=' flex justify-between items-center'>Total Remaining Amount <span><FaExternalLinkAlt className=' text-blue-400 h-5 w-5 cursor-pointer' /></span></p>
                             <p className=' text-2xl text-red-400'>₹ 5,20,200</p>
                         </div>
                         <div className=' border-b mb-14'>

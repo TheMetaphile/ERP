@@ -197,7 +197,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
     };
 
     const FeeStructureHeader = () => (
-        <motion.thead className="bg-purple-200 rounded-t-lg w-full">
+        <motion.thead className="bg-blue-200 rounded-t-lg w-full">
             <tr>
                 <th scope="col" className="px-3 py-3">Month</th>
                 <th scope="col" className="px-3 py-3">Total Fee</th>
@@ -215,7 +215,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
     );
 
     const QuarterFeeHeader = () => (
-        <motion.thead variants={rowVariants} className="bg-purple-200 rounded-t-lg w-full">
+        <motion.thead variants={rowVariants} className="bg-blue-200 rounded-t-lg w-full">
             <tr>
                 <th scope="col" className="px-3 py-3">Months</th>
                 <th scope="col" className="px-3 py-3">Quarter</th>
@@ -282,7 +282,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                         //             ) : (
                         //                 <motion.select
                         //                     whileHover={{ scale: 1.05 }}
-                        //                     className="w-full p-2 rounded-full bg-gradient-to-r from-blue-200 to-purple-300 text-black"
+                        //                     className="w-full p-2 rounded-full bg-gradient-to-r from-blue-200 to-blue-300 text-black"
                         //                     value={mode}
                         //                     onChange={(e) => handleModeChange(e, data)}
                         //                 >
@@ -334,7 +334,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                         //             ) : (
                         //                 <motion.select
                         //                     whileHover={{ scale: 1.05 }}
-                        //                     className="w-full p-2 rounded-full bg-gradient-to-r from-blue-200 to-purple-300 text-black"
+                        //                     className="w-full p-2 rounded-full bg-gradient-to-r from-blue-200 to-blue-300 text-black"
                         //                     value={mode}
                         //                     onChange={(e) => handleModeChange(e, data)}
                         //                 >

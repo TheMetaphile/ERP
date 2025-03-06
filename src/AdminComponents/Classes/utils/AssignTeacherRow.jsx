@@ -253,7 +253,7 @@ export default function AssignTeacherRow({ Class }) {
                         transition={{ duration: 0.3 }}
                         className='mx-3 border border-secondary-300 rounded-lg mb-2 mt-3 overflow-hidden'
                     >
-                        <div className="flex justify-between w-full py-2 pl-2 bg-purple-300 text-black">
+                        <div className="flex justify-between w-full py-2 pl-2 bg-blue-300 text-black">
                             <h1 className="w-36 text-lg font-medium">Section</h1>
                             <h1 className="w-36 text-lg font-medium">Class Teacher</h1>
                             <h1 className="w-36 text-lg font-medium text-center">Action</h1>
@@ -429,7 +429,7 @@ export default function AssignTeacherRow({ Class }) {
 
                         >
                             <motion.button
-                                className='px-4 py-2 rounded-lg flex items-center bg-purple-300 text-black'
+                                className='px-4 py-2 rounded-lg flex items-center bg-blue-300 text-black'
                                 onClick={() => addNewRow()}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}

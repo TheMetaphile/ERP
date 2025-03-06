@@ -45,9 +45,9 @@ const Access = ({ nextStep, prevStep, handleChange, formData }) => {
       initial="hidden"
       animate="visible"
     >
-      <div className="p-6 mx-auto bg-purple-50 rounded-lg shadow-lg space-y-6 border border-purple-200">
+      <div className="p-6 mx-auto bg-blue-50 rounded-lg shadow-lg space-y-6 border border-blue-200">
         <motion.h2
-          className="text-2xl font-semibold p-2 text-purple-800 mobile:max-tablet:text-xl"
+          className="text-2xl font-semibold p-2 text-blue-800 mobile:max-tablet:text-xl"
           variants={childVariants}
         >
           Access Control Details
@@ -82,7 +82,7 @@ const Access = ({ nextStep, prevStep, handleChange, formData }) => {
         <motion.div className="flex justify-between" variants={childVariants}>
           <motion.button
             onClick={prevStep}
-            className="bg-purple-500 text-white p-2 rounded-lg shadow-md hover:bg-purple-600 transition duration-300"
+            className="bg-blue-500 text-white p-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -90,7 +90,7 @@ const Access = ({ nextStep, prevStep, handleChange, formData }) => {
           </motion.button>
           <motion.button
             onClick={handleProceed}
-            className="bg-purple-700 text-white p-2 rounded-lg shadow-md hover:bg-purple-800 transition duration-300"
+            className="bg-blue-700 text-white p-2 rounded-lg shadow-md hover:bg-blue-800 transition duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -108,13 +108,13 @@ export default Access;
 function SelectField({ icon, label, value, onChange, options }) {
   return (
     <label className="block">
-      <span className="text-purple-700 font-medium">{label}</span>
+      <span className="text-blue-700 font-medium">{label}</span>
       <div className="relative mt-1">
-        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-purple-500">
+        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-500">
           {icon}
         </span>
         <select
-          className="w-full p-2 pl-10 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 appearance-none bg-white"
+          className="w-full p-2 pl-10 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 appearance-none bg-white"
           value={value}
           onChange={onChange}
         >

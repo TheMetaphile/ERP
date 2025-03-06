@@ -6,7 +6,7 @@ export default function AllActivity() {
             <div className=' w-full'>
             <AllActivityTile bg='bg-blue-200' topic='Drawing Competition' description='School is Organizing a Drawing Competition on 11 March.' date='10 March 2024, 10:00 am' />
             <AllActivityTile bg='bg-green-200' topic='Drawing Competition' description='School is Organizing a Drawing Competition on 11 March.' date='10 March 2024, 10:00 am' />
-            <AllActivityTile bg='bg-purple-200' topic='Drawing Competition' description='School is Organizing a Drawing Competition on 11 March.' date='10 March 2024, 10:00 am' />
+            <AllActivityTile bg='bg-blue-200' topic='Drawing Competition' description='School is Organizing a Drawing Competition on 11 March.' date='10 March 2024, 10:00 am' />
             <AllActivityTile bg='bg-orange-200' topic='Drawing Competition' description='School is Organizing a Drawing Competition on 11 March.' date='10 March 2024, 10:00 am' />
             </div>
             <div className=' w-full'>

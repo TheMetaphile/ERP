@@ -17,7 +17,7 @@ function Selection({ selectClass, selectedSection, onClassChange, onSectionChang
 
     return (
         <motion.div
-            className="border rounded-lg shadow-lg w-full flex flex-col p-3 overflow-y-auto items-start mt-4 mb-6 no-scrollbar bg-purple-100"
+            className="border rounded-lg shadow-lg w-full flex flex-col p-3 overflow-y-auto items-start mt-4 mb-6 no-scrollbar bg-blue-100"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -31,9 +31,9 @@ function Selection({ selectClass, selectedSection, onClassChange, onSectionChang
                 >
                     <motion.div className="w-1/4 mobile:max-tablet:w-full" variants={selectVariants}>
                         <div className="relative">
-                            <FaChalkboard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-600" />
+                            <FaChalkboard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600" />
                             <select
-                                className="w-full pl-10 pr-4 py-3 border-2 border-purple-300 rounded-md bg-white text-purple-800 focus:outline-none focus:border-purple-500 transition duration-300"
+                                className="w-full pl-10 pr-4 py-3 border-2 border-blue-300 rounded-md bg-white text-blue-800 focus:outline-none focus:border-blue-500 transition duration-300"
                                 value={selectClass}
                                 onChange={(e) => onClassChange(e.target.value)}
                             >
@@ -47,9 +47,9 @@ function Selection({ selectClass, selectedSection, onClassChange, onSectionChang
 
                     <motion.div className="w-1/4 mobile:max-tablet:w-full" variants={selectVariants}>
                         <div className="relative">
-                            <FaUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-600" />
+                            <FaUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600" />
                             <select
-                                className="w-full pl-10 pr-4 py-3 border-2 border-purple-300 rounded-md bg-white text-purple-800 focus:outline-none focus:border-purple-500 transition duration-300"
+                                className="w-full pl-10 pr-4 py-3 border-2 border-blue-300 rounded-md bg-white text-blue-800 focus:outline-none focus:border-blue-500 transition duration-300"
                                 value={selectedSection}
                                 onChange={(e) => onSectionChange(e.target.value)}
                             >
@@ -63,9 +63,9 @@ function Selection({ selectClass, selectedSection, onClassChange, onSectionChang
 
                     <motion.div className="w-1/4 mobile:max-tablet:w-full" variants={selectVariants}>
                         <div className="relative">
-                            <FaCalendarAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-600" />
+                            <FaCalendarAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600" />
                             <select
-                                className="w-full pl-10 pr-4 py-3 border-2 border-purple-300 rounded-md bg-white text-purple-800 focus:outline-none focus:border-purple-500 transition duration-300"
+                                className="w-full pl-10 pr-4 py-3 border-2 border-blue-300 rounded-md bg-white text-blue-800 focus:outline-none focus:border-blue-500 transition duration-300"
                                 value={day}
                                 onChange={handleDayChange}
                             >
@@ -78,7 +78,7 @@ function Selection({ selectClass, selectedSection, onClassChange, onSectionChang
                     </motion.div>
 
                     {/* <motion.button
-            className="px-6 py-3 bg-purple-600 text-white rounded-md flex items-center justify-center hover:bg-purple-700 transition duration-300"
+            className="px-6 py-3 bg-blue-600 text-white rounded-md flex items-center justify-center hover:bg-blue-700 transition duration-300"
             onClick={onSearch}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

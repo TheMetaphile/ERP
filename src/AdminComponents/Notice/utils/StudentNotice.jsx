@@ -178,14 +178,14 @@ const StudentNotice = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="mt-8 mx-auto bg-purple-50  border rounded-xl shadow-lg p-6 mobile:max-tablet:p-2"
+      className="mt-8 mx-auto bg-blue-50  border rounded-xl shadow-lg p-6 mobile:max-tablet:p-2"
 
     >
       <motion.select
         whileHover={{ scale: 1.01 }}
         value={type}
         onChange={handleTypeChange}
-        className="w-full border-2 border-purple-500 rounded-lg px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-purple-500 text-purple-700 bg-white"
+        className="w-full border-2 border-blue-500 rounded-lg px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 text-blue-700 bg-white"
       >
         <option value="For Students">For Students</option>
         <option value="Particular Students">Particular Students</option>
@@ -199,7 +199,7 @@ const StudentNotice = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-purple-600 text-center text-xl font-semibold"
+            className="text-blue-600 text-center text-xl font-semibold"
           >
             No notices available
           </motion.div>
@@ -213,10 +213,10 @@ const StudentNotice = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-white shadow-lg rounded-lg p-3 border-l-4  border-purple-500"
+                  className="bg-white shadow-lg rounded-lg p-3 border-l-4  border-blue-500"
                 >
                   <div className="w-full flex items-center justify-between mb-4 cursor-pointer mobile:max-sm:items-start mobile:max-sm:flex-col" onClick={() => handleClick(index)}>
-                    <h3 className="text-purple-800 font-bold text-xl">
+                    <h3 className="text-blue-800 font-bold text-xl">
                       {editingIndex === index ? (
                         <input
                           type="text"
@@ -224,14 +224,14 @@ const StudentNotice = () => {
                           value={editedNotice.title}
                           onChange={handleChange}
                           onClick={handleFieldClick}
-                          className="border-2 border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 w-full"
+                          className="border-2 border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
                         />
                       ) : (
                         notice.title
                       )}
                     </h3>
                     <div className="flex items-center space-x-2">
-                      <span className="text-purple-600 font-medium">{notice.type}</span>
+                      <span className="text-blue-600 font-medium">{notice.type}</span>
                       {editingIndex === index ? (
                         <div className="flex space-x-2">
                           <motion.button
@@ -256,7 +256,7 @@ const StudentNotice = () => {
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
-                            className="bg-purple-500 text-white p-2 rounded-full shadow-md"
+                            className="bg-blue-500 text-white p-2 rounded-full shadow-md"
                             onClick={() => handleEdit(index)}
                           >
                             <MdEdit size={20} />
@@ -282,7 +282,7 @@ const StudentNotice = () => {
                         transition={{ duration: 0.3 }}
                         className="text-base mt-4"
                       >
-                        <p className="mb-4 text-purple-700">
+                        <p className="mb-4 text-blue-700">
                           {editingIndex === index ? (
                             <textarea
                               rows={6}
@@ -290,14 +290,14 @@ const StudentNotice = () => {
                               value={editedNotice.description}
                               onChange={handleChange}
                               onClick={handleFieldClick}
-                              className="border-2 border-purple-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+                              className="border-2 border-blue-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                           ) : (
                             notice.description
                           )}
                         </p>
                         {editingIndex === index && type === 'Particular Students' ? (
-                          <div className="text-purple-700">
+                          <div className="text-blue-700">
                             For Students:
                             <ul className="list-disc list-inside mt-2">
                               {editedNotice.forId.map((student, idx) => (
@@ -310,7 +310,7 @@ const StudentNotice = () => {
                         ) : (
                           <>
                             {(type === 'Particular Students' && notice.forId.length > 0) && (
-                              <div className="text-purple-700">
+                              <div className="text-blue-700">
                                 <h4 className="font-semibold mb-2">For Students:</h4>
                                 <div className="space-y-4">
                                   {Object.entries(notice.forId.reduce((acc, stud) => {
@@ -322,7 +322,7 @@ const StudentNotice = () => {
                                   }, {})).map(([key, students]) => {
                                     const [currentClass, section] = key.split('-');
                                     return (
-                                      <div key={key} className="bg-purple-100 rounded-lg p-3">
+                                      <div key={key} className="bg-blue-100 rounded-lg p-3">
                                         <div className="font-medium mb-2">
                                           Class: {currentClass}, Section: {section}
                                         </div>
@@ -331,7 +331,7 @@ const StudentNotice = () => {
                                             <motion.div
                                               key={idx}
                                               whileHover={{ scale: 1.05 }}
-                                              className="bg-purple-200 border border-purple-400 rounded-full px-3 py-1 text-sm"
+                                              className="bg-blue-200 border border-blue-400 rounded-full px-3 py-1 text-sm"
                                             >
                                               {stud.name}
                                             </motion.div>
@@ -350,16 +350,16 @@ const StudentNotice = () => {
                   </AnimatePresence>
 
                   <div className="w-full flex items-center justify-between mt-4 text-sm mobile:max-sm:flex-col mobile:max-sm:items-start">
-                    <p className="text-purple-600">Date: {notice.date}</p>
+                    <p className="text-blue-600">Date: {notice.date}</p>
                     <div className="flex items-center space-x-2">
-                      <span className="text-purple-600">By:</span>
-                      <div className="flex items-center space-x-1 bg-purple-100 rounded-full px-3 py-1">
+                      <span className="text-blue-600">By:</span>
+                      <div className="flex items-center space-x-1 bg-blue-100 rounded-full px-3 py-1">
                         {notice.from.profileLink ? (
                           <img src={notice.from.profileLink} alt="" className="w-6 h-6 rounded-full" />
                         ) : (
-                          <FaUserCircle className="w-6 h-6 text-purple-500" />
+                          <FaUserCircle className="w-6 h-6 text-blue-500" />
                         )}
-                        <p className="text-purple-700 font-medium">{notice.from.name}</p>
+                        <p className="text-blue-700 font-medium">{notice.from.name}</p>
                       </div>
                     </div>
                   </div>
@@ -370,9 +370,9 @@ const StudentNotice = () => {
                     onClick={() => handleClick(index)}
                   >
                     {expanded === index ? (
-                      <FaChevronUp className="text-purple-500 text-2xl" />
+                      <FaChevronUp className="text-blue-500 text-2xl" />
                     ) : (
-                      <FaChevronDown className="text-purple-500 text-2xl" />
+                      <FaChevronDown className="text-blue-500 text-2xl" />
                     )}
                   </motion.div>
                 </motion.div>

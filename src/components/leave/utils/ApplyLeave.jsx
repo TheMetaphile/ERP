@@ -70,7 +70,7 @@ export default function ApplyLeave({ onNewLeave }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col border border-gray-300 items-center p-6  rounded-xl shadow-lg bg-gradient-to-br from-blue-50 to-purple-50"
+            className="flex flex-col border border-gray-300 items-center p-6  rounded-xl shadow-lg bg-gradient-to-br from-blue-50 to-blue-50"
         >
             {/* <ToastContainer position="top-right" autoClose={3000} /> */}
             <motion.h1
@@ -129,7 +129,7 @@ export default function ApplyLeave({ onNewLeave }) {
             <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center justify-center space-x-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition duration-300"
+                className="flex items-center justify-center space-x-2 bg-gradient-to-r from-indigo-500 to-blue-600 text-white px-6 py-3 rounded-full font-medium shadow-md hover:shadow-lg transition duration-300"
                 onClick={handleApply}
                 disabled={isLoading}
             >

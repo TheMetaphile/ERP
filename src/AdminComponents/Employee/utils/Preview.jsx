@@ -148,12 +148,12 @@ const Preview = ({ prevStep, formData }) => {
             transition={{ duration: 0.5 }}
             className="w-full px-3 mobile:max-tablet:px-0 items-start mt-2 mb-3"
         >
-            <div className="p-6  mx-auto bg-purple-50 rounded-lg shadow-lg space-y-6 border border-purple-200">
+            <div className="p-6  mx-auto bg-blue-50 rounded-lg shadow-lg space-y-6 border border-blue-200">
                 <motion.h2
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
-                    className="text-3xl font-semibold p-2 text-purple-700 text-center"
+                    className="text-3xl font-semibold p-2 text-blue-700 text-center"
                 >
                     Preview
                 </motion.h2>
@@ -167,9 +167,9 @@ const Preview = ({ prevStep, formData }) => {
                             transition={{ delay: index * 0.1 }}
                             className="flex items-center space-x-3"
                         >
-                            <div className="text-purple-600 text-xl">{item.icon}</div>
+                            <div className="text-blue-600 text-xl">{item.icon}</div>
                             <div className='flex items-center font-semibold'>
-                                <p className="text-base text-purple-800">{item.label}: </p>&nbsp;
+                                <p className="text-base text-blue-800">{item.label}: </p>&nbsp;
                                 <p className="text-base ">{item.value}</p>
                             </div>
                         </motion.div>
@@ -195,7 +195,7 @@ const Preview = ({ prevStep, formData }) => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={prevStep}
-                        className="bg-purple-500 text-white px-6 py-2 rounded-full shadow-md hover:bg-purple-600 transition duration-300"
+                        className="bg-blue-500 text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-600 transition duration-300"
                     >
                         Back
                     </motion.button>
@@ -203,7 +203,7 @@ const Preview = ({ prevStep, formData }) => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handleConfirm}
-                        className="bg-purple-700 text-white px-6 py-2 rounded-full shadow-md hover:bg-purple-800 transition duration-300"
+                        className="bg-blue-700 text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-800 transition duration-300"
                     >
                         {loading ? <Loading /> : 'Confirm'}
                     </motion.button>

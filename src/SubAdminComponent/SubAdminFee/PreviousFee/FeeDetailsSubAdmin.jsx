@@ -119,11 +119,11 @@ function PreviousFeeDetailsSubAdmin() {
         <div className="flex flex-col px-6 mobile:max-tablet:p-2 py-8">
             <ToastContainer />
             <div className='flex justify-between items-center mb-8 mobile:max-tablet:flex-col'>
-                <h1 className="text-3xl font-bold text-purple-500 flex items-center mobile:max-tablet:text-lg whitespace-nowrap"><MdSchool className="mr-2" />Previous Fee Details</h1>
+                <h1 className="text-3xl font-bold text-blue-500 flex items-center mobile:max-tablet:text-lg whitespace-nowrap"><MdSchool className="mr-2" />Previous Fee Details</h1>
             </div>
             <div className=' overflow-auto'>
                 <div className='overflow-auto w-full'>
-                    <div className="flex justify-between  py-2  bg-purple-200 rounded-t-lg border border-b-2  whitespace-nowrap mobile:max-tablet:w-fit">
+                    <div className="flex justify-between  py-2  bg-blue-200 rounded-t-lg border border-b-2  whitespace-nowrap mobile:max-tablet:w-fit">
                         <h1 className="w-44 text-lg text-center font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm">
                             Name
                         </h1>

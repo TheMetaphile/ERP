@@ -109,8 +109,8 @@ console.log(authState?.userDetails?.branch)
   };
 
 
-  const inputClasses = "border-2 border-purple-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300";
-  const labelClasses = "block text-lg mb-2 text-purple-700 font-semibold";
+  const inputClasses = "border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300";
+  const labelClasses = "block text-lg mb-2 text-blue-700 font-semibold";
 
   const formFields = [
     { name: "name", label: "Name", icon: <FaUser />, type: "text" },
@@ -135,10 +135,10 @@ console.log(authState?.userDetails?.branch)
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="mx-4 pt-4 bg-gradient-to-br from-purple-50 to-white rounded-lg shadow-xl p-8 mobile:max-tablet:p-2 mobile:max-tablet:mx-2 mobile:max-tablet:mt-2"
+      className="mx-4 pt-4 bg-gradient-to-br from-blue-50 to-white rounded-lg shadow-xl p-8 mobile:max-tablet:p-2 mobile:max-tablet:mx-2 mobile:max-tablet:mt-2"
     >
       <ToastContainer />
-      <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-purple-700 mb-8 text-center">Add New Teacher</h1>
+      <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-blue-700 mb-8 text-center">Add New Teacher</h1>
       <form className="grid grid-cols-3 mobile:max-tablet:grid-cols-1 gap-6">
         {formFields.map((field, index) => (
           <motion.div

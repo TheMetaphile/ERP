@@ -208,7 +208,7 @@ function SubjectDetails({ Class, section, selectedStream }) {
             
             <div className='overflow-auto'>
                 <div className={`border ${darkMode ? 'border-gray-700' : 'border-gray-300'} rounded-lg mobile:max-laptop:w-fit w-full`}>
-                    <div className={`flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border ${darkMode ? 'bg-purple-900 border-gray-700' : 'bg-purple-200 border-gray-300'}`}>
+                    <div className={`flex justify-between py-2 pl-2 mobile:max-laptop:w-fit w-full h-fit rounded-t-lg border ${darkMode ? 'bg-blue-900 border-gray-700' : 'bg-blue-200 border-gray-300'}`}>
                         <h1 className="w-48 text-lg font-medium mobile:max-laptop:text-sm">
                             Teacher
                         </h1>
@@ -344,7 +344,7 @@ function SubjectDetails({ Class, section, selectedStream }) {
                 
                 <div className="flex justify-center w-full px-3 py-4 h-fit">
                     <button 
-                        className={`px-4 py-2 rounded-lg shadow-md flex items-center justify-center ${darkMode ? 'bg-purple-800 hover:bg-purple-700' : 'bg-purple-500 hover:bg-purple-600'} text-white transition-colors duration-150`} 
+                        className={`px-4 py-2 rounded-lg shadow-md flex items-center justify-center ${darkMode ? 'bg-blue-800 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white transition-colors duration-150`} 
                         onClick={() => setShowNewRow(true)}
                     >
                         <MdAdd className="mr-2" /> Add Subject

@@ -175,14 +175,14 @@ const TeacherNotice = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="mt-8 mx-auto bg-purple-50  border rounded-xl shadow-lg p-6 mobile:max-tablet:p-2"
+      className="mt-8 mx-auto bg-blue-50  border rounded-xl shadow-lg p-6 mobile:max-tablet:p-2"
 
     >
       <motion.select
         whileHover={{ scale: 1.01 }}
         value={type}
         onChange={handleTypeChange}
-        className="w-full mb-6 bg-white border-2 border-purple-500 rounded-lg px-4 py-2 text-purple-700 focus:outline-none focus:border-purple-500"
+        className="w-full mb-6 bg-white border-2 border-blue-500 rounded-lg px-4 py-2 text-blue-700 focus:outline-none focus:border-blue-500"
       >
         <option value="For Teachers">For Teachers</option>
         <option value="Particular Teachers">Particular Teachers</option>
@@ -195,7 +195,7 @@ const TeacherNotice = () => {
           <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="text-center text-purple-600 font-semibold"
+            className="text-center text-blue-600 font-semibold"
           >
             No notices available
           </motion.div>
@@ -207,12 +207,12 @@ const TeacherNotice = () => {
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="bg-white shadow-lg rounded-lg p-3 border-l-4 border-purple-500"
+                className="bg-white shadow-lg rounded-lg p-3 border-l-4 border-blue-500"
               >
                 <div className="flex items-center justify-between mb-2 mobile:max-sm:flex-col mobile:max-sm:items-start">
                   <motion.h3
                     whileHover={{ scale: 1.05 }}
-                    className="text-xl font-semibold text-purple-700 cursor-pointer"
+                    className="text-xl font-semibold text-blue-700 cursor-pointer"
                     onClick={() => handleClick(index)}
                   >
                     {editingIndex === index ? (
@@ -222,14 +222,14 @@ const TeacherNotice = () => {
                         value={editedNotice.title}
                         onChange={handleChange}
                         onClick={handleFieldClick}
-                        className="border-2 border-purple-300 rounded-lg px-3 py-1 focus:outline-none focus:border-purple-500"
+                        className="border-2 border-blue-300 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500"
                       />
                     ) : (
                       notice.title
                     )}
                   </motion.h3>
                   <div className="flex items-center space-x-2">
-                    <span className="text-purple-600">{notice.type}</span>
+                    <span className="text-blue-600">{notice.type}</span>
                     {editingIndex === index ? (
                       <>
                         <motion.button
@@ -254,7 +254,7 @@ const TeacherNotice = () => {
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.95 }}
-                          className="bg-purple-500 text-white p-2 rounded-full shadow-md"
+                          className="bg-blue-500 text-white p-2 rounded-full shadow-md"
                           onClick={() => handleEdit(index)}
                         >
                           <MdEdit size={20} />
@@ -288,7 +288,7 @@ const TeacherNotice = () => {
                             value={editedNotice.description}
                             onChange={handleChange}
                             onClick={handleFieldClick}
-                            className="w-full mt-2 border-2 border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500"
+                            className="w-full mt-2 border-2 border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500"
                           />
                         ) : (
                           notice.description
@@ -310,7 +310,7 @@ const TeacherNotice = () => {
                               <strong>For Teachers:</strong>
                               <div className="flex flex-wrap gap-2 mt-2">
                                 {notice.forId.map((teacher, index) => (
-                                  <span key={index} className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">
+                                  <span key={index} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
                                     {teacher.name}
                                   </span>
                                 ))}
@@ -327,13 +327,13 @@ const TeacherNotice = () => {
                   <p>Date: {notice.date}</p>
                   <div className="flex items-center space-x-2">
                     <span>By:</span>
-                    <div className="flex items-center bg-purple-100 rounded-full px-3 py-1">
+                    <div className="flex items-center bg-blue-100 rounded-full px-3 py-1">
                       {notice.from.profileLink ? (
                         <img src={notice.from.profileLink} alt="" className="w-6 h-6 rounded-full mr-2" />
                       ) : (
-                        <FaUserCircle className="w-6 h-6 text-purple-500 mr-2" />
+                        <FaUserCircle className="w-6 h-6 text-blue-500 mr-2" />
                       )}
-                      <span className="text-purple-700">{notice.from.name}</span>
+                      <span className="text-blue-700">{notice.from.name}</span>
                     </div>
                   </div>
                 </div>
@@ -342,7 +342,7 @@ const TeacherNotice = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => handleClick(index)}
-                  className="mt-4 w-full text-purple-600 hover:text-purple-800 focus:outline-none"
+                  className="mt-4 w-full text-blue-600 hover:text-blue-800 focus:outline-none"
                 >
                   {expanded === index ? (
                     <FaChevronUp className="mx-auto" />

@@ -61,7 +61,7 @@ function ExpansionTile({ title, childrens, image, alternateText, route, darkMode
     flex items-center gap-2.5 pl-9 py-2.5 my-1 rounded-md
     ${darkMode 
       ? 'text-gray-300 hover:bg-gray-800' 
-      : 'text-gray-600 hover:bg-purple-50'
+      : 'text-gray-600 hover:bg-blue-50'
     }
     cursor-pointer transition-colors
   `;
@@ -80,8 +80,8 @@ function ExpansionTile({ title, childrens, image, alternateText, route, darkMode
                 <div className={`w-10 h-10 flex items-center justify-center rounded-md ${
                   isActive
                     ? darkMode
-                      ? 'bg-purple-900/60 text-purple-400'
-                      : 'bg-purple-200/70 text-purple-700'
+                      ? 'bg-blue-900/60 text-blue-400'
+                      : 'bg-blue-200/70 text-blue-700'
                     : darkMode
                       ? 'bg-gray-800 text-gray-300'
                       : 'bg-gray-100 text-gray-500'
@@ -100,8 +100,8 @@ function ExpansionTile({ title, childrens, image, alternateText, route, darkMode
                 <span className={`text-base ${
                   isActive 
                     ? darkMode
-                      ? 'text-purple-400 font-medium'
-                      : 'text-purple-800 font-medium'
+                      ? 'text-blue-400 font-medium'
+                      : 'text-blue-800 font-medium'
                     : 'font-normal'
                 }`}>
                   {title}
@@ -113,7 +113,7 @@ function ExpansionTile({ title, childrens, image, alternateText, route, darkMode
                 animate={expanded ? "expanded" : "collapsed"}
                 transition={{ duration: 0.2 }}
               >
-                <FaChevronRight size={12} className={isActive && darkMode ? 'text-purple-400' : isActive ? 'text-purple-600' : ''} />
+                <FaChevronRight size={12} className={isActive && darkMode ? 'text-blue-400' : isActive ? 'text-blue-600' : ''} />
               </motion.div>
             </div>
           </div>
@@ -135,7 +135,7 @@ function ExpansionTile({ title, childrens, image, alternateText, route, darkMode
                     transition={{ delay: index * 0.05 }}
                   >
                     <Link to={child.route} className={childClasses}>
-                      <FaCircle size={6} className={darkMode ? 'text-purple-400' : 'text-purple-600'} />
+                      <FaCircle size={6} className={darkMode ? 'text-blue-400' : 'text-blue-600'} />
                       <span className="text-sm">{child.text}</span>
                     </Link>
                   </motion.div>
@@ -150,8 +150,8 @@ function ExpansionTile({ title, childrens, image, alternateText, route, darkMode
             <div className={`w-10 h-10 flex items-center justify-center rounded-md ${
               isActive
                 ? darkMode
-                  ? 'bg-purple-900/60 text-purple-400'
-                  : 'bg-purple-200/70 text-purple-700'
+                  ? 'bg-blue-900/60 text-blue-400'
+                  : 'bg-blue-200/70 text-blue-700'
                 : darkMode
                   ? 'bg-gray-800 text-gray-300'
                   : 'bg-gray-100 text-gray-500'
@@ -170,8 +170,8 @@ function ExpansionTile({ title, childrens, image, alternateText, route, darkMode
             <span className={`text-base ${
               isActive 
                 ? darkMode
-                  ? 'text-purple-400 font-medium'
-                  : 'text-purple-800 font-medium'
+                  ? 'text-blue-400 font-medium'
+                  : 'text-blue-800 font-medium'
                 : 'font-normal'
             }`}>
               {title}

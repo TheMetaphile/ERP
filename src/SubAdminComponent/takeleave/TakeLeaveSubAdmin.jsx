@@ -43,9 +43,9 @@ function TakeLeaveSubAdmin() {
         >
             <ToastContainer />
             <motion.div className='w-full flex items-center justify-between mb-6 py-2' variants={itemVariants}>
-                <h1 className='text-3xl font-bold text-purple-800'>Your Leave</h1>
+                <h1 className='text-3xl font-bold text-blue-800'>Your Leave</h1>
                 <motion.button
-                    className='flex items-center text-sm bg-purple-600 text-white py-2 px-4 rounded-lg shadow-md cursor-pointer hover:bg-purple-700 transition-colors duration-300'
+                    className='flex items-center text-sm bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md cursor-pointer hover:bg-blue-700 transition-colors duration-300'
                     onClick={handleOpen}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}

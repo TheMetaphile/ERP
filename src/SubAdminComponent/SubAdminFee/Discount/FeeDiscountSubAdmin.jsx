@@ -109,26 +109,26 @@ function FeeDiscountSubAdmin() {
         <div className="flex flex-col px-6 py-8 min-h-screen mobile:max-tablet:p-2">
             <ToastContainer />
             <div className='flex justify-between items-center mb-6 mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
-                <h1 className="text-3xl font-bold text-purple-500 flex items-center mobile:max-tablet:text-lg"><MdSchool className="mr-2" /> Student Fee Discount</h1>
+                <h1 className="text-3xl font-bold text-blue-500 flex items-center mobile:max-tablet:text-lg"><MdSchool className="mr-2" /> Student Fee Discount</h1>
                 <div className='flex gap-4 items-center mobile:max-tablet:flex-col'>
                     <div className=' flex gap-2'>
-                        <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-purple-300 rounded-md py-2 px-4 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300">
+                        <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-blue-300 rounded-md py-2 px-4 text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
                             {session.map((session, index) => (
                                 <option key={index} value={session}>{session}</option>
                             ))}
                         </select>
                     </div>
 
-                    <button className={`flex items-center mobile:max-tablet:justify-start gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'}`} onClick={() => setShowDiscountStructure(!showDiscountStructure)}>
+                    <button className={`flex items-center mobile:max-tablet:justify-start gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'}`} onClick={() => setShowDiscountStructure(!showDiscountStructure)}>
                         {showDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Apply Discount</>}
                     </button>
                 </div>
             </div>
             <div className='w-full'>
                 {showDiscountStructure && <CreateDiscount selectedSession={selectedSession} />}
-                <div className='mt-3 bg-white border border-purple-200 rounded-lg shadow-lg overflow-auto'>
+                <div className='mt-3 bg-white border border-blue-200 rounded-lg shadow-lg overflow-auto'>
                     <table className="w-full">
-                        <thead className="bg-purple-200 whitespace-nowrap">
+                        <thead className="bg-blue-200 whitespace-nowrap">
                             <tr>
                                 {["Roll No.", "Student Name", "Class & Section", "Discount Type", "Title", "Amount", "By", "Department", "Date", "Start Month", "End Month", "Action"].map(header => (
                                     <th key={header} className="py-3 px-4 text-left">{header}</th>

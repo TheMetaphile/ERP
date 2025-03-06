@@ -55,7 +55,7 @@ export default function StudentDetailTile({ userData }) {
                     animate={{ opacity: 1, x: 0 }}
                     whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="border-b border-gray-200 hover:bg-purple-100 transition-colors mb-2"
+                    className="border-b border-gray-200 hover:bg-blue-100 transition-colors mb-2"
                 >
                     <div className="flex text-center mobile:max-tablet:gap-2 items-center justify-evenly border rounded-lg py-2 pl-2 tablet:max-laptop:w-fit">
                         <Link to={`/Sub-Admin/Students/details/${user.email}`}  className="rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
@@ -73,14 +73,14 @@ export default function StudentDetailTile({ userData }) {
                                 <motion.div
                                     animate={{ rotate: 360 }}
                                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                    className="w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full"
+                                    className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full"
                                 />
                             </div>
                         ) : (
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="bg-purple-100 text-purple-500 px-3 py-1 rounded-full text-sm font-medium hover:bg-purple-200 transition-colors duration-200"
+                                className="bg-blue-100 text-blue-500 px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors duration-200"
                                 onClick={() => handleTerminate(user.email, index)}
                             >
                                 Terminate

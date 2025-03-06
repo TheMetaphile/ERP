@@ -131,7 +131,7 @@ export default function AllTeachers() {
                 <div className="mt-8 text-xl font-semibold">
                     All Teachers Data
                 </div>
-                <div className="mt-8 text-base font-normal text-white bg-purple-300 rounded-lg shadow-md p-2 cursor-pointer" onClick={handleModal}>
+                <div className="mt-8 text-base font-normal text-white bg-blue-300 rounded-lg shadow-md p-2 cursor-pointer" onClick={handleModal}>
                     Add Model
                 </div>
             </div>

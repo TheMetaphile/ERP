@@ -118,18 +118,18 @@ export default function StudentLeaves() {
 
   return (
     <motion.div
-      className="flex flex-col space-y-6 mb-6 bg-purple-50 p-2 rounded-xl shadow-lg"
+      className="flex flex-col space-y-6 mb-6 bg-blue-50 p-2 rounded-xl shadow-lg"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       <ToastContainer />
       <motion.div className="flex items-center justify-between w-full" variants={itemVariants}>
-        <h1 className="text-2xl mobile:max-sm:text-lg font-semibold text-purple-600">Old Leave</h1>
+        <h1 className="text-2xl mobile:max-sm:text-lg font-semibold text-blue-600">Old Leave</h1>
         <select
           value={status}
           onChange={handleStatusChange}
-          className="border-2 border-purple-300 rounded-lg px-3 py-2 bg-white text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+          className="border-2 border-blue-300 rounded-lg px-3 py-2 bg-white text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
         >
           <option value="Pending">Pending</option>
           <option value="Approved">Approved</option>
@@ -140,22 +140,22 @@ export default function StudentLeaves() {
       {loading ? (
         <Loading />
       ) : data.length === 0 ? (
-        <motion.div variants={itemVariants} className="text-center text-purple-700">No data available</motion.div>
+        <motion.div variants={itemVariants} className="text-center text-blue-700">No data available</motion.div>
       ) : (
         <>
           {data.map((leave, index) => (
             <motion.div
               key={index}
-              className="rounded-lg border border-purple-200 p-5 bg-white shadow-md hover:shadow-lg transition duration-300"
+              className="rounded-lg border border-blue-200 p-5 bg-white shadow-md hover:shadow-lg transition duration-300"
               variants={itemVariants}
             >
               <div className="flex justify-between cursor-pointer mobile:max-sm:flex-col" onClick={() => handleClick(`${index}`)}>
                 <div className="flex items-center space-x-3">
                   <img src={leave.profileLink} alt="" className="h-10 w-10 rounded-full object-cover" />
-                  <p className="font-medium text-purple-800">{leave.name}</p>
+                  <p className="font-medium text-blue-800">{leave.name}</p>
                 </div>
                 <div>
-                  <h1 className="text-purple-700">
+                  <h1 className="text-blue-700">
                     Class: {leave.class} {leave.section}
                   </h1>
                 </div>
@@ -163,7 +163,7 @@ export default function StudentLeaves() {
               <AnimatePresence>
                 {expanded === `${index}` && (
                   <motion.p
-                    className="mt-3 text-purple-600"
+                    className="mt-3 text-blue-600"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
@@ -172,7 +172,7 @@ export default function StudentLeaves() {
                   </motion.p>
                 )}
               </AnimatePresence>
-              <div className="flex justify-between text-purple-600 mt-3 space-x-4 mobile:max-sm:flex-col mobile:max-sm:space-x-0">
+              <div className="flex justify-between text-blue-600 mt-3 space-x-4 mobile:max-sm:flex-col mobile:max-sm:space-x-0">
                 <span>Leave Taken on: {leave.startDate}</span>
                 <span>Expected Arr: {leave.endDate}</span>
               </div>

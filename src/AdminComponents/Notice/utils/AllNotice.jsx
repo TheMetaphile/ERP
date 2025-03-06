@@ -159,7 +159,7 @@ const AllNotice = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="mt-8 mx-auto bg-purple-50  border rounded-xl shadow-lg p-6 mobile:max-tablet:p-2"
+      className="mt-8 mx-auto bg-blue-50  border rounded-xl shadow-lg p-6 mobile:max-tablet:p-2"
     >
       <div className="space-y-6">
         {loading ? (
@@ -169,7 +169,7 @@ const AllNotice = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-purple-600 text-center text-xl font-semibold"
+            className="text-blue-600 text-center text-xl font-semibold"
           >
             No notices available
           </motion.div>
@@ -184,10 +184,10 @@ const AllNotice = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
-                    className="bg-white shadow-lg rounded-lg p-3 border-l-4 border-purple-500"
+                    className="bg-white shadow-lg rounded-lg p-3 border-l-4 border-blue-500"
                   >
                     <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between mb-4 cursor-pointer" onClick={() => handleClick(index)}>
-                      <h3 className="text-purple-800 font-bold text-xl mb-2 sm:mb-0">
+                      <h3 className="text-blue-800 font-bold text-xl mb-2 sm:mb-0">
                         {editingIndex === index ? (
                           <input
                             type="text"
@@ -195,21 +195,21 @@ const AllNotice = () => {
                             value={editedNotice.title}
                             onChange={handleChange}
                             onClick={handleFieldClick}
-                            className="border-2 border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 w-full"
+                            className="border-2 border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
                           />
                         ) : (
                           notice.title
                         )}
                       </h3>
                       <div className="flex items-center space-x-2">
-                        <span className="text-purple-600 font-medium">
+                        <span className="text-blue-600 font-medium">
                           {editingIndex === index ? (
                             <select
                               name="type"
                               value={editedNotice.type}
                               onChange={handleChange}
                               onClick={handleFieldClick}
-                              className="border-2 border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                              className="border-2 border-blue-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
                               <option value="For All">For All</option>
                               <option value="For Student">For Student</option>
@@ -270,7 +270,7 @@ const AllNotice = () => {
                           transition={{ duration: 0.3 }}
                           className="text-base mt-4"
                         >
-                          <p className="text-purple-700">
+                          <p className="text-blue-700">
                             {editingIndex === index ? (
                               <textarea
                                 rows={6}
@@ -278,7 +278,7 @@ const AllNotice = () => {
                                 value={editedNotice.description}
                                 onChange={handleChange}
                                 onClick={handleFieldClick}
-                                className="border-2 border-purple-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                className="border-2 border-blue-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                               />
                             ) : (
                               notice.description
@@ -288,16 +288,16 @@ const AllNotice = () => {
                       )}
                     </AnimatePresence>
                     <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between mt-4 text-sm">
-                      <p className="text-purple-600 mb-2 sm:mb-0">Date: {notice.date}</p>
+                      <p className="text-blue-600 mb-2 sm:mb-0">Date: {notice.date}</p>
                       <div className="flex items-center space-x-2">
-                        <span className="text-purple-600">By:</span>
-                        <div className="flex items-center space-x-1 bg-purple-100 rounded-full px-3 py-1">
+                        <span className="text-blue-600">By:</span>
+                        <div className="flex items-center space-x-1 bg-blue-100 rounded-full px-3 py-1">
                           {notice.from.profileLink ? (
                             <img src={notice.from.profileLink} alt="" className="w-6 h-6 rounded-full hidden sm:block" />
                           ) : (
-                            <FaUserCircle className="w-6 h-6 text-purple-500 hidden sm:block" />
+                            <FaUserCircle className="w-6 h-6 text-blue-500 hidden sm:block" />
                           )}
-                          <p className="text-purple-700 font-medium">{notice.from.name}</p>
+                          <p className="text-blue-700 font-medium">{notice.from.name}</p>
                         </div>
                       </div>
                     </div>
@@ -308,9 +308,9 @@ const AllNotice = () => {
                       onClick={() => handleClick(index)}
                     >
                       {expandedIndex === index ? (
-                        <FaChevronUp className="text-purple-500 text-2xl" />
+                        <FaChevronUp className="text-blue-500 text-2xl" />
                       ) : (
-                        <FaChevronDown className="text-purple-500 text-2xl" />
+                        <FaChevronDown className="text-blue-500 text-2xl" />
                       )}
                     </motion.div>
                   </motion.div>

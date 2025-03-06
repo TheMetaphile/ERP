@@ -73,7 +73,7 @@ export default function FeeStatusRow() {
 
   return (
     <motion.div
-      className="grid grid-cols-5 mobile:max-tablet:grid-cols-1 tablet:max-laptop:grid-cols-3 gap-4 p-4 w-full border border-gray-300 bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl"
+      className="grid grid-cols-5 mobile:max-tablet:grid-cols-1 tablet:max-laptop:grid-cols-3 gap-4 p-4 w-full border border-gray-300 bg-gradient-to-br from-blue-100 to-blue-100 rounded-xl"
       variants={containerVariants}
       initial="hidden"
       animate="visible"

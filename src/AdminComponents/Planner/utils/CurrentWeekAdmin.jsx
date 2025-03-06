@@ -71,32 +71,32 @@ const CurrentWeekAdmin = ({ selectedTab, Class, section, subject }) => {
             {loading ? (
                 <Loading />
             ) : details.length === 0 && selectedTab === "Current Week" ? (
-                <div className="text-purple-500 font-bold text-xl text-center mt-3">No Data Available</div>
+                <div className="text-blue-500 font-bold text-xl text-center mt-3">No Data Available</div>
             ) : (
                 <motion.table
-                    className="w-full rounded-md border border-purple-500"
+                    className="w-full rounded-md border border-blue-500"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.1 }}
                 >
-                    <thead className="bg-purple-500 border-b border-purple-500">
+                    <thead className="bg-blue-500 border-b border-blue-500">
                         <tr className="p-4 text-center">
-                            <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 font-semibold text-white">
+                            <th className="border-y border-blue-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 font-semibold text-white">
                                 Date
                             </th>
-                            <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
+                            <th className="border-y border-blue-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
                                 Chapter
                             </th>
-                            <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
+                            <th className="border-y border-blue-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
                                 Topic
                             </th>
-                            <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
+                            <th className="border-y border-blue-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
                                 Teaching Aids
                             </th>
-                            <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
+                            <th className="border-y border-blue-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
                                 Activity (if any)
                             </th>
-                            <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
+                            <th className="border-y border-blue-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold text-white">
                                 Progress
                             </th>
                         </tr>

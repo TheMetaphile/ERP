@@ -26,7 +26,7 @@ export default function ParentsDetails() {
     },
   ];
 
-  const colors = ['bg-red-200', 'bg-blue-200', 'bg-green-200', 'bg-yellow-200', 'bg-purple-200'];
+  const colors = ['bg-red-200', 'bg-blue-200', 'bg-green-200', 'bg-yellow-200', 'bg-blue-200'];
 
   return (
     <div className="flex flex-col w-full p-8">

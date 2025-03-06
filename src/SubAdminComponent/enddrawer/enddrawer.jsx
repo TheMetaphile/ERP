@@ -62,7 +62,7 @@ export default function Enddrawer() {
         variants={titleVariants}
       >
         <div className="flex items-center gap-2 text-lg whitespace-nowrap">
-          <FaBell className={`text-lg ${darkMode ? 'text-purple-300' : 'text-purple-500'}`} />
+          <FaBell className={`text-lg ${darkMode ? 'text-blue-300' : 'text-blue-500'}`} />
           <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>
             Daily Notice
           </span>
@@ -71,8 +71,8 @@ export default function Enddrawer() {
           to="/Sub-Admin/Notice" 
           className={`${
             darkMode 
-              ? 'text-purple-300 hover:text-purple-200' 
-              : 'text-purple-600 hover:text-purple-800'
+              ? 'text-blue-300 hover:text-blue-200' 
+              : 'text-blue-600 hover:text-blue-800'
           } text-sm flex items-center gap-1 transition-colors duration-200 font-medium`}
         >
           See All
@@ -84,8 +84,8 @@ export default function Enddrawer() {
         <motion.div
           className={`rounded-lg shadow-md h-full overflow-y-auto transition-all duration-300 ${
             darkMode 
-              ? 'bg-gray-700 hover:shadow-lg hover:shadow-purple-900/20' 
-              : 'bg-white hover:shadow-xl hover:shadow-purple-300/30'
+              ? 'bg-gray-700 hover:shadow-lg hover:shadow-blue-900/20' 
+              : 'bg-white hover:shadow-xl hover:shadow-blue-300/30'
           }`}
           whileHover={{ scale: 1.01 }}
           transition={{ type: "spring", stiffness: 300 }}
@@ -102,14 +102,14 @@ export default function Enddrawer() {
         className={`rounded-lg p-4 mt-4 ${
           darkMode 
             ? 'bg-gray-700' 
-            : 'bg-purple-50'
+            : 'bg-blue-50'
         }`}
       >
         <div className="flex items-start">
           <div className={`p-2 rounded-full mr-3 ${
             darkMode 
-              ? 'bg-gray-600 text-purple-300' 
-              : 'bg-purple-100 text-purple-600'
+              ? 'bg-gray-600 text-blue-300' 
+              : 'bg-blue-100 text-blue-600'
           }`}>
             {darkMode ? <FaMoon /> : <FaSun />}
           </div>

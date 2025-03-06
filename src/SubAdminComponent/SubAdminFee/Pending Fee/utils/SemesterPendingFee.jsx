@@ -54,7 +54,7 @@ const SemesterPendingFee = ({ selectedClass, selectedSection, selectedMonth, sel
   return (
     <div className="overflow-x-auto shadow-md rounded-lg">
       <table className="min-w-full text-sm text-left ">
-        <thead className="text-xs whitespace-nowrap  uppercase bg-gradient-to-r from-purple-300 to-purple-100">
+        <thead className="text-xs whitespace-nowrap  uppercase bg-gradient-to-r from-blue-300 to-blue-100">
           <tr>
             <th scope="col" className="px-3 py-3">RollNo.</th>
             <th scope="col" className="px-3 py-3">Name</th>

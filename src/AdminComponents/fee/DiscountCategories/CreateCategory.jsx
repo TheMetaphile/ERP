@@ -58,7 +58,7 @@ export default function () {
             <div className='flex justify-between px-2'>
                 <h1 className="text-2xl p-2 mobile:max-tablet:text-lg">Available Discounts</h1>
                 <button
-                    className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${majorDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'}`}
+                    className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${majorDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'}`}
                     onClick={handleToggleMajorDiscountStructure}
                 >
                     {majorDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Create Category Discount</>}

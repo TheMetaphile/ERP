@@ -74,7 +74,7 @@ export default function StudentRegisterDynamic() {
     const userTypeIcons = {
         Student: <MdSchool className="text-blue-500" />,
         Teacher: <MdPerson className="text-green-500" />,
-        SubAdmin: <MdSupervisorAccount className="text-purple-500" />
+        SubAdmin: <MdSupervisorAccount className="text-blue-500" />
     };
 
     const addRow = () => {
@@ -219,7 +219,7 @@ export default function StudentRegisterDynamic() {
                 className="mb-8 flex flex-col items-center"
                 variants={itemVariants}
             >
-                <h1 className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 mb-4">
+                <h1 className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600 mb-4">
                     Dynamic Registration Form Builder
                 </h1>
 
@@ -265,7 +265,7 @@ export default function StudentRegisterDynamic() {
                 className="bg-white rounded-xl shadow-lg overflow-hidden mb-6"
                 variants={itemVariants}
             >
-                <div className="p-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+                <div className="p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
                     <h2 className="text-xl font-semibold flex items-center gap-2">
                         <MdLabel /> Current Form Fields
                     </h2>

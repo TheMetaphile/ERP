@@ -204,7 +204,7 @@ function CompleteFee({ selectedSession }) {
                         value={selectedSuggestion.name || ''}
                         onChange={handleEmailChange}
                         required
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Start typing student name..."
                     />
                     {showSuggestions && suggestions.length > 0 && (
@@ -212,7 +212,7 @@ function CompleteFee({ selectedSession }) {
                             {suggestions.map((suggestion, idx) => (
                                 <li
                                     key={idx}
-                                    className="flex items-center p-3 cursor-pointer hover:bg-purple-50 transition duration-150 ease-in-out"
+                                    className="flex items-center p-3 cursor-pointer hover:bg-blue-50 transition duration-150 ease-in-out"
                                     onClick={() => handleSuggestionClick(suggestion)}
                                 >
                                     <img src={suggestion.profileLink} alt="Profile" className='w-8 h-8 rounded-full mr-3' />
@@ -243,7 +243,7 @@ function CompleteFee({ selectedSession }) {
 
                     {selectedSuggestion && Object.keys(selectedSuggestion).length > 0 && (
                         <button
-                            className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'}`}
+                            className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'}`}
                             onClick={handleToggleDiscountStructure}
                         >
                             {showDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Add</>}
@@ -279,7 +279,7 @@ function CompleteFee({ selectedSession }) {
 
                     {selectedSuggestion && Object.keys(selectedSuggestion).length > 0 && (
                         <button
-                            className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-purple-500 hover:bg-purple-600'}`}
+                            className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'}`}
                             onClick={handleToggleDiscountStructure}
                         >
                             {showDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Add</>}
@@ -300,7 +300,7 @@ function CompleteFee({ selectedSession }) {
                         <select
                             value={view}
                             onChange={(e) => setView(e.target.value)}
-                            className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="monthly">Monthly</option>
                             <option value="quarterly">Quarterly</option>

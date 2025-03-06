@@ -77,7 +77,7 @@ export default function SubadminDrawer({ isOpen }) {
                 >
                     <div className="flex items-center justify-between mb-5">
                         <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl ${darkMode ? "bg-purple-800" : "bg-purple-600"} text-white`}>
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl ${darkMode ? "bg-blue-800" : "bg-blue-600"} text-white`}>
                                 {firstLetterOfName}
                             </div>
                             <div className="flex flex-col items-start">
@@ -136,8 +136,8 @@ export default function SubadminDrawer({ isOpen }) {
                                     exit={{ opacity: 0, y: -10 }}
                                     className={`w-full mb-1.5 overflow-hidden rounded-lg ${active === index
                                         ? darkMode
-                                            ? "bg-purple-900/40 ring-1 ring-purple-700"
-                                            : "bg-purple-100"
+                                            ? "bg-blue-900/40 ring-1 ring-blue-700"
+                                            : "bg-blue-100"
                                         : darkMode
                                             ? "hover:bg-gray-800"
                                             : "hover:bg-gray-100"
@@ -180,9 +180,9 @@ export default function SubadminDrawer({ isOpen }) {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.3 }}
                 >
-                    <div className={`flex items-center gap-3 rounded-lg p-3 cursor-pointer ${darkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-purple-50 hover:bg-purple-100"
+                    <div className={`flex items-center gap-3 rounded-lg p-3 cursor-pointer ${darkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-blue-50 hover:bg-blue-100"
                         } transition-colors`}>
-                        <FaUserShield className={darkMode ? "text-purple-400" : "text-purple-600"} size={18} />
+                        <FaUserShield className={darkMode ? "text-blue-400" : "text-blue-600"} size={18} />
                         <div className="flex flex-col items-start">
                             <span className="font-medium text-sm">Admin Portal</span>
                             <span className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>

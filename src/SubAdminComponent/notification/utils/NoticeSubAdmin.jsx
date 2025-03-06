@@ -103,14 +103,14 @@ function NoticeSubAdmin() {
         >
             <ToastContainer />
             <div className="flex mx-3 items-center justify-between bg-white ">
-                <h1 className='text-2xl mobile:max-tablet:text-xl font-bold text-purple-600 whitespace-nowrap'>Notice Board</h1>
+                <h1 className='text-2xl mobile:max-tablet:text-xl font-bold text-blue-600 whitespace-nowrap'>Notice Board</h1>
                 <div className="flex items-center">
-                    <FaCalendarAlt className="text-purple-600 mr-2" />
+                    <FaCalendarAlt className="text-blue-600 mr-2" />
                     <select
                         id="sessionSelector"
                         value={selectedSession}
                         onChange={handleChange}
-                        className="mobile:max-tablet:mx-4  rounded-md py-2 px-4  leading-tight bg-white border-2 border-purple-300 text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                        className="mobile:max-tablet:mx-4  rounded-md py-2 px-4  leading-tight bg-white border-2 border-blue-300 text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
                     >
                         {sessions.map((session, index) => (
                             <option key={index} value={session}>

@@ -223,7 +223,7 @@ const Upload = () => {
     return (
 
         <motion.div
-            className="flex flex-col w-full mobile:max-tablet:px-2 h-screen overflow-y-auto items-start mt-4 mb-6 no-scrollbar border bg-purple-50 p-3 rounded-lg shadow-lg"
+            className="flex flex-col w-full mobile:max-tablet:px-2 h-screen overflow-y-auto items-start mt-4 mb-6 no-scrollbar border bg-blue-50 p-3 rounded-lg shadow-lg"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -231,12 +231,12 @@ const Upload = () => {
             <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 
             <motion.div className='w-full flex flex-wrap justify-between items-center mb-3 px-4 mobile:max-tablet:px-2 gap-2' variants={itemVariants}>
-                <motion.h1 className='text-3xl mobile:max-tablet:text-lg whitespace-nowrap font-bold text-purple-800 flex items-center'>
+                <motion.h1 className='text-3xl mobile:max-tablet:text-lg whitespace-nowrap font-bold text-blue-800 flex items-center'>
                     <FaCalendarAlt className="mr-2" />
                     Schedule Time Table
                 </motion.h1>
                 <motion.button
-                    className='px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md flex items-center'
+                    className='px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md flex items-center'
                     onClick={() => setShowTimetableStructure(!showTimetableStructure)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}

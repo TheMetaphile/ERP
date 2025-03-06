@@ -127,7 +127,7 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
             {loading ? (
                 <Loading />
             ) : details.length === 0 && selectedTab === "Next Week" ? (
-                <div className="text-purple-500 font-bold text-2xl">No Data Available</div>
+                <div className="text-blue-500 font-bold text-2xl">No Data Available</div>
             ) : (
                 <motion.form
                     onSubmit={handleSubmit}
@@ -136,26 +136,26 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
                     transition={{ duration: 0.5, delay: 0.1 }}
                 >
                     <motion.table
-                        className="w-full rounded-md border border-purple-500"
+                        className="w-full rounded-md border border-blue-500"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
                     >
-                        <thead className="bg-purple-500 ">
+                        <thead className="bg-blue-500 ">
                             <tr className="p-4 text-center">
-                                <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
+                                <th className="border-y border-blue-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
                                     Date
                                 </th>
-                                <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
+                                <th className="border-y border-blue-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
                                     Chapter
                                 </th>
-                                <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
+                                <th className="border-y border-blue-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
                                     Topic
                                 </th>
-                                <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
+                                <th className="border-y border-blue-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
                                     Teaching Aids
                                 </th>
-                                <th className="border-y border-purple-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
+                                <th className="border-y border-blue-500 py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold text-white">
                                     Activity (if any)
                                 </th>
                             </tr>
@@ -182,12 +182,12 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
                             value={remark}
                             onChange={(e) => setRemark(e.target.value)}
                             placeholder="Enter your remark"
-                            className="w-full p-2 border border-purple-500 rounded-md mb-4 text-purple-500"
+                            className="w-full p-2 border border-blue-500 rounded-md mb-4 text-blue-500"
                         />
                         <select
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
-                            className="p-5 border border-purple-500 rounded-md mb-4 text-purple-500"
+                            className="p-5 border border-blue-500 rounded-md mb-4 text-blue-500"
                         >
                             <option value="">Select status</option>
                             <option value="Accept">Accept</option>
@@ -202,7 +202,7 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
                     >
                         <button
                             type="submit"
-                            className="p-1 px-4 rounded-md bg-purple-500 font-semibold border-purple-500 border text-white hover:bg-white hover:text-purple-500 hover:border-purple-500 hover:border-2"
+                            className="p-1 px-4 rounded-md bg-blue-500 font-semibold border-blue-500 border text-white hover:bg-white hover:text-blue-500 hover:border-blue-500 hover:border-2"
                         >
                             SAVE
                         </button>

@@ -111,7 +111,7 @@ export default function SubjectHomeWork() {
             }
             {/* <SubjectHomeWorkTile subject={name} classwork='Write a Essay on My Mother ?' assignedDate='01-05-2024' bg='bg-green-200' />
             <SubjectHomeWorkTile subject={name} classwork='Complete Exercise 2.9 .' assignedDate='31-04-2024' bg='bg-red-200' />
-            <SubjectHomeWorkTile subject={name} classwork='Complete Exercise 2.9 .' assignedDate='30-04-2024' bg='bg-purple-200' />
+            <SubjectHomeWorkTile subject={name} classwork='Complete Exercise 2.9 .' assignedDate='30-04-2024' bg='bg-blue-200' />
             <SubjectHomeWorkTile subject={name} classwork='Complete Exercise 2.9 .' assignedDate='29-04-2024' bg='bg-green-200' /> */}
 
         </div>

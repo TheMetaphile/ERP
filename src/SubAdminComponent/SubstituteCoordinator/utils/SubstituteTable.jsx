@@ -51,7 +51,7 @@ export default function SubstituteTable() {
             <table className="min-w-full border border-gray-300 rounded-lg">
                 <thead>
                     <motion.tr
-                        className="bg-gradient-to-r from-purple-200 to-purple-100 text-lg"
+                        className="bg-gradient-to-r from-blue-200 to-blue-100 text-lg"
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}
@@ -73,7 +73,7 @@ export default function SubstituteTable() {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                         >
-                            <td colSpan={6} className="text-center text-purple-400 py-4 font-medium">
+                            <td colSpan={6} className="text-center text-blue-400 py-4 font-medium">
                                 No Coordinator is on leave
                             </td>
                         </motion.tr>

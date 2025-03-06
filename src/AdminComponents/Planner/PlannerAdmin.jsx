@@ -38,7 +38,7 @@ function PlannerAdmin() {
                 </motion.h1>
                 <div className="block tablet:hidden w-full mobile:max-tablet:text-end">
                     <motion.button
-                        className="p-2 border rounded bg-purple-500 text-white hover:bg-purple-600"
+                        className="p-2 border rounded bg-blue-500 text-white hover:bg-blue-600"
                         onClick={() => setDropdownVisible(!isDropdownVisible)}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}

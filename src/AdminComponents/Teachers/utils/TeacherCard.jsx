@@ -245,7 +245,7 @@ export default function TeacherCard({ userData }) {
                     <div className="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all">
                         <div className="border-b p-6">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-2xl font-bold text-purple-600">Manage Permissions</h2>
+                                <h2 className="text-2xl font-bold text-blue-600">Manage Permissions</h2>
                             </div>
                             <p className=" mt-2">Select the permissions you want to enable</p>
                         </div>
@@ -263,7 +263,7 @@ export default function TeacherCard({ userData }) {
                                                 value={perm}
                                                 checked={selectedPermissions.includes(perm)}
                                                 onChange={() => handlePermissionChange(perm)}
-                                                className="appearance-none w-6 h-6 border-2 rounded-md border-gray-300 checked:border-purple-500 checked:bg-purple-500 transition-all duration-200"
+                                                className="appearance-none w-6 h-6 border-2 rounded-md border-gray-300 checked:border-blue-500 checked:bg-blue-500 transition-all duration-200"
                                             />
                                             <span className="absolute text-white font-bold pointer-events-none opacity-0 transform scale-0 transition-all duration-200 checked:opacity-100 checked:scale-100">
                                                 ✓
@@ -287,7 +287,7 @@ export default function TeacherCard({ userData }) {
                                 </button>
                                 <button
                                     onClick={handleSave}
-                                    className="px-4 py-2 rounded-lg bg-purple-500 text-white hover:bg-purple-600 transition-colors font-medium"
+                                    className="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors font-medium"
                                 >
                                     Save Changes
                                 </button>

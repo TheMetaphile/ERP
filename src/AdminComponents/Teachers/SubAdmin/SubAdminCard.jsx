@@ -71,7 +71,7 @@ export default function SubAdminCard({ userData, setUserData }) {
         <div className="my-2">
             <table className="w-full border-collapse border border-gray-300">
                 <thead>
-                    <tr className="bg-purple-200">
+                    <tr className="bg-blue-200">
                         <th className="border p-2">Profile</th>
                         <th className="border p-2">Name</th>
                         <th className="border p-2">Email</th>
@@ -81,14 +81,14 @@ export default function SubAdminCard({ userData, setUserData }) {
                 </thead>
                 <tbody>
                     {userData.map((user, index) => (
-                        <tr key={user._id || index} className="hover:bg-purple-50 transition-colors duration-150">
+                        <tr key={user._id || index} className="hover:bg-blue-50 transition-colors duration-150">
                             <td className="border p-2 text-center">
                                 <img src={user.profileLogo || userimg} alt={`${user.name}'s profile`} className="h-16 w-16 rounded-full mx-auto" />
                             </td>
                             <td className="p-4">
                                 <Link
                                     to={`/Admin-Dashboard/SubAdmin/Profile/${user._id}`}
-                                    className="font-medium text-purple-700 hover:text-purple-900 transition-colors duration-150 text-lg block"
+                                    className="font-medium text-blue-700 hover:text-blue-900 transition-colors duration-150 text-lg block"
                                 >
                                     {user.name}
                                 </Link>
@@ -106,7 +106,7 @@ export default function SubAdminCard({ userData, setUserData }) {
                                     {(user.permissions || []).map((permission, i) => (
                                         <span
                                             key={i}
-                                            className="bg-gradient-to-r from-purple-400 to-purple-500 text-white rounded-full px-3 py-1 text-xs font-medium shadow-sm"
+                                            className="bg-gradient-to-r from-blue-400 to-blue-500 text-white rounded-full px-3 py-1 text-xs font-medium shadow-sm"
                                         >
                                             {permission}
                                         </span>
@@ -116,7 +116,7 @@ export default function SubAdminCard({ userData, setUserData }) {
 
                             <td className="p-4">
                                 <button
-                                    className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 group"
+                                    className="flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 group"
                                     onClick={() => handlePermission(user._id)}
                                 >
                                     <MdOutlineSecurity className="mr-2 group-hover:animate-pulse" />
@@ -132,13 +132,13 @@ export default function SubAdminCard({ userData, setUserData }) {
             {permission && (
                 <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center p-4 z-50 transition-opacity duration-300 ease-in-out">
                     <div className="bg-white rounded-2xl shadow-2xl w-11/12 md:w-4/5 max-w-5xl h-4/5 transform transition-all duration-300 scale-100 flex flex-col overflow-hidden">
-                        <div className="relative bg-gradient-to-r from-purple-600 to-indigo-600 p-4 md:p-6 lg:p-8 text-white">
+                        <div className="relative bg-gradient-to-r from-blue-600 to-indigo-600 p-4 md:p-6 lg:p-8 text-white">
                             <h2 className="text-xl md:text-2xl lg:text-3xl font-bold flex items-center">
                                 <MdOutlineSecurity className="mr-2 group-hover:animate-pulse" />
                                 Manage Permissions
                             </h2>
-                            <p className="mt-1 md:mt-2 text-purple-100 text-sm md:text-base lg:text-lg">
-                                Configuring access for <span className="font-bold underline decoration-2 decoration-purple-300">{selectedUserId.name}</span>
+                            <p className="mt-1 md:mt-2 text-blue-100 text-sm md:text-base lg:text-lg">
+                                Configuring access for <span className="font-bold underline decoration-2 decoration-blue-300">{selectedUserId.name}</span>
                             </p>
 
                             <div className="absolute -bottom-6 md:-bottom-8 lg:-bottom-10 left-0 right-0 h-6 md:h-8 lg:h-10 bg-white rounded-t-3xl"></div>
@@ -154,8 +154,8 @@ export default function SubAdminCard({ userData, setUserData }) {
                                         <label
                                             key={perm}
                                             className={`flex items-center p-3 md:p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer hover:shadow-md ${isSelected
-                                                ? "border-purple-500 bg-purple-50 shadow-sm"
-                                                : "border-gray-200 hover:border-purple-300"
+                                                ? "border-blue-500 bg-blue-50 shadow-sm"
+                                                : "border-gray-200 hover:border-blue-300"
                                                 }`}
                                         >
                                             <div className="relative flex items-center justify-center">
@@ -164,7 +164,7 @@ export default function SubAdminCard({ userData, setUserData }) {
                                                     value={perm}
                                                     checked={isSelected}
                                                     onChange={() => handlePermissionChange(perm)}
-                                                    className="appearance-none w-5 h-5 md:w-6 md:h-6 border-2 rounded-md border-gray-300 checked:border-purple-500 checked:bg-purple-500 transition-all duration-200"
+                                                    className="appearance-none w-5 h-5 md:w-6 md:h-6 border-2 rounded-md border-gray-300 checked:border-blue-500 checked:bg-blue-500 transition-all duration-200"
                                                 />
                                                 <span className="absolute text-white font-bold pointer-events-none  transform  transition-all duration-200 checked:opacity-100 checked:scale-100">
                                                     ✓
@@ -172,7 +172,7 @@ export default function SubAdminCard({ userData, setUserData }) {
                                             </div>
 
                                             <div className="ml-3">
-                                                <span className={`text-sm md:text-base font-medium ${isSelected ? "text-purple-700" : "text-gray-700"}`}>
+                                                <span className={`text-sm md:text-base font-medium ${isSelected ? "text-blue-700" : "text-gray-700"}`}>
                                                     {perm}
                                                 </span>
                                             </div>
@@ -193,7 +193,7 @@ export default function SubAdminCard({ userData, setUserData }) {
                                 </button>
                                 <button
                                     onClick={handleSave}
-                                    className="flex-1 sm:flex-initial px-6 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:shadow-lg transition-all duration-200 font-medium flex items-center justify-center group"
+                                    className="flex-1 sm:flex-initial px-6 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:shadow-lg transition-all duration-200 font-medium flex items-center justify-center group"
                                 >
                                     Save Changes
                                 </button>

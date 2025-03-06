@@ -172,7 +172,7 @@ console.log(subject)
             <div className="overflow-auto">
                 <table className="min-w-full whitespace-nowrap bg-white border border-gray-300 rounded-lg text-center">
                     <thead>
-                        <tr className="bg-gradient-to-r from-blue-500 to-purple-500 text-white ">
+                        <tr className="bg-gradient-to-r from-blue-500 to-blue-500 text-white ">
                             <th className="py-3 px-2 text-center  rounded-tl-lg"><FaUserGraduate className="inline mr-2" />Roll No.</th>
                             <th className="py-3 px-2 text-center "><FaUserGraduate className="inline mr-2" />Name</th>
                             <th className="py-3 px-2 text-center "><FaBook className="inline mr-2" />Last Note Book Checked</th>

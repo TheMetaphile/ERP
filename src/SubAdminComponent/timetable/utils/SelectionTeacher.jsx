@@ -85,7 +85,7 @@ function SelectionTeacher({ onSearch, onEmailChange, onNameChange }) {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="border rounded-lg shadow-lg w-full flex  p-4 bg-purple-50"
+      className="border rounded-lg shadow-lg w-full flex  p-4 bg-blue-50"
     >
       <div className="container">
         <div className="flex items-center md:flex-row justify-between gap-6">
@@ -96,11 +96,11 @@ function SelectionTeacher({ onSearch, onEmailChange, onNameChange }) {
             transition={{ delay: 0.2 }}
           >
             <div className="relative">
-              <FaSearch className="absolute top-3 left-3 text-purple-400" />
+              <FaSearch className="absolute top-3 left-3 text-blue-400" />
               <input
                 type="email"
                 ref={inputRef}
-                className="w-full px-10 py-2 border-2 border-purple-300 rounded-md focus:outline-none focus:border-purple-500 transition-colors duration-300"
+                className="w-full px-10 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:border-blue-500 transition-colors duration-300"
                 placeholder="Search by Teacher's name, employee ID or email"
                 list={`teacher-suggestions`}
                 onClick={handleClickInside}
@@ -112,7 +112,7 @@ function SelectionTeacher({ onSearch, onEmailChange, onNameChange }) {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="absolute z-10 w-full bg-white border-2 border-purple-300 rounded-md mt-1 max-h-40 overflow-y-auto shadow-lg"
+                  className="absolute z-10 w-full bg-white border-2 border-blue-300 rounded-md mt-1 max-h-40 overflow-y-auto shadow-lg"
                   ref={suggestionsRef}
                 >
                   {suggestions.map((suggestion, idx) => (
@@ -122,8 +122,8 @@ function SelectionTeacher({ onSearch, onEmailChange, onNameChange }) {
                       className="flex items-center p-2 cursor-pointer transition-colors duration-200"
                       onClick={() => handleSuggestionClick(suggestion)}
                     >
-                      <img src={suggestion.profileLink} alt="Profile" className='w-8 h-8 rounded-full mr-3 border-2 border-purple-300' />
-                      <span className="text-purple-700">{suggestion.email}</span>
+                      <img src={suggestion.profileLink} alt="Profile" className='w-8 h-8 rounded-full mr-3 border-2 border-blue-300' />
+                      <span className="text-blue-700">{suggestion.email}</span>
                     </motion.li>
                   ))}
                 </motion.ul>

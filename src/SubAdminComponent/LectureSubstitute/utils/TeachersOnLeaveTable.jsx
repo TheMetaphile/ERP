@@ -73,7 +73,7 @@ export default function ClassTeacherOnLeaveTable() {
                 animate="visible"
             >
                 <thead>
-                    <tr className="bg-gradient-to-r from-purple-400 to-purple-200 text-lg">
+                    <tr className="bg-gradient-to-r from-blue-400 to-blue-200 text-lg">
                         <th className="py-2 px-6 text-center">Lecture</th>
                         <th className="py-2 px-6 text-center">Date</th>
                         <th className="py-2 px-6 text-center">Class</th>

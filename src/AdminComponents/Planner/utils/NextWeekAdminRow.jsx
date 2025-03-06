@@ -14,19 +14,19 @@ function NextWeekAdminRow({ details, index }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
         >
-            <td className=" p-4  whitespace-nowrap gap-2 text-purple-500">
+            <td className=" p-4  whitespace-nowrap gap-2 text-blue-500">
                 {details.date}
             </td>
-            <td className=" p-4  whitespace-nowrap gap-2 text-purple-500">
+            <td className=" p-4  whitespace-nowrap gap-2 text-blue-500">
                 {details.chapter}
             </td>
-            <td className=" p-4  whitespace-nowrap gap-2 text-purple-500">
+            <td className=" p-4  whitespace-nowrap gap-2 text-blue-500">
                 {details.topic}
             </td>
-            <td className=" p-4  whitespace-nowrap gap-2 text-purple-500">
+            <td className=" p-4  whitespace-nowrap gap-2 text-blue-500">
                 {details.teachingAids}
             </td>
-            <td className=" p-4  whitespace-nowrap gap-2 text-purple-500">
+            <td className=" p-4  whitespace-nowrap gap-2 text-blue-500">
                 {details.Activity}
             </td>
         </motion.tr>

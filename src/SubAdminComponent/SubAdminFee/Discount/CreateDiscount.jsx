@@ -136,7 +136,7 @@ function CreateDiscount({ selectedSession }) {
                         value={searchInput}
                         onChange={handleEmailChange}
                         // required
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Start typing student name..."
                     />
                     {showSuggestions && suggestions.length > 0 && (
@@ -144,7 +144,7 @@ function CreateDiscount({ selectedSession }) {
                             {suggestions.map((suggestion, idx) => (
                                 <li
                                     key={idx}
-                                    className="flex items-center p-3 cursor-pointer hover:bg-purple-50 transition duration-150 ease-in-out"
+                                    className="flex items-center p-3 cursor-pointer hover:bg-blue-50 transition duration-150 ease-in-out"
                                     onClick={() => handleSuggestionClick(suggestion)}
                                 >
                                     <img src={suggestion.profileLink} alt="Profile" className='w-8 h-8 rounded-full mr-3' />
@@ -181,7 +181,7 @@ function CreateDiscount({ selectedSession }) {
             </div>
             <div className="flex justify-end">
                 <button
-                    className={`bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     type="submit"
                     disabled={isLoading}
                 >

@@ -13,11 +13,11 @@ const LeaveCard = () => {
         <div className="bg-white p-4 r w-full flex flex-col">
 
             <div className="flex gap-10  mobile:max-tablet:gap-4 mobile:max-tablet:justify-between">
-                <button className={`p-2 mx-1 ${selectedRole === 'student' ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}
+                <button className={`p-2 mx-1 ${selectedRole === 'student' ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
                     onClick={() => selectRole('student')}>Student</button>
-                <button className={`p-2 mx-1 ${selectedRole === 'teacher' ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}
+                <button className={`p-2 mx-1 ${selectedRole === 'teacher' ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
                     onClick={() => selectRole('teacher')}>Teacher</button>
-                <button className={`p-2 mx-1 ${selectedRole === 'employee' ? "text-purple-600 border-b-2 border-purple-600" : "text-gray-600"}`}
+                <button className={`p-2 mx-1 ${selectedRole === 'employee' ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
                     onClick={() => selectRole('employee')}>Employee</button>
             </div>
 

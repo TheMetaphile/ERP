@@ -146,7 +146,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                 >
                     <table className="w-full table-auto">
                         <thead>
-                            <tr className="text-gray-600 uppercase bg-gradient-to-r from-purple-200 to-purple-100 text-sm leading-normal">
+                            <tr className="text-gray-600 uppercase bg-gradient-to-r from-blue-200 to-blue-100 text-sm leading-normal">
                                 <th className="py-3 px-6 text-left">Lecture</th>
                                 <th className="py-3 px-6 text-left">Time</th>
                                 <th className="py-3 px-6 text-left">Subject</th>
@@ -257,7 +257,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
                                                         whileHover={{ scale: 1.1 }}
                                                         whileTap={{ scale: 0.9 }}
                                                         onClick={() => handleEditClick(lecture._id)}
-                                                        className="transform hover:text-purple-500 hover:scale-110"
+                                                        className="transform hover:text-blue-500 hover:scale-110"
                                                     >
                                                         <FaEdit />
                                                     </motion.button>

@@ -105,7 +105,7 @@ const TimeTableStructure = () => {
                         <div>
                             <label className="block text-sm font-medium mb-2">Class Range</label>
                             <select
-                                className="w-full border-2 border-purple-300 p-2 rounded-md focus:outline-none focus:border-purple-500 bg-white"
+                                className="w-full border-2 border-blue-300 p-2 rounded-md focus:outline-none focus:border-blue-500 bg-white"
                                 name="classRange"
                                 value={formData?.classRange || ''}
                                 onChange={(e) => setFormData(prev => ({ ...prev, classRange: e.target.value }))}

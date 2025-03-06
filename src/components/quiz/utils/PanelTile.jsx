@@ -36,7 +36,7 @@ export default function PanelTile(props) {
                         </span>
                     </div>
                     <div className='flex  flex-1'>
-                        <BsExclamationCircle className='w-9 h-9 text-purple-400' />
+                        <BsExclamationCircle className='w-9 h-9 text-blue-400' />
                         <span className='px-2'>
                             <h1 className='font-normal'>{props.skipped}</h1>
                             <h1 className='text-xs text-gray-400'>Question Skipped</h1>

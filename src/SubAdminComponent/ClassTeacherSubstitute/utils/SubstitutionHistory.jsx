@@ -92,7 +92,7 @@ export default function ClassTeacherSubstitutionHistory() {
                 animate="visible"
             >
                 <thead>
-                    <tr className="bg-gradient-to-r from-purple-400 to-purple-200 text-lg">
+                    <tr className="bg-gradient-to-r from-blue-400 to-blue-200 text-lg">
                         <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Employee Id</th>
                         <th className="py-2 px-6">Name</th>
                         <th className="py-2 px-6 text-center">Date</th>
@@ -141,7 +141,7 @@ export default function ClassTeacherSubstitutionHistory() {
             </motion.table>
             {!allDataFetched && PrevioursSubstitutions.length > 0 && (
                 <motion.h1
-                    className='text-purple-500 hover:text-purple-800 mt-3 cursor-pointer text-center'
+                    className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center'
                     onClick={handleViewMore}
                     
                 >

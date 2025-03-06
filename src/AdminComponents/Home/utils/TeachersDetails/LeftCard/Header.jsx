@@ -8,7 +8,7 @@ export default function Header({ headings }) {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-purple-200 text-gray-700 uppercase text-sm leading-normal"
+        className="bg-blue-200 text-gray-700 uppercase text-sm leading-normal"
       >
         {headings.map((heading, index) => (
           <th 
