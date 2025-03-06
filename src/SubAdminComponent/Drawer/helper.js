@@ -160,6 +160,13 @@ const menuItems = [
     route: "/Sub-Admin/Template",
     children: [],
   },
+  {
+    image: dashboardLeaveImage,
+    alt: "Notice image",
+    title: "Subject Management",
+    route: "/Sub-Admin/SubjectManagement",
+    children: [],
+  },
 ];
 
 export default menuItems;
