@@ -11,7 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 export default function AllStudentsListSubject() {
     const [userData, setUserData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [start, setStart] = useState(0);
     const end = 9;
     const [allDataFetched, setAllDataFetched] = useState(false);
@@ -50,7 +50,7 @@ export default function AllStudentsListSubject() {
         if (authState.accessToken) {
             fetchUserData();
         }
-    }, [authState.accessToken, Class,  Section]);
+    }, [authState.accessToken, Class, Section]);
 
     useEffect(() => {
         if (start !== 0) {
@@ -115,11 +115,8 @@ export default function AllStudentsListSubject() {
         }
     };
 
-
-
     const filteredStudents = userData.filter(student => {
         return (
-           
             student.currentClass.toLowerCase().includes(Class.toLowerCase()) &&
             student.section.toLowerCase().includes(Section.toLowerCase())
         );
@@ -127,64 +124,62 @@ export default function AllStudentsListSubject() {
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     return (
         <>
-            <div className="flex pt-3 items-center  bg-white mb-3 px-2">
-                <ToastContainer />
-                <div className=" flex mobile:max-tablet:justify-between w-full items-center">
-                    <h1 className="text-2xl mobile:max-tablet:text-lg font-medium px-2 ">Optional Subject Allocate</h1>
+            <div className={`flex pt-3 items-center ${darkMode ? 'bg-gray-900 text-white' : 'bg-white'} mb-3 px-2 transition-colors duration-300`}>
+                <ToastContainer theme={darkMode ? 'dark' : 'light'} />
+                <div className="flex mobile:max-tablet:justify-between w-full items-center">
+                    <h1 className="text-2xl mobile:max-tablet:text-lg font-medium px-2">Optional Subject Allocate</h1>
                     <div className="block tablet:hidden">
                         <button
-                            className="p-2 border rounded"
+                            className={`p-2 border rounded ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
                             onClick={() => setDropdownVisible(!isDropdownVisible)}
                         >
                             Filter
                         </button>
                         {isDropdownVisible && (
-                            <div className="absolute bg-white shadow-lg px-2 rounded mt-2 right-2 left-2 z-20 justify-center flex tablet:w-4/6 py-2">
+                            <div className={`absolute ${darkMode ? 'bg-gray-800 shadow-dark' : 'bg-white shadow-lg'} px-2 rounded mt-2 right-2 left-2 z-20 justify-center flex tablet:w-4/6 py-2`}>
                                 <SearchBar
                                     Class={Class}
                                     Section={Section}
                                     handleClassChange={handleClassChange}
                                     handleSectionChange={handleSectionChange}
                                     handlebothEventsCalled={handlebothEventsCalled}
+                                    darkMode={darkMode}
                                 />
                             </div>
                         )}
                     </div>
                 </div>
             </div>
-            <div className="h-fit w-full items-start mb-3 px-2 ">
-
+            <div className={`h-fit w-full items-start mb-3 px-2 ${darkMode ? 'text-white' : ''}`}>
                 <div className="w-full tablet:block hidden my-2">
-                    <SearchBar         
+                    <SearchBar
                         Class={Class}
                         Section={Section}
                         handleClassChange={handleClassChange}
                         handleSectionChange={handleSectionChange}
                         handlebothEventsCalled={handlebothEventsCalled}
+                        darkMode={darkMode}
                     />
                 </div>
 
-
                 <div className="mobile:max-laptop:overflow-y-auto">
-                    <div className="rounded-lg shadow-md border h-screen text-center border-black w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap">
+                    <div className={`rounded-lg shadow-md border h-screen text-center ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-black bg-white'} w-full mobile:max-tablet:w-fit overflow-auto whitespace-nowrap transition-colors duration-300`}>
                         <div className="stutable">
-                            <Header headings={['Name', 'Class', 'Section', 'Phone No.', 'E-mail', 'Action']} />
+                            <Header headings={['Name', 'Class', 'Section', 'Phone No.', 'E-mail', 'Action']} darkMode={darkMode} />
                         </div>
                         {loading && userData.length === 0 ? (
                             <Loading />
                         ) : Array.isArray(filteredStudents) && filteredStudents.length === 0 ? (
-                            <div>No students found</div>
+                            <div className={`p-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>No students found</div>
                         ) : (
                             <div>
-                                <StudentDetailTile userData={filteredStudents} />
+                                <StudentDetailTile userData={filteredStudents} darkMode={darkMode} />
                                 <div ref={sentinelRef} className="h-10"></div>
                                 {loading && start > 0 && (
-                                    <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                                    <div className={`text-center w-full ${darkMode ? 'text-gray-400' : 'text-gray-600'} text-sm`}>Loading more...</div>
                                 )}
                             </div>
                         )}
-
-
                     </div>
                 </div>
             </div>

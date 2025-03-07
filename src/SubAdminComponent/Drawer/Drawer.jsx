@@ -57,7 +57,7 @@ export default function SubadminDrawer({ isOpen }) {
 
     return (
         <motion.div
-            className={`${isOpen ? "h-screen py-3 w-full lg:w-72" : "w-0"
+            className={`${isOpen ? "h-full py-3 w-full lg:w-72" : "w-0"
                 } overflow-y-auto rounded-xl shadow-lg text-center items-center border-r border-gray-200 ${darkMode
                     ? "bg-gray-900 text-white border-gray-700"
                     : "bg-white text-gray-800"

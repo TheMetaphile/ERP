@@ -6,9 +6,8 @@ import { BASE_URL } from "../../Config";
 import { motion } from 'framer-motion';
 import { FaBell, FaSpinner, FaCalendarAlt, FaInfoCircle } from 'react-icons/fa';
 
-export default function Notice(props) {
-  const { authState } = useContext(AuthContext);
-  const darkMode = authState?.darkMode || false;
+export default function Notice() {
+  const { authState, darkMode } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState([]);
   const [error, setError] = useState(null);
@@ -86,7 +85,7 @@ export default function Notice(props) {
 
   return (
     <motion.div
-      className={`p-4 border rounded-xl transition-colors duration-300 ${
+      className={` border rounded-xl transition-colors duration-300 ${
         darkMode 
           ? 'bg-gradient-to-r from-gray-800 to-gray-700 border-gray-600 shadow-lg shadow-blue-900/10' 
           : 'bg-gradient-to-r from-blue-100 to-indigo-50 border-gray-200 shadow-lg shadow-blue-200/30'

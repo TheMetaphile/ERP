@@ -48,7 +48,7 @@ export default function Enddrawer() {
 
   return (
     <motion.div
-      className={`h-full overflow-auto no-scrollbar px-4 py-3 transition-colors duration-300 ${
+      className={`h-full flex flex-col overflow-auto no-scrollbar px-2 py-3 transition-colors duration-300 ${
         darkMode 
           ? 'bg-gray-800 text-white' 
           : 'bg-white text-gray-800'
@@ -80,7 +80,7 @@ export default function Enddrawer() {
         </Link>
       </motion.h2>
 
-      <motion.section className="mb-6 h-full" variants={itemVariants}>
+      <motion.section className=" flex-grow" variants={itemVariants}>
         <motion.div
           className={`rounded-lg shadow-md h-full overflow-y-auto transition-all duration-300 ${
             darkMode 
@@ -99,7 +99,7 @@ export default function Enddrawer() {
       {/* Info card at the bottom */}
       <motion.div
         variants={itemVariants}
-        className={`rounded-lg p-4 mt-4 ${
+        className={`rounded-lg p-4 mt-2 ${
           darkMode 
             ? 'bg-gray-700' 
             : 'bg-blue-50'
@@ -125,6 +125,7 @@ export default function Enddrawer() {
           </div>
         </div>
       </motion.div>
+
     </motion.div>
   );
 }

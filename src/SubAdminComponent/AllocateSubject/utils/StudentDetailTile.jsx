@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function StudentDetailTile({ userData }) {
-    const { authState } = useContext(AuthContext);
+    const { authState,darkMode } = useContext(AuthContext);
     const [newData, setNewData] = useState(userData);
     const [loadingIndex, setLoadingIndex] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -95,12 +95,12 @@ export default function StudentDetailTile({ userData }) {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="border-b border-gray-200 hover:bg-blue-100 transition-colors mb-2"
+                    className={`border-b ${darkMode ? 'border-gray-700 hover:bg-gray-700' : 'border-gray-200 hover:bg-blue-100'} transition-colors mb-2`}
                 >
-                    <div className="flex text-center items-center justify-evenly border rounded-lg py-2 pl-2">
+                    <div className={`flex text-center items-center justify-evenly border rounded-lg py-2 pl-2 ${darkMode ? 'border-gray-700' : ''}`}>
                         <Link
                             to={`/Sub-Admin/Students/details/${user.email}`}
-                            className="rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800"
+                            className={`rounded-full text-center px-3 py-2 font-semibold ${darkMode ? 'bg-blue-900 text-blue-100' : 'bg-blue-100 text-blue-800'}`}
                         >
                             <div className="w-40 flex justify-center items-center space-x-2">
                                 <img
@@ -125,7 +125,7 @@ export default function StudentDetailTile({ userData }) {
                                         repeat: Infinity,
                                         ease: "linear",
                                     }}
-                                    className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full"
+                                    className={`w-6 h-6 border-2 ${darkMode ? 'border-blue-400 border-t-gray-800' : 'border-blue-500 border-t-transparent'} rounded-full`}
                                 />
                             </div>
                         ) : (
@@ -133,7 +133,7 @@ export default function StudentDetailTile({ userData }) {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => fetchSubjects(user)}
-                                className="bg-blue-100 text-blue-500 px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors"
+                                className={`${darkMode ? 'bg-blue-900 text-blue-100 hover:bg-blue-800' : 'bg-blue-100 text-blue-500 hover:bg-blue-200'} px-3 py-1 rounded-full text-sm font-medium transition-colors`}
                             >
                                 Optional Subject
                             </motion.button>
@@ -144,8 +144,8 @@ export default function StudentDetailTile({ userData }) {
 
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-                    <div className="bg-white rounded-2xl shadow-2xl w-11/12 md:w-4/5 max-w-5xl h-fit flex flex-col overflow-hidden">
-                        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
+                    <div className={`${darkMode ? 'bg-gray-800 text-white' : 'bg-white'} rounded-2xl shadow-2xl w-11/12 md:w-4/5 max-w-5xl h-fit flex flex-col overflow-hidden`}>
+                        <div className={`${darkMode ? 'bg-gradient-to-r from-blue-800 to-indigo-900' : 'bg-gradient-to-r from-blue-600 to-indigo-600'} p-6 text-white`}>
                             <h2 className="text-2xl font-bold">Select Optional Subjects for <span className="italic">{selectedUser?.name}</span></h2>
                         </div>
 
@@ -157,14 +157,26 @@ export default function StudentDetailTile({ userData }) {
                                     {optionalSubjects.map((subject) => (
                                         <label
                                             key={subject}
-                                            className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${selectedSubjects.includes(subject) ? "border-blue-500 bg-blue-50 shadow-sm" : "border-gray-200 hover:border-blue-300"}`}
+                                            className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                                                selectedSubjects.includes(subject) 
+                                                    ? darkMode 
+                                                        ? "border-blue-500 bg-blue-900 shadow-sm" 
+                                                        : "border-blue-500 bg-blue-50 shadow-sm" 
+                                                    : darkMode 
+                                                        ? "border-gray-600 hover:border-blue-700" 
+                                                        : "border-gray-200 hover:border-blue-300"
+                                            }`}
                                         >
                                             <input
                                                 type="checkbox"
                                                 value={subject}
                                                 checked={selectedSubjects.includes(subject)}
                                                 onChange={() => handleCheckboxChange(subject)}
-                                                className="appearance-none w-6 h-6 border-2 rounded-md border-gray-300 checked:border-blue-500 checked:bg-blue-500 transition-all"
+                                                className={`appearance-none w-6 h-6 border-2 rounded-md ${
+                                                    darkMode 
+                                                        ? "border-gray-500 checked:border-blue-400 checked:bg-blue-600" 
+                                                        : "border-gray-300 checked:border-blue-500 checked:bg-blue-500"
+                                                } transition-all`}
                                             />
                                             <span className="ml-3 text-base font-medium">
                                                 {subject}
@@ -175,16 +187,24 @@ export default function StudentDetailTile({ userData }) {
                             )}
                         </div>
 
-                        <div className="border-t p-4 bg-gray-50 flex justify-end gap-3">
+                        <div className={`border-t ${darkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-gray-50'} p-4 flex justify-end gap-3`}>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="px-4 py-2 rounded-lg border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors font-medium"
+                                className={`px-4 py-2 rounded-lg border-2 ${
+                                    darkMode 
+                                        ? "border-gray-600 text-gray-300 hover:bg-gray-700" 
+                                        : "border-gray-300 text-gray-700 hover:bg-gray-100"
+                                } transition-colors font-medium`}
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={submitSubjects}
-                                className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:shadow-lg transition-all font-medium"
+                                className={`px-6 py-2 rounded-lg ${
+                                    darkMode 
+                                        ? "bg-gradient-to-r from-blue-700 to-blue-900" 
+                                        : "bg-gradient-to-r from-blue-500 to-blue-700"
+                                } text-white hover:shadow-lg transition-all font-medium`}
                             >
                                 Save Changes
                             </button>

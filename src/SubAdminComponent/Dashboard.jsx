@@ -75,7 +75,7 @@ export default function SubAdminDashboard() {
         } ${
           isEndDrawerOpen ? 'mr-60' : 'mr-0'
         }`}>
-          <div className={`h-full w-full p-4 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+          <div className={` w-full  ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
             <Outlet />
           </div>
         </div>

@@ -1,6 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import AuthContext from "../../Context/AuthContext";
+
 
 const FileUploadField = ({ label, name, required, accept = ".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.bmp,.webp", value = '', onChange }) => {
+    const { darkMode } = useContext(AuthContext);
     const [fileName, setFileName] = useState('');
     const [filePreview, setFilePreview] = useState(null);
     const [fileType, setFileType] = useState('');
@@ -105,7 +108,7 @@ const FileUploadField = ({ label, name, required, accept = ".pdf,.doc,.docx,.jpg
             );
         } else {
             return (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className={`h-8 w-8 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
             );
@@ -114,11 +117,14 @@ const FileUploadField = ({ label, name, required, accept = ".pdf,.doc,.docx,.jpg
 
     return (
         <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className={`block text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'} mb-1`}>
                 {label} {required && <span className="text-red-500">*</span>}
             </label>
             <div
-                className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer hover:bg-gray-50"
+                className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 ${darkMode 
+                    ? 'border-gray-600 hover:bg-gray-800' 
+                    : 'border-gray-300 hover:bg-gray-50'} 
+                    border-dashed rounded-md cursor-pointer ${darkMode ? 'bg-gray-900' : 'bg-white'}`}
                 onClick={handleClick}
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
@@ -126,7 +132,7 @@ const FileUploadField = ({ label, name, required, accept = ".pdf,.doc,.docx,.jpg
                 {!fileName ? (
                     <div className="space-y-1 text-center">
                         <svg
-                            className="mx-auto h-12 w-12 text-gray-400"
+                            className={`mx-auto h-12 w-12 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}
                             stroke="currentColor"
                             fill="none"
                             viewBox="0 0 48 48"
@@ -139,7 +145,7 @@ const FileUploadField = ({ label, name, required, accept = ".pdf,.doc,.docx,.jpg
                                 strokeLinejoin="round"
                             />
                         </svg>
-                        <div className="flex text-sm text-gray-600">
+                        <div className={`flex text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                             <span>Drop a file here or click to browse</span>
                             <input
                                 id={name}
@@ -152,7 +158,7 @@ const FileUploadField = ({ label, name, required, accept = ".pdf,.doc,.docx,.jpg
                                 accept={accept}
                             />
                         </div>
-                        <p className="text-xs text-gray-500">PDF, DOC, DOCX up to 10MB</p>
+                        <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>PDF, DOC, DOCX up to 10MB</p>
                     </div>
                 ) : (
                     <div className="w-full">
@@ -174,7 +180,7 @@ const FileUploadField = ({ label, name, required, accept = ".pdf,.doc,.docx,.jpg
                                     <img
                                         src={filePreview}
                                         alt={fileName}
-                                        className="max-h-64 mx-auto object-contain rounded border border-gray-200"
+                                        className={`max-h-64 mx-auto object-contain rounded ${darkMode ? 'border-gray-700' : 'border-gray-200'} border`}
                                     />
                                 </div>
                             ) : (
@@ -182,7 +188,7 @@ const FileUploadField = ({ label, name, required, accept = ".pdf,.doc,.docx,.jpg
                                     {renderFileIcon()}
                                 </div>
                             )}
-                            <span className="text-sm text-gray-700 break-all text-center">
+                            <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'} break-all text-center`}>
                                 {fileName}
                             </span>
                         </div>
