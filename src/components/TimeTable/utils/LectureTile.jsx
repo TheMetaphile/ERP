@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FaUtensils, FaBook, FaCalendarAlt } from 'react-icons/fa';
 
 
-export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, day, data }) {
+export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, day, data, subjects }) {
   const [lectures, setLectures] = useState([]);
 
   // console.log(lectureStructure, data, day, numberOfLeacturesBeforeLunch, '11111')
@@ -35,7 +35,7 @@ export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, day,
             {numberOfLeacturesBeforeLunch && index === numberOfLeacturesBeforeLunch && (
               <LunchBreakColumn key={`lunch-${index}`} />
             )}
-            <LectureColumn key={index} lecture={lecture} />
+            <LectureColumn key={index} lecture={lecture} subjects={subjects}/>
           </>
         ))}
       </motion.tr>
@@ -44,27 +44,40 @@ export default function LeactureTile({ index, numberOfLeacturesBeforeLunch, day,
   );
 }
 
-const LectureColumn = ({ lecture }) => (
-  <td className="border border-gray-300 px-4 py-3">
-    <div className="flex items-center">
-      <FaBook className="text-blue-600 mr-2" />
-      <span>{lecture.subject}</span>
-      {lecture.merge && lecture.mergeWithSection && (
-        <span className="ml-2 text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">
-          Merge: {lecture.mergeWithSection}
-        </span>
-      )}
-    </div>
+const LectureColumn = ({ lecture, subjects }) => {
+  const showOptionalSubject =
+    lecture.optional &&
+    lecture.optionalSubjects.length > 0 &&
+    subjects.includes(lecture.optionalSubjects[0].subject);
 
-    <div className="flex items-center mt-1">
-      {lecture.teacher?.profileLink && (
-        <img src={lecture.teacher.profileLink} alt={lecture.teacher.name} className="w-8 h-8 rounded-full mr-2" />
-      )}
-      <span className="text-sm">{lecture.teacher?.name || "Unknown Teacher"}</span>
-    </div>
+  const displayLecture = showOptionalSubject ? lecture.optionalSubjects[0] : lecture;
 
-  </td>
-);
+  return (
+    <td className="border border-gray-300 px-4 py-3">
+      <div className="flex items-center">
+        <FaBook className="text-blue-600 mr-2" />
+        <span>{displayLecture.subject}</span>
+        {displayLecture.mergeWithSection && (
+          <span className="ml-2 text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">
+            Merge: {displayLecture.mergeWithSection}
+          </span>
+        )}
+      </div>
+
+      <div className="flex items-center mt-1">
+        {displayLecture.teacher?.profileLink && (
+          <img
+            src={displayLecture.teacher.profileLink}
+            alt={displayLecture.teacher.name}
+            className="w-8 h-8 rounded-full mr-2"
+          />
+        )}
+        <span className="text-sm">{displayLecture.teacher?.name || "Unknown Teacher"}</span>
+      </div>
+    </td>
+  );
+};
+
 
 const LunchBreakColumn = () => (
   <td className="border border-gray-300 px-4 py-3 bg-yellow-100 text-yellow-800 text-center font-bold">

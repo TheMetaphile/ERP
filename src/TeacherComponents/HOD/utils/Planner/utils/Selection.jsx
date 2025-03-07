@@ -12,6 +12,7 @@ function Selection({ setClass, setSection, setSubject }) {
     const [selectedSection, setSelectedSection] = useState('');
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
+    console.log(authState)
 
     const handleClassChange = (event) => {
         setSelectedClass(event.target.value);

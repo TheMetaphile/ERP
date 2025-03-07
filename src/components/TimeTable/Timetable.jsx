@@ -32,8 +32,8 @@ export default function TimeTable() {
     }, [ClassRange]);
 
     const handleTimeFetch = async () => {
-        console.log(authState.accessToken)
-        console.log('classaaa', ClassRange)
+        // console.log(authState.accessToken)
+        // console.log('classaaa', ClassRange)
         try {
             const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
                 classRange: ClassRange,
@@ -45,10 +45,10 @@ export default function TimeTable() {
                 });
 
             if (response.status === 200) {
-                console.log('response from fetch', response.data);
+                // console.log('response from fetch', response.data);
                 if (response.data) {
                     setTimetableStructure(response.data);
-                    console.log('ressssss', response.data)
+                    // console.log('ressssss', response.data)
                 } else {
                     // setShowTimetable(false);
                 }
@@ -123,6 +123,7 @@ export default function TimeTable() {
                                     data={data}
                                     index={index}
                                     key={index}
+                                    subjects={authState.subjects}
                                 />
                             ))
                         )}
