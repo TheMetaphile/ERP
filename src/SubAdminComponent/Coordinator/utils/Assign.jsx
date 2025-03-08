@@ -22,7 +22,7 @@ function Assign() {
         try {
             const response = await axios.get(`${BASE_URL}/co_ordinator/fetch`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
 
@@ -51,7 +51,7 @@ function Assign() {
 
     useEffect(() => {
         fetchCoordinator();
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     return (
         <div className="flex mobile:max-tablet:flex-col w-full px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar">

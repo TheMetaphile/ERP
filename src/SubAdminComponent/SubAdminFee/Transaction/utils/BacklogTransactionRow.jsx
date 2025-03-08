@@ -85,7 +85,7 @@ const BacklogTransactionRow = ({ student, session, data }) => {
             maxBodyLength: Infinity,
             url: `${BASE_URL}/fee/update/transaction/${student._id}`,
             headers: {
-                'Authorization': `Bearer ${authState.accessToken}`
+                'Authorization': `Bearer ${authState?.accessToken}`
             },
             data: {
                 reason: reason,

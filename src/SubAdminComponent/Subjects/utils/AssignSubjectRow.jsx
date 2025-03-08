@@ -28,7 +28,7 @@ export default function AssignSubjectRow({ Class, selectedStream }) {
     const fetchSections = async () => {
         try {
             const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: Class,
             });
             const sectionsdetail = response.data.sections;

@@ -25,7 +25,7 @@ const SemesterPendingFee = ({ selectedClass, selectedSection, selectedMonth, sel
       maxBodyLength: Infinity,
       url: `${BASE_URL}/fee/fetch/pendingFeeReport/${selectedClass}/${selectedSection}/${selectedSession}/${selectedMonth}`,
       headers: {
-        'Authorization': `Bearer ${authState.accessToken}`
+        'Authorization': `Bearer ${authState?.accessToken}`
       },
       data: ''
     };

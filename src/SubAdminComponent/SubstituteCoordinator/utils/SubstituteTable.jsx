@@ -19,7 +19,7 @@ export default function SubstituteTable() {
             maxBodyLength: Infinity,
             url: `${BASE_URL}/CoordinatorSubstitute/fetch/checkLeave?date=${formattedDate}&session=${session}`,
             headers: {
-                'Authorization': `Bearer ${authState.accessToken}`
+                'Authorization': `Bearer ${authState?.accessToken}`
             }
         };
 

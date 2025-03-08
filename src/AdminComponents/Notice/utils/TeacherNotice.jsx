@@ -74,7 +74,7 @@ const TeacherNotice = () => {
     try {
       const response = await axios.get(`${BASE_URL}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${type}`, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       });
       const notice = response.data.notices.length;
@@ -103,7 +103,7 @@ const TeacherNotice = () => {
     try {
       const response = await axios.get(`${BASE_URL}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${'For Students'}`, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       });
       console.log("API response after update:", response.data);
@@ -119,7 +119,7 @@ const TeacherNotice = () => {
     try {
       await axios.delete(`${BASE_URL}/notice/delete?id=${data[index]._id}&session=${session}`, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       });
       toast.success('Deleted Successfully');

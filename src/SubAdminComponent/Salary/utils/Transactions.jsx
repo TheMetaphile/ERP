@@ -83,7 +83,7 @@ const Transactions = ({ transactions }) => {
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/allTransactions?start=${start}&end=${end}&status=${status}&session=${selectedSession}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             if (response.status === 200) {

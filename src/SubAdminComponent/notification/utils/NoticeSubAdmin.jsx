@@ -41,7 +41,7 @@ function NoticeSubAdmin() {
         try {
             const response = await axios.get(`${BASE_URL}/notice/fetch/subAdmin?start=${start}&limit=${end}&session=${selectedSession}&type=for`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
+                    Authorization: `Bearer ${authState?.accessToken}`,
                 }
             });
 

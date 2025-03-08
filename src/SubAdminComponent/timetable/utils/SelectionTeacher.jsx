@@ -55,7 +55,7 @@ function SelectionTeacher({ onSearch, onEmailChange, onNameChange }) {
     const handler = setTimeout(async () => {
       try {
         const response = await axios.post(`${BASE_URL}/search/teacher`, {
-          accessToken: authState.accessToken,
+          accessToken: authState?.accessToken,
           searchString: email,
           start: 0,
           end: 30
@@ -77,7 +77,7 @@ function SelectionTeacher({ onSearch, onEmailChange, onNameChange }) {
     }, 1000);
 
     return () => clearTimeout(handler);
-  }, [email, authState.accessToken]);
+  }, [email, authState?.accessToken]);
 
 
   return (

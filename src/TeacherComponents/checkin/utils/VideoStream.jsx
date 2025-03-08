@@ -143,7 +143,7 @@ function VideoStream({ onClose, onCapture }) {
     // try {
     //   const response = await axios.post(`${BASE_URL}/teacherAttendance/checkin`, {
     //     headers: {
-    //       Authorisation: `Bearer ${authState.accessToken}`
+    //       Authorisation: `Bearer ${authState?.accessToken}`
     //     },
     //     date: formattedDate,
     //     time: timeInMillis

@@ -53,7 +53,7 @@ export default function AssignTeacherRow({ Class }) {
                 const searchTeacher = async () => {
                     try {
                         const response = await axios.post(`${BASE_URL}/search/teacher`, {
-                            accessToken: authState.accessToken,
+                            accessToken: authState?.accessToken,
                             searchString: temp,
                             start: 0,
                             end: 30
@@ -80,7 +80,7 @@ export default function AssignTeacherRow({ Class }) {
         } else {
             setShowSuggestions(false);
         }
-    }, [temp, authState.accessToken])
+    }, [temp, authState?.accessToken])
 
 
     const getNextAsciiValues = (inputString) => {
@@ -92,7 +92,7 @@ export default function AssignTeacherRow({ Class }) {
         try {
             if (sectionsDetails.length <= 0) {
                 const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-                    accessToken: authState.accessToken,
+                    accessToken: authState?.accessToken,
                     class: Class,
                 });
                 const sectionsdetail = response.data.sections;
@@ -119,7 +119,7 @@ export default function AssignTeacherRow({ Class }) {
             console.log(newData)
             if (email) {
                 const response = await axios.post(`${BASE_URL}/classTeacher/assign`, {
-                    accessToken: authState.accessToken,
+                    accessToken: authState?.accessToken,
                     class: Class,
                     section: newSection,
                     teacherEmail: email
@@ -157,7 +157,7 @@ export default function AssignTeacherRow({ Class }) {
         try {
             if (email) {
                 const response = await axios.post(`${BASE_URL}/classTeacher/assign`, {
-                    accessToken: authState.accessToken,
+                    accessToken: authState?.accessToken,
                     class: Class,
                     section: sectionsDetails[index].section,
                     teacherEmail: email
@@ -195,7 +195,7 @@ export default function AssignTeacherRow({ Class }) {
         try {
             const response = await axios.delete(`${BASE_URL}/classTeacher/delete?class=${Class}&section=${section}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
+                    Authorization: `Bearer ${authState?.accessToken}`,
                 }
             });
 

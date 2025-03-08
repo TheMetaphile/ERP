@@ -107,7 +107,7 @@ export default function AnsweredTile({ data, Class }) {
         try {
             const response = await axios.delete(`${BASE_URL}/doubts/delete?class=${Class}&doubtId=${id}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
 

@@ -5,7 +5,7 @@ import AuthContext from '../Context/AuthContext';
 const PrivateRoutes = ({ children }) => {
     const { authState } = useContext(AuthContext);
 
-    if (!authState.accessToken) {
+    if (!authState?.accessToken) {
         return <Navigate to="/" />;
     }
 

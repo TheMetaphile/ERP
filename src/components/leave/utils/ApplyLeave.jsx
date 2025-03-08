@@ -31,7 +31,7 @@ export default function ApplyLeave({ onNewLeave }) {
                 reason
             }, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
+                    Authorization: `Bearer ${authState?.accessToken}`,
                 }
             });
             if (response.status === 200) {

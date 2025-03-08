@@ -56,7 +56,7 @@ const PendingFee = () => {
     const fetchSections = async (selectedClass) => {
         try {
             const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: selectedClass,
             });
             console.log(response.data, 'section')
@@ -75,7 +75,7 @@ const PendingFee = () => {
         try {
             const response = await axios.get(`${BASE_URL}/fee/export/Pending/${selectedClass}/${section}/${selectedSession}/${selectedMonth}`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 },
                 responseType: 'blob'
             });

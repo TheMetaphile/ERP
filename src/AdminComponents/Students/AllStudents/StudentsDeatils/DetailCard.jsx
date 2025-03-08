@@ -25,7 +25,7 @@ export default function StudentBasicDetails() {
         console.log(email)
         try {
             const response = await axios.post(`${BASE_URL}/fetchSingle/student`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 email: email
             });
             console.log("API response Single Student:", response.data);
@@ -42,13 +42,13 @@ export default function StudentBasicDetails() {
     };
 
     useEffect(() => {
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchUserData();
         } else {
             setError('No access token available');
             console.log('No access token available');
         }
-    }, [authState.accessToken, email]);
+    }, [authState?.accessToken, email]);
 
     const handleEdit = (field) => {
         setEditMode({ ...editMode, [field]: true });
@@ -62,7 +62,7 @@ export default function StudentBasicDetails() {
     const handleSave = async (field) => {
         try {
             const response = await axios.put(`${BASE_URL}/edit/student`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 email: userData.email,
                 [field]: tempData[field]
             });

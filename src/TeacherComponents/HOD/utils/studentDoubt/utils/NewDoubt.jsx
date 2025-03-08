@@ -52,7 +52,7 @@ function NewDoubt({ Class, Section, Subject }) {
         try {
             const response = await axios.get(`${BASE_URL}/doubts/fetch/teacher?class=${Class}&section=${Section}&subject=${Subject}&start=${start}&end=${end}&status=${'Pending'}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             const doubt = response.data.doubts;

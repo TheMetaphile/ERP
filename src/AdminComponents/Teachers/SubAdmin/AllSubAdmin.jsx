@@ -17,7 +17,7 @@ export default function AllSubAdmin() {
             setLoading(true);
             try {
                 const response = await axios.post(`${BASE_URL}/fetchMultiple/subAdmin`, {
-                    accessToken: authState.accessToken
+                    accessToken: authState?.accessToken
                 });
                 console.log("API response:", response.data);
                 setUserData(response.data.SubAdmins);
@@ -29,13 +29,13 @@ export default function AllSubAdmin() {
             }
         };
 
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchUserData();
         } else {
             setError('No access token available');
             setLoading(false);
         }
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
 
 

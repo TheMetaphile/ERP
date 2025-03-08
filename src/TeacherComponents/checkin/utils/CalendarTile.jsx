@@ -14,7 +14,7 @@ const CalendarTile = ( {month,year}) => {
       try {
         const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/student?month=${month}&year=${year}`, {
           headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
+            Authorization: `Bearer ${authState?.accessToken}`,
           }
         });
         setData(response.data)
@@ -27,7 +27,7 @@ const CalendarTile = ( {month,year}) => {
     };
 
     fetchStudents();
-  }, [authState.accessToken]);
+  }, [authState?.accessToken]);
   const currentDate = new Date(`${year}-${month}-01`);
   const [selectedDate, setSelectedDate] = useState(currentDate);
 

@@ -24,7 +24,7 @@ export const StructureProvider = ({ children }) => {
 
 
     const handleTimeFetch = async () => {
-        console.log(authState.accessToken);
+        console.log(authState?.accessToken);
         console.log('classRange', classRange);
         try {
             const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
@@ -32,7 +32,7 @@ export const StructureProvider = ({ children }) => {
             },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     },
                 });
 

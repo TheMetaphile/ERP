@@ -5,7 +5,7 @@ import AuthContext from '../Context/AuthContext';
 const FetchDataComponent = () => {
 
   const { authState } = useContext(AuthContext);
-  const token = authState.accessToken;
+  const token = authState?.accessToken;
 
   const fetchData1 = async () => {
     try {

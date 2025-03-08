@@ -102,7 +102,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
         }));
 
         const data = {
-            accessToken: authState.accessToken,
+            accessToken: authState?.accessToken,
             class: Class,
             section: section,
             subject: subject,
@@ -115,7 +115,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
         try {
             const response = await axios.post(`${BASE_URL}/lessonPlan/create`, data, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             console.log("API response:", response.data);
@@ -140,7 +140,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
             try {
                 const response = await axios.get(`${BASE_URL}/lessonPlan/fetch/coordinator?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${date}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 });
                 console.log("API response:", response.data);
@@ -157,7 +157,7 @@ const WeekTable = ({ selectedTab, Class, section, subject }) => {
             setDetails([]);
             fetchPlan();
         }
-    }, [authState.accessToken, Class, section, subject, session, date]);
+    }, [authState?.accessToken, Class, section, subject, session, date]);
 
     console.log(nextWeekDays)
     const renderTableRows = (detail, editable = false) => {

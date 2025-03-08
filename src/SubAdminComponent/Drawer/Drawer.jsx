@@ -10,7 +10,7 @@ export default function SubadminDrawer({ isOpen }) {
     const [active, setActive] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     // const [darkMode, setDarkMode] = useState(false);
-    const { authState , darkMode, toggleDarkMode} = useContext(AuthContext);
+    const { authState, darkMode, toggleDarkMode } = useContext(AuthContext);
     const [filteredMenuItems, setFilteredMenuItems] = useState([]);
 
     useEffect(() => {
@@ -52,7 +52,7 @@ export default function SubadminDrawer({ isOpen }) {
     };
 
     const firstLetterOfName = authState?.userDetails?.name
-        ? authState.userDetails.name.charAt(0).toUpperCase()
+        ? authState?.userDetails?.name.charAt(0).toUpperCase()
         : "A";
 
     return (

@@ -40,7 +40,7 @@ export default function StudentRegister() {
     const [formData, setFormData] = useState(
         {
             academicYear: currentYear,
-            accessToken: authState.accessToken,
+            accessToken: authState?.accessToken,
         }
     );
 
@@ -83,7 +83,7 @@ export default function StudentRegister() {
     const fetchSections = async (selectedClass) => {
         try {
             const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: selectedClass,
             });
 
@@ -153,7 +153,7 @@ export default function StudentRegister() {
     const handleReset = () => {
         setFormData({
             academicYear: currentYear,
-            accessToken: authState.accessToken,
+            accessToken: authState?.accessToken,
         });
         setExtraFormData([]);
     };
@@ -225,7 +225,7 @@ export default function StudentRegister() {
         try {
             const response = await axios.get(`${BASE_URL}/registrationFields/fetch/Student`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
             if (response.status === 200) {
@@ -284,7 +284,7 @@ export default function StudentRegister() {
             }, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
 

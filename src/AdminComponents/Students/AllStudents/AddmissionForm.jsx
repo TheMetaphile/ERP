@@ -54,7 +54,7 @@ export default function AddmissionForm() {
             category: '',
             nationality: '',
             stream: '',
-            accessToken: authState.accessToken
+            accessToken: authState?.accessToken
         }
     );
     const handleChange = (e) => {
@@ -154,7 +154,7 @@ export default function AddmissionForm() {
             const promises = data.map(userData => {
                 userData.password = userData.aadhaarNumber;
                 userData.session = session;
-                userData.accessToken = authState.accessToken;
+                userData.accessToken = authState?.accessToken;
                 console.log(userData);
                 if (!userData.name) {
                     return;

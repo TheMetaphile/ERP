@@ -48,7 +48,7 @@ function Selection({ setClass, setSection, setSubject }) {
 
     const fetchSections = async () => {
         let data = JSON.stringify({
-            "accessToken": authState.accessToken,
+            "accessToken": authState?.accessToken,
             "class": selectedClass
         });
 
@@ -80,7 +80,7 @@ function Selection({ setClass, setSection, setSubject }) {
             maxBodyLength: Infinity,
             url: `${BASE_URL}/fetch/subjects?section=${selectedSection}&class=${selectedClass}`,
             headers: {
-                'Authorization': `Bearer ${authState.accessToken}`
+                'Authorization': `Bearer ${authState?.accessToken}`
             },
             data: data
         };

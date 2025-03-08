@@ -64,7 +64,7 @@ export default function MyDoubts() {
             },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 }
             );
@@ -117,7 +117,7 @@ export default function MyDoubts() {
             console.log('kkk', selectedSubject, params)
             const response = await axios.get(`${BASE_URL}/doubts/fetch/student?${params}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             const doubts = response.data.doubts;
@@ -246,7 +246,7 @@ export default function MyDoubts() {
                                     className="shadow-md border border-grey-300 rounded-lg p-2 w-full mr-2 mb-2"
                                     onChange={handleModalSubject}
                                 >
-                                    {authState.subjects.map(
+                                    {authState?.subjects.map(
                                         (subject, index) => (
                                             <option key={index} value={subject}>
                                                 {subject}

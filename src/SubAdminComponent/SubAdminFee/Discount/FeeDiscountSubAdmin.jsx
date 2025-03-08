@@ -44,7 +44,7 @@ function FeeDiscountSubAdmin() {
         try {
             const response = await axios.get(`${BASE_URL}/fee/apply/fetch/discount?end=${end}&start=${start}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
 
@@ -70,7 +70,7 @@ function FeeDiscountSubAdmin() {
         try {
             const response = await axios.delete(`${BASE_URL}/fee/delete/discount?id=${id}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
 

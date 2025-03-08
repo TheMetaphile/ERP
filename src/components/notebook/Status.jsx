@@ -27,7 +27,7 @@ const Status = () => {
             try {
                 const response = await axios.get(`${BASE_URL}/notebook/fetch/student?subject=${selectedSubject}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 });
                 console.log('fetch', response.data);
@@ -40,7 +40,7 @@ const Status = () => {
             }
         };
         fetchData();
-    }, [authState.accessToken, selectedSubject]);
+    }, [authState?.accessToken, selectedSubject]);
 
 
     return (

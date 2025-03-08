@@ -29,7 +29,7 @@ const BacklogTransaction = () => {
       maxBodyLength: Infinity,
       url: `${BASE_URL}/fee/fetch/allTransactions?session=${selectedSession}&start=${start}&end=${end}&startDate=${startDate}&endDate=${endDate}&search=${searchMain}`,
       headers: {
-        'Authorization': `Bearer ${authState.accessToken}`
+        'Authorization': `Bearer ${authState?.accessToken}`
       },
       data: ''
     };

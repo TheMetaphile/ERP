@@ -58,7 +58,7 @@ function StudentLeave() {
             const formattedDate = `${today.getFullYear()}-${month}-${today.getDate()}`;
             const response = await axios.get(`${BASE_URL}/leave/fetch/classTeacher?start=${start}&end=${end}&status=${status}&date=${formattedDate}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
 

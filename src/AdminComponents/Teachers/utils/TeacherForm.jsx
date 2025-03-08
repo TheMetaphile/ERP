@@ -32,7 +32,7 @@ export default function TeacherForm() {
             DOB: '',
             permanentAddress: '',
             salary: '',
-            accessToken: authState.accessToken
+            accessToken: authState?.accessToken
         }
     );
     const handleChange = (e) => {

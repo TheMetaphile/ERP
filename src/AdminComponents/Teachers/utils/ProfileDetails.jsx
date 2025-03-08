@@ -25,7 +25,7 @@ export default function ProfileDetails() {
     const fetchUserData = async () => {
         try {
             const response = await axios.post(`${BASE_URL}/fetchSingle/teacher`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 employeeId
             });
             console.log("API response Single teacher:", response.data);
@@ -43,13 +43,13 @@ export default function ProfileDetails() {
     };
     useEffect(() => {
 
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchUserData();
         } else {
             setError('No access token available');
             console.log('No access token available');
         }
-    }, [authState.accessToken, employeeId]);
+    }, [authState?.accessToken, employeeId]);
 
     const handleEdit = (field) => {
         setEditMode({ ...editMode, [field]: true });
@@ -63,7 +63,7 @@ export default function ProfileDetails() {
     const handleSave = async (field) => {
         try {
             const response = await axios.put(`${BASE_URL}/edit/teacher`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 email: userData.email,
                 [field]: tempData[field]
             });

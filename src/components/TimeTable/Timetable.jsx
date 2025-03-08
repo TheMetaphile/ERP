@@ -32,7 +32,7 @@ export default function TimeTable() {
     }, [ClassRange]);
 
     const handleTimeFetch = async () => {
-        // console.log(authState.accessToken)
+        // console.log(authState?.accessToken)
         // console.log('classaaa', ClassRange)
         try {
             const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
@@ -40,7 +40,7 @@ export default function TimeTable() {
             },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     },
                 });
 
@@ -76,7 +76,7 @@ export default function TimeTable() {
             },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     },
                 });
 
@@ -123,7 +123,7 @@ export default function TimeTable() {
                                     data={data}
                                     index={index}
                                     key={index}
-                                    subjects={authState.subjects}
+                                    subjects={authState?.subjects}
                                 />
                             ))
                         )}

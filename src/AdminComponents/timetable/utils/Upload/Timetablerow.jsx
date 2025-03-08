@@ -59,7 +59,7 @@ export default function TimetableRow({
     if (!searchString) return [];
     try {
       const response = await axios.post(`${BASE_URL}/search/teacher`, {
-        accessToken: authState.accessToken,
+        accessToken: authState?.accessToken,
         searchString,
         start: 0,
         end: 30,
@@ -73,7 +73,7 @@ export default function TimetableRow({
       console.error("Error searching for teachers:", error);
       return [];
     }
-  }, [authState.accessToken]);
+  }, [authState?.accessToken]);
 
   useEffect(() => {
     const handler = setTimeout(async () => {
@@ -117,7 +117,7 @@ export default function TimetableRow({
         url: `${BASE_URL}/timetable/fetch/checkAvailability`,
         params: { lecture, day, email },
         headers: {
-          'Authorization': `Bearer ${authState.accessToken}`,
+          'Authorization': `Bearer ${authState?.accessToken}`,
           'Content-Type': 'application/json',
         }
       };

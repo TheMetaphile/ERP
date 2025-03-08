@@ -73,7 +73,7 @@ function NewLeave({ onClose, onNewLeave }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${authState.accessToken}`
+            Authorization: `Bearer ${authState?.accessToken}`
           }
         }
       )

@@ -80,7 +80,7 @@ export default function TimetableRow({
 
     try {
       const response = await axios.post(`${BASE_URL}/search/teacher`, {
-        accessToken: authState.accessToken,
+        accessToken: authState?.accessToken,
         searchString: searchText,
         start: 0,
         end: 30,
@@ -97,7 +97,7 @@ export default function TimetableRow({
       console.error("Teacher search error:", error);
       return [];
     }
-  }, [authState.accessToken]);
+  }, [authState?.accessToken]);
 
   const handleOptionalSubjectUpdate = (lectureNo, index, field, value) => {
     handleSchedule(prev => {

@@ -26,7 +26,7 @@ export default function Student() {
             try {
                 const response = await axios.get(`${BASE_URL}/birthday/student?date=${getFormattedDate()}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 });
 
@@ -40,7 +40,7 @@ export default function Student() {
             }
         }
         fetchBirthday();
-    }, [authState.accessToken])
+    }, [authState?.accessToken])
     
     return (
         <div className=''>

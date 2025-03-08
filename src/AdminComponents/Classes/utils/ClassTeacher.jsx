@@ -47,7 +47,7 @@ export default function ClassTeacher() {
         const fetchUserData = async () => {
             try {
                 const response = await axios.post(`${BASE_URL}/classTeacher/fetch/multi`, {
-                    accessToken: authState.accessToken
+                    accessToken: authState?.accessToken
                 });
                 console.log("API response:", response.data);
 
@@ -79,7 +79,7 @@ export default function ClassTeacher() {
         };
         useEffect(() => {
 
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchUserData();
         } else {
             setError('No access token available');
@@ -88,7 +88,7 @@ export default function ClassTeacher() {
                 setError('');
             }, 2000);
         }
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
 
     const filterData = () => {

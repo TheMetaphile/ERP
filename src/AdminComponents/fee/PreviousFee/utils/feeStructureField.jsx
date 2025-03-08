@@ -146,7 +146,7 @@
 //                 paymentDetails,
 //                 {
 //                     headers: {
-//                         'Authorization': `Bearer ${authState.accessToken}`
+//                         'Authorization': `Bearer ${authState?.accessToken}`
 //                     }
 //                 }
 //             );

@@ -145,7 +145,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                 paymentDetails,
                 {
                     headers: {
-                        'Authorization': `Bearer ${authState.accessToken}`
+                        'Authorization': `Bearer ${authState?.accessToken}`
                     }
                 }
             );

@@ -62,14 +62,14 @@ function ReportCardAdmin() {
   console.log('ll', Class, Section, selectedSession)
   useEffect(() => {
     fetchStudents();
-  }, [authState.accessToken, Class, Section]);
+  }, [authState?.accessToken, Class, Section]);
 
   const fetchStudents = async () => {
     setLoading(true);
     try {
       console.log(start, "-", end);
       const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
-        accessToken: authState.accessToken,
+        accessToken: authState?.accessToken,
         currentClass: Class,
         section: Section,
         end: end,

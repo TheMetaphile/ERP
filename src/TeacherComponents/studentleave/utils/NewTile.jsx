@@ -31,7 +31,7 @@ export default function NewTile({ data, setData }) {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );
@@ -83,7 +83,7 @@ export default function NewTile({ data, setData }) {
                                     <h3 className="text-lg font-semibold text-blue-700">{student.name}</h3>
                                     <div className="flex items-center text-sm text-blue-600">
                                         <FaUserGraduate className="mr-2" />
-                                        Class {authState.ClassDetails.class} {authState.ClassDetails.section}
+                                        Class {authState?.ClassDetails?.class} {authState?.ClassDetails?.section}
                                     </div>
                                 </div>
                             </div>
@@ -162,7 +162,7 @@ export default function NewTile({ data, setData }) {
                                 <h3 className="text-lg font-semibold text-green-700">{student.name}</h3>
                                 <div className="flex items-center text-sm text-green-600">
                                     <FaUserGraduate className="mr-2" />
-                                    Class {authState.ClassDetails.class} {authState.ClassDetails.section}
+                                    Class {authState?.ClassDetails?.class} {authState?.ClassDetails?.section}
                                 </div>
                             </div>
                         </div>
@@ -216,7 +216,7 @@ export default function NewTile({ data, setData }) {
                                 <h3 className="text-lg font-semibold text-red-700">{student.name}</h3>
                                 <div className="flex items-center text-sm text-red-600">
                                     <FaUserGraduate className="mr-2" />
-                                    Class {authState.ClassDetails.class} {authState.ClassDetails.section}
+                                    Class {authState?.ClassDetails?.class} {authState?.ClassDetails?.section}
                                 </div>
                             </div>
                         </div>

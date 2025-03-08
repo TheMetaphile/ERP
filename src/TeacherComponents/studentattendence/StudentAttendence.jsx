@@ -32,7 +32,7 @@ function StudentAttendance() {
         const formattedDate = `${today.getFullYear()}-${month}-${today.getDate()}`;
         const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/student/list?date=${formattedDate}&start=${start}&end=${end}`, {
           headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
+            Authorization: `Bearer ${authState?.accessToken}`,
           },
         });
 
@@ -61,7 +61,7 @@ function StudentAttendance() {
     };
 
     fetchStudents();
-  }, [authState.accessToken, start]);
+  }, [authState?.accessToken, start]);
 
 
 
@@ -121,7 +121,7 @@ function StudentAttendance() {
     }));
 
     const requestData = {
-      accessToken: authState.accessToken,
+      accessToken: authState?.accessToken,
       date: formattedDate,
       studentAttendance
     };

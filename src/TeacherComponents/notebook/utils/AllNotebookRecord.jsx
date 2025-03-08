@@ -48,7 +48,7 @@ const AllNoteBookRecord = () => {
       maxBodyLength: Infinity,
       url: `${BASE_URL}/notebook/fetch/teacher/all?class=${Class}&section=${Section}&subject=${Subject}&session=${session}&start=${start}&count=${end}`,
       headers: {
-        'Authorization': `Bearer ${authState.accessToken}`
+        'Authorization': `Bearer ${authState?.accessToken}`
       }
     };
 

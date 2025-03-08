@@ -17,7 +17,7 @@ function New() {
         try {
             const response = await axios.get(`${BASE_URL}/leave/fetch/classTeacher?start=${0}&end=${20}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             console.log("API response:", response.data);
@@ -34,13 +34,13 @@ function New() {
     };
     useEffect(() => {
 
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchUserData();
         } else {
             setError('No access token available');
             setLoading(false);
         }
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     if (loading) {
         return <Loading />;

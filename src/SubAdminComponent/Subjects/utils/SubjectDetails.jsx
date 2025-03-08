@@ -49,7 +49,7 @@ function SubjectDetails({ Class, section, selectedStream }) {
     const fetchSubject = async () => {
         try {
             const response = await axios.post(`${BASE_URL}/fetch${additionalLink}`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: Class,
                 section: section
             });
@@ -75,7 +75,7 @@ function SubjectDetails({ Class, section, selectedStream }) {
             }
 
             const response = await axios.post(`${BASE_URL}/assign${additionalLink}`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: Class,
                 section: section,
                 email: newRow.email,
@@ -116,7 +116,7 @@ function SubjectDetails({ Class, section, selectedStream }) {
                 const searchTeacher = async () => {
                     try {
                         const response = await axios.post(`${BASE_URL}/search/teacher`, {
-                            accessToken: authState.accessToken,
+                            accessToken: authState?.accessToken,
                             searchString: temp,
                             start: 0,
                             end: 30
@@ -141,7 +141,7 @@ function SubjectDetails({ Class, section, selectedStream }) {
         } else {
             setShowSuggestions(false);
         }
-    }, [temp, authState.accessToken]);
+    }, [temp, authState?.accessToken]);
 
     const handleDelete = async (index) => {
         const { email, subject } = subjectDetails[index];
@@ -149,7 +149,7 @@ function SubjectDetails({ Class, section, selectedStream }) {
         try {
             const response = await axios.delete(`${BASE_URL}/delete${additionalLink}`, {
                 data: {
-                    accessToken: authState.accessToken,
+                    accessToken: authState?.accessToken,
                     class: Class,
                     section: section,
                     subject: subject
@@ -175,7 +175,7 @@ function SubjectDetails({ Class, section, selectedStream }) {
             }, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
 

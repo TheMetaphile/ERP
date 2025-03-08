@@ -5,14 +5,14 @@ import { BASE_URL } from '../../../Config';
 
 function SubjectSelection({ onSubjectSelect }) {
   const { authState } = useContext(AuthContext);
-  const [subjects, setSubjects] = useState(authState.subjects);
+  const [subjects, setSubjects] = useState(authState?.subjects);
   const [selectedSubject, setSelectedSubject] = useState('Maths');
 
   // const fetchSubjects = async () => {
   //   try {
   //     const response = await axios.get(`${BASE_URL}/fetch/subjects?class=${authState?.userDetails?.currentClass}&section=${authState?.userDetails?.section}`, {
   //       headers: {
-  //         Authorization: `Bearer ${authState.accessToken}`,
+  //         Authorization: `Bearer ${authState?.accessToken}`,
   //       }
   //     });
 

@@ -47,10 +47,10 @@ export default function AllStudentsListSubject() {
     }, [Class, Section, bothEventsCalled]);
 
     useEffect(() => {
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchUserData();
         }
-    }, [authState.accessToken, Class, Section]);
+    }, [authState?.accessToken, Class, Section]);
 
     useEffect(() => {
         if (start !== 0) {
@@ -92,7 +92,7 @@ export default function AllStudentsListSubject() {
         try {
             console.log(start, "-", end);
             const response = await axios.post(`${BASE_URL}/allocateSubject/fetch/list/student`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 currentClass: Class,
                 section: Section,
                 end: end,

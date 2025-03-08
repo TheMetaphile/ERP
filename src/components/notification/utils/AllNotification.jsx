@@ -45,7 +45,7 @@ function AllNotification() {
         try {
             const response = await axios.get(`${BASE_URL}/notice/fetch/student?start=${start}&limit=${end}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
+                    Authorization: `Bearer ${authState?.accessToken}`,
                 }
             });
             const notice = response.data.notices.length;

@@ -57,7 +57,7 @@ export default function Progress() {
             try {
                 const response = await axios.get(`${BASE_URL}/teacherleave/fetch/stats?session=${getCurrentSession()}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 });
                 setDetails(response.data);
@@ -68,7 +68,7 @@ export default function Progress() {
             }
         };
         fetchStats();
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     return (
         <motion.div

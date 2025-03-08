@@ -15,7 +15,7 @@ const Calendar = ({ month, year }) => {
 
   useEffect(() => {
     fetchStudentAttendance();
-  }, [currentDate, authState.accessToken]);
+  }, [currentDate, authState?.accessToken]);
 
   const fetchStudentAttendance = async () => {
     setLoading(true);
@@ -26,7 +26,7 @@ const Calendar = ({ month, year }) => {
           year: currentDate.getFullYear(),
         },
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`,
+          Authorization: `Bearer ${authState?.accessToken}`,
         }
       });
       setData(response.data);

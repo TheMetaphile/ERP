@@ -31,7 +31,7 @@ function AllNoteBookRecordRow({ record, index }) {
         maxBodyLength: Infinity,
         url: `${BASE_URL}/notebook/update/remark?docId=${record._id}&session=${session}`,
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`,
+          Authorization: `Bearer ${authState?.accessToken}`,
         },
         data: { remark },
       };

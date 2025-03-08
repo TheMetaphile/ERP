@@ -17,7 +17,7 @@ export default function Table() {
     try {
       setIsLoading(true);
       const response = await axios.post(`${BASE_URL}/fetchDateSheet`, {
-        accessToken: authState.accessToken,
+        accessToken: authState?.accessToken,
         class: authState?.userDetails?.currentClass
       });
       if (response.data && response.data.dateSheet) {
@@ -36,13 +36,13 @@ export default function Table() {
   }
 
   useEffect(() => {
-    if (authState.accessToken && authState?.userDetails?.currentClass) {
+    if (authState?.accessToken && authState?.userDetails?.currentClass) {
       fetchDateSheet();
     } else {
       toast.error('No access token available');
       setIsLoading(false);
     }
-  }, [authState.accessToken, authState?.userDetails?.currentClass]);
+  }, [authState?.accessToken, authState?.userDetails?.currentClass]);
 
   const tableVariants = {
     hidden: { opacity: 0 },

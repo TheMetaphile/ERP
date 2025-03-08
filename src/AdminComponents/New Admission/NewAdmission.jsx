@@ -66,7 +66,7 @@ function NewAdmission() {
         try {
             const response = await axios.get(`${BASE_URL}/newStudents/students?class=${Class}&start=${start}&end=${end}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             console.log("API response:", response.data);
@@ -93,7 +93,7 @@ function NewAdmission() {
         try {
             const response = await axios.get(`${BASE_URL}/newStudents/stats?class=${Class}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             console.log("API response:", response.data);
@@ -113,7 +113,7 @@ function NewAdmission() {
                 {},
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );

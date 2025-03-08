@@ -90,7 +90,7 @@ const ExResult = () => {
       try {
         const response = await axios.get(`${BASE_URL}/terminate/terminatedSingle?session=${session}&id=${id}`, {
           headers: {
-            Authorization: `Bearer ${authState.accessToken}`
+            Authorization: `Bearer ${authState?.accessToken}`
           }
         });
         if (response.status === 200) {
@@ -107,7 +107,7 @@ const ExResult = () => {
       try {
         const response = await axios.get(`${BASE_URL}/result/fetch/ex-student?session=${session}&id=${id}`, {
           headers: {
-            Authorization: `Bearer ${authState.accessToken}`
+            Authorization: `Bearer ${authState?.accessToken}`
           }
         });
         if (response.status === 200) {
@@ -128,7 +128,7 @@ const ExResult = () => {
 
     }
     processAll();
-  }, [id, authState.accessToken]);
+  }, [id, authState?.accessToken]);
 
   // if (loading || profileLoading) {
   //   return <Loading />;

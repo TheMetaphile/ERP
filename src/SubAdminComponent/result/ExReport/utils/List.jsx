@@ -70,7 +70,7 @@ const List = () => {
         try {
             const response = await axios.get(`${BASE_URL}/terminate/terminatedStudents?Class=${Class}&session=${selectedSession}&start=${start}&end=${end}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             if (response.status === 200) {

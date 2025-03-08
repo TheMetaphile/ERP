@@ -55,7 +55,7 @@ export default function Teacher() {
         try {
             const response = await axios.get(`${BASE_URL}/notice/fetch/teacher?start=${start}&limit=${end}&session=${getCurrentSession()}&type=${'for'}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
+                    Authorization: `Bearer ${authState?.accessToken}`,
                 }
             });
 

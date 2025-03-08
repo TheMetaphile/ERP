@@ -25,7 +25,7 @@ export default function SubjectHomeWork() {
             try {
                 const response = await axios.get(`${BASE_URL}/homework/fetch/student?class=${authState?.userDetails?.currentClass}&month=${new Date().getMonth() + 1}&year=${authState?.userDetails?.academicYear}&section=${authState?.userDetails?.section}&subject=${name}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 });
 
@@ -40,7 +40,7 @@ export default function SubjectHomeWork() {
         };
 
         fetchHomework();
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     const options = {
         maintainAspectRatio: false,

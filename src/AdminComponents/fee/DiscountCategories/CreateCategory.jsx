@@ -22,7 +22,7 @@ export default function () {
             try {
                 const response = await axios.get(`${BASE_URL}/fee/fetch/discountCategory`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     },
                 });
                 setDiscounts(response.data.discounts);
@@ -32,16 +32,16 @@ export default function () {
             }
         };
 
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchDiscounts();
         }
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     const handleDeleteDiscount = async (discountId) => {
         try {
             await axios.delete(`${BASE_URL}/fee/delete/discountCategory/${discountId}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
+                    Authorization: `Bearer ${authState?.accessToken}`,
                 },
             });
 

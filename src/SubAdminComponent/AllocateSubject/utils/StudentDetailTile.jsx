@@ -31,7 +31,7 @@ export default function StudentDetailTile({ userData }) {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     },
                 }
             );
@@ -71,7 +71,7 @@ export default function StudentDetailTile({ userData }) {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     },
                 }
             );

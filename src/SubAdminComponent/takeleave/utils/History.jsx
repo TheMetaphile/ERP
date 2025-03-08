@@ -18,12 +18,12 @@ function History({ additionalData }) {
     const [allDataFetched, setAllDataFetched] = useState(false);
 
     useEffect(() => {
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             setDetails(prevState => [...additionalData, ...prevState]);
         } else {
             toast.error('No access token available');
         }
-    }, [authState.accessToken, additionalData]);
+    }, [authState?.accessToken, additionalData]);
 
     function getCurrentSession() {
         const now = new Date();
@@ -40,7 +40,7 @@ function History({ additionalData }) {
     useEffect(() => {
         setLoading(true);
         fetchLeaves();
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     const handleViewMore = () => {
         setStart(prevStart => prevStart + end);
@@ -59,7 +59,7 @@ function History({ additionalData }) {
         try {
             const response = await axios.get(`${BASE_URL}/teacherleave/fetch/teacher?start=${start}&end=${end}&session=${session}`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
 

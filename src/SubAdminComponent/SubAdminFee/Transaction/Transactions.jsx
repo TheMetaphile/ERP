@@ -118,7 +118,7 @@ const Transactions = () => {
 
 
         const requestData =  {
-            token: authState.accessToken,
+            token: authState?.accessToken,
             studentID: selectedStudent._id,
             amount: amount,
             date: datee,
@@ -142,7 +142,7 @@ const Transactions = () => {
                 requestData,
                 {
                     headers: {
-                        'Authorization': `Bearer ${authState.accessToken}`
+                        'Authorization': `Bearer ${authState?.accessToken}`
                     }
                 });
             toast.success("Transaction added Successfully");
@@ -164,7 +164,7 @@ const Transactions = () => {
         try {
 
             const response = await axios.post(`${BASE_URL}/search/student`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 searchString: value,
                 start: 0,
                 end: 30
@@ -203,7 +203,7 @@ const Transactions = () => {
         try {
             await axios.get(`${BASE_URL}/fee/export/Transaction?session=${selectedSession}&startDate=${startDate}&endDate=${endDate}`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 },
                 responseType: 'blob'
             })

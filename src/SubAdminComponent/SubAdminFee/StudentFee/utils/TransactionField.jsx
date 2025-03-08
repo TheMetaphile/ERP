@@ -213,7 +213,7 @@ export default function TransactionField({ data, selectedStudent, setData }) {
     try {
       const response = await axios.delete(`${BASE_URL}/fee/delete/discount?id=${id}`, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       });
 
@@ -249,7 +249,7 @@ export default function TransactionField({ data, selectedStudent, setData }) {
       maxBodyLength: Infinity,
       url: `${BASE_URL}/fee/delete/transaction/particular/${stud._id}/${!stud.flag}`,
       headers: {
-        'Authorization': `Bearer ${authState.accessToken}`
+        'Authorization': `Bearer ${authState?.accessToken}`
       },
       data: {
         reason: reason,

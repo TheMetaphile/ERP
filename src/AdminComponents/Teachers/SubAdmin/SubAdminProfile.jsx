@@ -17,7 +17,7 @@ const SubAdminProfile = () => {
         const fetchSubAdminDetails = async () => {
             try {
                 const response = await axios.post(`${BASE_URL}/fetchSingle/subAdmin/${id}`, {
-                    accessToken: authState.accessToken,
+                    accessToken: authState?.accessToken,
                 });
 
                 setsubAdmin(response.data.SubAdminDetails[0]);
@@ -39,7 +39,7 @@ const SubAdminProfile = () => {
         try {
             const payload = {
                 _id: id,
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 name: editedsubAdmin.name,
                 phoneNumber: editedsubAdmin.phoneNumber,
                 bloodGroup: editedsubAdmin.bloodGroup,
@@ -54,7 +54,7 @@ const SubAdminProfile = () => {
                 method: 'put',
                 url: `${BASE_URL}/edit/subAdmin`,
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`,
+                    'Authorization': `Bearer ${authState?.accessToken}`,
                     'Content-Type': 'application/json'
                 },
                 data: payload

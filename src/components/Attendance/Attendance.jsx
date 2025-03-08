@@ -77,7 +77,7 @@ export default function Attendance() {
       try {
         const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/student/stats?month=${selectedMonth}&year=${selectedYear}`, {
           headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
+            Authorization: `Bearer ${authState?.accessToken}`,
           }
         });
         setData(response.data)
@@ -90,7 +90,7 @@ export default function Attendance() {
     };
 
     fetchStudents();
-  }, [authState.accessToken, selectedMonth, selectedYear]);
+  }, [authState?.accessToken, selectedMonth, selectedYear]);
   return (
     <div className=" flex flex-col w-full overflow-y-auto items-start px-2 mb-1 pb-4 no-scrollbar mt-2">
       <div className="flex mobile:max-tablet:flex-col justify-between w-full mb-2 gap-2 mobile:max-tablet:mt-2">

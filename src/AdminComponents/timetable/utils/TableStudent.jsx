@@ -52,7 +52,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
             };
 
             const payload = {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: selectClass,
                 section: selectedSection,
                 day: dayStudent,
@@ -101,7 +101,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
         }
         try {
             const response = await axios.post(`${BASE_URL}/search/teacher`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 searchString,
                 start: 0,
                 end: 30,
@@ -116,7 +116,7 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
             console.error("Error searching for teachers:", error);
             setSuggestions([]);
         }
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     const handleSuggestionClick = (suggestion) => {
         setTeacherInput(suggestion.name);

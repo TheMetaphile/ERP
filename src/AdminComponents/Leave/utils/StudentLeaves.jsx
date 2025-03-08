@@ -59,7 +59,7 @@ export default function StudentLeaves() {
     try {
       const response = await axios.get(`${BASE_URL}/leave/fetch/admin?start=${start}&end=${end}&status=${status}`, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       }
       );

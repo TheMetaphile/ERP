@@ -22,7 +22,7 @@ export default function AllTeachers({ additionalDataAdmin, onNew }) {
             maxBodyLength: Infinity,
             url: `${BASE_URL}/admins/NonAdmin?branch=${authState?.userDetails?.branch}`,
             headers: {
-                'Authorization': `Bearer ${authState.accessToken}`
+                'Authorization': `Bearer ${authState?.accessToken}`
             }
         };
 
@@ -47,7 +47,7 @@ export default function AllTeachers({ additionalDataAdmin, onNew }) {
             maxBodyLength: Infinity,
             url: `${BASE_URL}/admins/add-admin`,
             headers: {
-                'Authorization': `Bearer ${authState.accessToken}`,
+                'Authorization': `Bearer ${authState?.accessToken}`,
                 'Content-Type': 'application/json'
             },
             data: {

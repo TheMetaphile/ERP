@@ -65,7 +65,7 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
             try {
                 const response = await axios.get(`${BASE_URL}/lessonPlan/fetch/coordinator?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${nextWeekFormattedDate}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 });
                 console.log("API response:", response.data);
@@ -100,7 +100,7 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
             alert('Please fill status');
         }
         const data = {
-            accessToken: authState.accessToken,
+            accessToken: authState?.accessToken,
             id: id,
             status: status,
             remark: remark,
@@ -113,7 +113,7 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
                 null,
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );

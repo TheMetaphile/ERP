@@ -30,7 +30,7 @@ function GlobalDiscount() {
         try {
             setLoading(true);
             const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: selectedClass,
             });
             if (response.status === 200) {
@@ -101,7 +101,7 @@ function GlobalDiscount() {
                 session
             }, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
+                    Authorization: `Bearer ${authState?.accessToken}`,
                 },
             });
             if (response.status === 200) {

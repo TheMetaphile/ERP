@@ -62,7 +62,7 @@ export default function AllStudentsList() {
         try {
             console.log(start, "-", end);
             const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 currentClass: Class,
                 section: Section,
                 rollNumber: rollNumber,
@@ -104,7 +104,7 @@ export default function AllStudentsList() {
     };
 
     useEffect(() => {
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchUserData();
         } else {
             setError('No access token available');
@@ -113,7 +113,7 @@ export default function AllStudentsList() {
                 setError('');
             }, 2000);
         }
-    }, [authState.accessToken, Class, rollNumber, Section, name, start]);
+    }, [authState?.accessToken, Class, rollNumber, Section, name, start]);
 
     const filteredStudents = userData.filter(student => {
         return (
@@ -135,7 +135,7 @@ export default function AllStudentsList() {
             setLoading(true);
             console.log("start");
             const response = await axios.post(`${BASE_URL}/assignRollNumber`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 currentClass: Class,
                 section: Section
             });

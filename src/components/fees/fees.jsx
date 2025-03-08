@@ -27,7 +27,7 @@ export default function Fees() {
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/student/detailedFee/${authState?.userDetails?._id}`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
 

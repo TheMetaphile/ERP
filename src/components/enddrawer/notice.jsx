@@ -19,7 +19,7 @@ export default function Notice() {
       try {
         const response = await axios.get(`${BASE_URL}/notice/fetch/student?start=${start}&limit=${end}`, {
           headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
+            Authorization: `Bearer ${authState?.accessToken}`,
           }
         });
         setDetails(response.data.notices);
@@ -30,7 +30,7 @@ export default function Notice() {
       }
     };
     fetchNotice();
-  }, [authState.accessToken, start, end]);
+  }, [authState?.accessToken, start, end]);
 
   const containerVariants = {
     hidden: { opacity: 0 },

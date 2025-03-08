@@ -27,12 +27,12 @@ function ClassWork() {
     const sentinelRef = useRef(null);
 
 
-    const uniqueClasses = Array.from(new Set(authState.subject ? authState.subject.map(subj => subj.class) : []));
+    const uniqueClasses = Array.from(new Set(authState?.subject ? authState?.subject.map(subj => subj.class) : []));
 
 
     useEffect(() => {
         setUniqueSections(Array.from(new Set(
-            authState.subject ? authState.subject
+            authState?.subject ? authState?.subject
                 .filter(subj => subj.class === selectedClass)
                 .map(subj => subj.section) : []
         )));
@@ -41,14 +41,14 @@ function ClassWork() {
 
     useEffect(() => {
         setUniqueSubjects(Array.from(new Set(
-            authState.subject ? authState.subject
+            authState?.subject ? authState?.subject
                 .filter(subj => subj.section === selectedSection && subj.class === selectedClass)
                 .map(subj => subj.subject) : []
         )));
     }, [selectedSection, selectedClass]);
 
     const handleOpen = () => {
-        if (!authState.subject) { toast.error("No subject is assigned. Please contact Admin"); return; }
+        if (!authState?.subject) { toast.error("No subject is assigned. Please contact Admin"); return; }
         setIsDialogOpen(true);
 
     }
@@ -104,12 +104,12 @@ function ClassWork() {
         if (!selectedClass || !selectedSection || !selectedSubject) return;
         if (loading || allDataFetched) return;
 
-        console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
+        console.log(authState?.ClassDetails?.class, new Date().getMonth() + 1, authState?.ClassDetails?.section, selectedSubject);
         setLoading(true);
         try {
             const response = await axios.get(`${BASE_URL}/classwork/fetch/teacher?class=${selectedClass}&month=${new Date().getMonth() + 1}&year=2024&section=${selectedSection}&subject=${selectedSubject}&start=${start}&end=${end}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
+                    Authorization: `Bearer ${authState?.accessToken}`,
                 }
             });
             const work = response.data.classwork.length;

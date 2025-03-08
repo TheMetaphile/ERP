@@ -22,19 +22,19 @@ export default function TransactionRow() {
       const query = useQuery();
       const session = query.get('session');
     useEffect(() => {
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             setLoading(true);
             fetchTransaction();
         } else {
             toast.error('No access token available');
         }
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     const fetchTransaction = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/particularStudent/transactions?email=${id}&session=${session}`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
             console.log("API response transaction:", response.data);

@@ -36,7 +36,7 @@ const SubjectManagement = () => {
       }, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authState.accessToken}`
+          'Authorization': `Bearer ${authState?.accessToken}`
         }
       });
 
@@ -66,7 +66,7 @@ const SubjectManagement = () => {
       }, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authState.accessToken}`
+          'Authorization': `Bearer ${authState?.accessToken}`
         }
       });
 

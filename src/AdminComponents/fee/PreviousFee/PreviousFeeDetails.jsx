@@ -34,10 +34,10 @@ function PreviousFeeDetailsAdmin() {
     const [clickedIndex, setClickedIndex] = useState(null);
 
     useEffect(() => {
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchDetails();
         }
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     const handleViewMore = () => {
         setStart(prevStart => prevStart + end);
@@ -54,7 +54,7 @@ function PreviousFeeDetailsAdmin() {
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/pendingFeeStats`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             if (response.status === 200) {

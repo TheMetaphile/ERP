@@ -24,14 +24,14 @@ export default function StudentDetailTile({ userData }) {
     }, [userData]);
 
     const handleTerminate = async (email, index) => {
-        console.log(authState.accessToken, email)
+        console.log(authState?.accessToken, email)
         setLoading(true);
         setLoadingIndex(index);
         try {
             const response = await axios.delete(`${BASE_URL}/terminate/student`, {
                 data: {
                     email: email,
-                    accessToken: authState.accessToken
+                    accessToken: authState?.accessToken
                 }
             });
             console.log(response.data);

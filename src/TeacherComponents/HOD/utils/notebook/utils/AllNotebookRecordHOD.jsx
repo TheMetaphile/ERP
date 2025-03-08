@@ -40,7 +40,7 @@ const AllNoteBookRecordHOD = ({ Class, Section, Subject }) => {
       maxBodyLength: Infinity,
       url: `${BASE_URL}/notebook/fetch/coordinator/all?class=${Class}&section=${Section}&subject=${Subject}&session=${session}&start=${start}&count=${end}`,
       headers: {
-        Authorization: `Bearer ${authState.accessToken}`,
+        Authorization: `Bearer ${authState?.accessToken}`,
       },
     };
 

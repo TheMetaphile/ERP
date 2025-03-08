@@ -106,12 +106,12 @@ const PerformanceProfileSubAdmin = () => {
 
 
   useEffect(() => {
-    console.log(authState.accessToken, id)
+    console.log(authState?.accessToken, id)
     const fetchProfile = async () => {
       setProfileLoading(true);
       try {
         const response = await axios.post(`${BASE_URL}/fetchSingle/student`, {
-          accessToken: authState.accessToken,
+          accessToken: authState?.accessToken,
           email: id
         });
         if (response.status === 200) {
@@ -131,7 +131,7 @@ const PerformanceProfileSubAdmin = () => {
       try {
         const response = await axios.get(`${BASE_URL}/result/fetch/admin?email=${id}&class=${Class}&session=${session}`, {
           headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
+            Authorization: `Bearer ${authState?.accessToken}`,
           }
         });
         if (response.status === 200) {
@@ -146,7 +146,7 @@ const PerformanceProfileSubAdmin = () => {
     };
 
     fetchProfile();
-  }, [id, authState.accessToken]);
+  }, [id, authState?.accessToken]);
 
   if (loading || profileLoading) {
     return <Loading />;

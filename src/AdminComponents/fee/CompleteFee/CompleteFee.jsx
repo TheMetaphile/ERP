@@ -78,7 +78,7 @@ function CompleteFee({ selectedSession }) {
                 try {
                     const response = await axios.get(`${BASE_URL}/fee/fetch/students/list?searchString=${temp}`, {
                         headers: {
-                            Authorization: `Bearer ${authState.accessToken}`
+                            Authorization: `Bearer ${authState?.accessToken}`
                         }
                     });
                     const StudentEmails = response.data.students.map(Student => ({
@@ -101,7 +101,7 @@ function CompleteFee({ selectedSession }) {
             }
             searchStudent();
         }
-    }, [temp, authState.accessToken]);
+    }, [temp, authState?.accessToken]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -125,7 +125,7 @@ function CompleteFee({ selectedSession }) {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );
@@ -169,7 +169,7 @@ function CompleteFee({ selectedSession }) {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );

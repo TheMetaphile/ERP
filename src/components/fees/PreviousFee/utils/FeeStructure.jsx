@@ -18,7 +18,7 @@ export default function FeeStructure() {
   useEffect(() => {
     setLoading(true);
     fetchFees();
-  }, [authState.accessToken]);
+  }, [authState?.accessToken]);
 
   const today = new Date();
   // const formattedDate = today.toISOString().split('T')[0];
@@ -36,7 +36,7 @@ export default function FeeStructure() {
     try {
       const response = await axios.get(`${BASE_URL}/fee/fetch/pendingFee?email=${authState?.userDetails?.email}`, {
         headers: {
-          'Authorization': `Bearer ${authState.accessToken}`
+          'Authorization': `Bearer ${authState?.accessToken}`
         }
       });
       console.log("API response fees:", response.data);

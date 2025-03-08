@@ -60,7 +60,7 @@ function CreateDiscount({ selectedSession }) {
             const searchStudent = async () => {
                 try {
                     const response = await axios.post(`${BASE_URL}/search/student`, {
-                        accessToken: authState.accessToken,
+                        accessToken: authState?.accessToken,
                         searchString: temp,
                         start: 0,
                         end: 30
@@ -84,7 +84,7 @@ function CreateDiscount({ selectedSession }) {
             }
             searchStudent();
         }
-    }, [temp, authState.accessToken]);
+    }, [temp, authState?.accessToken]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -104,7 +104,7 @@ function CreateDiscount({ selectedSession }) {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );

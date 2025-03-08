@@ -54,7 +54,7 @@ export default function UploadTimetable({ handleChange }) {
         setIsLoading(true);
         try {
             const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: selectedClass,
             });
             const sectionsDetail = response.data.sections.map(sectionObj => sectionObj.section);
@@ -110,7 +110,7 @@ export default function UploadTimetable({ handleChange }) {
 
 
             const timetableData = {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: selectedClass,
                 section: selectedSection,
                 schedule: timetable
@@ -191,7 +191,7 @@ export default function UploadTimetable({ handleChange }) {
             const response = await axios.get(`${BASE_URL}/timetable/fetch/checkAvailability`, {
                 params: { lecture, day, email },
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`,
+                    'Authorization': `Bearer ${authState?.accessToken}`,
                     'Content-Type': 'application/json',
                 }
             });

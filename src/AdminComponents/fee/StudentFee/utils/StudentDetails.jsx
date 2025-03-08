@@ -24,13 +24,13 @@ function StudentDetails({ selectedOption }) {
 
 
   useEffect(() => {
-    if (authState.accessToken) {
+    if (authState?.accessToken) {
       setLoading(true);
       fetchFees();
     } else {
       toast.error('No access token available');
     }
-  }, [authState.accessToken]);
+  }, [authState?.accessToken]);
 
   // const today = new Date();
 
@@ -40,7 +40,7 @@ function StudentDetails({ selectedOption }) {
     try {
       const response = await axios.get(`${BASE_URL}/fee/fetch/student/detailedFee?email=${id}&session=${session}`, {
         headers: {
-          'Authorization': `Bearer ${authState.accessToken}`
+          'Authorization': `Bearer ${authState?.accessToken}`
         }
       });
 

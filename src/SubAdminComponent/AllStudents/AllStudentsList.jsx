@@ -60,10 +60,10 @@ export default function AllStudentsList() {
     }, [Class, Section, bothEventsCalled]);
 
     useEffect(() => {
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchUserData();
         }
-    }, [authState.accessToken, Class, rollNumber, Section, name]);
+    }, [authState?.accessToken, Class, rollNumber, Section, name]);
 
     useEffect(() => {
         if (start !== 0) {
@@ -105,7 +105,7 @@ export default function AllStudentsList() {
         try {
             console.log(start, "-", end);
             const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 currentClass: Class,
                 section: Section,
                 rollNumber: rollNumber,

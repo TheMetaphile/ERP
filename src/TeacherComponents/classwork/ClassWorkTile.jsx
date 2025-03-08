@@ -46,7 +46,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 }
             );
@@ -70,7 +70,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
             const response = await axios.delete(`${BASE_URL}/classwork/delete?class=${Class}&month=${new Date().getMonth() + 1}&year=2024&id=${detail._id}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 }
             );

@@ -55,7 +55,7 @@ export default function AssignSubjectRow({ Class }) {
             const searchTeacher = async () => {
                 try {
                     const response = await axios.post(`${BASE_URL}/search/teacher`, {
-                        accessToken: authState.accessToken,
+                        accessToken: authState?.accessToken,
                         searchString: temp,
                         start: 0,
                         end: 30
@@ -74,12 +74,12 @@ export default function AssignSubjectRow({ Class }) {
             }
             searchTeacher();
         }
-    }, [temp, authState.accessToken])
+    }, [temp, authState?.accessToken])
 
     const fetchSections = async () => {
         try {
             const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: Class,
             });
             const sectionsdetail = response.data.sections;

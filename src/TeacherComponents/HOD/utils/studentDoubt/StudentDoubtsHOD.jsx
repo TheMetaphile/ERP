@@ -33,7 +33,7 @@ function StudentDoubtsHOD() {
     const fetchSections = async (selectedClass) => {
         try {
             const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: selectedClass
             });
             const sectionsDetail = response.data.sections.map((sectionObj) => sectionObj.section);
@@ -48,7 +48,7 @@ function StudentDoubtsHOD() {
         console.log(Class, Section)
         try {
             const response = await axios.post(`${BASE_URL}/fetch`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: Class,
                 section: Section
             });

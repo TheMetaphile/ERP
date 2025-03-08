@@ -31,14 +31,14 @@ export default function HistoryTile({ details }) {
     const handleDelete = async (index) => {
         const id = data[index]._id;
         const session = getCurrentSession();
-        console.log(id, session, authState.accessToken);
+        console.log(id, session, authState?.accessToken);
         if ((data[index].status) === "Pending") {
             try {
                 const response = await axios.delete(
                     `${BASE_URL}/teacherleave/delete?leaveId=${id}&session=${session}`,
                     {
                         headers: {
-                            Authorization: `Bearer ${authState.accessToken}`
+                            Authorization: `Bearer ${authState?.accessToken}`
                         }
                     }
                 );
@@ -90,7 +90,7 @@ export default function HistoryTile({ details }) {
                 editData,
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );

@@ -13,16 +13,16 @@ export default function Detailscard() {
     const [imageError, setImageError] = useState(false);
 
     useEffect(() => {
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchUserData();
         }
-    }, [authState.accessToken, email]);
+    }, [authState?.accessToken, email]);
 
     const fetchUserData = async () => {
         setLoading(true);
         try {
             const response = await axios.post(`${BASE_URL}/fetchSingle/student`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 email: email
             });
             if (response.data.StudentDetails && response.data.StudentDetails.length > 0) {

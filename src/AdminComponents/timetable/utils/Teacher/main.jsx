@@ -89,7 +89,7 @@ function TeachersTimeTable() {
             try {
                 const url = `${BASE_URL}/timetable/fetch/teacher`;
                 const payload = {
-                    accessToken: authState.accessToken,
+                    accessToken: authState?.accessToken,
                     email: teacherEmail,
                     day: dayTeacher
                 };

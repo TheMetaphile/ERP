@@ -72,7 +72,7 @@ export default function AllExam() {
         try {
             const response = await axios.delete(`${BASE_URL}/deleteExam`, {
                 data: {
-                    accessToken: authState.accessToken,
+                    accessToken: authState?.accessToken,
                     examId: examToDelete._id,
                     class: examToDelete.class,
                     term: examToDelete.term,
@@ -103,7 +103,7 @@ export default function AllExam() {
         setLoading(true);
         try {
             const response = await axios.post(`${BASE_URL}/fetchExams`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 start: start,
                 end: end,
                 class: selectedClass
@@ -165,7 +165,7 @@ export default function AllExam() {
         };
         try {
             const response = await axios.put(`${BASE_URL}/updateExam`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 examId: examToEdit._id,
                 class: examToEdit.class,
                 update: updateFields

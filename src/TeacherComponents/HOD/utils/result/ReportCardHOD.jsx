@@ -77,7 +77,7 @@ function ReportCardHOD() {
     try {
       console.log(start, "-", end);
       const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
-        accessToken: authState.accessToken,
+        accessToken: authState?.accessToken,
         currentClass: Class,
         section: Section,
         end: end,

@@ -22,7 +22,7 @@ export default function CurrentAdmin({ onNewWork, additionalDataNonAdmin }) {
       maxBodyLength: Infinity,
       url: `${BASE_URL}/admins/admin?branch=${authState?.userDetails?.branch}`,
       headers: {
-        'Authorization': `Bearer ${authState.accessToken}`
+        'Authorization': `Bearer ${authState?.accessToken}`
       }
     };
 

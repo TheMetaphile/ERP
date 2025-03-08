@@ -35,7 +35,7 @@ export default function FeeAdminRow({ Class, session, key }) {
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/structure?class=${Class}&session=${session}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
 
@@ -76,7 +76,7 @@ export default function FeeAdminRow({ Class, session, key }) {
                 stream: stream
             }, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
 

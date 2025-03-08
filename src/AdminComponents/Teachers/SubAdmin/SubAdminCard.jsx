@@ -43,7 +43,7 @@ export default function SubAdminCard({ userData, setUserData }) {
                 { permissions: formattedPermissions },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );

@@ -43,7 +43,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 }
             );
@@ -64,7 +64,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
             const response = await axios.delete(`${BASE_URL}/homework/delete?class=${Class}&month=${new Date().getMonth() + 1}&year=${currentYear}&id=${detail._id}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 }
             );

@@ -58,7 +58,7 @@ export default function TodayHomeWork() {
         try {
             const response = await axios.get(`${BASE_URL}/homework/fetch/student?class=${authState?.userDetails?.currentClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${authState?.userDetails?.section}&subject=${selectedSubject}&start=${start}&end=${end}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
+                    Authorization: `Bearer ${authState?.accessToken}`,
                 }
             });
 

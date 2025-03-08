@@ -37,7 +37,7 @@ export default function FeeDetail() {
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/student/detailedFee/${selectedStudent._id}`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
 
@@ -63,7 +63,7 @@ export default function FeeDetail() {
                 const searchTeacher = async () => {
                     try {
                         const response = await axios.post(`${BASE_URL}/search/student`, {
-                            accessToken: authState.accessToken,
+                            accessToken: authState?.accessToken,
                             searchString: searchString,
                             start: 0,
                             end: 30
@@ -96,7 +96,7 @@ export default function FeeDetail() {
         } else {
             setShowSuggestions(false);
         }
-    }, [searchString, authState.accessToken]);
+    }, [searchString, authState?.accessToken]);
 
     useEffect(() => {
         // console.log(selectedStudent);
@@ -125,7 +125,7 @@ export default function FeeDetail() {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );
@@ -146,17 +146,17 @@ export default function FeeDetail() {
     };
 
     useEffect(() => {
-        if (authState.accessToken && selectedStudent) {
+        if (authState?.accessToken && selectedStudent) {
             setLoading(true);
             fetchTransaction();
         }
-    }, [authState.accessToken,selectedStudent]);
+    }, [authState?.accessToken,selectedStudent]);
 
     const fetchTransaction = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/particularStudent/transactions?email=${selectedStudent.email}`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
             console.log("API response transaction:", response.data);

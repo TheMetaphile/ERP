@@ -55,7 +55,7 @@ export default function AttendenceTable({ additionalData, status }) {
     try {
       const response = await axios.get(`${BASE_URL}/leave/fetch/particularStudent?start=${start}&end=${end}&status=${status}`, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       });
       const leaves = response.data.Leaves;
@@ -119,7 +119,7 @@ export default function AttendenceTable({ additionalData, status }) {
         leaveId: data[index]._id
       }, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`,
+          Authorization: `Bearer ${authState?.accessToken}`,
         }
       });
       if (response.status === 200) {
@@ -144,7 +144,7 @@ export default function AttendenceTable({ additionalData, status }) {
           `${BASE_URL}/leave/delete?leaveId=${id}`,
           {
             headers: {
-              Authorization: `Bearer ${authState.accessToken}`
+              Authorization: `Bearer ${authState?.accessToken}`
             }
           }
         );

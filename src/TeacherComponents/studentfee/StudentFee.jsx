@@ -60,7 +60,7 @@ function StudentFee() {
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/classTeacher?&start=${start}&end=${end}&session=${session}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             if (response.status === 200) {

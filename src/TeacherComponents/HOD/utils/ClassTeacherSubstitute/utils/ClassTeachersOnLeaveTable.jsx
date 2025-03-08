@@ -19,7 +19,7 @@ export default function ClassTeacherOnLeaveTable() {
       maxBodyLength: Infinity,
       url: `${BASE_URL}/classTeacherSubstitute/fetch/checkLeave?date=${formattedDate}&session=${session}`,
       headers: {
-        'Authorization': `Bearer ${authState.accessToken}`
+        'Authorization': `Bearer ${authState?.accessToken}`
       }
     };
 

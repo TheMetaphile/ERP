@@ -39,7 +39,7 @@ const CurrentWeek = ({ selectedTab, Class, section, subject }) => {
             try {
                 const response = await axios.get(`${BASE_URL}/lessonPlan/fetch/teacher?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${currentWeekFormattedDate}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 });
                 console.log("API response:", response.data);

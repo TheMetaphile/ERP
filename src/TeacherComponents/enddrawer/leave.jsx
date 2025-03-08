@@ -29,7 +29,7 @@ export default function Leave() {
             try {
                 const response = await axios.get(`${BASE_URL}/teacherleave/fetch/stats?session=${getCurrentSession()}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 });
                 setDetails(response.data);
@@ -42,7 +42,7 @@ export default function Leave() {
             }
         };
         fetchStats();
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     const containerVariants = {
         hidden: { opacity: 0 },

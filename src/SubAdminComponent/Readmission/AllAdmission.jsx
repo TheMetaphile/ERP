@@ -20,7 +20,7 @@ export default function AllAdmission() {
     const [end, setEnd] = useState(20);
     const [loadMore, setLoadMore] = useState(false);
 
-    console.log(authState.accessToken, 'aa')
+    console.log(authState?.accessToken, 'aa')
     const handleRollNumberChange = (event) => {
         setStart(0);
         setUserData([]);
@@ -58,7 +58,7 @@ export default function AllAdmission() {
         try {
             console.log(start, "-", end);
             const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 currentClass: Class,
                 section: Section,
                 rollNumber: rollNumber,
@@ -101,7 +101,7 @@ export default function AllAdmission() {
     };
 
     useEffect(() => {
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchUserData();
         } else {
             setError('No access token available');
@@ -110,7 +110,7 @@ export default function AllAdmission() {
                 setError('');
             }, 2000);
         }
-    }, [authState.accessToken, Class, rollNumber, Section, name, start]);
+    }, [authState?.accessToken, Class, rollNumber, Section, name, start]);
 
     const filteredStudents = userData.filter(student => {
         return (

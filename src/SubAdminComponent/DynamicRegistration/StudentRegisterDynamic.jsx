@@ -119,7 +119,7 @@ export default function StudentRegisterDynamic() {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );
@@ -143,7 +143,7 @@ export default function StudentRegisterDynamic() {
                 `${BASE_URL}/registrationFields/delete/${DocId}/${fieldId}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );
@@ -167,14 +167,14 @@ export default function StudentRegisterDynamic() {
 
     useEffect(() => {
         fetchFieldsForUserType(userType);
-    }, [userType, authState.accessToken]);
+    }, [userType, authState?.accessToken]);
 
     const fetchFieldsForUserType = async (type) => {
         setIsLoading(true);
         try {
             const response = await axios.get(`${BASE_URL}/registrationFields/fetch/${type}`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
 

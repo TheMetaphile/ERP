@@ -29,7 +29,7 @@ export default function Notice(props) {
       try {
         const response = await axios.get(`${BASE_URL}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${'For All'}`, {
           headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
+            Authorization: `Bearer ${authState?.accessToken}`,
           }
         });
         setDetails(response.data.notices);
@@ -42,7 +42,7 @@ export default function Notice(props) {
       }
     };
     fetchNotice();
-  }, [authState.accessToken]);
+  }, [authState?.accessToken]);
 
   const containerVariants = {
     hidden: { opacity: 0 },

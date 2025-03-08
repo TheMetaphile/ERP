@@ -16,7 +16,7 @@ export default function AdminRow({ Teacher, index, onNewWork, setAdmins }) {
             maxBodyLength: Infinity,
             url: `${BASE_URL}/admins/remove-admin`,
             headers: {
-                'Authorization': `Bearer ${authState.accessToken}`,
+                'Authorization': `Bearer ${authState?.accessToken}`,
                 'Content-Type': 'application/json'
             },
             data: {

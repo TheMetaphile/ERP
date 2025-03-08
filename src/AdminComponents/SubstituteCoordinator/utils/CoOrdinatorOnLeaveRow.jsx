@@ -70,7 +70,7 @@ export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session })
             url: `${BASE_URL}/CoordinatorSubstitute/create`,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authState.accessToken}`
+                'Authorization': `Bearer ${authState?.accessToken}`
             },
             data: data
         };
@@ -110,7 +110,7 @@ export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session })
                 payload,
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 }
             );
@@ -139,7 +139,7 @@ export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session })
             const searchTeacher = async () => {
                 try {
                     const response = await axios.post(`${BASE_URL}/search/teacher`, {
-                        accessToken: authState.accessToken,
+                        accessToken: authState?.accessToken,
                         searchString: temp,
                         start: 0,
                         end: 30
@@ -163,7 +163,7 @@ export default function CoOrdinatorOnLeaveRow({ Teacher, index, date, session })
             }
             searchTeacher();
         }
-    }, [temp, authState.accessToken]);
+    }, [temp, authState?.accessToken]);
 
     const handleUpdateClick = () => {
         setSubstitute();

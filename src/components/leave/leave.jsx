@@ -28,7 +28,7 @@ export default function Leave() {
             try {
                 const response = await axios.get(`${BASE_URL}/leave/fetch/stats`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 });
                 setDetails(response.data);
@@ -40,7 +40,7 @@ export default function Leave() {
             }
         };
         fetchStats();
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     const handleNewLeave = (newLeave) => {
         console.log('leave.jsx');

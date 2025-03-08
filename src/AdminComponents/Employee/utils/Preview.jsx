@@ -76,7 +76,7 @@ const Preview = ({ prevStep, formData }) => {
             residentialPincode,
             department,
             role,
-            accessToken: authState.accessToken
+            accessToken: authState?.accessToken
         };
         setLoading(true);
         console.log(payload)

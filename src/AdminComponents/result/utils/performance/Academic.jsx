@@ -23,7 +23,7 @@ export default function Academic(props) {
             try {
                 const response = await axios.get(`${BASE_URL}/result/fetch/teacher?email=${id}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 });
 
@@ -38,7 +38,7 @@ export default function Academic(props) {
         };
 
         fetchResult();
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     return (
         <div className="w-full shadow-md border border-gray-300 rounded-lg tablet:p-4 mobile:max-tablet:px-2 mt-4 ">

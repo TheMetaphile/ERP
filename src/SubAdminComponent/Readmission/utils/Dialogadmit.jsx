@@ -80,7 +80,7 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );

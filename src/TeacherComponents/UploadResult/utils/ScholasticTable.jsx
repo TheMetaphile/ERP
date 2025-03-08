@@ -43,7 +43,7 @@ console.log(subject)
                 `${BASE_URL}/result/fetch/scholastic/${Class}/${section}/${subject}/${term}`,
                 {
                   headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                   }
                 }
               );
@@ -132,7 +132,7 @@ console.log(subject)
                 resultData,
                 {
                     headers: {
-                        Authorization: `bearer ${authState.accessToken}`
+                        Authorization: `bearer ${authState?.accessToken}`
                     }
                 }
             );

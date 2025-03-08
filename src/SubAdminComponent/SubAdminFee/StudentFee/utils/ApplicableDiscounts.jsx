@@ -15,7 +15,7 @@ export default function ApplicableDiscounts({ selectedStudent, selectedDiscount,
                 const date = new Date();
                 const response = await axios.post(BASE_URL + '/fee/fetch/applicable-discounts/' + selectedStudent._id, { month: date.getMonth() }, {
                     headers: {
-                        'Authorization': "Bearer " + authState.accessToken
+                        'Authorization': "Bearer " + authState?.accessToken
                     }
                 });
                 setDiscounts(response.data.applicableDiscounts);

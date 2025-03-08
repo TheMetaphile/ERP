@@ -36,7 +36,7 @@ const RecordDetailsHOD = () => {
       maxBodyLength: Infinity,
       url: `${BASE_URL}/notebook/fetch/teacher/particular?docId=${id}&session=${session}`,
       headers: {
-        Authorization: `Bearer ${authState.accessToken}`,
+        Authorization: `Bearer ${authState?.accessToken}`,
       },
     };
 

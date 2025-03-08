@@ -91,7 +91,7 @@ function StudentsTimeTable() {
             try {
                 const url = `${BASE_URL}/timetable/fetch/student`;
                 const payload = {
-                    accessToken: authState.accessToken,
+                    accessToken: authState?.accessToken,
                     class: selectClass,
                     section: selectedSection,
                     day: dayStudent

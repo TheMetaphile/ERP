@@ -74,7 +74,7 @@ export default function () {
     try {
       const response = await axios.get(`${BASE_URL}/notice/fetch/admin?start=${start}&limit=${end}&session=${session}&type=${type}`, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       });
 
@@ -104,7 +104,7 @@ export default function () {
     try {
       const response = await axios.put(`${BASE_URL}/notice/update?noticeId=${data[index]._id}&session=${session}`, editedNotice, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       });
       console.log("API response after update:", response.data);
@@ -120,7 +120,7 @@ export default function () {
     try {
       await axios.delete(`${BASE_URL}/notice/delete?id=${data[index]._id}&session=${session}`, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       });
       toast.success('Deleted Successfully');

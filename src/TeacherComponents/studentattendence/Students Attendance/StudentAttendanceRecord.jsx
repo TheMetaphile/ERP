@@ -22,7 +22,7 @@ export default function StudentAttendanceRecord() {
                 const formattedDate = `${todayDate.getFullYear()}-${month1}-${todayDate.getDate()}`;
                 const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/classTeacher?month=${month}&year=${todayDate.getFullYear()}&date=${formattedDate}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 });
                 setData(response.data);
@@ -34,7 +34,7 @@ export default function StudentAttendanceRecord() {
         };
 
         fetchStudents();
-    }, [authState.accessToken, month]);
+    }, [authState?.accessToken, month]);
 
     const handleMonthChange = (month) => {
         setMonth(Number(month));

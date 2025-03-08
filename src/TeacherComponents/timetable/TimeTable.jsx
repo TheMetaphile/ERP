@@ -14,7 +14,7 @@ function TimeTable() {
     const [day, setDay] = useState('tuesday');
     const [loading, setLoading] = useState(false);
     const [fetchLoading, setFetchLoading] = useState(false);
-    const [selectClass, setClass] = useState(authState.ClassDetails.class);
+    const [selectClass, setClass] = useState(authState?.ClassDetails?.class);
     const [fetchedTimeTableStructure, setTimetableStructure] = useState(null);
     const [lectureTimes, setLectureTimes] = useState([]);
     const [subsData, setSubsData] = useState([]);
@@ -95,7 +95,7 @@ function TimeTable() {
 
 
     const handleTimeFetch = async () => {
-        console.log(authState.accessToken)
+        console.log(authState?.accessToken)
         console.log('classaaa', ClassRange)
         try {
             const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
@@ -103,7 +103,7 @@ function TimeTable() {
             },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     },
                 });
 
@@ -138,7 +138,7 @@ function TimeTable() {
             },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     },
                 });
 
@@ -167,7 +167,7 @@ function TimeTable() {
             const response = await axios.get(`${BASE_URL}/LectureSubstitute/fetch/checkSubstitute?date=${formattedDate}&session=${session}`,
                 {
                     headers: {
-                        'Authorization': `Bearer ${authState.accessToken}`
+                        'Authorization': `Bearer ${authState?.accessToken}`
                     }
                 });
             if (response.status === 200) {

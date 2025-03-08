@@ -37,7 +37,7 @@ const FeePaymentRow = ({ student, key,fetchFees, selectedStudent, selectedDiscou
                 data,
                 {
                     headers: {
-                        'Authorization': `Bearer ${authState.accessToken}`,
+                        'Authorization': `Bearer ${authState?.accessToken}`,
                         'Content-Type': 'application/json', // Optional: Explicitly set content type
                     },
                 }
@@ -284,7 +284,7 @@ const FeePaymentRow = ({ student, key,fetchFees, selectedStudent, selectedDiscou
                 try {
                     const datee = formatDateTime();
                     SemesterFeePayment({
-                        token: authState.accessToken,
+                        token: authState?.accessToken,
                         studentID: selectedStudent._id,
                         amount: amount,
                         date: datee,
@@ -322,7 +322,7 @@ const FeePaymentRow = ({ student, key,fetchFees, selectedStudent, selectedDiscou
                     const datee = formatDateTime();
 
                     await SemesterFeePayment({
-                        token: authState.accessToken,
+                        token: authState?.accessToken,
                         studentID: selectedStudent._id,
                         amount: amount,
                         date: datee,

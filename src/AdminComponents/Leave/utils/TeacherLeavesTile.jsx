@@ -42,7 +42,7 @@ export default function TeacherLeavesTile({ data }) {
                 { status: actionType },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );

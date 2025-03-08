@@ -23,7 +23,7 @@ function StudentsTimeTableSubAdmin() {
     const fetchSections = async (selectedClass) => {
         try {
             const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: selectedClass,
             });
 

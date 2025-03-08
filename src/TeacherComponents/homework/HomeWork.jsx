@@ -27,11 +27,11 @@ function HomeWork() {
   const [uniqueSubjects, setUniqueSubjects] = useState([]);
   const sentinelRef = useRef(null);
 
-  const uniqueClasses = Array.from(new Set(authState.subject ? authState.subject.map(subj => subj.class) : []));
+  const uniqueClasses = Array.from(new Set(authState?.subject ? authState?.subject.map(subj => subj.class) : []));
 
   useEffect(() => {
     setUniqueSections(Array.from(new Set(
-      authState.subject ? authState.subject
+      authState?.subject ? authState?.subject
         .filter(subj => subj.class === selectedClass)
         .map(subj => subj.section) : []
     )));
@@ -40,14 +40,14 @@ function HomeWork() {
 
   useEffect(() => {
     setUniqueSubjects(Array.from(new Set(
-      authState.subject ? authState.subject
+      authState?.subject ? authState?.subject
         .filter(subj => subj.section === selectedSection && subj.class === selectedClass)
         .map(subj => subj.subject) : []
     )));
   }, [selectedSection, selectedClass]);
 
   const handleOpen = () => {
-    if (!authState.subject) { toast.error("No subject is assigned. Please contanct Admin"); return; }
+    if (!authState?.subject) { toast.error("No subject is assigned. Please contanct Admin"); return; }
     setIsDialogOpen(true);
   }
   const handleClose = () => {
@@ -101,7 +101,7 @@ function HomeWork() {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
   const fetchHomework = async () => {
-    console.log(authState.ClassDetails.class, new Date().getMonth() + 1, authState.ClassDetails.section, selectedSubject);
+    console.log(authState?.ClassDetails?.class, new Date().getMonth() + 1, authState?.ClassDetails?.section, selectedSubject);
     if (!selectedClass || !selectedSection || !selectedSubject) return;
     if (loading || allDataFetched) return;
 
@@ -109,7 +109,7 @@ function HomeWork() {
     try {
       const response = await axios.get(`${BASE_URL}/homework/fetch/teacher?class=${selectedClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${selectedSection}&subject=${selectedSubject}&start=${start}&end=${end}`, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`,
+          Authorization: `Bearer ${authState?.accessToken}`,
         }
       });
       const work = response.data.homework.length;

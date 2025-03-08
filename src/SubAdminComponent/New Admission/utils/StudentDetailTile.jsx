@@ -24,7 +24,7 @@ export default function StudentDetailTile({ userData, Class }) {
                 {},
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );

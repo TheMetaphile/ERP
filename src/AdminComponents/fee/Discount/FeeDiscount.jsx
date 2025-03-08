@@ -66,7 +66,7 @@ function FeeDiscount() {
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/discount?end=${end}&start=${start}&class=${selectedClass}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             if (response.status === 200) {
@@ -89,7 +89,7 @@ function FeeDiscount() {
         try {
             const response = await axios.delete(`${BASE_URL}/fee/delete/discount?id=${id}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             if (response.status === 200) {

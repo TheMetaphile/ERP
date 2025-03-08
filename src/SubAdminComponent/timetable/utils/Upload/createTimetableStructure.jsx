@@ -28,7 +28,7 @@ const TimeTableStructure = () => {
         try {
             const structureResponse = await axios.post(`${BASE_URL}/timeTableStructure/create`, formData, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`,
+                    Authorization: `Bearer ${authState?.accessToken}`,
                 },
             });
 

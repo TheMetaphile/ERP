@@ -5,8 +5,8 @@ import { FaGraduationCap, FaChalkboardTeacher, FaBook } from 'react-icons/fa';
 
 function Selection({ setClass, setSection, setSubject }) {
   const { authState } = useContext(AuthContext);
-  const [selectedClass, setSelectedClass] = useState(authState.subject ? authState.subject[0].class : '');
-  const [selectedSection, setSelectedSection] = useState(authState.subject ? authState.subject[0].section : "");
+  const [selectedClass, setSelectedClass] = useState(authState?.subject ? authState?.subject[0]?.class : '');
+  const [selectedSection, setSelectedSection] = useState(authState?.subject ? authState?.subject[0]?.section : "");
 
   const handleClassChange = (event) => {
     setSelectedClass(event.target.value);
@@ -20,13 +20,13 @@ function Selection({ setClass, setSection, setSubject }) {
     setSubject(event.target.value);
   }
 
-  const uniqueClasses = Array.from(new Set(authState.subject ? authState.subject.map(subj => subj.class) : []));
+  const uniqueClasses = Array.from(new Set(authState?.subject ? authState?.subject.map(subj => subj.class) : []));
 
   const [uniqueSections, setUniqueSections] = useState([]);
   const [uniqueSubjects, setUniqueSubjects] = useState([]);
   useEffect(() => {
     setUniqueSections(Array.from(new Set(
-      authState.subject ? authState.subject
+      authState?.subject ? authState?.subject
         .filter(subj => subj.class === selectedClass)
         .map(subj => subj.section) : []
     )));
@@ -35,7 +35,7 @@ function Selection({ setClass, setSection, setSubject }) {
 
   useEffect(() => {
     setUniqueSubjects(Array.from(new Set(
-      authState.subject ? authState.subject
+      authState?.subject ? authState?.subject
         .filter(subj => subj.section === selectedSection && subj.class === selectedClass)
         .map(subj => subj.subject) : []
     )));

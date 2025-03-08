@@ -25,7 +25,7 @@ export default function MyDoubtTile({ data }) {
         try {
             const response = await axios.delete(`${BASE_URL}/doubts/delete?class=${authState?.userDetails?.currentClass}&doubtId=${id}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
 
@@ -64,7 +64,7 @@ export default function MyDoubtTile({ data }) {
                 subject: editedData.subject
             }, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
 

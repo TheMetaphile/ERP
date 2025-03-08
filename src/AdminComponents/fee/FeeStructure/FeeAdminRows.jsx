@@ -34,7 +34,7 @@ console.log(session)
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/structure?class=${Class}&session=${session}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
 
@@ -75,7 +75,7 @@ console.log(session)
                 stream: stream
             }, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
 

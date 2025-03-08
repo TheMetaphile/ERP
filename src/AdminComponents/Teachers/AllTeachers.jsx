@@ -86,7 +86,7 @@ export default function AllTeachers() {
         const fetchUserData = async () => {
             try {
                 const response = await axios.post(`${BASE_URL}/fetchMultiple/teacher`, {
-                    accessToken: authState.accessToken
+                    accessToken: authState?.accessToken
                 });
                 console.log("API response:", response.data);
 
@@ -108,13 +108,13 @@ export default function AllTeachers() {
             }
         };
 
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchUserData();
         } else {
             setError('No access token available');
             setLoading(false);
         }
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     const filteredTeachers = userData.filter(user => {
         const nameMatch = user.name.toLowerCase().includes(name.toLowerCase());

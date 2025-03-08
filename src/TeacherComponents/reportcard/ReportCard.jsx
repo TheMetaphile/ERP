@@ -43,9 +43,9 @@ function ReportCard() {
         setLoading(true);
         try {
             const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
-                accessToken: authState.accessToken,
-                currentClass: authState.ClassDetails.class,
-                section: authState.ClassDetails.section,
+                accessToken: authState?.accessToken,
+                currentClass: authState?.ClassDetails?.class,
+                section: authState?.ClassDetails?.section,
                 start: start,
                 end: end
             });
@@ -153,11 +153,11 @@ function ReportCard() {
                                         </td>
                                         <td className="py-3 px-4">
                                             <FaChalkboardTeacher className="inline mr-2 text-blue-600" />
-                                            {authState.ClassDetails.class}
+                                            {authState?.ClassDetails?.class}
                                         </td>
                                         <td className="py-3 px-4">
                                             <FaBookOpen className="inline mr-2 text-blue-600" />
-                                            {authState.ClassDetails.section}
+                                            {authState?.ClassDetails?.section}
                                         </td>
                                     </motion.tr>
                                 ))}

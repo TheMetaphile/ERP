@@ -40,7 +40,7 @@ const UserProfile = () => {
         </div>
         <div className="mt-16 p-8 text-center">
           <motion.h1 className="text-3xl font-bold text-gray-800" variants={itemVariants}>
-            {userDetails.name}
+            {userDetails?.name}
           </motion.h1>
           <motion.p className="text-xl text-gray-600" variants={itemVariants}>
             Class {userDetails?.currentClass} - Section {userDetails?.section}

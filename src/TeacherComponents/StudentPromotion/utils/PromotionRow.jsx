@@ -23,11 +23,11 @@ function PromotionRow({ detail, index, authState, selectedStudents, handleSwitch
             </td>
             <td className="py-3 px-4">
                 <FaChalkboardTeacher className="inline mr-2 text-blue-600" />
-                {authState.ClassDetails.class}
+                {authState?.ClassDetails?.class}
             </td>
             <td className="py-3 px-4">
                 <FaBookOpen className="inline mr-2 text-blue-600" />
-                {authState.ClassDetails.section}
+                {authState?.ClassDetails?.section}
             </td>
             <td className="py-3 px-4">
                 <Switch

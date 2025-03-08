@@ -115,7 +115,7 @@ export default function TeacherCard({ userData }) {
         try {
             const response = await axios.get(`${BASE_URL}/permission/fetch/${userId}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
 
@@ -146,7 +146,7 @@ export default function TeacherCard({ userData }) {
                 { permissions: formattedPermissions },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );

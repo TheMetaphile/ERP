@@ -27,7 +27,7 @@ function CurrentWeekRow({ details, index, mapId }) {
 
             await axios.put(`${BASE_URL}/lessonPlan/update/teacher/${formattedYear}/${mapId}/${id}`, { description, status }, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`,
+                    'Authorization': `Bearer ${authState?.accessToken}`,
                 },
             });
 

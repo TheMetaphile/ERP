@@ -69,7 +69,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
             url: `${BASE_URL}/LectureSubstitute/create`,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authState.accessToken}`
+                'Authorization': `Bearer ${authState?.accessToken}`
             },
             data: data
         };
@@ -107,7 +107,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
                 payload,
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 }
             );
@@ -136,7 +136,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
             const searchTeacher = async () => {
                 try {
                     const response = await axios.post(`${BASE_URL}/search/teacher`, {
-                        accessToken: authState.accessToken,
+                        accessToken: authState?.accessToken,
                         searchString: temp,
                         start: 0,
                         end: 30
@@ -156,7 +156,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
             }
             searchTeacher();
         }
-    }, [temp, authState.accessToken]);
+    }, [temp, authState?.accessToken]);
 
     const handleUpdateClick = () => {
         setSubstitute();
@@ -180,7 +180,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
             maxBodyLength: Infinity,
             url: `${BASE_URL}/timetable/fetch/checkAvailability?lecture=${lecture}&day=${day}&email=${email}`,
             headers: {
-                'Authorization': `Bearer ${authState.accessToken}`
+                'Authorization': `Bearer ${authState?.accessToken}`
             }
         };
 

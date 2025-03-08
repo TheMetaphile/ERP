@@ -46,7 +46,7 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
           { branch: newBranch, _id: authState?.userDetails?._id },
           {
             headers: {
-              Authorization: `Bearer ${authState.accessToken}`,
+              Authorization: `Bearer ${authState?.accessToken}`,
               "Content-Type": "application/json",
             },
           }

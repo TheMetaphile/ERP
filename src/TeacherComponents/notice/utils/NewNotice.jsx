@@ -91,7 +91,7 @@ function NewNotice({ setShowModal }) {
           payload,
           {
             headers: {
-              Authorization: `Bearer ${authState.accessToken}`,
+              Authorization: `Bearer ${authState?.accessToken}`,
             }
           }
         );
@@ -114,7 +114,7 @@ function NewNotice({ setShowModal }) {
     try {
       setLoading(true);
       const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-        accessToken: authState.accessToken,
+        accessToken: authState?.accessToken,
         class: selectedClass,
       });
       if (response.status === 200) {
@@ -188,7 +188,7 @@ function NewNotice({ setShowModal }) {
     console.log(query)
     try {
       const response = await axios.post(`${BASE_URL}/search/student`, {
-        accessToken: authState.accessToken,
+        accessToken: authState?.accessToken,
         searchString: query,
 
       });
@@ -202,7 +202,7 @@ function NewNotice({ setShowModal }) {
   const searchUsers = async (query) => {
     try {
       const response = await axios.post(`${BASE_URL}/search/teacher`, {
-        accessToken: authState.accessToken,
+        accessToken: authState?.accessToken,
         searchString: query,
       });
       console.log('search', response.data);

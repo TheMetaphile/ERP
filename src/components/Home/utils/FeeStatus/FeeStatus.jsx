@@ -16,12 +16,12 @@ export default function FeeStatus() {
     const [details, setDetails] = useState(null);
 
     useEffect(() => {
-        if (authState.accessToken) {
+        if (authState?.accessToken) {
             fetchStatus();
         } else {
             toast.error('No access token available');
         }
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     const fetchStatus = async () => {
         try {
@@ -29,7 +29,7 @@ export default function FeeStatus() {
                 `${BASE_URL}/fee/fetch/stats?end=20&start=0&class=${authState?.userDetails?.currentClass}`,
                 {
                     headers: {
-                        'Authorization': `Bearer ${authState.accessToken}`
+                        'Authorization': `Bearer ${authState?.accessToken}`
                     }
                 }
             );

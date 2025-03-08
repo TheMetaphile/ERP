@@ -50,7 +50,7 @@ function Answered({ Class, Section, Subject }) {
         try {
             const response = await axios.get(`${BASE_URL}/doubts/fetch/teacher?class=${Class}&section=${Section}&subject=${Subject}&status=${'Resolved'}&start=${start}&end=${end}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             const doubt = response.data.doubts;

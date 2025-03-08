@@ -30,7 +30,7 @@ export default function Notice() {
       try {
         const response = await axios.get(`${BASE_URL}/notice/fetch/subAdmin?start=${start}&limit=${end}&session=${session}&type=for`, {
           headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
+            Authorization: `Bearer ${authState?.accessToken}`,
           }
         });
         setDetails(response.data.notices);
@@ -43,7 +43,7 @@ export default function Notice() {
     };
     
     fetchNotice();
-  }, [authState.accessToken, start, end, session]);
+  }, [authState?.accessToken, start, end, session]);
 
   // Format date for display
   const formatDate = (dateString) => {

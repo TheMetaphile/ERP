@@ -22,7 +22,7 @@ export default function Performance(props) {
             try {
                 const response = await axios.get(`${BASE_URL}/result/fetch/student?email=${authState?.userDetails?.email}&class=${authState?.userDetails?.currentClass}&session=${authState?.userDetails?.session}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 });
 
@@ -41,7 +41,7 @@ export default function Performance(props) {
         };
 
         fetchResult();
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     return (
         <div className="w-full shadow-lg rounded-lg tablet:p-4 mobile:max-tablet:px-2 mt-4 ">

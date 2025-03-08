@@ -131,14 +131,14 @@ export default function UploadTimetable({ fetchedTimeTableStructure, handleChang
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!selectedSubjects.length || !selectedTeachers.length || !selectedClass || !selectedSection || !selectedDay || !authState.accessToken) {
+        if (!selectedSubjects.length || !selectedTeachers.length || !selectedClass || !selectedSection || !selectedDay || !authState?.accessToken) {
             toast.error("Please ensure all fields are filled out correctly.");
             return;
         }
 
 
         const timetableData = {
-            accessToken: authState.accessToken,
+            accessToken: authState?.accessToken,
             class: selectedClass,
             section: selectedSection,
             day: selectedDay,

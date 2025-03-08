@@ -36,7 +36,7 @@ export default function Row({ con }) {
             const fetchSuggestions = async () => {
                 try {
                     const response = await axios.post(`${BASE_URL}/search/teacher`, {
-                        accessToken: authState.accessToken,
+                        accessToken: authState?.accessToken,
                         searchString: email,
                         start: 0,
                         end: 30
@@ -64,7 +64,7 @@ export default function Row({ con }) {
                 email: selectedTeacher.email
             }, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
 

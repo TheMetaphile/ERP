@@ -85,7 +85,7 @@ export default function FeeStructureField({ fees }) {
                 NewpaymentDetails,
                 {
                     headers: {
-                        'Authorization': `Bearer ${authState.accessToken}`
+                        'Authorization': `Bearer ${authState?.accessToken}`
                     }
                 }
             );

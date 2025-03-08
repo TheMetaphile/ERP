@@ -21,7 +21,7 @@ const FeePaymentRow = ({ student, key }) => {
                 data,
                 {
                     headers: {
-                        'Authorization': `Bearer ${authState.accessToken}`,
+                        'Authorization': `Bearer ${authState?.accessToken}`,
                         'Content-Type': 'application/json', // Optional: Explicitly set content type
                     },
                 }

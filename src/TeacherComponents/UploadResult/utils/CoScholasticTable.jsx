@@ -10,9 +10,9 @@ import { Link } from "react-router-dom";
 export default function CoScholasticTable({ students, term, Class, section }) {
     const { authState } = useContext(AuthContext);
     const [Subjects] = useState(() => {
-        if (authState.Co_scholastic === undefined) return [];
+        if (authState?.Co_scholastic === undefined) return [];
 
-        return authState.Co_scholastic.filter(subject =>
+        return authState?.Co_scholastic.filter(subject =>
             subject.class === Class && subject.section === section
         );
     });
@@ -41,7 +41,7 @@ export default function CoScholasticTable({ students, term, Class, section }) {
                 `${BASE_URL}/result/fetch/Coscholastic/${Class}/${section}/${term}?subject=${subjectArray}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );
@@ -129,7 +129,7 @@ export default function CoScholasticTable({ students, term, Class, section }) {
                 resultData,
                 {
                     headers: {
-                        Authorization: `bearer ${authState.accessToken}`
+                        Authorization: `bearer ${authState?.accessToken}`
                     }
                 }
             );

@@ -40,7 +40,7 @@ export default function UploadTile({ details }) {
     try {
       const response = await axios.put(`${BASE_URL}/notice/update?noticeId=${details[index]._id}&session=${session}`, editedNotice, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       });
       console.log("API response after update:", response.data);
@@ -60,7 +60,7 @@ export default function UploadTile({ details }) {
     try {
       await axios.delete(`${BASE_URL}/notice/delete?id=${details[index]._id}&session=${session}`, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       });
       toast.success('Deleted Successfully');

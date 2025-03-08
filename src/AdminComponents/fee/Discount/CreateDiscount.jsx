@@ -54,7 +54,7 @@ function CreateDiscount({ selectedSession }) {
                 try {
                     const response = await axios.get(`${BASE_URL}/fee/fetch/students/list?searchString=${temp}`, {
                         headers: {
-                            Authorization: `Bearer ${authState.accessToken}`
+                            Authorization: `Bearer ${authState?.accessToken}`
                         }
                     });
                     const StudentEmails = response.data.Students.map(Student => ({
@@ -70,7 +70,7 @@ function CreateDiscount({ selectedSession }) {
             }
             searchStudent();
         }
-    }, [temp, authState.accessToken]);
+    }, [temp, authState?.accessToken]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -85,7 +85,7 @@ function CreateDiscount({ selectedSession }) {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );

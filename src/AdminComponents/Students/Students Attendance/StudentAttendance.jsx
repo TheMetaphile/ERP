@@ -65,7 +65,7 @@ export default function StudentAttendance() {
 
                 const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/admin?month=${Month}&year=${year}&class=${Class}&section=${Section}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 });
                 if (response.status === 200) {
@@ -82,7 +82,7 @@ export default function StudentAttendance() {
         };
 
         fetchStudents();
-    }, [authState.accessToken, Class, Section, Month]);
+    }, [authState?.accessToken, Class, Section, Month]);
 
     const containerVariants = {
         hidden: { opacity: 0, y: 20 },

@@ -120,7 +120,7 @@ const Upload = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const createStructureData = {
-            accessToken: authState.accessToken,
+            accessToken: authState?.accessToken,
             classRange: structureData.Class,
             numberOfLecture: structureData.lecture,
             durationOfEachLeacture: structureData.duration,
@@ -161,12 +161,12 @@ const Upload = () => {
 
     const handleFetch = async (e) => {
         //e.preventDefault();
-        console.log(authState.accessToken)
+        console.log(authState?.accessToken)
         console.log(ClassRange)
         try {
 
             const response = await axios.post(`${BASE_URL}/timeTableStructure/fetch`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 classRange: ClassRange,
             });
 

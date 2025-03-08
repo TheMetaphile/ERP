@@ -32,7 +32,7 @@ export default function Attendance(props) {
 
             const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/completeStats?id=${id}&class=${Class}&year=2024`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             if (response.status === 200) {

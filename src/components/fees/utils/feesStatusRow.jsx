@@ -12,20 +12,20 @@ export default function FeeStatusRow() {
 
 
   useEffect(() => {
-    if (authState.accessToken) {
+    if (authState?.accessToken) {
       setLoading(true);
       fetchStatus();
     } else {
       toast.error('No access token available');
     }
-  }, [authState.accessToken]);
+  }, [authState?.accessToken]);
 
   const fetchStatus = async () => {
     console.log(authState?.userDetails?.currentClass, 'Class')
     try {
       const response = await axios.get(`${BASE_URL}/fee/fetch/stats?end=20&start=0&class=${authState?.userDetails?.currentClass}`, {
         headers: {
-          'Authorization': `Bearer ${authState.accessToken}`
+          'Authorization': `Bearer ${authState?.accessToken}`
         }
       });
 

@@ -65,9 +65,9 @@ export default function RightCard() {
         setIsSubmitting(true);
         try {
             const response = await axios.post(`${BASE_URL}/otp/verify`, {
-                email: authState.email,
+                email: authState?.email,
                 otp,
-                otpToken: authState.otpToken
+                otpToken: authState?.otpToken
             });
             if (response.status === 200 && response.data.valid) {
                 navigate('/newPassword');

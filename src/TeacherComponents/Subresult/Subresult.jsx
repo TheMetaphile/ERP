@@ -72,7 +72,7 @@ const Result = () => {
             setProfileLoading(true);
             try {
                 const response = await axios.post(`${BASE_URL}/fetchSingle/student`, {
-                    accessToken: authState.accessToken,
+                    accessToken: authState?.accessToken,
                     email: id
                 });
                 if (response.status === 200) {
@@ -90,7 +90,7 @@ const Result = () => {
             try {
                 const response = await axios.get(`${BASE_URL}/result/fetch/teacher?email=${id}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`,
+                        Authorization: `Bearer ${authState?.accessToken}`,
                     }
                 });
                 if (response.status === 200) {
@@ -110,7 +110,7 @@ const Result = () => {
                 maxBodyLength: Infinity,
                 url: 'http://13.201.247.28:8000/studentAttendance/fetch/completeStats?class=9th&id=664c4da3a8cd53da5751bdba&year=2024',
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             };
 
@@ -128,7 +128,7 @@ const Result = () => {
             await Promise.all([fetchAttendance(), fetchProfile(), fetchResult()]);
         }
         processAll();
-    }, [id, authState.accessToken]);
+    }, [id, authState?.accessToken]);
 
     if (loading || profileLoading) {
         return <Loading />;

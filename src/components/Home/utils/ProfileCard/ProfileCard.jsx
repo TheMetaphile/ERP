@@ -11,15 +11,15 @@ export default function ProfileCard() {
   const [teacher, setTeacher] = useState('');
 
   useEffect(() => {
-    if (authState.accessToken) {
+    if (authState?.accessToken) {
       fetchTeacher();
     }
-  }, [authState.accessToken]);
+  }, [authState?.accessToken]);
 
   const fetchTeacher = async () => {
     try {
       const response = await axios.post(`${BASE_URL}/classTeacher/fetch/single`, {
-        accessToken: authState.accessToken,
+        accessToken: authState?.accessToken,
         class: authState?.userDetails?.currentClass,
         section: authState?.userDetails?.section
       });

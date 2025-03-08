@@ -36,7 +36,7 @@ export default function Home() {
         const year = today.getFullYear();
         const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/student/stats?month=${month}&year=${year}`, {
           headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
+            Authorization: `Bearer ${authState?.accessToken}`,
           }
         });
         setData(response.data);
@@ -48,7 +48,7 @@ export default function Home() {
     };
 
     fetchStudents();
-  }, [authState.accessToken]);
+  }, [authState?.accessToken]);
 
   return (
     <div className='flex flex-col w-full h-screen mt-3 overflow-y-auto space-y-6 p-4 mobile:p-2 tablet:p-6 no-scrollbar mb-2'>

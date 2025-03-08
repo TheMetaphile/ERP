@@ -55,7 +55,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
         e.preventDefault();
         if (!Class || !section || !subject) return;
         const data = {
-            accessToken: authState.accessToken,
+            accessToken: authState?.accessToken,
             class: Class,
             section: section,
             subject: subject,
@@ -68,7 +68,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
         try {
             const response = await axios.post(`${BASE_URL}/lessonPlan/create`, data, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             console.log("API response:", response.data);
@@ -89,7 +89,7 @@ const NextWeek = ({ selectedTab, Class, section, subject }) => {
             try {
                 const response = await axios.get(`${BASE_URL}/lessonPlan/fetch/teacher?class=${Class}&section=${section}&subject=${subject}&session=${session}&startingDate=${nextWeekFormattedDate}`, {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 });
                 console.log("API response:", response.data);

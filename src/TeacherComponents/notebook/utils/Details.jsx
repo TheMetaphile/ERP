@@ -37,7 +37,7 @@ const RecordDetails = () => {
       maxBodyLength: Infinity,
       url: `${BASE_URL}/notebook/fetch/teacher/particular?docId=${id}&session=${session}`,
       headers: {
-        'Authorization': `Bearer ${authState.accessToken}`
+        'Authorization': `Bearer ${authState?.accessToken}`
       }
     };
 
@@ -69,7 +69,7 @@ const RecordDetails = () => {
       url: `${BASE_URL}/notebook/update/submission`,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authState.accessToken}`
+        'Authorization': `Bearer ${authState?.accessToken}`
       },
       data: data
     };

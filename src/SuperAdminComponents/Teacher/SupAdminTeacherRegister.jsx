@@ -33,7 +33,7 @@ console.log(authState?.userDetails?.branch)
       DOB: '',
       permanentAddress: '',
       salary: '',
-      accessToken: authState.accessToken,
+      accessToken: authState?.accessToken,
       branch: authState?.userDetails?.branch
     }
   );
@@ -81,11 +81,11 @@ console.log(authState?.userDetails?.branch)
     console.log('o')
     setLoading(true);
 
-    console.log(formData, authState.accessToken)
+    console.log(formData, authState?.accessToken)
     const [year, month, day] = formData.DOB.split('-');
     const formattedDate = `${day}-${month}-${year}`;
     formData.DOB = formattedDate
-    console.log(formData, authState.accessToken)
+    console.log(formData, authState?.accessToken)
 
     try {
       formData.password = formData.aadhaarNumber;

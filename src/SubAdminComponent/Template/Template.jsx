@@ -79,7 +79,7 @@ export default function Template() {
             console.log(fileName);
             const response = await axios.get(`${BASE_URL}/fetch/url/${encodeURIComponent(fileName)}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`, // Pass the JWT token for authentication
+                    Authorization: `Bearer ${authState?.accessToken}`, // Pass the JWT token for authentication
                 },
             });
             return response.data.signedUrl; // Return the pre-signed URL
@@ -91,8 +91,8 @@ export default function Template() {
 
     const downloadFile = async (doc) => {
         try {
-            console.log(authState.userDetails);
-            const fileName = "documents/" + authState.userDetails.branch + '/' + userType + "/" + doc.referenceNo + '.' + doc.documentType
+            console.log(authState?.userDetails);
+            const fileName = "documents/" + authState?.userDetails?.branch + '/' + userType + "/" + doc.referenceNo + '.' + doc.documentType
             const signedUrl = await getPresignedUrl(fileName);
             if (!signedUrl) {
                 alert("Failed to get download URL");
@@ -116,8 +116,8 @@ export default function Template() {
 
     const openFile = async (doc) => {
         try {
-            console.log(authState.userDetails);
-            const fileName = "documents/" + authState.userDetails.branch + '/' + userType + "/" + doc.referenceNo + '.' + doc.documentType
+            console.log(authState?.userDetails);
+            const fileName = "documents/" + authState?.userDetails?.branch + '/' + userType + "/" + doc.referenceNo + '.' + doc.documentType
             const signedUrl = await getPresignedUrl(fileName);
             if (!signedUrl) {
                 alert("Failed to get download URL");
@@ -195,7 +195,7 @@ export default function Template() {
                 formData,
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );
@@ -222,7 +222,7 @@ export default function Template() {
                 `${BASE_URL}/templates/delete/${fieldId}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );
@@ -242,14 +242,14 @@ export default function Template() {
 
     useEffect(() => {
         fetchFieldsForUserType(userType);
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     const fetchFieldsForUserType = async (type) => {
         setIsLoading(true);
         try {
             const response = await axios.get(`${BASE_URL}/templates/fetch`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
 

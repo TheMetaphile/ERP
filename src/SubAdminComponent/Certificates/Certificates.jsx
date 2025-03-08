@@ -107,7 +107,7 @@ const Certificates = () => {
                 templateReference: selectedTemplate
             }, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 },
                 responseType: "blob"
             });
@@ -192,7 +192,7 @@ const Certificates = () => {
         try {
             const response = await axios.get(`${BASE_URL}/templates/fetch`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
 
@@ -284,7 +284,7 @@ const Certificates = () => {
                 `${BASE_URL}/terminate/terminatedStudents?Class=${Class}&section=${selectedSection}&session=${selectedSession}&start=${start}&end=${end}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );
@@ -318,7 +318,7 @@ const Certificates = () => {
                 `${BASE_URL}/terminate/sections/${Class}/${selectedSession}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${authState.accessToken}`
+                        Authorization: `Bearer ${authState?.accessToken}`
                     }
                 }
             );
@@ -399,7 +399,7 @@ const Certificates = () => {
                 templateReference: selectedTemplate
             }, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 },
                 responseType: "blob"
             });
@@ -461,7 +461,7 @@ const Certificates = () => {
                 const searchTeacher = async () => {
                     try {
                         const response = await axios.post(`${BASE_URL}/search/Exstudent`, {
-                            accessToken: authState.accessToken,
+                            accessToken: authState?.accessToken,
                             session: selectedSession,
                             searchString: searchString,
                             start: 0,

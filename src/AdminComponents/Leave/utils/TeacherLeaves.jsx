@@ -57,7 +57,7 @@ export default function TeacherLeaves() {
     try {
       const response = await axios.get(`${BASE_URL}/teacherleave/fetch/admin?start=${start}&end=${end}&session=${session}`, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       }
       );

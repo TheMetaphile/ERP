@@ -76,7 +76,7 @@ const NewExam = ({ onClose, addExam }) => {
     }));
 
     const examData = {
-      accessToken: authState.accessToken,
+      accessToken: authState?.accessToken,
       stream: stream || "Not applicable",
       class: classs,
       term: selectedTerm,

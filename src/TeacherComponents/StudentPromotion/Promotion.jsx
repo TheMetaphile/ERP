@@ -34,7 +34,7 @@ function Promotion() {
 
     useEffect(() => {
         fetchStudents();
-    }, [authState.accessToken]);
+    }, [authState?.accessToken]);
 
     const handleViewMore = () => {
         setStart(prevStart => prevStart + end);
@@ -65,9 +65,9 @@ function Promotion() {
         setLoading(true);
         try {
             const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
-                accessToken: authState.accessToken,
-                currentClass: authState.ClassDetails.class,
-                section: authState.ClassDetails.section,
+                accessToken: authState?.accessToken,
+                currentClass: authState?.ClassDetails?.class,
+                section: authState?.ClassDetails?.section,
                 start: start,
                 end: end,
                 session: session
@@ -97,20 +97,20 @@ function Promotion() {
     };
 
     const handleSave = async () => {
-        const currentClass = authState.ClassDetails.class;
+        const currentClass = authState?.ClassDetails?.class;
         const nextClass = getNextClass(currentClass);
 
         const payload = {
             email: selectedStudents,
             nextClass: nextClass,
-            nextSection: authState.ClassDetails.section,
+            nextSection: authState?.ClassDetails?.section,
             nextSession: nextSession
         };
 
         try {
             const response = await axios.put(`${BASE_URL}/promote/student?session=${session}&class=${currentClass}&section=${authState.ClassDetails.section}`, payload, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
             if (response.status === 200) {

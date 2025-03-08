@@ -18,7 +18,7 @@ export default function Classwork() {
       try {
         const response = await axios.get(`${BASE_URL}/classwork/fetch/student?class=${authState?.userDetails?.currentClass}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&section=${authState?.userDetails?.section}&start=${start}&end=${end}`, {
           headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
+            Authorization: `Bearer ${authState?.accessToken}`,
           }
         });
         setDetails(response.data.classwork);
@@ -29,7 +29,7 @@ export default function Classwork() {
       }
     };
     fetchClassWork();
-  }, [authState.accessToken, authState?.userDetails, start, end]);
+  }, [authState?.accessToken, authState?.userDetails, start, end]);
 
 
   

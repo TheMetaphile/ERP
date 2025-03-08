@@ -13,7 +13,7 @@ function StudentDoubts() {
     const [Section, setSection] = useState(localStorage.getItem('Section') || '');
     const [Subject, setSubject] = useState(localStorage.getItem('Subject') || '');
     const [selectedLink, setSelectedLink] = useState(`/Teacher-Dashboard/studentdoubts/new`);
-    const uniqueClasses = Array.from(new Set(authState.subject ? authState.subject.map(subj => subj.class) : []));
+    const uniqueClasses = Array.from(new Set(authState?.subject ? authState?.subject.map(subj => subj.class) : []));
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
     const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -26,7 +26,7 @@ function StudentDoubts() {
 
     useEffect(() => {
         setUniqueSections(Array.from(new Set(
-            authState.subject ? authState.subject
+            authState?.subject ? authState?.subject
                 .filter(subj => subj.class === Class)
                 .map(subj => subj.section) : []
         )));
@@ -34,7 +34,7 @@ function StudentDoubts() {
 
     useEffect(() => {
         setUniqueSubjects(Array.from(new Set(
-            authState.subject ? authState.subject
+            authState?.subject ? authState?.subject
                 .filter(subj => subj.section === Section && subj.class === Class)
                 .map(subj => subj.subject) : []
         )));

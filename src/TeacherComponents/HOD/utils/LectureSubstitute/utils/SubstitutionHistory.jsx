@@ -23,7 +23,7 @@ export default function ClassTeacherSubstitutionHistory() {
             maxBodyLength: Infinity,
             url: `${BASE_URL}/LectureSubstitute/fetch/completeHistory?date=${formattedDate}&start=${start}&end=${end}&session=${session}`,
             headers: {
-                'Authorization': `Bearer ${authState.accessToken}`
+                'Authorization': `Bearer ${authState?.accessToken}`
             }
         };
 

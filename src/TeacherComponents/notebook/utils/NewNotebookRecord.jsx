@@ -67,7 +67,7 @@ const NewNoteBookRecord = () => {
   const fetchStudentList = async () => {
 
     let data = JSON.stringify({
-      "accessToken": authState.accessToken,
+      "accessToken": authState?.accessToken,
       "currentClass": Class,
       "section": Section,
       "start": start,
@@ -117,7 +117,7 @@ const NewNoteBookRecord = () => {
         url: `${BASE_URL}/notebook/upload/`,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authState.accessToken}`
+          'Authorization': `Bearer ${authState?.accessToken}`
         },
         data: data
       };

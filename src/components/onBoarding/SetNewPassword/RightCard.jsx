@@ -33,9 +33,9 @@ export default function RightCard() {
             return;
         }
         try {
-            console.log("mail password", authState.email, newPassword)
+            console.log("mail password", authState?.email, newPassword)
             const response = await axios.post(`${BASE_URL}/password/forgot/Student`, {
-                email: authState.email,
+                email: authState?.email,
                 newPassword
             });
             const success = response.data;

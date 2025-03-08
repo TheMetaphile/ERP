@@ -69,7 +69,7 @@ function PreviousFeeDetailsSubAdmin() {
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/pendingFeeStats?end=${end}&start=${start}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             if (response.status === 200) {

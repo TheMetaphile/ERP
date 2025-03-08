@@ -48,7 +48,7 @@ export default function TeacherRegister() {
 
   const [formData, setFormData] = useState(
     {
-      accessToken: authState.accessToken,
+      accessToken: authState?.accessToken,
     }
   );
 
@@ -125,7 +125,7 @@ export default function TeacherRegister() {
 
   const handleReset = () => {
     setFormData({
-      accessToken: authState.accessToken,
+      accessToken: authState?.accessToken,
     });
     setExtraFormData([]);
   };
@@ -201,7 +201,7 @@ export default function TeacherRegister() {
     try {
       const response = await axios.get(`${BASE_URL}/registrationFields/fetch/Teacher`, {
         headers: {
-          'Authorization': `Bearer ${authState.accessToken}`
+          'Authorization': `Bearer ${authState?.accessToken}`
         }
       });
       if (response.status === 200) {

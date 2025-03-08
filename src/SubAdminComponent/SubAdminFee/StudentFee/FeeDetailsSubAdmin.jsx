@@ -91,7 +91,7 @@ function FeeDetailsSubAdmin() {
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/admin?class=${selectedClass}&start=${start}&end=${end}&session=${selectedSession}&section=${section}`, {
                 headers: {
-                    Authorization: `Bearer ${authState.accessToken}`
+                    Authorization: `Bearer ${authState?.accessToken}`
                 }
             });
             if (response.status === 200) {
@@ -117,7 +117,7 @@ function FeeDetailsSubAdmin() {
     const fetchSections = async (selectedClass) => {
         try {
             const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-                accessToken: authState.accessToken,
+                accessToken: authState?.accessToken,
                 class: selectedClass,
             });
             console.log(response.data, 'section')

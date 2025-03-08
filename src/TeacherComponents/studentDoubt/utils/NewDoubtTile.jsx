@@ -119,7 +119,7 @@ export default function NewDoubtTile({ data, Class }) {
     try {
       const response = await axios.delete(`${BASE_URL}/doubts/delete?class=${Class}&doubtId=${id}`, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       });
 
@@ -166,7 +166,7 @@ export default function NewDoubtTile({ data, Class }) {
         replyDate: new Date().toISOString().split('T')[0]
       }, {
         headers: {
-          Authorization: `Bearer ${authState.accessToken}`
+          Authorization: `Bearer ${authState?.accessToken}`
         }
       });
       if (response.status === 200) {

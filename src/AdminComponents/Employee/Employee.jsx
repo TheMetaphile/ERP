@@ -97,7 +97,7 @@ function Employee() {
     const [customFields, setCustomFields] = useState([]);
     const [formData, setFormData] = useState(
         {
-            accessToken: authState.accessToken,
+            accessToken: authState?.accessToken,
         }
     );
 
@@ -141,7 +141,7 @@ function Employee() {
 
     const handleReset = () => {
         setFormData({
-            accessToken: authState.accessToken,
+            accessToken: authState?.accessToken,
         });
         setExtraFormData([]);
     };
@@ -196,7 +196,7 @@ function Employee() {
         try {
             const response = await axios.get(`${BASE_URL}/registrationFields/fetch/SubAdmin`, {
                 headers: {
-                    'Authorization': `Bearer ${authState.accessToken}`
+                    'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
             if (response.status === 200) {
