@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
-import { FaEnvelope, FaBirthdayCake, FaIdCard, FaGraduationCap, FaCalendarAlt, FaTint } from 'react-icons/fa';
+import { FaEnvelope, FaBirthdayCake, FaIdCard, FaGraduationCap, FaCalendarAlt, FaTint, FaPhone } from 'react-icons/fa';
 import { IoMdSchool } from 'react-icons/io';
 import { GiIndiaGate } from 'react-icons/gi';
 import AuthContext from '../../Context/AuthContext';
@@ -19,7 +19,6 @@ const itemVariants = {
 const ProfileSubAdmin = () => {
   const { authState } = useContext(AuthContext)
   const { userDetails } = authState;
-
 
   return (
     <motion.div
@@ -48,12 +47,12 @@ const ProfileSubAdmin = () => {
           <motion.div className="grid laptop:grid-cols-3 mobile:max-tablet:grid-cols-1 tablet:grid-cols-2 gap-4" variants={containerVariants}>
             <InfoItem icon={<FaEnvelope />} label="Email" value={userDetails?.email} />
             <InfoItem icon={<FaBirthdayCake />} label="Date of Birth" value={userDetails?.dob} />
-            <InfoItem icon={<FaIdCard />} label="Role" value={userDetails?.role} />
-            <InfoItem icon={<FaTint />} label="Blood Group" value={userDetails?.bloodGroup} />
+            <InfoItem icon={<FaIdCard />} label="Role" value={userDetails?.rolee} />
+            {/* <InfoItem icon={<FaTint />} label="Blood Group" value={userDetails?.bloodGroup} />
             <InfoItem icon={<IoMdSchool />} label="Department" value={userDetails?.department} />
-            <InfoItem icon={<FaGraduationCap />} label="Qualification" value={userDetails?.qualification} />
-            <InfoItem icon={<FaCalendarAlt />} label="Institute" value={userDetails?.institute} />
-            <InfoItem icon={<GiIndiaGate />} label="Permanent Address" value={userDetails?.permanentAddress} />
+            <InfoItem icon={<FaGraduationCap />} label="Qualification" value={userDetails?.qualification} /> */}
+            <InfoItem icon={<FaCalendarAlt />} label="Branch" value={userDetails?.branch} />
+            <InfoItem icon={<FaPhone />} label="Phone Number" value={userDetails?.phoneNumber} />
 
           </motion.div>
         </div>

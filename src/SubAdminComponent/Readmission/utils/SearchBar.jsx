@@ -54,7 +54,7 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
                     placeholder="Search by Name"
                     className="rounded-lg shadow-md px-3 py-1 bg-white border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1"
                 />
-                {/* <select id="class" value={Class} onChange={handleClassChangeWithFetch} className="rounded-lg shadow-md px-3 py-1 border-2 border-gray-200 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
+                <select id="class" value={Class} onChange={handleClassChangeWithFetch} className="rounded-lg shadow-md px-3 py-1 bg-white border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
                     <option value="">Search by Class</option>
                     <option value="Pre-Nursery">Pre-Nursery</option>
                     <option value="Nursery">Nursery</option>
@@ -72,7 +72,7 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
                     <option value="10th">10th</option>
                     <option value="11th">11th</option>
                     <option value="12th">12th</option>
-                </select> */}
+                </select>
 
                 <select id="section" value={Section} onChange={handleSectionChange} className="rounded-lg shadow-md px-3 py-1 bg-white border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
                     <option value="">Search by Section</option>

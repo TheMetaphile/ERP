@@ -32,7 +32,13 @@ export default function AllAdmission() {
         setUserData([]);
         setName(event.target.value);
     };
-    const Class = "10th"
+    
+    const [Class, setClass] = useState('');
+    const handleClassChange = (event) => {
+        setStart(0);
+        setUserData([]);
+        setClass(event.target.value);
+    };
 
     const [Section, setSection] = useState('');
     const handleSectionChange = (event) => {
@@ -165,7 +171,7 @@ export default function AllAdmission() {
                                     Section={Section}
                                     handleRollNumberChange={handleRollNumberChange}
                                     handleNameChange={handleNameChange}
-                                    // handleClassChange={handleClassChange}
+                                    handleClassChange={handleClassChange}
                                     handleSectionChange={handleSectionChange}
                                     handlebothEventsCalled={handlebothEventsCalled}
                                 />
@@ -184,7 +190,7 @@ export default function AllAdmission() {
                         Section={Section}
                         handleRollNumberChange={handleRollNumberChange}
                         handleNameChange={handleNameChange}
-                        // handleClassChange={handleClassChange}
+                        handleClassChange={handleClassChange}
                         handleSectionChange={handleSectionChange}
                         handlebothEventsCalled={handlebothEventsCalled}
                     />
