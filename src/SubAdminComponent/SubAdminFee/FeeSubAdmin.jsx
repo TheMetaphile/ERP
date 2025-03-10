@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, Outlet } from "react-router-dom";
 import { motion } from "framer-motion";
+import AuthContext from '../../Context/AuthContext';
 
 function FeeSubAdmin() {
-    const [selectedLink, setSelectedLink] = useState('/Sub-Admin/StudentsFee/details');
+    const { authState } = useContext(AuthContext);
+    const [selectedLink, setSelectedLink] = useState(`/${authState?.role}/StudentsFee/details`);
 
     const handleLinkSelect = (link) => {
         setSelectedLink(link);
@@ -43,13 +45,13 @@ function FeeSubAdmin() {
                 <div className="flex  items-center justify-between">
                     <div className="flex gap-4 w-full overflow-auto whitespace-nowrap">
                         {[
-                            { path: '/Sub-Admin/StudentsFee/structure', label: 'Fee Structure' },
-                            { path: '/Sub-Admin/StudentsFee/details', label: 'Fee Status' },
-                            { path: '/Sub-Admin/StudentsFee/feediscount', label: 'Fee Discount' },
-                            { path: '/Sub-Admin/StudentsFee/PreviousFeeSubAdmin', label: 'Previous Session' },
-                            { path: '/Sub-Admin/StudentsFee/discountCategory', label: 'Discount Category' },
-                            { path: '/Sub-Admin/StudentsFee/Transactions', label: 'Transactions' },
-                            { path: '/Sub-Admin/StudentsFee/PendingFee', label: 'Pending Fee' }
+                            { path: `/${authState?.role}/StudentsFee/structure`, label: 'Fee Structure' },
+                            { path: `/${authState?.role}/StudentsFee/details`, label: 'Fee Status' },
+                            { path: `/${authState?.role}/StudentsFee/feediscount`, label: 'Fee Discount' },
+                            { path: `/${authState?.role}/StudentsFee/PreviousFeeSubAdmin`, label: 'Previous Session' },
+                            { path: `/${authState?.role}/StudentsFee/discountCategory`, label: 'Discount Category' },
+                            { path: `/${authState?.role}/StudentsFee/Transactions`, label: 'Transactions' },
+                            { path: `/${authState?.role}/StudentsFee/PendingFee`, label: 'Pending Fee' }
 
 
                         ].map((item) => (

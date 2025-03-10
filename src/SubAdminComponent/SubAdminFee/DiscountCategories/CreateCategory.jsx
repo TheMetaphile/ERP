@@ -1,11 +1,11 @@
 import { MdAdd, MdRemove } from "react-icons/md";
 import GlobalDiscount from "./GlobalDiscount";
 import Header from "../FeeStructure/Header";
-import DiscountRow from "../FeeStructure/DiscountRow";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../../Config";
 import AuthContext from "../../../Context/AuthContext";
+import DiscountRow from "./DiscountRow";
 
 export default function () {
     const [discounts, setDiscounts] = useState([]);

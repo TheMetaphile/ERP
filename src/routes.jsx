@@ -10,6 +10,7 @@ import Template from "./SubAdminComponent/Template/Template.jsx";
 import TimeTableStructure from "./SubAdminComponent/timetable/utils/Upload/createTimetableStructure.jsx";
 import SubjectManagement from "./SubAdminComponent/SubjectManagement/SubjectManagement.jsx";
 import AllStudentsListSubject from "./SubAdminComponent/AllocateSubject/AllStudentsListSubject.jsx";
+import CreateCategory from "./SubAdminComponent/SubAdminFee/DiscountCategories/CreateCategory.jsx";
 
 const AssignSubjectSubAdmin = lazy(() => import("./SubAdminComponent/Subjects/utils/AssignSubjectSubAdmin"));
 const TimeTableSubAdmin = lazy(() => import("./SubAdminComponent/timetable/TimeTableSubAdmin.jsx"));
@@ -19,8 +20,8 @@ const UploadSubAdmin = lazy(() => import("./SubAdminComponent/timetable/utils/Up
 const AssigncoordinatorSubAdmin = lazy(() => import("./SubAdminComponent/Coordinator/AssigncoordinatorSubAdmin.jsx"));
 const SubstituteCoordinatorSubAdmin = lazy(() => import("./SubAdminComponent/SubstituteCoordinator/SubstituteCoordinatorSubAdmin.jsx"));
 const StudentCard = lazy(() => import("./AdminComponents/StudentDetails.jsx"));
-const CompleteFee = lazy(() => import("./AdminComponents/fee/CompleteFee/CompleteFee.jsx"));
-const CreateCategory = lazy(() => import("./AdminComponents/fee/DiscountCategories/CreateCategory.jsx"));
+
+
 const Transactions = lazy(() => import("./SubAdminComponent/SubAdminFee/Transaction/Transactions.jsx"));
 const BacklogTransaction = lazy(() => import("./SubAdminComponent/SubAdminFee/Transaction/utils/BacklogFeeTransaction.jsx"));
 const PendingFee = lazy(() => import("./SubAdminComponent/SubAdminFee/Pending Fee/PendingFee.jsx"));
@@ -34,9 +35,6 @@ const SuperAdminProfile = lazy(() => import("./SuperAdminComponents/profile/Admi
 const AllAdmins = lazy(() => import("./SuperAdminComponents/Admins/AllAdmins.jsx"));
 const AllReportHOD = lazy(() => import("./TeacherComponents/HOD/utils/result/AllReportHOD.jsx"));
 const ReportCardHOD = lazy(() => import("./TeacherComponents/HOD/utils/result/ReportCardHOD.jsx"));
-const AllPreviousDetailsAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/AllDetailsAdmin.jsx"));
-const PreviousFeeDetailAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/utils/PreviousFeeDetailAdmin.jsx"));
-const PreviousFeeDetailsAdmin = lazy(() => import("./AdminComponents/fee/PreviousFee/PreviousFeeDetails.jsx"));
 const TeacherDashboardProfile = lazy(() => import("./TeacherComponents/profile/TeacherProfile.jsx"));
 const AdminProfile = lazy(() => import("./AdminComponents/profile/AdminProfile.jsx"));
 const AllPreviousDetails = lazy(() => import("./SubAdminComponent/SubAdminFee/PreviousFee/AllDetails.jsx"));
@@ -130,7 +128,6 @@ const TeacherHome = lazy(() => import("./TeacherComponents/Home/TeacherHome.jsx"
 const ClassTeacher = lazy(() => import("./AdminComponents/Classes/utils/ClassTeacher.jsx"));
 const AssignTeacher = lazy(() => import("./AdminComponents/Classes/utils/AssignTeacher.jsx"));
 const StudentAttendanceRecord = lazy(() => import("./TeacherComponents/studentattendence/Students Attendance/StudentAttendanceRecord.jsx"));
-const FeeAdmin = lazy(() => import("./AdminComponents/fee/FeeAdmin.jsx"));
 const Event = lazy(() => import("./AdminComponents/event/Event.jsx"));
 const AllTC = lazy(() => import("./AdminComponents/Students/TransferCharacter/AllTC.jsx"));
 const TC = lazy(() => import("./AdminComponents/Students/TransferCharacter/TC.jsx"));
@@ -138,9 +135,6 @@ const CC = lazy(() => import("./AdminComponents/Students/Character/CC.jsx"));
 const Certificate = lazy(() => import("./AdminComponents/Students/TransferCharacter/utils/performance/Certificate.jsx"));
 const AllCC = lazy(() => import("./AdminComponents/Students/Character/AllCC.jsx"));
 const CharacterCertificate = lazy(() => import("./AdminComponents/Students/Character/utils/performance/CharacterCertificate.jsx"));
-const FeeDetails = lazy(() => import("./AdminComponents/fee/StudentFee/FeeDetails.jsx"));
-const FeeStructure = lazy(() => import("./AdminComponents/fee/FeeStructure/FeeStructure.jsx"));
-const FeeDiscount = lazy(() => import("./AdminComponents/fee/Discount/FeeDiscount.jsx"));
 const StudentDoubts = lazy(() => import("./TeacherComponents/studentDoubt/StudentDoubts.jsx"));
 const NewDoubt = lazy(() => import("./TeacherComponents/studentDoubt/utils/NewDoubt.jsx"));
 const Answered = lazy(() => import("./TeacherComponents/studentDoubt/utils/Answered.jsx"));
@@ -185,8 +179,6 @@ const Planner = lazy(() => import("./TeacherComponents/Planner/Planner.jsx"));
 const AllExDetails = lazy(() => import("./SubAdminComponent/SubAdminFee/StudentFee/AllDetails.jsx"));
 const FeeDetail = lazy(() => import("./SubAdminComponent/SubAdminFee/StudentFee/utils/FeeDetail.jsx"));
 const NoticeSubAdmin = lazy(() => import("./SubAdminComponent/notification/utils/NoticeSubAdmin.jsx"));
-const FeeDetailAdmin = lazy(() => import("./AdminComponents/fee/StudentFee/utils/FeeDetailAdmin.jsx"));
-const AllDetailsAdmin = lazy(() => import("./AdminComponents/fee/StudentFee/AllDetailsAdmin.jsx"));
 const Hod = lazy(() => import("./TeacherComponents/HOD/Hod.jsx"));
 const NoteBookHOD = lazy(() => import("./TeacherComponents/HOD/utils/notebook/NoteBookHOD.jsx"));
 const RecordDetailsHOD = lazy(() => import("./TeacherComponents/HOD/utils/notebook/utils/Details.jsx"));
@@ -527,28 +519,49 @@ const router = createBrowserRouter([
       {
         path: "/Admin-Dashboard/StudentsFee",
         element: <SuspenseWrapper fallback={Loading}>
-          <FeeAdmin /></SuspenseWrapper>,
+          <FeeSubAdmin /></SuspenseWrapper>,
         children: [
           {
             path: '/Admin-Dashboard/StudentsFee/details',
             element: <SuspenseWrapper fallback={Loading}>
-              <AllDetailsAdmin /></SuspenseWrapper>,
+              <AllExDetails /></SuspenseWrapper>,
             children: [
               {
                 path: '',
                 element: <SuspenseWrapper fallback={Loading}>
-                  <FeeDetails /></SuspenseWrapper>
+                  <FeeDetail /></SuspenseWrapper>
               },
               {
                 path: ':id',
-                element: <SuspenseWrapper fallback={Loading}><FeeDetailAdmin /></SuspenseWrapper>
+                element: <SuspenseWrapper fallback={Loading}>
+                  <FeeDetail /></SuspenseWrapper>
               }
             ]
           },
           {
             path: '/Admin-Dashboard/StudentsFee/structure',
+            element: <SuspenseWrapper fallback={Loading}><FeeStructureSubAdmin /></SuspenseWrapper>
+          },
+          {
+            path: '/Admin-Dashboard/StudentsFee/feediscount',
             element: <SuspenseWrapper fallback={Loading}>
-              <FeeStructure /></SuspenseWrapper>
+              <FeeDiscountSubAdmin /></SuspenseWrapper>
+          },
+          {
+            path: "/Admin-Dashboard/StudentsFee/PendingFee",
+            element: <SuspenseWrapper><PendingFee /></SuspenseWrapper>
+          },
+          {
+            path: "/Admin-Dashboard/StudentsFee/Transactions",
+            element: (
+              <SuspenseWrapper>
+                <Transactions />
+              </SuspenseWrapper>
+            ),
+            children: [
+              { path: "", element: <SuspenseWrapper><BacklogTransaction /></SuspenseWrapper> },
+              { path: "/Admin-Dashboard/StudentsFee/Transactions/:tab", element: <SuspenseWrapper><BacklogTransaction /></SuspenseWrapper> },
+            ],
           },
           {
             path: '/Admin-Dashboard/StudentsFee/discountCategory',
@@ -556,41 +569,26 @@ const router = createBrowserRouter([
               <CreateCategory /></SuspenseWrapper>
           },
           {
-            path: '/Admin-Dashboard/StudentsFee/feediscount',
+            path: '/Admin-Dashboard/StudentsFee/PreviousFeeSubAdmin',
             element: <SuspenseWrapper fallback={Loading}>
-              <FeeDiscount /></SuspenseWrapper>,
+              <AllPreviousDetails /></SuspenseWrapper>,
             children: [
               {
-                path: ':email',
-                element: <SuspenseWrapper fallback={Loading}><FeeDiscount /></SuspenseWrapper>
+                path: '',
+                element: <SuspenseWrapper fallback={Loading}>
+                  <PreviousFeeDetailsSubAdmin /></SuspenseWrapper>
+              },
+              {
+                path: ':id',
+                element: <SuspenseWrapper fallback={Loading}>
+                  <PreviousFeeDetail /></SuspenseWrapper>
               }
             ]
           },
           {
             path: '',
             element: <SuspenseWrapper fallback={Loading}>
-              <FeeDetails /></SuspenseWrapper>
-          },
-          {
-            path: '/Admin-Dashboard/StudentsFee/PreviousFee',
-            element: <SuspenseWrapper fallback={Loading}>
-              <AllPreviousDetailsAdmin /></SuspenseWrapper>,
-            children: [
-              {
-                path: '',
-                element: <SuspenseWrapper fallback={Loading}>
-                  <PreviousFeeDetailsAdmin /></SuspenseWrapper>
-              },
-              {
-                path: ':email',
-                element: <SuspenseWrapper fallback={Loading}><PreviousFeeDetailAdmin /></SuspenseWrapper>
-              }
-            ]
-          },
-          {
-            path: '/Admin-Dashboard/StudentsFee/CompleteFee',
-            element: <SuspenseWrapper fallback={Loading}>
-              <CompleteFee /></SuspenseWrapper>
+              <FeeDetail /> </SuspenseWrapper>
           },
         ]
       },
