@@ -36,7 +36,7 @@ function TakeLeaveSubAdmin() {
 
     return (
         <motion.div
-            className="flex flex-col px-6 h-screen overflow-y-auto items-start mt-4 mb-6 no-scrollbar"
+            className="flex flex-col  h-screen overflow-y-auto items-start mt-4 mb-6 no-scrollbar"
             variants={containerVariants}
             initial="hidden"
             animate="visible"

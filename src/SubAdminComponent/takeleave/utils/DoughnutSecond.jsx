@@ -48,7 +48,7 @@ export default function DoughnutSecond({ chartData, title }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.5 }}
-        className="flex mt-6 mobile:max-tablet:justify-center mobile:max-tablet:flex-wrap gap-2 my-2 mobile:max-tablet:w-full"
+        className="flex mt-6 mobile:justify-center mobile:flex-wrap gap-2 my-2 mobile:max-tablet:w-full"
       >
         {chartData.labels.map((label, index) => (
           <motion.div
