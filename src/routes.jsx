@@ -11,8 +11,6 @@ import TimeTableStructure from "./SubAdminComponent/timetable/utils/Upload/creat
 import SubjectManagement from "./SubAdminComponent/SubjectManagement/SubjectManagement.jsx";
 import AllStudentsListSubject from "./SubAdminComponent/AllocateSubject/AllStudentsListSubject.jsx";
 
-const NewAdmissionSubAdmin = lazy(() => import("./SubAdminComponent/New Admission/NewAdmissionSubAdmin.jsx"));
-const AssignTeacherSubAdmin = lazy(() => import("./SubAdminComponent/Classes/utils/AssignTeacherSubAdmin.jsx"));
 const AssignSubjectSubAdmin = lazy(() => import("./SubAdminComponent/Subjects/utils/AssignSubjectSubAdmin"));
 const TimeTableSubAdmin = lazy(() => import("./SubAdminComponent/timetable/TimeTableSubAdmin.jsx"));
 const TeachersTimeTableSubAdmin = lazy(() => import("./SubAdminComponent/timetable/utils/Teacher/main.jsx"));
@@ -104,7 +102,6 @@ const Leaves = lazy(() => import("./AdminComponents/Leave/Leaves.jsx"));
 const Class = lazy(() => import("./AdminComponents/Classes/Class.jsx"));
 const Exam = lazy(() => import("./AdminComponents/Exam/Exam.jsx"));
 const Message = lazy(() => import("./AdminComponents/Message/Message.jsx"));
-const Subject = lazy(() => import("./AdminComponents/Subjects/Subject.jsx"));
 const Expenses = lazy(() => import("./AdminComponents/Accounts/Expenses.jsx"));
 const TeacherStudent = lazy(() => import("./AdminComponents/Accounts/TeacherStudent.jsx"));
 const PrivateRoute = lazy(() => import("./components/PrivateRoutes.jsx"));
@@ -130,11 +127,8 @@ const StudentFee = lazy(() => import("./TeacherComponents/studentfee/StudentFee.
 const NoteBook = lazy(() => import("./TeacherComponents/notebook/NoteBook.jsx"));
 const TeacherMessage = lazy(() => import("./TeacherComponents/message/Message.jsx"));
 const TeacherHome = lazy(() => import("./TeacherComponents/Home/TeacherHome.jsx"));
-const TimeTableAdmin = lazy(() => import("./AdminComponents/timetable/TimeTable.jsx"));
-const Upload = lazy(() => import("./AdminComponents/timetable/utils/Upload/Upload.jsx"));
 const ClassTeacher = lazy(() => import("./AdminComponents/Classes/utils/ClassTeacher.jsx"));
 const AssignTeacher = lazy(() => import("./AdminComponents/Classes/utils/AssignTeacher.jsx"));
-const AssignSubject = lazy(() => import("./AdminComponents/Subjects/utils/AssignSubject.jsx"));
 const StudentAttendanceRecord = lazy(() => import("./TeacherComponents/studentattendence/Students Attendance/StudentAttendanceRecord.jsx"));
 const FeeAdmin = lazy(() => import("./AdminComponents/fee/FeeAdmin.jsx"));
 const Event = lazy(() => import("./AdminComponents/event/Event.jsx"));
@@ -210,8 +204,6 @@ const Readmission = lazy(() => import("./SubAdminComponent/Readmission/Readmissi
 const AllAdmission = lazy(() => import("./SubAdminComponent/Readmission/AllAdmission.jsx"));
 const TabsStudentFee = lazy(() => import("./components/fees/Tabs.jsx"));
 const Promotion = lazy(() => import("./TeacherComponents/StudentPromotion/Promotion.jsx"));
-const TeachersTimeTable = lazy(() => import("./AdminComponents/timetable/utils/Teacher/main.jsx"));
-const StudentsTimeTable = lazy(() => import("./AdminComponents/timetable/utils/Student/main.jsx"));
 const UserProfile = lazy(() => import("./components/StudentProfile/Profile.jsx"));
 const TakeLeaveSubAdmin = lazy(() => import("./SubAdminComponent/takeleave/TakeLeaveSubAdmin.jsx"));
 
@@ -821,15 +813,9 @@ const router = createBrowserRouter([
         children: []
       },
       {
-        path: "/Admin-Dashboard/Subjects",
-        element: <SuspenseWrapper fallback={Loading}>
-          <Subject /></SuspenseWrapper>,
-        children: []
-      },
-      {
         path: "/Admin-Dashboard/Assignsubject",
         element: <SuspenseWrapper fallback={Loading}>
-          <AssignSubject /></SuspenseWrapper>,
+          <AssignSubjectSubAdmin /></SuspenseWrapper>,
         children: []
       },
       {
@@ -851,39 +837,40 @@ const router = createBrowserRouter([
         children: []
       },
       {
-        path: "/Admin-Dashboard/timetable",
+        path: "/Admin-Dashboard/TimeTable",
         element: <SuspenseWrapper fallback={Loading}>
-          <TimeTableAdmin /></SuspenseWrapper>,
+          <TimeTableSubAdmin /></SuspenseWrapper>,
         children: [
           {
             path: "",
             element: <SuspenseWrapper fallback={Loading}>
-              <StudentsTimeTable /></SuspenseWrapper>,
-            children: []
-          },
-          {
-            path: "timetablestructure",
-            element: <SuspenseWrapper fallback={Loading}><Employee /></SuspenseWrapper>,
+              <UploadSubAdmin /></SuspenseWrapper>,
             children: []
           },
           {
             path: "upload",
             element: <SuspenseWrapper fallback={Loading}>
-              <Upload /></SuspenseWrapper>,
+              <UploadSubAdmin /></SuspenseWrapper>,
+            children: []
+          },
+          {
+            path: "structure",
+            element: <SuspenseWrapper fallback={Loading}>
+              <TimeTableStructure /></SuspenseWrapper>,
             children: []
           },
           {
             path: "teacher",
             element: <SuspenseWrapper fallback={Loading}>
-              <TeachersTimeTable /></SuspenseWrapper>,
+              <TeachersTimeTableSubAdmin /></SuspenseWrapper>,
             children: []
           },
-          {
-            path: "student",
-            element: <SuspenseWrapper fallback={Loading}>
-              <StudentsTimeTable /></SuspenseWrapper>,
-            children: []
-          },
+          // {
+          //   path: "student",
+          //   element: <SuspenseWrapper fallback={Loading}>
+          //     <StudentsTimeTableSubAdmin /></SuspenseWrapper>,
+          //   children: []
+          // },
         ]
       },
       {
@@ -1573,7 +1560,7 @@ const router = createBrowserRouter([
       {
         path: "/Sub-Admin/NewAdmission",
         element: <SuspenseWrapper fallback={Loading}>
-          <NewAdmissionSubAdmin /></SuspenseWrapper>,
+          <NewAdmission /></SuspenseWrapper>,
         children: []
       },
       {

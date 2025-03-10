@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { StructureProvider } from './utils/TimetableContext';
 import { motion } from 'framer-motion';
 import { FaUserGraduate, FaChalkboardTeacher } from 'react-icons/fa';
 import { MdCloudUpload, MdTableChart } from 'react-icons/md';
+import AuthContext from '../../Context/AuthContext';
 
 function TimeTableSubAdmin() {
   const navigate = useNavigate();
   const [role, setRole] = useState('Upload');
+  const { authState } = useContext(AuthContext)
 
+  console.log(authState)
   const handleRoleChange = (event) => {
     const selectedRole = event.target.value;
     setRole(selectedRole);
 
     const routes = {
-      Teacher: '/Sub-Admin/TimeTable/teacher',
-      Student: '/Sub-Admin/TimeTable/student',
-      Upload: '/Sub-Admin/TimeTable/upload',
-      Structure: '/Sub-Admin/TimeTable/structure'
+      Teacher: `/${authState?.role}/TimeTable/teacher`,
+      Student: `/${authState?.role}/TimeTable/student`,
+      Upload: `/${authState?.role}/TimeTable/upload`,
+      Structure: `/${authState?.role}/TimeTable/structure`
     };
 
     navigate(routes[selectedRole]);
