@@ -1311,7 +1311,7 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <SuspenseWrapper fallback={Loading}>
-          <AllStudentsList /></SuspenseWrapper>
+          <ProfileSubAdmin /></SuspenseWrapper>
       },
       {
         path: 'Profile',
@@ -1342,6 +1342,12 @@ const router = createBrowserRouter([
       },
       {
         path: "SubAdmin",
+        element: <SuspenseWrapper fallback={Loading}>
+          <AllSubAdmin /></SuspenseWrapper>,
+        children: []
+      },
+      {
+        path: "/Sub-Admin/StudentDetails",
         element: <SuspenseWrapper fallback={Loading}>
           <AllSubAdmin /></SuspenseWrapper>,
         children: []

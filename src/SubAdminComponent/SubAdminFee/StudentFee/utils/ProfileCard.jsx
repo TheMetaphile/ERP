@@ -28,10 +28,10 @@ const StudentCard = ({
                 src={profileLink} 
                 alt={`${name}'s profile`}
                 className="w-full h-full rounded-full object-cover border-4 border-indigo-500"
-                onError={(e) => {
-                  e.target.onerror = null; // Prevents infinite loop if fallback image also fails
-                  e.target.src = 'https://via.placeholder.com/150'; // You can replace this with your default image
-                }}
+                // onError={(e) => {
+                //   e.target.onerror = null; // Prevents infinite loop if fallback image also fails
+                //   e.target.src = 'https://via.placeholder.com/150'; // You can replace this with your default image
+                // }}
               />
             ) : (
               <div className="w-full h-full rounded-full bg-indigo-100 flex items-center justify-center border-4 border-indigo-500">

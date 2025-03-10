@@ -101,9 +101,15 @@ function Employee() {
         }
     );
 
-
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, files, type } = e.target;
+        if (type === 'file') {
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: files[0],
+            }));
+            return;
+        }
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -268,10 +274,16 @@ function Employee() {
                 <InputField icon={<FaEnvelope />} label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required />
                 <InputField icon={<FaPhone />} label="Phone Number" name="phoneNumber" type="text" value={formData.phoneNumber} onChange={handleChange} required />
                 <InputField icon={<FaAddressCard />} label="Aadhaar Number" name="aadhaarNumber" type="text" value={formData.aadhaarNumber} onChange={handleChange} required />
-                <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} />
+                {/* <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} /> */}
                 <InputField icon={<FaCalendarAlt />} label="Date of Birth" name="dob" type="date" value={formData.dob} onChange={handleChange} required />
 
-
+                <FileUploadField
+                    label="Profile Photo"
+                    name="profileLink"
+                    value={formData?.profileLink || ""}
+                    onChange={handleChange}
+                    accept=".jpeg,.jpg,.png "
+                />
 
                 {customFields.map((field, index) => {
                     switch (field.type) {

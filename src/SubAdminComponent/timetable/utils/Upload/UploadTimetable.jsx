@@ -13,7 +13,6 @@ import { FaSpinner } from 'react-icons/fa';
 export default function UploadTimetable({ handleChange }) {
     const days = ["monday", 'tuesday', 'wednesday', 'thursday', "friday", 'saturday'];
     const [sectionsDetails, setSectionsDetails] = useState([]);
-    const subjects = ["Hindi", "English", "Mathematics", "Science", "Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", "Accounts"];
     const { authState, darkMode } = useContext(AuthContext);
     const { setClass, structureDetails } = useTimetableContext();
     const [isLoading, setIsLoading] = useState(false);
@@ -35,6 +34,41 @@ export default function UploadTimetable({ handleChange }) {
     const [rowState, setRowState] = useState(null);
     const [selectedClass, setSelectedClass] = useState('');
     const [selectedSection, setSection] = useState('');
+    const streams = ['PCM', 'PCMB', "PCB", 'Commerce', 'Arts', 'General'];
+    const [selectedStream, setSelectedStream] = useState('');
+    const [subjects, setAllSubjects] = useState([]);
+
+    useEffect(() => {
+        if (selectedClass && selectedStream) {
+            fetchSubjects();
+        }
+    }, [selectedClass, selectedStream]);
+
+    const fetchSubjects = async () => {
+        setIsLoading(true);
+        try {
+            // In a real application, you would add your API base URL
+            const response = await axios.post(`${BASE_URL}/subjects/fetch`, {
+                Class: selectedClass,
+                stream: selectedStream
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authState?.accessToken}`
+                }
+            });
+
+            console.log(response.data)
+            const data = response.data;
+
+            setAllSubjects([...(data?.coreSubjects || []), ...(data?.optionalSubjects || [])]);
+
+        } catch (error) {
+            toast.error({ text: 'Error connecting to server', type: 'error' });
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
         let initialSchedule = {};
@@ -162,7 +196,7 @@ export default function UploadTimetable({ handleChange }) {
                 setRowState(rowState);
             }
         } catch (error) {
-            toast.error("Error fetching timetable: " + error.message);
+            toast.error(error.response.data.error);
             setRowState({});
             let initialSchedule = {};
             days.forEach((day) => {
@@ -250,6 +284,26 @@ export default function UploadTimetable({ handleChange }) {
                             <option value="">Select Section</option>
                             {sectionsDetails.map((section, index) => (
                                 <option key={index} value={section}>{section}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label className={`font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                            Stream
+                        </label>
+                        <select
+                            value={selectedStream}
+                            onChange={(e) => setSelectedStream(e.target.value)}
+                            className={`w-full border p-2 rounded-md ${darkMode
+                                ? 'bg-gray-700 border-gray-600 text-gray-200'
+                                : 'bg-white border-gray-300'
+                                }`}
+                        >
+                            <option value="">Select Stream</option>
+                            {streams.map((stream) => (
+                                <option key={stream} value={stream}>
+                                    {stream}
+                                </option>
                             ))}
                         </select>
                     </div>

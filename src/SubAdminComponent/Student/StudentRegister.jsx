@@ -29,6 +29,19 @@ const itemVariants = {
     }
 };
 
+const getLast5Sessions = () => {
+    const currentYear = new Date().getFullYear();
+    const sessions = [];
+
+    for (let i = 0; i < 5; i++) {
+        const startYear = currentYear - i;
+        const endYear = (currentYear - i + 1).toString().slice(2);
+        sessions.push(`${startYear}-${endYear}`);
+    }
+
+    return sessions;
+}
+
 export default function StudentRegister() {
     const { authState, darkMode } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
@@ -36,6 +49,7 @@ export default function StudentRegister() {
     const currentYear = (new Date().getFullYear()).toString();
     const [subjects, setSubjects] = useState([]);
     const [optionalSubjects, setOptioanlSubjects] = useState([]);
+    const sessions = getLast5Sessions();
 
     const [formData, setFormData] = useState(
         {
@@ -331,6 +345,8 @@ export default function StudentRegister() {
                 <InputField darkMode={darkMode} icon={<FaCalendarAlt />} label="Date of Birth" name="DOB" type="date" value={formData.DOB} onChange={handleChange} required />
                 <InputField darkMode={darkMode} icon={<FaBriefcase />} label="Nationality" name="nationality" value={formData.nationality} onChange={handleChange} required />
                 <SelectField darkMode={darkMode} icon={<FaUsers />} label="Category" name="category" value={formData.category} onChange={handleChange} options={["General", "EWS", "OBC", "SC", "ST"]} />
+                <SelectField darkMode={darkMode} icon={<FaUsers />} label="Session" name="session" value={formData.session} onChange={handleChange} options={sessions} />
+
 
                 <SelectField darkMode={darkMode} icon={<FaGraduationCap />} label="Admission Class" name="admissionClass" value={formData.admissionClass} onChange={handleChange} options={['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']} required />
                 <SelectField darkMode={darkMode} icon={<FaGraduationCap />} label="Current Class" name="currentClass" value={formData.currentClass} onChange={handleClassChangeWithFetch} options={['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']} required />

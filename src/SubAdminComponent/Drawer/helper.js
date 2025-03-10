@@ -58,6 +58,13 @@ const menuItems = [
     children: [],
   },
   {
+    image: student,
+    alt: "Student image",
+    title: "Terminate Students",
+    route: "/Sub-Admin/Students",
+    children: [],
+  },
+  {
     image: fee,
     alt: "Fee image",
     title: "Student Fees",

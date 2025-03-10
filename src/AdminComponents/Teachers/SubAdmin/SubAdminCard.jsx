@@ -16,7 +16,8 @@ export default function SubAdminCard({ userData, setUserData }) {
     const [selectedUserId, setSelectedUserId] = useState(null);
 
     const availablePermissions = ["Exam", "Certificate", "Result", "Student Fees", "Student Registration", "Teacher Registration", "SubAdmin Registration", "Readmission", "New Admission", "New Section", "Assign Subject",
-        "Time Table", "Assign Coordinator", "Substitute Coordinator", "ClassTeacher Substitute", "Lecture Substitute", "Access Control", "Custom Registration Builder", "Template","Subject Management", "Subject Allocate"
+        "Time Table", "Assign Coordinator", "Substitute Coordinator", "ClassTeacher Substitute", "Lecture Substitute", "Access Control", "Custom Registration Builder", "Template","Subject Management", "Subject Allocate",
+        "Terminate Students", "Student Details", "Student Details Edit"
     ];
 
 

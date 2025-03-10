@@ -8,8 +8,8 @@ import { FaBars, FaUserCircle, FaBell, FaMoon, FaSun } from 'react-icons/fa';
 export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { logout, authState, toggleDarkMode,darkMode } = useContext(AuthContext);
- 
+  const { logout, authState, toggleDarkMode, darkMode } = useContext(AuthContext);
+
 
   const navigate = useNavigate();
 
@@ -45,15 +45,15 @@ export default function SubAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
       : 'bg-gradient-to-r from-blue-300 to-blue-200 text-gray-800'
       }`}>
       <div className="flex items-center mobile:max-tablet:w-full mobile:max-tablet:mb-3 mobile:max-tablet:justify-between">
-        {authState?.userDetails?.role === 'Accountant' && (
-          <FaBars
-            onClick={onDrawerToggle}
-            className={`w-11 h-fit mr-4 px-3 py-2 rounded-lg cursor-pointer transform hover:scale-105 transition-transform ${darkMode
-              ? 'bg-gray-700 text-white hover:bg-gray-600'
-              : 'bg-white shadow-lg hover:bg-gray-100'
-              }`}
-          />
-        )}
+
+        <FaBars
+          onClick={onDrawerToggle}
+          className={`w-11 h-fit mr-4 px-3 py-2 rounded-lg cursor-pointer transform hover:scale-105 transition-transform ${darkMode
+            ? 'bg-gray-700 text-white hover:bg-gray-600'
+            : 'bg-white shadow-lg hover:bg-gray-100'
+            }`}
+        />
+
         <div className='flex items-center gap-2'>
           <img
             src={logo}

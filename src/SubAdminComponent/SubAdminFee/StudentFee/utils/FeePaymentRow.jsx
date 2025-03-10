@@ -12,7 +12,7 @@ import logo from '../../../../assets/metaphile_logo.png';
 import Loading from '../../../../LoadingScreen/Loading';
 // import { useFilters } from '../../Students/utils/Filters';
 
-const FeePaymentRow = ({ student, key,fetchFees, selectedStudent, selectedDiscount, fetchTransaction }) => {
+const FeePaymentRow = ({ student, key, fetchFees, selectedStudent, selectedDiscount, fetchTransaction }) => {
     const { authState } = useContext(AuthContext);
     const dropdownRef = useRef(null);
     const [Razorpay] = useRazorpay();
@@ -463,8 +463,8 @@ const FeePaymentRow = ({ student, key,fetchFees, selectedStudent, selectedDiscou
                 }
             </td>
             <td className={`px-3 py-2  `}>
-                <div className={`px-3 py-1 rounded-full border text-center ${student.totalFee === student.paidFee ? 'text-green-600 bg-green-200 border-green-600' : 'text-red-600 bg-red-200 border-red-600'}`}>
-                    {student.totalFee === student.paidFee ? 'Paid' : 'Pending'}
+                <div className={`px-3 py-1 rounded-full border text-center ${(student.totalFee === student.paidFee + student.categoryDiscount) ? 'text-green-600 bg-green-200 border-green-600' : 'text-red-600 bg-red-200 border-red-600'}`}>
+                    {(student.totalFee === student.paidFee + student.categoryDiscount) ? 'Paid' : 'Pending'}
                 </div>
             </td>
             <td className="px-3 py-4">
@@ -503,7 +503,7 @@ const FeePaymentRow = ({ student, key,fetchFees, selectedStudent, selectedDiscou
             </td>
 
             <td className="px-3 py-4" ref={dropdownRef}>
-                {!(student.totalFee === student.paidFee) && paymentMode === '' && (
+                {!(student.totalFee === student.paidFee + student.categoryDiscount) && paymentMode === '' && (
                     <div className="relative">
                         <button
                             className="text-blue-600 bg-blue-200 focus:outline-none px-5 py-1 rounded-full text-center"
@@ -533,7 +533,7 @@ const FeePaymentRow = ({ student, key,fetchFees, selectedStudent, selectedDiscou
 
                     </div>
                 )}
-                {student.totalFee === student.paidFee && (
+                {(student.totalFee === student.paidFee + student.categoryDiscount) && (
                     <span className="text-gray-600 bg-gray-200 px-5 py-1 rounded-full">Paid</span>
                 )}
 

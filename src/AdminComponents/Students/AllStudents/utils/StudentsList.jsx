@@ -156,7 +156,6 @@ export default function StudentsList() {
             return;
         }
         try {
-            setLoading(true);
             console.log("start");
             const response = await axios.post(`${BASE_URL}/assignRollNumber`, {
                 accessToken: authState?.accessToken,

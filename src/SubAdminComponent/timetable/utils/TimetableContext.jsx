@@ -40,7 +40,7 @@ export const StructureProvider = ({ children }) => {
                 console.log('response from fetch', response.data);
                 if (response.data.lectureStructure) {
 
-                    setStructureDetails(response.data);
+                    setStructureDetails(response?.data || []);
                     console.log('response', response.data);
                 }
             }

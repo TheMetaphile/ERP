@@ -60,11 +60,12 @@ const TimeTableStructure = () => {
         setFormData(prev => ({
             ...prev,
             lectureStructure: [
-                ...prev.lectureStructure,
-                { startTime: '', endTime: '', lectureNo: prev.lectureStructure.length + 1 }
+                ...(Array.isArray(prev?.lectureStructure) ? prev.lectureStructure : []),
+                { startTime: '', endTime: '', lectureNo: (prev?.lectureStructure?.length || 0) + 1 }
             ]
         }));
     };
+    
 
     const handleLectureChange = (index, field, value) => {
         const updatedStructure = [...formData.lectureStructure];

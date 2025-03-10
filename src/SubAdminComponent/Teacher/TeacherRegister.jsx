@@ -86,12 +86,19 @@ export default function TeacherRegister() {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files, type } = e.target;
+    if (type === 'file') {
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: files[0],
+        }));
+        return;
+    }
     setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
+        ...prevData,
+        [name]: value,
     }));
-  };
+};
 
   const handleCustomFieldValueChange = (e) => {
     const { name, value, files, type } = e.target;
@@ -262,9 +269,17 @@ export default function TeacherRegister() {
         <InputField icon={<FaAddressCard />} label="Aadhaar Number" name="aadhaarNumber" type="text" value={formData.aadhaarNumber} onChange={handleChange} required />
         <SelectField icon={<FaVenusMars />} label="Gender" name="gender" value={formData.gender} onChange={handleChange} options={['male', 'female', 'other']} required />
         <SelectField icon={<MdAdminPanelSettings />} label="Admin" name="admin" value={formData.admin} onChange={handleChange} options={["False", "True"]} required />
-        <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} />
+        {/* <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} /> */}
         <InputField icon={<FaCalendarAlt />} label="Date of Birth" name="DOB" type="date" value={formData.DOB} onChange={handleChange} required />
 
+        <FileUploadField
+
+          label="Profile Photo"
+          name="profileLink"
+          value={formData?.profileLink || ""}
+          onChange={handleChange}
+          accept=".jpeg,.jpg,.png "
+        />
         {/* {formFields.map((field, index) => (
           <motion.div
             key={field.name}

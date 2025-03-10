@@ -7,20 +7,21 @@ import AuthContext from '../../Context/AuthContext';
 import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaIdCard, FaMapMarkerAlt, FaPray, FaBook, FaBirthdayCake, FaPhone, FaBriefcase, FaGraduationCap, FaMoneyBillWave, FaCloudUploadAlt, FaGoogle } from 'react-icons/fa';
 import { MdAdminPanelSettings } from 'react-icons/md';
+import FileUploadField from "../../SubAdminComponent/Student/FileUploadField";
 
 export default function SupAdminTeacherRegister() {
   const { authState } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-console.log(authState?.userDetails?.branch)
+  console.log(authState?.userDetails?.branch)
   const [formData, setFormData] = useState(
     {
       name: '',
       email: '',
       password: '',
       gender: '',
-      profileLink: '',
+
       religion: '',
       subject: '',
       employeeId: '',
@@ -46,10 +47,17 @@ console.log(authState?.userDetails?.branch)
   }, [authState?.userDetails?.branch]);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value, files, type } = e.target;
+    if (type === 'file') {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: files[0],
+      }));
+      return;
+    }
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === 'photo' ? files[0] : value,
+      [name]: value,
     }));
   };
   const handleReset = () => {
@@ -58,7 +66,7 @@ console.log(authState?.userDetails?.branch)
       email: '',
       password: '',
       gender: '',
-      profileLink: '',
+
       religion: '',
       subject: '',
       employeeId: '',
@@ -81,16 +89,23 @@ console.log(authState?.userDetails?.branch)
     console.log('o')
     setLoading(true);
 
-    console.log(formData, authState?.accessToken)
     const [year, month, day] = formData.DOB.split('-');
     const formattedDate = `${day}-${month}-${year}`;
-    formData.DOB = formattedDate
-    console.log(formData, authState?.accessToken)
+    formData.DOB = formattedDate;
+    formData.password = formData.aadhaarNumber;
 
     try {
-      formData.password = formData.aadhaarNumber;
-      const response = await axios.post(`${BASE_URL}/signup/SupAdmin/teacher`, formData,
+      const payload = new FormData();
+      for (const key in formData) {
+
+        payload.append(key, formData[key]); // Append files properly
+
+      }
+
+
+      const response = await axios.post(`${BASE_URL}/signup/SupAdmin/teacher`, payload,
       );
+
       if (response.status === 200) {
         toast.success('Teacher registered successfully!');
         console.log(formData)
@@ -127,7 +142,7 @@ console.log(authState?.userDetails?.branch)
     { name: "experience", label: "Experience", icon: <FaBriefcase />, type: "text" },
     { name: "education", label: "Education", icon: <FaGraduationCap />, type: "text" },
     { name: "salary", label: "Salary", icon: <FaMoneyBillWave />, type: "text" },
-    { name: "profileLink", label: "Google Drive Link for Photo", icon: <FaGoogle />, type: "text" },
+    // { name: "profileLink", label: "Google Drive Link for Photo", icon: <FaGoogle />, type: "text" },
   ];
 
   return (
@@ -180,6 +195,13 @@ console.log(authState?.userDetails?.branch)
             </label>
           </motion.div>
         ))}
+        <FileUploadField
+          label="Profile Photo"
+          name="profileLink"
+          value={formData?.profileLink || ""}
+          onChange={handleChange}
+          accept=".jpeg,.jpg,.png "
+        />
       </form>
 
       <div className="flex justify-center mt-8 space-x-4">
