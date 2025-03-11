@@ -131,7 +131,9 @@ export default function UploadTimetable({ handleChange }) {
             console.log("upload", timetable);
 
             for (const day of Object.keys(timetable)) {
+                if(day === 'Subday') continue;
                 for (const lecture of timetable[day]) {
+                    console.log(lecture, day)
                     lecture.teacher = typeof lecture.teacher === 'object' ? lecture.teacher._id : lecture.teacher;
                     if (lecture.optional && lecture.optionalSubjects.length > 0) {
                         for (const optional of lecture.optionalSubjects) {
@@ -183,7 +185,7 @@ export default function UploadTimetable({ handleChange }) {
                     rowState[day] = {};
                     for (const lecture of response.data[day]) {
                         rowState[day][`${lecture.lectureNo}`] = {
-                            teacherInput: lecture.teacher.name,
+                            teacherInput: lecture?.teacher?.name || "",
                             suggestions: [],
                             showSuggestions: false,
                             remark: 'Good to go'
@@ -196,6 +198,7 @@ export default function UploadTimetable({ handleChange }) {
                 setRowState(rowState);
             }
         } catch (error) {
+            console.log(error)
             toast.error(error.response.data.error);
             setRowState({});
             let initialSchedule = {};
