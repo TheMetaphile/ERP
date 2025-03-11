@@ -15,15 +15,21 @@ const MotionSelect = motion.select;
 export default function Fees() {
     const [selectedOption, setSelectedOption] = useState('monthlyfee');
     const [Fee, setFee] = useState([]);
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
+
+    const bgClass = darkMode ? 'bg-gray-900' : 'bg-white';
+    const textClass = darkMode ? 'text-white' : 'text-gray-800';
+    const subTextClass = darkMode ? 'text-gray-300' : 'text-gray-600';
+    const borderClass = darkMode ? 'border-gray-700' : 'border-gray-300';
+    const selectClass = darkMode 
+        ? 'bg-gray-800 text-white border-gray-600 focus:ring-blue-600' 
+        : 'bg-white text-black border-gray-300 focus:ring-blue-500';
 
     const handleDropdownChange = (e) => {
         setSelectedOption(e.target.value);
     };
-    console.log('aaa',authState?.userDetails)
 
     const fetchFees = async () => {
-
         try {
             const response = await axios.get(`${BASE_URL}/fee/fetch/student/detailedFee/${authState?.userDetails?._id}`, {
                 headers: {
@@ -31,14 +37,10 @@ export default function Fees() {
                 }
             });
 
-            console.log("API response fees:", response.data);
             setFee(response.data);
-
-
         }
         catch (error) {
             const errorMessage = error.response?.data?.error || 'An error occurred';
-            // console.log(error)
             toast.error(errorMessage);
         }
     };
@@ -48,7 +50,6 @@ export default function Fees() {
             fetchFees();
         }
     }, [authState?.userDetails, authState?.accessToken]);
-    
 
     const pageVariants = {
         initial: { opacity: 0, y: 20 },
@@ -65,14 +66,25 @@ export default function Fees() {
     return (
         <PaymentProvider>
             <motion.div
-                className="flex flex-col w-full  mx-auto  space-y-6 min-h-screen"
+                className={`flex flex-col w-full mx-auto space-y-6 min-h-screen ${bgClass}`}
                 initial="initial"
                 animate="in"
                 exit="exit"
                 variants={pageVariants}
                 transition={{ duration: 0.5 }}
             >
-                <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+                <ToastContainer 
+                    position="top-right" 
+                    autoClose={3000} 
+                    theme={darkMode ? 'dark' : 'light'}
+                    hideProgressBar={false} 
+                    newestOnTop={false} 
+                    closeOnClick 
+                    rtl={false} 
+                    pauseOnFocusLoss 
+                    draggable 
+                    pauseOnHover 
+                />
                 <StudentCard
                     currentClass={authState?.userDetails?.currentClass}
                     email={authState?.userDetails?.email}
@@ -80,19 +92,26 @@ export default function Fees() {
                     name={authState?.userDetails?.name}
                     profileLink={authState?.userDetails?.profileLink}
                     rollNumber={authState?.userDetails?.rollNumber}
-                    section={authState?.userDetails?.section} />
+                    section={authState?.userDetails?.section}
+                    darkMode={darkMode}
+                />
                
                 <motion.section variants={sectionVariants} transition={{ delay: 0.1 }}>
-                    <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-gray-800 mb-4">Fee Status</h1>
-                    <FeeStatusRow />
+                    <h1 className={`text-3xl mobile:max-tablet:text-lg font-bold ${textClass} mb-4`}>
+                        Fee Status
+                    </h1>
+                    <FeeStatusRow darkMode={darkMode} />
                 </motion.section>
-                <motion.section variants={sectionVariants} transition={{ delay: 0.2 }} >
+
+                <motion.section variants={sectionVariants} transition={{ delay: 0.2 }}>
                     <div className='flex items-center justify-between w-full mb-4'>
-                        <h2 className="text-3xl mobile:max-tablet:text-lg font-bold text-gray-800">Fees Structure</h2>
+                        <h2 className={`text-3xl mobile:max-tablet:text-lg font-bold ${textClass}`}>
+                            Fees Structure
+                        </h2>
                         <MotionSelect
                             value={selectedOption}
                             onChange={handleDropdownChange}
-                            className="border border-gray-300 rounded-lg p-2 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className={`border rounded-lg p-2 shadow-sm focus:outline-none focus:ring-2 focus:border-transparent ${selectClass}`}
                             whileHover={{ scale: 1.05 }}
                             transition={{ type: "spring", stiffness: 300 }}
                         >
@@ -101,12 +120,22 @@ export default function Fees() {
                             <option value="quarterFee">Quarterly Fee</option>
                         </MotionSelect>
                     </div>
-                    <FeeStructure selectedOption={selectedOption} fees={Fee} setFees={setFee} />
+                    <FeeStructure 
+                        selectedOption={selectedOption} 
+                        fees={Fee} 
+                        setFees={setFee} 
+                        darkMode={darkMode} 
+                    />
                 </motion.section>
 
                 <motion.section variants={sectionVariants} transition={{ delay: 0.3 }}>
-                    <h2 className="text-3xl font-bold text-gray-800 mb-4">Transaction History</h2>
-                    <TransactionRow selectedOption={selectedOption} />
+                    <h2 className={`text-3xl font-bold ${textClass} mb-4`}>
+                        Transaction History
+                    </h2>
+                    <TransactionRow 
+                        selectedOption={selectedOption} 
+                        darkMode={darkMode} 
+                    />
                 </motion.section>
             </motion.div>
         </PaymentProvider>

@@ -14,10 +14,17 @@ const rowVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 }
 };
-
-export default function TransactionField({ data, selectedStudent }) {
+export default function TransactionField({ data, selectedStudent, darkMode }) {
   const { authState } = useContext(AuthContext);
   const [clickedIndex, setClickedIndex] = useState(null);
+
+  const bgClass = darkMode ? 'bg-gray-800' : 'bg-white';
+  const textClass = darkMode ? 'text-gray-300' : 'text-gray-800';
+  const borderClass = darkMode ? 'border-gray-700' : 'border-gray-200';
+  const headerBgClass = darkMode ? 'bg-gray-700' : 'bg-blue-200';
+  const headerTextClass = darkMode ? 'text-white' : 'text-black';
+  const hoverBgClass = darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50';
+  const selectedBgClass = darkMode ? 'bg-gray-600' : 'bg-blue-50';
 
   const handleClick = (index) => {
     setClickedIndex(index);
@@ -205,20 +212,22 @@ export default function TransactionField({ data, selectedStudent }) {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="w-full overflow-x-auto"
+      className={`w-full overflow-x-auto ${bgClass}`}
     >
-      <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead className="bg-blue-200 text-black">
+      <table className={`min-w-full shadow-md rounded-lg overflow-hidden ${bgClass}`}>
+        <thead className={`${headerBgClass} ${headerTextClass}`}>
           <tr>
-            <th className="px-4 py-3 text-left text-xs font-medium  uppercase tracking-wider">#</th>
-            <th className="px-4 py-3 text-left text-xs font-medium  uppercase tracking-wider">Order ID</th>
-            <th className="px-4 py-3 text-left text-xs font-medium  uppercase tracking-wider">Payment ID</th>
-            <th className="px-4 py-3 text-left text-xs font-medium  uppercase tracking-wider">Date</th>
-            <th className="px-4 py-3 text-left text-xs font-medium  uppercase tracking-wider">Discount</th>
-            <th className="px-4 py-3 text-left text-xs font-medium  uppercase tracking-wider">Amount</th>
-            <th className="px-4 py-3 text-left text-xs font-medium  uppercase tracking-wider">Signature</th>
-            <th className="px-4 py-3 text-left text-xs font-medium  uppercase tracking-wider">Status</th>
-            <th className="px-4 py-3 text-left text-xs font-medium  uppercase tracking-wider">Action</th>
+            {[
+              '#', 'Order ID', 'Payment ID', 'Date',
+              'Discount', 'Amount', 'Signature', 'Status', 'Action'
+            ].map((header, index) => (
+              <th
+                key={index}
+                className={`px-4 py-3 text-left text-xs font-medium uppercase tracking-wider`}
+              >
+                {header}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -226,39 +235,71 @@ export default function TransactionField({ data, selectedStudent }) {
             <motion.tr
               key={index}
               variants={rowVariants}
-              whileHover={{ backgroundColor: "#f3f4f6" }}
-              className={`border-b border-gray-200 ${clickedIndex === index ? 'bg-blue-50' : ''}`}
+              whileHover={{ backgroundColor: darkMode ? "#4B5563" : "#f3f4f6" }}
+              className={`
+              border-b ${borderClass} 
+              ${textClass} 
+              ${clickedIndex === index ? selectedBgClass : ''}
+            `}
               onClick={() => handleClick(index)}
             >
-              <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
-              <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{value.order_id}</td>
-              <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{value.payment_id}</td>
-              <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 "><FaCalendarAlt className="inline mr-2" />{value.date}</td>
-              <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                <span className={`px-2 inline-flex text-xs leading-5 font-semibold items-center rounded-full bg-green-100 text-green-800}`}>
+              <td className={`px-4 py-3 whitespace-nowrap text-sm`}>{index + 1}</td>
+              <td className={`px-4 py-3 whitespace-nowrap text-sm`}>{value.order_id}</td>
+              <td className={`px-4 py-3 whitespace-nowrap text-sm`}>{value.payment_id}</td>
+              <td className={`px-4 py-3 whitespace-nowrap text-sm`}>
+                <FaCalendarAlt className={`inline mr-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
+                {value.date}
+              </td>
+              <td className={`px-4 py-3 whitespace-nowrap text-sm`}>
+                <span
+                  className={`
+                  px-2 inline-flex text-xs leading-5 font-semibold items-center rounded-full 
+                  ${darkMode ? 'bg-green-900 text-green-400' : 'bg-green-100 text-green-800'}
+                `}
+                >
                   <FaMoneyBillWave className="inline mr-2" />₹ {value.discount}
                 </span>
               </td>
-              <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                <span className={`px-2 inline-flex text-xs leading-5 font-semibold items-center rounded-full bg-green-100 text-green-800}`}>
+              <td className={`px-4 py-3 whitespace-nowrap text-sm`}>
+                <span
+                  className={`
+                  px-2 inline-flex text-xs leading-5 font-semibold items-center rounded-full 
+                  ${darkMode ? 'bg-green-900 text-green-400' : 'bg-green-100 text-green-800'}
+                `}
+                >
                   <FaMoneyBillWave className="inline mr-2" />₹ {value.amount}
                 </span>
               </td>
-              <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500"><FaSignature className="inline mr-2" />{value.signature}</td>
-              <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                <span className={`px-2 inline-flex text-xs leading-5 font-semibold items-center rounded-full ${value.payment_status === 'Success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+              <td className={`px-4 py-3 whitespace-nowrap text-sm`}>
+                <FaSignature className={`inline mr-2 ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
+                {value.signature}
+              </td>
+              <td className={`px-4 py-3 whitespace-nowrap text-sm`}>
+                <span
+                  className={`
+                  px-2 inline-flex text-xs leading-5 font-semibold items-center rounded-full 
+                  ${value.payment_status === 'Success'
+                      ? (darkMode ? 'bg-green-900 text-green-400' : 'bg-green-100 text-green-800')
+                      : (darkMode ? 'bg-red-900 text-red-400' : 'bg-red-100 text-red-800')
+                    }
+                `}
+                >
                   <FaCheckCircle className="inline mr-1" />{value.payment_status}
                 </span>
               </td>
-              <td className="flex justify-center items-center gap-2 px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                <div className='text-green-500 text-xl cursor-pointer' onClick={() => generateReceipt(value)}><FaDownload /></div>
+              <td className="flex justify-center items-center gap-2 px-4 py-3 whitespace-nowrap text-sm">
+                <div
+                  className={`
+                  ${darkMode ? 'text-green-400 hover:text-green-300' : 'text-green-500 hover:text-green-600'} 
+                  text-xl cursor-pointer
+                `}
+                  onClick={() => generateReceipt(value)}
+                >
+                  <FaDownload />
+                </div>
               </td>
-
             </motion.tr>
           )) : null}
-
-
-
         </tbody>
       </table>
     </motion.div>

@@ -1,30 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from 'axios';
+import React, { useState, useContext } from "react";
 import AuthContext from '../../../Context/AuthContext';
-import { BASE_URL } from '../../../Config';
 
 function SubjectSelection({ onSubjectSelect }) {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [subjects, setSubjects] = useState(authState?.subjects);
-  const [selectedSubject, setSelectedSubject] = useState('Maths');
+  const [selectedSubject, setSelectedSubject] = useState(subjects[0]);
 
-  // const fetchSubjects = async () => {
-  //   try {
-  //     const response = await axios.get(`${BASE_URL}/fetch/subjects?class=${authState?.userDetails?.currentClass}&section=${authState?.userDetails?.section}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${authState?.accessToken}`,
-  //       }
-  //     });
-
-  //     setSubjects(response.data.subjects);
-  //   } catch (error) {
-  //     console.error("Error fetching subjects:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchSubjects();
-  // }, [authState]);
+  const bgClass = darkMode ? 'bg-gray-700' : 'bg-white';
+  const textClass = darkMode ? 'text-white' : 'text-gray-900';
+  const borderClass = darkMode ? 'border-gray-600' : 'border-gray-300';
+  const focusClass = darkMode 
+    ? 'focus:ring-indigo-400 focus:border-indigo-400' 
+    : 'focus:ring-indigo-500 focus:border-indigo-500';
 
   const handleSubjectChange = (event) => {
     const subject = event.target.value;
@@ -33,12 +20,27 @@ function SubjectSelection({ onSubjectSelect }) {
   };
 
   return (
-    <div className=" mobile:max-tablet:w-full">
-      <select id="subject" value={selectedSubject} onChange={handleSubjectChange}
-        className="mt-1 mobile:w-full border block py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+    <div className="mobile:max-tablet:w-full">
+      <select 
+        id="subject" 
+        value={selectedSubject} 
+        onChange={handleSubjectChange}
+        className={`
+          mt-1 mobile:w-full border block py-2 text-base 
+          ${bgClass} ${textClass} ${borderClass} ${focusClass}
+          focus:outline-none sm:text-sm rounded-md
+        `}
       >
         {subjects.map((subject, index) => (
-          <option key={index} value={subject}>{subject}</option>
+          <option 
+            key={index} 
+            value={subject}
+            className={`
+              ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}
+            `}
+          >
+            {subject}
+          </option>
         ))}
       </select>
     </div>

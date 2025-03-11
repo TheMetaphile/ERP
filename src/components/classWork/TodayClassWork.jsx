@@ -14,11 +14,15 @@ export default function TodayClassWork() {
   const [selectedSubject, setSelectedSubject] = useState('Maths');
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState([]);
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [start, setStart] = useState(0);
   const end = 5;
   const [allDataFetched, setAllDataFetched] = useState(false);
   const sentinelRef = useRef(null);
+
+  const bgClass = darkMode ? 'bg-gray-900' : 'bg-gray-50';
+  const textClass = darkMode ? 'text-white' : 'text-gray-800';
+  const subTextClass = darkMode ? 'text-gray-300' : 'text-gray-600';
 
   const handleSubjectSelect = (subject) => {
     setSelectedSubject(subject);
@@ -50,10 +54,7 @@ export default function TodayClassWork() {
     }
   }, [start]);
 
-
-
   const fetchClassWork = async () => {
-    console.log(authState?.userDetails?.currentClass, new Date().getMonth() + 1, authState?.userDetails?.academicYear, authState?.userDetails?.section, selectedSubject)
     if (loading || allDataFetched) return;
 
     setLoading(true);
@@ -64,14 +65,11 @@ export default function TodayClassWork() {
         }
       });
       const work = response.data.classwork.length;
-      console.log("API response:", response.data.classwork);
       if (work < end) {
         toast.success('All data fetched');
-        console.log('All data fetched')
         setAllDataFetched(true);
       }
       setDetails(prevData => [...prevData, ...response.data.classwork]);
-      console.log('fetch', response.data)
     } catch (error) {
       console.error("Error fetching student classwork:", error);
     }
@@ -84,9 +82,7 @@ export default function TodayClassWork() {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !allDataFetched && !loading) {
-          console.log("Fetching more data...");
           handleViewMore();
-
         }
       },
       { root: null, rootMargin: '0px', threshold: 1.0 }
@@ -105,7 +101,7 @@ export default function TodayClassWork() {
 
   return (
     <motion.div
-      className="flex flex-col mobile:max-tablet:mt-4 p-4 bg-gray-50"
+      className={`flex flex-col mobile:max-tablet:mt-4 p-4 ${bgClass}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -117,8 +113,8 @@ export default function TodayClassWork() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.5 }}
       >
-        <h1 className="text-2xl mobile:max-tablet:text-lg mr-1 font-semibold text-gray-800 flex items-center">
-          <FaBook className="mr-2 text-indigo-600" />
+        <h1 className={`text-2xl mobile:max-tablet:text-lg mr-1 font-semibold ${textClass} flex items-center`}>
+          <FaBook className={`mr-2 ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
           Classwork
         </h1>
         <SubjectSelection onSubjectSelect={handleSubjectSelect} />
@@ -128,7 +124,7 @@ export default function TodayClassWork() {
         <Loading />
       ) : details.length === 0 ? (
         <motion.div
-          className="text-center w-full mt-8 text-gray-600 text-lg"
+          className={`text-center w-full mt-8 ${subTextClass} text-lg`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
@@ -137,11 +133,17 @@ export default function TodayClassWork() {
         </motion.div>
       ) : (
         <>
-          <SubjectClassWorkTile subject={selectedSubject} details={details} />
+          <SubjectClassWorkTile
+            subject={selectedSubject}
+            details={details}
+            darkMode={darkMode}
+          />
           <div ref={sentinelRef} className="h-10">
-          {loading && start > 0 && (
-            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
-          )}
+            {loading && start > 0 && (
+              <div className={`text-center w-full ${subTextClass} text-sm`}>
+                Loading more...
+              </div>
+            )}
           </div>
         </>
       )}

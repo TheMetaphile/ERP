@@ -4,36 +4,71 @@ import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import Loading from '../../../LoadingScreen/Loading';
 
-const FeePaymentRowQuarter = ({ student, key }) => {
+const FeePaymentRowQuarter = ({ student, key, darkMode }) => {
     const { authState } = useContext(AuthContext);
     const [paymentMode, setPaymentMode] = useState('');
     const [discount, setDiscount] = useState(0);
     const [amount, setAmount] = useState(0);
     const [loading, setLoading] = useState(false);
 
-    console.log(student)
+
+    const bgClass = darkMode ? 'bg-gray-800' : 'bg-white';
+    const hoverBgClass = darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50';
+    const textClass = darkMode ? 'text-gray-300' : 'text-gray-900';
+    const inputClass = darkMode 
+        ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600 focus:border-blue-600 placeholder-gray-500' 
+        : 'bg-white text-gray-900 border-blue-200 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400';
+
+    const getBadgeClasses = (type) => {
+        switch(type) {
+            case 'total':
+                return darkMode 
+                    ? 'text-blue-400 bg-blue-900 border-blue-700' 
+                    : 'text-blue-500 bg-blue-100 border-blue-600';
+            case 'paid':
+                return darkMode 
+                    ? 'text-green-400 bg-green-900 border-green-700' 
+                    : 'text-green-700 bg-green-100 border-green-600';
+            case 'discount':
+                return darkMode 
+                    ? 'text-green-400 bg-green-900 border-green-700' 
+                    : 'text-green-700 bg-green-100 border-green-600';
+            case 'pending':
+                return darkMode 
+                    ? 'text-red-400 bg-red-900 border-red-700' 
+                    : 'text-red-600 bg-red-100 border-red-600';
+            default:
+                return '';
+        }
+    };
+
+    const getStatusClasses = () => {
+        const isPaid = student.totalFee === student.paidFee;
+        return darkMode
+            ? (isPaid 
+                ? 'text-green-400 bg-green-900 border-green-700' 
+                : 'text-red-400 bg-red-900 border-red-700')
+            : (isPaid 
+                ? 'text-green-600 bg-green-200 border-green-600' 
+                : 'text-red-600 bg-red-200 border-red-600');
+    };
+
     const payOnline = async (data) => {
         try {
             setLoading(true);
-            console.log("triggered url", data);
-
             const response = await axios.post(
                 `${BASE_URL}/fee/encrypt/url`,
                 data,
                 {
                     headers: {
                         'Authorization': `Bearer ${authState?.accessToken}`,
-                        'Content-Type': 'application/json', // Optional: Explicitly set content type
+                        'Content-Type': 'application/json',
                     },
                 }
             );
 
-            //console.log("Response:", response.data.paymentLink);
-
             if (response.data.paymentLink) {
-                window.location.href = response.data.paymentLink; // Redirects the current tab
-            } else {
-                //console.error("Failed to initiate payment");
+                window.location.href = response.data.paymentLink;
             }
         } catch (error) {
             console.error('Error fetching agents:', error.response.data.error);
@@ -41,9 +76,7 @@ const FeePaymentRowQuarter = ({ student, key }) => {
         setLoading(false);
     };
 
-
     useEffect(() => {
-
         if (amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && amount > 0) {
             if (paymentMode === 'Online') {
                 const datee = formatDateTime();
@@ -62,7 +95,6 @@ const FeePaymentRowQuarter = ({ student, key }) => {
                     discount: 0
                 });
             }
-
         }
     }, [paymentMode]);
 
@@ -77,7 +109,6 @@ const FeePaymentRowQuarter = ({ student, key }) => {
         } else {
             setAmount(0);
         }
-
     };
 
     const formatDateTime = () => {
@@ -97,36 +128,34 @@ const FeePaymentRowQuarter = ({ student, key }) => {
     }
 
     return (
-        <tr className="bg-white border-b hover:bg-gray-50">
+        <tr className={`${bgClass} border-b ${hoverBgClass} ${textClass}`}>
             <td className="px-3 py-4">{student.months.join(', ')}</td>
             <td className="px-3 py-4">{student.quarter}</td>
             <td className="px-3 py-4 whitespace-nowrap">
-                <div className='text-blue-500 px-2 py-1 bg-blue-100 font-semibold border border-blue-600 rounded-full'>
+                <div className={`px-2 py-1 font-semibold border rounded-full ${getBadgeClasses('total')}`}>
                     ₹ {student.totalFee}
                 </div>
             </td>
             <td className="px-3 py-4 whitespace-nowrap">
-                <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
+                <div className={`px-2 py-1 font-semibold border rounded-full ${getBadgeClasses('paid')}`}>
                     ₹ {student.paidFee}
                 </div>
             </td>
             <td className="px-3 py-4">
-                <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
+                <div className={`px-2 py-1 font-semibold border rounded-full ${getBadgeClasses('discount')}`}>
                     ₹ {student.manualDiscount + student.categoryDiscount}
                 </div>
             </td>
             <td className="px-3 py-4">
-                <div className='text-red-600 px-2 py-1 bg-red-100 font-semibold border border-red-600 rounded-full'>
+                <div className={`px-2 py-1 font-semibold border rounded-full ${getBadgeClasses('pending')}`}>
                     ₹ {student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount}
                 </div>
             </td>
-
-            <td className={`px-3 py-2  `}>
-                <div className={`px-3 py-1 rounded-full border text-center ${student.totalFee === student.paidFee ? 'text-green-600 bg-green-200 border-green-600' : 'text-red-600 bg-red-200 border-red-600'}`}>
+            <td className="px-3 py-2">
+                <div className={`px-3 py-1 rounded-full border text-center ${getStatusClasses()}`}>
                     {student.totalFee === student.paidFee ? 'Paid' : 'Pending'}
                 </div>
             </td>
-
             <td className="px-3 py-4">
                 <input
                     type="number"
@@ -140,16 +169,21 @@ const FeePaymentRowQuarter = ({ student, key }) => {
                     min={0}
                     max={student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount}
                     onChange={(e) => onAmountChange(e.target.value)}
-                    className=" px-2 py-1 w-20 text-center rounded-full bg-white border border-blue-200 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400"
+                    className={`px-2 py-1 w-20 text-center rounded-full border shadow-sm focus:outline-none focus:ring-1 ${inputClass}`}
                     placeholder="Enter amount"
                 />
             </td>
-
             <td className="px-3 py-4">
                 {!(student.totalFee === student.paidFee) && (
                     <div className="relative">
                         <button
-                            className="text-blue-600 bg-blue-200 focus:outline-none px-5 py-1 rounded-full text-center"
+                            className={`
+                                ${darkMode 
+                                    ? 'text-blue-400 bg-blue-900 hover:bg-blue-800' 
+                                    : 'text-blue-600 bg-blue-200 hover:bg-blue-300'
+                                } 
+                                focus:outline-none px-5 py-1 rounded-full text-center
+                            `}
                             onClick={() => setPaymentMode('Online')}
                         >
                             Pay
@@ -157,11 +191,17 @@ const FeePaymentRowQuarter = ({ student, key }) => {
                     </div>
                 )}
                 {student.totalFee === student.paidFee && (
-                    <span className="text-gray-600 bg-gray-200 px-5 py-1 rounded-full">Paid</span>
+                    <span className={`
+                        ${darkMode 
+                            ? 'text-gray-400 bg-gray-700' 
+                            : 'text-gray-600 bg-gray-200'
+                        } 
+                        px-5 py-1 rounded-full
+                    `}>
+                        Paid
+                    </span>
                 )}
-
             </td>
-
         </tr>
     );
 };

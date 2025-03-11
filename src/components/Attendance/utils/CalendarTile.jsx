@@ -7,7 +7,7 @@ import { BASE_URL } from '../../../Config';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const Calendar = ({ month, year }) => {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date(`${year}-${month}-01`));
@@ -78,25 +78,42 @@ const Calendar = ({ month, year }) => {
     <div key={`blank-${i}`} className="flex justify-center items-center p-2" />
   ));
 
+
+  const bgClass = darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300';
+  const textClass = darkMode ? 'text-white' : 'text-gray-800';
+  const headerTextClass = darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-800';
+  const weekdayTextClass = darkMode
+    ? (index) => index === 6 ? 'text-red-400' : 'text-gray-300'
+    : (index) => index === 6 ? 'text-red-500' : 'text-gray-600';
+
   return (
-    <motion.div 
-      className="flex flex-col w-full h-full flex-grow p-6 bg-white border border-gray-300 rounded-lg shadow-lg"
+    <motion.div
+      className={`flex flex-col w-full h-full flex-grow p-6 border rounded-lg shadow-lg ${bgClass} ${textClass}`}
       initial="hidden"
       animate="visible"
       variants={calendarAnimation}
     >
-      <div className="flex justify-between items-center mb-6 text-xl font-bold text-gray-800">
-        <button onClick={() => changeMonth(-1)} className="text-gray-600 hover:text-gray-800">
+      <div className={`flex justify-between items-center mb-6 text-xl font-bold ${textClass}`}>
+        <button
+          onClick={() => changeMonth(-1)}
+          className={`${headerTextClass}`}
+        >
           <FaChevronLeft />
         </button>
         <span>{monthName}</span>
-        <button onClick={() => changeMonth(1)} className="text-gray-600 hover:text-gray-800">
+        <button
+          onClick={() => changeMonth(1)}
+          className={`${headerTextClass}`}
+        >
           <FaChevronRight />
         </button>
       </div>
       <div className="grid grid-cols-7 gap-2 mb-4">
         {weekdayShortNames.map((day, index) => (
-          <div key={index} className={`font-medium text-center py-2 ${index === 6 ? "text-red-500" : "text-gray-600"}`}>
+          <div
+            key={index}
+            className={`font-medium text-center py-2 ${weekdayTextClass(index)}`}
+          >
             {day}
           </div>
         ))}
@@ -115,11 +132,11 @@ const Calendar = ({ month, year }) => {
               key={index}
               className={`
                 flex flex-col items-center justify-center p-2 rounded-lg relative
-                ${!isCurrentMonth ? 'text-gray-400' : ''}
-                ${isSelected ? 'bg-blue-100 text-blue-800' : ''}
-                ${checkSunday ? 'text-red-500' : ''}
+                ${!isCurrentMonth ? (darkMode ? 'text-gray-600' : 'text-gray-400') : ''}
+                ${isSelected ? (darkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800') : ''}
+                ${checkSunday ? (darkMode ? 'text-red-400' : 'text-red-500') : ''}
                 ${isCurrentDate ? 'border-2 border-blue-500' : ''}
-                ${isCurrentMonth && !isSelected && !checkSunday ? 'hover:bg-gray-100' : ''}
+                ${isCurrentMonth && !isSelected && !checkSunday ? (darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100') : ''}
                 cursor-pointer
               `}
               onClick={() => handleDateClick(date)}
@@ -134,7 +151,11 @@ const Calendar = ({ month, year }) => {
           );
         })}
       </div>
-      {loading && <div className="text-center mt-4 text-gray-600">Loading...</div>}
+      {loading && (
+        <div className={`text-center mt-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          Loading...
+        </div>
+      )}
     </motion.div>
   );
 };

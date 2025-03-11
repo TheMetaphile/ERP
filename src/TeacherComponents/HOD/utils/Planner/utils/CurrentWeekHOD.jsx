@@ -6,12 +6,12 @@ import Loading from '../../../../../LoadingScreen/Loading';
 import 'react-toastify/dist/ReactToastify.css';
 import CurrentWeekHODRow from './CurrentWeekHODRow';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'react-toastify';
 
-const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
+const CurrentWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
-    const [error, setError] = useState(null);
 
     const getCurrentSession = () => {
         const now = new Date();
@@ -25,11 +25,11 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
 
     const currentWeekStart = new Date();  // Create a new Date object to avoid modifying the original
     currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay() + 1);  // Adjust to Monday (start of the week)
-    
 
 
 
-    const currentWeekFormattedDate = `${currentWeekStart.getFullYear()}-${ currentWeekStart.getMonth() <10 ? `0${currentWeekStart.getMonth()+1}` : currentWeekStart.getMonth()+1}-${currentWeekStart.getDate()}`;
+
+    const currentWeekFormattedDate = `${currentWeekStart.getFullYear()}-${currentWeekStart.getMonth() < 10 ? `0${currentWeekStart.getMonth() + 1}` : currentWeekStart.getMonth() + 1}-${currentWeekStart.getDate()}`;
     console.log(currentWeekStart, "curretnweek"); // Should point to Monday of the current week
 
 
@@ -47,19 +47,20 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject }) => {
                 });
                 console.log("API response:", response.data);
                 setDetails(response.data.plan);
+                toast.success("All data Fetched");
                 setLoading(false);
             } catch (err) {
                 console.log(err.response.data.error);
-                setError(err.response.data.error);
+                toast.error(err.response.data.error);
                 setLoading(false);
             }
         };
-        if (Class && section && subject) {
+        if (Class && section && subject && stream) {
             setLoading(true);
             setDetails([]);
             fetchPlan();
         }
-    }, [Class, section, subject, currentWeekFormattedDate]);
+    }, [Class, section, subject, currentWeekFormattedDate, stream]);
 
 
     const tableVariants = {

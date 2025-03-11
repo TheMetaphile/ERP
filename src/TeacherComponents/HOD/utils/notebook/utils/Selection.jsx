@@ -11,6 +11,9 @@ function Selection({ setClass, setSection, setSubject }) {
 
     const [selectedClass, setSelectedClass] = useState('');
     const [selectedSection, setSelectedSection] = useState('');
+    const streams = ['PCM', 'PCMB', "PCB", 'Commerce', 'Arts', 'General'];
+    const [selectedStream, setSelectedStream] = useState('');
+    const [subjects, setAllSubjects] = useState([]);
 
     const handleClassChange = (event) => {
         setSelectedClass(event.target.value);
@@ -24,25 +27,23 @@ function Selection({ setClass, setSection, setSubject }) {
         setSubject(event.target.value);
     }
 
+    const handleStreamChange = (event) => {
+        setSelectedStream(event.target.value)
+    }
+
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
     useEffect(() => {
-
-
         if (selectedClass) {
             fetchSections();
         }
-
-
-
-
     }, [selectedClass]);
 
     useEffect(() => {
-        if(selectedClass && selectedSection){
+        if (selectedClass && selectedStream) {
             fetchSubjects();
         }
-    }, [selectedSection, selectedClass]);
+    }, [selectedSection, selectedStream]);
 
     const fetchSections = async () => {
         let data = JSON.stringify({
@@ -70,28 +71,27 @@ function Selection({ setClass, setSection, setSubject }) {
     }
 
     const fetchSubjects = async () => {
-
-        let data = '';
-
-        let config = {
-            method: 'get',
-            maxBodyLength: Infinity,
-            url: `${BASE_URL}/fetch/subjects?section=${selectedSection}&class=${selectedClass}`,
-            headers: {
-                'Authorization': `Bearer ${authState?.accessToken}`
-            },
-            data: data
-        };
-
-        axios.request(config)
-            .then((response) => {
-                setUniqueSubjects(response.data.subjects);
-            })
-            .catch((error) => {
-                console.log(error);
+        try {
+            // In a real application, you would add your API base URL
+            const response = await axios.post(`${BASE_URL}/subjects/fetch`, {
+                Class: selectedClass,
+                stream: selectedStream
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authState?.accessToken}`
+                }
             });
 
-    }
+            console.log(response.data)
+            const data = response.data;
+
+            setAllSubjects([...(data?.coreSubjects || []), ...(data?.optionalSubjects || [])]);
+
+        } catch (error) {
+            toast.error({ text: 'Error connecting to server', type: 'error' });
+        }
+    };
 
 
 
@@ -100,10 +100,20 @@ function Selection({ setClass, setSection, setSubject }) {
 
             <div className="flex justify-between gap-3 mobile:max-tablet:flex-col mobile:max-tablet:w-full">
                 <div className="w-36 mobile:max-tablet:w-full">
-                <select id="class" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" value={selectedClass} onChange={handleClassChange}>
+                    <select id="class" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" value={selectedClass} onChange={handleClassChange}>
                         <option value="">Select Class</option>
                         {wingClasses.map((classOption, index) => (
                             <option key={index} value={classOption}>{classOption}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="w-36 mobile:max-tablet:w-full">
+                    <select id="stream" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" value={selectedStream} onChange={handleStreamChange}>
+                        <option value="">Select Stream</option>
+                        {streams.map((stream) => (
+                            <option key={stream} value={stream}>
+                                {stream}
+                            </option>
                         ))}
                     </select>
                 </div>
@@ -118,7 +128,7 @@ function Selection({ setClass, setSection, setSubject }) {
                 <div className="w-36 mobile:max-tablet:w-full">
                     <select id="subject" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" onChange={handleSubjectChange}>
                         <option value="">Select Subject</option>
-                        {uniqueSubjects.map((subjectOption, index) => (
+                        {subjects.map((subjectOption, index) => (
                             <option key={index} value={subjectOption}>{subjectOption}</option>
                         ))}
                     </select>

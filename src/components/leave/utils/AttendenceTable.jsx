@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from '../../../Config';
 
-export default function AttendenceTable({ additionalData, status }) {
+export default function AttendenceTable({ additionalData, status, darkMode }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [error, setError] = useState('');
@@ -23,6 +23,36 @@ export default function AttendenceTable({ additionalData, status }) {
   const [allDataFetched, setAllDataFetched] = useState(false);
   const sentinelRef = useRef(null);
 
+
+  const bgClass = darkMode ? 'bg-gray-900' : 'bg-white';
+  const textClass = darkMode ? 'text-white' : 'text-black';
+  const subTextClass = darkMode ? 'text-gray-300' : 'text-gray-500';
+  const borderClass = darkMode ? 'border-gray-700' : 'border-gray-200';
+  const cardBgClass = darkMode ? 'bg-gray-800' : 'bg-white';
+  const expandBgClass = darkMode ? 'bg-gray-700' : 'bg-gray-50';
+  const inputClass = darkMode
+    ? 'bg-gray-700 text-white border-gray-600'
+    : 'bg-white text-black border-gray-300';
+
+
+  const getStatusColorClass = (status) => {
+    if (darkMode) {
+      switch (status) {
+        case 'Pending': return 'text-yellow-400';
+        case 'Rejected': return 'text-red-400';
+        case 'Approved': return 'text-green-400';
+        default: return 'text-gray-400';
+      }
+    } else {
+      switch (status) {
+        case 'Pending': return 'text-yellow-500';
+        case 'Rejected': return 'text-red-500';
+        case 'Approved': return 'text-green-500';
+        default: return 'text-gray-500';
+      }
+    }
+  };
+
   useEffect(() => {
     setStart(0);
     setData([]);
@@ -34,7 +64,7 @@ export default function AttendenceTable({ additionalData, status }) {
     if (start === 0 && data.length === 0 && !allDataFetched && !loading) {
       fetchUserData();
     }
-}, [start, data, allDataFetched, loading]);
+  }, [start, data, allDataFetched, loading]);
 
   const handleViewMore = () => {
     if (!allDataFetched && !loading) {
@@ -191,27 +221,35 @@ export default function AttendenceTable({ additionalData, status }) {
   }, [allDataFetched, loading]);
 
   return (
-    <div className=' mt-1 border-gray-300 w-full bg-white '>
-      {/* <ToastContainer /> */}
+    <div className={`mt-1 border ${borderClass} w-full ${bgClass}`}>
       {loading ? (
         <Loading />
       ) : data.length === 0 ? (
-        <div className='text-center w-full text-gray-500'>No data available</div>
+        <div className={`text-center w-full ${subTextClass}`}>
+          No data available
+        </div>
       ) : (
         <div className='space-y-2'>
           {data.map((leave, index) => (
             <motion.div
               key={index}
-              className='border border-gray-200 rounded-lg shadow-md overflow-hidden'
+              className={`border ${borderClass} rounded-lg shadow-md overflow-hidden ${cardBgClass}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="px-6 py-4 flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
+              <div
+                className={`px-6 py-4 flex items-center justify-between cursor-pointer ${textClass}`}
+                onClick={() => handleClick(index)}
+              >
                 <div className='flex items-center space-x-4'>
-                  <img src={authState?.userDetails?.profileLink} alt="" className='w-12 h-12 rounded-full' />
+                  <img
+                    src={authState?.userDetails?.profileLink}
+                    alt=""
+                    className='w-12 h-12 rounded-full'
+                  />
                   <div>
-                    <div className="font-medium text-gray-800 mobile:max-sm:text-xs">
+                    <div className={`font-medium ${textClass} mobile:max-sm:text-xs`}>
                       {editRowIndex === index ? (
                         <>
                           <input
@@ -219,24 +257,21 @@ export default function AttendenceTable({ additionalData, status }) {
                             name='startDate'
                             value={editData.startDate}
                             onChange={handleInputChange}
-                            className='border rounded px-2 py-1 mr-2'
+                            className={`border rounded px-2 py-1 mr-2 ${inputClass}`}
                           />
                           <input
                             type="date"
                             name='endDate'
                             value={editData.endDate}
                             onChange={handleInputChange}
-                            className='border rounded px-2 py-1'
+                            className={`border rounded px-2 py-1 ${inputClass}`}
                           />
                         </>
                       ) : (
                         `${leave.startDate} to ${leave.endDate}`
                       )}
                     </div>
-                    <div className={`${leave.status === "Pending" ? "text-yellow-500" :
-                      leave.status === "Rejected" ? "text-red-500" :
-                        "text-green-500"
-                      } font-medium`}>
+                    <div className={`font-medium ${getStatusColorClass(leave.status)}`}>
                       {leave.status}
                     </div>
                   </div>
@@ -247,7 +282,13 @@ export default function AttendenceTable({ additionalData, status }) {
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        className='bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md'
+                        className={`
+                        ${darkMode
+                            ? 'bg-green-700 hover:bg-green-600'
+                            : 'bg-green-500 hover:bg-green-600'
+                          } 
+                        text-white px-3 py-1 rounded-lg shadow-md
+                      `}
                         onClick={(event) => handleUpdate(index, event)}
                       >
                         <MdCheck />
@@ -255,7 +296,13 @@ export default function AttendenceTable({ additionalData, status }) {
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md'
+                        className={`
+                        ${darkMode
+                            ? 'bg-red-700 hover:bg-red-600'
+                            : 'bg-red-500 hover:bg-red-600'
+                          } 
+                        text-white px-3 py-1 rounded-lg shadow-md
+                      `}
                         onClick={handleCancelEdit}
                       >
                         <MdCancel />
@@ -267,7 +314,13 @@ export default function AttendenceTable({ additionalData, status }) {
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          className='bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg shadow-md'
+                          className={`
+                          ${darkMode
+                              ? 'bg-blue-700 hover:bg-blue-600'
+                              : 'bg-blue-500 hover:bg-blue-600'
+                            } 
+                          text-white px-3 py-1 rounded-lg shadow-md
+                        `}
                           onClick={(event) => handleEditClick(index, event)}
                         >
                           <CiEdit />
@@ -275,7 +328,13 @@ export default function AttendenceTable({ additionalData, status }) {
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md'
+                          className={`
+                          ${darkMode
+                              ? 'bg-red-700 hover:bg-red-600'
+                              : 'bg-red-500 hover:bg-red-600'
+                            } 
+                          text-white px-3 py-1 rounded-lg shadow-md
+                        `}
                           onClick={(event) => handleDelete(index, event)}
                         >
                           <MdDeleteForever />
@@ -292,20 +351,20 @@ export default function AttendenceTable({ additionalData, status }) {
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="px-6 py-4 bg-gray-50"
+                    className={`px-6 py-4 ${expandBgClass}`}
                   >
-                    <span className='font-medium'>Reason:</span>
+                    <span className={`font-medium ${textClass}`}>Reason:</span>
                     <div className="mt-2">
                       {editRowIndex === index ? (
                         <textarea
                           name="reason"
                           value={editData.reason}
                           onChange={handleInputChange}
-                          className='w-full border rounded px-2 py-1'
+                          className={`w-full border rounded px-2 py-1 ${inputClass}`}
                           rows="3"
                         />
                       ) : (
-                        leave.reason
+                        <p className={textClass}>{leave.reason}</p>
                       )}
                     </div>
                   </motion.div>
@@ -313,9 +372,11 @@ export default function AttendenceTable({ additionalData, status }) {
               </AnimatePresence>
             </motion.div>
           ))}
-           <div ref={sentinelRef} className="h-10"></div>
+          <div ref={sentinelRef} className="h-10"></div>
           {loading && start > 0 && (
-            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+            <div className={`text-center w-full ${subTextClass} text-sm`}>
+              Loading more...
+            </div>
           )}
         </div>
       )}

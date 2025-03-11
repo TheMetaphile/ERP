@@ -98,7 +98,7 @@ const NewNoteBookRecord = () => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
-
+    // console.log(Class,Section,session,Subject,topic,chapter,checkedStudents)
     if (checkedStudents.length > 0 && chapter != "" && topic != "" && Subject && Class && Section && session) {
       let data = JSON.stringify({
         "class": Class,
@@ -133,9 +133,10 @@ const NewNoteBookRecord = () => {
           toast.error(error.response.data.error);
         });
 
-    } else {
-      toast.error("Please fill all the field");
-    }
+    } 
+    // else {
+    //   toast.error("Please fill all the field");
+    // }
   }
   return (
     <motion.div

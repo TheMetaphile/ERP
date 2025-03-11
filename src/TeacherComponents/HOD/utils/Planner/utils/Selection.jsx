@@ -3,7 +3,7 @@ import AuthContext from "../../../../../Context/AuthContext";
 import { BASE_URL } from "../../../../../Config";
 import axios from "axios";
 
-function Selection({ setClass, setSection, setSubject }) {
+function Selection({ setClass, setSection, setSubject,  setStream}) {
     const { authState } = useContext(AuthContext);
     const co_ordinator_wing = authState?.userDetails?.co_ordinator_wing;
     const wingClasses = wingMap[co_ordinator_wing] || [];
@@ -13,6 +13,9 @@ function Selection({ setClass, setSection, setSubject }) {
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
     console.log(authState)
+    const streams = ['PCM', 'PCMB', "PCB", 'Commerce', 'Arts', 'General'];
+    const [selectedStream, setSelectedStream] = useState('');
+    const [subjects, setAllSubjects] = useState([]);
 
     const handleClassChange = (event) => {
         setSelectedClass(event.target.value);
@@ -24,27 +27,26 @@ function Selection({ setClass, setSection, setSubject }) {
         setSection(event.target.value);
     }
 
+    const handleStreamChange=(event)=>{
+        setSelectedStream(event.target.value);
+        setStream(event.target.value);
+    }
+
     const handleSubjectChange = (event) => {
         setSubject(event.target.value);
     }
 
     useEffect(() => {
-
-
         if (selectedClass) {
             fetchSections();
         }
-
-
-
-
     }, [selectedClass]);
 
     useEffect(() => {
-        if(selectedClass && selectedSection){
+        if (selectedClass && selectedStream) {
             fetchSubjects();
         }
-    }, [selectedSection, selectedClass]);
+    }, [selectedStream, selectedClass]);
 
     const fetchSections = async () => {
         let data = JSON.stringify({
@@ -72,28 +74,27 @@ function Selection({ setClass, setSection, setSubject }) {
     }
 
     const fetchSubjects = async () => {
-
-        let data = '';
-
-        let config = {
-            method: 'get',
-            maxBodyLength: Infinity,
-            url: `${BASE_URL}/fetch/subjects?section=${selectedSection}&class=${selectedClass}`,
-            headers: {
-                'Authorization': `Bearer ${authState?.accessToken}`
-            },
-            data: data
-        };
-
-        axios.request(config)
-            .then((response) => {
-                setUniqueSubjects(response.data.subjects);
-            })
-            .catch((error) => {
-                console.log(error);
+        try {
+            // In a real application, you would add your API base URL
+            const response = await axios.post(`${BASE_URL}/subjects/fetch`, {
+                Class: selectedClass,
+                stream: selectedStream
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authState?.accessToken}`
+                }
             });
 
-    }
+            console.log(response.data)
+            const data = response.data;
+
+            setAllSubjects([...(data?.coreSubjects || []), ...(data?.optionalSubjects || [])]);
+
+        } catch (error) {
+            toast.error({ text: 'Error connecting to server', type: 'error' });
+        }
+    };
 
     return (
         <div className="container p-3 w-fit mobile:max-tablet:w-full">
@@ -108,6 +109,16 @@ function Selection({ setClass, setSection, setSubject }) {
                     </select>
                 </div>
                 <div className="w-36 mobile:max-tablet:w-full">
+                    <select id="stream" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" value={selectedStream} onChange={handleStreamChange}>
+                        <option value="">Select Stream</option>
+                        {streams.map((stream) => (
+                            <option key={stream} value={stream}>
+                                {stream}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="w-36 mobile:max-tablet:w-full">
                     <select id="section" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" value={selectedSection} onChange={handleSectionChange}>
                         <option value="">Select Section</option>
                         {uniqueSections.map((sectionOption, index) => (
@@ -118,7 +129,7 @@ function Selection({ setClass, setSection, setSubject }) {
                 <div className="w-36 mobile:max-tablet:w-full">
                     <select id="subject" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" onChange={handleSubjectChange}>
                         <option value="">Select Subject</option>
-                        {uniqueSubjects.map((subjectOption, index) => (
+                        {subjects.map((subjectOption, index) => (
                             <option key={index} value={subjectOption}>{subjectOption}</option>
                         ))}
                     </select>

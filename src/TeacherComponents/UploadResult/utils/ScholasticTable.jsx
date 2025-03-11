@@ -27,6 +27,8 @@ export default function ScholasticTable({ students, term, Class, subject, sectio
     }, {}));
     const [clickedIndex, setClickedIndex] = useState(null);
 
+console.log(subject)
+
     const handleClick = (index) => {
         setClickedIndex(index);
     };

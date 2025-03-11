@@ -9,12 +9,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../../Config.js";
 import { usePaymentContext } from "./PaymentContext.jsx";
 
-export default function TransactionRow() {
+export default function TransactionRow({ darkMode }) {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false)
     const paymentDetail = usePaymentContext();
     const { setPaymentDetails } = paymentDetail;
     const [data, setData] = useState([]);
+
+    const bgClass = darkMode ? 'bg-gray-800' : 'bg-white';
+    const borderClass = darkMode ? 'border-gray-700' : 'border-gray-300';
+    const textClass = darkMode ? 'text-gray-300' : 'text-gray-800';
+    const noDataTextClass = darkMode ? 'text-gray-500' : 'text-gray-600';
 
     useEffect(() => {
         if (authState?.accessToken) {
@@ -32,7 +37,6 @@ export default function TransactionRow() {
                     'Authorization': `Bearer ${authState?.accessToken}`
                 }
             });
-            console.log("API response transaction:", response.data);
             setData(response.data.transactions)
         }
         catch (error) {
@@ -45,18 +49,27 @@ export default function TransactionRow() {
     }
 
     return (
-        <div className="w-full h-fit mb-4 shadow-md rounded-lg border border-gray-300   overflow-x-auto no-scrollbar">
-
+        <div 
+            className={`
+                w-full h-fit mb-4 shadow-md rounded-lg border 
+                ${bgClass} ${borderClass} 
+                overflow-x-auto no-scrollbar
+            `}
+        >
             {loading ? (
                 <Loading />
             ) : data.length === 0 ? (
-                <div className='text-center'>No data available</div>
+                <div className={`text-center p-4 ${noDataTextClass}`}>
+                    No data available
+                </div>
             ) : (
                 <div>
-                    <TransactionField data={data} />
+                    <TransactionField 
+                        data={data} 
+                        darkMode={darkMode} 
+                    />
                 </div>
             )}
-
         </div>
     );
 }

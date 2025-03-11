@@ -14,11 +14,15 @@ export default function TodayHomeWork() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
     const [allDataFetched, setAllDataFetched] = useState(false);
     const sentinelRef = useRef(null);
+
+    const bgClass = darkMode ? 'bg-gray-900' : 'bg-white';
+    const textClass = darkMode ? 'text-white' : 'text-black';
+    const subTextClass = darkMode ? 'text-gray-300' : 'text-gray-600';
 
     const handleSubjectSelect = (subject) => {
         setSelectedSubject(subject);
@@ -51,7 +55,6 @@ export default function TodayHomeWork() {
     }, [start]);
 
     const fetchHomework = async () => {
-        console.log(authState?.userDetails?.currentClass, new Date().getMonth() + 1, authState?.userDetails?.academicYear, authState?.userDetails?.section, selectedSubject)
         if (loading || allDataFetched) return;
 
         setLoading(true);
@@ -63,14 +66,11 @@ export default function TodayHomeWork() {
             });
 
             const work = response.data.homework.length;
-            console.log("API response:", response.data.homework);
             if (work < end) {
                 toast.success('All data fetched');
-                console.log('All data fetched')
                 setAllDataFetched(true);
             }
             setDetails(prevData => [...prevData, ...response.data.homework]);
-            console.log('fetch', response.data)
         } catch (error) {
             console.error("Error fetching student homework:", error);
         }
@@ -83,7 +83,6 @@ export default function TodayHomeWork() {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && !allDataFetched && !loading) {
-                    console.log("Fetching more data...");
                     handleViewMore();
                 }
             },
@@ -102,30 +101,36 @@ export default function TodayHomeWork() {
     }, [allDataFetched, loading]);
 
     return (
-        <div className="flex flex-col">
-            {/* <h1 className="text-lg font-medium px-2">Today HomeWork</h1>
-            <HomeWorkGrid /> */}
+        <div className={`flex flex-col ${bgClass}`}>
             <ToastContainer />
             <div className="flex justify-between items-center px-3 mobile:max-tablet:mt-4">
-                <h1 className="text-3xl mobile:max-laptop:text-lg font-medium px-2">Homework</h1>
+                <h1 className={`text-3xl mobile:max-laptop:text-lg font-medium px-2 ${textClass}`}>
+                    Homework
+                </h1>
                 <SubjectSelection onSubjectSelect={handleSubjectSelect} />
             </div>
 
             {loading ? (
                 <Loading />
             ) : details.length === 0 ? (
-                <div className="w-full text-center mt-2">No homework found</div>
+                <div className={`w-full text-center mt-2 ${subTextClass}`}>
+                    No homework found
+                </div>
             ) : (
                 <>
-                    <SubjectHomeWorkTile subject={selectedSubject} details={details} />
+                    <SubjectHomeWorkTile 
+                        subject={selectedSubject} 
+                        details={details} 
+                        darkMode={darkMode} 
+                    />
                     <div ref={sentinelRef} className="h-10"></div>
                     {loading && start > 0 && (
-                        <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                        <div className={`text-center w-full text-sm ${subTextClass}`}>
+                            Loading more...
+                        </div>
                     )}
                 </>
-            )
-            }
-            {/* <HomeSubjectGrid /> */}
+            )}
         </div>
     )
 }

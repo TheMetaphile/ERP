@@ -9,6 +9,7 @@ function PlannerHOD() {
     const [selectedClass, setSelectedClass] = useState('');
     const [selectedSection, setSelectedSection] = useState('');
     const [selectedSubject, setSelectedSubject] = useState('');
+    const [selectedStream, setSelectedStream] = useState('');
     const [isDropdownVisible, setDropdownVisible] = useState(false);
 
     console.log(selectedClass, selectedSection, selectedSubject)
@@ -37,7 +38,8 @@ function PlannerHOD() {
                             <Selection
                                 setClass={setSelectedClass}
                                 setSection={setSelectedSection}
-                                setSubject={setSelectedSubject} />
+                                setSubject={setSelectedSubject}
+                                setStream={setSelectedStream} />
                         </div>
                     )}
                 </div>
@@ -48,10 +50,12 @@ function PlannerHOD() {
                     <Selection
                         setClass={setSelectedClass}
                         setSection={setSelectedSection}
-                        setSubject={setSelectedSubject} />
+                        setSubject={setSelectedSubject}
+                        setStream={setSelectedStream}
+                    />
                 </div>
             </div>
-            <Tabs Class={selectedClass} section={selectedSection} subject={selectedSubject} />
+            <Tabs Class={selectedClass} section={selectedSection} subject={selectedSubject} stream ={selectedStream}/>
             {/* <Outlet /> */}
         </div>
 

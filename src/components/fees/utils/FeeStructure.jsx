@@ -1,17 +1,46 @@
 import React from "react";
 import FeeStructureField from './feeStructureField.jsx';
 import 'react-toastify/dist/ReactToastify.css';
-export default function FeeStructure({ selectedOption, fees, setFees, }) {
+
+export default function FeeStructure({ 
+  selectedOption, 
+  fees, 
+  setFees, 
+  darkMode 
+}) {
+  // Dark mode classes
+  const bgClass = darkMode ? 'bg-gray-800' : 'bg-white';
+  const borderClass = darkMode ? 'border-gray-700' : 'border-gray-300';
+  const textClass = darkMode ? 'text-gray-300' : 'text-gray-700';
 
   return (
-    <div className="w-full h-fit mb-4  rounded-lg shadow-md overflow-auto border border-gray-300">
-      <table className=" w-full">
+    <div 
+      className={`
+        w-full h-fit mb-4 rounded-lg shadow-md overflow-auto border 
+        ${bgClass} ${borderClass}
+      `}
+    >
+      <table className="w-full">
         {fees.length === 0 ? (
-          <div>No data available</div>
+          <tbody>
+            <tr>
+              <td 
+                className={`
+                  text-center p-4 
+                  ${textClass}
+                `}
+              >
+                No data available
+              </td>
+            </tr>
+          </tbody>
         ) : (
-          <div className="">
-            <FeeStructureField fees={fees} selectedOption={selectedOption} setFees={setFees} />
-          </div>
+          <FeeStructureField 
+            fees={fees} 
+            selectedOption={selectedOption} 
+            setFees={setFees} 
+            darkMode={darkMode} 
+          />
         )}
       </table>
     </div>

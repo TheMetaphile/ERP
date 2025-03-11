@@ -15,8 +15,10 @@ function StudentDoubtsHOD() {
     const [Section, setSection] = useState('');
     const [Subject, setSubject] = useState('');
     const [sections, setSections] = useState([]);
-    const [subjects, setSubjects] = useState([]);
     const [selectedLink, setSelectedLink] = useState(`/Teacher-Dashboard/HOD/studentDoubts/new`);
+    const streams = ['PCM', 'PCMB', "PCB", 'Commerce', 'Arts', 'General'];
+    const [selectedStream, setSelectedStream] = useState('');
+    const [subjects, setAllSubjects] = useState([]);
 
     const wingClasses = {
         'Pre-Nursery-U.K.G': ['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G'],
@@ -44,20 +46,29 @@ function StudentDoubtsHOD() {
         }
     };
 
-    const fetchSubject = async () => {
-        console.log(Class, Section)
+    const fetchSubjects = async () => {
         try {
-            const response = await axios.post(`${BASE_URL}/fetch`, {
-                accessToken: authState?.accessToken,
-                class: Class,
-                section: Section
+            // In a real application, you would add your API base URL
+            const response = await axios.post(`${BASE_URL}/subjects/fetch`, {
+                Class: Class,
+                stream: selectedStream
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authState?.accessToken}`
+                }
             });
-            const subjectsDetail = [...new Set(response.data.teacher.map((teacher) => teacher.subject))];
-            setSubjects(subjectsDetail);
+
+            console.log(response.data)
+            const data = response.data;
+
+            setAllSubjects([...(data?.coreSubjects || []), ...(data?.optionalSubjects || [])]);
+
         } catch (error) {
-            console.error('Error while fetching subjects:', error);
+            toast.error({ text: 'Error connecting to server', type: 'error' });
         }
     };
+
 
     const handleClassChange = (e) => {
         const selectedClass = e.target.value;
@@ -67,16 +78,21 @@ function StudentDoubtsHOD() {
         fetchSections(selectedClass);
     };
 
+
+    const handleStreamChange = (event) => {
+        setSelectedStream(event.target.value)
+    }
+
     const handleSectionChange = (e) => {
         const selectedSection = e.target.value;
         setSection(selectedSection);
     };
 
     useEffect(() => {
-        if (Section) {
-            fetchSubject();
+        if (Class && selectedStream) {
+            fetchSubjects();
         }
-    }, [Section]);
+    }, [selectedStream, Class]);
 
     const handleSubjectChange = (e) => {
         setSubject(e.target.value);
@@ -114,6 +130,15 @@ function StudentDoubtsHOD() {
                             {availableClasses.map((classOption, index) => (
                                 <option key={index} value={classOption}>
                                     {classOption}
+                                </option>
+                            ))}
+                        </select>
+
+                        <select id="stream" className="shadow-md px-3 py-1 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg" value={selectedStream} onChange={handleStreamChange}>
+                            <option value="">Select Stream</option>
+                            {streams.map((stream) => (
+                                <option key={stream} value={stream}>
+                                    {stream}
                                 </option>
                             ))}
                         </select>

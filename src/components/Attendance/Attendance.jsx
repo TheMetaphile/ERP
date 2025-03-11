@@ -12,7 +12,7 @@ import Loading from "../../LoadingScreen/Loading"
 import { BASE_URL } from "../../Config";
 
 export default function Attendance() {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [data, setData] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -69,8 +69,8 @@ export default function Attendance() {
 
   const handleYearChange = (selectedOption) => {
     setSelectedYear(selectedOption);
-
   };
+
   useEffect(() => {
     const fetchStudents = async () => {
       setLoading(true);
@@ -91,16 +91,24 @@ export default function Attendance() {
 
     fetchStudents();
   }, [authState?.accessToken, selectedMonth, selectedYear]);
+
+  const bgClass = darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black';
+  const selectClass = darkMode 
+    ? 'bg-gray-700 text-white border-gray-600' 
+    : 'bg-white text-black border-gray-300';
+
   return (
-    <div className=" flex flex-col w-full overflow-y-auto items-start px-2 mb-1 pb-4 no-scrollbar mt-2">
+    <div className={`flex flex-col w-full overflow-y-auto items-start px-2 mb-1 pb-4 no-scrollbar mt-2 ${bgClass}`}>
       <div className="flex mobile:max-tablet:flex-col justify-between w-full mb-2 gap-2 mobile:max-tablet:mt-2">
-        <h1 className="text-2xl mobile:max-tablet:text-lg font-medium">Attendance</h1>
-        <div className=" mobile:max-tablet:flex gap-2">
+        <h1 className={`text-2xl mobile:max-tablet:text-lg font-medium ${darkMode ? 'text-white' : 'text-black'}`}>
+          Attendance
+        </h1>
+        <div className="mobile:max-tablet:flex gap-2">
           <select
             id="month-selector"
             value={selectedMonth}
             onChange={(e) => handleMonthChange(e.target.value)}
-            className="border rounded p-2 mobile:max-tablet:mx-0 mx-2 flex-1"
+            className={`border rounded p-2 mobile:max-tablet:mx-0 mx-2 flex-1 ${selectClass}`}
           >
             <option value="" disabled>Select a month</option>
             {months.map((month, index) => (
@@ -113,7 +121,7 @@ export default function Attendance() {
             id="year-selector"
             value={selectedYear}
             onChange={(e) => handleYearChange(e.target.value)}
-            className="border rounded p-2 mx-2 mobile:max-tablet:mx-0 flex-1"
+            className={`border rounded p-2 mx-2 mobile:max-tablet:mx-0 flex-1 ${selectClass}`}
           >
             <option value="" disabled>Select a year</option>
             {years.map((year) => (
@@ -125,28 +133,27 @@ export default function Attendance() {
         </div>
       </div>
       {loading ? (
-        <div className=" self-center ">
+        <div className="self-center">
           <Loading />
         </div>
       ) : (
         <>
-          <div className=" flex w-full justify-start mobile:max-tablet:flex-col gap-2">
+          <div className="flex w-full justify-start mobile:max-tablet:flex-col gap-2">
             <TotalAttendance TotalAttendance={data.present + data.leave + data.absent} />
             <PresentAttendanceTile Present={data.present} image={Present} text="Present" />
             <PresentAttendanceTile Present={data.absent} image={Absent} text="Absent" />
             <PresentAttendanceTile Present={data.leave} image={Leave} text="Leave" />
           </div>
-          <div className=" flex w-full  mobile:max-laptop:h-80 tablet:max-laptop:justify-evenly mobile:max-laptop:flex-col items-center mt-4 mb-4 gap-2 ">
-            <div className=" mobile:max-laptop:w-full flex-1 ">
+          <div className="flex w-full mobile:max-laptop:h-80 tablet:max-laptop:justify-evenly mobile:max-laptop:flex-col items-center mt-4 mb-4 gap-2">
+            <div className="mobile:max-laptop:w-full flex-1">
               <Calendar month={selectedMonth} year={selectedYear} />
             </div>
-            <div className=" h-96  mobile:max-laptop:w-full flex-1 ">
+            <div className="h-96 mobile:max-laptop:w-full flex-1">
               <Doughnut chartData={chartData} title='Attendance Status' />
             </div>
           </div>
         </>
       )}
-
     </div>
   )
 }

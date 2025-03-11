@@ -119,7 +119,7 @@ function History({ additionalData }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
 
-            className=' mx-auto   '
+            className=' mx-auto  w-full '
 
         >
             <motion.div

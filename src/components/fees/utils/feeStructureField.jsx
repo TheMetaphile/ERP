@@ -4,8 +4,20 @@ import { motion } from 'framer-motion';
 import FeePaymentRow from "./FeePaymentRow";
 import FeePaymentRowQuarter from "./FeePaymentRowQuarter";
 
-export default function FeeStructureField({ fees, selectedOption, setFees }) {
+export default function FeeStructureField({ 
+    fees, 
+    selectedOption, 
+    setFees, 
+    darkMode 
+}) {
     const { authState } = useContext(AuthContext);
+
+    // Dark mode classes
+    const bgHeaderClass = darkMode ? 'bg-gray-700' : 'bg-blue-200';
+    const textHeaderClass = darkMode ? 'text-white' : 'text-gray-800';
+    const bgRowClass = darkMode ? 'bg-gray-800' : 'bg-white';
+    const textClass = darkMode ? 'text-gray-300' : 'text-gray-800';
+    const borderClass = darkMode ? 'border-gray-700' : 'border-gray-300';
 
     // Animation variants
     const containerVariants = {
@@ -19,59 +31,76 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
     };
 
     const FeeStructureHeader = () => (
-        <motion.thead className="bg-blue-200 rounded-t-lg w-full">
+        <motion.thead className={`${bgHeaderClass} rounded-t-lg w-full`}>
             <tr>
-                <th scope="col" className="px-3 py-3">Month</th>
-                <th scope="col" className="px-3 py-3">Total Fee</th>
-                <th scope="col" className="px-3 py-3">Paid Fee</th>
-                <th scope="col" className="px-3 py-3">Applied Discount (Manual + Category)</th>
-                <th scope="col" className="px-3 py-3">Pending Fee</th>
-                <th scope="col" className="px-3 py-3">Status</th>
-                <th scope="col" className="px-3 py-3 text-center">Amount</th>
-                <th scope="col" className="px-3 py-3">Payment Mode</th>
+                {[
+                    'Month', 'Total Fee', 'Paid Fee', 
+                    'Applied Discount (Manual + Category)', 
+                    'Pending Fee', 'Status', 'Amount', 'Payment Mode'
+                ].map((header, index) => (
+                    <th 
+                        key={index} 
+                        scope="col" 
+                        className={`px-3 py-3 ${textHeaderClass}`}
+                    >
+                        {header}
+                    </th>
+                ))}
             </tr>
         </motion.thead>
     );
 
     const QuarterFeeHeader = () => (
-        <motion.thead variants={rowVariants} className="bg-blue-200 rounded-t-lg w-full">
+        <motion.thead 
+            variants={rowVariants} 
+            className={`${bgHeaderClass} rounded-t-lg w-full`}
+        >
             <tr>
-                <th scope="col" className="px-3 py-3">Months</th>
-                <th scope="col" className="px-3 py-3">Quarter</th>
-                <th scope="col" className="px-3 py-3">Total Fee</th>
-                <th scope="col" className="px-3 py-3">Paid Fee</th>
-                <th scope="col" className="px-3 py-3">Applied Discount</th>
-                <th scope="col" className="px-3 py-3">Pending Fee</th>
- 
-                <th scope="col" className="px-3 py-3">Status</th>
-                <th scope="col" className="px-3 py-3 text-center">Amount</th>
-                <th scope="col" className="px-3 py-3">Payment Mode</th>
+                {[
+                    'Months', 'Quarter', 'Total Fee', 'Paid Fee', 
+                    'Applied Discount', 'Pending Fee', 
+                    'Status', 'Amount', 'Payment Mode'
+                ].map((header, index) => (
+                    <th 
+                        key={index} 
+                        scope="col" 
+                        className={`px-3 py-3 ${textHeaderClass}`}
+                    >
+                        {header}
+                    </th>
+                ))}
             </tr>
         </motion.thead>
     );
 
     const Cell = ({ content }) => (
-        <td className="flex-1 p-4 text-center flex items-center justify-center">
+        <td 
+            className={`flex-1 p-4 text-center flex items-center justify-center ${textClass}`}
+        >
             <span>{content}</span>
         </td>
     );
-
 
     return (
         <motion.table
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="w-full"
+            className={`w-full ${bgRowClass}`}
         >
             {selectedOption === 'monthlyfee' && (
                 <>
                     <FeeStructureHeader />
                     {fees.monthlyStatus.map((data, index) => (
-                        <tbody>
-                            <FeePaymentRow student={data} key={index} />
+                        <tbody 
+                            key={index} 
+                            className={`${bgRowClass} ${borderClass} border-b`}
+                        >
+                            <FeePaymentRow 
+                                student={data} 
+                                darkMode={darkMode} 
+                            />
                         </tbody>
-
                     ))}
                 </>
             )}
@@ -80,15 +109,18 @@ export default function FeeStructureField({ fees, selectedOption, setFees }) {
                 <>
                     <QuarterFeeHeader />
                     {fees.quarterlyStatus.map((data, index) => (
-                        <tbody>
-                            <FeePaymentRowQuarter student={data} key={index} />
+                        <tbody 
+                            key={index} 
+                            className={`${bgRowClass} ${borderClass} border-b`}
+                        >
+                            <FeePaymentRowQuarter 
+                                student={data} 
+                                darkMode={darkMode} 
+                            />
                         </tbody>
                     ))}
                 </>
             )}
-
         </motion.table>
     );
 }
-
-

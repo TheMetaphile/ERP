@@ -5,7 +5,7 @@ import NextWeekHOD from './NextWeekHOD';
 
 const tabs = ["Current Week", "Next Week"];
 
-const Tabs = ({ Class, section, subject }) => {
+const Tabs = ({ Class, section, subject, stream }) => {
     const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
     const handleTabChange = (tab) => {
@@ -28,9 +28,9 @@ const Tabs = ({ Class, section, subject }) => {
                 </div>
             </div>
             {selectedTab === 'Current Week' ? (
-                <CurrentWeekHOD selectedTab={selectedTab} Class={Class} section={section} subject={subject} />
+                <CurrentWeekHOD selectedTab={selectedTab} Class={Class} section={section} subject={subject} stream={stream} />
             ) : (
-                <NextWeekHOD selectedTab={selectedTab} Class={Class} section={section} subject={subject} />
+                <NextWeekHOD selectedTab={selectedTab} Class={Class} section={section} subject={subject} stream={stream} />
             )}
 
         </div>

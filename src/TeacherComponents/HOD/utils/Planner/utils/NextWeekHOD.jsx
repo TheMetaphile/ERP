@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import NextWeekHODRow from './NextWeekHODRow';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
+const NextWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -40,7 +40,7 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
     const currentWeekStart = new Date();
     const diff = 1 - day;  // If Sunday (0), go back 6 days, otherwise adjust to Monday
     currentWeekStart.setDate(currentDate.getDate() + diff);
-    
+
     const nextWeekStart = new Date(currentWeekStart);  // Create a new Date object for next week
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
@@ -52,14 +52,14 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
     // nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
 
-    const nextWeekFormattedDate = `${nextWeekStart.getFullYear()}-${ nextWeekStart.getMonth() <10 ? `0${nextWeekStart.getMonth()+1}` : nextWeekStart.getMonth()+1}-${nextWeekStart.getDate()}`;
+    const nextWeekFormattedDate = `${nextWeekStart.getFullYear()}-${nextWeekStart.getMonth() < 10 ? `0${nextWeekStart.getMonth() + 1}` : nextWeekStart.getMonth() + 1}-${nextWeekStart.getDate()}`;
     const [details, setDetails] = useState(defaultPlan());
 
 
 
 
     useEffect(() => {
-        console.log(nextWeekFormattedDate,"dfh")
+        console.log(nextWeekFormattedDate, "dfh")
         const fetchPlan = async () => {
 
             try {
@@ -71,6 +71,7 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
                 console.log("API response:", response.data);
                 if (response.data.plan && response.data.plan.length > 0) {
                     setDetails(response.data.plan);
+                    toast.success("All data Fetched");
                     setId(response.data._id);
                     setRemark(response.data.coordinatorRemark);
                     setStatus(response.data.coordinatorStatus);
@@ -82,16 +83,16 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject }) => {
             } catch (err) {
                 console.log(err);
                 setDetails(defaultPlan());
-                setError(err.response.data.error);
+                toast.error(err.response.data.error);
                 setLoading(false);
             }
         };
-        if (Class && section && subject) {
+        if (Class && section && subject && stream) {
             setLoading(true);
             setDetails([]);
             fetchPlan();
         }
-    }, [Class, section, subject, nextWeekFormattedDate]);
+    }, [Class, section, subject, nextWeekFormattedDate, stream]);
 
 
     const handleSubmit = async (e) => {

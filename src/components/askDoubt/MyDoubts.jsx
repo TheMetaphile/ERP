@@ -11,8 +11,8 @@ import Loading from '../../LoadingScreen/Loading';
 import { Link } from 'react-router-dom';
 
 export default function MyDoubts() {
-    const { authState } = useContext(AuthContext);
-    const [selectedSubject, setSelectedSubject] = useState('Maths');
+    const { authState, darkMode } = useContext(AuthContext);
+    const [selectedSubject, setSelectedSubject] = useState(authState?.subjects[0]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
@@ -23,6 +23,22 @@ export default function MyDoubts() {
     const [allDataFetched, setAllDataFetched] = useState(false);
     const [status, setStatus] = useState('Pending');
     const sentinelRef = useRef(null);
+
+    const bgClass = darkMode
+        ? 'bg-gradient-to-br from-gray-900 to-gray-800'
+        : 'bg-gradient-to-br from-blue-100 to-blue-100';
+    const cardBgClass = darkMode ? 'bg-gray-800' : 'bg-white';
+    const textClass = darkMode ? 'text-white' : 'text-black';
+    const subTextClass = darkMode ? 'text-gray-300' : 'text-gray-600';
+    const borderClass = darkMode ? 'border-gray-700' : 'border-gray-300';
+    const selectClass = darkMode
+        ? 'bg-gray-700 text-white border-gray-600 focus:ring-indigo-600'
+        : 'bg-white text-black border-gray-300 focus:ring-indigo-500';
+    const buttonClass = darkMode
+        ? 'bg-indigo-700 hover:bg-indigo-600 text-white'
+        : 'bg-blue-500 hover:bg-blue-600 text-white';
+    const modalBgClass = darkMode ? 'bg-gray-800' : 'bg-white';
+    const modalTextClass = darkMode ? 'text-gray-300' : 'text-gray-600';
 
     const handleSubjectSelect = (subject) => {
         setSelectedSubject(subject);
@@ -172,30 +188,68 @@ export default function MyDoubts() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col w-full mobile:max-tablet:mt-4 bg-gradient-to-br from-blue-100 to-blue-100 p-2 rounded-lg shadow-lg"
+            className={`flex flex-col w-full mobile:max-tablet:mt-4 p-2 rounded-lg shadow-lg ${bgClass}`}
         >
-            <ToastContainer />
-            <div className='flex justify-between bg-white p-4 rounded-lg shadow-md mobile:max-tablet:flex-col'>
-                <Link className="text-2xl font-bold text-blue-600 hover:text-blue-800 transition-colors duration-300 mobile:max-laptop:text-lg whitespace-nowrap flex items-center">
+            <ToastContainer theme={darkMode ? 'dark' : 'light'} />
+            <div className={`flex justify-between ${cardBgClass} p-4 rounded-lg shadow-md mobile:max-tablet:flex-col`}>
+                <Link
+                    className={`
+                    text-2xl font-bold hover:text-blue-800 
+                    transition-colors duration-300 
+                    mobile:max-laptop:text-lg 
+                    whitespace-nowrap 
+                    flex items-center 
+                    ${darkMode ? 'text-indigo-400 hover:text-indigo-300' : 'text-blue-600 hover:text-blue-800'}
+                `}
+                >
                     <IoBookOutline className="mr-2" />
                     My Doubts
                 </Link>
                 <div className='flex items-center mobile:max-tablet:flex-col mobile:max-tablet:items-start mt-4 tablet:mt-0'>
                     <div className="flex md:order-2 mobile:max-tablet:w-full md:w-full lg:w-fit md:ml-2 gap-2 mobile:max-tablet:flex-col">
-                        <SubjectSelection onSubjectSelect={handleSubjectSelect} />
+                        <SubjectSelection
+                            onSubjectSelect={handleSubjectSelect}
+                            darkMode={darkMode}
+                        />
                         <select
                             value={status}
                             onChange={handleStatusChange}
-                            className="mt-1 border block py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md mr-1 bg-white shadow-sm"
+                            className={`
+                            mt-1 block py-2 text-base 
+                            focus:outline-none focus:ring-2 
+                            sm:text-sm rounded-md mr-1 
+                            ${selectClass}
+                        `}
                         >
-                            <option value="Pending">Pending</option>
-                            <option value="Resolved">Resolved</option>
-                            <option value="Rejected">Rejected</option>
+                            <option
+                                value="Pending"
+                                className={darkMode ? 'bg-gray-800' : 'bg-white'}
+                            >
+                                Pending
+                            </option>
+                            <option
+                                value="Resolved"
+                                className={darkMode ? 'bg-gray-800' : 'bg-white'}
+                            >
+                                Resolved
+                            </option>
+                            <option
+                                value="Rejected"
+                                className={darkMode ? 'bg-gray-800' : 'bg-white'}
+                            >
+                                Rejected
+                            </option>
                         </select>
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className='bg-blue-500 hover:bg-blue-600 mobile:max-tablet:text-xs whitespace-nowrap rounded-lg shadow-md px-4 py-2 text-white flex items-center'
+                            className={`
+                            mobile:max-tablet:text-xs 
+                            whitespace-nowrap rounded-lg 
+                            shadow-md px-4 py-2 
+                            flex items-center 
+                            ${buttonClass}
+                        `}
                             onClick={handleAskDoubt}
                         >
                             <IoAddCircleOutline className="mr-2" />
@@ -213,13 +267,17 @@ export default function MyDoubts() {
                 {loading ? (
                     <Loading />
                 ) : data.length === 0 ? (
-                    <div className='text-center w-full text-gray-600 text-lg'>No doubts asked yet. Start by asking a doubt!</div>
+                    <div className={`text-center w-full text-lg ${subTextClass}`}>
+                        No doubts asked yet. Start by asking a doubt!
+                    </div>
                 ) : (
                     <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-                        <MyDoubtTile data={data} />
+                        <MyDoubtTile data={data} darkMode={darkMode} />
                         <div ref={sentinelRef} className="h-10"></div>
                         {loading && start > 0 && (
-                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                            <div className={`text-center w-full text-sm ${subTextClass}`}>
+                                Loading more...
+                            </div>
                         )}
                     </div>
                 )}
@@ -229,26 +287,47 @@ export default function MyDoubts() {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center mobile:max-tablet:z-50"
+                    className={`
+                    fixed inset-0 
+                    ${darkMode ? 'bg-black bg-opacity-75' : 'bg-gray-500 bg-opacity-75'} 
+                    flex justify-center items-center 
+                    mobile:max-tablet:z-50
+                `}
                 >
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="bg-white rounded-lg mobile:max-tablet:p-4 mobile:max-tablet:w-full mobile:max-tablet:mx-10 p-6 shadow-lg w-1/2"
+                        className={`
+                        ${modalBgClass} rounded-lg 
+                        mobile:max-tablet:p-4 mobile:max-tablet:w-full 
+                        mobile:max-tablet:mx-10 p-6 shadow-lg w-1/2
+                    `}
                     >
-                        <h2 className="text-xl font-bold mb-4 text-blue-600">Ask Your Doubt</h2>
-                        <p className="text-base text-gray-600 mb-4">Select a subject and write your question. You can also attach photos for reference.</p>
+                        <h2 className={`text-xl font-bold mb-4 ${darkMode ? 'text-indigo-400' : 'text-blue-600'}`}>
+                            Ask Your Doubt
+                        </h2>
+                        <p className={`text-base mb-4 ${modalTextClass}`}>
+                            Select a subject and write your question. You can also attach photos for reference.
+                        </p>
 
                         <div className="flex flex-col tablet:flex-row justify-between items-center gap-3 w-full">
                             <div className="flex-1 mobile:max-tablet:w-full">
                                 <select
-                                    className="shadow-md border border-grey-300 rounded-lg p-2 w-full mr-2 mb-2"
+                                    className={`
+                                    shadow-md border rounded-lg 
+                                    p-2 w-full mr-2 mb-2 
+                                    ${selectClass}
+                                `}
                                     onChange={handleModalSubject}
                                 >
                                     {authState?.subjects.map(
                                         (subject, index) => (
-                                            <option key={index} value={subject}>
+                                            <option
+                                                key={index}
+                                                value={subject}
+                                                className={darkMode ? 'bg-gray-800' : 'bg-white'}
+                                            >
                                                 {subject}
                                             </option>
                                         )
@@ -257,10 +336,16 @@ export default function MyDoubts() {
                             </div>
                         </div>
 
-                        <h1 className="mb-2 mt-2 font-semibold text-gray-700">Your Question</h1>
+                        <h1 className={`mb-2 mt-2 font-semibold ${textClass}`}>
+                            Your Question
+                        </h1>
 
                         <textarea
-                            className="w-full px-3 py-2 mb-4 border rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300"
+                            className={`
+                            w-full px-3 py-2 mb-4 border rounded-lg 
+                            focus:ring-2 focus:border-blue-300 
+                            ${selectClass}
+                        `}
                             placeholder="Write your question here..."
                             rows={4}
                             value={doubtDescription}
@@ -269,13 +354,26 @@ export default function MyDoubts() {
 
                         <div className="flex justify-between items-center">
                             <div className='flex items-center'>
-                                <IoCameraOutline className='w-6 h-6 mobile:max-tablet:w-5 mobile:max-tablet:h-5 text-blue-500 cursor-pointer' />
+                                <IoCameraOutline
+                                    className={`
+                                    w-6 h-6 mobile:max-tablet:w-5 
+                                    mobile:max-tablet:h-5 cursor-pointer 
+                                    ${darkMode ? 'text-indigo-400' : 'text-blue-500'}
+                                `}
+                                />
                             </div>
                             <div>
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="bg-gray-300 rounded-lg mobile:max-tablet:px-2 mobile:max-tablet:py-1 px-4 py-2 mr-2 hover:bg-gray-400 transition-colors duration-300"
+                                    className={`
+                                    rounded-lg mobile:max-tablet:px-2 
+                                    mobile:max-tablet:py-1 px-4 py-2 mr-2 
+                                    transition-colors duration-300 
+                                    ${darkMode
+                                            ? 'bg-gray-700 text-white hover:bg-gray-600'
+                                            : 'bg-gray-300 hover:bg-gray-400'}
+                                `}
                                     onClick={handleCloseModal}
                                 >
                                     Cancel
@@ -283,7 +381,14 @@ export default function MyDoubts() {
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="bg-blue-600 text-white rounded-lg mobile:max-tablet:px-2 mobile:max-tablet:py-1 px-4 py-2 hover:bg-blue-700 transition-colors duration-300"
+                                    className={`
+                                    text-white rounded-lg 
+                                    mobile:max-tablet:px-2 
+                                    mobile:max-tablet:py-1 px-4 py-2 
+                                    hover:bg-opacity-90 
+                                    transition-colors duration-300 
+                                    ${buttonClass}
+                                `}
                                     onClick={handleSubmitDoubt}
                                 >
                                     {loading ? <Loading /> : 'Submit'}
