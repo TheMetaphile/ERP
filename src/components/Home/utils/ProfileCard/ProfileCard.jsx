@@ -6,9 +6,22 @@ import AuthContext from '../../../../Context/AuthContext';
 import { Badge } from '@mui/material';
 import { BASE_URL } from "../../../../Config";
 
-export default function ProfileCard() {
+export default function ProfileCard({ darkMode }) {
   const { authState } = useContext(AuthContext);
   const [teacher, setTeacher] = useState('');
+
+  const bgClass = darkMode
+    ? 'bg-gradient-to-r from-gray-800 to-gray-900'
+    : 'bg-gradient-to-r from-blue-50 to-teal-50';
+  const textClass = darkMode ? 'text-white' : 'text-gray-800';
+  const subTextClass = darkMode ? 'text-gray-300' : 'text-gray-600';
+  const borderClass = darkMode ? 'border-gray-700' : 'border-gray-300';
+  const sessionBadgeClass = darkMode
+    ? 'bg-teal-900 text-teal-300'
+    : 'bg-teal-100 text-teal-800';
+  const notificationBgClass = darkMode
+    ? 'bg-gray-700 hover:bg-gray-600'
+    : 'bg-white hover:bg-gray-100';
 
   useEffect(() => {
     if (authState?.accessToken) {
@@ -32,39 +45,66 @@ export default function ProfileCard() {
   }
 
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-teal-50 w-full rounded-xl shadow-lg p-6 border border-gray-300">
+    <div
+      className={`
+        w-full rounded-xl shadow-lg p-6 border 
+        ${bgClass} ${borderClass}
+      `}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4 mobile:max-tablet:flex-col mobile:max-tablet:text-center">
-          <img 
-            src={authState?.userDetails?.profileLink || ProfileIcon} 
-            alt="Profile" 
-            className="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover"
+          <img
+            src={authState?.userDetails?.profileLink || ProfileIcon}
+            alt="Profile"
+            className={`
+              w-24 h-24 rounded-full border-4 
+              ${darkMode ? 'border-gray-700' : 'border-white'} 
+              shadow-md object-cover
+            `}
           />
           <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-1">
+            <h2 className={`text-2xl font-bold ${textClass} mb-1`}>
               Hi, {authState?.userDetails?.name}
             </h2>
-            <div className="text-sm text-gray-600 space-y-1">
-              <p>Class: {authState?.userDetails?.currentClass}-{authState?.userDetails?.section} | Roll No. {authState?.userDetails?.rollNumber}</p>
+            <div className={`text-sm ${subTextClass} space-y-1`}>
+              <p>
+                Class: {authState?.userDetails?.currentClass}-{authState?.userDetails?.section} |
+                Roll No. {authState?.userDetails?.rollNumber}
+              </p>
               <p>Class Teacher: {teacher || "Not found"}</p>
-              <span className="inline-block px-3 py-1 bg-teal-100 text-teal-800 rounded-full font-medium">
+              <span
+                className={`
+                  inline-block px-3 py-1 rounded-full 
+                  font-medium ${sessionBadgeClass}
+                `}
+              >
                 {authState?.userDetails?.session}
               </span>
             </div>
           </div>
         </div>
         <div className="relative">
-          <Badge 
+          <Badge
             badgeContent={4}
-            color="error"
+            color={darkMode ? "primary" : "error"}
             overlap="circular"
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'right',
             }}
           >
-            <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors duration-200">
-              <img src={NotificationIcon} alt="Notifications" className="w-8 h-8" />
+            <button
+              className={`
+                p-2 rounded-full shadow-md 
+                transition-colors duration-200 
+                ${notificationBgClass}
+              `}
+            >
+              <img
+                src={NotificationIcon}
+                alt="Notifications"
+                className="w-8 h-8"
+              />
             </button>
           </Badge>
         </div>

@@ -6,10 +6,14 @@ import AuthContext from "../../../Context/AuthContext";
 import { BASE_URL } from "../../../Config";
 import DoughnutSecond from "./DoughnutSecond";
 
-export default function Progress() {
+export default function Progress({ darkMode }) {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
+
+    const bgClass = darkMode ? 'bg-gray-900' : 'bg-white';
+    const textClass = darkMode ? 'text-white' : 'text-black';
+    const spinnerClass = darkMode ? 'text-blue-400' : 'text-blue-600';
 
     function getCurrentSession() {
         const now = new Date();
@@ -28,8 +32,12 @@ export default function Progress() {
         datasets: [{
             label: 'Attendance',
             data: [details.accepted, details.rejected, details.pending],
-            backgroundColor: ['#4F46E5', '#EF4444', '#FBBF24'],
-            bg: ['text-blue-600', 'text-red-600', 'text-yellow-500'],
+            backgroundColor: darkMode
+                ? ['#4338ca', '#b91c1c', '#d97706']  // Darker shades for dark mode
+                : ['#4F46E5', '#EF4444', '#FBBF24'],
+            bg: darkMode
+                ? ['text-indigo-600', 'text-red-600', 'text-yellow-500']
+                : ['text-blue-600', 'text-red-600', 'text-yellow-500'],
             hoverOffset: 4,
             cutout: "80%",
             borderRadius: 60,
@@ -41,9 +49,21 @@ export default function Progress() {
         labels: ['Casual', 'Complimentry', 'Duty', 'Earned', 'Maternity', 'Medical', 'Restricted'],
         datasets: [{
             label: 'Attendance',
-            data: [details.casual, details.complimentary, details.duty, details.earned, details.maternity, details.medical, details.restricted],
-            backgroundColor: ['#4F46E5', '#10B981', '#FBBF24', '#F97316', '#3B82F6', '#8B5CF6', '#EC4899'],
-            bg: ['text-blue-600', 'text-green-600', 'text-yellow-500', 'text-orange-500', 'text-blue-500', 'text-blue-500', 'text-pink-500'],
+            data: [
+                details.casual,
+                details.complimentary,
+                details.duty,
+                details.earned,
+                details.maternity,
+                details.medical,
+                details.restricted
+            ],
+            backgroundColor: darkMode
+                ? ['#4338ca', '#047857', '#d97706', '#c2410c', '#1d4ed8', '#7c3aed', '#be185d']  // Darker shades
+                : ['#4F46E5', '#10B981', '#FBBF24', '#F97316', '#3B82F6', '#8B5CF6', '#EC4899'],
+            bg: darkMode
+                ? ['text-indigo-600', 'text-green-600', 'text-yellow-500', 'text-orange-500', 'text-blue-500', 'text-purple-500', 'text-pink-500']
+                : ['text-blue-600', 'text-green-600', 'text-yellow-500', 'text-orange-500', 'text-blue-500', 'text-blue-500', 'text-pink-500'],
             hoverOffset: 4,
             cutout: "80%",
             borderRadius: 60,
@@ -75,11 +95,15 @@ export default function Progress() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col  mobile:max-tablet:px-0 mobile:max-tablet:mx-0 items-start mb-3 no-scrollbar"
+            className={`
+                flex flex-col mobile:max-tablet:px-0 
+                mobile:max-tablet:mx-0 items-start 
+                mb-3 no-scrollbar ${bgClass}
+            `}
         >
             {loading ? (
                 <div className="flex items-center justify-center w-full h-72">
-                    <FaSpinner className="animate-spin text-4xl text-blue-600" />
+                    <FaSpinner className={`animate-spin text-4xl ${spinnerClass}`} />
                 </div>
             ) : (
                 <motion.div
@@ -89,10 +113,18 @@ export default function Progress() {
                     className="flex mobile:max-tablet:flex-col items-center gap-6 w-full py-4 mobile:max-laptop:gap-6 justify-start overflow-auto"
                 >
                     <div className="tablet:flex-1 h-80 mobile:max-tablet:text-lg mobile:max-tablet:w-full">
-                        <DoughnutSecond chartData={chartData} title='Leave Status' />
+                        <DoughnutSecond
+                            chartData={chartData}
+                            title='Leave Status'
+                            darkMode={darkMode}
+                        />
                     </div>
                     <div className="tablet:flex-1 h-80 mobile:max-tablet:text-lg mobile:max-tablet:h-fit w-full">
-                        <DoughnutSecond chartData={chartData2} title='Leave Types' />
+                        <DoughnutSecond
+                            chartData={chartData2}
+                            title='Leave Types'
+                            darkMode={darkMode}
+                        />
                     </div>
                 </motion.div>
             )}

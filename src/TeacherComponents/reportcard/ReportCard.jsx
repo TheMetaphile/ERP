@@ -10,13 +10,23 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function ReportCard() {
+    const { authState, darkMode } = useContext(AuthContext);
     const [students, setStudents] = useState([]);
-    const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(1);
     const [allDataFetched, setAllDataFetched] = useState(false);
     const sentinelRef = useRef(null);
+
+    const bgClass = darkMode ? 'bg-gray-900' : 'bg-white';
+    const textClass = darkMode ? 'text-white' : 'text-black';
+    const headerBgClass = darkMode
+        ? 'bg-gradient-to-r from-gray-800 to-gray-700'
+        : 'bg-gradient-to-r from-blue-200 to-blue-100';
+    const hoverBgClass = darkMode ? 'hover:bg-gray-700' : 'hover:bg-blue-50';
+    const iconClass = darkMode
+        ? { primary: 'text-blue-400', secondary: 'text-blue-500' }
+        : { primary: 'text-blue-600', secondary: 'text-blue-600' };
 
 
     const handleViewMore = () => {
@@ -100,63 +110,92 @@ function ReportCard() {
     };
 
     return (
-
         <motion.div
-            className="w-full px-4 py-6 "
-
+            className={`w-full px-4 py-6 ${bgClass}`}
             initial="hidden"
             animate="visible"
             variants={containerVariants}
         >
-            <ToastContainer />
+            <ToastContainer theme={darkMode ? 'dark' : 'light'} />
 
-            <h1 className="text-3xl mobile:max-tablet:text-lg font-medium text-black mb-6">Search Report Card</h1>
-
+            <h1 className={`text-3xl mobile:max-tablet:text-lg font-medium ${textClass} mb-6`}>
+                Search Report Card
+            </h1>
 
             {loading ? (
                 <Loading />
             ) : students.length === 0 ? (
-                <div className="text-center text-blue-600 text-xl">No students found</div>
+                <div className={`text-center text-xl ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+                    No students found
+                </div>
             ) : (
                 <motion.div
-                    className="overflow-hidden rounded-lg shadow-lg bg-white"
+                    className={`
+                    overflow-hidden rounded-lg shadow-lg 
+                    ${darkMode ? 'bg-gray-800' : 'bg-white'}
+                `}
                     variants={tableVariants}
                 >
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-max">
                             <thead>
-                                <tr className="bg-gradient-to-r from-blue-200 to-blue-100 text-black">
-                                    <th className="py-3 px-4 text-left">Roll No.</th>
-                                    <th className="py-3 px-4 text-left">Name</th>
-                                    <th className="py-3 px-4 text-left">Class</th>
-                                    <th className="py-3 px-4 text-left">Section</th>
+                                <tr className={headerBgClass}>
+                                    <th className={`py-3 px-4 text-left ${darkMode ? 'text-white' : 'text-black'}`}>
+                                        Roll No.
+                                    </th>
+                                    <th className={`py-3 px-4 text-left ${darkMode ? 'text-white' : 'text-black'}`}>
+                                        Name
+                                    </th>
+                                    <th className={`py-3 px-4 text-left ${darkMode ? 'text-white' : 'text-black'}`}>
+                                        Class
+                                    </th>
+                                    <th className={`py-3 px-4 text-left ${darkMode ? 'text-white' : 'text-black'}`}>
+                                        Section
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {students.map((detail, index) => (
                                     <motion.tr
                                         key={index}
-                                        className="border-b hover:bg-blue-50 transition-colors duration-200"
+                                        className={`
+                                        border-b ${hoverBgClass} 
+                                        transition-colors duration-200 
+                                        ${darkMode ? 'border-gray-700' : ''}
+                                    `}
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.3, delay: index * 0.05 }}
                                     >
-                                        <td className="py-3 px-4">
-                                            <FaUserGraduate className="inline mr-2 text-blue-600" />
+                                        <td className={`py-3 px-4 ${textClass}`}>
+                                            <FaUserGraduate
+                                                className={`inline mr-2 ${iconClass.primary}`}
+                                            />
                                             {detail.rollNumber}
                                         </td>
-                                        <td className="py-3 px-4">
-                                            <Link to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`} className="flex items-center">
-                                                <img src={detail.profileLink} alt="Profile" className="w-8 h-8 rounded-full mr-2" />
+                                        <td className={`py-3 px-4 ${textClass}`}>
+                                            <Link
+                                                to={`/Teacher-Dashboard/class_activity/reportcard/${detail.email}`}
+                                                className="flex items-center"
+                                            >
+                                                <img
+                                                    src={detail.profileLink}
+                                                    alt="Profile"
+                                                    className="w-8 h-8 rounded-full mr-2"
+                                                />
                                                 <span>{detail.name}</span>
                                             </Link>
                                         </td>
-                                        <td className="py-3 px-4">
-                                            <FaChalkboardTeacher className="inline mr-2 text-blue-600" />
+                                        <td className={`py-3 px-4 ${textClass}`}>
+                                            <FaChalkboardTeacher
+                                                className={`inline mr-2 ${iconClass.primary}`}
+                                            />
                                             {authState?.ClassDetails?.class}
                                         </td>
-                                        <td className="py-3 px-4">
-                                            <FaBookOpen className="inline mr-2 text-blue-600" />
+                                        <td className={`py-3 px-4 ${textClass}`}>
+                                            <FaBookOpen
+                                                className={`inline mr-2 ${iconClass.primary}`}
+                                            />
                                             {authState?.ClassDetails?.section}
                                         </td>
                                     </motion.tr>
@@ -166,7 +205,14 @@ function ReportCard() {
                     </div>
                     <div ref={sentinelRef} className="h-10">
                         {loading && start > 0 && (
-                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                            <div
+                                className={`
+                                text-center w-full text-sm 
+                                ${darkMode ? 'text-gray-400' : 'text-gray-600'}
+                            `}
+                            >
+                                Loading more...
+                            </div>
                         )}
                     </div>
                 </motion.div>

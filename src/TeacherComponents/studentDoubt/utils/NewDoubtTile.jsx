@@ -9,52 +9,97 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdDeleteForever } from "react-icons/md";
 
-const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerChange, handleStatusUpdate, loading, handleDelete }) => {
+const DoubtCard = ({
+  doubt,
+  index,
+  expanded,
+  handleClick,
+  answers,
+  handleAnswerChange,
+  handleStatusUpdate,
+  loading,
+  handleDelete,
+  darkMode
+}) => {
+
+  const bgClass = darkMode ? 'bg-gray-800' : 'bg-white';
+  const borderClass = darkMode ? 'border-gray-700' : 'border-blue-200';
+  const textClass = {
+    primary: darkMode ? 'text-blue-300' : 'text-blue-800',
+    secondary: darkMode ? 'text-blue-400' : 'text-blue-600',
+    question: darkMode ? 'text-blue-400' : 'text-blue-700',
+  };
+  const iconClass = darkMode
+    ? { primary: 'text-blue-400', secondary: 'text-blue-500' }
+    : { primary: 'text-blue-600', secondary: 'text-blue-600' };
+  const inputClass = darkMode
+    ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
+    : 'bg-white text-black border-blue-300 focus:ring-blue-500';
+  const buttonClass = darkMode
+    ? 'bg-blue-700 hover:bg-blue-600 text-white'
+    : 'bg-blue-600 hover:bg-blue-700 text-white';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="border border-blue-200 p-4 rounded-lg shadow-lg mt-4 bg-white"
+      className={`border ${borderClass} p-4 rounded-lg shadow-lg mt-4 ${bgClass}`}
     >
-      <div className="flex mobile:max-sm:flex-col mobile:max-sm:items-start  items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
+      <div
+        className={`
+          flex mobile:max-sm:flex-col mobile:max-sm:items-start 
+          items-center justify-between cursor-pointer
+          ${textClass.primary}
+        `}
+        onClick={() => handleClick(index)}
+      >
         <div className="flex items-center space-x-4">
           <motion.img
             whileHover={{ scale: 1.1 }}
             src={doubt.student[0].profileLink}
             alt=""
-            className="w-12 h-12 rounded-full border-2 border-blue-300"
+            className={`
+              w-12 h-12 rounded-full border-2 
+              ${darkMode ? 'border-blue-700' : 'border-blue-300'}
+            `}
           />
-          <h3 className="font-semibold text-blue-800">{doubt.student[0].name}</h3>
+          <h3 className="font-semibold">{doubt.student[0].name}</h3>
           <div>
-
-
-            <div className="flex items-center text-sm text-blue-600 whitespace-nowrap">
-
+            <div className={`flex items-center text-sm ${textClass.secondary} whitespace-nowrap`}>
               <FaUserGraduate className="mr-1" />
               <span>Roll: {doubt.student[0].rollNumber}</span>
             </div>
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          <span className="text-blue-600 font-medium">{doubt.subject}</span>
+          <span className={`font-medium ${textClass.secondary}`}>{doubt.subject}</span>
           <motion.div
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="bg-blue-100 p-2 rounded-full"
+            className={`
+              p-2 rounded-full 
+              ${darkMode ? 'bg-gray-700' : 'bg-blue-100'}
+            `}
           >
-            {expanded === index ? <FaChevronUp className="text-blue-600" /> : <FaChevronDown className="text-blue-600" />}
-
+            {expanded === index
+              ? <FaChevronUp className={iconClass.primary} />
+              : <FaChevronDown className={iconClass.primary} />
+            }
           </motion.div>
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg shadow-md flex items-center"
+            className={`
+              hover:bg-red-600 text-white 
+              px-3 py-2 rounded-lg shadow-md 
+              flex items-center 
+              ${darkMode ? 'bg-red-700' : 'bg-red-500'}
+            `}
             onClick={() => handleDelete(index, doubt._id)}
           >
             <MdDeleteForever />
           </motion.button>
-
         </div>
       </div>
 
@@ -67,23 +112,50 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
             transition={{ duration: 0.3 }}
             className="mt-4"
           >
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h4 className="font-medium text-blue-800 flex items-center mb-2">
-                <FaQuestionCircle className="mr-2 text-blue-600" />
+            <div
+              className={`
+                p-4 rounded-lg 
+                ${darkMode ? 'bg-gray-700' : 'bg-blue-50'}
+              `}
+            >
+              <h4
+                className={`
+                  font-medium flex items-center mb-2 
+                  ${textClass.primary}
+                `}
+              >
+                <FaQuestionCircle
+                  className={`mr-2 ${iconClass.secondary}`}
+                />
                 Question:
               </h4>
-              <p className="text-blue-700 mb-4">{doubt.question}</p>
+              <p className={`${textClass.question} mb-4`}>{doubt.question}</p>
               {doubt.imageUrl && (
-                <img src={doubt.imageUrl} alt="Doubt" className="mt-2 max-w-xs rounded-lg shadow-md" />
+                <img
+                  src={doubt.imageUrl}
+                  alt="Doubt"
+                  className="mt-2 max-w-xs rounded-lg shadow-md"
+                />
               )}
             </div>
             <div className="mt-4">
-              <h4 className="font-medium text-blue-800 flex items-center mb-2">
-                <FaPen className="mr-2 text-blue-600" />
+              <h4
+                className={`
+                  font-medium flex items-center mb-2 
+                  ${textClass.primary}
+                `}
+              >
+                <FaPen
+                  className={`mr-2 ${iconClass.secondary}`}
+                />
                 Your Answer:
               </h4>
               <textarea
-                className="w-full px-3 py-2 mb-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`
+                  w-full px-3 py-2 mb-2 border rounded-lg 
+                  focus:outline-none focus:ring-2 
+                  ${inputClass}
+                `}
                 placeholder="Type your answer here..."
                 rows={3}
                 value={answers[index] || ''}
@@ -92,7 +164,11 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center justify-center w-full p-2 bg-blue-600 text-white rounded-lg shadow-md"
+                className={`
+                  flex items-center justify-center 
+                  w-full p-2 rounded-lg shadow-md 
+                  ${buttonClass}
+                `}
                 onClick={() => handleStatusUpdate(doubt._id, index)}
                 disabled={loading}
               >
@@ -107,7 +183,7 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
   );
 };
 
-export default function NewDoubtTile({ data, Class }) {
+export default function NewDoubtTile({ data, Class, darkMode }) {
   const [expanded, setExpanded] = useState(null);
   const { authState } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
@@ -115,6 +191,10 @@ export default function NewDoubtTile({ data, Class }) {
   const [pendingDoubts, setPendingDoubts] = useState([]);
 
 
+  const textClass = darkMode ? 'text-white' : 'text-black';
+  const counterClass = darkMode
+    ? 'bg-blue-700 text-white'
+    : 'bg-blue-600 text-white';
   const handleDelete = async (index, id) => {
     try {
       const response = await axios.delete(`${BASE_URL}/doubts/delete?class=${Class}&doubtId=${id}`, {
@@ -194,11 +274,21 @@ export default function NewDoubtTile({ data, Class }) {
         animate={{ y: 0, opacity: 1 }}
         className="flex items-center justify-between mb-6"
       >
-
-        <h2 className="text-2xl mobile:max-tablet:text-sm font-medium text-black">Pending Doubts</h2>
-        <div className="flex items-center bg-blue-600 mobile:max-tablet:p-2 mobile:max-tablet:text-xs text-white px-4 py-2 rounded-lg shadow-md">
-
-
+        <h2
+          className={`
+            text-2xl mobile:max-tablet:text-sm 
+            font-medium ${textClass}
+          `}
+        >
+          Pending Doubts
+        </h2>
+        <div
+          className={`
+            flex items-center mobile:max-tablet:p-2 
+            mobile:max-tablet:text-xs px-4 py-2 
+            rounded-lg shadow-md ${counterClass}
+          `}
+        >
           <FaQuestionCircle className="mr-2" />
           <span>{pendingDoubts.length} Pending</span>
         </div>
@@ -216,6 +306,7 @@ export default function NewDoubtTile({ data, Class }) {
           handleStatusUpdate={handleStatusUpdate}
           loading={loading}
           handleDelete={handleDelete}
+          darkMode={darkMode}
         />
       ))}
     </motion.div>

@@ -34,7 +34,7 @@ export default function ProgressCard(props) {
             trail: { stroke: props.trailColor },
             text: {
               fontSize: '20px',
-              fill: '#000',
+              fill: props.darkMode ? '#fff' : '#000',
             },
           }}
           renderText={(value) => (

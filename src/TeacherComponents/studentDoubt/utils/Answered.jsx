@@ -7,7 +7,7 @@ import { BASE_URL } from '../../../Config'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Answered({ Class, Section, Subject }) {
+function Answered({ Class, Section, Subject, darkMode }) {
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,6 +17,8 @@ function Answered({ Class, Section, Subject }) {
     const [allDataFetched, setAllDataFetched] = useState(false);
     const sentinelRef = useRef(null);
 
+    const textClass = darkMode ? 'text-blue-300' : 'text-blue-500';
+    const bgClass = darkMode ? 'bg-gray-900' : 'bg-white';
 
     const handleViewMore = () => {
         if (!allDataFetched && !loading) {
@@ -101,13 +103,13 @@ function Answered({ Class, Section, Subject }) {
     }
 
     return (
-        <div className=''>
+        <div className={`${bgClass}`}>
             {data.length > 0 ? (
                 <>
-                    <AnsweredTile data={data} Class={Class} />
+                    <AnsweredTile data={data} Class={Class} darkMode={darkMode} />
                     <div ref={sentinelRef} className="h-10">
                         {loading && start > 0 && (
-                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                            <div className={`text-center w-full ${darkMode ? 'text-gray-400' : 'text-gray-600'} text-sm`}>Loading more...</div>
                         )}
                     </div>
                 </>

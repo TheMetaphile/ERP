@@ -8,7 +8,7 @@ import NewDoubt from './utils/NewDoubt';
 import Answered from './utils/Answered';
 
 function StudentDoubts() {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [Class, setClass] = useState(localStorage.getItem('Class') || '');
     const [Section, setSection] = useState(localStorage.getItem('Section') || '');
     const [Subject, setSubject] = useState(localStorage.getItem('Subject') || '');
@@ -16,7 +16,20 @@ function StudentDoubts() {
     const uniqueClasses = Array.from(new Set(authState?.subject ? authState?.subject.map(subj => subj.class) : []));
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
-    const [isDropdownVisible, setDropdownVisible] = useState(false);
+
+    const bgClass = darkMode ? 'bg-gray-900' : 'bg-white';
+    const textClass = darkMode ? 'text-white' : 'text-black';
+    const selectClass = darkMode 
+        ? 'bg-gray-800 text-white border-gray-600 focus:ring-indigo-600' 
+        : 'bg-white text-black border-blue-300 focus:ring-blue-500';
+    const tabClass = {
+        active: darkMode 
+            ? 'text-indigo-400 border-indigo-400' 
+            : 'text-blue-600 border-blue-600',
+        inactive: darkMode 
+            ? 'text-gray-500' 
+            : 'text-gray-600'
+    };
 
     useEffect(() => {
         localStorage.setItem('Class', Class);
@@ -58,86 +71,148 @@ function StudentDoubts() {
 
     return (
         <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className={`flex flex-col px-2 h-screen overflow-y-auto items-start mt-4 ml-4 mr-6 mb-6 no-scrollbar ${bgClass}`}
+    >
+        <ToastContainer theme={darkMode ? 'dark' : 'light'} />
+        <motion.div
+            initial={{ y: -20 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col px-2 h-screen overflow-y-auto items-start mt-4 ml-4 mr-6 mb-6 no-scrollbar"
+            className="flex justify-between mobile:max-tablet:flex-col w-full mobile:max-tablet:items-start items-center mb-4 py-2"
         >
-            <ToastContainer />
-            <motion.div
-                initial={{ y: -20 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="flex justify-between mobile:max-tablet:flex-col w-full mobile:max-tablet:items-start items-center mb-4 py-2"
-            >
-
-                <div className='w-full flex'>
-                    <h1 className="text-3xl mobile:max-tablet:text-xl font-medium text-black mobile:max-tablet:text-left w-full">Student Doubts</h1>
-                    <div className="flex justify-between mobile:max-tablet:overflow-auto w-full ">
-                        <select id="class" value={Class} onChange={handleClassChange} className="shadow-md px-3 py-1  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
-                            <option value="">Search by Class</option>
-                            {uniqueClasses.map((classOption, index) => (
-                                <option key={index} value={classOption}>{classOption}</option>
-                            ))}
-                        </select>
-
-                        <select id="section" value={Section} onChange={handleSectionChange} className="shadow-md px-3 py-1  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
-                            <option value="">Search by Section</option>
-                            {uniqueSections.map((sectionOption, index) => (
-                                <option key={index} value={sectionOption}>{sectionOption}</option>
-                            ))}
-                        </select>
-
-                        <select id="subject" value={Subject} onChange={handleSubjectChange} className="shadow-md px-3 py-2  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
-                            <option value="">Search by Subject</option>
-                            {uniqueSubjects.map((subjectOption, index) => (
-                                <option key={index} value={subjectOption}>{subjectOption}</option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-            </motion.div>
-
-
-            <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="w-full"
-            >
-                <div className="flex mb-4 border-b-2 border-blue-200">
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`p-3 flex items-center ${selectedLink === `/Teacher-Dashboard/studentdoubts/new` ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
-                        onClick={() => handleLinkSelect(`/Teacher-Dashboard/studentdoubts/new`)}
+            <div className='w-full flex'>
+                <h1 className={`text-3xl mobile:max-tablet:text-xl font-medium ${textClass} mobile:max-tablet:text-left w-full`}>
+                    Student Doubts
+                </h1>
+                <div className="flex justify-between mobile:max-tablet:overflow-auto w-full">
+                    <select 
+                        id="class" 
+                        value={Class} 
+                        onChange={handleClassChange} 
+                        className={`
+                            shadow-md px-3 py-1 border-2 rounded-md 
+                            focus:outline-none focus:ring-2 focus:border-transparent 
+                            text-lg ${selectClass}
+                        `}
                     >
-                        <FaQuestionCircle className="mr-2" /> New Doubts
-                    </motion.button>
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`p-3 flex items-center ${selectedLink === `/Teacher-Dashboard/studentdoubts/answered` ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600"}`}
-                        onClick={() => handleLinkSelect(`/Teacher-Dashboard/studentdoubts/answered`)}
+                        <option value="">Search by Class</option>
+                        {uniqueClasses.map((classOption, index) => (
+                            <option 
+                                key={index} 
+                                value={classOption}
+                                className={darkMode ? 'bg-gray-800' : 'bg-white'}
+                            >
+                                {classOption}
+                            </option>
+                        ))}
+                    </select>
+
+                    <select 
+                        id="section" 
+                        value={Section} 
+                        onChange={handleSectionChange} 
+                        className={`
+                            shadow-md px-3 py-1 border-2 rounded-md 
+                            focus:outline-none focus:ring-2 focus:border-transparent 
+                            text-lg ${selectClass}
+                        `}
                     >
-                        <FaCheck className="mr-2" /> Answered Doubts
-                    </motion.button>
+                        <option value="">Search by Section</option>
+                        {uniqueSections.map((sectionOption, index) => (
+                            <option 
+                                key={index} 
+                                value={sectionOption}
+                                className={darkMode ? 'bg-gray-800' : 'bg-white'}
+                            >
+                                {sectionOption}
+                            </option>
+                        ))}
+                    </select>
+
+                    <select 
+                        id="subject" 
+                        value={Subject} 
+                        onChange={handleSubjectChange} 
+                        className={`
+                            shadow-md px-3 py-2 border-2 rounded-md 
+                            focus:outline-none focus:ring-2 focus:border-transparent 
+                            text-lg ${selectClass}
+                        `}
+                    >
+                        <option value="">Search by Subject</option>
+                        {uniqueSubjects.map((subjectOption, index) => (
+                            <option 
+                                key={index} 
+                                value={subjectOption}
+                                className={darkMode ? 'bg-gray-800' : 'bg-white'}
+                            >
+                                {subjectOption}
+                            </option>
+                        ))}
+                    </select>
                 </div>
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                    className=""
+            </div>
+        </motion.div>
+
+        <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="w-full"
+        >
+            <div className={`flex mb-4 border-b-2 ${darkMode ? 'border-gray-700' : 'border-blue-200'}`}>
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`p-3 flex items-center ${
+                        selectedLink === `/Teacher-Dashboard/studentdoubts/new` 
+                            ? tabClass.active 
+                            : tabClass.inactive
+                    }`}
+                    onClick={() => handleLinkSelect(`/Teacher-Dashboard/studentdoubts/new`)}
                 >
-                    {selectedLink === '/Teacher-Dashboard/studentdoubts/new' && (
-                        <NewDoubt Class={Class} Section={Section} Subject={Subject} />
-                    )}
-                    {selectedLink === '/Teacher-Dashboard/studentdoubts/answered' && (
-                        <Answered Class={Class} Section={Section} Subject={Subject} />
-                    )}
-                </motion.div>
+                    <FaQuestionCircle className="mr-2" /> New Doubts
+                </motion.button>
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`p-3 flex items-center ${
+                        selectedLink === `/Teacher-Dashboard/studentdoubts/answered` 
+                            ? tabClass.active 
+                            : tabClass.inactive
+                    }`}
+                    onClick={() => handleLinkSelect(`/Teacher-Dashboard/studentdoubts/answered`)}
+                >
+                    <FaCheck className="mr-2" /> Answered Doubts
+                </motion.button>
+            </div>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+            >
+                {selectedLink === '/Teacher-Dashboard/studentdoubts/new' && (
+                    <NewDoubt 
+                        Class={Class} 
+                        Section={Section} 
+                        Subject={Subject} 
+                        darkMode={darkMode} 
+                    />
+                )}
+                {selectedLink === '/Teacher-Dashboard/studentdoubts/answered' && (
+                    <Answered 
+                        Class={Class} 
+                        Section={Section} 
+                        Subject={Subject} 
+                        darkMode={darkMode} 
+                    />
+                )}
             </motion.div>
         </motion.div>
+    </motion.div>
     );
 }
 

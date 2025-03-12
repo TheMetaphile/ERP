@@ -104,7 +104,7 @@ export default function Drawer({ isOpen }) {
                       : "bg-blue-100"
                     : darkMode
                       ? "hover:bg-gray-800"
-                      : "hover:bg-gray-100"
+                      : "hover:bg-gray-100 text-black"
                     } transition-all duration-200`}
                 >
                   <div onClick={() => handleClick(index)}>
@@ -115,6 +115,7 @@ export default function Drawer({ isOpen }) {
                       text={menuItem.text}
                       route={menuItem.route}
                       isActive={active === index}
+                      darkMode={darkMode}
                     />
                   </div>
                 </motion.div>

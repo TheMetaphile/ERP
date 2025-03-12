@@ -6,12 +6,23 @@ import { BASE_URL } from "../../Config";
 import { motion } from 'framer-motion';
 import { FaBell, FaCalendarAlt, FaSpinner } from 'react-icons/fa';
 
-export default function Notice() {
+export default function Notice({ darkMode }) {
   const { authState } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState([]);
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(5);
+
+  // Dark mode classes
+  const bgClass = darkMode 
+    ? 'bg-gradient-to-r from-gray-800 to-gray-900' 
+    : 'bg-gradient-to-r from-blue-100 to-indigo-50';
+  const borderClass = darkMode ? 'border-gray-700' : 'border-gray-200';
+  const textClass = {
+    title: darkMode ? 'text-indigo-300' : 'text-indigo-800',
+    description: darkMode ? 'text-indigo-400' : 'text-indigo-600',
+    date: darkMode ? 'text-indigo-500' : 'text-indigo-600'
+  };
 
   useEffect(() => {
     const fetchNotice = async () => {
@@ -47,19 +58,36 @@ export default function Notice() {
 
   return (
     <motion.div
-      className="bg-gradient-to-r from-blue-100 to-indigo-50 p-3 border border-gray-200 rounded-xl shadow-lg"
+      className={`p-3 border rounded-xl shadow-lg ${bgClass} ${borderClass}`}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       {loading ? (
         <div className="flex justify-center items-center h-40">
-          <FaSpinner className="animate-spin text-4xl text-indigo-600" />
+          <FaSpinner 
+            className={`
+              animate-spin text-4xl 
+              ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}
+            `} 
+          />
         </div>
       ) : details.length === 0 ? (
-        <div className="text-center text-indigo-600 py-10">
-          <FaBell className="text-5xl mb-4 mx-auto" />
-          <p className="text-xl font-semibold">No notices available</p>
+        <div className="text-center py-10">
+          <FaBell 
+            className={`
+              text-5xl mb-4 mx-auto 
+              ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}
+            `} 
+          />
+          <p 
+            className={`
+              text-xl font-semibold 
+              ${darkMode ? 'text-indigo-300' : 'text-indigo-600'}
+            `}
+          >
+            No notices available
+          </p>
         </div>
       ) : (
         details.map((detail, index) => (
@@ -68,11 +96,26 @@ export default function Notice() {
             className="mb-6 last:mb-0"
             variants={itemVariants}
           >
-            <h3 className="text-xl font-bold text-indigo-800 mb-2">{detail.title}</h3>
-            <p className="text-indigo-600 text-opacity-80 leading-relaxed line-clamp-4">
+            <h3 className={`text-xl font-bold mb-2 ${textClass.title}`}>
+              {detail.title}
+            </h3>
+            <p 
+              className={`
+                ${textClass.description} 
+                text-opacity-80 leading-relaxed 
+                line-clamp-4
+              `}
+            >
               {detail.description}
             </p>
-            <div className="flex justify-end items-center text-indigo-600 border-t border-gray-400 text-xs mt-2">
+            <div 
+              className={`
+                flex justify-end items-center 
+                border-t ${darkMode ? 'border-gray-700' : 'border-gray-400'} 
+                text-xs mt-2 
+                ${textClass.date}
+              `}
+            >
               <FaCalendarAlt className="mr-1" />
               Date: {detail.date}
             </div>

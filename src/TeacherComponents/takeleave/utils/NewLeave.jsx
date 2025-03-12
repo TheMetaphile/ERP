@@ -9,7 +9,7 @@ import { FiCalendar, FiType, FiMessageSquare } from 'react-icons/fi';
 import { IoClose } from 'react-icons/io5';
 
 function NewLeave({ onClose, onNewLeave }) {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
@@ -116,21 +116,21 @@ function NewLeave({ onClose, onNewLeave }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed z-50 inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50"
+      className={`fixed z-50 inset-0 flex items-center justify-center ${darkMode ? 'bg-gray-900 bg-opacity-70' : 'bg-gray-100 bg-opacity-50'}`}
     >
       <motion.div
         initial={{ scale: 0.9, y: 50 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 50 }}
-        className="bg-white rounded-lg p-6 shadow-2xl w-96 max-w-full mx-4"
+        className={`${darkMode ? 'bg-gray-800 text-gray-100' : 'bg-white'} rounded-lg p-6 shadow-2xl w-96 max-w-full mx-4`}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold text-blue-700">Apply for Leave</h2>
+          <h2 className={`text-2xl font-semibold ${darkMode ? 'text-blue-400' : 'text-blue-700'}`}>Apply for Leave</h2>
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={onClose}
-            className="text-blue-500 hover:text-blue-700"
+            className={`${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-500 hover:text-blue-700'}`}
           >
             <IoClose size={24} />
           </motion.button>
@@ -138,41 +138,50 @@ function NewLeave({ onClose, onNewLeave }) {
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label className="block text-blue-700 mb-2 font-medium">From Date</label>
+              <label className={`block mb-2 font-medium ${darkMode ? 'text-blue-400' : 'text-blue-700'}`}>From Date</label>
               <div className="relative">
-                <FiCalendar className="absolute top-3 left-3 text-blue-500" />
+                <FiCalendar className={`absolute top-3 left-3 ${darkMode ? 'text-blue-400' : 'text-blue-500'}`} />
                 <input
                   type="date"
                   value={fromDate}
                   min={getTodayDate()}
                   onChange={handleFromDateChange}
-                  className="w-full pl-10 pr-3 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={`w-full pl-10 pr-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${darkMode
+                      ? 'bg-gray-700 border-2 border-gray-600 text-white'
+                      : 'border-2 border-blue-300'
+                    }`}
                   required
                 />
               </div>
             </div>
             <div>
-              <label className="block text-blue-700 mb-2 font-medium">To Date</label>
+              <label className={`block mb-2 font-medium ${darkMode ? 'text-blue-400' : 'text-blue-700'}`}>To Date</label>
               <div className="relative">
-                <FiCalendar className="absolute top-3 left-3 text-blue-500" />
+                <FiCalendar className={`absolute top-3 left-3 ${darkMode ? 'text-blue-400' : 'text-blue-500'}`} />
                 <input
                   type="date"
                   value={toDate}
                   min={getFromDate()}
                   onChange={handleToDateChange}
-                  className="w-full pl-10 pr-3 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={`w-full pl-10 pr-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${darkMode
+                      ? 'bg-gray-700 border-2 border-gray-600 text-white'
+                      : 'border-2 border-blue-300'
+                    }`}
                   required
                 />
               </div>
             </div>
             <div>
-              <label className="block text-blue-700 mb-2 font-medium">Choose Leave Type</label>
+              <label className={`block mb-2 font-medium ${darkMode ? 'text-blue-400' : 'text-blue-700'}`}>Choose Leave Type</label>
               <div className="relative">
-                <FiType className="absolute top-3 left-3 text-blue-500" />
+                <FiType className={`absolute top-3 left-3 ${darkMode ? 'text-blue-400' : 'text-blue-500'}`} />
                 <select
                   value={leaveType}
                   onChange={handleLeaveTypeChange}
-                  className="w-full pl-10 pr-3 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+                  className={`w-full pl-10 pr-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none ${darkMode
+                      ? 'bg-gray-700 border-2 border-gray-600 text-white'
+                      : 'border-2 border-blue-300'
+                    }`}
                   required
                 >
                   <option value="">Select Type</option>
@@ -186,13 +195,16 @@ function NewLeave({ onClose, onNewLeave }) {
               </div>
             </div>
             <div>
-              <label className="block text-blue-700 mb-2 font-medium">Reason</label>
+              <label className={`block mb-2 font-medium ${darkMode ? 'text-blue-400' : 'text-blue-700'}`}>Reason</label>
               <div className="relative">
-                <FiMessageSquare className="absolute top-3 left-3 text-blue-500" />
+                <FiMessageSquare className={`absolute top-3 left-3 ${darkMode ? 'text-blue-400' : 'text-blue-500'}`} />
                 <textarea
                   value={reason}
                   onChange={handleReasonChange}
-                  className="w-full pl-10 pr-3 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={`w-full pl-10 pr-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${darkMode
+                      ? 'bg-gray-700 border-2 border-gray-600 text-white'
+                      : 'border-2 border-blue-300'
+                    }`}
                   rows={3}
                   required
                 ></textarea>
@@ -204,7 +216,10 @@ function NewLeave({ onClose, onNewLeave }) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               type="button"
-              className="bg-blue-100 text-blue-700 px-4 py-2 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className={`px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${darkMode
+                  ? 'bg-gray-700 text-blue-400 hover:bg-gray-600'
+                  : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                }`}
               onClick={onClose}
             >
               Cancel
@@ -213,7 +228,10 @@ function NewLeave({ onClose, onNewLeave }) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className={`px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${darkMode
+                  ? 'bg-blue-700 text-white hover:bg-blue-600'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
             >
               {loading ? <Loading /> : 'Submit'}
             </motion.button>

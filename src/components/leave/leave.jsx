@@ -22,7 +22,6 @@ export default function Leave() {
     const [additionalData, setAdditionalData] = useState([]);
     const [status, setStatus] = useState('Pending');
 
-    // Dark mode classes
     const bgClass = darkMode ? 'bg-gray-900' : 'bg-white';
     const textClass = darkMode ? 'text-white' : 'text-black';
     const subTextClass = darkMode ? 'text-gray-300' : 'text-gray-800';
@@ -108,6 +107,7 @@ export default function Leave() {
                                 centerText={details.approved}
                                 trailColor={darkMode ? '#2ecc71' : '#c8ebc9'}
                                 strokeColor={darkMode ? '#27ae60' : '#4caf50'}
+                                darkMode={darkMode}
                             />,
 
                         },
@@ -118,6 +118,7 @@ export default function Leave() {
                                 centerText={details.pending}
                                 trailColor={darkMode ? '#f39c12' : '#FFD8B2'}
                                 strokeColor={darkMode ? '#d35400' : '#FE8D01'}
+                                darkMode={darkMode}
                             />,
 
                         },
@@ -128,6 +129,7 @@ export default function Leave() {
                                 centerText={details.rejected}
                                 trailColor={darkMode ? '#e74c3c' : '#ffd6d6'}
                                 strokeColor={darkMode ? '#c0392b' : '#ff0000'}
+                                darkMode={darkMode}
                             />,
 
                         }

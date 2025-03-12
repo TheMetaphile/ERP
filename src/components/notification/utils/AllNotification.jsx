@@ -7,14 +7,18 @@ import { BASE_URL } from "../../../Config";
 import { toast } from "react-toastify";
 
 function AllNotification() {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [globalLoading, setGlobalLoading] = useState(false);
     const [fetchingMore, setFetchingMore] = useState(false);
     const [details, setDetails] = useState([]);
     const [start, setStart] = useState(0);
-    const end= 6;
+    const end = 6;
     const [allDataFetched, setAllDataFetched] = useState(false);
     const sentinelRef = useRef(null);
+
+    const bgClass = darkMode ? 'bg-gray-900' : 'bg-white';
+    const textClass = darkMode ? 'text-white' : 'text-black';
+    const subTextClass = darkMode ? 'text-gray-300' : 'text-gray-600';
 
     useEffect(() => {
         if (start === 0 && details.length === 0 && !allDataFetched && !globalLoading) {
@@ -49,14 +53,11 @@ function AllNotification() {
                 }
             });
             const notice = response.data.notices.length;
-            console.log("API response:", response.data.notices);
             if (notice < end) {
                 toast.success('All data fetched');
-                console.log('All data fetched')
                 setAllDataFetched(true);
             }
             setDetails(prevData => [...prevData, ...response.data.notices]);
-            console.log('fetch', response.data);
         } catch (error) {
             console.error("Error fetching notice:", error);
         }
@@ -73,9 +74,7 @@ function AllNotification() {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && !allDataFetched && !fetchingMore) {
-                    console.log("Fetching more data...");
                     handleViewMore();
-
                 }
             },
             { root: null, rootMargin: '0px', threshold: 1.0 }
@@ -93,18 +92,23 @@ function AllNotification() {
     }, [allDataFetched, fetchingMore]);
 
     return (
-        <div className='px-3 w-full'>
+        <div className={`px-3 w-full ${bgClass}`}>
             {globalLoading ? (
                 <Loading />
             ) : details.length === 0 ? (
-                <div className="w-full text-center">No data available</div>
+                <div className={`w-full text-center ${subTextClass}`}>
+                    No data available
+                </div>
             ) : (
                 <>
-                    <AllNotificationTile details={details} />
+                    <AllNotificationTile 
+                        details={details} 
+                        darkMode={darkMode} 
+                    />
                     <div ref={sentinelRef} className="h-10">
                         {fetchingMore && (
-                            <div className="text-center w-full text-gray-600 text-sm">
-                                <Loading/>
+                            <div className={`text-center w-full text-sm ${subTextClass}`}>
+                                <Loading />
                             </div>
                         )}
                     </div>

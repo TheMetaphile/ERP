@@ -6,10 +6,9 @@ import Loading from '../../../LoadingScreen/Loading'
 import { toast } from 'react-toastify';
 import HistoryTile from './HistoryTile';
 import { motion } from 'framer-motion';
-import { FaHistory, FaChevronDown } from 'react-icons/fa';
-import { MdRefresh } from 'react-icons/md';
+import { FaHistory } from 'react-icons/fa';
 
-function History({ additionalData }) {
+function History({ additionalData, darkMode }) {
     const { authState } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
@@ -17,6 +16,11 @@ function History({ additionalData }) {
     const [end, setEnd] = useState(2);
     const [allDataFetched, setAllDataFetched] = useState(false);
     const sentinelRef = useRef(null);
+
+    const bgClass = darkMode ? 'bg-gray-900' : 'bg-white';
+    const textClass = darkMode ? 'text-white' : 'text-black';
+    const subTextClass = darkMode ? 'text-gray-300' : 'text-gray-600';
+    const iconClass = darkMode ? 'text-indigo-400' : 'text-black';
 
     useEffect(() => {
         if (authState?.accessToken) {
@@ -61,7 +65,6 @@ function History({ additionalData }) {
         if (loading || allDataFetched) return;
 
         setLoading(true);
-        console.log('start', start, 'end', end)
         try {
             const response = await axios.get(`${BASE_URL}/teacherleave/fetch/teacher?start=${start}&end=${end}&session=${session}`, {
                 headers: {
@@ -70,16 +73,11 @@ function History({ additionalData }) {
             });
 
             const leaves = response.data.Leaves.length;
-            console.log("API response:", response.data.Leaves);
             if (leaves < end) {
                 toast.success('All data fetched');
-                console.log('All data fetched')
                 setAllDataFetched(true);
             }
             setDetails(prevData => [...prevData, ...response.data.Leaves]);
-            console.log("API responserrrrrr:", data);
-
-
         }
         catch (error) {
             toast.error(error);
@@ -93,9 +91,7 @@ function History({ additionalData }) {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && !allDataFetched && !loading) {
-                    console.log("Fetching more data...");
                     handleViewMore();
-
                 }
             },
             { root: null, rootMargin: '0px', threshold: 1.0 }
@@ -112,15 +108,12 @@ function History({ additionalData }) {
         };
     }, [allDataFetched, loading]);
 
-
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-
-            className=' mx-auto  w-full '
-
+            className={`mx-auto w-full ${bgClass}`}
         >
             <motion.div
                 className='flex items-center justify-between mb-6 mobile:max-tablet:mb-3'
@@ -128,10 +121,16 @@ function History({ additionalData }) {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
             >
-
-                <h1 className='text-3xl px-2 mobile:max-tablet:text-lg font-medium text-black flex items-center'>
-
-                    <FaHistory className="mr-2" />
+                <h1
+                    className={`
+                        text-3xl px-2 mobile:max-tablet:text-lg 
+                        font-medium flex items-center 
+                        ${textClass}
+                    `}
+                >
+                    <FaHistory
+                        className={`mr-2 ${iconClass}`}
+                    />
                     Leave History
                 </h1>
             </motion.div>
@@ -149,7 +148,11 @@ function History({ additionalData }) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
-                    className="text-center py-12 text-blue-600 font-medium"
+                    className={`
+                        text-center py-12 
+                        ${darkMode ? 'text-blue-400' : 'text-blue-600'} 
+                        font-medium
+                    `}
                 >
                     No data available
                 </motion.div>
@@ -160,12 +163,22 @@ function History({ additionalData }) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <HistoryTile details={details} />
+                        <HistoryTile
+                            details={details}
+                            darkMode={darkMode}
+                        />
                     </motion.div>
 
                     <div ref={sentinelRef} className="h-10">
                         {loading && start > 0 && (
-                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                            <div
+                                className={`
+                                    text-center w-full text-sm 
+                                    ${subTextClass}
+                                `}
+                            >
+                                Loading more...
+                            </div>
                         )}
                     </div>
                 </>

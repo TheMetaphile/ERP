@@ -9,17 +9,28 @@ import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL } from "../../Config";
 
 export default function Home() {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [data, setData] = useState({ absent: 0, present: 0, leave: 0 });
   const [loading, setLoading] = useState(false);
+
+  const bgClass = darkMode ? 'bg-gray-900' : 'bg-white';
+  const subTextClass = darkMode ? 'text-gray-300' : 'text-text_blue';
+  const cardBgClass = darkMode
+    ? 'bg-gradient-to-r from-gray-800 to-gray-900'
+    : 'bg-gradient-to-r from-blue-50 to-teal-50';
+  const borderClass = darkMode ? 'border-gray-700' : 'border-gray-300';
 
   const chartData = {
     labels: ['Absent', 'Present', 'Leave'],
     datasets: [{
       label: 'Attendance',
       data: [data.absent, data.present, data.leave],
-      backgroundColor: ['#EB3232', '#7BD850', '#F8EE00'],
-      bg: ['text-red-600', 'text-green-600', 'text-yellow-400'],
+      backgroundColor: darkMode
+        ? ['#ef4444', '#22c55e', '#eab308'] 
+        : ['#EB3232', '#7BD850', '#F8EE00'],
+      bg: darkMode
+        ? ['text-red-500', 'text-green-500', 'text-yellow-500']
+        : ['text-red-600', 'text-green-600', 'text-yellow-400'],
       hoverOffset: 4,
       cutout: "80%",
       borderRadius: 60,
@@ -51,28 +62,65 @@ export default function Home() {
   }, [authState?.accessToken]);
 
   return (
-    <div className='flex flex-col w-full h-screen mt-3 overflow-y-auto space-y-6 p-4 mobile:p-2 tablet:p-6 no-scrollbar mb-2'>
-          <h2 className='text-xl tablet:text-4xl font-semibold text-text_blue '>Student Dashboard</h2>
+    <div
+      className={`
+        flex flex-col w-full h-screen mt-3 
+        overflow-y-auto space-y-6 p-4 
+        mobile:p-2 tablet:p-6 no-scrollbar mb-2 
+        ${bgClass}
+      `}
+    >
+      <h2 className={`text-xl tablet:text-4xl font-semibold ${subTextClass}`}>
+        Student Dashboard
+      </h2>
 
-      <ProfileCard />
-      
+      <ProfileCard darkMode={darkMode} />
+
       <section>
-        <FeeStatus />
+        <FeeStatus darkMode={darkMode} />
       </section>
-      
-      <section className='flex flex-col-reverse laptop:flex-row laptop:space-x-6 gap-4 space-y-6 laptop:space-y-0'>
-        <div className=' laptop:w-2/3 h-72'>
-          <h2 className='text-xl tablet:text-2xl font-semibold text-text_blue mb-1'>Subject Progress</h2>
-          <div className='bg-gradient-to-r from-blue-50 to-teal-50 rounded-xl border border-gray-300 shadow-md p-4 h-full '>
-            <AllSubjectProgress />
+
+      <section
+        className='
+          flex flex-col-reverse laptop:flex-row 
+          laptop:space-x-6 gap-4 space-y-6 laptop:space-y-0
+        '
+      >
+        <div className='laptop:w-2/3 h-72'>
+          <h2 className={`text-xl tablet:text-2xl font-semibold ${subTextClass} mb-1`}>
+            Subject Progress
+          </h2>
+          <div
+            className={`
+              ${cardBgClass} rounded-xl border 
+              ${borderClass} shadow-md p-4 h-full
+            `}
+          >
+            <AllSubjectProgress darkMode={darkMode} />
           </div>
         </div>
-        
-        <div className='laptop:w-1/3'>
-        <h2 className='text-xl tablet:text-2xl font-semibold text-text_blue mb-1'>Attendance Progress</h2>
 
-          <div className='bg-white rounded-xl border border-gray-300 shadow-md p-4'>
-            {loading ? <Loading /> : <Doughnut chartData={chartData} title='Attendance Status' />}
+        <div className='laptop:w-1/3'>
+          <h2 className={`text-xl tablet:text-2xl font-semibold ${subTextClass} mb-1`}>
+            Attendance Progress
+          </h2>
+
+          <div
+            className={`
+              ${darkMode ? 'bg-gray-800' : 'bg-white'} 
+              rounded-xl border ${borderClass} 
+              shadow-md p-4
+            `}
+          >
+            {loading ? (
+              <Loading />
+            ) : (
+              <Doughnut
+                chartData={chartData}
+                title='Attendance Status'
+                darkMode={darkMode}
+              />
+            )}
           </div>
         </div>
       </section>

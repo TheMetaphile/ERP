@@ -30,7 +30,7 @@ export default function MyDoubts() {
     const cardBgClass = darkMode ? 'bg-gray-800' : 'bg-white';
     const textClass = darkMode ? 'text-white' : 'text-black';
     const subTextClass = darkMode ? 'text-gray-300' : 'text-gray-600';
-    const borderClass = darkMode ? 'border-gray-700' : 'border-gray-300';
+    const borderClass = darkMode ? 'border-gray-600' : 'border-gray-300';
     const selectClass = darkMode
         ? 'bg-gray-700 text-white border-gray-600 focus:ring-indigo-600'
         : 'bg-white text-black border-gray-300 focus:ring-indigo-500';
@@ -215,9 +215,11 @@ export default function MyDoubts() {
                             value={status}
                             onChange={handleStatusChange}
                             className={`
-                            mt-1 block py-2 text-base 
+                            block p-2 text-base 
                             focus:outline-none focus:ring-2 
-                            sm:text-sm rounded-md mr-1 
+                            sm:text-sm rounded-md mx-2 
+                            border
+                            ${borderClass}
                             ${selectClass}
                         `}
                         >

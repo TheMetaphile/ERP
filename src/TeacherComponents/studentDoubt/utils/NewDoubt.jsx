@@ -7,7 +7,7 @@ import { BASE_URL } from '../../../Config'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function NewDoubt({ Class, Section, Subject }) {
+function NewDoubt({ Class, Section, Subject, darkMode }) {
     const { authState } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -16,6 +16,9 @@ function NewDoubt({ Class, Section, Subject }) {
     const end = 2;
     const [allDataFetched, setAllDataFetched] = useState(false);
     const sentinelRef = useRef(null);
+
+    const textClass = darkMode ? 'text-blue-300' : 'text-blue-500';
+    const bgClass = darkMode ? 'bg-gray-900' : 'bg-white';
 
     console.log(Class, Section, Subject)
     useEffect(() => {
@@ -101,20 +104,27 @@ function NewDoubt({ Class, Section, Subject }) {
     }
 
     return (
-        <div className='mobile:max-tablet:mr-0 mr-3'>
+        <div className={`mobile:max-tablet:mr-0 mr-3 ${bgClass}`}>
             {data.length > 0 ? (
                 <>
-                    <NewDoubtTile data={data} Class={Class} />
+                    <NewDoubtTile
+                        data={data}
+                        Class={Class}
+                        darkMode={darkMode}
+                    />
                     <div ref={sentinelRef} className="h-10">
                         {loading && start > 0 && (
-                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                            <div className={`text-center w-full text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                Loading more...
+                            </div>
                         )}
                     </div>
                 </>
             ) : (
-                <div className='w-full text-center mt-3 text-blue-500'>No new doubt</div>
+                <div className={`w-full text-center mt-3 ${textClass}`}>
+                    No new doubt
+                </div>
             )}
-
         </div>
     )
 }

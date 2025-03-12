@@ -463,8 +463,8 @@ const FeePaymentRow = ({ student, key, fetchFees, selectedStudent, selectedDisco
                 }
             </td>
             <td className={`px-3 py-2  `}>
-                <div className={`px-3 py-1 rounded-full border text-center ${(student.totalFee === student.paidFee + student.categoryDiscount) ? 'text-green-600 bg-green-200 border-green-600' : 'text-red-600 bg-red-200 border-red-600'}`}>
-                    {(student.totalFee === student.paidFee + student.categoryDiscount) ? 'Paid' : 'Pending'}
+                <div className={`px-3 py-1 rounded-full border text-center ${(student.totalFee === student.paidFee + student.categoryDiscount + student.manualDiscount) ? 'text-green-600 bg-green-200 border-green-600' : 'text-red-600 bg-red-200 border-red-600'}`}>
+                    {(student.totalFee === student.paidFee + student.categoryDiscount + student.manualDiscount) ? 'Paid' : 'Pending'}
                 </div>
             </td>
             <td className="px-3 py-4">
@@ -503,7 +503,7 @@ const FeePaymentRow = ({ student, key, fetchFees, selectedStudent, selectedDisco
             </td>
 
             <td className="px-3 py-4" ref={dropdownRef}>
-                {!(student.totalFee === student.paidFee + student.categoryDiscount) && paymentMode === '' && (
+                {!(student.totalFee === student.paidFee + student.categoryDiscount + student.manualDiscount) && paymentMode === '' && (
                     <div className="relative">
                         <button
                             className="text-blue-600 bg-blue-200 focus:outline-none px-5 py-1 rounded-full text-center"
@@ -533,7 +533,7 @@ const FeePaymentRow = ({ student, key, fetchFees, selectedStudent, selectedDisco
 
                     </div>
                 )}
-                {(student.totalFee === student.paidFee + student.categoryDiscount) && (
+                {(student.totalFee === student.paidFee + student.categoryDiscount + student.manualDiscount) && (
                     <span className="text-gray-600 bg-gray-200 px-5 py-1 rounded-full">Paid</span>
                 )}
 

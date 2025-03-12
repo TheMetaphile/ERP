@@ -5,7 +5,7 @@ import { FaChartPie } from "react-icons/fa";
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
-export default function DoughnutSecond({ chartData, title }) {
+export default function DoughnutSecond({ chartData, title, darkMode }) {
   const options = {
     maintainAspectRatio: false,
     plugins: {
@@ -26,7 +26,7 @@ export default function DoughnutSecond({ chartData, title }) {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
 
-      className="flex flex-col h-full w-full mobile:max-tablet:w-full justify-evenly items-center shadow-lg bg-white border border-blue-300 rounded-lg px-4 py-6   mobile:max-tablet:px-2 overflow-auto"
+      className={`flex flex-col h-full w-full mobile:max-tablet:w-full justify-evenly items-center shadow-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} border border-blue-300 rounded-lg px-4 py-6   mobile:max-tablet:px-2 overflow-auto`}
 
     >
       <motion.div
@@ -57,7 +57,7 @@ export default function DoughnutSecond({ chartData, title }) {
             key={index}
             whileHover={{ scale: 1.1 }}
 
-            className={`text-center ${chartData.datasets[0].bg[index]} text-xl mr-3 bg-white border border-blue-200 rounded-lg p-2`}
+            className={`text-center ${chartData.datasets[0].bg[index]} text-xl mr-3 ${darkMode ? 'bg-gray-800' : 'bg-white'}  border border-blue-200 rounded-lg p-2`}
 
           >
             <h4 className="mobile:max-laptop:text-sm font-medium">
