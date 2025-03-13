@@ -1,30 +1,44 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 
-function NextWeekHODRow({ details, index}) {
-
-    console.log(details);
-
-
+function NextWeekHODRow({ details, index, darkMode }) {
     return (
-        <tr key={index}>
-            <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
+        <motion.tr
+            key={index}
+            className={darkMode ? 'bg-gray-800 hover:bg-gray-700' : 'hover:bg-blue-50'}
+        >
+            <td className={`border-y p-4 whitespace-nowrap gap-2 
+                ${darkMode
+                    ? 'border-gray-700 text-white'
+                    : 'border-black'}`}>
                 {details.date}
             </td>
-            <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
+            <td className={`border-y p-4 whitespace-nowrap gap-2 
+                ${darkMode
+                    ? 'border-gray-700 text-white'
+                    : 'border-black'}`}>
                 {details.chapter}
             </td>
-            <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
+            <td className={`border-y p-4 whitespace-nowrap gap-2 
+                ${darkMode
+                    ? 'border-gray-700 text-white'
+                    : 'border-black'}`}>
                 {details.topic}
             </td>
-            <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
+            <td className={`border-y p-4 whitespace-nowrap gap-2 
+                ${darkMode
+                    ? 'border-gray-700 text-white'
+                    : 'border-black'}`}>
                 {details.teachingAids}
             </td>
-            <td className='border-y p-4 border-black whitespace-nowrap gap-2'>
+            <td className={`border-y p-4 whitespace-nowrap gap-2 
+                ${darkMode
+                    ? 'border-gray-700 text-white'
+                    : 'border-black'}`}>
                 {details.Activity}
             </td>
-        </tr>
+        </motion.tr>
     )
 }
 
 export default NextWeekHODRow
-

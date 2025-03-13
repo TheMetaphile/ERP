@@ -7,7 +7,14 @@ import { motion } from "framer-motion";
 import { FaSave, FaUserGraduate, FaBook, FaPencilAlt, FaFlask, FaClipboardCheck } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-export default function ScholasticTable({ students, term, Class, subject, section }) {
+export default function ScholasticTable({
+    students,
+    term,
+    Class,
+    subject,
+    section,
+    darkMode
+}) {
     const { authState } = useContext(AuthContext);
     const [totalTheoryMarks, setTotalMarks] = useState({
         noteBook: "",
@@ -27,12 +34,10 @@ export default function ScholasticTable({ students, term, Class, subject, sectio
     }, {}));
     const [clickedIndex, setClickedIndex] = useState(null);
 
-console.log(subject)
-
     const handleClick = (index) => {
         setClickedIndex(index);
     };
-console.log(subject)
+
     useEffect(() => {
         fetchLastUpload();
     }, [subject]);
@@ -44,30 +49,29 @@ console.log(subject)
             const response = await axios.get(
                 `${BASE_URL}/result/fetch/scholastic/${Class}/${section}/${subject}/${term}`,
                 {
-                  headers: {
-                    Authorization: `Bearer ${authState?.accessToken}`
-                  }
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`
+                    }
                 }
-              );
-              
-            console.log(response.data)
+            );
+
             const updatedMarks = { ...marks };
 
             Object.keys(response.data).forEach((email) => {
-              const studentResult = response.data[email];
-              
-              if (updatedMarks[email]) {
-                updatedMarks[email] = {
-                  ...updatedMarks[email],
-                  noteBook: studentResult.obtainedNoteBookMarks || '',
-                  practical: studentResult.obtainedPracticalMarks || '',
-                  subjectEnrichment: studentResult.obtainedSubjectEnrichmentMarks || '',
-                  theory: studentResult.marksObtained || '',
-                  lastNoteBookChecked: studentResult.totalNoteBookMarks || '',
-                };
-              }
+                const studentResult = response.data[email];
+
+                if (updatedMarks[email]) {
+                    updatedMarks[email] = {
+                        ...updatedMarks[email],
+                        noteBook: studentResult.obtainedNoteBookMarks || '',
+                        practical: studentResult.obtainedPracticalMarks || '',
+                        subjectEnrichment: studentResult.obtainedSubjectEnrichmentMarks || '',
+                        theory: studentResult.marksObtained || '',
+                        lastNoteBookChecked: studentResult.totalNoteBookMarks || '',
+                    };
+                }
             });
-        
+
             setMarks(updatedMarks);
         } catch (error) {
             toast.error('Error fetching last result data');
@@ -84,8 +88,6 @@ console.log(subject)
             }
         }));
     };
-
-    console.log(marks,'marks')
 
     const handletotalMarksChange = (type, value) => {
         setTotalMarks(prevMarks => ({
@@ -149,22 +151,28 @@ console.log(subject)
 
     return (
         <motion.div
-            className="w-full overflow-x-auto rounded-lg shadow-lg"
+            className={`w-full overflow-x-auto rounded-lg shadow-lg ${darkMode ? 'bg-gray-900' : 'bg-white'
+                }`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
-            <div className="flex gap-3 ml-2 overflow-auto p-4 bg-gray-100 rounded-t-lg">
+            <div className={`flex gap-3 ml-2 overflow-auto p-4 rounded-t-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'
+                }`}>
                 {['theory', 'subjectEnrichment', 'noteBook', 'practical'].map((field) => (
                     <motion.div key={field} className="flex flex-col mb-4" whileHover={{ scale: 1.05 }}>
-                        <label className="mb-2 text-gray-700 font-semibold">
+                        <label className={`mb-2 font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'
+                            }`}>
                             Total {field.charAt(0).toUpperCase() + field.slice(1)} Marks
                         </label>
                         <motion.input
                             type="number"
                             value={totalTheoryMarks[field]}
                             onChange={(e) => handletotalMarksChange(field, e.target.value)}
-                            className="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={`border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 ${darkMode
+                                ? 'bg-gray-700 text-white border-gray-600'
+                                : 'bg-white text-black border-gray-300'
+                                }`}
                             placeholder={`Enter total ${field} marks`}
                             whileFocus={{ scale: 1.05 }}
                         />
@@ -172,57 +180,87 @@ console.log(subject)
                 ))}
             </div>
             <div className="overflow-auto">
-                <table className="min-w-full whitespace-nowrap bg-white border border-gray-300 rounded-lg text-center">
+                <table className={`min-w-full whitespace-nowrap border rounded-lg text-center ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                    }`}>
                     <thead>
-                        <tr className="bg-gradient-to-r from-blue-500 to-blue-500 text-white ">
-                            <th className="py-3 px-2 text-center  rounded-tl-lg"><FaUserGraduate className="inline mr-2" />Roll No.</th>
-                            <th className="py-3 px-2 text-center "><FaUserGraduate className="inline mr-2" />Name</th>
-                            <th className="py-3 px-2 text-center "><FaBook className="inline mr-2" />Last Note Book Checked</th>
-                            <th className="py-3 px-2 text-center "><FaBook className="inline mr-2" />Note Book</th>
-                            <th className="py-3 px-2 text-center "><FaPencilAlt className="inline mr-2" />Subject Enrichment</th>
-                            <th className="py-3 px-2 text-center "><FaFlask className="inline mr-2" />Practical Marks</th>
-                            <th className="py-3 px-2 text-center "><FaClipboardCheck className="inline mr-2" />Theory Marks</th>
-                            <th className="py-3 px-2 text-center  rounded-tr-lg">Action</th>
+                        <tr className={`${darkMode
+                            ? 'bg-gradient-to-r from-blue-900 to-blue-700'
+                            : 'bg-gradient-to-r from-blue-500 to-blue-500'
+                            } text-white`}>
+                            {[
+                                { icon: FaUserGraduate, text: 'Roll No.' },
+                                { icon: FaUserGraduate, text: 'Name' },
+                                { icon: FaBook, text: 'Last Note Book Checked' },
+                                { icon: FaBook, text: 'Note Book' },
+                                { icon: FaPencilAlt, text: 'Subject Enrichment' },
+                                { icon: FaFlask, text: 'Practical Marks' },
+                                { icon: FaClipboardCheck, text: 'Theory Marks' },
+                                { text: 'Action' }
+                            ].map((header, index) => (
+                                <th
+                                    key={index}
+                                    className={`py-3 px-2 text-center ${index === 0 ? 'rounded-tl-lg' :
+                                        index === 7 ? 'rounded-tr-lg' : ''
+                                        }`}
+                                >
+                                    {header.icon && <header.icon className="inline mr-2" />}
+                                    {header.text}
+                                </th>
+                            ))}
                         </tr>
                     </thead>
-                    <tbody className="text-gray-600 text-md font-normal ">
+                    <tbody className={`${darkMode ? 'text-gray-300' : 'text-gray-600'
+                        } text-md font-normal`}>
                         {students.map((student, index) => (
                             <motion.tr
                                 key={index}
-                                className={`border-b border-gray-200 hover:bg-gray-100 transition-colors duration-200 ${clickedIndex === index ? 'bg-blue-100' : ''}`}
+                                className={`border-b transition-colors duration-200 ${darkMode
+                                    ? 'border-gray-700 hover:bg-gray-700'
+                                    : 'border-gray-200 hover:bg-gray-100'
+                                    } ${clickedIndex === index ? (darkMode ? 'bg-blue-900' : 'bg-blue-100') : ''}`}
                                 onClick={() => handleClick(index)}
                                 whileHover={{ scale: 1.01 }}
                                 transition={{ type: "spring", stiffness: 300 }}
                             >
-                                <td className="py-3 px-2 text-center ">
-
-                                    {student.rollNumber}</td>
+                                <td className="py-3 px-2 text-center">{student.rollNumber}</td>
                                 <Link to={`/Teacher-Dashboard/uploadResult/details/${student.email}`}>
                                     <td className="py-3 px-2 text-center flex gap-2 items-center">
-                                        <img src={student.profileLink} alt="" className="h-10 w-10 rounded-full" />
-                                        {student.name}</td>
+                                        <img
+                                            src={student.profileLink}
+                                            alt=""
+                                            className={`h-10 w-10 rounded-full border ${darkMode ? 'border-gray-600' : 'border-blue-200'
+                                                }`}
+                                        />
+                                        {student.name}
+                                    </td>
                                 </Link>
-                                <td className="py-3 px-2 text-center ">
+                                <td className="py-3 px-2 text-center">
                                     {marks[student.email]?.lastNoteBookChecked?.topic || 'No data'}
                                 </td>
                                 {['noteBook', 'subjectEnrichment', 'practical', 'theory'].map((field) => (
-                                    <td key={field} className="py-3 px-2 text-center ">
+                                    <td key={field} className="py-3 px-2 text-center">
                                         <motion.input
                                             type="number"
                                             value={marks[student.email]?.[field] || ''}
                                             onChange={(e) => handleInputChange(student.email, field, e.target.value)}
-                                            className="border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                                            className={`border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ${darkMode
+                                                ? 'bg-gray-700 text-white border-gray-600'
+                                                : 'border-gray-300 bg-white'
+                                                }`}
                                             placeholder={`${field.charAt(0).toUpperCase() + field.slice(1)} Marks`}
                                             whileHover={{ scale: 1.05 }}
                                             whileFocus={{ scale: 1.05 }}
                                         />
                                     </td>
                                 ))}
-                                <td className="py-3 px-2 text-center ">
+                                <td className="py-3 px-2 text-center">
                                     <motion.button
                                         type="button"
                                         onClick={() => handleSave(student.email)}
-                                        className="bg-green-500 text-white rounded-md px-4 py-2 flex items-center justify-center hover:bg-green-600 transition-colors duration-200"
+                                        className={`rounded-md px-4 py-2 flex items-center justify-center hover:opacity-90 transition-colors duration-200 ${darkMode
+                                            ? 'bg-green-700 text-white'
+                                            : 'bg-green-500 text-white'
+                                            }`}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                     >

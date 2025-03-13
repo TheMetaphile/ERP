@@ -7,7 +7,13 @@ import { motion } from "framer-motion";
 import { FaSave, FaGraduationCap, FaUserGraduate, FaBook } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-export default function CoScholasticTable({ students, term, Class, section }) {
+export default function CoScholasticTable({
+    students,
+    term,
+    Class,
+    section,
+    darkMode
+}) {
     const { authState } = useContext(AuthContext);
     const [Subjects] = useState(() => {
         if (authState?.Co_scholastic === undefined) return [];
@@ -29,11 +35,10 @@ export default function CoScholasticTable({ students, term, Class, section }) {
     const [errors, setErrors] = useState({});
     const [clickedIndex, setClickedIndex] = useState(null);
 
-    console.log(grades)
     useEffect(() => {
         fetchLastUpload();
     }, [Class, section, term, Subjects]);
-    console.log(Subjects)
+
     const fetchLastUpload = async () => {
         try {
             const subjectArray = Subjects.map((item) => item.subject);
@@ -46,10 +51,7 @@ export default function CoScholasticTable({ students, term, Class, section }) {
                 }
             );
 
-            console.log(response.data);
-
             const fetchedGrades = response.data;
-
 
             const updatedGrades = { ...grades };
             Object.keys(fetchedGrades).forEach(studentEmail => {
@@ -68,7 +70,6 @@ export default function CoScholasticTable({ students, term, Class, section }) {
             console.error('Error fetching last result data:', error);
         }
     };
-
 
     const handleClick = (index) => {
         setClickedIndex(index);
@@ -144,56 +145,92 @@ export default function CoScholasticTable({ students, term, Class, section }) {
 
     return (
         <motion.div
-            className="w-full overflow-x-auto rounded-lg shadow-lg"
+            className={`w-full overflow-x-auto rounded-lg shadow-lg ${darkMode ? 'bg-gray-900' : 'bg-white'
+                }`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
-            <table className="min-w-full whitespace-nowrap bg-white border border-gray-300 rounded-lg">
+            <table className={`min-w-full whitespace-nowrap border rounded-lg ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+                }`}>
                 <thead>
-                    <tr className="bg-gradient-to-r from-blue-500 to-blue-500 text-white text-lg leading-normal">
-                        <th className="py-3 px-6 text-center rounded-tl-lg"><FaUserGraduate className="inline mr-2" />Roll No.</th>
-                        <th className="py-3 px-6 text-center"><FaGraduationCap className="inline mr-2" />Name</th>
+                    <tr className={`${darkMode
+                        ? 'bg-gradient-to-r from-blue-900 to-blue-700'
+                        : 'bg-gradient-to-r from-blue-500 to-blue-500'
+                        } text-white text-lg leading-normal`}>
+                        <th className={`py-3 px-6 text-center rounded-tl-lg`}>
+                            <FaUserGraduate className="inline mr-2" />Roll No.
+                        </th>
+                        <th className="py-3 px-6 text-center">
+                            <FaGraduationCap className="inline mr-2" />Name
+                        </th>
                         {Subjects.map((Subject, index) => (
-                            <th key={index} className="py-3 px-6 text-center"><FaBook className="inline mr-2" />{Subject.subject}</th>
+                            <th
+                                key={index}
+                                className="py-3 px-6 text-center"
+                            >
+                                <FaBook className="inline mr-2" />{Subject.subject}
+                            </th>
                         ))}
                         <th className="py-3 px-6 text-center rounded-tr-lg">Action</th>
                     </tr>
                 </thead>
-                <tbody className="text-gray-600 text-md font-normal">
+                <tbody className={`${darkMode ? 'text-gray-300' : 'text-gray-600'
+                    } text-md font-normal`}>
                     {students.map((Student, index) => (
                         <motion.tr
                             key={index}
-                            className={`border-b border-gray-200 hover:bg-gray-100 transition-colors duration-200 ${clickedIndex === index ? 'bg-blue-100' : ''}`}
+                            className={`border-b transition-colors duration-200 
+                                 ${clickedIndex === index ? (darkMode ? 'bg-blue-900' : 'bg-blue-100') : ''}`}
                             onClick={() => handleClick(index)}
                             whileHover={{ scale: 1.01 }}
                             transition={{ type: "spring", stiffness: 300 }}
                         >
                             <td className="py-3 px-6 text-center">{Student.rollNumber}</td>
-                            <Link to={`/Teacher-Dashboard/uploadResult/details/${Student.email}`}>
-                                <td className="py-3 px-6 text-center whitespace-nowrap">{Student.name}</td>
-                            </Link>
+                            <td className="py-3 px-6 text-center whitespace-nowrap flex items-center gap-2">
+                                <Link to={`/Teacher-Dashboard/uploadResult/details/${Student.email}`}>
+
+                                    <img
+                                        src={Student.profileLink}
+                                        alt=""
+                                        className={`h-10 w-10 rounded-full border ${darkMode ? 'border-gray-600' : 'border-blue-200'
+                                            }`}
+                                    />
+                                    {Student.name}
+                                </Link>
+
+                            </td>
+
                             {Subjects.map((Subject, subIndex) => (
                                 <td key={subIndex} className="py-3 px-6 text-center">
                                     <motion.input
                                         type="text"
                                         value={grades[Student.email][Subject.subject]}
                                         onChange={(e) => handleGradeChange(Student.email, Subject.subject, e.target.value)}
-                                        className="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                                        className={`border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ${darkMode
+                                            ? 'bg-gray-700 text-white border-gray-600'
+                                            : 'border-gray-300 bg-white'
+                                            }`}
                                         placeholder="Grade"
                                         whileHover={{ scale: 1.05 }}
                                         whileFocus={{ scale: 1.05 }}
                                     />
                                     {errors[Student.email] && errors[Student.email][Subject.subject] && (
-                                        <p className="text-red-500 text-sm mt-1">{errors[Student.email][Subject.subject]}</p>
+                                        <p className="text-red-500 text-sm mt-1">
+                                            {errors[Student.email][Subject.subject]}
+                                        </p>
                                     )}
                                 </td>
                             ))}
+
                             <td className="py-3 px-6 flex justify-center items-center">
                                 <motion.button
                                     type="button"
                                     onClick={() => handleSave(Student.email)}
-                                    className="bg-green-500 text-white rounded-md px-4 py-2 flex items-center hover:bg-green-600 transition-colors duration-200"
+                                    className={`rounded-md px-4 py-2 flex items-center hover:opacity-90 transition-colors duration-200 ${darkMode
+                                        ? 'bg-green-700 text-white'
+                                        : 'bg-green-500 text-white'
+                                        }`}
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                 >

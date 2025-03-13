@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ClassTeacherSubstitutionHistory() {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [PrevioursSubstitutions, SetPrevioursSubstitutions] = useState([]);
     const [start, setStart] = useState(0);
     const end = 4;
@@ -86,28 +86,31 @@ export default function ClassTeacherSubstitutionHistory() {
     return (
         <div className="rounded-lg overflow-auto pt-3">
             <motion.table
-                className="min-w-fit bg-white border border-gray-300 rounded-lg"
+                className={`w-full border border-gray-300 rounded-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-600'}`}
                 variants={tableVariants}
                 initial="hidden"
                 animate="visible"
             >
                 <thead>
-                    <tr className="bg-gradient-to-r from-blue-400 to-blue-200 text-lg">
-                        <th className="py-2 px-6 text-center">Lecture</th>
-                        <th className="py-2 px-6 text-center">Date</th>
-                        <th className="py-2 px-6 text-center">Class</th>
-                        <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Employee Id</th>
-                        <th className="py-2 px-6 w-64">Name</th>
-                        <th className="py-2 px-6 text-center">Section</th>
-                        <th className="py-2 px-6 text-center">Subject</th>
-                        <th className="py-2 px-6 text-center w-72">Substitute</th>
+                    <tr className={`${darkMode ? 'bg-blue-900' : 'bg-gradient-to-r from-blue-400 to-blue-200'} text-lg`}>
+                        <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Lecture</th>
+                        <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Date</th>
+                        <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Class</th>
+                        <th className={`py-2 px-6 text-center rounded-t-r whitespace-nowrap ${darkMode ? 'text-white' : 'text-black'}`}>Employee Id</th>
+                        <th className={`py-2 px-6 w-64 ${darkMode ? 'text-white' : 'text-black'}`}>Name</th>
+                        <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Section</th>
+                        <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Subject</th>
+                        <th className={`py-2 px-6 text-center w-72 ${darkMode ? 'text-white' : 'text-black'}`}>Substitute</th>
                     </tr>
                 </thead>
                 <AnimatePresence>
-                    <motion.tbody className="text-gray-600 text-md font-normal min-h-10 max-h-screen overflow-x-auto overflow-y-auto">
+                    <motion.tbody className={`text-md font-normal min-h-10 max-h-screen overflow-x-auto overflow-y-auto ${darkMode ? 'bg-gray-700' : ''}`}>
                         {PrevioursSubstitutions.length === 0 ? (
                             <motion.tr variants={rowVariants}>
-                                <td colSpan="8" className="text-center py-4">
+                                <td
+                                    colSpan="8"
+                                    className={`text-center py-4 ${darkMode ? 'text-gray-300' : ''}`}
+                                >
                                     Teacher leave history not available
                                 </td>
                             </motion.tr>
@@ -116,23 +119,23 @@ export default function ClassTeacherSubstitutionHistory() {
                                 {PrevioursSubstitutions.map((teachers, index) => (
                                     <motion.tr
                                         key={index}
-                                        className="border-b border-gray-200 last:border-none"
+                                        className={`border-b ${darkMode ? 'border-gray-600' : 'border-gray-200'} last:border-none`}
                                         variants={rowVariants}
                                     >
-                                        <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.Lecture}</td>
-                                        <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.date}</td>
-                                        <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.class}</td>
-                                        <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.classTeacherDetails.employeeId}</td>
+                                        <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{teachers.Lecture}</td>
+                                        <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{teachers.date}</td>
+                                        <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{teachers.class}</td>
+                                        <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{teachers.classTeacherDetails.employeeId}</td>
                                         <td className="flex py-3 px-6 justify-start items-center gap-2 whitespace-nowrap w-64">
                                             <img src={teachers.classTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />
-                                            {teachers.classTeacherDetails.name}
+                                            <span className={`${darkMode ? 'text-gray-200' : ''}`}>{teachers.classTeacherDetails.name}</span>
                                         </td>
-                                        <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.section}</td>
-                                        <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.subject}</td>
+                                        <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{teachers.section}</td>
+                                        <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{teachers.subject}</td>
                                         <td className="py-3 px-6">
                                             <div className="flex justify-start gap-2 items-center w-72">
                                                 <img src={teachers.substituteTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />
-                                                <div className="text-start">
+                                                <div className={`text-start ${darkMode ? 'text-gray-200' : ''}`}>
                                                     <p>{teachers.substituteTeacherDetails.name}</p>
                                                     {teachers.substituteTeacherDetails.employeeId}
                                                 </div>
@@ -147,9 +150,8 @@ export default function ClassTeacherSubstitutionHistory() {
             </motion.table>
             {!allDataFetched && (
                 <motion.h1
-                    className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center'
+                    className={`${darkMode ? 'text-blue-300 hover:text-blue-500' : 'text-blue-500 hover:text-blue-800'} mt-3 cursor-pointer text-center`}
                     onClick={handleViewMore}
-
                 >
                     View More
                 </motion.h1>

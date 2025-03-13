@@ -12,7 +12,7 @@ import { FiFilter, FiUpload, FiBook, FiUsers, FiLayers } from 'react-icons/fi';
 import { IoMdArrowDropdown } from "react-icons/io";
 
 function HomeWork() {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -167,19 +167,19 @@ function HomeWork() {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="w-full flex flex-col px-3 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar">
-      <ToastContainer />
-      <div className=" flex justify-between w-full mobile:max-sm:flex-col">
+      className={`w-full flex flex-col px-3 h-screen overflow-y-auto items-start mt-2 mb-3 no-scrollbar ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+      <ToastContainer theme={darkMode ? "dark" : "light"} />
+      <div className="flex justify-between w-full mobile:max-sm:flex-col">
         <motion.div
-          className='w-full flex  items-center justify-between tablet:max-laptop:flex-col tablet:max-laptop:items-start mobile:max-tablet:px-3'
+          className='w-full flex items-center justify-between tablet:max-laptop:flex-col tablet:max-laptop:items-start mobile:max-tablet:px-3'
           variants={itemVariants}
         >
           <div>
-            <h1 className='text-3xl whitespace-nowrap mobile:max-tablet:text-lg font-medium text-black'>All Homework</h1>
+            <h1 className={`text-3xl whitespace-nowrap mobile:max-tablet:text-lg font-medium ${darkMode ? 'text-white' : 'text-black'}`}>All Homework</h1>
           </div>
           <div className="block sm:hidden w-full mobile:max-tablet:text-end">
             <motion.button
-              className="p-2 border rounded-full bg-blue-100 text-black hover:bg-blue-200 transition-colors duration-300"
+              className={`p-2 border rounded-full ${darkMode ? 'bg-blue-800 text-white hover:bg-blue-700' : 'bg-blue-100 text-black hover:bg-blue-200'} transition-colors duration-300`}
               onClick={() => setDropdownVisible(!isDropdownVisible)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -190,14 +190,18 @@ function HomeWork() {
             <AnimatePresence>
               {isDropdownVisible && (
                 <motion.div
-                  className='flex absolute left-0 right-0 bg-white p-2 items-center gap-3 flex-col shadow-lg rounded-md'
+                  className={`flex absolute left-0 right-0 ${darkMode ? 'bg-gray-700' : 'bg-white'} p-2 items-center gap-3 flex-col shadow-lg rounded-md`}
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                 >
-                  <div className=" w-full">
-                    <FiBook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
-                    <select id="class" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleClassChange}>
+                  <div className="w-full">
+                    <FiBook className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${darkMode ? 'text-blue-300' : 'text-black'}`} />
+                    <select
+                      id="class"
+                      className={`w-full pl-10 pr-4 py-2 border-2 ${darkMode ? 'border-blue-500 bg-gray-600 text-white' : 'border-blue-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                      onChange={handleClassChange}
+                    >
                       <option value="">Class</option>
                       {uniqueClasses.map((classOption, index) => (
                         <option key={index} value={classOption}>{classOption}</option>
@@ -205,8 +209,12 @@ function HomeWork() {
                     </select>
                   </div>
                   <div className="relative w-full">
-                    <FiUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
-                    <select id="section" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSectionChange}>
+                    <FiUsers className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${darkMode ? 'text-blue-300' : 'text-blue-500'}`} />
+                    <select
+                      id="section"
+                      className={`w-full pl-10 pr-4 py-2 border-2 ${darkMode ? 'border-blue-500 bg-gray-600 text-white' : 'border-blue-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                      onChange={handleSectionChange}
+                    >
                       <option value="">Section</option>
                       {uniqueSections.map((sectionOption, index) => (
                         <option key={index} value={sectionOption}>{sectionOption}</option>
@@ -214,8 +222,12 @@ function HomeWork() {
                     </select>
                   </div>
                   <div className="relative w-full">
-                    <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
-                    <select id="subject" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSubjectChange}>
+                    <FiLayers className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${darkMode ? 'text-blue-300' : 'text-blue-500'}`} />
+                    <select
+                      id="subject"
+                      className={`w-full pl-10 pr-4 py-2 border-2 ${darkMode ? 'border-blue-500 bg-gray-600 text-white' : 'border-blue-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                      onChange={handleSubjectChange}
+                    >
                       <option value="">Subject</option>
                       {uniqueSubjects.map((subjectOption, index) => (
                         <option key={index} value={subjectOption}>{subjectOption}</option>
@@ -226,14 +238,17 @@ function HomeWork() {
               )}
             </AnimatePresence>
           </div>
-
         </motion.div>
         <motion.div variants={itemVariants} className='w-full flex items-center justify-end mb-4'>
           <div className="flex items-center space-x-4 mt-3">
             <div className='flex mobile:max-sm:hidden items-center gap-3'>
               <div className="relative">
-                <FiBook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
-                <select id="class" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleClassChange}>
+                <FiBook className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${darkMode ? 'text-blue-300' : 'text-blue-500'}`} />
+                <select
+                  id="class"
+                  className={`w-full pl-10 pr-4 py-2 border-2 ${darkMode ? 'border-blue-500 bg-gray-600 text-white' : 'border-blue-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                  onChange={handleClassChange}
+                >
                   <option value="">Class</option>
                   {uniqueClasses.map((classOption, index) => (
                     <option key={index} value={classOption}>{classOption}</option>
@@ -241,8 +256,12 @@ function HomeWork() {
                 </select>
               </div>
               <div className="relative">
-                <FiUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
-                <select id="section" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSectionChange}>
+                <FiUsers className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${darkMode ? 'text-blue-300' : 'text-blue-500'}`} />
+                <select
+                  id="section"
+                  className={`w-full pl-10 pr-4 py-2 border-2 ${darkMode ? 'border-blue-500 bg-gray-600 text-white' : 'border-blue-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                  onChange={handleSectionChange}
+                >
                   <option value="">Section</option>
                   {uniqueSections.map((sectionOption, index) => (
                     <option key={index} value={sectionOption}>{sectionOption}</option>
@@ -250,8 +269,12 @@ function HomeWork() {
                 </select>
               </div>
               <div className="relative">
-                <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
-                <select id="subject" className="w-full pl-10 pr-4 py-2 border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSubjectChange}>
+                <FiLayers className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${darkMode ? 'text-blue-300' : 'text-blue-500'}`} />
+                <select
+                  id="subject"
+                  className={`w-full pl-10 pr-4 py-2 border-2 ${darkMode ? 'border-blue-500 bg-gray-600 text-white' : 'border-blue-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                  onChange={handleSubjectChange}
+                >
                   <option value="">Subject</option>
                   {uniqueSubjects.map((subjectOption, index) => (
                     <option key={index} value={subjectOption}>{subjectOption}</option>
@@ -260,7 +283,7 @@ function HomeWork() {
               </div>
             </div>
             <motion.button
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 flex items-center"
+              className={`${darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white px-4 py-2 rounded-md transition-colors duration-300 flex items-center`}
               onClick={handleOpen}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -275,7 +298,7 @@ function HomeWork() {
         <Loading />
       ) : details.length === 0 ? (
         <motion.div
-          className="text-center w-full mt-6 text-black"
+          className={`text-center w-full mt-6 ${darkMode ? 'text-gray-300' : 'text-black'}`}
           variants={itemVariants}
         >
           No Homework found
@@ -285,7 +308,7 @@ function HomeWork() {
           <HomeWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
           <div ref={sentinelRef} className="h-10">
             {loading && start > 0 && (
-              <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+              <div className={`text-center w-full ${darkMode ? 'text-gray-400' : 'text-gray-600'} text-sm`}>Loading more...</div>
             )}
           </div>
         </motion.div>

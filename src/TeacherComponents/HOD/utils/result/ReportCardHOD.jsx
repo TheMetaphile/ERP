@@ -10,7 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function ReportCardHOD() {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [loading, setLoading] = useState(false)
   // State to control the dropdown visibility
   const [Class, setClass] = useState(localStorage.getItem('Class') || '');
@@ -41,30 +41,30 @@ function ReportCardHOD() {
     setSelectedSession(session);
   };
 
-      useEffect(() => {
-          setStart(0);
-          setUserData([]);
-          setLoading(false);
-          setAllDataFetched(false);
-      }, [Class, Section]);
-  
-      const handleViewMore = () => {
-          if (!allDataFetched && !loading) {
-              setStart((prevStart) => prevStart + end);
-          }
-      };
-  
-      useEffect(() => {
-          if (start !== 0) {
-            fetchStudents();
-          }
-      }, [start]);
-  
-      useEffect(() => {
-          if (start === 0 && userData.length === 0 && !allDataFetched && !loading) {
-            fetchStudents();
-          }
-      }, [start, userData, allDataFetched, loading]);
+  useEffect(() => {
+    setStart(0);
+    setUserData([]);
+    setLoading(false);
+    setAllDataFetched(false);
+  }, [Class, Section]);
+
+  const handleViewMore = () => {
+    if (!allDataFetched && !loading) {
+      setStart((prevStart) => prevStart + end);
+    }
+  };
+
+  useEffect(() => {
+    if (start !== 0) {
+      fetchStudents();
+    }
+  }, [start]);
+
+  useEffect(() => {
+    if (start === 0 && userData.length === 0 && !allDataFetched && !loading) {
+      fetchStudents();
+    }
+  }, [start, userData, allDataFetched, loading]);
 
 
   console.log('ll', Class, Section, selectedSession)
@@ -72,7 +72,7 @@ function ReportCardHOD() {
 
   const fetchStudents = async () => {
     if (loading || allDataFetched) return;
-    
+
     setLoading(true);
     try {
       console.log(start, "-", end);
@@ -146,30 +146,30 @@ function ReportCardHOD() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-        (entries) => {
-            if (entries[0].isIntersecting && !allDataFetched && !loading) {
-                console.log("Fetching more data...");
-                handleViewMore();
+      (entries) => {
+        if (entries[0].isIntersecting && !allDataFetched && !loading) {
+          console.log("Fetching more data...");
+          handleViewMore();
 
-            }
-        },
-        { root: null, rootMargin: '0px', threshold: 1.0 }
+        }
+      },
+      { root: null, rootMargin: '0px', threshold: 1.0 }
     );
 
     if (sentinelRef.current) {
-        observer.observe(sentinelRef.current);
+      observer.observe(sentinelRef.current);
     }
 
     return () => {
-        if (sentinelRef.current) {
-            observer.unobserve(sentinelRef.current);
-        }
+      if (sentinelRef.current) {
+        observer.unobserve(sentinelRef.current);
+      }
     };
-}, [allDataFetched, loading]);
+  }, [allDataFetched, loading]);
 
   return (
     <motion.div
-      className="w-full min-h-screen p-4 mobile:max-tablet:px-2"
+      className={`w-full min-h-screen p-4 mobile:max-tablet:px-2 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -177,10 +177,12 @@ function ReportCardHOD() {
       <ToastContainer />
 
       <motion.div
-        className="flex justify-between items-center  mb-6 mobile:max-tablet:mb-3"
+        className="flex justify-between items-center mb-6 mobile:max-tablet:mb-3"
         variants={itemVariants}
       >
-        <h1 className="text-3xl font-medium text-black mobile:max-tablet:text-lg">Report Card</h1>
+        <h1 className={`text-3xl font-medium ${darkMode ? 'text-white' : 'text-black'} mobile:max-tablet:text-lg`}>
+          Report Card
+        </h1>
         <div className="hidden laptop:flex items-center space-x-4">
           <Selection
             Class={Class}
@@ -194,19 +196,21 @@ function ReportCardHOD() {
       </motion.div>
 
       <motion.div
-        className="bg-white rounded-lg shadow-lg  overflow-auto"
+        className={`rounded-lg shadow-lg overflow-auto ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
         variants={itemVariants}
       >
         {loading && userData.length === 0 ? (
           <Loading />
         ) : userData.length === 0 ? (
-          <div className="p-4 text-center text-gray-500">No student found</div>
+          <div className={`p-4 text-center ${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>
+            No student found
+          </div>
         ) : (
           <motion.table
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            className='w-full border text-center'
+            className={`w-full border text-center ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}
           >
             <Header headings={['Name', 'Class', 'Section', 'Email']} />
             <AnimatePresence>
@@ -215,22 +219,20 @@ function ReportCardHOD() {
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
-                className="divide-y divide-blue-200"
+                className={`divide-y ${darkMode ? 'divide-gray-700' : 'divide-blue-200'}`}
               >
                 {userData.map((detail) => (
                   <motion.tr
                     key={detail.email}
                     variants={itemVariants}
-                  // whileHover={{ scale: 1.01, backgroundColor: "#F3E8FF" }}
-                  // transition={{ type: 'spring', stiffness: 300 }}
+                    className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-blue-50'}`}
                   >
-                    <td className="py-4 px-6 ">
+                    <td className="py-4 px-6">
                       <Link to={`/Teacher-Dashboard/HOD/studentResult/${detail.email}?session=${selectedSession}&Class=${Class}`}>
                         <motion.div
                           className="flex items-center justify-start space-x-2"
                           whileHover={{ x: 5 }}
                         >
-
                           <motion.img
                             src={detail.profileLink}
                             alt=""
@@ -238,28 +240,26 @@ function ReportCardHOD() {
                             whileHover={{ scale: 1.2 }}
                             transition={{ type: 'spring', stiffness: 300 }}
                           />
-                          <div className="truncate max-w-xs">{detail.name}</div>
-
-
+                          <div className={`truncate max-w-xs ${darkMode ? 'text-gray-200' : ''}`}>
+                            {detail.name}
+                          </div>
                         </motion.div>
                       </Link>
                     </td>
-                    <td className="py-4 px-6 ">{detail.currentClass}</td>
-                    <td className="py-4 px-6 ">{detail.section}</td>
-                    <td className="py-4 px-6">
-
-                      {detail.email}
-
-                    </td>
+                    <td className={`py-4 px-6 ${darkMode ? 'text-gray-200' : ''}`}>{detail.currentClass}</td>
+                    <td className={`py-4 px-6 ${darkMode ? 'text-gray-200' : ''}`}>{detail.section}</td>
+                    <td className={`py-4 px-6 ${darkMode ? 'text-gray-200' : ''}`}>{detail.email}</td>
                   </motion.tr>
                 ))}
               </motion.tbody>
             </AnimatePresence>
             <div ref={sentinelRef} className="h-10">
-                        {loading && start > 0 && (
-                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
-                        )}
-                    </div>
+              {loading && start > 0 && (
+                <div className={`text-center w-full text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Loading more...
+                </div>
+              )}
+            </div>
           </motion.table>
         )}
       </motion.div>

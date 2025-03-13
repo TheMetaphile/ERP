@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 function AllNoteBookRecordRow({ record, index }) {
   const [remark, setRemark] = useState(record.remark || "");
   const [editingRow, setEditingRow] = useState(false);
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
 
   const date = new Date();
   var session =
@@ -53,50 +53,86 @@ function AllNoteBookRecordRow({ record, index }) {
   return (
     <motion.tr
       key={index}
-      className="border-b border-gray-200 last:border-none"
+      className={`border-b 
+      ${darkMode
+          ? 'border-gray-700 hover:bg-gray-800'
+          : 'border-gray-200 hover:bg-gray-100'}`}
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <td className="py-3 px-6 text-center whitespace-nowrap">
+      <td className={`py-3 px-6 text-center whitespace-nowrap 
+      ${darkMode ? 'text-white' : 'text-gray-900'}`}>
         {new Date(record.date).toDateString()}
       </td>
-      <td className="py-3 px-6 text-center">{record.chapter}</td>
-      <td className="py-3 px-6 text-center whitespace-nowrap">{record.topic}</td>
-      <td className="py-3 px-6 text-center">{record.checked}</td>
+
+      <td className={`py-3 px-6 text-center 
+      ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+        {record.chapter}
+      </td>
+
+      <td className={`py-3 px-6 text-center whitespace-nowrap 
+      ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+        {record.topic}
+      </td>
+
+      <td className={`py-3 px-6 text-center 
+      ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+        {record.checked}
+      </td>
+
       <td className="py-3 px-6 text-center whitespace-nowrap">
         <Link
           to={`/Teacher-Dashboard/HOD/notebook/details/${record._id}?session=${session}&date=${record.date}&chapter=${record.chapter}&topic=${record.topic}`}
-          className="block w-full text-blue-500 underline hover:text-blue-700"
+          className={`block w-full 
+          ${darkMode
+              ? 'text-blue-300 hover:text-blue-200'
+              : 'text-blue-500 hover:text-blue-700'} 
+          underline`}
         >
           Show Details
         </Link>
       </td>
-      <td className="py-3 px-6 text-center">
+
+      <td className={`py-3 px-6 text-center 
+      ${darkMode ? 'text-white' : 'text-gray-900'}`}>
         {editingRow ? (
           <input
             value={remark}
             onChange={(e) => setRemark(e.target.value)}
             placeholder="Enter your remark"
-            className="w-full p-2 border border-black rounded-md"
+            className={`w-full p-2 rounded-md 
+            ${darkMode
+                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-500'
+                : 'border border-black focus:ring-blue-300'}`}
           />
         ) : (
           <span>{remark}</span>
         )}
       </td>
+
       <td className="py-3 px-6 text-center">
         {editingRow ? (
           <div className="flex gap-1 justify-center">
             <motion.button
-              className="bg-green-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
+              className={`
+              ${darkMode
+                  ? 'bg-green-700 hover:bg-green-600 text-white'
+                  : 'bg-green-400 hover:bg-green-700 text-white'} 
+              px-3 py-1 rounded-lg shadow-md flex items-center`}
               onClick={handleConfirmClick}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
               <MdCheck />
             </motion.button>
+
             <motion.button
-              className="bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
+              className={`
+              ${darkMode
+                  ? 'bg-red-700 hover:bg-red-600 text-white'
+                  : 'bg-red-400 hover:bg-red-700 text-white'} 
+              px-3 py-1 rounded-lg shadow-md flex items-center`}
               onClick={handleCancelClick}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -107,7 +143,11 @@ function AllNoteBookRecordRow({ record, index }) {
         ) : (
           <div className="flex justify-center gap-1">
             <motion.button
-              className="bg-blue-400 hover:bg-blue-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
+              className={`
+              ${darkMode
+                  ? 'bg-blue-700 hover:bg-blue-600 text-white'
+                  : 'bg-blue-400 hover:bg-blue-700 text-white'} 
+              px-3 py-1 rounded-lg shadow-md flex items-center`}
               onClick={handleUpdateClick}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}

@@ -15,7 +15,7 @@ function useQuery() {
 const RecordDetailsHOD = () => {
   const { id } = useParams();
   const query = useQuery();
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const session = query.get("session");
   const date = query.get("date");
   const chapter = query.get("chapter");
@@ -57,7 +57,7 @@ const RecordDetailsHOD = () => {
 
   return (
     <motion.div
-      className=" items-center w-full  px-4 py-3 mb-2"
+      className={`items-center w-full px-4 py-3 mb-2 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -65,16 +65,15 @@ const RecordDetailsHOD = () => {
       <ToastContainer />
       <div className="flex justify-between items-center mb-4">
         <motion.h1
-          className="text-3xl font-medium text-black mobile:max-tablet:text-lg whitespace-nowrap mb-2 "
+          className={`text-3xl font-medium mobile:max-tablet:text-lg whitespace-nowrap mb-2 ${darkMode ? 'text-white' : 'text-black'}`}
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
           Pending Notebooks
         </motion.h1>
-        <motion.Link
-          to="/Teacher-Dashboard/HOD/notebook"
-          className="flex items-center text-black hover:text-black hover:cursor-pointer transition-colors duration-300"
+        <motion.div
+          className={`flex items-center hover:cursor-pointer transition-colors duration-300 ${darkMode ? 'text-white hover:text-gray-300' : 'text-black hover:text-gray-600'}`}
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -82,50 +81,54 @@ const RecordDetailsHOD = () => {
         >
           <AiOutlineArrowLeft className="mr-2" />
           Back
-        </motion.Link>
+        </motion.div>
       </div>
       <div className="w-full overflow-x-auto rounded-lg">
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+        <table className={`min-w-full border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
           <thead>
-            <tr className="bg-gradient-to-r from-blue-400 to-blue-200 text-lg leading-normal">
-              <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">
+            <tr className={`${darkMode
+              ? 'bg-gradient-to-r from-blue-900 to-blue-700'
+              : 'bg-gradient-to-r from-blue-400 to-blue-200'} text-lg leading-normal`}>
+              <th className={`py-2 px-6 text-center rounded-t-r whitespace-nowrap ${darkMode ? 'text-white' : 'text-black'}`}>
                 Roll No.
               </th>
-              <th className="py-2 px-6 text-center">Name</th>
-              <th className="py-2 px-6 text-center">Date</th>
-              <th className="py-2 px-6 text-center">Chapter</th>
-              <th className="py-2 px-6 text-center ">Topic</th>
-              <th className="py-2 px-6 text-center rounded-t-l whitespace-nowrap">
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Name</th>
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Date</th>
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Chapter</th>
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Topic</th>
+              <th className={`py-2 px-6 text-center rounded-t-l whitespace-nowrap ${darkMode ? 'text-white' : 'text-black'}`}>
                 Notebook Checked
               </th>
             </tr>
           </thead>
-          <tbody className="text-gray-600 text-md font-normal ">
+          <tbody className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} text-md font-normal`}>
             {notSubmittedBy.map((Student, index) => (
               <motion.tr
                 key={index}
-                className="border-b border-gray-200  last:border-none"
+                className={`border-b ${darkMode ? 'border-gray-700 hover:bg-gray-700' : 'border-gray-200 hover:bg-gray-100'}`}
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <td className="py-3 px-6 text-center whitespace-nowrap">
+                <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-white' : ''}`}>
                   {Student.rollNumber}
                 </td>
-                <td className="flex py-3 px-6 text-center items-center gap-2 whitespace-nowrap">
-                  <img
-                    src={Student.profileLink}
-                    alt="img"
-                    className="rounded-full h-10 w-10"
-                  />
+                <td className={`py-3 px-6 flex text-center whitespace-nowrap ${darkMode ? 'text-white' : ''}`}>
+                  <img src={Student.profileLink} alt="img" className="rounded-full h-10 w-10" />
                   {Student.name}
                 </td>
-                <td className="py-3 px-6 text-center whitespace-nowrap">
+                <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-white' : ''}`}>
                   {new Date(date).toDateString()}
                 </td>
-                <td className="py-3 px-6 text-center">{chapter}</td>
-                <td className="py-3 px-6 text-center whitespace-nowrap">{topic}</td>
-                <td className="py-3 px-6 text-center">{chapter}</td>
+                <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-white' : ''}`}>
+                  {chapter}
+                </td>
+                <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-white' : ''}`}>
+                  {topic}
+                </td>
+                <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-white' : ''}`}>
+                  {chapter}
+                </td>
               </motion.tr>
             ))}
           </tbody>
@@ -133,7 +136,8 @@ const RecordDetailsHOD = () => {
       </div>
 
       <motion.h1
-        className="text-3xl font-medium text-black mobile:max-tablet:text-lg whitespace-nowrap my-3"
+        className={`text-3xl font-medium mobile:max-tablet:text-lg whitespace-nowrap mb-2 ${darkMode ? 'text-white' : 'text-black'}`}
+
         initial={{ x: -50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -142,27 +146,30 @@ const RecordDetailsHOD = () => {
       </motion.h1>
 
       <div className="w-full overflow-x-auto rounded-lg">
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+        <table className={`min-w-full border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
+
           <thead>
-            <tr className="bg-gradient-to-r from-blue-400 to-blue-200 text-lg leading-normal">
-              <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">
+            <tr className={`${darkMode
+              ? 'bg-gradient-to-r from-blue-900 to-blue-700'
+              : 'bg-gradient-to-r from-blue-400 to-blue-200'} text-lg leading-normal`}>
+              <th className={`py-2 px-6 text-center rounded-t-r whitespace-nowrap ${darkMode ? 'text-white' : 'text-black'}`}>
                 Roll No.
               </th>
-              <th className="py-2 px-6 text-center">Name</th>
-              <th className="py-2 px-6 text-center">Date</th>
-              <th className="py-2 px-6 text-center">Chapter</th>
-              <th className="py-2 px-6 text-center ">Topic</th>
-              <th className="py-2 px-6 text-center rounded-t-l whitespace-nowrap">
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Name</th>
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Date</th>
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Chapter</th>
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Topic</th>
+              <th className={`py-2 px-6 text-center rounded-t-l whitespace-nowrap ${darkMode ? 'text-white' : 'text-black'}`}>
                 Notebook Checked
               </th>
-              <th className="py-2 px-6 text-center rounded-t-l">Checked</th>
+              <th className={`rounded-t-l py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Checked</th>
             </tr>
           </thead>
-          <tbody className="text-gray-600 text-md font-normal ">
+          <tbody className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} text-md font-normal`}>
             {submittedBy.map((Student, index) => (
               <motion.tr
                 key={index}
-                className="border-b border-gray-200  last:border-none"
+                className={`border-b ${darkMode ? 'border-gray-700 hover:bg-gray-700' : 'border-gray-200 hover:bg-gray-100'}`}
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.3 }}
@@ -170,7 +177,7 @@ const RecordDetailsHOD = () => {
                 <td className="py-3 px-6 text-center whitespace-nowrap">
                   {Student.rollNumber}
                 </td>
-                <td className="flex py-3 px-6 text-center items-center gap-2 whitespace-nowrap">
+                <td className={`py-3 px-6 flex text-center whitespace-nowrap ${darkMode ? 'text-white' : ''}`}>
                   <img
                     src={Student.profileLink}
                     alt="img"
@@ -178,13 +185,13 @@ const RecordDetailsHOD = () => {
                   />
                   {Student.name}
                 </td>
-                <td className="py-3 px-6 text-center whitespace-nowrap">
+                <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-white' : ''}`}>
                   {new Date(date).toDateString()}
                 </td>
-                <td className="py-3 px-6 text-center">{chapter}</td>
-                <td className="py-3 px-6 text-center whitespace-nowrap">{topic}</td>
-                <td className="py-3 px-6 text-center">{chapter}</td>
-                <td className="flex py-3 px-6 justify-center">
+                <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-white' : ''}`}>{chapter}</td>
+                <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-white' : ''}`}>{topic}</td>
+                <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-white' : ''}`}>{chapter}</td>
+                <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-white' : ''}`}>
                   <Switch checked={true} />
                 </td>
               </motion.tr>

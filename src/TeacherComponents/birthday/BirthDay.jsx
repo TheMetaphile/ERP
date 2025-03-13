@@ -1,35 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, Outlet } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaChalkboardTeacher, FaUserGraduate } from "react-icons/fa";
+import AuthContext from '../../Context/AuthContext';
 
 function BirthDay() {
+    const { darkMode } = useContext(AuthContext);
     const [selectedLink, setSelectedLink] = useState('/Teacher-Dashboard/birthday/student');
+
     const handleLinkSelect = (link) => {
         setSelectedLink(link);
     };
+
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar  "
+            className={`flex flex-col px-3 mobile:max-tablet:px-0 h-screen overflow-y-auto items-start mt-2 ml-2 mr-3 mb-3 no-scrollbar ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'
+                }`}
         >
-            <motion.h1 
+            <motion.h1
                 initial={{ y: -20 }}
                 animate={{ y: 0 }}
                 transition={{ type: "spring", stiffness: 300 }}
-                className='text-3xl font-medium mobile:max-tablet:text-xl text-black'
+                className={`text-3xl font-medium mobile:max-tablet:text-xl ${darkMode ? 'text-white' : 'text-black'
+                    }`}
             >
                 Birthday Celebrations
             </motion.h1>
             <div className='mt-6 w-full'>
-                <div className="flex items-center justify-between mb-3 ">
+                <div className="flex items-center justify-between mb-3">
                     <div className="flex gap-2 -mb-0.5">
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                             <Link
                                 to={'/Teacher-Dashboard/birthday/teacher'}
-                                className={`text-xl mobile:max-tablet:text-lg font-medium px-4 py-2 rounded-t-lg flex items-center gap-2 transition-colors duration-300 ${selectedLink === '/Teacher-Dashboard/birthday/teacher' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
+                                className={`text-xl mobile:max-tablet:text-lg font-medium px-4 py-2 rounded-t-lg flex items-center gap-2 transition-colors duration-300 ${selectedLink === '/Teacher-Dashboard/birthday/teacher'
+                                    ? (darkMode
+                                        ? 'text-blue-400 border-b-2 border-blue-400'
+                                        : 'text-blue-600 border-b-2 border-blue-600')
+                                    : (darkMode
+                                        ? 'text-gray-400 hover:text-white'
+                                        : 'text-gray-600 hover:text-black')
+                                    }`}
                                 onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/teacher')}
                             >
                                 <FaChalkboardTeacher />
@@ -39,7 +52,14 @@ function BirthDay() {
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                             <Link
                                 to={'/Teacher-Dashboard/birthday/student'}
-                                className={`text-xl mobile:max-tablet:text-lg font-medium px-4 py-2 rounded-t-lg flex items-center gap-2 transition-colors duration-300 ${selectedLink === '/Teacher-Dashboard/birthday/student' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
+                                className={`text-xl mobile:max-tablet:text-lg font-medium px-4 py-2 rounded-t-lg flex items-center gap-2 transition-colors duration-300 ${selectedLink === '/Teacher-Dashboard/birthday/student'
+                                    ? (darkMode
+                                        ? 'text-blue-400 border-b-2 border-blue-400'
+                                        : 'text-blue-600 border-b-2 border-blue-600')
+                                    : (darkMode
+                                        ? 'text-gray-400 hover:text-white'
+                                        : 'text-gray-600 hover:text-black')
+                                    }`}
                                 onClick={() => handleLinkSelect('/Teacher-Dashboard/birthday/student')}
                             >
                                 <FaUserGraduate />
@@ -52,8 +72,9 @@ function BirthDay() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
+                    className={darkMode ? 'bg-gray-800' : 'bg-white'}
                 >
-                    <Outlet />
+                    <Outlet context={{ darkMode }} />
                 </motion.div>
             </div>
         </motion.div>

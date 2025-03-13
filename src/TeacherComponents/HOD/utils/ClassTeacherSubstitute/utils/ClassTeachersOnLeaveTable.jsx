@@ -6,7 +6,7 @@ import { BASE_URL } from "../../../../../Config";
 import { motion } from 'framer-motion';
 
 export default function ClassTeacherOnLeaveTable() {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [TeachersOnLeave, SetTeachersOnLeave] = useState([]);
   const date = new Date();
   var month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
@@ -66,13 +66,13 @@ export default function ClassTeacherOnLeaveTable() {
   return (
     <div className="w-full overflow-x-auto rounded-lg pt-2">
       <motion.table
-        className="min-w-full bg-white border border-gray-300 rounded-lg"
+        className={`min-w-full border border-gray-300 rounded-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-600'}`}
         variants={tableVariants}
         initial="hidden"
         animate="visible"
       >
         <thead>
-          <tr className="bg-gradient-to-r from-blue-400 to-blue-200 text-lg">
+          <tr className={`${darkMode ? 'bg-blue-900' : 'bg-gradient-to-r from-blue-400 to-blue-200'} text-lg`}>
             <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Employee Id</th>
             <th className="py-2 px-6">Name</th>
             <th className="py-2 px-6 text-center">Date</th>
@@ -82,9 +82,15 @@ export default function ClassTeacherOnLeaveTable() {
             <th className="py-2 px-6 text-center">Actions</th>
           </tr>
         </thead>
-        <tbody className="text-gray-600 text-md font-normal">
+        <tbody className={`text-md font-normal ${darkMode ? 'bg-gray-700 text-gray-200' : 'text-gray-600'}`}>
           {TeachersOnLeave.map((teachers, index) => (
-            <ClassTeacherOnLeaveRow Teacher={teachers} index={index} date={formattedDate} session={session} />
+            <ClassTeacherOnLeaveRow
+              key={index}
+              Teacher={teachers}
+              index={index}
+              date={formattedDate}
+              session={session}
+            />
           ))}
         </tbody>
       </motion.table>

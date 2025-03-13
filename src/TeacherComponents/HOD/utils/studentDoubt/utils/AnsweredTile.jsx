@@ -9,13 +9,13 @@ import axios from 'axios';
 import AuthContext from '../../../../../Context/AuthContext';
 import { BASE_URL } from '../../../../../Config';
 
-const DoubtCard = ({ doubt, index, expanded, handleClick, handleDelete }) => {
+const DoubtCard = ({ doubt, index, expanded, handleClick, handleDelete, darkMode }) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="border border-blue-200 p-4 rounded-lg shadow-lg mt-4 bg-white"
+            className={`border p-4 rounded-lg shadow-lg mt-4 ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-blue-200'}`}
         >
             <div className="flex items-center mobile:max-sm:flex-col mobile:max-sm:items-start justify-between cursor-pointer" onClick={() => handleClick(index)}>
                 <div className="flex items-center space-x-4">
@@ -23,26 +23,32 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, handleDelete }) => {
                         whileHover={{ scale: 1.1 }}
                         src={doubt.student[0].profileLink}
                         alt=""
-                        className="w-12 h-12 rounded-full border-2 border-blue-300"
+                        className={`w-12 h-12 rounded-full border-2 ${darkMode ? 'border-gray-500' : 'border-blue-300'}`}
                     />
-                    <h3 className="font-semibold text-blue-800">{doubt.student[0].name}</h3>
+                    <h3 className={`font-semibold ${darkMode ? 'text-blue-300' : 'text-blue-800'}`}>
+                        {doubt.student[0].name}
+                    </h3>
 
                     <div>
-                        <div className="flex items-center text-sm text-blue-600 whitespace-nowrap">
-
+                        <div className={`flex items-center text-sm ${darkMode ? 'text-blue-400' : 'text-blue-600'} whitespace-nowrap`}>
                             <FaUserGraduate className="mr-1" />
                             <span>Roll: {doubt.student[0].rollNumber}</span>
                         </div>
                     </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                    <span className="text-blue-600 font-medium">{doubt.subject}</span>
+                    <span className={`font-medium ${darkMode ? 'text-blue-300' : 'text-blue-600'}`}>
+                        {doubt.subject}
+                    </span>
                     <motion.div
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        className="bg-blue-100 p-2 rounded-full"
+                        className={`p-2 rounded-full ${darkMode ? 'bg-gray-600' : 'bg-blue-100'}`}
                     >
-                        {expanded === index ? <FaChevronUp className="text-blue-600" /> : <FaChevronDown className="text-blue-600" />}
+                        {expanded === index ?
+                            <FaChevronUp className={`${darkMode ? 'text-white' : 'text-blue-600'}`} /> :
+                            <FaChevronDown className={`${darkMode ? 'text-white' : 'text-blue-600'}`} />
+                        }
                     </motion.div>
                     <motion.button
                         whileHover={{ scale: 1.1 }}
@@ -64,22 +70,26 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, handleDelete }) => {
                         transition={{ duration: 0.3 }}
                         className="mt-4"
                     >
-                        <div className="bg-blue-50 p-4 rounded-lg">
-                            <h4 className="font-medium text-blue-800 flex items-center mb-2">
-                                <FaQuestionCircle className="mr-2 text-blue-600" />
+                        <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-600' : 'bg-blue-50'}`}>
+                            <h4 className={`font-medium flex items-center mb-2 ${darkMode ? 'text-blue-300' : 'text-blue-800'}`}>
+                                <FaQuestionCircle className={`mr-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
                                 Question:
                             </h4>
-                            <p className="text-blue-700 mb-4">{doubt.question}</p>
+                            <p className={`${darkMode ? 'text-gray-200' : 'text-blue-700'} mb-4`}>
+                                {doubt.question}
+                            </p>
                             {doubt.imageUrl && (
                                 <img src={doubt.imageUrl} alt="Doubt" className="mt-2 max-w-xs rounded-lg shadow-md" />
                             )}
                         </div>
-                        <div className="mt-4 bg-blue-50 p-4 rounded-lg">
-                            <h4 className="font-medium text-blue-800 flex items-center mb-2">
-                                <FaBookOpen className="mr-2 text-blue-600" />
+                        <div className={`mt-4 p-4 rounded-lg ${darkMode ? 'bg-gray-600' : 'bg-blue-50'}`}>
+                            <h4 className={`font-medium flex items-center mb-2 ${darkMode ? 'text-blue-300' : 'text-blue-800'}`}>
+                                <FaBookOpen className={`mr-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
                                 Answer:
                             </h4>
-                            <p className="text-blue-700">{doubt.solution}</p>
+                            <p className={`${darkMode ? 'text-gray-200' : 'text-blue-700'}`}>
+                                {doubt.solution}
+                            </p>
                         </div>
                     </motion.div>
                 )}
@@ -91,7 +101,7 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, handleDelete }) => {
 export default function AnsweredTile({ data, Class }) {
     const [expanded, setExpanded] = useState(null);
     const [resolvedDoubts, setResolvedDoubts] = useState([]);
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
 
     useEffect(() => {
         if (data) {
@@ -134,10 +144,10 @@ export default function AnsweredTile({ data, Class }) {
                 animate={{ y: 0, opacity: 1 }}
                 className="flex items-center justify-between mb-6"
             >
-
-                <h2 className="text-2xl mobile:max-sm:text-sm font-medium text-black">Resolved Doubts</h2>
-                <div className="flex items-center mobile:max-sm:text-xs bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md">
-
+                <h2 className={`text-2xl mobile:max-sm:text-sm font-medium ${darkMode ? 'text-white' : 'text-black'}`}>
+                    Resolved Doubts
+                </h2>
+                <div className={`flex items-center mobile:max-sm:text-xs text-white px-4 py-2 rounded-lg shadow-md ${darkMode ? 'bg-blue-800' : 'bg-blue-600'}`}>
                     <IoMdCheckmarkCircleOutline className="mr-2" />
                     <span>{resolvedDoubts.length} Resolved</span>
                 </div>
@@ -151,6 +161,7 @@ export default function AnsweredTile({ data, Class }) {
                     expanded={expanded}
                     handleClick={handleClick}
                     handleDelete={handleDelete}
+                    darkMode={darkMode}
                 />
             ))}
         </motion.div>

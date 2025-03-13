@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ClassTeacherSubstitutionHistory() {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [PrevioursSubstitutions, SetPrevioursSubstitutions] = useState([]);
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(4);
@@ -86,13 +86,13 @@ export default function ClassTeacherSubstitutionHistory() {
     return (
         <div className="w-full overflow-x-auto rounded-lg">
             <motion.table
-                className="min-w-full bg-white border border-gray-300 rounded-lg"
+                className={`min-w-full border border-gray-300 rounded-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-600'}`}
                 variants={tableVariants}
                 initial="hidden"
                 animate="visible"
             >
                 <thead>
-                    <tr className="bg-gradient-to-r from-blue-400 to-blue-200 text-lg">
+                    <tr className={`${darkMode ? 'bg-blue-900' : 'bg-gradient-to-r from-blue-400 to-blue-200'} text-lg`}>
                         <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Employee Id</th>
                         <th className="py-2 px-6">Name</th>
                         <th className="py-2 px-6 text-center">Date</th>
@@ -102,10 +102,13 @@ export default function ClassTeacherSubstitutionHistory() {
                     </tr>
                 </thead>
                 <AnimatePresence>
-                    <motion.tbody className="text-gray-600 text-md font-normal">
+                    <motion.tbody className={`text-md font-normal ${darkMode ? 'bg-gray-800' : ''}`}>
                         {PrevioursSubstitutions.length === 0 ? (
                             <motion.tr variants={rowVariants}>
-                                <td colSpan="6" className="py-4 text-center">
+                                <td
+                                    colSpan="6"
+                                    className={`py-4 text-center ${darkMode ? 'text-gray-300' : ''}`}
+                                >
                                     Class teacher substitute history not available
                                 </td>
                             </motion.tr>
@@ -113,21 +116,29 @@ export default function ClassTeacherSubstitutionHistory() {
                             PrevioursSubstitutions.map((teachers, index) => (
                                 <motion.tr
                                     key={index}
-                                    className="border-b border-gray-200 last:border-none"
+                                    className={`border-b ${darkMode ? 'border-gray-600' : 'border-gray-200'} last:border-none`}
                                     variants={rowVariants}
                                 >
-                                    <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.classTeacherDetails.employeeId}</td>
-                                    <td className="flex py-3 px-6 justify-start items-center gap-2 whitespace-nowrap">
+                                    <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>
+                                        {teachers.classTeacherDetails.employeeId}
+                                    </td>
+                                    <td className={`flex py-3 px-6 justify-start items-center gap-2 whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>
                                         <img src={teachers.classTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />
                                         {teachers.classTeacherDetails.name}
                                     </td>
-                                    <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.date}</td>
-                                    <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.class}</td>
-                                    <td className="py-3 px-6 text-center whitespace-nowrap">{teachers.section}</td>
+                                    <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>
+                                        {teachers.date}
+                                    </td>
+                                    <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>
+                                        {teachers.class}
+                                    </td>
+                                    <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>
+                                        {teachers.section}
+                                    </td>
                                     <td className="py-3 px-6">
                                         <div className="flex justify-start gap-2 items-center">
                                             <img src={teachers.substituteTeacherDetails.profileLink} alt="img" className="rounded-full h-12 w-12" />
-                                            <div className="text-start">
+                                            <div className={`text-start ${darkMode ? 'text-gray-200' : ''}`}>
                                                 <p>{teachers.substituteTeacherDetails.name}</p>
                                                 {teachers.substituteTeacherDetails.employeeId}
                                             </div>
@@ -141,9 +152,8 @@ export default function ClassTeacherSubstitutionHistory() {
             </motion.table>
             {!allDataFetched && PrevioursSubstitutions.length > 0 && (
                 <motion.h1
-                    className='text-blue-500 hover:text-blue-800 mt-3 cursor-pointer text-center'
+                    className={`${darkMode ? 'text-blue-300 hover:text-blue-500' : 'text-blue-500 hover:text-blue-800'} mt-3 cursor-pointer text-center`}
                     onClick={handleViewMore}
-                    
                 >
                     View More
                 </motion.h1>

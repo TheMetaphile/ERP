@@ -15,7 +15,7 @@ import { Outlet } from 'react-router-dom';
 
 function UploadResult() {
   const [students, setStudents] = useState([]);
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const end = 100;
   const [Class, setClass] = useState(localStorage.getItem('Class') || '');
@@ -32,27 +32,16 @@ function UploadResult() {
   }, [Class, Section, Subject, selectedTerm]);
 
   const terms = [
-    {
-      label: 'Term 1',
-      value: "term1"
-    },
-    {
-      label: 'Half Yearly',
-      value: "halfYearly"
-    },
-    {
-      label: 'Term 2',
-      value: "term2"
-    },
-    {
-      label: 'Final',
-      value: "final"
-    }
+    { label: 'Term 1', value: "term1" },
+    { label: 'Half Yearly', value: "halfYearly" },
+    { label: 'Term 2', value: "term2" },
+    { label: 'Final', value: "final" }
   ];
 
   const handleTermChange = (event) => {
     setSelectedTerm(event.target.value);
   }
+
   const handleRoleChange = (event) => {
     setScholastic(event);
   };
@@ -61,9 +50,6 @@ function UploadResult() {
     setStudents([]);
     fetchStudents();
   }, [Class, Section]);
-
-
-
 
   const fetchStudents = async () => {
     if (!Class || !Section) return;
@@ -77,12 +63,8 @@ function UploadResult() {
         end: end
       });
       if (response.status == 200) {
-        console.log("API response:", response.data.Students);
         setStudents(prevData => [...prevData, ...response.data.Students]);
-        console.log("API responserrrrrr:", response.data.Students);
-
       }
-
     } catch (error) {
       console.error("Error fetching student:", error);
     }
@@ -92,9 +74,6 @@ function UploadResult() {
   };
 
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-
-
-
 
   const containerVariants = {
     hidden: { opacity: 0, y: -20 },
@@ -108,7 +87,9 @@ function UploadResult() {
 
   return (
     <motion.div
-      className="overflow-y-auto w-full items-start px-2 py-1 no-scrollbar"
+      className={`overflow-y-auto w-full items-start px-2 py-1 no-scrollbar ${
+        darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'
+      }`}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -117,7 +98,9 @@ function UploadResult() {
       <div className='w-full flex items-center justify-between my-2'>
         <div className='flex-1'>
           <motion.h1
-            className="mb-2 text-3xl font-medium text-black mobile:max-tablet:text-lg whitespace-nowrap"
+            className={`mb-2 text-3xl font-medium mobile:max-tablet:text-lg whitespace-nowrap ${
+              darkMode ? 'text-white' : 'text-black'
+            }`}
             whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 300 }}
           >
@@ -126,7 +109,11 @@ function UploadResult() {
         </div>
         <div className="flex flex-1 justify-end sm:hidden w-full items-end mobile:max-laptop:text-end">
           <motion.button
-            className="p-2 border rounded flex items-center"
+            className={`p-2 border rounded flex items-center ${
+              darkMode 
+                ? 'bg-gray-700 text-white border-gray-600' 
+                : 'bg-white text-black border-gray-300'
+            }`}
             onClick={() => setDropdownVisible(!isDropdownVisible)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -141,47 +128,98 @@ function UploadResult() {
             animate={isDropdownVisible ? "visible" : "hidden"}
           >
             {isDropdownVisible && (
-              <div className='flex absolute left-0 right-0 bg-white p-4 gap-2 justify-between mobile:max-tablet:flex-col'>
-                <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
+              <div className={`flex absolute left-0 right-0 p-4 gap-2 justify-between mobile:max-tablet:flex-col ${
+                darkMode ? 'bg-gray-800' : 'bg-white'
+              }`}>
+                <Selection 
+                  setClass={setClass} 
+                  setSection={setSection} 
+                  setSubject={setSubject} 
+                  darkMode={darkMode}
+                />
                 <div className="w-36 mobile:max-tablet:w-full mobile:max-tablet:mr-0 mr-3 self-center">
-                  <select id="section" className="w-full px-2 py-2 border-2 border-blue-300 rounded-md" onChange={handleTermChange}>
+                  <select 
+                    id="section" 
+                    className={`w-full px-2 py-2 border-2 rounded-md ${
+                      darkMode 
+                        ? 'bg-gray-700 text-white border-gray-600' 
+                        : 'border-blue-300'
+                    }`}
+                    onChange={handleTermChange}
+                  >
                     <option value="">Select Term</option>
                     {terms.map((sectionOption, index) => (
-                      <option key={index} value={sectionOption.value}>{sectionOption.label}</option>
+                      <option key={index} value={sectionOption.value}>
+                        {sectionOption.label}
+                      </option>
                     ))}
                   </select>
                 </div>
-                <Switch checked={scholastic} changeRole={handleRoleChange} />
+                <Switch 
+                  checked={scholastic} 
+                  changeRole={handleRoleChange} 
+                  darkMode={darkMode} 
+                />
               </div>
             )}
           </motion.div>
         </div>
 
         <div className='flex items-end mobile:max-laptop:hidden'>
-          <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
+          <Selection 
+            setClass={setClass} 
+            setSection={setSection} 
+            setSubject={setSubject} 
+            darkMode={darkMode}
+          />
           <div className="w-36 mr-3 self-center">
-            <select id="section" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" onChange={handleTermChange}>
+            <select 
+              id="section" 
+              className={`w-full px-2 py-2 border-2 rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${
+                darkMode 
+                  ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600' 
+                  : 'border-blue-300 focus:ring-blue-500'
+              }`}
+              onChange={handleTermChange}
+            >
               <option value="">Select Term</option>
               {terms.map((sectionOption, index) => (
-                <option key={index} value={sectionOption.value}>{sectionOption.label}</option>
+                <option key={index} value={sectionOption.value}>
+                  {sectionOption.label}
+                </option>
               ))}
             </select>
           </div>
-          <Switch checked={scholastic} changeRole={handleRoleChange} />
+          <Switch 
+            checked={scholastic} 
+            changeRole={handleRoleChange} 
+            darkMode={darkMode} 
+          />
         </div>
       </div>
-      <Outlet />
+      <Outlet context={{ darkMode }} />
       {loading ? (
         <Loading />
       ) : scholastic ? (
-        <ScholasticTable students={students} subject={Subject} term={selectedTerm} Class={Class} section={Section}/>
+        <ScholasticTable 
+          students={students} 
+          subject={Subject} 
+          term={selectedTerm} 
+          Class={Class} 
+          section={Section}
+          darkMode={darkMode}
+        />
       ) : (
-        <CoScholasticTable students={students} Class={Class} term={selectedTerm} section={Section}/>
+        <CoScholasticTable 
+          students={students} 
+          Class={Class} 
+          term={selectedTerm} 
+          section={Section}
+          darkMode={darkMode}
+        />
       )}
-
     </motion.div>
   );
 };
 
-
-export default UploadResult
+export default UploadResult;

@@ -6,7 +6,7 @@ import StudentTile from './StudentTile';
 import { BASE_URL } from "../../../Config";
 
 export default function Student() {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [birthdays, setBirthDays] = useState([]);
 
@@ -21,7 +21,6 @@ export default function Student() {
 
     useEffect(() => {
         const fetchBirthday = async () => {
-            console.log(getFormattedDate());
             setLoading(true);
             try {
                 const response = await axios.get(`${BASE_URL}/birthday/student?date=${getFormattedDate()}`, {
@@ -31,7 +30,6 @@ export default function Student() {
                 });
 
                 setBirthDays(response.data);
-                console.log('fetch', response.data);
             } catch (error) {
                 console.error("Error fetching student birthday:", error);
             }
@@ -41,16 +39,14 @@ export default function Student() {
         }
         fetchBirthday();
     }, [authState?.accessToken])
-    
+
     return (
-        <div className=''>
+        <div className={`${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
             {loading ? (
                 <Loading />
-            ) :  (
-                <StudentTile birthdays={birthdays} />
-            )
-            }
+            ) : (
+                <StudentTile birthdays={birthdays} darkMode={darkMode} />
+            )}
         </div>
     )
 }
-

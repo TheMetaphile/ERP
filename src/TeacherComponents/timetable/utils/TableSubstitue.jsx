@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FaCalendarAlt, FaChalkboardTeacher, FaUserGraduate, FaBook, FaClock } from "react-icons/fa";
 
-function TableSubstitute({ data, Time, numberOfLeacturesBeforeLunch }) {
+function TableSubstitute({ data, Time, numberOfLeacturesBeforeLunch, darkMode }) {
   const formatTime = (date) => {
     let hours = date.getHours();
     const minutes = date.getMinutes();
@@ -15,7 +15,7 @@ function TableSubstitute({ data, Time, numberOfLeacturesBeforeLunch }) {
 
   return (
     <motion.div
-      className="rounded-lg border border-gray-400 overflow-auto"
+      className="rounded-lg border border-gray-400 overflow-auto text-black"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -45,11 +45,18 @@ function TableSubstitute({ data, Time, numberOfLeacturesBeforeLunch }) {
         <tbody>
           {data.length > 0 ? (
             data.sort((a, b) => a.lectureNo - b.lectureNo).map((item, idx) => {
+              const isLunchBreak =
+                (numberOfLeacturesBeforeLunch === item.Lecture) ||
+                (data[idx].lectureNo < numberOfLeacturesBeforeLunch && data[idx + 1]?.lectureNo > numberOfLeacturesBeforeLunch);
+
               return (
                 <React.Fragment key={item._id}>
-                  {(numberOfLeacturesBeforeLunch === item.Lecture || (data[idx].lectureNo < numberOfLeacturesBeforeLunch && data[idx + 1].lectureNo > numberOfLeacturesBeforeLunch)) && (
+                  {isLunchBreak && (
                     <motion.tr
-                      className="w-full h-8 border-t border-gray-400  text-xl text-center"
+                      className={`w-full h-8 border-t text-xl text-center ${darkMode
+                        ? 'border-gray-700 bg-gray-900 text-yellow-300'
+                        : 'border-gray-400 bg-white text-yellow-900'
+                        }`}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
@@ -60,38 +67,42 @@ function TableSubstitute({ data, Time, numberOfLeacturesBeforeLunch }) {
                     </motion.tr>
                   )}
                   <motion.tr
-                    className="text-center border-t border-gray-400"
+                    className={`text-center border-t ${darkMode
+                      ? 'border-gray-700 hover:bg-gray-700'
+                      : 'border-gray-400 hover:bg-gray-100'
+                      }`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: idx * 0.1 }}
                   >
-                    <td className="w-32 px-4 py-2 border-r border-gray-400">
-
-                      {item.Lecture}
-                    </td>
-                    <td className="w-60 px-4 py-2 border-r whitespace-nowrap border-gray-400 ">
-
-                      {`${formatTime(Time[item.Lecture - 1].start)}-${formatTime(Time[item.Lecture - 1].end)}`}
-                    </td>
-                    <td className="w-60 px-4 py-2 border-r border-gray-400 ">
-
-                      {item.class}
-                    </td>
-                    <td className="w-60 px-4 py-2 border-r border-gray-400 ">
-
-                      {item.section}
-                    </td>
-                    <td className="w-60 px-4 py-2 whitespace-nowrap ">
-
-                      {item.subject}
-                    </td>
+                    {[
+                      item.Lecture,
+                      `${formatTime(Time[item.Lecture - 1].start)}-${formatTime(Time[item.Lecture - 1].end)}`,
+                      item.class,
+                      item.section,
+                      item.subject
+                    ].map((cellData, cellIndex) => (
+                      <td
+                        key={cellIndex}
+                        className={`w-60 px-4 py-2 border-r whitespace-nowrap ${darkMode
+                          ? 'border-gray-700 text-white'
+                          : 'border-gray-400 text-black'
+                          } ${cellIndex === 4 ? 'border-r-0' : ''}`}
+                      >
+                        {cellData}
+                      </td>
+                    ))}
                   </motion.tr>
                 </React.Fragment>
               );
             })
           ) : (
             <tr>
-              <td colSpan="5" className="text-center py-4 text-blue-500">
+              <td
+                colSpan="5"
+                className={`text-center py-4 ${darkMode ? 'text-blue-400' : 'text-blue-500'
+                  }`}
+              >
                 No data available
               </td>
             </tr>

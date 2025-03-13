@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../../../Context/AuthContext";
 
-function Selection({ setClass, setSection, setSubject }) {
+function Selection({ setClass, setSection, setSubject, darkMode }) {
     const { authState } = useContext(AuthContext);
     const [selectedClass, setSelectedClass] = useState(authState?.subject ? authState?.subject[0]?.class : "");
     const [selectedSection, setSelectedSection] = useState(authState?.subject ? authState?.subject[0]?.section : "");
@@ -47,7 +47,10 @@ function Selection({ setClass, setSection, setSubject }) {
 
             <div className="flex justify-between w-full gap-3 mobile:max-tablet:flex-col">
                 <div className="w-36 mobile:max-tablet:w-full">
-                    <select id="class" className="w-full px-2 py-2  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleClassChange} >
+                    <select id="class" className={`w-full px-2 py-2 border-2 rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${darkMode
+                        ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
+                        : 'border-blue-300 focus:ring-blue-500'
+                        }`} onChange={handleClassChange} >
                         <option value="">Select Class</option>
                         {uniqueClasses.map((classOption, index) => (
                             <option key={index} value={classOption}>{classOption}</option>
@@ -55,7 +58,11 @@ function Selection({ setClass, setSection, setSubject }) {
                     </select>
                 </div>
                 <div className="w-36 mobile:max-tablet:w-full">
-                    <select id="section" className="w-full px-2 py-2  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSectionChange}>
+                    <select id="section" className={`w-full px-2 py-2 border-2 rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${darkMode
+                        ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
+                        : 'border-blue-300 focus:ring-blue-500'
+                        }`}
+                        onChange={handleSectionChange}>
                         <option value="">Select Section</option>
                         {uniqueSections.map((sectionOption, index) => (
                             <option key={index} value={sectionOption}>{sectionOption}</option>
@@ -63,7 +70,10 @@ function Selection({ setClass, setSection, setSubject }) {
                     </select>
                 </div>
                 <div className="w-36 mobile:max-tablet:w-full">
-                    <select id="subject" className="w-full px-2 py-2  border-2 border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onChange={handleSubjectChange}>
+                    <select id="subject" className={`w-full px-2 py-2 border-2 rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${darkMode
+                        ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
+                        : 'border-blue-300 focus:ring-blue-500'
+                        }`} onChange={handleSubjectChange}>
                         <option value="">Select Subject</option>
                         {uniqueSubjects.map((subjectOption, index) => (
                             <option key={index} value={subjectOption}>{subjectOption}</option>

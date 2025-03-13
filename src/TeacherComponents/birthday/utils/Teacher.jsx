@@ -6,7 +6,7 @@ import { BASE_URL } from "../../../Config";
 import TeacherTile from './TeacherTile';
 
 export default function Teacher() {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [birthdays, setBirthDays] = useState([]);
 
@@ -21,7 +21,6 @@ export default function Teacher() {
 
     useEffect(() => {
         const fetchBirthday = async () => {
-            console.log(getFormattedDate());
             setLoading(true);
             try {
                 const response = await axios.get(`${BASE_URL}/birthday/teacher?date=${getFormattedDate()}`, {
@@ -31,7 +30,6 @@ export default function Teacher() {
                 });
 
                 setBirthDays(response.data);
-                console.log('fetch', response.data);
             } catch (error) {
                 console.error("Error fetching teacher birthday:", error);
             }
@@ -43,14 +41,12 @@ export default function Teacher() {
     }, [authState?.accessToken])
 
     return (
-        <div className=''>
+        <div className={`${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
             {loading ? (
                 <Loading />
             ) : (
-                <TeacherTile birthdays={birthdays} />
-            )
-            }
+                <TeacherTile birthdays={birthdays} darkMode={darkMode} />
+            )}
         </div>
     )
 }
-

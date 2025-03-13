@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Answered({ Class, Section, Subject }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -100,20 +100,23 @@ function Answered({ Class, Section, Subject }) {
     }
 
     return (
-        <div className=''>
+        <div className={`mobile:max-tablet:mr-0 mr-3 `}>
             {data.length > 0 ? (
                 <>
                     <AnsweredTile data={data} Class={Class} />
                     <div ref={sentinelRef} className="h-10">
                         {loading && start > 0 && (
-                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                            <div className={`text-center w-full text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                Loading more...
+                            </div>
                         )}
                     </div>
                 </>
             ) : (
-                <div className='w-full text-center mt-3 text-blue-500'>No answered doubt</div>
+                <div className={`w-full text-center mt-3 ${darkMode ? 'text-blue-300' : 'text-blue-500'}`}>
+                    No answered doubt
+                </div>
             )}
-
         </div>
     )
 }

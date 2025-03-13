@@ -6,7 +6,7 @@ import { BASE_URL } from "../../../../../Config";
 import { motion } from 'framer-motion';
 
 export default function ClassTeacherOnLeaveTable() {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [TeachersOnLeave, SetTeachersOnLeave] = useState([]);
     const date = new Date();
     var month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
@@ -67,34 +67,42 @@ export default function ClassTeacherOnLeaveTable() {
     return (
         <div className="rounded-lg overflow-auto pt-3">
             <motion.table
-                className="min-w-fit bg-white border border-gray-300 rounded-lg"
+                className={`w-full border border-gray-300 rounded-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-600'}`}
                 variants={tableVariants}
                 initial="hidden"
                 animate="visible"
             >
                 <thead>
-                    <tr className="bg-gradient-to-r from-blue-400 to-blue-200 text-lg">
-                        <th className="py-2 px-6 text-center">Lecture</th>
-                        <th className="py-2 px-6 text-center">Date</th>
-                        <th className="py-2 px-6 text-center">Class</th>
-                        <th className="py-2 px-6 text-center rounded-t w-60">Name</th>
-                        <th className="py-2 px-6 text-center">Section</th>
-                        <th className="py-2 px-6 text-center">Subject</th>
-                        <th className="py-2 px-6 text-center w-60">Substitute</th>
-                        <th className="py-2 px-6 text-center w-60">Remark</th>
-                        <th className="py-2 px-6 text-center">Actions</th>
+                    <tr className={`${darkMode ? 'bg-blue-900' : 'bg-gradient-to-r from-blue-400 to-blue-200'} text-lg`}>
+                        <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Lecture</th>
+                        <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Date</th>
+                        <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Class</th>
+                        <th className={`py-2 px-6 text-center rounded-t w-60 ${darkMode ? 'text-white' : 'text-black'}`}>Name</th>
+                        <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Section</th>
+                        <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Subject</th>
+                        <th className={`py-2 px-6 text-center w-60 ${darkMode ? 'text-white' : 'text-black'}`}>Substitute</th>
+                        <th className={`py-2 px-6 text-center w-60 ${darkMode ? 'text-white' : 'text-black'}`}>Remark</th>
+                        <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Actions</th>
                     </tr>
                 </thead>
-                <motion.tbody className="text-gray-600 text-md font-normal min-h-10 max-h-screen overflow-x-auto overflow-y-auto">
+                <motion.tbody className={`text-md font-normal min-h-10 max-h-screen overflow-x-auto overflow-y-auto ${darkMode ? 'bg-gray-700' : ''}`}>
                     {TeachersOnLeave.length === 0 ? (
                         <motion.tr variants={rowVariants}>
-                            <td colSpan="9" className="text-center py-4">
+                            <td
+                                colSpan="9"
+                                className={`text-center py-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}
+                            >
                                 No Teacher is on leave today
                             </td>
                         </motion.tr>
                     ) : (
                         TeachersOnLeave.map((teachers, index) => (
-                            <ClassTeacherOnLeaveRow Teacher={teachers} date={formattedDate} session={session} />
+                            <ClassTeacherOnLeaveRow
+                                key={index}
+                                Teacher={teachers}
+                                date={formattedDate}
+                                session={session}
+                            />
                         ))
                     )}
                 </motion.tbody>

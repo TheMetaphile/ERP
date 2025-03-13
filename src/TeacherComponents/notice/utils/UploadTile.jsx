@@ -2,13 +2,12 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
-import Logo from '../../../assets/metaphile_logo.png';
 import { toast } from "react-toastify";
 import { motion } from 'framer-motion';
 import { MdEdit, MdDeleteForever, MdCheck, MdCancel, MdExpandMore, MdExpandLess } from 'react-icons/md';
 
 export default function UploadTile({ details }) {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [newDetails, setDetails] = useState(details);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedNotice, setEditedNotice] = useState({});
@@ -43,12 +42,12 @@ export default function UploadTile({ details }) {
           Authorization: `Bearer ${authState?.accessToken}`
         }
       });
-      console.log("API response after update:", response.data);
       toast.success('Updated Successfully');
       newDetails[index] = editedNotice;
       setEditingIndex(null);
     } catch (err) {
       console.log(err);
+      toast.error('Update Failed');
     }
   };
 
@@ -68,6 +67,7 @@ export default function UploadTile({ details }) {
       setDetails(newDetail);
     } catch (err) {
       console.log(err);
+      toast.error('Delete Failed');
     }
   };
 
@@ -76,25 +76,40 @@ export default function UploadTile({ details }) {
   };
 
   return (
-    <motion.div className="w-full space-y-4">
+    <motion.div className={`w-full space-y-4 ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
       {newDetails.map((detail, index) => (
         <motion.div
           key={index}
-          className='p-4 border border-blue-200 rounded-lg shadow-lg bg-white'
+          className={`p-4 rounded-lg shadow-lg ${darkMode
+              ? 'bg-gray-800 border border-gray-700'
+              : 'bg-white border border-blue-200'
+            }`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
           <div className='flex items-center space-x-4'>
             <div className='flex-grow'>
-              <div className="flex items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
-                <motion.div className="font-medium text-blue-700">
+              <div
+                className={`flex items-center justify-between cursor-pointer ${darkMode ? 'text-white' : 'text-black'
+                  }`}
+                onClick={() => handleClick(index)}
+              >
+                <motion.div
+                  className={`font-medium ${darkMode
+                      ? 'text-blue-300 hover:text-blue-200'
+                      : 'text-blue-700 hover:text-blue-600'
+                    }`}
+                >
                   {editingIndex === index ? (
                     <input
                       type="text"
                       value={editedNotice.title}
                       onChange={(e) => handleInputChange(e, 'title')}
-                      className="border-b border-blue-300 focus:border-blue-500 outline-none px-1"
+                      className={`border-b focus:outline-none px-1 ${darkMode
+                          ? 'bg-gray-800 text-white border-gray-600 focus:border-blue-500'
+                          : 'border-blue-300 focus:border-blue-500'
+                        }`}
                     />
                   ) : (
                     detail.title
@@ -103,16 +118,62 @@ export default function UploadTile({ details }) {
                 <div className="flex space-x-2">
                   {editingIndex === index ? (
                     <>
-                      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="text-green-500" onClick={() => handleSave(index)}><MdCheck size={20} /></motion.button>
-                      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="text-red-500" onClick={handleCancel}><MdCancel size={20} /></motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="text-green-500"
+                        onClick={() => handleSave(index)}
+                      >
+                        <MdCheck size={20} />
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="text-red-500"
+                        onClick={handleCancel}
+                      >
+                        <MdCancel size={20} />
+                      </motion.button>
                     </>
                   ) : (
                     <>
-                      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="text-blue-500" onClick={() => handleEdit(index)}><MdEdit size={20} /></motion.button>
-                      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="text-red-500" onClick={() => handleDelete(index)}><MdDeleteForever size={20} /></motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className={`${darkMode
+                            ? 'text-blue-400 hover:text-blue-300'
+                            : 'text-blue-500 hover:text-blue-600'
+                          }`}
+                        onClick={() => handleEdit(index)}
+                      >
+                        <MdEdit size={20} />
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className={`${darkMode
+                            ? 'text-red-400 hover:text-red-300'
+                            : 'text-red-500 hover:text-red-600'
+                          }`}
+                        onClick={() => handleDelete(index)}
+                      >
+                        <MdDeleteForever size={20} />
+                      </motion.button>
                     </>
                   )}
-                  {expanded === index ? <MdExpandLess size={20} className="text-blue-500" /> : <MdExpandMore size={20} className="text-blue-500" />}
+                  {expanded === index ? (
+                    <MdExpandLess
+                      size={20}
+                      className={`${darkMode ? 'text-blue-400' : 'text-blue-500'
+                        }`}
+                    />
+                  ) : (
+                    <MdExpandMore
+                      size={20}
+                      className={`${darkMode ? 'text-blue-400' : 'text-blue-500'
+                        }`}
+                    />
+                  )}
                 </div>
               </div>
               <motion.div
@@ -122,13 +183,19 @@ export default function UploadTile({ details }) {
                 className="overflow-hidden"
               >
                 {expanded === index && (
-                  <div className="mt-2 text-sm text-gray-600">
+                  <div
+                    className={`mt-2 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'
+                      }`}
+                  >
                     {editingIndex === index ? (
                       <textarea
                         rows={4}
                         value={editedNotice.description}
                         onChange={(e) => handleInputChange(e, 'description')}
-                        className="w-full border border-blue-300 rounded p-2 focus:border-blue-500 outline-none"
+                        className={`w-full rounded p-2 focus:outline-none ${darkMode
+                            ? 'bg-gray-700 text-white border-gray-600 focus:border-blue-500'
+                            : 'border border-blue-300 focus:border-blue-500'
+                          }`}
                       />
                     ) : (
                       detail.description
@@ -136,10 +203,18 @@ export default function UploadTile({ details }) {
                   </div>
                 )}
               </motion.div>
-              <div className='flex items-center justify-between mt-2 text-xs text-gray-500'>
+              <div
+                className={`flex items-center justify-between mt-2 text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'
+                  }`}
+              >
                 <div className="flex items-center space-x-2">
                   <span>By:</span>
-                  <img src={detail.from.profileLink} alt="profile" className='w-6 h-6 rounded-full' />
+                  <img
+                    src={detail.from.profileLink}
+                    alt="profile"
+                    className={`w-6 h-6 rounded-full border ${darkMode ? 'border-gray-600' : 'border-blue-200'
+                      }`}
+                  />
                   <span>{detail.from.name}</span>
                 </div>
                 <div>{detail.date}</div>
@@ -151,5 +226,3 @@ export default function UploadTile({ details }) {
     </motion.div>
   )
 }
-
-

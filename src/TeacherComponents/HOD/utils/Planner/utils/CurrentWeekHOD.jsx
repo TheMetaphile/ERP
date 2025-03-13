@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 
 const CurrentWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
 
@@ -77,7 +77,7 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
 
 
     return (
-        <div className='rounded-md overflow-auto'>
+        <div className={`rounded-md overflow-auto ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
             {loading ? (
                 <Loading />
             ) : details.length === 0 && selectedTab === 'Current Week' ? (
@@ -85,33 +85,68 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
-                    className="text-center py-4 text-blue-500"
+                    className={`text-center py-4 ${darkMode ? 'text-blue-300' : 'text-blue-500'}`}
                 >
                     No Data Available
                 </motion.div>
             ) : (
                 <motion.table
-                    className='w-full rounded-md border border-black'
+                    className={`w-full rounded-md border ${darkMode ? 'border-gray-700' : 'border-black'}`}
                     variants={tableVariants}
                     initial="hidden"
                     animate="visible"
                 >
-                    <thead className='bg-gradient-to-r from-blue-400 to-blue-200'>
+                    <thead className={`${darkMode
+                        ? 'bg-gradient-to-r from-blue-800 to-blue-600'
+                        : 'bg-gradient-to-r from-blue-400 to-blue-200'}`}>
                         <tr className='p-4 text-center'>
-                            <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 font-semibold'>Date</th>
-                            <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Chapter</th>
-                            <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Topic</th>
-                            <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Teaching Aids</th>
-                            <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Activity (if any)</th>
-                            <th className='border-y border-black py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold'>Progress</th>
+                            <th className={`border-y py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 font-semibold 
+                            ${darkMode
+                                    ? 'border-gray-700 text-white'
+                                    : 'border-black'}`}>
+                                Date
+                            </th>
+                            <th className={`border-y py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold 
+                            ${darkMode
+                                    ? 'border-gray-700 text-white'
+                                    : 'border-black'}`}>
+                                Chapter
+                            </th>
+                            <th className={`border-y py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold 
+                            ${darkMode
+                                    ? 'border-gray-700 text-white'
+                                    : 'border-black'}`}>
+                                Topic
+                            </th>
+                            <th className={`border-y py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold 
+                            ${darkMode
+                                    ? 'border-gray-700 text-white'
+                                    : 'border-black'}`}>
+                                Teaching Aids
+                            </th>
+                            <th className={`border-y py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold 
+                            ${darkMode
+                                    ? 'border-gray-700 text-white'
+                                    : 'border-black'}`}>
+                                Activity (if any)
+                            </th>
+                            <th className={`border-y py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal gap-2 whitespace-nowrap font-semibold 
+                            ${darkMode
+                                    ? 'border-gray-700 text-white'
+                                    : 'border-black'}`}>
+                                Progress
+                            </th>
                         </tr>
                     </thead>
                     <AnimatePresence>
                         <motion.tbody className='text-center'>
                             {details.map((data, index) => (
-
-                                <CurrentWeekHODRow details={data} index={index} />
-
+                                <CurrentWeekHODRow
+                                    key={index}
+                                    details={data}
+                                    index={index}
+                                    darkMode={darkMode}
+                                />
                             ))}
                         </motion.tbody>
                     </AnimatePresence>

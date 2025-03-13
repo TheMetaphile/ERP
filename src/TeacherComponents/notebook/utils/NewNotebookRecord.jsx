@@ -20,7 +20,7 @@ const NewNoteBookRecord = () => {
   const [checkedStudents, setCheckedStudents] = useState([]);
   const [Students, setStudents] = useState([]);
 
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [start, setStart] = useState(0);
   const date = new Date();
   const end = 10;
@@ -133,7 +133,7 @@ const NewNoteBookRecord = () => {
           toast.error(error.response.data.error);
         });
 
-    } 
+    }
     // else {
     //   toast.error("Please fill all the field");
     // }
@@ -143,7 +143,7 @@ const NewNoteBookRecord = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex-col mobile:max-tablet:flex-col-reverse justify-between tablet:items-center px-4 pb-0 mb-2 overflow-auto mobile:max-tablet:px-1"
+      className={`flex-col mobile:max-tablet:flex-col-reverse justify-between tablet:items-center px-4 pb-0 mb-2 overflow-auto mobile:max-tablet:px-1 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}
     >
       <ToastContainer />
       <motion.div
@@ -153,7 +153,9 @@ const NewNoteBookRecord = () => {
       >
         <div className="mobile:max-tablet:flex-row flex">
           <div className="w-2/5 mobile:max-tablet:w-1/3 mr-2">
-            <label htmlFor="chapter" className="block text-sm font-medium text-gray-700">Chapter</label>
+            <label htmlFor="chapter" className={`block text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Chapter
+            </label>
             <motion.input
               whileFocus={{ scale: 1.02 }}
               type="text"
@@ -161,11 +163,16 @@ const NewNoteBookRecord = () => {
               name="chapter"
               value={chapter}
               onChange={handleChapterChange}
-              className="mt-1 block w-full px-3 mobile:max-tablet:py-1 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+              className={`mt-1 block w-full px-3 mobile:max-tablet:py-1 py-2 border shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md 
+              ${darkMode
+                  ? 'bg-gray-700 text-white border-gray-600'
+                  : 'border-gray-300 text-black'}`}
             />
           </div>
           <div className="w-2/5 ml-2 mobile:max-tablet:w-1/3">
-            <label htmlFor="topic" className="block text-sm font-medium text-gray-700">Topic</label>
+            <label htmlFor="topic" className={`block text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Topic
+            </label>
             <motion.input
               whileFocus={{ scale: 1.02 }}
               type="text"
@@ -173,7 +180,10 @@ const NewNoteBookRecord = () => {
               name="topic"
               value={topic}
               onChange={handleTopicChange}
-              className="mt-1 block mobile:max-tablet:py-1 w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+              className={`mt-1 block mobile:max-tablet:py-1 w-full px-3 py-2 border shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md 
+              ${darkMode
+                  ? 'bg-gray-700 text-white border-gray-600'
+                  : 'border-gray-300 text-black'}`}
             />
           </div>
         </div>
@@ -181,7 +191,10 @@ const NewNoteBookRecord = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="text-xl mt-8 text-green-500 border border-green-500 px-4 rounded-md shadow-md font-medium mb-2 hover:bg-green-600 hover:text-white hover:border-white flex items-center"
+            className={`text-xl mt-8 border px-4 rounded-md shadow-md font-medium mb-2 hover:border-white flex items-center 
+            ${darkMode
+                ? 'text-green-400 border-green-400 hover:bg-green-800'
+                : 'text-green-500 border-green-500 hover:bg-green-600 hover:text-white'}`}
             onClick={handleSave}
           >
             <FaSave className="mr-2" />
@@ -195,25 +208,45 @@ const NewNoteBookRecord = () => {
         transition={{ delay: 0.2 }}
         className="overflow-x-auto rounded-lg"
       >
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+        <table className={`min-w-full border rounded-lg 
+        ${darkMode
+            ? 'bg-gray-800 border-gray-700'
+            : 'bg-white border-gray-300'}`}
+        >
           <thead>
-            <tr className="bg-gradient-to-r from-blue-400  to-blue-200 text-lg leading-normal">
-              <th className="py-2 px-6 text-center rounded-t-r whitespace-nowrap">Roll No.</th>
-              <th className="py-2 px-6 text-center">Name</th>
-              <th className="py-2 px-6 text-center">Date</th>
-              <th className="py-2 px-6 text-center">Chapter</th>
-              <th className="py-2 px-6 text-center">Topic</th>
-              <th className="py-2 px-6 text-center rounded-t-l whitespace-nowrap">Notebook Checked</th>
+            <tr className={`text-lg leading-normal 
+            ${darkMode
+                ? 'bg-blue-900'
+                : 'bg-gradient-to-r from-blue-400 to-blue-200'}`}
+            >
+              <th className={`py-2 px-6 text-center rounded-t-r whitespace-nowrap ${darkMode ? 'text-white' : 'text-black'}`}>
+                Roll No.
+              </th>
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>
+                Name
+              </th>
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>
+                Date
+              </th>
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>
+                Chapter
+              </th>
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>
+                Topic
+              </th>
+              <th className={`py-2 px-6 text-center rounded-t-l whitespace-nowrap ${darkMode ? 'text-white' : 'text-black'}`}>
+                Notebook Checked
+              </th>
             </tr>
           </thead>
-          <tbody className="text-gray-600 text-md font-normal">
+          <tbody className={`text-md font-normal ${darkMode ? 'text-gray-200' : 'text-gray-600'}`}>
             {Students.map((Student, index) => (
               <motion.tr
                 key={index}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: index * 0.1 }}
-                className="border-b border-gray-200 last:border-none"
+                className={`border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'} last:border-none`}
               >
                 <td className="py-3 px-6 text-center whitespace-nowrap">{Student.rollNumber}</td>
                 <Link to={`/Teacher-Dashboard/notebook/studentdetails/${Student.email}`}>
@@ -226,7 +259,12 @@ const NewNoteBookRecord = () => {
                 <td className="py-3 px-6 text-center">{chapter}</td>
                 <td className="py-3 px-6 text-center">{topic}</td>
                 <td className="py-3 px-6 text-center flex justify-center">
-                  <Switch addEmail={addEmail} checked={checkedStudents.includes(Student.email)} email={Student.email} removeEmail={removeEmail} />
+                  <Switch
+                    addEmail={addEmail}
+                    checked={checkedStudents.includes(Student.email)}
+                    email={Student.email}
+                    removeEmail={removeEmail}
+                  />
                 </td>
               </motion.tr>
             ))}
@@ -237,7 +275,10 @@ const NewNoteBookRecord = () => {
         <motion.h1
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="text-blue-400 text-center text-lg hover:text-blue-600 hover:cursor-pointer mt-4 flex items-center justify-center"
+          className={`text-center text-lg hover:cursor-pointer mt-4 flex items-center justify-center 
+          ${darkMode
+              ? 'text-blue-300 hover:text-blue-500'
+              : 'text-blue-400 hover:text-blue-600'}`}
           onClick={handleViewMore}
         >
           <FaBookOpen className="mr-2" />

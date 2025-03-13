@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { motion } from 'framer-motion';
 
 export default function LectureRow({ Teacher, date, index, session, data, substitutionDetail }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const inputRef = useRef(null);
     const suggestionsRef = useRef(null);
     const [email, setEmail] = useState('');
@@ -215,27 +215,27 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
             initial="hidden"
             animate="visible"
             key={index}
-            className="border-b border-gray-200 last:border-none"
+            className={`border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'} last:border-none`}
         >
-            <td className="py-1 px-3 text-center whitespace-nowrap">{data.lectureNo}</td>
-            <td className="py-3 px-6 text-center whitespace-nowrap">{date}</td>
-            <td className="py-1 px-3 text-center whitespace-nowrap">{data.class}</td>
+            <td className={`py-1 px-3 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{data.lectureNo}</td>
+            <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{date}</td>
+            <td className={`py-1 px-3 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{data.class}</td>
             <td className="flex py-3 px-6 items-center gap-2 text-center w-60">
                 <div className="flex justify-start gap-2 items-center">
                     <img src={Teacher.profileLink} alt="img" className="rounded-full h-12 w-12" />
-                    <div className="text-start ml-2">
+                    <div className={`text-start ml-2 ${darkMode ? 'text-gray-200' : ''}`}>
                         <p>{Teacher.name}</p>
                         {Teacher.employeeId}
                     </div>
                 </div>
             </td>
-            <td className="py-1 px-3 text-center whitespace-nowrap">{data.section}</td>
-            <td className="py-1 px-3 text-center whitespace-nowrap">{data.subject}</td>
+            <td className={`py-1 px-3 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{data.section}</td>
+            <td className={`py-1 px-3 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{data.subject}</td>
             <td className="py-3 px-6 text-center items-center w-60">
                 {originalSubstitute ? (
                     <div className="flex justify-start gap-2 items-center">
                         <img src={originalSubstitute.profileLink} alt="img" className="rounded-full h-12 w-12" />
-                        <div className="text-start ml-2">
+                        <div className={`text-start ml-2 ${darkMode ? 'text-gray-200' : ''}`}>
                             <p>{originalSubstitute.name}</p>
                             {originalSubstitute.employeeId}
                         </div>
@@ -245,18 +245,21 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
                         <input
                             type="email"
                             ref={inputRef}
-                            className="w-full px-4 py-2 border rounded-md"
+                            className={`w-full px-4 py-2 border rounded-md ${darkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black'}`}
                             placeholder="Search Teacher"
                             onClick={handleClickInside}
                             value={email}
                             onChange={handleEmailChange}
                         />
                         {showSuggestions && suggestions.length > 0 && (
-                            <ul className="absolute z-10 bg-white border rounded-md mt-1 max-h-40 overflow-y-auto" ref={suggestionsRef}>
+                            <ul
+                                className={`absolute z-10 border rounded-md mt-1 max-h-40 overflow-y-auto ${darkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black'}`}
+                                ref={suggestionsRef}
+                            >
                                 {suggestions.map((suggestion, idx) => (
                                     <li
                                         key={idx}
-                                        className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                        className={`flex items-center p-2 cursor-pointer ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-200'}`}
                                         onClick={() => handleSuggestionClick(suggestion, data.lectureNo)}
                                     >
                                         <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
@@ -267,7 +270,7 @@ export default function LectureRow({ Teacher, date, index, session, data, substi
                         )}
                     </div>
                 ) : (
-                    <>N/A</>
+                    <span className={`${darkMode ? 'text-gray-400' : ''}`}>N/A</span>
                 )}
             </td>
             <td className={`py-1 px-3 text-center w-60 ${Remark === 'Good to go' ? "text-green-500" : "text-red-500"} whitespace-normal break-words`}>{Remark}</td>

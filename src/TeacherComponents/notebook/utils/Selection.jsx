@@ -3,7 +3,7 @@ import AuthContext from "../../../Context/AuthContext";
 import { motion } from 'framer-motion';
 import { FaGraduationCap, FaChalkboardTeacher, FaBook } from 'react-icons/fa';
 
-function Selection({ setClass, setSection, setSubject }) {
+function Selection({ setClass, setSection, setSubject, darkMode }) {
   const { authState } = useContext(AuthContext);
   const [selectedClass, setSelectedClass] = useState(authState?.subject ? authState?.subject[0]?.class : '');
   const [selectedSection, setSelectedSection] = useState(authState?.subject ? authState?.subject[0]?.section : "");
@@ -12,10 +12,12 @@ function Selection({ setClass, setSection, setSubject }) {
     setSelectedClass(event.target.value);
     setClass(event.target.value);
   }
+
   const handleSectionChange = (event) => {
     setSelectedSection(event.target.value);
     setSection(event.target.value);
   }
+
   const handleSubjectChange = (event) => {
     setSubject(event.target.value);
   }
@@ -24,6 +26,7 @@ function Selection({ setClass, setSection, setSubject }) {
 
   const [uniqueSections, setUniqueSections] = useState([]);
   const [uniqueSubjects, setUniqueSubjects] = useState([]);
+
   useEffect(() => {
     setUniqueSections(Array.from(new Set(
       authState?.subject ? authState?.subject
@@ -32,7 +35,6 @@ function Selection({ setClass, setSection, setSubject }) {
     )));
   }, [selectedClass]);
 
-
   useEffect(() => {
     setUniqueSubjects(Array.from(new Set(
       authState?.subject ? authState?.subject
@@ -40,7 +42,6 @@ function Selection({ setClass, setSection, setSubject }) {
         .map(subj => subj.subject) : []
     )));
   }, [selectedSection, selectedClass]);
-
 
   const containerVariants = {
     hidden: { opacity: 0, y: -20 },
@@ -61,16 +62,21 @@ function Selection({ setClass, setSection, setSubject }) {
     >
       <div className="flex justify-between gap-3 mobile:max-tablet:flex-col mobile:max-tablet:w-full">
         <motion.div
-          className="w-36 mobile:max-tablet:w-full relative "
+          className="w-36 mobile:max-tablet:w-full relative"
           variants={selectVariants}
           whileHover="hover"
           whileTap="tap"
         >
-          <FaGraduationCap className="absolute left-2 top-1/2  transform -translate-y-1/2 text-blue-500" />
+          <FaGraduationCap className={`absolute left-2 top-1/2 transform -translate-y-1/2 ${darkMode ? 'text-blue-400' : 'text-blue-500'
+            }`} />
           <select
             id="class"
-            className="w-full px-2 py-2 pl-8 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md"
+            className={`w-full px-2 py-2 pl-8 border-2 focus:outline-none focus:ring-2 focus:border-transparent rounded-md ${darkMode
+                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
+                : 'border-blue-300 focus:ring-blue-500'
+              }`}
             onChange={handleClassChange}
+            value={selectedClass}
           >
             <option value="">Class</option>
             {uniqueClasses.map((classOption, index) => (
@@ -84,11 +90,16 @@ function Selection({ setClass, setSection, setSubject }) {
           whileHover="hover"
           whileTap="tap"
         >
-          <FaChalkboardTeacher className="absolute left-2 top-1/2 transform -translate-y-1/2 text-blue-500" />
+          <FaChalkboardTeacher className={`absolute left-2 top-1/2 transform -translate-y-1/2 ${darkMode ? 'text-blue-400' : 'text-blue-500'
+            }`} />
           <select
             id="section"
-            className="w-full px-2 py-2 pl-8 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md"
+            className={`w-full px-2 py-2 pl-8 border-2 focus:outline-none focus:ring-2 focus:border-transparent rounded-md ${darkMode
+                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
+                : 'border-blue-300 focus:ring-blue-500'
+              }`}
             onChange={handleSectionChange}
+            value={selectedSection}
           >
             <option value="">Section</option>
             {uniqueSections.map((sectionOption, index) => (
@@ -102,10 +113,14 @@ function Selection({ setClass, setSection, setSubject }) {
           whileHover="hover"
           whileTap="tap"
         >
-          <FaBook className="absolute left-2 top-1/2 transform -translate-y-1/2 text-blue-500" />
+          <FaBook className={`absolute left-2 top-1/2 transform -translate-y-1/2 ${darkMode ? 'text-blue-400' : 'text-blue-500'
+            }`} />
           <select
             id="subject"
-            className="w-full px-2 py-2 pl-8 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md"
+            className={`w-full px-2 py-2 pl-8 border-2 focus:outline-none focus:ring-2 focus:border-transparent rounded-md ${darkMode
+                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
+                : 'border-blue-300 focus:ring-blue-500'
+              }`}
             onChange={handleSubjectChange}
           >
             <option value="">Subject</option>
@@ -119,4 +134,4 @@ function Selection({ setClass, setSection, setSubject }) {
   );
 }
 
-export default Selection
+export default Selection;

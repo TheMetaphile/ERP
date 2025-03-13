@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { FaSpinner } from 'react-icons/fa';
 
 export default function Teacher() {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [start, setStart] = useState(0);
@@ -47,11 +47,9 @@ export default function Teacher() {
         }
     }, [start, details, allDataFetched, loading]);
 
-
     const fetchNotice = async () => {
         if (loading || allDataFetched) return;
         setLoading(true);
-        console.log(start, 'start', end, 'end')
         try {
             const response = await axios.get(`${BASE_URL}/notice/fetch/teacher?start=${start}&limit=${end}&session=${getCurrentSession()}&type=${'for'}`, {
                 headers: {
@@ -61,10 +59,8 @@ export default function Teacher() {
 
             const notice = response.data.notices;
             setDetails(prevData => [...prevData, ...response.data.notices]);
-            console.log('fetch', response.data);
             if (notice.length < end) {
                 toast.success('All data fetched');
-                console.log('All data fetched')
                 setAllDataFetched(true);
             }
 
@@ -80,9 +76,7 @@ export default function Teacher() {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && !allDataFetched && !loading) {
-                    console.log("Fetching more data...");
                     handleViewMore();
-
                 }
             },
             { root: null, rootMargin: '0px', threshold: 1.0 }
@@ -100,35 +94,38 @@ export default function Teacher() {
     }, [allDataFetched, loading]);
 
     return (
-        <div className='mx-3'>
+        <div className={`mx-3 ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
             {loading ? (
                 <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     className="flex justify-center items-center h-40"
                 >
-                    <FaSpinner className="text-4xl text-blue-600" />
+                    <FaSpinner className={`text-4xl ${darkMode ? 'text-blue-400' : 'text-blue-600'
+                        }`} />
                 </motion.div>
             ) : details.length === 0 ? (
                 <motion.div
                     initial={{ scale: 0.9 }}
                     animate={{ scale: 1 }}
-                    className="w-full text-center text-blue-800 font-semibold py-10"
+                    className={`w-full text-center font-semibold py-10 ${darkMode ? 'text-blue-400' : 'text-blue-800'
+                        }`}
                 >
                     No data available
                 </motion.div>
             ) : (
                 <>
-                    <TeacherTile details={details} />
+                    <TeacherTile details={details} darkMode={darkMode} />
                     <div ref={sentinelRef} className="h-10">
                         {loading && start > 0 && (
-                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                            <div className={`text-center w-full text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'
+                                }`}>
+                                Loading more...
+                            </div>
                         )}
                     </div>
                 </>
             )}
-
         </div>
     )
 }
-

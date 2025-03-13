@@ -4,10 +4,8 @@ import AuthContext from '../../../../../Context/AuthContext';
 import { BASE_URL } from '../../../../../Config';
 
 function Selection({ handleClassChange, handleSectionChange, handleSessionChange, Class, Section, Session }) {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [sectionsDetails, setSectionsDetails] = useState([]);
-  // const [sessions, setSessions] = useState([]);
-  // const [selectedSession, setSelectedSession] = useState('');
 
   const wingClasses = {
     'Pre-Nursery-U.K.G': ['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G'],
@@ -18,17 +16,6 @@ function Selection({ handleClassChange, handleSectionChange, handleSessionChange
   };
 
   const availableClasses = wingClasses[authState?.userDetails?.co_ordinator_wing] || [];
-
-  // useEffect(() => {
-  //   const currentYear = new Date().getFullYear();
-  //   const newSessions = [];
-  //   for (let i = 0; i < 5; i++) {
-  //     const startYear = currentYear - i;
-  //     const endYear = startYear + 1;
-  //     newSessions.push(`${startYear}-${endYear.toString().slice(-2)}`);
-  //   }
-  //   // setSessions(newSessions);
-  // }, []);
 
   const fetchSections = async (selectedClass) => {
     try {
@@ -53,23 +40,27 @@ function Selection({ handleClassChange, handleSectionChange, handleSessionChange
     }
   };
 
-  // const handleSessionChangeInternal = (e) => {
-  //   const selectedSessionValue = e.target.value;
-  //   setSelectedSession(selectedSessionValue);
-  //   handleSessionChange(selectedSessionValue);
-  // };
 
   return (
     <div className="w-fit flex items-center gap-2 mobile:max-tablet:flex-col mobile:max-tablet:w-full mobile:max-tablet:px-4">
       <select
         id="class"
         value={Class}
-        className="w-full px-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2"
+        className={`w-full px-4 py-2 border-2 focus:outline-none focus:ring-2 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2 
+          ${darkMode
+            ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-700'
+            : 'border-blue-300 focus:ring-blue-500'}`}
         onChange={handleClassChangeWithFetch}
       >
-        <option value="">Search by Class</option>
+        <option value="" className={darkMode ? 'bg-gray-800 text-gray-300' : ''}>
+          Search by Class
+        </option>
         {availableClasses.map((className) => (
-          <option key={className} value={className}>
+          <option
+            key={className}
+            value={className}
+            className={darkMode ? 'bg-gray-800 text-white' : ''}
+          >
             {className}
           </option>
         ))}
@@ -79,29 +70,24 @@ function Selection({ handleClassChange, handleSectionChange, handleSessionChange
         id="section"
         value={Section}
         onChange={handleSectionChange}
-        className="w-full px-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2"
+        className={`w-full px-4 py-2 border-2 focus:outline-none focus:ring-2 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2 
+          ${darkMode
+            ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-700'
+            : 'border-blue-300 focus:ring-blue-500'}`}
       >
-        <option value="">Search by Section</option>
+        <option value="" className={darkMode ? 'bg-gray-800 text-gray-300' : ''}>
+          Search by Section
+        </option>
         {sectionsDetails.map((section, index) => (
-          <option key={index} value={section}>
+          <option
+            key={index}
+            value={section}
+            className={darkMode ? 'bg-gray-800 text-white' : ''}
+          >
             {section}
           </option>
         ))}
       </select>
-
-      {/* <select
-        id="session"
-        value={Session}
-        onChange={handleSessionChangeInternal}
-        className="w-full px-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2"
-      >
-        <option value="">Select Session</option>
-        {sessions.map((session, index) => (
-          <option key={index} value={session}>
-            {session}
-          </option>
-        ))}
-      </select> */}
     </div>
   );
 }

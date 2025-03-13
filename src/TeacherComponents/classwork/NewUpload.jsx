@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import { FiBook, FiBookOpen, FiClipboard, FiFileText, FiMessageSquare } from 'react-icons/fi';
 
 function NewUpload({ onClose, onNewWork }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [subject, setSubject] = useState('');
     const [classLevel, setClassLevel] = useState('');
     const [section, setSection] = useState('');
@@ -80,14 +80,14 @@ function NewUpload({ onClose, onNewWork }) {
             <motion.div
                 initial={{ scale: 0.9, y: 50 }}
                 animate={{ scale: 1, y: 0 }}
-                className="bg-white rounded-lg p-6 shadow-lg max-w-2xl w-full mobile:max-tablet:mx-2"
+                className={`${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} mobile:max-tablet:mx-4 mobile:max-tablet:my-8 rounded-lg p-6 shadow-lg max-w-2xl w-full`}
             >
-                <h2 className="text-2xl font-bold text-blue-700 mb-6">Create New Classwork</h2>
+                <h2 className={`text-2xl font-bold ${darkMode ? 'text-blue-400' : 'text-blue-700'} mb-6`}>Create New Classwork</h2>
 
                 <div className='grid grid-cols-2 gap-4 mobile:max-sm:whitespace-nowrap'>
                     <div>
-                        <label className="flex items-center text-sm font-medium text-blue-600 mb-1">
-                            <FiBook className="mr-2" />
+                        <label className={`flex items-center text-sm font-medium ${darkMode ? 'text-blue-300' : 'text-blue-600'} mb-1`}>
+                            <FiBook className="inline mr-2" />
                             Select Class
                         </label>
                         <motion.select
@@ -95,7 +95,7 @@ function NewUpload({ onClose, onNewWork }) {
                             variants={inputVariants}
                             value={classLevel}
                             onChange={(e) => setClassLevel(e.target.value)}
-                            className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={`w-full px-3 py-2 border ${darkMode ? 'border-blue-500 bg-gray-700 text-white' : 'border-blue-300 bg-white text-gray-800'} rounded-md focus:outline-none focus:ring-2 ${darkMode ? 'focus:ring-blue-400' : 'focus:ring-blue-500'}`}
                         >
                             <option value="">Select Class</option>
                             {uniqueClasses.map((classOption, index) => (
@@ -105,8 +105,8 @@ function NewUpload({ onClose, onNewWork }) {
                     </div>
 
                     <div>
-                        <label className="flex items-center text-sm font-medium text-blue-600 mb-1">
-                            <FiBookOpen className="mr-2" />
+                        <label className={`flex items-center text-sm font-medium ${darkMode ? 'text-blue-300' : 'text-blue-600'} mb-1`}>
+                            <FiBookOpen className="inline mr-2" />
                             Select Section
                         </label>
                         <motion.select
@@ -114,7 +114,7 @@ function NewUpload({ onClose, onNewWork }) {
                             variants={inputVariants}
                             value={section}
                             onChange={(e) => setSection(e.target.value)}
-                            className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={`w-full px-3 py-2 border ${darkMode ? 'border-blue-500 bg-gray-700 text-white' : 'border-blue-300 bg-white text-gray-800'} rounded-md focus:outline-none focus:ring-2 ${darkMode ? 'focus:ring-blue-400' : 'focus:ring-blue-500'}`}
                         >
                             <option value="">Select Section</option>
                             {uniqueSections.map((sectionOption, index) => (
@@ -124,8 +124,8 @@ function NewUpload({ onClose, onNewWork }) {
                     </div>
 
                     <div>
-                        <label className="flex items-center text-sm font-medium text-blue-600 mb-1">
-                            <FiClipboard className="mr-2" />
+                        <label className={`flex items-center text-sm font-medium ${darkMode ? 'text-blue-300' : 'text-blue-600'} mb-1`}>
+                            <FiClipboard className="inline mr-2" />
                             Select Subject
                         </label>
                         <motion.select
@@ -133,7 +133,7 @@ function NewUpload({ onClose, onNewWork }) {
                             variants={inputVariants}
                             value={subject}
                             onChange={(e) => setSubject(e.target.value)}
-                            className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={`w-full px-3 py-2 border ${darkMode ? 'border-blue-500 bg-gray-700 text-white' : 'border-blue-300 bg-white text-gray-800'} rounded-md focus:outline-none focus:ring-2 ${darkMode ? 'focus:ring-blue-400' : 'focus:ring-blue-500'}`}
                         >
                             <option value="">Select Subject</option>
                             {uniqueSubjects.map((subjectOption, index) => (
@@ -143,7 +143,7 @@ function NewUpload({ onClose, onNewWork }) {
                     </div>
 
                     <div>
-                        <label className="flex items-center text-sm font-medium text-blue-600 mb-1">
+                        <label className={`flex items-center text-sm font-medium ${darkMode ? 'text-blue-300' : 'text-blue-600'} mb-1`}>
                             <FiFileText className="mr-2" />
                             Chapter
                         </label>
@@ -153,12 +153,12 @@ function NewUpload({ onClose, onNewWork }) {
                             type="text"
                             value={chapter}
                             onChange={(e) => setChapter(e.target.value)}
-                            className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={`w-full px-3 py-2 border ${darkMode ? 'border-blue-500 bg-gray-700 text-white' : 'border-blue-300 bg-white text-gray-800'} rounded-md focus:outline-none focus:ring-2 ${darkMode ? 'focus:ring-blue-400' : 'focus:ring-blue-500'}`}
                         />
                     </div>
 
                     <div className="md:col-span-2">
-                        <label className="flex items-center text-sm font-medium text-blue-600 mb-1">
+                        <label className={`flex items-center text-sm font-medium ${darkMode ? 'text-blue-300' : 'text-blue-600'} mb-1`}>
                             <FiMessageSquare className="mr-2" />
                             Topic
                         </label>
@@ -168,13 +168,13 @@ function NewUpload({ onClose, onNewWork }) {
                             type="text"
                             value={topic}
                             onChange={(e) => setTopic(e.target.value)}
-                            className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={`w-full px-3 py-2 border ${darkMode ? 'border-blue-500 bg-gray-700 text-white' : 'border-blue-300 bg-white text-gray-800'} rounded-md focus:outline-none focus:ring-2 ${darkMode ? 'focus:ring-blue-400' : 'focus:ring-blue-500'}`}
                         />
                     </div>
                 </div>
 
                 <div className='mt-4'>
-                    <label className="flex items-center text-sm font-medium text-blue-600 mb-1">
+                    <label className={`flex items-center text-sm font-medium ${darkMode ? 'text-blue-300' : 'text-blue-600'} mb-1`}>
                         <FiMessageSquare className="mr-2" />
                         Question
                     </label>
@@ -183,7 +183,7 @@ function NewUpload({ onClose, onNewWork }) {
                         variants={inputVariants}
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
-                        className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-3 py-2 border ${darkMode ? 'border-blue-500 bg-gray-700 text-white' : 'border-blue-300 bg-white text-gray-800'} rounded-md focus:outline-none focus:ring-2 ${darkMode ? 'focus:ring-blue-400' : 'focus:ring-blue-500'}`}
                         rows="4"
                     ></motion.textarea>
                 </div>
@@ -193,7 +193,7 @@ function NewUpload({ onClose, onNewWork }) {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         type="button"
-                        className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2 hover:bg-gray-400 transition duration-300"
+                        className={`${darkMode ? 'bg-gray-600 text-gray-200 hover:bg-gray-500' : 'bg-gray-300 text-gray-700 hover:bg-gray-400'} px-4 py-2 rounded-md mr-2 transition duration-300`}
                         onClick={onClose}
                     >
                         Cancel
@@ -202,7 +202,7 @@ function NewUpload({ onClose, onNewWork }) {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         type="submit"
-                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+                        className={`${darkMode ? 'bg-blue-500 hover:bg-blue-600' : 'bg-blue-600 hover:bg-blue-700'} text-white px-4 py-2 rounded-md transition duration-300`}
                         onClick={handleSave}
                     >
                         {loading ? <Loading /> : 'Submit'}

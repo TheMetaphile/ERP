@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FaUserGraduate, FaChalkboardTeacher, FaBookOpen, FaSave } from 'react-icons/fa';
+import { FaSave } from 'react-icons/fa';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL } from '../../Config';
@@ -11,7 +11,7 @@ import PromotionRow from './utils/PromotionRow';
 
 function Promotion() {
     const [students, setStudents] = useState([]);
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [start, setStart] = useState(0);
     const end = 10;
@@ -134,21 +134,24 @@ function Promotion() {
     };
 
     return (
-
-        <motion.div 
-            className="w-full px-4 py-6"
-
+        <motion.div
+            className={`w-full px-4 py-6 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}
             initial="hidden"
             animate="visible"
             variants={containerVariants}
         >
             <ToastContainer />
             <div className='flex items-center justify-between mb-6'>
-
-                <h1 className="text-3xl mobile:max-tablet:text-lg font-medium text-black">Promotion</h1>
+                <h1 className={`text-3xl mobile:max-tablet:text-lg font-medium ${darkMode ? 'text-white' : 'text-black'}`}>
+                    Promotion
+                </h1>
 
                 <motion.button
-                    className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-colors duration-300"
+                    className={`flex items-center px-4 py-2 rounded-md shadow-md transition-colors duration-300 
+                    ${darkMode
+                            ? 'bg-green-700 text-white hover:bg-green-600'
+                            : 'bg-green-500 text-white hover:bg-green-600'
+                        }`}
                     onClick={handleSave}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -160,16 +163,21 @@ function Promotion() {
             {loading ? (
                 <Loading />
             ) : students.length === 0 ? (
-                <div className="text-center text-blue-600 text-xl">No students found</div>
+                <div className={`text-center text-xl ${darkMode ? 'text-blue-300' : 'text-blue-600'}`}>
+                    No students found
+                </div>
             ) : (
                 <motion.div
-                    className="overflow-hidden rounded-lg shadow-lg bg-white"
+                    className={`overflow-hidden rounded-lg shadow-lg ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
                     variants={tableVariants}
                 >
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-max">
                             <thead>
-                                <tr className="bg-gradient-to-r from-blue-200 to-blue-100 text-black">
+                                <tr className={`${darkMode
+                                    ? 'bg-gray-700 text-white'
+                                    : 'bg-gradient-to-r from-blue-200 to-blue-100 text-black'
+                                    }`}>
                                     <th className="py-3 px-4 text-left">Roll No.</th>
                                     <th className="py-3 px-4 text-left">Name</th>
                                     <th className="py-3 px-4 text-left">Class</th>
@@ -177,7 +185,7 @@ function Promotion() {
                                     <th className="py-3 px-4 text-left">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className={darkMode ? 'bg-gray-800 text-white' : ''}>
                                 {students.map((detail, index) => (
                                     <PromotionRow
                                         key={detail._id}
@@ -186,6 +194,7 @@ function Promotion() {
                                         authState={authState}
                                         selectedStudents={selectedStudents}
                                         handleSwitchChange={handleSwitchChange}
+                                        darkMode={darkMode}
                                     />
                                 ))}
                             </tbody>
@@ -197,9 +206,12 @@ function Promotion() {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-
-                            <button 
-                                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300"
+                            <button
+                                className={`px-4 py-2 rounded-md hover:opacity-90 transition-colors duration-300 
+                                ${darkMode
+                                        ? 'bg-blue-700 text-white'
+                                        : 'bg-blue-600 text-white'
+                                    }`}
                                 onClick={handleViewMore}
                             >
                                 View More

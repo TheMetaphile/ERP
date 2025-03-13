@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { FaFilter } from 'react-icons/fa';
 
 function NoteBookHOD() {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [Class, setClass] = useState('');
     const [Section, setSection] = useState('');
     const [selectedTab, setSelectedTab] = useState('All');
@@ -29,10 +29,12 @@ function NoteBookHOD() {
     }, [Class, Section, Subject]);
 
     return (
-        <div className="overflow-y-auto w-full items-start   no-scrollbar">
-            <div className='w-full flex items-center justify-between px-4 mobile:max-tablet:py-1 mobile:max-tablet:px-0'>
+        <div className={`overflow-y-auto w-full items-start no-scrollbar ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
+            <div className={`w-full flex items-center justify-between px-4 mobile:max-tablet:py-1 mobile:max-tablet:px-0 
+            ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
                 <motion.h1
-                    className="text-3xl font-medium text-black mobile:max-tablet:text-lg whitespace-nowrap mb-2"
+                    className={`text-3xl font-medium mobile:max-tablet:text-lg whitespace-nowrap mb-2 
+                    ${darkMode ? 'text-white' : 'text-black'}`}
                     initial={{ y: -50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5 }}
@@ -41,7 +43,10 @@ function NoteBookHOD() {
                 </motion.h1>
                 <div className="flex justify-end tablet:hidden w-full mobile:max-tablet:text-end whitespace-nowrap">
                     <motion.button
-                        className="p-2 border items-center rounded bg-blue-700 text-white hover:bg-blue-800 transition-colors duration-300 flex"
+                        className={`p-2 border items-center rounded transition-colors duration-300 flex 
+                        ${darkMode
+                                ? 'bg-blue-800 text-white hover:bg-blue-700 border-blue-700'
+                                : 'bg-blue-700 text-white hover:bg-blue-800 border-blue-700'}`}
                         onClick={() => setDropdownVisible(!isDropdownVisible)}
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
@@ -52,22 +57,34 @@ function NoteBookHOD() {
                     </motion.button>
                     {isDropdownVisible && (
                         <motion.div
-                            className='flex fixed mt-11 left-0 right-0 bg-white pt-1 p-4 gap-2 justify-between mobile:max-tablet:flex-col'
+                            className={`flex fixed mt-11 left-0 right-0 pt-1 p-4 gap-2 justify-between mobile:max-tablet:flex-col 
+                            ${darkMode ? 'bg-gray-900' : 'bg-white'}`}
                             initial={{ y: -20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.3 }}
                         >
-                            <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
+                            <Selection
+                                setClass={setClass}
+                                setSection={setSection}
+                                setSubject={setSubject}
+                            />
                         </motion.div>
                     )}
                 </div>
 
                 <div className='mobile:max-tablet:hidden'>
-                    <Selection setClass={setClass} setSection={setSection} setSubject={setSubject} />
+                    <Selection
+                        setClass={setClass}
+                        setSection={setSection}
+                        setSubject={setSubject}
+                    />
                 </div>
             </div>
-            <AllNoteBookRecordHOD Class={Class} Section={Section} Subject={Subject} />
-
+            <AllNoteBookRecordHOD
+                Class={Class}
+                Section={Section}
+                Subject={Subject}
+            />
             <Outlet />
         </div>
     )

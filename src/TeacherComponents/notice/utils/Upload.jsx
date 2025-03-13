@@ -7,10 +7,10 @@ import { BASE_URL } from "../../../Config";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion } from 'framer-motion';
-import { FaSpinner, FaUpload, FaChevronDown } from 'react-icons/fa';
+import { FaSpinner } from 'react-icons/fa';
 
 export default function Upload() {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [start, setStart] = useState(0);
@@ -51,7 +51,6 @@ export default function Upload() {
     const fetchNotice = async () => {
         if (loading || allDataFetched) return;
         setLoading(true);
-        console.log(start, 'start', end, 'end')
         try {
             const response = await axios.get(`${BASE_URL}/notice/fetch/teacher?start=${start}&limit=${end}&session=${getCurrentSession()}&type=${'by'}`, {
                 headers: {
@@ -61,10 +60,8 @@ export default function Upload() {
 
             const notice = response.data.notices;
             setDetails(prevData => [...prevData, ...response.data.notices]);
-            console.log('fetch', response.data);
             if (notice.length < end) {
                 toast.success('All data fetched');
-                console.log('All data fetched')
                 setAllDataFetched(true);
             }
 
@@ -80,9 +77,7 @@ export default function Upload() {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && !allDataFetched && !loading) {
-                    console.log("Fetching more data...");
                     handleViewMore();
-
                 }
             },
             { root: null, rootMargin: '0px', threshold: 1.0 }
@@ -100,30 +95,36 @@ export default function Upload() {
     }, [allDataFetched, loading]);
 
     return (
-        <div className='mx-3'>
-
+        <div className={`mx-3 ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
             {loading ? (
                 <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     className="flex justify-center items-center h-40"
                 >
-                    <FaSpinner className="text-4xl text-blue-600" />
+                    <FaSpinner className={`text-4xl ${darkMode ? 'text-blue-400' : 'text-blue-600'
+                        }`} />
                 </motion.div>
             ) : details.length === 0 ? (
                 <motion.div
                     initial={{ scale: 0.9 }}
                     animate={{ scale: 1 }}
-                    className="w-full text-center text-blue-800 font-semibold py-10 bg-white rounded-lg shadow-inner"
+                    className={`w-full text-center font-semibold py-10 rounded-lg shadow-inner ${darkMode
+                            ? 'bg-gray-800 text-blue-400'
+                            : 'bg-white text-blue-800'
+                        }`}
                 >
                     No data available
                 </motion.div>
             ) : (
                 <>
-                    <UploadTile details={details} />
+                    <UploadTile details={details} darkMode={darkMode} />
                     <div ref={sentinelRef} className="h-10">
                         {loading && start > 0 && (
-                            <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                            <div className={`text-center w-full text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'
+                                }`}>
+                                Loading more...
+                            </div>
                         )}
                     </div>
                 </>
@@ -131,4 +132,3 @@ export default function Upload() {
         </div>
     )
 }
-

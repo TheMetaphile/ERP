@@ -5,7 +5,7 @@ import axios from "axios";
 import { Rect } from "face-api.js";
 
 function Selection({ setClass, setSection, setSubject }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const co_ordinator_wing = authState?.userDetails?.co_ordinator_wing;
     const wingClasses = wingMap[co_ordinator_wing] || [];
 
@@ -96,40 +96,92 @@ function Selection({ setClass, setSection, setSubject }) {
 
 
     return (
-        <div className="container p-3 w-fit mobile:max-tablet:w-full mobile:max-tablet:p-0">
-
+        <div className={`container p-3 w-fit mobile:max-tablet:w-full mobile:max-tablet:p-0 
+            ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
             <div className="flex justify-between gap-3 mobile:max-tablet:flex-col mobile:max-tablet:w-full">
                 <div className="w-36 mobile:max-tablet:w-full">
-                    <select id="class" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" value={selectedClass} onChange={handleClassChange}>
+                    <select
+                        id="class"
+                        className={`w-full px-2 py-2 border-2 focus:outline-none focus:ring-2 focus:border-transparent rounded-md 
+                        ${darkMode
+                                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-500'
+                                : 'border-blue-300 focus:ring-blue-500'}`}
+                        value={selectedClass}
+                        onChange={handleClassChange}
+                    >
                         <option value="">Select Class</option>
                         {wingClasses.map((classOption, index) => (
-                            <option key={index} value={classOption}>{classOption}</option>
+                            <option
+                                key={index}
+                                value={classOption}
+                                className={darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}
+                            >
+                                {classOption}
+                            </option>
                         ))}
                     </select>
                 </div>
                 <div className="w-36 mobile:max-tablet:w-full">
-                    <select id="stream" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" value={selectedStream} onChange={handleStreamChange}>
+                    <select
+                        id="stream"
+                        className={`w-full px-2 py-2 border-2 focus:outline-none focus:ring-2 focus:border-transparent rounded-md 
+                        ${darkMode
+                                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-500'
+                                : 'border-blue-300 focus:ring-blue-500'}`}
+                        value={selectedStream}
+                        onChange={handleStreamChange}
+                    >
                         <option value="">Select Stream</option>
                         {streams.map((stream) => (
-                            <option key={stream} value={stream}>
+                            <option
+                                key={stream}
+                                value={stream}
+                                className={darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}
+                            >
                                 {stream}
                             </option>
                         ))}
                     </select>
                 </div>
                 <div className="w-36 mobile:max-tablet:w-full">
-                    <select id="section" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" onChange={handleSectionChange}>
+                    <select
+                        id="section"
+                        className={`w-full px-2 py-2 border-2 focus:outline-none focus:ring-2 focus:border-transparent rounded-md 
+                        ${darkMode
+                                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-500'
+                                : 'border-blue-300 focus:ring-blue-500'}`}
+                        onChange={handleSectionChange}
+                    >
                         <option value="">Select Section</option>
                         {uniqueSections.map((sectionOption, index) => (
-                            <option key={index} value={sectionOption}>{sectionOption}</option>
+                            <option
+                                key={index}
+                                value={sectionOption}
+                                className={darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}
+                            >
+                                {sectionOption}
+                            </option>
                         ))}
                     </select>
                 </div>
                 <div className="w-36 mobile:max-tablet:w-full">
-                    <select id="subject" className="w-full px-2 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md" onChange={handleSubjectChange}>
+                    <select
+                        id="subject"
+                        className={`w-full px-2 py-2 border-2 focus:outline-none focus:ring-2 focus:border-transparent rounded-md 
+                        ${darkMode
+                                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-500'
+                                : 'border-blue-300 focus:ring-blue-500'}`}
+                        onChange={handleSubjectChange}
+                    >
                         <option value="">Select Subject</option>
                         {subjects.map((subjectOption, index) => (
-                            <option key={index} value={subjectOption}>{subjectOption}</option>
+                            <option
+                                key={index}
+                                value={subjectOption}
+                                className={darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}
+                            >
+                                {subjectOption}
+                            </option>
                         ))}
                     </select>
                 </div>

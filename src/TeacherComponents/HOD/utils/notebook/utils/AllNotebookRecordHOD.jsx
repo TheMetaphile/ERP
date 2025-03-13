@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 
 const AllNoteBookRecordHOD = ({ Class, Section, Subject }) => {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [records, SetRecord] = useState([]);
   const [start, SetStart] = useState(0);
   const date = new Date();
@@ -64,38 +64,44 @@ const AllNoteBookRecordHOD = ({ Class, Section, Subject }) => {
 
   return (
     <motion.div
-      className="flex-col mobile:max-tablet:flex-col-reverse justify-between tablet:items-center px-4 pb-0  mb-2 overflow-auto mobile:max-tablet:px-0"
+      className={`flex-col mobile:max-tablet:flex-col-reverse justify-between tablet:items-center px-4 pb-0 mb-2 overflow-auto mobile:max-tablet:px-0 
+      ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       <ToastContainer />
       <div className="overflow-x-auto rounded-lg">
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+        <table className={`min-w-full border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
           <thead>
-            <tr className="bg-gradient-to-r from-blue-400 to-blue-200 text-lg leading-normal">
-              <th className="py-2 px-6 text-center rounded-t-r">Date</th>
-              <th className="py-2 px-6 text-center">Chapter</th>
-              <th className="py-2 px-6 text-center ">Topic</th>
-              <th className="py-2 px-6 text-center rounded-t-l whitespace-nowrap">
+            <tr className={`${darkMode
+              ? 'bg-gradient-to-r from-blue-900 to-blue-700'
+              : 'bg-gradient-to-r from-blue-400 to-blue-200'} text-lg leading-normal`}>
+              <th className={`py-2 px-6 text-center rounded-t-r ${darkMode ? 'text-white' : 'text-black'}`}>Date</th>
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Chapter</th>
+              <th className={`py-2 px-6 text-center ${darkMode ? 'text-white' : 'text-black'}`}>Topic</th>
+              <th className={`py-2 px-6 text-center rounded-t-l whitespace-nowrap ${darkMode ? 'text-white' : 'text-black'}`}>
                 Notebook Checked
               </th>
-              <th className="py-2 px-6 text-center rounded-t-l">Details</th>
-              <th className="py-2 px-6 text-center rounded-t-l">Remark</th>
-              <th className="py-2 px-6 text-center rounded-t-l">Action</th>
+              <th className={`py-2 px-6 text-center rounded-t-l  ${darkMode ? 'text-white' : 'text-black'}`}>Details</th>
+              <th className={`py-2 px-6 text-center rounded-t-l  ${darkMode ? 'text-white' : 'text-black'}`}>Remark</th>
+              <th className={`py-2 px-6 text-center rounded-t-l  ${darkMode ? 'text-white' : 'text-black'}`}>Action</th>
             </tr>
           </thead>
-          <tbody className="text-gray-600 text-md font-normal ">
+          <tbody className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} text-md font-normal`}>
             {records.map((record, index) => (
-              <AllNoteBookRecordRow record={record} index={index} />
+              <AllNoteBookRecordRow record={record} index={index} darkMode={darkMode} />
             ))}
           </tbody>
         </table>
       </div>
       <h1
-        className={`text-blue-400 text-center text-lg hover:text-blue-600 hover:cursor-pointer ${
-          records.length < start + end ? "hidden" : ""
-        }`}
+        className={`
+        ${darkMode
+            ? 'text-blue-300 hover:text-blue-200'
+            : 'text-blue-400 hover:text-blue-600'} 
+        text-center text-lg hover:cursor-pointer 
+        ${records.length < start + end ? "hidden" : ""}`}
         onClick={handleViewMore}
 
       >

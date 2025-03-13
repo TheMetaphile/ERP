@@ -9,42 +9,49 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdDeleteForever } from "react-icons/md";
 
-const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerChange, handleStatusUpdate, loading, handleDelete }) => {
+const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerChange, handleStatusUpdate, loading, handleDelete, darkMode }) => {
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="border border-blue-200 p-4 rounded-lg shadow-lg mt-4 bg-white"
+      className={`border p-4 rounded-lg shadow-lg mt-4 ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-blue-200'}`}
     >
-      <div className="flex mobile:max-sm:flex-col mobile:max-sm:items-start  items-center justify-between cursor-pointer" onClick={() => handleClick(index)}>
+      <div
+        className="flex mobile:max-sm:flex-col mobile:max-sm:items-start items-center justify-between cursor-pointer"
+        onClick={() => handleClick(index)}
+      >
         <div className="flex items-center space-x-4">
           <motion.img
             whileHover={{ scale: 1.1 }}
             src={doubt.student[0].profileLink}
             alt=""
-            className="w-12 h-12 rounded-full border-2 border-blue-300"
+            className={`w-12 h-12 rounded-full border-2 ${darkMode ? 'border-gray-500' : 'border-blue-300'}`}
           />
-          <h3 className="font-semibold text-blue-800">{doubt.student[0].name}</h3>
+          <h3 className={`font-semibold ${darkMode ? 'text-blue-300' : 'text-blue-800'}`}>
+            {doubt.student[0].name}
+          </h3>
           <div>
-
-
-            <div className="flex items-center text-sm text-blue-600 whitespace-nowrap">
-
+            <div className={`flex items-center text-sm ${darkMode ? 'text-blue-400' : 'text-blue-600'} whitespace-nowrap`}>
               <FaUserGraduate className="mr-1" />
               <span>Roll: {doubt.student[0].rollNumber}</span>
             </div>
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          <span className="text-blue-600 font-medium">{doubt.subject}</span>
+          <span className={`font-medium ${darkMode ? 'text-blue-300' : 'text-blue-600'}`}>
+            {doubt.subject}
+          </span>
           <motion.div
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="bg-blue-100 p-2 rounded-full"
+            className={`p-2 rounded-full ${darkMode ? 'bg-gray-600' : 'bg-blue-100'}`}
           >
-            {expanded === index ? <FaChevronUp className="text-blue-600" /> : <FaChevronDown className="text-blue-600" />}
+            {expanded === index ?
+              <FaChevronUp className={`${darkMode ? 'text-white' : 'text-blue-600'}`} /> :
+              <FaChevronDown className={`${darkMode ? 'text-white' : 'text-blue-600'}`} />
+            }
           </motion.div>
           <motion.button
             whileHover={{ scale: 1.1 }}
@@ -54,7 +61,6 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
           >
             <MdDeleteForever />
           </motion.button>
-
         </div>
       </div>
 
@@ -67,23 +73,28 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
             transition={{ duration: 0.3 }}
             className="mt-4"
           >
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h4 className="font-medium text-blue-800 flex items-center mb-2">
-                <FaQuestionCircle className="mr-2 text-blue-600" />
+            <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-600' : 'bg-blue-50'}`}>
+              <h4 className={`font-medium flex items-center mb-2 ${darkMode ? 'text-blue-300' : 'text-blue-800'}`}>
+                <FaQuestionCircle className={`mr-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
                 Question:
               </h4>
-              <p className="text-blue-700 mb-4">{doubt.question}</p>
+              <p className={`${darkMode ? 'text-gray-200' : 'text-blue-700'} mb-4`}>
+                {doubt.question}
+              </p>
               {doubt.imageUrl && (
                 <img src={doubt.imageUrl} alt="Doubt" className="mt-2 max-w-xs rounded-lg shadow-md" />
               )}
             </div>
             <div className="mt-4">
-              <h4 className="font-medium text-blue-800 flex items-center mb-2">
-                <FaPen className="mr-2 text-blue-600" />
+              <h4 className={`font-medium flex items-center mb-2 ${darkMode ? 'text-blue-300' : 'text-blue-800'}`}>
+                <FaPen className={`mr-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
                 Your Answer:
               </h4>
               <textarea
-                className="w-full px-3 py-2 mb-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full px-3 py-2 mb-2 border rounded-lg focus:outline-none focus:ring-2 
+                  ${darkMode
+                    ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-700'
+                    : 'border-blue-300 focus:ring-blue-500'}`}
                 placeholder="Type your answer here..."
                 rows={3}
                 value={answers[index] || ''}
@@ -92,7 +103,10 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center justify-center w-full p-2 bg-blue-600 text-white rounded-lg shadow-md"
+                className={`flex items-center justify-center w-full p-2 rounded-lg shadow-md
+                  ${darkMode
+                    ? 'bg-blue-800 text-white hover:bg-blue-700'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'}`}
                 onClick={() => handleStatusUpdate(doubt._id, index)}
                 disabled={loading}
               >
@@ -109,7 +123,7 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
 
 export default function NewDoubtTile({ data, Class }) {
   const [expanded, setExpanded] = useState(null);
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [answers, setAnswers] = useState({});
   const [pendingDoubts, setPendingDoubts] = useState([]);
@@ -193,11 +207,10 @@ export default function NewDoubtTile({ data, Class }) {
         animate={{ y: 0, opacity: 1 }}
         className="flex items-center justify-between mb-6"
       >
-
-        <h2 className="text-2xl mobile:max-tablet:text-sm font-medium text-black">Pending Doubts</h2>
-        <div className="flex items-center bg-blue-600 mobile:max-tablet:p-2 mobile:max-tablet:text-xs text-white px-4 py-2 rounded-lg shadow-md">
-
-
+        <h2 className={`text-2xl mobile:max-tablet:text-sm font-medium ${darkMode ? 'text-white' : 'text-black'}`}>
+          Pending Doubts
+        </h2>
+        <div className={`flex items-center mobile:max-tablet:p-2 mobile:max-tablet:text-xs text-white px-4 py-2 rounded-lg shadow-md ${darkMode ? 'bg-blue-800' : 'bg-blue-600'}`}>
           <FaQuestionCircle className="mr-2" />
           <span>{pendingDoubts.length} Pending</span>
         </div>
@@ -215,6 +228,7 @@ export default function NewDoubtTile({ data, Class }) {
           handleStatusUpdate={handleStatusUpdate}
           loading={loading}
           handleDelete={handleDelete}
+          darkMode={darkMode}
         />
       ))}
     </motion.div>

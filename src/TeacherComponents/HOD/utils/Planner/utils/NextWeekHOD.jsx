@@ -9,7 +9,7 @@ import NextWeekHODRow from './NextWeekHODRow';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NextWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [remark, setRemark] = useState('');
@@ -153,7 +153,7 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
     };
 
     return (
-        <div className='rounded-md overflow-auto'>
+        <div className={`rounded-md overflow-auto ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
             {loading ? (
                 <Loading />
             ) : details.length === 0 && selectedTab === 'Next Week' ? (
@@ -161,7 +161,7 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
-                    className="text-center py-4 text-blue-500"
+                    className={`text-center py-4 ${darkMode ? 'text-blue-300' : 'text-blue-500'}`}
                 >
                     No Data Available
                 </motion.div>
@@ -172,20 +172,46 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
                     animate="visible"
                     variants={tableVariants}
                 >
-                    <motion.table className='w-full rounded-md border border-black' variants={tableVariants}>
-                        <thead className='bg-gradient-to-r from-blue-400  to-blue-200'>
+                    <motion.table
+                        className={`w-full rounded-md border ${darkMode ? 'border-gray-700' : 'border-black'}`}
+                        variants={tableVariants}
+                    >
+                        <thead className={`${darkMode
+                            ? 'bg-gradient-to-r from-blue-800 to-blue-600'
+                            : 'bg-gradient-to-r from-blue-400 to-blue-200'}`}>
                             <tr className='p-4 text-center'>
-                                <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Date</th>
-                                <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Chapter</th>
-                                <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Topic</th>
-                                <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Teaching Aids</th>
-                                <th className=' py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold'>Activity (if any)</th>
+                                <th className={`py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold 
+                                ${darkMode ? 'text-white border-gray-700' : 'text-black'}`}>
+                                    Date
+                                </th>
+                                <th className={`py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold 
+                                ${darkMode ? 'text-white border-gray-700' : 'text-black'}`}>
+                                    Chapter
+                                </th>
+                                <th className={`py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold 
+                                ${darkMode ? 'text-white border-gray-700' : 'text-black'}`}>
+                                    Topic
+                                </th>
+                                <th className={`py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold 
+                                ${darkMode ? 'text-white border-gray-700' : 'text-black'}`}>
+                                    Teaching Aids
+                                </th>
+                                <th className={`py-2 text-xl mobile:max-tablet:text-lg mobile:max-tablet:font-normal whitespace-nowrap font-semibold 
+                                ${darkMode ? 'text-white border-gray-700' : 'text-black'}`}>
+                                    Activity (if any)
+                                </th>
                             </tr>
                         </thead>
                         <AnimatePresence>
                             <motion.tbody className='text-center whitespace-nowrap'>
                                 {details.map((data, index) => (
-                                    <NextWeekHODRow details={data} index={index} setDetails={setDetails} />
+                                    <NextWeekHODRow
+                                        key={index}
+                                        details={data}
+                                        index={index}
+                                        setDetails={setDetails}
+                                        darkMode={darkMode}
+                                    />
                                 ))}
                             </motion.tbody>
                         </AnimatePresence>
@@ -196,13 +222,19 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
                             value={remark}
                             onChange={(e) => setRemark(e.target.value)}
                             placeholder='Enter your remark'
-                            className='w-full p-2 border border-black rounded-md mb-4'
+                            className={`w-full p-2 rounded-md mb-4 
+                            ${darkMode
+                                    ? 'bg-gray-800 text-white border-gray-600 focus:ring-blue-500'
+                                    : 'border border-black focus:ring-blue-300'}`}
                             variants={inputVariants}
                         />
                         <motion.select
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
-                            className='p-5 border border-black rounded-md mb-4'
+                            className={`p-5 rounded-md mb-4 
+                            ${darkMode
+                                    ? 'bg-gray-800 text-white border-gray-600 focus:ring-blue-500'
+                                    : 'border border-black focus:ring-blue-300'}`}
                             variants={inputVariants}
                         >
                             <option value="">Select status</option>
@@ -213,7 +245,10 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
                     <motion.div className='flex justify-center items-center py-4' variants={inputVariants}>
                         <motion.button
                             type="submit"
-                            className='p-1 px-4 rounded-md bg-secondary font-semibold border-black border hover:bg-white hover:text-black hover:border-black hover:border-2'
+                            className={`p-1 px-4 rounded-md font-semibold 
+                            ${darkMode
+                                    ? 'bg-blue-700 text-white hover:bg-blue-600'
+                                    : 'bg-secondary border-black border hover:bg-white hover:text-black hover:border-black hover:border-2'}`}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >

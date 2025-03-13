@@ -6,7 +6,12 @@ import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 
-function CurrentWeekRow({ details, index, mapId }) {
+function CurrentWeekRow({
+    details,
+    index,
+    mapId,
+    darkMode
+}) {
     const { authState } = useContext(AuthContext);
     const [editMode, setEditMode] = useState(null);
     const [editedData, setEditedData] = useState({});
@@ -21,7 +26,7 @@ function CurrentWeekRow({ details, index, mapId }) {
         setEditedData(item);
     };
 
-    const handleConfirmEdit = async ( id) => {
+    const handleConfirmEdit = async (id) => {
         try {
             const { description, status } = editedData;
 
@@ -36,7 +41,7 @@ function CurrentWeekRow({ details, index, mapId }) {
                 description,
                 status
             }));
-            
+
             toast.success('Status saved');
             setEditMode(null);
             setEditedData({});
@@ -69,14 +74,26 @@ function CurrentWeekRow({ details, index, mapId }) {
             variants={rowVariants}
             initial="hidden"
             animate="visible"
-            className={ 'bg-white'}
+            className={`${darkMode
+                ? 'bg-gray-900 hover:bg-gray-800'
+                : 'bg-white hover:bg-gray-100'
+                }`}
         >
-            <td className='border-y p-4 border-blue-200'>{details.date}</td>
-            <td className='border-y p-4 border-blue-200'>{details.chapter}</td>
-            <td className='border-y p-4 border-blue-200'>{details.topic}</td>
-            <td className='border-y p-4 border-blue-200'>{details.teachingAids}</td>
-            <td className='border-y p-4 border-blue-200'>{details.Activity}</td>
-            <td className='border-y p-4 border-blue-200'>
+            {['date', 'chapter', 'topic', 'teachingAids', 'Activity'].map((field, fieldIndex) => (
+                <td
+                    key={fieldIndex}
+                    className={`border-y p-4 ${darkMode
+                        ? 'border-gray-700 text-white'
+                        : 'border-blue-200 text-black'
+                        }`}
+                >
+                    {details[field]}
+                </td>
+            ))}
+            <td className={`border-y p-4 ${darkMode
+                ? 'border-gray-700 text-white'
+                : 'border-blue-200 text-black'
+                }`}>
                 {editMode === index ? (
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
@@ -89,14 +106,20 @@ function CurrentWeekRow({ details, index, mapId }) {
                             name="description"
                             value={editedData.description || ''}
                             onChange={handleInputChange}
-                            className="border border-blue-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className={`border rounded-lg p-2 focus:ring-2 focus:border-blue-500 ${darkMode
+                                ? 'bg-gray-700 text-white border-gray-600'
+                                : 'border-blue-300'
+                                }`}
                             placeholder="Description"
                         />
                         <select
                             name="status"
                             value={editedData.status || ''}
                             onChange={handleInputChange}
-                            className="p-2 border border-blue-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className={`p-2 border rounded-md focus:ring-2 focus:border-blue-500 ${darkMode
+                                ? 'bg-gray-700 text-white border-gray-600'
+                                : 'border-blue-300'
+                                }`}
                         >
                             <option value="">Select status</option>
                             <option value="On Time">On Time</option>
@@ -106,7 +129,10 @@ function CurrentWeekRow({ details, index, mapId }) {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md"
+                                className={`hover:opacity-90 text-white px-3 py-1 rounded-lg shadow-md ${darkMode
+                                    ? 'bg-green-700 hover:bg-green-600'
+                                    : 'bg-green-500 hover:bg-green-600'
+                                    }`}
                                 onClick={() => handleConfirmEdit(index, details._id)}
                             >
                                 <MdCheck />
@@ -114,7 +140,10 @@ function CurrentWeekRow({ details, index, mapId }) {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="bg-gray-400 hover:bg-gray-500 text-white px-3 py-1 rounded-lg shadow-md"
+                                className={`hover:opacity-90 text-white px-3 py-1 rounded-lg shadow-md ${darkMode
+                                    ? 'bg-gray-600 hover:bg-gray-500'
+                                    : 'bg-gray-400 hover:bg-gray-500'
+                                    }`}
                                 onClick={handleCancelEdit}
                             >
                                 <MdCancel />
@@ -122,15 +151,24 @@ function CurrentWeekRow({ details, index, mapId }) {
                         </div>
                     </motion.div>
                 ) : (
-                    <motion.div 
+                    <motion.div
                         className='flex items-center justify-between'
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <span className="text-blue-700">
+                        <span className={`${darkMode ? 'text-blue-400' : 'text-blue-700'
+                            }`}>
                             {localUserData.description ? (
-                                <>  {localUserData.description}, <span className={`font-semibold ${localUserData.status === 'On Time' ? 'text-green-600' : 'text-red-600'}`}>{localUserData.status}</span></>
+                                <>
+                                    {localUserData.description},
+                                    <span className={`font-semibold ${localUserData.status === 'On Time'
+                                        ? (darkMode ? 'text-green-400' : 'text-green-600')
+                                        : (darkMode ? 'text-red-400' : 'text-red-600')
+                                        }`}>
+                                        {localUserData.status}
+                                    </span>
+                                </>
                             ) : (
                                 <>No data available</>
                             )}
@@ -138,7 +176,10 @@ function CurrentWeekRow({ details, index, mapId }) {
                         <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
-                            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center"
+                            className={`hover:opacity-90 text-white px-3 py-1 rounded-lg shadow-md flex items-center ${darkMode
+                                ? 'bg-blue-700 hover:bg-blue-600'
+                                : 'bg-blue-500 hover:bg-blue-600'
+                                }`}
                             onClick={() => handleEditToggle(index, details)}
                         >
                             <MdOutlineModeEdit />

@@ -10,7 +10,7 @@ import { motion } from 'framer-motion';
 
 export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }) {
 
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const inputRef = useRef(null);
     const suggestionsRef = useRef(null);
     const [email, setEmail] = useState('');
@@ -182,71 +182,73 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
 
     const rowVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: { 
-          opacity: 1, 
-          y: 0,
-          transition: {
-            type: 'spring',
-            stiffness: 100,
-            damping: 12
-          }
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: 'spring',
+                stiffness: 100,
+                damping: 12
+            }
         }
-      };
+    };
 
     return (
         <motion.tr
-        key={index}
-        variants={rowVariants}
-        className="border-b border-gray-200  last:border-none"
-      >
-    
-            <td className="py-3 px-6 text-center whitespace-nowrap">{Teacher.employeeId}</td>
-            <td className="flex py-3 px-6   items-center gap-2 whitespace-nowrap"><img src={Teacher.profileLink} alt="img" className="rounded-full h-12 w-12" />{Teacher.name}</td>
-            <td className="py-3 px-6 text-center whitespace-nowrap">{date}</td>
-            <td className="py-3 px-6 text-center whitespace-nowrap">{Teacher.class}</td>
-            <td className="py-3 px-6 text-center whitespace-nowrap">{Teacher.section}</td>
+            key={index}
+            variants={rowVariants}
+            className={`border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'} last:border-none`}
+        >
+            <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{Teacher.employeeId}</td>
+            <td className={`flex py-3 px-6 items-center gap-2 whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>
+                <img src={Teacher.profileLink} alt="img" className="rounded-full h-12 w-12" />
+                {Teacher.name}
+            </td>
+            <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{date}</td>
+            <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{Teacher.class}</td>
+            <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : ''}`}>{Teacher.section}</td>
 
-            <td className=" py-3 px-6 text-center  items-center  whitespace-nowrap">
-                {
-                    originalSubstitute ? <div className="flex justify-start gap-2 items-center">
+            <td className="py-3 px-6 text-center items-center whitespace-nowrap">
+                {originalSubstitute ? (
+                    <div className="flex justify-start gap-2 items-center">
                         <img src={originalSubstitute.profileLink} alt="img" className="rounded-full h-12 w-12" />
-                        <div className="text-start">
-                            <p> {originalSubstitute.name}</p>
+                        <div className={`text-start ${darkMode ? 'text-gray-200' : ''}`}>
+                            <p>{originalSubstitute.name}</p>
                             {originalSubstitute.employeeId}
-
                         </div>
                     </div>
-                        :
-                        <div >
-                            <input
-                                type="email"
-                                ref={inputRef}
-                                className="w-full px-4 py-2 border rounded-md"
-                                placeholder="Search Teacher"
-                                list={`teacher-suggestions`}
-                                onClick={handleClickInside}
-                                value={email}
-                                onChange={handleEmailChange}
-                            />
-                            {showSuggestions && suggestions.length > 0 && (
-                                <ul className="absolute z-10 bg-white border rounded-md mt-1 max-h-70 overflow-y-auto" ref={suggestionsRef}>
-                                    {suggestions.map((suggestion, idx) => (
-                                        <li
-                                            key={idx}
-                                            className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
-                                            onClick={() => handleSuggestionClick(suggestion)}
-                                        >
-                                            <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                            {suggestion.name}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-                }
+                ) : (
+                    <div>
+                        <input
+                            type="email"
+                            ref={inputRef}
+                            className={`w-full px-4 py-2 border rounded-md ${darkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black'}`}
+                            placeholder="Search Teacher"
+                            list={`teacher-suggestions`}
+                            onClick={handleClickInside}
+                            value={email}
+                            onChange={handleEmailChange}
+                        />
+                        {showSuggestions && suggestions.length > 0 && (
+                            <ul
+                                className={`absolute z-10 border rounded-md mt-1 max-h-70 overflow-y-auto ${darkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black'}`}
+                                ref={suggestionsRef}
+                            >
+                                {suggestions.map((suggestion, idx) => (
+                                    <li
+                                        key={idx}
+                                        className={`flex items-center p-2 cursor-pointer ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-200'}`}
+                                        onClick={() => handleSuggestionClick(suggestion)}
+                                    >
+                                        <img src={suggestion.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
+                                        {suggestion.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                )}
             </td>
-
-
 
             <td className="py-3 px-6 text-center whitespace-nowrap">
                 {editingRow ? (
@@ -258,7 +260,7 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
                             <MdCheck />
                         </button>
                         <button
-                            className='bg-red-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
+                            className='bg-red-400 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
                             onClick={() => handleCancelClick()}
                         >
                             <FaTimes />
@@ -272,15 +274,10 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
                         >
                             <MdEdit />
                         </button>
-
                     </div>
                 )}
-
             </td>
-
-
-
-            </motion.tr>
+        </motion.tr>
 
     )
 }
