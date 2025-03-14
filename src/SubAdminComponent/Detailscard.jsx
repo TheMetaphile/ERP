@@ -7,7 +7,7 @@ import AuthContext from '../Context/AuthContext';
 export default function Detailscard() {
     const { email } = useParams();
     const [selectedTab, setSelectedTab] = useState('personal');
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [imageError, setImageError] = useState(false);
@@ -36,20 +36,31 @@ export default function Detailscard() {
             setLoading(false);
         }
     };
+    
     const handleImageError = () => {
         setImageError(true);
     };
 
     const InfoItem = ({ label, value }) => (
-        <div className="mb-4 p-3 bg-blue-50 rounded-lg transition-all duration-300 ease-in-out hover:shadow-md hover:bg-blue-100">
-            <span className="font-semibold text-blue-700">{label}:</span>
-            <span className="ml-2 text-gray-800">{value || 'N/A'}</span>
+        <div className={`mb-4 p-3 rounded-lg transition-all duration-300 ease-in-out hover:shadow-md ${
+            darkMode 
+                ? 'bg-gray-700 hover:bg-gray-600' 
+                : 'bg-blue-50 hover:bg-blue-100'
+        }`}>
+            <span className={`font-semibold ${
+                darkMode ? 'text-blue-300' : 'text-blue-700'
+            }`}>{label}:</span>
+            <span className={`ml-2 ${
+                darkMode ? 'text-gray-200' : 'text-gray-800'
+            }`}>{value || 'N/A'}</span>
         </div>
     );
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
+            <div className={`flex justify-center items-center h-screen ${
+                darkMode ? 'bg-gray-900' : ''
+            }`}>
                 <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
             </div>
         );
@@ -57,10 +68,18 @@ export default function Detailscard() {
 
     return (
         <div className="pt-1 w-full mobile:max-sm:p-2">
-            <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl">
-                <div className="bg-blue-100 text-white p-6 mobile:max-sm:p-1">
+            <div className={`${
+                darkMode 
+                    ? 'bg-gray-800 shadow-lg text-gray-200' 
+                    : 'bg-white shadow-lg'
+            } rounded-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl`}>
+                <div className={`${
+                    darkMode ? 'bg-gray-700' : 'bg-blue-100'
+                } p-6 mobile:max-sm:p-1`}>
                     <div className="flex items-center space-x-4">
-                        <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center bg-blue-300 text-blue-600 text-2xl font-bold">
+                        <div className={`w-20 h-20 rounded-full overflow-hidden flex items-center justify-center ${
+                            darkMode ? 'bg-gray-600 text-blue-300' : 'bg-blue-300 text-blue-600'
+                        } text-2xl font-bold`}>
                             {imageError || !userData?.profileLink ? (
                                 <span>{userData?.name?.charAt(0)}</span>
                             ) : (
@@ -73,8 +92,10 @@ export default function Detailscard() {
                             )}
                         </div>
                         <div>
-                            <h2 className="text-2xl font-bold text-blue-700">{userData?.name}</h2>
-                            <p className="text-blue-700">Roll No: {userData?.rollNumber}</p>
+                            <h2 className={`text-2xl font-bold ${
+                                darkMode ? 'text-blue-300' : 'text-blue-700'
+                            }`}>{userData?.name}</h2>
+                            <p className={darkMode ? 'text-blue-300' : 'text-blue-700'}>Roll No: {userData?.rollNumber}</p>
                         </div>
                     </div>
                 </div>
@@ -83,10 +104,15 @@ export default function Detailscard() {
                         {['personal', 'parent'].map((tab) => (
                             <button
                                 key={tab}
-                                className={`flex-1 py-2 px-4 transition-all duration-300 ease-in-out ${selectedTab === tab
-                                    ? 'bg-blue-400 text-white shadow-md'
-                                    : 'bg-gray-200 hover:bg-blue-100'
-                                    }`}
+                                className={`flex-1 py-2 px-4 transition-all duration-300 ease-in-out ${
+                                    selectedTab === tab
+                                        ? darkMode
+                                            ? 'bg-blue-600 text-white shadow-md'
+                                            : 'bg-blue-400 text-white shadow-md'
+                                        : darkMode
+                                            ? 'bg-gray-600 hover:bg-gray-500'
+                                            : 'bg-gray-200 hover:bg-blue-100'
+                                }`}
                                 onClick={() => setSelectedTab(tab)}
                             >
                                 {tab === 'personal' ? 'Personal Information' : 'Parent Details'}
@@ -125,8 +151,3 @@ export default function Detailscard() {
         </div>
     );
 }
-
-
-
-
-

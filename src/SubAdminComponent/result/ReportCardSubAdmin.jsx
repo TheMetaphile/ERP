@@ -61,7 +61,7 @@ function ScholasticRow(area, index) {
 
 
 function ReportCardSubAdmin() {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [loading, setLoading] = useState(false)
   // State to control the dropdown visibility
   const [Class, setClass] = useState(localStorage.getItem('Class') || '');
@@ -90,7 +90,6 @@ function ReportCardSubAdmin() {
   };
 
   const handleSectionChange = (event) => {
-
     setUserData([]);
     setAllDataFetched(false);
     setSection(event.target.value);
@@ -155,11 +154,6 @@ function ReportCardSubAdmin() {
       console.log("API response:", response.data, response.data.Students.length);
 
       if (response.data.Students) {
-        // const users = response.data.Students.map(user => ({
-        //     ...user,
-        //     profileLogo: user.profileLink || profilelogo,
-        // }));
-
         const list = response.data.Students.length;
         if (list < end) {
           toast.success('All data fetched');
@@ -167,8 +161,6 @@ function ReportCardSubAdmin() {
           setAllDataFetched(true);
         }
         setUserData(prevUsers => [...prevUsers, ...response.data.Students]);
-
-
       } else {
         setError('Unexpected response format');
         setTimeout(() => {
@@ -199,7 +191,7 @@ function ReportCardSubAdmin() {
 
     try {
       // Fetch student's result and profile
-      const [resultResponse, profileResponse, attendanceResponse] = await Promise.all([
+      const [resultResponse, profileResponse] = await Promise.all([
         axios.get(`${BASE_URL}/result/fetch/teacher?email=${studentData.email}`, {
           headers: {
             Authorization: `Bearer ${authState.accessToken}`,
@@ -208,23 +200,12 @@ function ReportCardSubAdmin() {
         axios.post(`${BASE_URL}/fetchSingle/student`, {
           accessToken: authState.accessToken,
           email: studentData.email
-        }),
-        // axios.get(`http://13.201.247.28:8000/studentAttendance/fetch/completeStats`, {
-        //     params: {
-        //         class: studentData.currentClass,
-        //         id: studentData.id,
-        //         year: '2024'
-        //     },
-        //     headers: {
-        //         Authorization: `Bearer ${authState.accessToken}`
-        //     }
-        // })
+        })
       ]);
 
       const profile = profileResponse.data.StudentDetails[0];
       const details = resultResponse.data;
       console.log(details, 'nn', details[term])
-      const attendance = attendanceResponse;
 
       // Populate container with result content
       container.innerHTML = `
@@ -293,10 +274,10 @@ function ReportCardSubAdmin() {
                   <div class="border-b border-black">
                     <div class="flex items-center justify-between px-4 pb-4 bg-gradient-to-r from-blue-200 to-blue-100 text-xl">
                       <h2 class="font-semibold">Attendance:</h2>
-                      <p><strong className='  font-medium'>Total:</strong>20</p>
-                        <p><strong className=' font-medium'>Present:</strong> 20</p>
-                        <p><strong className=' font-medium'>Percentage:</strong>20%</p>
-                           </div>
+                      <p><strong className='font-medium'>Total:</strong>20</p>
+                      <p><strong className='font-medium'>Present:</strong> 20</p>
+                      <p><strong className='font-medium'>Percentage:</strong>20%</p>
+                    </div>
                     <div class="mb-12 px-4">
                       <h2 class="text-xl font-semibold">Remarks:</h2>
                     </div>
@@ -418,11 +399,11 @@ function ReportCardSubAdmin() {
 
   return (
     <>
-      <div className='   '>
-        <ToastContainer />
-        <div className="flex items-center justify-between px-3 py-2">
-
-          <h1 className="text-xl font-medium mb-2 ">Report Card</h1>
+      <div className={`${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
+        <ToastContainer theme={darkMode ? 'dark' : 'light'} />
+       
+        <div className={`flex items-center justify-between px-3 py-2 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+          <h1 className={`text-xl font-medium mb-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>Report Card</h1>
           <span className='w-fit flex items-center gap-2 mobile:max-laptop:hidden'>
             <Selection
               Class={Class}
@@ -436,18 +417,23 @@ function ReportCardSubAdmin() {
             <select
               value={selectedTermValue}
               onChange={(e) => setSelectedTermValue(e.target.value)}
-              className="border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 p-2 rounded"
+              className={`border-2 focus:outline-none focus:ring-2 focus:ring-blue-500 p-2 rounded ${
+                darkMode 
+                  ? 'bg-gray-800 border-blue-500 text-white' 
+                  : 'bg-white border-blue-300 text-gray-800'
+              }`}
             >
               <option value="" disabled>Select Term</option>
               <option value="term1">Term 1</option>
               <option value="halfYearly">Half Yearly</option>
               <option value="term2">Term 2</option>
               <option value="final">Final</option>
-
             </select>
             <div className="flex justify-between items-center">
               <motion.button
-                className="bg-green-500 text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-green-600 transition-colors duration-200 disabled:bg-gray-400"
+                className={`text-white px-6 py-2 rounded-full text-sm font-medium transition-colors duration-200 disabled:bg-gray-400 ${
+                  darkMode ? 'bg-green-600 hover:bg-green-700' : 'bg-green-500 hover:bg-green-600'
+                }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleBulkDownload}
@@ -458,47 +444,63 @@ function ReportCardSubAdmin() {
             </div>
           </span>
         </div>
-
       </div>
-      <div className=" w-full items-start overflow-y-auto  px-2 no-scrollbar mobile:max-tablet:mt-2 ">
+      <div className={`w-full items-start overflow-y-auto px-2 no-scrollbar mobile:max-tablet:mt-2 ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-800'}`}>
         {loading && start == 0 ? (
           <Loading />
         ) : userData.length === 0 ? (
-          <>No student found</>
+          <div className={`text-center p-8 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>No student found</div>
         ) : (
           <motion.div
-            className='rounded-lg shadow-lg border border-blue-200 w-full mb-4 overflow-hidden bg-white'
+            className={`rounded-lg shadow-lg w-full mb-4 overflow-hidden ${
+              darkMode 
+                ? 'bg-gray-800 border border-gray-700' 
+                : 'bg-white border border-blue-200'
+            }`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             ref={containerRef}
           >
-            <table className="min-w-full border-collapse border border-gray-200">
+            <table className={`min-w-full border-collapse ${darkMode ? 'border border-gray-700' : 'border border-gray-200'}`}>
               <Header headings={['Name', 'Class', 'Section', 'Email', 'Action']} />
               <tbody>
                 {userData.map((detail, index) => (
                   <motion.tr
-                    className='hover:bg-blue-100 transition-colors duration-200 border-b border-gray-200'
+                    className={`transition-colors duration-200 ${
+                      darkMode 
+                        ? 'hover:bg-gray-700 border-b border-gray-700' 
+                        : 'hover:bg-blue-100 border-b border-gray-200'
+                    }`}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+                    key={detail.email}
                   >
-                    <td className="py-3 px-6 text-center text-gray-800 whitespace-nowrap">
-                      <Link to={`/Sub-Admin/Students/details/${detail.email}`} className="rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
+                    <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      <Link to={`/Sub-Admin/Students/details/${detail.email}`} className={`rounded-full text-center px-3 py-2 font-semibold ${
+                        darkMode 
+                          ? 'bg-blue-900 text-blue-200' 
+                          : 'bg-blue-100 text-blue-800'
+                      }`}>
                         {detail.name}
                       </Link>
                     </td>
-                    <td className='py-3 px-6 text-center text-gray-800 whitespace-nowrap'>{detail.currentClass}</td >
-                    <td className='py-3 px-6 text-center text-gray-800 whitespace-nowrap'>{detail.section}</td >
-                    <td className='py-3 px-6 text-center text-gray-800 whitespace-nowrap flex items-center gap-3'>
-                      <img src={detail.profileLink} alt={detail.name} className='w-8 h-8 rounded-full object-cover border-2 border-blue-300 mobile:max-tablet:hidden' />
-                      <span className='text-blue-600'>{detail.email}</span>
-                    </td >
+                    <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>{detail.currentClass}</td>
+                    <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>{detail.section}</td>
+                    <td className={`py-3 px-6 text-center whitespace-nowrap flex items-center gap-3 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      <img src={detail.profileLink} alt={detail.name} className={`w-8 h-8 rounded-full object-cover mobile:max-tablet:hidden ${
+                        darkMode ? 'border-2 border-blue-500' : 'border-2 border-blue-300'
+                      }`} />
+                      <span className={darkMode ? 'text-blue-400' : 'text-blue-600'}>{detail.email}</span>
+                    </td>
                     <td className="py-3 px-4 text-center whitespace-nowrap">
-                      <Link to={`/Sub-Admin/Result/${detail.email}?session=${selectedSession}&Class=${Class}`} key={index}>
+                      <Link to={`/Sub-Admin/Result/${detail.email}?session=${selectedSession}&Class=${Class}`}>
                         <motion.button
-                          className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-600 transition-colors duration-200"
+                          className={`text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
+                            darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'
+                          }`}
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >
@@ -509,29 +511,16 @@ function ReportCardSubAdmin() {
                   </motion.tr>
                 ))}
               </tbody>
-              <div ref={sentinelRef} className="h-10"></div>
-              {loading && start > 0 && (
-                <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
-              )}
-
             </table>
+            <div ref={sentinelRef} className="h-10"></div>
+            {loading && start > 0 && (
+              <div className={`text-center w-full text-sm py-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Loading more...</div>
+            )}
           </motion.div>
         )}
-
       </div>
     </>
   )
 }
 
 export default ReportCardSubAdmin
-
-
-
-
-
-
-
-
-
-
-

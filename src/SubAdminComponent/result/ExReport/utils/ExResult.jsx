@@ -3,7 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import AuthContext from "../../../../Context/AuthContext";
 import axios from "axios";
 import Loading from "../../../../LoadingScreen/Loading";
-import { BASE_URL} from "../../../../Config";
+import { BASE_URL } from "../../../../Config";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import ScholasticRow from './ScholasticRow';
@@ -17,7 +17,7 @@ import './Print.css';
 const ExResult = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [details, setDetails] = useState({ term1: [], term2: [] });
   const [profile, setProfile] = useState({});
   const [profileLoading, setProfileLoading] = useState(true);
@@ -78,11 +78,7 @@ const ExResult = () => {
     const selectedTerm = terms.find(term => term.value === event.target.value);
     console.log(selectedTerm);
     setSelectedTermLabel(selectedTerm.label);
-
   }
-
-
-
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -125,18 +121,12 @@ const ExResult = () => {
       setLoading(true);
       await Promise.all([fetchUser(), fetchResult()]);
       setLoading(false);
-
     }
     processAll();
   }, [id, authState?.accessToken]);
 
-  // if (loading || profileLoading) {
-  //   return <Loading />;
-  // }
-
   const handlePrint = async () => {
     const page1 = ref.current;
-    // const page2 = ref2.current;
 
     const pdf = new jsPDF('p', 'mm', 'a4', true,);
     const pageWidth = pdf.internal.pageSize.width;
@@ -177,95 +167,78 @@ const ExResult = () => {
 
     try {
       await addPageContent(page1);
-      // pdf.addPage(); // Add a new page for the second component
-      // await addPageContent(page2);
-
       const pdfBlob = pdf.output('blob');
       const pdfUrl = URL.createObjectURL(pdfBlob);
       window.open(pdfUrl, '_blank');
-
     } catch (error) {
       console.error('Error generating PDF:', error);
     }
   };
 
+  // Dark mode class combinations
+  const mainBgClass = darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black';
+  const cardBgClass = darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-black';
+  const headerBgClass = darkMode ? 'bg-gray-700 text-white' : 'bg-blue-100 text-black';
+  const tableBgClass = darkMode ? 'bg-gray-800' : 'bg-white';
+  const tableBorderClass = darkMode ? 'border-gray-700' : 'border-gray-200';
+  const tableHeaderClass = darkMode ? 'bg-gray-700 text-white' : 'bg-blue-100 text-black';
+  const buttonClass = darkMode ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'border text-black hover:bg-blue-400 hover:text-white';
+  const selectClass = darkMode ? 'bg-gray-700 text-white border-gray-600' : 'border';
+  const errorClass = darkMode ? 'text-red-400' : 'text-red-500';
 
   return (
-    // <div className="mt-4 w-full pt-2">
-    //   {details === null ? (
-    //     <>
-    //       <h3 className="text-xl font-medium">Performance Profile</h3>
-    //       <InfoCard
-    //         class={profile.currentClass}
-    //         name={profile.name}
-    //         profileImg={profile.profileLink}
-    //         section={profile.section}
-    //         rollnumber={profile.rollNumber}
-    //         dob={profile.DOB}
-    //         bloodgroup={profile.bloodGroup}
-    //         contactno={profile.fatherPhoneNumber}
-    //         father={profile.fatherName}
-    //         mother={profile.motherName}
-    //       />
-    //       <Attendance term={[{ total: "249", attendance: "235" }]} />
-    //       <div className='text-center text-lg text-red-500 font-medium w-full mt-2'>No Result available</div>
-    //     </>
-    //   ) : (
-    //     <>
-    //       <button
-    //         className="text-xl font-medium bg-secondary text-black rounded-lg shadow-md py-1 px-3 hover:bg-blue-400 cursor-pointer hover:text-white"
-    //         onClick={handlePrint}
-    //       >
-    //         Download
-    //       </button>
-    //       <PrintableComponent ref={ref1} profile={profile} details={details} />
-    //       <PrintableComponent2 details={details} ref={ref2} /></>
-    //   )}
-    // </div>
-    <div className="p-2 w-full">
+    <div className={`p-2 w-full ${mainBgClass}`}>
       <div className="flex justify-between items-center mb-4">
         <h1 className='text-xl font-medium'>{profile.name} Progress Report</h1>
         <div className='flex gap-2 items-center'>
           <div className="w-36 mr-3 self-center">
-            <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleTermChange}>
+            <select
+              id="section"
+              className={`w-full px-2 py-2 rounded-md ${selectClass}`}
+              onChange={handleTermChange}
+            >
               {terms.map((sectionOption, index) => (
                 <option key={index} value={sectionOption.value}>{sectionOption.label}</option>
               ))}
             </select>
           </div>
-          <button className='text-lg font-semibold border rounded-md px-2 py-1' onClick={handlePrint}>Print</button>
+          <button
+            className={`text-lg font-semibold rounded-md px-2 py-1 ${buttonClass}`}
+            onClick={handlePrint}
+          >
+            Print
+          </button>
         </div>
       </div>
       {loading ? (<Loading />) : (
-        <div className="report-card border border-black " ref={ref} >
-
-          <div className=' border-b border-black py-3 items-center bg-blue-100 text-center'>
-            <h1 className={`text-3xl  font-semibold mb-2`}>{selectedTermlabel} : {profile.session || "2024-25"}</h1>
+        <div className={`report-card border ${cardBgClass}`} ref={ref}>
+          <div className={`border-b border-inherit py-3 items-center ${headerBgClass} text-center`}>
+            <h1 className={`text-3xl font-semibold mb-2`}>{selectedTermlabel} : {profile.session || "2024-25"}</h1>
             <h6 className="text-2xl mb-2">Report Card</h6>
           </div>
 
           <div className="mb-4 flex justify-between m-3 text-xl">
-            <div className=' leading-loose'>
+            <div className='leading-loose'>
               <p><strong className='font-medium'>Student's Name:</strong> {profile.name}</p>
               <p><strong className='font-medium'>Father's Name:</strong> {profile.fatherName}</p>
-              <p><strong className='font-medium'>Mother's Name:</strong> {profile.motherName}</p></div>
-            <div className=' leading-loose'>
+              <p><strong className='font-medium'>Mother's Name:</strong> {profile.motherName}</p>
+            </div>
+            <div className='leading-loose'>
               <p><strong className='font-medium'>Admission No.:</strong> {profile.admissionNumber || 123456}</p>
               <p><strong className='font-medium'>Class & Section:</strong> {profile.currentClass} {profile.section}</p>
               <p><strong className='font-medium'>Date of Birth:</strong> {profile.DOB}</p>
             </div>
-
-
           </div>
+
           {details === null ? (
-            <div className='font-medium text-center text-red-500'>No Result found</div>
+            <div className={`font-medium text-center ${errorClass}`}>No Result found</div>
           ) : (
             <>
               {details[selectedTermValue].length === 0 ? (
-                <div className='font-medium text-center text-red-500'> No Scholastic Data Available</div>
+                <div className={`font-medium text-center ${errorClass}`}>No Scholastic Data Available</div>
               ) : (
-                <table className="min-w-full border border-gray-200">
-                  <thead className=' bg-blue-100 text-xl font-medium '>
+                <table className={`min-w-full border ${tableBorderClass}`}>
+                  <thead className={`text-xl font-medium ${tableHeaderClass}`}>
                     <tr className='text-center'>
                       <th className="px-4 py-2 border">Scholastic Areas</th>
                       <th className="px-4 py-2 border">
@@ -279,14 +252,12 @@ const ExResult = () => {
                         <p>
                           ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalSubjectEnrichmentMarks : ""})
                         </p>
-
                       </th>
                       <th className="px-4 py-2 border">
                         Marks Obt
                         <p>
                           ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalMarks : ""})
                         </p>
-
                       </th>
                       <th className="px-4 py-2 border">Total</th>
                       <th className="px-4 py-2 border">%</th>
@@ -295,27 +266,25 @@ const ExResult = () => {
                   </thead>
                   <tbody className='pb-6'>
                     {details[selectedTermValue].map((area, index) => (
-                      <ScholasticRow index={index} area={area} />
+                      <ScholasticRow key={index} index={index} area={area} darkMode={darkMode} />
                     ))}
                     <tr></tr>
                   </tbody>
                 </table>
               )}
 
-
-
               <div className="">
                 {details[`${selectedTermValue}_Co_scholastic`].length === 0 ? (
-                  <div className='font-medium text-center text-red-500'> No Co-Scholastic Data Available</div>
+                  <div className={`font-medium text-center ${errorClass}`}>No Co-Scholastic Data Available</div>
                 ) : (
-                  <table className="min-w-full bg-white border border-gray-200">
-                    <thead className=' bg-blue-100 text-xl font-medium'>
+                  <table className={`min-w-full ${tableBgClass} border ${tableBorderClass}`}>
+                    <thead className={`text-xl font-medium ${tableHeaderClass}`}>
                       <tr>
                         <th className="px-4 pb-4 border text-start">Co-Scholastic Areas:</th>
                         <th className="px-4 pb-4 border text-end">Grade</th>
                       </tr>
                     </thead>
-                    <tbody className='text-lg font-normal '>
+                    <tbody className='text-lg font-normal'>
                       {details[`${selectedTermValue}_Co_scholastic`].map((area, index) => (
                         <tr key={index}>
                           <td className="px-4 pb-4 border text-start">{area.subject}</td>
@@ -325,20 +294,16 @@ const ExResult = () => {
                     </tbody>
                   </table>
                 )}
-
-
               </div>
             </>
           )}
 
-
-
-          <div className=' border-b border-black'>
-            <div className="flex bg-blue-100 text-xl items-center justify-between px-4 pb-4">
-              <h2 className='  font-semibold'>Attendance:</h2>
-              <p><strong className='  font-medium'>Total:</strong> {attendance.total}</p>
-              <p><strong className=' font-medium'>Present:</strong> {attendance.present}</p>
-              <p><strong className=' font-medium'>Percentage:</strong> {attendance.total !== 0 ? (attendance.present / attendance.total) * 100 : 0}%</p>
+          <div className='border-b border-inherit'>
+            <div className={`flex ${tableHeaderClass} text-xl items-center justify-between px-4 pb-4`}>
+              <h2 className='font-semibold'>Attendance:</h2>
+              <p><strong className='font-medium'>Total:</strong> {attendance.total}</p>
+              <p><strong className='font-medium'>Present:</strong> {attendance.present}</p>
+              <p><strong className='font-medium'>Percentage:</strong> {attendance.total !== 0 ? (attendance.present / attendance.total) * 100 : 0}%</p>
             </div>
 
             <div className="mb-12 flex items-center gap-2 px-4">
@@ -351,11 +316,11 @@ const ExResult = () => {
             </div>
           </div>
 
-          <div className=' flex gap-2'>
+          <div className='flex gap-2'>
             <div className="flex-1">
-              <h1 className=' text-center text-xl my-2'>SCHOLASTIC</h1>
-              <table className="w-full bg-white border border-gray-200">
-                <thead className=' bg-blue-100'>
+              <h1 className='text-center text-xl my-2'>SCHOLASTIC</h1>
+              <table className={`w-full ${tableBgClass} border ${tableBorderClass}`}>
+                <thead className={tableHeaderClass}>
                   <tr>
                     <th className="px-4 pb-4 border">MARKS RANGE</th>
                     <th className="px-4 pb-4 border">GRADE</th>
@@ -363,7 +328,7 @@ const ExResult = () => {
                 </thead>
                 <tbody>
                   {scholastic.map((item, index) => (
-                    <tr className=' text-center text-lg' key={index}>
+                    <tr className='text-center text-lg' key={index}>
                       <td className="px-2 pb-4 border w-1/2">{item.range}</td>
                       <td className="px-4 pb-4 border w-1/2">{item.grade}</td>
                     </tr>
@@ -372,9 +337,9 @@ const ExResult = () => {
               </table>
             </div>
             <div className="flex-1 h-full">
-              <h1 className=' text-center text-xl my-2'>CO-SCHOLASTIC AND DISCIPLINE</h1>
-              <table className="w-full bg-white border border-gray-200">
-                <thead className=' bg-blue-100'>
+              <h1 className='text-center text-xl my-2'>CO-SCHOLASTIC AND DISCIPLINE</h1>
+              <table className={`w-full ${tableBgClass} border ${tableBorderClass}`}>
+                <thead className={tableHeaderClass}>
                   <tr>
                     <th className="px-4 pb-4 border whitespace-nowrap">PERFOMANCE INDICATORS</th>
                     <th className="px-4 pb-4 border">GRADE</th>

@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 
 const List = () => {
     const [data, setData] = useState([]);
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext); // Fixed typo in 'darkMode'
     const [loading, setLoading] = useState(false);
     const [Class, setClass] = useState('9th');
     const [start, setStart] = useState(0);
@@ -47,6 +47,7 @@ const List = () => {
         if (selectedSession) {
             setStart(0);
             setData([]);
+            setAllDataFetched(false);
             fetchUsers();
         }
     }, [selectedSession, Class]);
@@ -107,7 +108,6 @@ const List = () => {
                     setAllDataFetched(true);
                 }
                 setData(prevData => [...prevData, ...response.data.list]);
-
             }
         } catch (err) {
             console.log(err);
@@ -120,16 +120,22 @@ const List = () => {
         setClass(event.target.value);
     };
 
-
-
     return (
-        <div className="">
-            <ToastContainer />
+        <div className={`${darkMode ? 'bg-gray-900 text-gray-200' : 'bg-white text-gray-800'}`}>
+            <ToastContainer theme={darkMode ? 'dark' : 'light'} />
             <div className="flex items-center justify-between px-3 py-2">
-
-                <h1 className='text-xl font-medium mb-2 '>Ex Student Result</h1>
+                <h1 className={`text-xl font-medium mb-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>Ex Student Result</h1>
                 <div className="flex items-center gap-2">
-                    <select id="class" value={Class} onChange={handleClassChange} className="rounded-lg shadow-md px-3 py-1 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
+                    <select 
+                        id="class" 
+                        value={Class} 
+                        onChange={handleClassChange} 
+                        className={`rounded-lg shadow-md px-3 py-1 border-2 ${
+                            darkMode 
+                            ? 'border-blue-700 bg-gray-800 text-gray-200 focus:ring-blue-600' 
+                            : 'border-blue-300 bg-white text-gray-800 focus:ring-blue-500'
+                        } focus:outline-none focus:ring-2 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1`}
+                    >
                         <option value="">Search by Class</option>
                         <option value="Pre-Nursery">Pre-Nursery</option>
                         <option value="Nursery">Nursery</option>
@@ -150,7 +156,16 @@ const List = () => {
                     </select>
 
                     <div>
-                        <select id="school-sessions" value={selectedSession} onChange={handleSessionChange} className="rounded-lg shadow-md px-3 py-1 border-2  border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1">
+                        <select 
+                            id="school-sessions" 
+                            value={selectedSession} 
+                            onChange={handleSessionChange} 
+                            className={`rounded-lg shadow-md px-3 py-1 border-2 ${
+                                darkMode 
+                                ? 'border-blue-700 bg-gray-800 text-gray-200 focus:ring-blue-600' 
+                                : 'border-blue-300 bg-white text-gray-800 focus:ring-blue-500'
+                            } focus:outline-none focus:ring-2 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1`}
+                        >
                             <option value="">Select Session</option>
                             {sessions.map((session, index) => (
                                 <option key={index} value={session}>
@@ -161,20 +176,24 @@ const List = () => {
                     </div>
                 </div>
             </div>
-            <div className="overflow-x-auto border-1 rounded-lg pt-2">
-                <table className="table w-full border-2">
-                    <thead className=" bg-blue-200">
+            <div className={`overflow-x-auto border-1 rounded-lg pt-2 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                <table className={`table w-full border-2 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                    <thead className={darkMode ? 'bg-gray-800' : 'bg-blue-200'}>
                         <tr>
-                            <th className="py-3 px-4 text-center ">Roll No.</th>
-                            <th className="py-3 px-4 text-center">Name</th>
-                            <th className="py-3 px-4 text-center">Class</th>
-                            <th className="py-3 px-4 text-center">Section</th>
-                            <th className="py-3 px-4 text-center">Action</th>
+                            <th className={`py-3 px-4 text-center ${darkMode ? 'border-b border-gray-700' : ''}`}>Roll No.</th>
+                            <th className={`py-3 px-4 text-center ${darkMode ? 'border-b border-gray-700' : ''}`}>Name</th>
+                            <th className={`py-3 px-4 text-center ${darkMode ? 'border-b border-gray-700' : ''}`}>Class</th>
+                            <th className={`py-3 px-4 text-center ${darkMode ? 'border-b border-gray-700' : ''}`}>Section</th>
+                            <th className={`py-3 px-4 text-center ${darkMode ? 'border-b border-gray-700' : ''}`}>Action</th>
                         </tr>
                     </thead>
                     <tbody className="table-row-group">
-                        {loading ? (
-                            <Loading />
+                        {loading && data.length === 0 ? (
+                            <tr>
+                                <td colSpan="5">
+                                    <Loading />
+                                </td>
+                            </tr>
                         ) : data.length === 0 ? (
                             <tr>
                                 <td colSpan="5" className="text-center p-4">
@@ -186,7 +205,11 @@ const List = () => {
                                 {data.map((item, index) => (
                                     <motion.tr
                                         key={index}
-                                        className='border-b hover:bg-blue-100 transition-colors'
+                                        className={`border-b ${
+                                            darkMode 
+                                            ? 'hover:bg-gray-800 border-gray-700' 
+                                            : 'hover:bg-blue-100 border-gray-200'
+                                        } transition-colors`}
                                         onClick={() => handleClick(index)}
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -195,8 +218,21 @@ const List = () => {
                                     >
                                         <td className="py-3 px-4 text-center">{item.rollNumber}</td>
                                         <td className="py-3 px-4 text-center">
-                                            <Link to={`/Sub-Admin/Students/details/${item.email}`} className="flex gap-2 items-center rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
-                                                <img src={item.profileLink} alt="" className="w-10 h-10 rounded-full object-cover border-2 border-blue-300" />
+                                            <Link 
+                                                to={`/Sub-Admin/Students/details/${item.email}`} 
+                                                className={`flex gap-2 items-center rounded-full text-center px-3 py-2 font-semibold ${
+                                                    darkMode 
+                                                    ? 'bg-gray-800 text-blue-300' 
+                                                    : 'bg-blue-100 text-blue-800'
+                                                }`}
+                                            >
+                                                <img 
+                                                    src={item.profileLink} 
+                                                    alt="" 
+                                                    className={`w-10 h-10 rounded-full object-cover border-2 ${
+                                                        darkMode ? 'border-blue-700' : 'border-blue-300'
+                                                    }`} 
+                                                />
                                                 {item.name}
                                             </Link>
                                         </td>
@@ -205,7 +241,11 @@ const List = () => {
                                         <td className="py-3 px-4 text-center whitespace-nowrap">
                                             <Link to={`/Sub-Admin/Result/exStudent/${item._id}?Class=${item.currentClass}&session=${selectedSession}`}>
                                                 <motion.button
-                                                    className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-600 transition-colors duration-200"
+                                                    className={`${
+                                                        darkMode 
+                                                        ? 'bg-blue-700 hover:bg-blue-800' 
+                                                        : 'bg-blue-500 hover:bg-blue-600'
+                                                    } text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200`}
                                                     whileHover={{ scale: 1.05 }}
                                                     whileTap={{ scale: 0.95 }}
                                                 >
@@ -215,17 +255,18 @@ const List = () => {
                                         </td>
                                     </motion.tr>
                                 ))}
-                                <div ref={sentinelRef} className="h-10"></div>
-                                {loading && start > 0 && (
-                                    <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
-                                )}
                             </>
                         )}
                     </tbody>
-
                 </table>
+                <div ref={sentinelRef} className="h-10"></div>
+                {loading && start > 0 && (
+                    <div className={`text-center w-full ${darkMode ? 'text-gray-400' : 'text-gray-600'} text-sm py-2`}>
+                        Loading more...
+                    </div>
+                )}
             </div>
-        </div >
+        </div>
     );
 };
 

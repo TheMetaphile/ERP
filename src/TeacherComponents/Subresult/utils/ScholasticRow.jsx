@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ScholasticRow({ area, index }) {
+export default function ScholasticRow({ area, index , darkMode}) {
     const totalobtained = parseInt(area.obtainedNoteBookMarks) + parseInt(area.obtainedSubjectEnrichmentMarks) + parseInt(area.marksObtained);
     const total = parseInt(area.totalMarks) + parseInt(area.totalNoteBookMarks) + parseInt(area.totalSubjectEnrichmentMarks);
     const percentage = total !== 0 ? (totalobtained / total) * 100 : 0;
@@ -20,13 +20,13 @@ export default function ScholasticRow({ area, index }) {
 
     return (
         <tr className='text-center text-lg font-normal ' key={index}>
-            <td className="px-4 pb-4 border-x border-gray-200">{area.subject}</td>
-            <td className="px-4 pb-4 border-x border-gray-200">{area.obtainedNoteBookMarks}</td>
-            <td className="px-4 pb-4 border-x border-gray-200">{area.obtainedSubjectEnrichmentMarks}</td>
-            <td className="px-4 pb-4 border-x border-gray-200">{area.marksObtained}</td>
-            <td className="px-4 pb-4 border-x border-gray-200">{totalobtained}</td>
-            <td className="px-4 pb-4 border-x border-gray-200">{percentage.toFixed(2)}</td>
-            <td className="px-4 pb-4 border-x border-gray-200">{grade}</td>
+            <td className={`px-4 py-2 border ${darkMode ? 'border-gray-700' : 'border-gray-300'}`}>{area.subject}</td>
+            <td className={`px-4 py-2 border ${darkMode ? 'border-gray-700' : 'border-gray-300'}`}>{area.obtainedNoteBookMarks}</td>
+            <td className={`px-4 py-2 border ${darkMode ? 'border-gray-700' : 'border-gray-300'}`}>{area.obtainedSubjectEnrichmentMarks}</td>
+            <td className={`px-4 py-2 border ${darkMode ? 'border-gray-700' : 'border-gray-300'}`}>{area.marksObtained}</td>
+            <td className={`px-4 py-2 border ${darkMode ? 'border-gray-700' : 'border-gray-300'}`}>{totalobtained}</td>
+            <td className={`px-4 py-2 border ${darkMode ? 'border-gray-700' : 'border-gray-300'}`}>{percentage.toFixed(2)}</td>
+            <td className={`px-4 py-2 border ${darkMode ? 'border-gray-700' : 'border-gray-300'}`}>{grade}</td>
         </tr>
     );
 }
