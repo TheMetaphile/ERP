@@ -9,7 +9,7 @@ import DiscountRow from "./DiscountRow";
 
 export default function () {
     const [discounts, setDiscounts] = useState([]);
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
 
     const [majorDiscountStructure, setShowMajorDiscountStructure] = useState(false);
 
@@ -54,25 +54,43 @@ export default function () {
     };
 
     return (
-        <div className='overflow-auto w-full rounded-md mt-2'>
-            <div className='flex justify-between px-2'>
-                <h1 className="text-2xl p-2 mobile:max-tablet:text-lg">Available Discounts</h1>
+        <div className={`overflow-auto w-full rounded-md mt-2 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white'}`}>
+            <div className='flex justify-between p-2'>
+                <h1 className={`text-2xl p-2 mobile:max-tablet:text-lg ${darkMode ? 'text-gray-200' : 'text-black'}`}>
+                    Available Discounts
+                </h1>
                 <button
-                    className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${majorDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'}`}
+                    className={`flex items-center gap-2 py-2 px-4 rounded-md text-white transition duration-300 
+                    ${majorDiscountStructure
+                            ? 'bg-red-500 hover:bg-red-600'
+                            : (darkMode ? 'bg-blue-700 hover:bg-blue-800' : 'bg-blue-500 hover:bg-blue-600')
+                        }`}
                     onClick={handleToggleMajorDiscountStructure}
                 >
                     {majorDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Create Category Discount</>}
                 </button>
-
             </div>
             {majorDiscountStructure && (
                 <GlobalDiscount />
             )}
-            <table className="w-full mt-3 border rounded-lg shadow-lg border-gray-300">
-                <Header headings={['Amount', 'Category', 'Type', 'Given By', 'Title', 'Duration', 'Permission', 'Action']} />
-                <tbody className="bg-white divide-y divide-gray-200 last:rounded-b-lg last:border-b-gray-300">
+            <table className={`w-full mt-3 border rounded-lg shadow-lg 
+            ${darkMode
+                    ? 'border-gray-700 bg-gray-800'
+                    : 'border-gray-300 bg-white'
+                }`}
+            >
+                <Header
+                    headings={['Amount', 'Category', 'Type', 'Given By', 'Title', 'Duration', 'Permission', 'Action']}
+                    darkMode={darkMode}
+                />
+                <tbody className={`divide-y ${darkMode ? 'divide-gray-700' : 'divide-gray-200'}`}>
                     {discounts.map((discount) => (
-                        <DiscountRow key={discount._id} discount={discount} handleDeleteDiscount={handleDeleteDiscount} />
+                        <DiscountRow
+                            key={discount._id}
+                            discount={discount}
+                            handleDeleteDiscount={handleDeleteDiscount}
+                            darkMode={darkMode}
+                        />
                     ))}
                 </tbody>
             </table>

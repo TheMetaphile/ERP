@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 export default function FeeAdminRow({ Class, session, key }) {
     const [structure, setStructure] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [admissionFee, setAdmissionFee] = useState('');
     const [monthlyFee, setMonthlyFee] = useState('');
     const [quarterFee, setQuarterFee] = useState('');
@@ -131,14 +131,23 @@ export default function FeeAdminRow({ Class, session, key }) {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: key * 0.1 }}
-            className="border-b border-gray-200 hover:bg-blue-100 transition-colors"
+            className={`border-b transition-colors ${darkMode
+                ? 'border-gray-700 hover:bg-gray-700'
+                : 'border-gray-200 hover:bg-blue-100'
+                }`}
         >
-
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{Class}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${darkMode ? 'text-gray-200' : 'text-gray-900'
+                }`}>
+                {Class}
+            </td>
+            <td className={`px-6 py-4 whitespace-nowrap text-sm ${darkMode ? 'text-gray-300' : 'text-gray-500'
+                }`}>
                 {editMode === key ? (
                     <input
-                        className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
+                        className={`border rounded-md w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline ${darkMode
+                            ? 'bg-gray-700 text-gray-200 border-gray-600'
+                            : 'text-gray-700 border-black'
+                            }`}
                         id="admissionFee"
                         type="number"
                         value={admissionFee}
@@ -149,10 +158,14 @@ export default function FeeAdminRow({ Class, session, key }) {
                     admissionFee || 'N/A'
                 )}
             </td>
-            <td className="px-4 py-2 whitespace-nowrap">
+            <td className={`px-4 py-2 whitespace-nowrap ${darkMode ? 'text-gray-300' : ''
+                }`}>
                 {editMode === key ? (
                     <input
-                        className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
+                        className={`border rounded-md w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline ${darkMode
+                            ? 'bg-gray-700 text-gray-200 border-gray-600'
+                            : 'text-gray-700 border-black'
+                            }`}
                         id="monthlyFee"
                         type="number"
                         value={monthlyFee}
@@ -163,10 +176,14 @@ export default function FeeAdminRow({ Class, session, key }) {
                     monthlyFee || 'N/A'
                 )}
             </td>
-            <td className="px-4 py-2 whitespace-nowrap">
+            <td className={`px-4 py-2 whitespace-nowrap ${darkMode ? 'text-gray-300' : ''
+                }`}>
                 {editMode === key ? (
                     <input
-                        className="border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-black"
+                        className={`border rounded-md w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline ${darkMode
+                            ? 'bg-gray-700 text-gray-200 border-gray-600'
+                            : 'text-gray-700 border-black'
+                            }`}
                         id="quarterFee"
                         type="number"
                         value={quarterFee}
@@ -188,7 +205,10 @@ export default function FeeAdminRow({ Class, session, key }) {
                             <MdCheck />
                         </button>
                         <button
-                            className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded shadow-md ml-2 transition duration-300"
+                            className={`${darkMode
+                                ? 'bg-gray-600 hover:bg-gray-700'
+                                : 'bg-gray-500 hover:bg-gray-600'
+                                } text-white px-3 py-1 rounded shadow-md ml-2 transition duration-300`}
                             onClick={handleCancelEdit}
                         >
                             <MdCancel />
@@ -196,14 +216,16 @@ export default function FeeAdminRow({ Class, session, key }) {
                     </>
                 ) : (
                     <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow-md transition duration-300"
+                        className={`${darkMode
+                            ? 'bg-blue-600 hover:bg-blue-700'
+                            : 'bg-blue-500 hover:bg-blue-600'
+                            } text-white px-3 py-1 rounded shadow-md transition duration-300`}
                         onClick={() => handleEditToggle(key)}
                     >
                         <MdOutlineModeEdit />
                     </button>
                 )}
             </td>
-
         </motion.tr>
 
     );

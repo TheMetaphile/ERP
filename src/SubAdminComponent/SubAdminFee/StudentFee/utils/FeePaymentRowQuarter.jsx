@@ -12,8 +12,8 @@ import logo from '../../../../assets/metaphile_logo.png';
 import Loading from '../../../../LoadingScreen/Loading';
 // import { useFilters } from '../../Students/utils/Filters';
 
-const FeePaymentRowQuarter = ({ student, key, fetchFees,selectedStudent, selectedDiscount, fetchTransaction }) => {
-    const { authState } = useContext(AuthContext);
+const FeePaymentRowQuarter = ({ student, key, fetchFees, selectedStudent, selectedDiscount, fetchTransaction }) => {
+    const { authState, darkMode } = useContext(AuthContext);
     const dropdownRef = useRef(null);
     const [Razorpay] = useRazorpay();
     const [paymentMode, setPaymentMode] = useState('');
@@ -279,7 +279,7 @@ const FeePaymentRowQuarter = ({ student, key, fetchFees,selectedStudent, selecte
 
     const handleCashPayment = async () => {
         if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
-            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) &&  amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
+            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                 try {
                     const datee = formatDateTime();
 
@@ -318,7 +318,7 @@ const FeePaymentRowQuarter = ({ student, key, fetchFees,selectedStudent, selecte
 
         else {
             if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && documentNumber) {
-                if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) &&  amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
+                if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                     const datee = formatDateTime();
 
                     await SemesterFeePayment({
@@ -347,7 +347,7 @@ const FeePaymentRowQuarter = ({ student, key, fetchFees,selectedStudent, selecte
     useEffect(() => {
 
         if (amount + discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
-            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) &&  amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
+            if (discount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount) && amount <= (student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount)) {
                 if (paymentMode === 'Online') {
                     const datee = formatDateTime();
 
@@ -413,61 +413,105 @@ const FeePaymentRowQuarter = ({ student, key, fetchFees,selectedStudent, selecte
     }
 
     return (
-        <tr className="bg-white border-b hover:bg-gray-50">
-            <td className="px-3 py-4">{student.months.join(', ')}</td>
-            <td className="px-3 py-4">{student.quarter}</td>
+        <tr className={`border-b ${darkMode
+            ? 'bg-gray-800 border-gray-700 hover:bg-gray-700'
+            : 'bg-white hover:bg-gray-50'
+            }`}>
+            {/* Months */}
+            <td className={`px-3 py-4 ${darkMode ? 'text-gray-300' : ''}`}>
+                {student.months.join(', ')}
+            </td>
+
+            {/* Quarter */}
+            <td className={`px-3 py-4 ${darkMode ? 'text-gray-300' : ''}`}>
+                {student.quarter}
+            </td>
+
+            {/* Total Fee */}
             <td className="px-3 py-4 whitespace-nowrap">
-                <div className='text-blue-500 px-2 py-1 bg-blue-100 font-semibold border border-blue-600 rounded-full'>
+                <div className={`${darkMode
+                    ? 'text-blue-400 bg-blue-900 border-blue-700'
+                    : 'text-blue-500 bg-blue-100 border-blue-600'
+                    } px-2 py-1 font-semibold border rounded-full`}>
                     ₹ {student.totalFee}
                 </div>
             </td>
+
+            {/* Paid Fee */}
             <td className="px-3 py-4 whitespace-nowrap">
-                <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
+                <div className={`${darkMode
+                    ? 'text-green-400 bg-green-900 border-green-700'
+                    : 'text-green-700 bg-green-100 border-green-600'
+                    } px-2 py-1 font-semibold border rounded-full`}>
                     ₹ {student.paidFee + parseInt(totalPaidAmount)}
                 </div>
             </td>
+
+            {/* Discount */}
             <td className="px-3 py-4">
-                <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
+                <div className={`${darkMode
+                    ? 'text-green-400 bg-green-900 border-green-700'
+                    : 'text-green-700 bg-green-100 border-green-600'
+                    } px-2 py-1 font-semibold border rounded-full`}>
                     ₹ {student.manualDiscount + student.categoryDiscount}
                 </div>
             </td>
+
+            {/* Pending Fee */}
             <td className="px-3 py-4">
-                <div className='text-red-600 px-2 py-1 bg-red-100 font-semibold border border-red-600 rounded-full'>
+                <div className={`${darkMode
+                    ? 'text-red-400 bg-red-900 border-red-700'
+                    : 'text-red-600 bg-red-100 border-red-600'
+                    } px-2 py-1 font-semibold border rounded-full`}>
                     ₹ {student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount}
                 </div>
             </td>
 
-            <td className="px-3 py-4 ">
-                <div className='text-green-700 px-2 py-1 bg-green-100 font-semibold border border-green-600 rounded-full'>
+            {/* Payment Method */}
+            <td className="px-3 py-4">
+                <div className={`${darkMode
+                    ? 'text-green-400 bg-green-900 border-green-700'
+                    : 'text-green-700 bg-green-100 border-green-600'
+                    } px-2 py-1 font-semibold border rounded-full`}>
                     {(paymentMode === 'Demand Draft' || paymentMode === 'Cheque') ? (
                         paymentMode
-                    )
-                        :
-                        "N/A"
-                    }
+                    ) : "N/A"}
                 </div>
             </td>
+
+            {/* Document Number */}
             <td className="px-3 py-4">
                 {(paymentMode === 'Demand Draft' || paymentMode === 'Cheque') ? (
-                    <div className=" flex flex-col">
+                    <div className="flex flex-col">
                         <input
                             type="text"
                             placeholder="Enter document number"
                             value={documentNumber}
                             onChange={(e) => setDocumentNumber(e.target.value)}
-                            className=" px-3 py-1 w-32 text-center rounded-full bg-white border border-blue-200 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400"
+                            className={`px-3 py-1 w-32 text-center rounded-full shadow-sm focus:outline-none focus:ring-1 ${darkMode
+                                ? 'bg-gray-700 text-gray-200 border-gray-600 focus:ring-blue-600'
+                                : 'bg-white border-blue-200 text-gray-900 focus:ring-blue-500'
+                                }`}
                         />
                     </div>
-                )
-                    :
-                    "N/A"
-                }
+                ) : "N/A"}
             </td>
-            <td className={`px-3 py-2  `}>
-                <div className={`px-3 py-1 rounded-full border text-center ${student.totalFee === student.paidFee ? 'text-green-600 bg-green-200 border-green-600' : 'text-red-600 bg-red-200 border-red-600'}`}>
+
+            {/* Status */}
+            <td className="px-3 py-2">
+                <div className={`px-3 py-1 rounded-full border text-center ${student.totalFee === student.paidFee
+                    ? (darkMode
+                        ? 'text-green-400 bg-green-900 border-green-700'
+                        : 'text-green-600 bg-green-200 border-green-600')
+                    : (darkMode
+                        ? 'text-red-400 bg-red-900 border-red-700'
+                        : 'text-red-600 bg-red-200 border-red-600')
+                    }`}>
                     {student.totalFee === student.paidFee ? 'Paid' : 'Pending'}
                 </div>
             </td>
+
+            {/* Discount Input */}
             <td className="px-3 py-4">
                 <input
                     type="number"
@@ -481,10 +525,15 @@ const FeePaymentRowQuarter = ({ student, key, fetchFees,selectedStudent, selecte
                     min={0}
                     max={student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount}
                     onChange={(e) => onDiscountChange(e.target.value)}
-                    className=" px-2 py-1 w-20 text-center rounded-full bg-white border border-blue-200 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400"
+                    className={`px-2 py-1 w-20 text-center rounded-full shadow-sm focus:outline-none focus:ring-1 ${darkMode
+                        ? 'bg-gray-700 text-gray-200 border-gray-600 focus:ring-blue-600'
+                        : 'bg-white border-blue-200 text-gray-900 focus:ring-blue-500'
+                        }`}
                     placeholder="Enter Discount"
                 />
             </td>
+
+            {/* Amount Input */}
             <td className="px-3 py-4">
                 <input
                     type="number"
@@ -498,28 +547,40 @@ const FeePaymentRowQuarter = ({ student, key, fetchFees,selectedStudent, selecte
                     min={0}
                     max={student.totalFee - student.paidFee - student.manualDiscount - student.categoryDiscount}
                     onChange={(e) => onAmountChange(e.target.value)}
-                    className=" px-2 py-1 w-20 text-center rounded-full bg-white border border-blue-200 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400"
+                    className={`px-2 py-1 w-20 text-center rounded-full shadow-sm focus:outline-none focus:ring-1 ${darkMode
+                        ? 'bg-gray-700 text-gray-200 border-gray-600 focus:ring-blue-600'
+                        : 'bg-white border-blue-200 text-gray-900 focus:ring-blue-500'
+                        }`}
                     placeholder="Enter amount"
                 />
             </td>
 
+            {/* Payment Mode Selection */}
             <td className="px-3 py-4" ref={dropdownRef}>
                 {!(student.totalFee === student.paidFee) && paymentMode === '' && (
                     <div className="relative">
                         <button
-                            className="text-blue-600 bg-blue-200 focus:outline-none px-5 py-1 rounded-full text-center"
+                            className={`focus:outline-none px-5 py-1 rounded-full text-center ${darkMode
+                                ? 'text-blue-400 bg-blue-900 hover:bg-blue-800'
+                                : 'text-blue-600 bg-blue-200 hover:bg-blue-300'
+                                }`}
                             onClick={() => setShowSuggestion(true)}
-
                         >
                             Pay
                         </button>
                         {paymentMode === '' && showSuggestion && (
-                            <div className="absolute z-10 mt-2 top-0 left-0 w-fit rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                                <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                            <div className={`absolute z-10 mt-2 top-0 left-0 w-fit rounded-md shadow-lg ${darkMode
+                                ? 'bg-gray-700 ring-1 ring-gray-600'
+                                : 'bg-white ring-1 ring-black ring-opacity-5'
+                                }`}>
+                                <div className="py-1" role="menu" aria-orientation="vertical">
                                     {['Online', 'Demand Draft', 'Cheque', 'Cash'].map((mode) => (
                                         <button
                                             key={mode}
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                                            className={`block px-4 py-2 text-sm w-full text-left ${darkMode
+                                                ? 'text-gray-300 hover:bg-gray-600 hover:text-white'
+                                                : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                                                }`}
                                             role="menuitem"
                                             onClick={() => { setShowSuggestion(false); setPaymentMode(mode) }}
                                         >
@@ -528,51 +589,57 @@ const FeePaymentRowQuarter = ({ student, key, fetchFees,selectedStudent, selecte
                                     ))}
                                 </div>
                             </div>
-                        )
-
-                        }
-
+                        )}
                     </div>
                 )}
+
+                {/* Paid Status */}
                 {student.totalFee === student.paidFee && (
-                    <span className="text-gray-600 bg-gray-200 px-5 py-1 rounded-full">Paid</span>
+                    <span className={`${darkMode
+                        ? 'text-gray-400 bg-gray-700'
+                        : 'text-gray-600 bg-gray-200'
+                        } px-5 py-1 rounded-full`}>
+                        Paid
+                    </span>
                 )}
 
+                {/* Payment Confirmation Buttons */}
                 {paymentMode !== '' && (
                     <div className="flex space-x-4 items-center">
                         <button
                             onClick={() => handleOtherPayment(student.studentEmailId, student.studentWhatsAppNo)}
-                            className="group flex items-center justify-center 
-                       w-8 h-8 rounded-full 
-                       bg-green-100 hover:bg-green-200 
-                       transition-all duration-300 
-                       shadow-md hover:shadow-lg 
-                       focus:outline-none focus:ring-2 focus:ring-green-300"
+                            className={`group flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 ${darkMode
+                                ? 'bg-green-900 hover:bg-green-800 focus:ring-green-700'
+                                : 'bg-green-100 hover:bg-green-200 focus:ring-green-300'
+                                }`}
                         >
                             <FaCheck
-                                className="text-green-600 group-hover:scale-110 transition-transform"
+                                className={`${darkMode
+                                    ? 'text-green-400 group-hover:text-green-300'
+                                    : 'text-green-600 group-hover:scale-110'
+                                    } transition-transform`}
                                 size={16}
                             />
                         </button>
 
                         <button
                             onClick={() => setPaymentMode('')}
-                            className="group flex items-center justify-center 
-                       w-8 h-8 rounded-full 
-                       bg-red-100 hover:bg-red-200 
-                       transition-all duration-300 
-                       shadow-md hover:shadow-lg 
-                       focus:outline-none focus:ring-2 focus:ring-red-300"
+                            className={`group flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 ${darkMode
+                                ? 'bg-red-900 hover:bg-red-800 focus:ring-red-700'
+                                : 'bg-red-100 hover:bg-red-200 focus:ring-red-300'
+                                }`}
                         >
                             <FaTimes
-                                className="text-red-600 group-hover:scale-110 transition-transform"
+                                className={`${darkMode
+                                    ? 'text-red-400 group-hover:text-red-300'
+                                    : 'text-red-600 group-hover:scale-110'
+                                    } transition-transform`}
                                 size={16}
                             />
                         </button>
                     </div>
                 )}
             </td>
-
         </tr>
     );
 };

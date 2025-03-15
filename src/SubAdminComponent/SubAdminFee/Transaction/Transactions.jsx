@@ -25,7 +25,7 @@ const getSessions = () => {
 }
 
 const Transactions = () => {
-    const { authState, logout, updateAccessToken } = useContext(AuthContext);
+    const { authState, logout, updateAccessToken, darkMode } = useContext(AuthContext);
 
     const session = getSessions();
     const [selectedSession, setSelectedSession] = useState(session[0]);
@@ -117,7 +117,7 @@ const Transactions = () => {
         const datee = formatDateTime();
 
 
-        const requestData =  {
+        const requestData = {
             token: authState?.accessToken,
             studentID: selectedStudent._id,
             amount: amount,
@@ -128,7 +128,7 @@ const Transactions = () => {
             payment_id: `${mode}-${Date.now()}`,
             signature: `${mode}`,
             discount: 0,
-        } 
+        }
         setTransactionData(requestData);
         setIsModalOpen(false);
         //console.log(course, transactionData, selectedStudent)
@@ -150,7 +150,7 @@ const Transactions = () => {
         } catch (error) {
             console.error('Error fetching back fee status:', error);
             //console.error('Error fetching agents:', error.response.data.error);
-       
+
         }
     };
 
@@ -234,20 +234,32 @@ const Transactions = () => {
 
     return (
         <div className="flex flex-col flex-grow">
-            <div className="bg-white flex-grow rounded-lg shadow-lg p-2">
+            <div className={`flex-grow rounded-lg shadow-lg p-2 
+        ${darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white'}`}
+            >
                 <div className="flex justify-between items-center mb-4 mobile:max-tablet:flex-col">
-                    <h1 className="text-2xl font-bold mb-3 mobile:max-tablet:text-sm mobile:max-tablet:font-semibold">
+                    <h1 className={`text-2xl font-bold mb-3 mobile:max-tablet:text-sm mobile:max-tablet:font-semibold 
+                ${darkMode ? 'text-gray-100' : 'text-black'}`}
+                    >
                         Fee Transaction Dashboard
                     </h1>
 
                     <div className='flex justify-end gap-2 mobile:max-tablet:flex-col'>
-                        <div className=' flex gap-2'>
-                            <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-blue-300 rounded-md py-2 px-4 text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
+                        <div className='flex gap-2'>
+                            <select
+                                id="sessionSelector"
+                                value={selectedSession}
+                                onChange={handleChange}
+                                className={`border-2 rounded-md py-2 px-4 focus:outline-none focus:ring-2 transition duration-300
+                            ${darkMode
+                                        ? 'bg-gray-700 border-gray-600 text-gray-200 focus:ring-blue-800'
+                                        : 'bg-white border-blue-300 text-blue-700 focus:ring-blue-500'
+                                    }`}
+                            >
                                 {session.map((session, index) => (
                                     <option key={index} value={session}>{session}</option>
                                 ))}
                             </select>
-
                         </div>
 
                         {/* <div className="relative" ref={ref}>
@@ -261,7 +273,11 @@ const Transactions = () => {
                             />
                         </div> */}
                         <button
-                            className='bg-blue-500 hover:bg-blue-600 mobile:max-tablet:text-xs whitespace-nowrap rounded-lg shadow-md px-4 py-2 text-white flex items-center'
+                            className={`mobile:max-tablet:text-xs whitespace-nowrap rounded-lg shadow-md px-4 py-2 flex items-center
+                        ${darkMode
+                                    ? 'bg-blue-700 hover:bg-blue-800 text-white'
+                                    : 'bg-blue-500 hover:bg-blue-600 text-white'
+                                }`}
                             onClick={handleAddTransaction}
                         >
                             <IoAddCircleOutline className="mr-2" />
@@ -282,7 +298,11 @@ const Transactions = () => {
                                     value={startDate}
                                     onChange={(e) => setStartDate(e.target.value)}
                                     max={endDate}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                    className={`mt-1 block w-full rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-opacity-50
+                                ${darkMode
+                                            ? 'bg-gray-700 border-gray-600 text-gray-200 focus:ring-blue-800'
+                                            : 'border-gray-300 focus:ring-blue-200'
+                                        }`}
                                 />
                             </div>
                             <div>
@@ -292,13 +312,21 @@ const Transactions = () => {
                                     value={endDate}
                                     onChange={(e) => setEndDate(e.target.value)}
                                     min={startDate}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                    className={`mt-1 block w-full rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-opacity-50
+                                ${darkMode
+                                            ? 'bg-gray-700 border-gray-600 text-gray-200 focus:ring-blue-800'
+                                            : 'border-gray-300 focus:ring-blue-200'
+                                        }`}
                                 />
                             </div>
                         </div>
 
                         <button
-                            className="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition duration-200"
+                            className={`px-4 py-2 font-semibold rounded hover:opacity-90 transition duration-200
+                        ${darkMode
+                                    ? 'bg-blue-700 text-white'
+                                    : 'bg-blue-500 text-white'
+                                }`}
                             onClick={handleDownload}
                         >
                             Download Report
@@ -310,22 +338,42 @@ const Transactions = () => {
 
                 {isModalOpen && (
                     <div
-                        className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-10" ref={dropdownRef}
+                        className={`fixed inset-0 flex justify-center items-center z-10
+                         ${darkMode
+                                ? 'bg-black bg-opacity-70'
+                                : 'bg-gray-500 bg-opacity-75'
+                            }`}
+                        ref={dropdownRef}
                     >
-                        <div className="bg-white rounded-lg mobile:max-tablet:p-4 mobile:max-tablet:w-full mobile:max-tablet:mx-10 p-6 shadow-lg w-1/2">
+                        <div className={`rounded-lg mobile:max-tablet:p-4 mobile:max-tablet:w-full mobile:max-tablet:mx-10 p-6 shadow-lg w-1/2
+                         ${darkMode
+                                ? 'bg-gray-800 text-gray-200'
+                                : 'bg-white'
+                            }`}
+                        >
                             <div className='flex justify-between'>
-                                <h2 className="text-xl font-bold mb-4 text-blue-600">Add Transaction</h2>
+                                <h2 className={`text-xl font-bold mb-4 
+                                 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}
+                                >
+                                    Add Transaction
+                                </h2>
                             </div>
 
                             <div className="grid md:grid-cols-1 grid-cols-2 gap-6">
                                 <div className="relative">
-                                    <label className="mb-2 text-sm font-medium text-blue-800 flex items-center">
-                                        <FaUser className="mr-2 text-blue-600" size={20} />
+                                    <label className={`mb-2 text-sm font-medium flex items-center
+                                ${darkMode ? 'text-blue-300' : 'text-blue-800'}`}
+                                    >
+                                        <FaUser className={`mr-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} size={20} />
                                         Name
                                     </label>
                                     <input
                                         type="text"
-                                        className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-blue-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white"
+                                        className={`w-full pl-10 pr-4 py-3 rounded-xl border-2 focus:border-blue-500 focus:ring-4 focus:ring-opacity-50 transition-all duration-300
+                                    ${darkMode
+                                                ? 'bg-gray-700 border-gray-600 text-gray-200 focus:ring-blue-800'
+                                                : 'bg-white border-blue-200 focus:ring-blue-200'
+                                            }`}
                                         placeholder="Enter student name"
                                         value={search}
                                         onChange={handleSearch}
@@ -337,7 +385,10 @@ const Transactions = () => {
                                             {suggestions.map((suggestion) => (
                                                 <li
                                                     key={suggestion._id}
-                                                    className="flex items-center p-2 cursor-pointer hover:bg-gray-200"
+                                                    className={`flex items-center p-2 cursor-pointer text-blue-800 ${darkMode
+                                                        ? 'bg-gray-400 hover:bg-gray-200'
+                                                        : ' hover:bg-gray-200'
+                                                        }`}
                                                     onClick={() => {
                                                         setSearch(suggestion.name);
                                                         setSelectedStudent(suggestion);
@@ -353,14 +404,17 @@ const Transactions = () => {
                                 </div>
 
                                 <div className="relative">
-                                    <label className="mb-2 text-sm font-medium text-blue-800 flex items-center">
-                                        <FaEnvelope className="mr-2 text-blue-600" size={20} />
+                                    <label className={`mb-2 text-sm font-medium flex items-center ${darkMode ? 'text-blue-300' : 'text-blue-800'}`}>
+                                        <FaEnvelope className={`mr-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} size={20} />
                                         Email
                                     </label>
                                     <input
                                         id="email"
                                         type="email"
-                                        className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-blue-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white"
+                                        className={`w-full pl-10 pr-4 py-3 rounded-xl border-2 border-blue-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white ${darkMode
+                                            ? 'bg-gray-700 border-gray-600 text-gray-200 focus:ring-blue-800'
+                                            : 'bg-white border-blue-200 focus:ring-blue-200'
+                                            }`}
                                         placeholder="Enter email"
                                         value={selectedStudent.email}
                                     // readOnly
@@ -368,10 +422,10 @@ const Transactions = () => {
                                     <FaEnvelope className="absolute left-3 top-[2.6rem] text-blue-400" size={20} />
                                 </div>
 
-                          
+
                                 <div className="relative">
-                                    <label className="mb-2 text-sm font-medium text-blue-800 flex items-center">
-                                        <FaRupeeSign className="mr-2 text-blue-600" size={20} />
+                                    <label className={`mb-2 text-sm font-medium flex items-center ${darkMode ? 'text-blue-300' : 'text-blue-800'}`}>
+                                        <FaRupeeSign className={`mr-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} size={20} />
                                         Amount
                                     </label>
                                     <input
@@ -392,8 +446,8 @@ const Transactions = () => {
                                 </div>
 
                                 <div className="relative">
-                                    <label className="mb-2 text-sm font-medium text-blue-800 flex items-center">
-                                        <MdOutlinePayments className="mr-2 text-blue-600" size={20} />
+                                    <label className={`mb-2 text-sm font-medium flex items-center ${darkMode ? 'text-blue-300' : 'text-blue-800'}`}>
+                                        <MdOutlinePayments className={`mr-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} size={20} />
                                         Mode
                                     </label>
                                     <select
@@ -433,13 +487,21 @@ const Transactions = () => {
 
                             <div className="flex justify-between space-x-4 mt-6">
                                 <button
-                                    className="flex-1 bg-gray-200 text-gray-700 rounded-xl py-3 hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
+                                    className={`flex-1 rounded-xl py-3 hover:opacity-90 transition-colors duration-300 flex items-center justify-center
+                                ${darkMode
+                                            ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                        }`}
                                     onClick={handleCloseModal}
                                 >
                                     Cancel
                                 </button>
                                 <button
-                                    className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl py-3 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
+                                    className={`flex-1 rounded-xl py-3 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center
+                                ${darkMode
+                                            ? 'bg-gradient-to-r from-blue-800 to-indigo-800 text-white hover:from-blue-900 hover:to-indigo-900'
+                                            : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700'
+                                        }`}
                                     onClick={handleSubmitTransaction}
                                 >
                                     Submit Transaction

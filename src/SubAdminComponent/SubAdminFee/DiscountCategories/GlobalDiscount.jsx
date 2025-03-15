@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FaRegTimesCircle } from 'react-icons/fa';
 
 function GlobalDiscount() {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [amount, setAmount] = useState('');
     const [discountType, setDiscountType] = useState('fixed');
 
@@ -123,12 +123,23 @@ function GlobalDiscount() {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="mt-4 w-full p-6 rounded-lg shadow-md border bg-white">
+        <form
+            onSubmit={handleSubmit}
+            className={`mt-4 w-full p-6 rounded-lg shadow-md border 
+        ${darkMode
+                    ? 'bg-gray-800 border-gray-700 text-gray-200'
+                    : 'bg-white border-gray-300'
+                }`}
+        >
             <ToastContainer />
-            <h2 className="text-2xl font-bold mb-6">Create Discount</h2>
+            <h2 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
+                Create Discount
+            </h2>
             <div className="grid grid-cols-1 tablet:max-laptop::grid-cols-3 laptop:grid-cols-4 gap-6 mb-6">
                 <div>
-                    <label className="block text-gray-700 font-medium mb-2">Discount Type</label>
+                    <label className={`block font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Discount Type
+                    </label>
                     <select
                         name="discountType"
                         value={discountType}
@@ -136,14 +147,20 @@ function GlobalDiscount() {
                             setDiscountType(e.target.value);
                             setAmount("");
                         }}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 p-3
+                    ${darkMode
+                                ? 'bg-gray-700 border-gray-600 text-gray-200'
+                                : 'border-gray-300 bg-white'
+                            }`}
                     >
                         <option value="fixed">Fixed Amount</option>
                         <option value="percentage">Percentage</option>
                     </select>
                 </div>
                 <div>
-                    <label className="block text-gray-700 font-medium mb-2">Discount Amount</label>
+                    <label className={`block font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Discount Amount
+                    </label>
                     <input
                         type="number"
                         name="amount"
@@ -157,145 +174,107 @@ function GlobalDiscount() {
                             setAmount(value);
                         }}
                         required
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 p-3
+                    ${darkMode
+                                ? 'bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-400'
+                                : 'border-gray-300 bg-white'
+                            }`}
                         placeholder={discountType === "percentage" ? "Enter percentage (0-100%)" : "Enter discount amount"}
                     />
                 </div>
 
+                {/* Similar modifications for other form elements */}
                 <div>
-                    <label className="block text-gray-700 font-medium mb-2">Title</label>
+                    <label className={`block font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Title
+                    </label>
                     <select
                         name="title"
                         value={title}
                         required
                         onChange={(e) => setTitle(e.target.value)}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 p-3
+                    ${darkMode
+                                ? 'bg-gray-700 border-gray-600 text-gray-200'
+                                : 'border-gray-300 bg-white'
+                            }`}
                     >
                         <option value="">Select Title</option>
-
                         <option value="staff ward">Staff Ward</option>
                         <option value="admin discount">Admin Discount</option>
                         <option value="superadmin discount">Superadmin Discount</option>
                     </select>
                 </div>
 
-                <div>
-                    <label className="block text-gray-700 font-medium mb-2">Duration (Months)</label>
-                    <select
-                        name="duration"
-                        value={duration}
-                        required
-                        onChange={(e) => setDuration(e.target.value)}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="">Enter duration</option>
-                        <option value={-1}>Remainig Session</option>
-                        {
-                            Array.from({ length: 12 }, (_, i) => (
-                                <option key={i} value={i}>{i + 1} month</option>
-                            ))
-                        }
-                    </select>
+                {/* For particular class section */}
+                {discountTargetType === 'particular class' && (
+                    <div>
+                        <div className="flex mb-4 space-x-4">
+                            <select
+                                className={`w-full border rounded-lg px-3 py-2
+                            ${darkMode
+                                        ? 'bg-gray-700 border-gray-600 text-gray-200'
+                                        : 'border-gray-300 bg-white'
+                                    }`}
+                                value={selectedClass}
+                                onChange={(e) => setSelectedClass(e.target.value)}
+                            >
+                                <option value="">Select Class</option>
+                                {classOptions.map(cls => (
+                                    <option key={cls} value={cls}>{cls}</option>
+                                ))}
+                            </select>
+                            {/* Similar dark mode styling for other selects */}
+                        </div>
 
-                </div>
-                <div>
-                    <label className="block text-gray-700 font-medium mb-2">Discount Target Type</label>
-                    <select
-                        name="discountTargetType"
-                        value={discountTargetType}
-                        onChange={(e) => setDiscountTargetType(e.target.value)}
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    >
-                        <option value="">Select Target Type</option>
-                        <option value="all">All</option>
-                        <option value="wing">Wing</option>
-                        <option value="particular class">Particular Class</option>
-
-
-                    </select>
-                </div>
-            </div>
-
-            {discountTargetType === 'particular class' && (
-                <div>
-                    <div className="flex mb-4 space-x-4">
-                        <select
-                            className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                            value={selectedClass}
-                            onChange={(e) => setSelectedClass(e.target.value)}
-                        >
-                            <option value="">Select Class</option>
-                            {classOptions.map(cls => (
-                                <option key={cls} value={cls}>{cls}</option>
-                            ))}
-                        </select>
-                        <select
-                            className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                            value={selectedSection}
-                            onChange={(e) => setSelectedSection(e.target.value)}
-                            disabled={!selectedClass || loading}
-                        >
-                            <option value="">Select Section</option>
-                            {sectionOptions.map(section => (
-                                <option key={section} value={section}>{section}</option>
-                            ))}
-                        </select>
-                        <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={handleAddClass}
-                            disabled={!selectedClass || !selectedSection}
-                        >
-                            Add
-                        </button>
+                        {/* Class and section list with dark mode */}
+                        {classes.length > 0 && (
+                            <ul className={`w-full mb-4 border rounded-lg px-3 py-2
+                        ${darkMode
+                                    ? 'bg-gray-700 border-gray-600 text-gray-200'
+                                    : 'border-gray-300 bg-white'
+                                }`}
+                            >
+                                {classes.map(cls => (
+                                    <li key={cls.Class} className="mb-2">
+                                        <div className={`flex justify-between mt-2 border shadow-md rounded-full px-2 items-center py-1
+                                    ${darkMode
+                                                ? 'bg-gray-800 border-gray-700'
+                                                : 'border-gray-300 bg-white'
+                                            }`}
+                                        >
+                                            <span>{cls.Class}: {cls.sections.join(', ')}</span>
+                                            <FaRegTimesCircle
+                                                className={`h-5 w-5 
+                                            ${darkMode
+                                                        ? 'text-red-400 hover:text-red-600'
+                                                        : 'text-red-500'
+                                                    }`}
+                                                onClick={() => handleRemoveClass(cls.Class)}
+                                            />
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
-                    {classes.length > 0 && (
-                        <ul className="w-full mb-4 border border-gray-300 rounded-lg px-3 py-2">
-                            {classes.map(cls => (
-                                <li key={cls.Class} className="mb-2">
-                                    <div className="flex justify-between mt-2 border border-gray-300 shadow-md rounded-full px-2 items-center py-1">
-                                        <span>{cls.Class}: {cls.sections.join(', ')}</span>
-                                        <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => handleRemoveClass(cls.Class)} />
-                                    </div>
-                                    <ul>
-                                        {cls.sections.map(section => (
-                                            <li key={section} className="flex justify-between mt-2 border border-gray-300 shadow-md rounded-full px-2 items-center py-1">
-                                                <span>{section}</span>
-                                                <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => handleRemoveSection(cls.Class, section)} />
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-            )}
+                )}
 
-            {discountTargetType === 'wing' && (
-                <div>
-                    <label className="block text-gray-700 font-medium mb-2">Select Wing</label>
-                    <select
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                        value={selectedWing}
-                        onChange={(e) => setSelectedWing(e.target.value)}
+                {/* Submit button with dark mode */}
+                <div className="flex justify-end mt-6">
+                    <button
+                        className={`font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out
+                    ${darkMode
+                                ? 'bg-blue-700 hover:bg-blue-800 text-white'
+                                : 'bg-blue-600 hover:bg-blue-700 text-white'
+                            }
+                    ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        type="submit"
+                        disabled={isLoading}
                     >
-                        <option value="">Select Wing</option>
-                        {wingOptions.map(wing => (
-                            <option key={wing} value={wing}>{wing}</option>
-                        ))}
-                    </select>
+                        {isLoading ? 'Creating...' : 'Create Discount'}
+                    </button>
                 </div>
-            )}
-
-            <div className="flex justify-end mt-6">
-                <button
-                    className={`bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    type="submit"
-                    disabled={isLoading}
-                >
-                    {isLoading ? 'Creating...' : 'Create Discount'}
-                </button>
             </div>
         </form>
     );

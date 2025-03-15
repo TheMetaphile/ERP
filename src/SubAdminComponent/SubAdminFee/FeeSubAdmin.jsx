@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import AuthContext from '../../Context/AuthContext';
 
 function FeeSubAdmin() {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [selectedLink, setSelectedLink] = useState(`/${authState?.role}/StudentsFee/details`);
 
     const handleLinkSelect = (link) => {
@@ -23,13 +23,20 @@ function FeeSubAdmin() {
     };
 
     const tabVariants = {
-        inactive: { backgroundColor: "#E5E7EB", color: "#4B5563" },
-        active: { backgroundColor: "#c6a4eb", color: "#FFFFFF" }
+        inactive: {
+            backgroundColor: darkMode ? "#374151" : "#E5E7EB",
+            color: darkMode ? "#D1D5DB" : "#4B5563"
+        },
+        active: {
+            backgroundColor: darkMode ? "#6D28D9" : "#c6a4eb",
+            color: "#FFFFFF"
+        }
     };
 
     return (
         <motion.div
-            className="flex flex-col px-2 overflow-auto items-start  no-scrollbar pt-4  min-h-screen"
+            className={`flex flex-col px-2 overflow-auto items-start no-scrollbar pt-4 min-h-screen ${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-800'
+                }`}
             initial="initial"
             animate="animate"
             exit="exit"
@@ -37,12 +44,13 @@ function FeeSubAdmin() {
             transition={{ duration: 0.5 }}
         >
             <motion.div
-                className=" rounded-lg w-full bg-white shadow-lg p-2"
+                className={`rounded-lg w-full shadow-lg p-2 ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white'
+                    }`}
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5 }}
             >
-                <div className="flex  items-center justify-between">
+                <div className="flex items-center justify-between">
                     <div className="flex gap-4 w-full overflow-auto whitespace-nowrap">
                         {[
                             { path: `/${authState?.role}/StudentsFee/structure`, label: 'Fee Structure' },
@@ -52,8 +60,6 @@ function FeeSubAdmin() {
                             { path: `/${authState?.role}/StudentsFee/discountCategory`, label: 'Discount Category' },
                             { path: `/${authState?.role}/StudentsFee/Transactions`, label: 'Transactions' },
                             { path: `/${authState?.role}/StudentsFee/PendingFee`, label: 'Pending Fee' }
-
-
                         ].map((item) => (
                             <motion.div
                                 key={item.path}
@@ -61,14 +67,17 @@ function FeeSubAdmin() {
                                 whileHover="hover"
                                 whileTap="tap"
                             >
-                                <Link to={item.path} onClick={() => handleLinkSelect(item.path)}>
+                                <Link
+                                    to={item.path}
+                                    onClick={() => handleLinkSelect(item.path)}
+                                    className="focus:outline-none"
+                                >
                                     <motion.h1
-                                        className={`px-4 py-2 rounded-full text-sm font-medium focus:outline-none`}
+                                        className={`px-4 py-2 rounded-full text-sm font-medium`}
                                         variants={tabVariants}
                                         animate={selectedLink === item.path ? "active" : "inactive"}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-
                                     >
                                         {item.label}
                                     </motion.h1>
@@ -78,7 +87,8 @@ function FeeSubAdmin() {
                     </div>
                 </div>
                 <motion.hr
-                    className='border-t-2 bg-blue-200 mt-2 mb-3'
+                    className={`border-t-2 mt-2 mb-3 ${darkMode ? 'border-gray-700' : 'bg-blue-200'
+                        }`}
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ duration: 0.5 }}
@@ -95,4 +105,4 @@ function FeeSubAdmin() {
     )
 }
 
-export default FeeSubAdmin
+export default FeeSubAdmin;

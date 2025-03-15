@@ -8,7 +8,7 @@ import StudentCard from '../StudentFee/utils/ProfileCard';
 import ApplicableDiscounts from '../StudentFee/utils/ApplicableDiscounts';
 
 function CreateDiscount({ selectedSession }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [selectedSuggestion, setSelectedSuggestion] = useState();
     const [appliedDis, setAppliedDis] = useState(null);
     const [temp, setTemp] = useState('');
@@ -92,8 +92,8 @@ function CreateDiscount({ selectedSession }) {
         try {
             console.log(selectedDiscount);
             const date = new Date();
-            if(!selectedSuggestion || (!selectedDiscount && !removeDiscount)){
-                return; 
+            if (!selectedSuggestion || (!selectedDiscount && !removeDiscount)) {
+                return;
             }
             const response = await axios.post(`${BASE_URL}/fee/apply/discount`,
                 {
@@ -124,33 +124,54 @@ function CreateDiscount({ selectedSession }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="mt-4 w-full p-6 rounded-lg shadow-md border bg-white">
+        <form
+            onSubmit={handleSubmit}
+            className={`mt-4 w-full p-6 rounded-lg shadow-md ${darkMode
+                ? 'bg-gray-800 border-gray-700 text-gray-200'
+                : 'bg-white border'
+                }`}
+        >
             <ToastContainer />
-            <h2 className="text-2xl font-bold mb-6 ">Create Discount</h2>
+            <h2 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-gray-200' : ''
+                }`}>
+                Create Discount
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div ref={inputRef} className="relative">
-                    <label className="block text-gray-700 font-medium mb-2">Student Email</label>
+                    <label className={`block font-medium mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-700'
+                        }`}>
+                        Student Email
+                    </label>
                     <input
                         type="text"
                         name="email"
                         value={searchInput}
                         onChange={handleEmailChange}
-                        // required
-                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full p-3 rounded-md focus:outline-none focus:ring-2 ${darkMode
+                            ? 'bg-gray-700 text-gray-200 border-gray-600 focus:ring-blue-600'
+                            : 'border border-gray-300 focus:ring-blue-500'
+                            }`}
                         placeholder="Start typing student name..."
                     />
                     {showSuggestions && suggestions.length > 0 && (
-                        <ul className="absolute z-10 w-full bg-white border rounded-md mt-1 max-h-60 overflow-y-auto shadow-lg">
+                        <ul className={`absolute z-10 w-full mt-1 max-h-60 overflow-y-auto shadow-lg rounded-md ${darkMode
+                            ? 'bg-gray-700 border-gray-600'
+                            : 'bg-white border'
+                            }`}>
                             {suggestions.map((suggestion, idx) => (
                                 <li
                                     key={idx}
-                                    className="flex items-center p-3 cursor-pointer hover:bg-blue-50 transition duration-150 ease-in-out"
+                                    className={`flex items-center p-3 cursor-pointer transition duration-150 ease-in-out ${darkMode
+                                        ? 'hover:bg-gray-600 text-gray-200'
+                                        : 'hover:bg-blue-50'
+                                        }`}
                                     onClick={() => handleSuggestionClick(suggestion)}
                                 >
                                     <img src={suggestion.profileLink} alt="Profile" className='w-8 h-8 rounded-full mr-3' />
                                     <div>
                                         <p className="font-medium">{suggestion.name}</p>
-                                        <p className="text-sm text-gray-600">{suggestion.email}</p>
+                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'
+                                            }`}>{suggestion.email}</p>
                                     </div>
                                 </li>
                             ))}
@@ -166,6 +187,7 @@ function CreateDiscount({ selectedSession }) {
                             profileLink={selectedSuggestion.profileLink}
                             rollNumber={selectedSuggestion.rollNumber}
                             section={selectedSuggestion.section}
+                            darkMode={darkMode}
                         />
                         <ApplicableDiscounts
                             selectedStudent={selectedSuggestion}
@@ -181,7 +203,12 @@ function CreateDiscount({ selectedSession }) {
             </div>
             <div className="flex justify-end">
                 <button
-                    className={`bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`font-bold py-3 px-6 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out ${isLoading
+                        ? 'opacity-50 cursor-not-allowed'
+                        : (darkMode
+                            ? 'bg-blue-700 hover:bg-blue-800 text-white'
+                            : 'bg-blue-600 hover:bg-blue-700 text-white')
+                        }`}
                     type="submit"
                     disabled={isLoading}
                 >

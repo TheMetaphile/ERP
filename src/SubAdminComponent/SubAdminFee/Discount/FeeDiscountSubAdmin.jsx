@@ -21,7 +21,7 @@ const getSessions = () => {
 function FeeDiscountSubAdmin() {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [showDiscountStructure, setShowDiscountStructure] = useState(false);
     const session = getSessions();
     const [selectedSession, setSelectedSession] = useState(session[0]);
@@ -106,51 +106,94 @@ function FeeDiscountSubAdmin() {
     }, [allDataFetched, loading]);
 
     return (
-        <div className="flex flex-col px-6 py-8 min-h-screen mobile:max-tablet:p-2">
+        <div className={`flex flex-col px-6 py-8 min-h-screen mobile:max-tablet:p-2 ${darkMode ? 'bg-gray-900 text-gray-100' : ''
+            }`}>
             <ToastContainer />
             <div className='flex justify-between items-center mb-6 mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
-                <h1 className="text-3xl font-bold text-blue-500 flex items-center mobile:max-tablet:text-lg"><MdSchool className="mr-2" /> Student Fee Discount</h1>
+                <h1 className={`text-3xl font-bold flex items-center mobile:max-tablet:text-lg ${darkMode ? 'text-blue-300' : 'text-blue-500'
+                    }`}>
+                    <MdSchool className="mr-2" /> Student Fee Discount
+                </h1>
                 <div className='flex gap-4 items-center mobile:max-tablet:flex-col'>
-                    <div className=' flex gap-2'>
-                        <select id="sessionSelector" value={selectedSession} onChange={handleChange} className="bg-white border-2 border-blue-300 rounded-md py-2 px-4 text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
+                    <div className='flex gap-2'>
+                        <select
+                            id="sessionSelector"
+                            value={selectedSession}
+                            onChange={handleChange}
+                            className={`${darkMode
+                                ? 'bg-gray-700 text-gray-200 border-gray-600 focus:ring-blue-600'
+                                : 'bg-white border-blue-300 text-blue-700 focus:ring-blue-500'
+                                } border-2 rounded-md py-2 px-4 focus:outline-none focus:ring-2 transition duration-300`}
+                        >
                             {session.map((session, index) => (
-                                <option key={index} value={session}>{session}</option>
+                                <option
+                                    key={index}
+                                    value={session}
+                                    className={darkMode ? 'bg-gray-800 text-gray-200' : ''}
+                                >
+                                    {session}
+                                </option>
                             ))}
                         </select>
                     </div>
 
-                    <button className={`flex items-center mobile:max-tablet:justify-start gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'}`} onClick={() => setShowDiscountStructure(!showDiscountStructure)}>
+                    <button
+                        className={`flex items-center mobile:max-tablet:justify-start gap-2 py-2 px-4 rounded-md text-white transition duration-300 ${showDiscountStructure
+                            ? (darkMode
+                                ? 'bg-red-700 hover:bg-red-800'
+                                : 'bg-red-500 hover:bg-red-600')
+                            : (darkMode
+                                ? 'bg-blue-700 hover:bg-blue-800'
+                                : 'bg-blue-500 hover:bg-blue-600')
+                            }`}
+                        onClick={() => setShowDiscountStructure(!showDiscountStructure)}
+                    >
                         {showDiscountStructure ? <><MdRemove /> Cancel</> : <><MdAdd /> Apply Discount</>}
                     </button>
                 </div>
             </div>
             <div className='w-full'>
                 {showDiscountStructure && <CreateDiscount selectedSession={selectedSession} />}
-                <div className='mt-3 bg-white border border-blue-200 rounded-lg shadow-lg overflow-auto'>
+                <div className={`mt-3 rounded-lg shadow-lg overflow-auto ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-200 border'
+                    }`}>
                     <table className="w-full">
-                        <thead className="bg-blue-200 whitespace-nowrap">
+                        <thead className={`whitespace-nowrap ${darkMode ? 'bg-gray-700' : 'bg-blue-200'
+                            }`}>
                             <tr>
                                 {["Roll No.", "Student Name", "Class & Section", "Discount Type", "Title", "Amount", "By", "Department", "Date", "Start Month", "End Month", "Action"].map(header => (
-                                    <th key={header} className="py-3 px-4 text-left">{header}</th>
+                                    <th key={header} className={`py-3 px-4 text-left ${darkMode ? 'text-gray-300' : 'text-gray-800'
+                                        }`}>{header}</th>
                                 ))}
                             </tr>
                         </thead>
-                        <tbody className=' whitespace-nowrap'>
+                        <tbody className='whitespace-nowrap'>
                             {loading ? (
-                                <tr><td colSpan="8" className="text-center py-4"><Loading /></td></tr>
+                                <tr><td colSpan="12" className="text-center py-4"><Loading /></td></tr>
                             ) : details.length > 0 ? (
                                 details.map((detail, index) => (
                                     <motion.tr
+                                        key={index}
                                         initial={{ opacity: 0, x: -20 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ duration: 0.3, delay: index * 0.1 }}
-                                        className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
+                                        className={`border-b transition-colors ${darkMode
+                                            ? 'border-gray-700 hover:bg-gray-700'
+                                            : 'border-gray-200 hover:bg-gray-50'
+                                            }`}
                                     >
-
-                                        <td className="py-3 px-4">{detail.student.rollNumber}</td>
+                                        <td className={`py-3 px-4 ${darkMode ? 'text-gray-300' : ''
+                                            }`}>{detail.student.rollNumber}</td>
                                         <td className="py-3 px-4">
-                                            <Link to={`/Sub-Admin/Students/details/${detail.student.email}`} className=" text-center px-3 py-2 font-semibold  text-blue-800 flex w-fit">
-                                                <img src={detail.student.profileLink} alt="profile" className="h-6 w-6 rounded-full mr-3 border-2 border-indigo-300" />
+                                            <Link
+                                                to={`/Sub-Admin/Students/details/${detail.student.email}`}
+                                                className={`text-center px-3 py-2 font-semibold flex w-fit ${darkMode ? 'text-blue-300 hover:text-blue-200' : 'text-blue-800'
+                                                    }`}
+                                            >
+                                                <img
+                                                    src={detail.student.profileLink}
+                                                    alt="profile"
+                                                    className="h-6 w-6 rounded-full mr-3 border-2 border-indigo-300"
+                                                />
                                                 {detail.student.name}
                                             </Link>
                                         </td>
@@ -165,22 +208,38 @@ function FeeDiscountSubAdmin() {
                                         <td className="py-3 px-4">{detail.endMonth}</td>
 
                                         <td className="py-3 px-4">
-                                            <button className="text-red-500 hover:text-red-700 transition duration-200" onClick={() => handleDelete(index, detail._id)}>
+                                            <button
+                                                className={`transition duration-200 ${darkMode
+                                                    ? 'text-red-400 hover:text-red-300'
+                                                    : 'text-red-500 hover:text-red-700'
+                                                    }`}
+                                                onClick={() => handleDelete(index, detail._id)}
+                                            >
                                                 <MdDeleteForever size={20} />
                                             </button>
                                         </td>
                                     </motion.tr>
-
                                 ))
                             ) : (
-                                <tr><td colSpan="8" className="text-center py-4 text-gray-500">No Fee Discount available</td></tr>
+                                <tr>
+                                    <td
+                                        colSpan="12"
+                                        className={`text-center py-4 ${darkMode ? 'text-gray-400' : 'text-gray-500'
+                                            }`}
+                                    >
+                                        No Fee Discount available
+                                    </td>
+                                </tr>
                             )}
                         </tbody>
                     </table>
                 </div>
                 <div ref={sentinelRef} className="h-10"></div>
                 {loading && start > 0 && (
-                    <div className="text-center w-full text-gray-600 text-sm">Loading more...</div>
+                    <div className={`text-center w-full text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'
+                        }`}>
+                        Loading more...
+                    </div>
                 )}
             </div>
         </div>

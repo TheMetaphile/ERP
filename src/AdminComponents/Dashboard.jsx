@@ -51,7 +51,7 @@ export default function AdminDashboard() {
         <AdminNavbar onDrawerToggle={toggleDrawer} onEndDrawerToggle={toggleEndDrawer} />
       </div>
 
-      <div className="flex flex-grow relative pt-20">
+      <div className={`flex flex-grow relative pt-20 ${darkMode ? 'bg-gray-900' : 'bg-white'} `}>
         <div
           className={`mobile:max-tablet:fixed z-30 mt-2 flex-shrink-0 transition-all duration-300 
             ${isDrawerOpen ? 'w-64' : 'w-0'} 

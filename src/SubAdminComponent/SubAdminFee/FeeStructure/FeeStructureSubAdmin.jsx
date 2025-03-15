@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { motion } from 'framer-motion';
-import { FaGraduationCap, FaChevronDown } from 'react-icons/fa';
+import { FaGraduationCap } from 'react-icons/fa';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import FeeAdminRow from './FeeAdminRow';
 import Header from './Header';
 import SessionSelector from './SessionSelector';
 import PageTitle from './PageTitle';
+import AuthContext from '../../../Context/AuthContext';
 
 const getSessions = () => {
   const currentYear = new Date().getFullYear();
@@ -26,6 +27,8 @@ const content = [
 ];
 
 function FeeStructureSubAdmin() {
+  const { darkMode } = useContext(AuthContext);
+
   const sessions = getSessions();
   const [selectedSession, setSelectedSession] = useState(sessions[0]);
 
@@ -34,7 +37,11 @@ function FeeStructureSubAdmin() {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3 }}
-      className="min-h-screen p-2 bg-gradient-to-br from-blue-50 to-white">
+      className={`min-h-screen p-2 ${darkMode
+          ? 'bg-gradient-to-br from-gray-900 to-gray-800'
+          : 'bg-gradient-to-br from-blue-50 to-white'
+        }`}
+    >
       <ToastContainer />
       <div className='flex justify-between items-center mb-8 mobile:max-tablet:flex-col mobile:max-tablet:items-start'>
         <PageTitle icon={FaGraduationCap} title="Fee Structure Management" />
@@ -44,10 +51,12 @@ function FeeStructureSubAdmin() {
           setSelectedSession={setSelectedSession}
         />
       </div>
-      <div className=' overflow-auto'>
-        <table className="w-full border-collapse bg-white rounded-lg">
+      <div className='overflow-auto'>
+        <table className={`w-full border-collapse rounded-lg ${darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white'
+          }`}>
           <Header headings={['Class Group', 'Admission Fee', 'Monthly Fee', 'Quarterly Fee', 'Actions']} />
-          <tbody className="divide-y divide-gray-200">
+          <tbody className={`divide-y ${darkMode ? 'divide-gray-700' : 'divide-gray-200'
+            }`}>
             {content.map((con, index) => (
               <FeeAdminRow
                 Class={con.class}

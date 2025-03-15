@@ -8,9 +8,9 @@ import { FaMoneyBillWave, FaCalendarAlt, FaPercent, FaCreditCard, FaUser, FaChal
 import FeePaymentRow from "./FeePaymentRow";
 import FeePaymentRowQuarter from "./FeePaymentRowQuarter";
 
-export default function FeeStructureField({ fees, selectedOption, setFees, Student,fetchFees, selectedDiscount ,removeDiscount, fetchTransaction}) {
+export default function FeeStructureField({ fees, selectedOption, setFees, Student, fetchFees, selectedDiscount, removeDiscount, fetchTransaction }) {
     const [Razorpay] = useRazorpay();
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [mode, setMode] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
@@ -19,7 +19,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
     const [clickedIndex, setClickedIndex] = useState(null);
 
 
-    console.log('SelectedDiscount: ',selectedDiscount, "removeDiscount: ", removeDiscount)
+    console.log('SelectedDiscount: ', selectedDiscount, "removeDiscount: ", removeDiscount)
     const handleClick = (index) => {
         setClickedIndex(index);
     };
@@ -197,38 +197,46 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
     };
 
     const FeeStructureHeader = () => (
-        <motion.thead className="bg-blue-200 rounded-t-lg w-full">
+        <motion.thead className={`${darkMode ? 'bg-gray-700' : 'bg-blue-200'
+            }`}>
             <tr>
-                <th scope="col" className="px-3 py-3">Month</th>
-                <th scope="col" className="px-3 py-3">Total Fee</th>
-                <th scope="col" className="px-3 py-3">Paid Fee</th>
-                <th scope="col" className="px-3 py-3">Applied Discount (Manual + Category)</th>
-                <th scope="col" className="px-3 py-3">Pending Fee</th>
-                <th scope="col" className="px-3 py-3">Payment Method</th>
-                <th scope="col" className="px-3 py-3">Doc Id</th>
-                <th scope="col" className="px-3 py-3">Status</th>
-                <th scope="col" className="px-3 py-3 text-center">Discount</th>
-                <th scope="col" className="px-3 py-3 text-center">Amount</th>
-                <th scope="col" className="px-3 py-3">Payment Mode</th>
+                {[
+                    'Month', 'Total Fee', 'Paid Fee', 'Applied Discount',
+                    'Pending Fee', 'Payment Method', 'Doc Id', 'Status',
+                    'Discount', 'Amount', 'Payment Mode'
+                ].map((header) => (
+                    <th
+                        key={header}
+                        className={`px-3 py-3 ${darkMode ? 'text-gray-300' : 'text-gray-800'
+                            }`}
+                    >
+                        {header}
+                    </th>
+                ))}
             </tr>
         </motion.thead>
     );
 
     const QuarterFeeHeader = () => (
-        <motion.thead variants={rowVariants} className="bg-blue-200 rounded-t-lg w-full">
+        <motion.thead
+            variants={rowVariants}
+            className={`${darkMode ? 'bg-gray-700' : 'bg-blue-200'
+                }`}
+        >
             <tr>
-                <th scope="col" className="px-3 py-3">Months</th>
-                <th scope="col" className="px-3 py-3">Quarter</th>
-                <th scope="col" className="px-3 py-3">Total Fee</th>
-                <th scope="col" className="px-3 py-3">Paid Fee</th>
-                <th scope="col" className="px-3 py-3">Applied Discount</th>
-                <th scope="col" className="px-3 py-3">Pending Fee</th>
-                <th scope="col" className="px-3 py-3">Payment Method</th>
-                <th scope="col" className="px-3 py-3">Doc Id</th>
-                <th scope="col" className="px-3 py-3">Status</th>
-                <th scope="col" className="px-3 py-3 text-center">Discount</th>
-                <th scope="col" className="px-3 py-3 text-center">Amount</th>
-                <th scope="col" className="px-3 py-3">Payment Mode</th>
+                {[
+                    'Months', 'Quarter', 'Total Fee', 'Paid Fee',
+                    'Applied Discount', 'Pending Fee', 'Payment Method',
+                    'Doc Id', 'Status', 'Discount', 'Amount', 'Payment Mode'
+                ].map((header) => (
+                    <th
+                        key={header}
+                        className={`px-3 py-3 ${darkMode ? 'text-gray-300' : 'text-gray-800'
+                            }`}
+                    >
+                        {header}
+                    </th>
+                ))}
             </tr>
         </motion.thead>
     );
@@ -245,58 +253,21 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
             variants={containerVariants}
             initial="hidden"
             animate="visible"
+            className={`w-full ${darkMode ? 'bg-gray-900 text-gray-200' : ''}`}
         >
             {selectedOption === 'monthlyfee' && (
                 <>
                     <FeeStructureHeader />
                     {fees.monthlyStatus.map((data, index) => (
-                        <tbody>
-                            <FeePaymentRow student={data} fetchFees={fetchFees} fetchTransaction={fetchTransaction} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
+                        <tbody key={index}>
+                            <FeePaymentRow
+                                student={data}
+                                fetchFees={fetchFees}
+                                fetchTransaction={fetchTransaction}
+                                selectedStudent={Student}
+                                selectedDiscount={selectedDiscount}
+                            />
                         </tbody>
-
-                        // <motion.tbody
-                        //     key={index}
-                        //     variants={rowVariants}
-                        //     className={`w-full rounded-lg shadow-md my-2 ${clickedIndex === index ? 'bg-blue-100' : 'bg-white'}`}
-                        //     onClick={() => handleClick(index)}
-                        // >
-
-                        //   <tr className="w-full flex">
-                        //         <Cell icon={FaCalendarAlt} content={data.month} />
-                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee} />
-                        //         <Cell icon={FaMoneyBillWave} content={data.paidFee} />
-                        //         <Cell icon={FaMoneyBillWave} content={data.manualDiscount + data.categoryDiscount} />
-                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee - data.paidFee - data.manualDiscount - data.categoryDiscount} />
-
-
-                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee} />
-                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee} />
-                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee} />
-                        //         <Cell icon={FaPercent} content={data.discountApplied} />
-
-
-                        //         <Cell icon={FaCheckCircle} content={data.status} />
-                        //         <td className="flex-1 p-4 text-center">
-                        //             {data.status === 'Submitted' ? (
-                        //                 <span className="text-green-500 font-semibold">Paid</span>
-                        //             ) : (
-                        //                 <motion.select
-                        //                     whileHover={{ scale: 1.05 }}
-                        //                     className="w-full p-2 rounded-full bg-gradient-to-r from-blue-200 to-blue-300 text-black"
-                        //                     value={mode}
-                        //                     onChange={(e) => handleModeChange(e, data)}
-                        //                 >
-                        //                     <option value="none">Select Payment Mode</option>
-                        //                     <option value="Cash">Cash</option>
-                        //                     <option value="Online">Online</option>
-                        //                     <option value="RTGS">RTGS</option>
-                        //                     <option value="Cheque">Cheque</option>
-                        //                     <option value="Demand Draft">Demand Draft</option>
-                        //                 </motion.select>
-                        //             )}
-                        //         </td>
-                        //     </tr> 
-                        // </motion.tbody>
                     ))}
                 </>
             )}
@@ -305,75 +276,17 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                 <>
                     <QuarterFeeHeader />
                     {fees.quarterlyStatus.map((data, index) => (
-                        <tbody>
-                            <FeePaymentRowQuarter student={data} fetchFees={fetchFees} fetchTransaction={fetchTransaction} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
+                        <tbody key={index}>
+                            <FeePaymentRowQuarter
+                                student={data}
+                                fetchFees={fetchFees}
+                                fetchTransaction={fetchTransaction}
+                                selectedStudent={Student}
+                                selectedDiscount={selectedDiscount}
+                            />
                         </tbody>
-                        // <motion.tbody
-                        //     key={index}
-                        //     variants={rowVariants}
-                        //     className="w-full rounded-lg shadow-md my-2 bg-white"
-                        // >
-                        //     <tr className="w-full flex">
-                        //         <Cell icon={FaCalendarAlt} content={data.months.join(', ')} />
-                        //         <Cell icon={FaMoneyBillWave} content={data.quarter} />
-                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee} />
-                        //         <Cell icon={FaPercent} content={data.paidFee} />
-                        //         <Cell icon={FaPercent} content={data.manualDiscount + data.categoryDiscount} />
-                        //         <Cell icon={FaMoneyBillWave} content={data.totalFee - data.paidFee - data.manualDiscount - data.categoryDiscount} />
-
-
-                        //         <Cell icon={FaPercent} content={data.paidFee} />
-                        //         <Cell icon={FaPercent} content={data.paidFee} />
-                        //         <Cell icon={FaPercent} content={data.paidFee} />
-                        //         <Cell icon={FaPercent} content={data.paidFee} />
-
-                        //         <Cell icon={FaCheckCircle} content={data.status} />
-                        //         <td className="flex-1 p-4 text-center">
-                        //             {data.status === 'Submitted' ? (
-                        //                 <span className="text-green-500 font-semibold">Paid</span>
-                        //             ) : (
-                        //                 <motion.select
-                        //                     whileHover={{ scale: 1.05 }}
-                        //                     className="w-full p-2 rounded-full bg-gradient-to-r from-blue-200 to-blue-300 text-black"
-                        //                     value={mode}
-                        //                     onChange={(e) => handleModeChange(e, data)}
-                        //                 >
-                        //                     <option value="none">Select Payment Mode</option>
-                        //                     <option value="Cash">Cash</option>
-                        //                     <option value="Online">Online</option>
-                        //                     <option value="RTGS">RTGS</option>
-                        //                     <option value="Cheque">Cheque</option>
-                        //                     <option value="Demand Draft">Demand Draft</option>
-                        //                 </motion.select>
-                        //             )}
-                        //         </td>
-                        //     </tr>
-                        // </motion.tbody>
                     ))}
                 </>
-            )}
-
-            {!selectedOption && (
-                <motion.tbody
-                    variants={rowVariants}
-                    className="w-full rounded-lg shadow-md my-2 bg-white"
-                >
-                    <tr className="w-full flex">
-                        <Cell icon={FaMoneyBillWave} content={fees.admissionFee} />
-                        <Cell icon={FaMoneyBillWave} content={fees.monthlyfee} />
-                        <Cell icon={FaMoneyBillWave} content={fees.quarterFee} />
-                        <td className="flex-1 p-4 text-center">
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="px-6 py-2 rounded-full bg-gradient-to-r from-green-400 to-blue-500 text-white"
-                                onClick={() => handlePayment({ amount: fees.payableAmount, order_id: fees.id, title: fees.title, deadline: fees.deadline })}
-                            >
-                                <FaCreditCard className="inline mr-2" /> Pay
-                            </motion.button>
-                        </td>
-                    </tr>
-                </motion.tbody>
             )}
 
             {isModalOpen && (
@@ -386,38 +299,78 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                     <motion.div
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        className="bg-white p-8 rounded-lg z-10 w-2/5 shadow-2xl"
+                        className={`p-8 rounded-lg z-10 w-2/5 shadow-2xl ${darkMode
+                            ? 'bg-gray-800 text-gray-200'
+                            : 'bg-white'
+                            }`}
                     >
-                        <h2 className="text-2xl mb-6 font-bold text-blue-600">Confirm Payment</h2>
+                        <h2 className={`text-2xl mb-6 font-bold ${darkMode ? 'text-blue-400' : 'text-blue-600'
+                            }`}>
+                            Confirm Payment
+                        </h2>
+
                         {selectedStudent && (
                             <div className='flex gap-20 items-center'>
                                 <div>
-                                    <p className="mb-2"><FaUser className="inline mr-2 text-blue-500" /><strong>Name:</strong> {Name}</p>
-                                    <p className="mb-2"><FaChalkboardTeacher className="inline mr-2 text-blue-500" /><strong>Class:</strong> {Class}</p>
-                                    <p className="mb-2"><FaSchool className="inline mr-2 text-blue-500" /><strong>Section:</strong> {Section}</p>
-                                    <p className="mb-2"><FaCalendarAlt className="inline mr-2 text-blue-500" /><strong>Month:</strong> {selectedStudent.month}</p>
+                                    {[
+                                        { icon: FaUser, label: 'Name', value: Name },
+                                        { icon: FaChalkboardTeacher, label: 'Class', value: Class },
+                                        { icon: FaSchool, label: 'Section', value: Section },
+                                        { icon: FaCalendarAlt, label: 'Month', value: selectedStudent.month }
+                                    ].map(({ icon: Icon, label, value }) => (
+                                        <p
+                                            key={label}
+                                            className={`mb-2 ${darkMode ? 'text-gray-300' : ''
+                                                }`}
+                                        >
+                                            <Icon className={`inline mr-2 ${darkMode ? 'text-blue-400' : 'text-blue-500'
+                                                }`} />
+                                            <strong>{label}:</strong> {value}
+                                        </p>
+                                    ))}
                                 </div>
+
                                 <div>
-                                    <p className="mb-2"><FaPercent className="inline mr-2 text-blue-500" /><strong>Discount:</strong> {selectedStudent.discountApplied}</p>
-                                    <p className="mb-2"><FaMoneyBillWave className="inline mr-2 text-blue-500" /><strong>Payable:</strong> {selectedStudent.amount}</p>
-                                    <p className="mb-2"><FaCreditCard className="inline mr-2 text-blue-500" /><strong>Mode:</strong> {mode}</p>
+                                    {[
+                                        { icon: FaPercent, label: 'Discount', value: selectedStudent.discountApplied },
+                                        { icon: FaMoneyBillWave, label: 'Payable', value: selectedStudent.amount },
+                                        { icon: FaCreditCard, label: 'Mode', value: mode }
+                                    ].map(({ icon: Icon, label, value }) => (
+                                        <p
+                                            key={label}
+                                            className={`mb-2 ${darkMode ? 'text-gray-300' : ''
+                                                }`}
+                                        >
+                                            <Icon className={`inline mr-2 ${darkMode ? 'text-blue-400' : 'text-blue-500'
+                                                }`} />
+                                            <strong>{label}:</strong> {value}
+                                        </p>
+                                    ))}
                                 </div>
                             </div>
                         )}
+
                         {mode !== 'Online' && mode !== 'Cash' && (
                             <input
                                 type="text"
                                 placeholder="Enter Document Number"
                                 value={docId}
                                 onChange={(e) => setDocId(e.target.value)}
-                                className="border rounded p-2 w-full mb-4"
+                                className={`border rounded p-2 w-full mb-4 ${darkMode
+                                    ? 'bg-gray-700 text-gray-200 border-gray-600'
+                                    : ''
+                                    }`}
                             />
                         )}
+
                         <div className="flex justify-end gap-4 mt-6">
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="px-6 py-2 bg-green-500 text-white rounded-full"
+                                className={`px-6 py-2 text-white rounded-full ${darkMode
+                                    ? 'bg-green-700 hover:bg-green-800'
+                                    : 'bg-green-500 hover:bg-green-600'
+                                    }`}
                                 onClick={handleConfirm}
                             >
                                 Confirm
@@ -425,7 +378,10 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="px-6 py-2 bg-red-500 text-white rounded-full"
+                                className={`px-6 py-2 text-white rounded-full ${darkMode
+                                    ? 'bg-red-700 hover:bg-red-800'
+                                    : 'bg-red-500 hover:bg-red-600'
+                                    }`}
                                 onClick={handleCancel}
                             >
                                 Cancel
