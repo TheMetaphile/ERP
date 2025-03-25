@@ -11,8 +11,6 @@ import FileUploadField from "../../SubAdminComponent/Student/FileUploadField";
 
 export default function SupAdminTeacherRegister() {
   const { authState } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   console.log(authState?.userDetails?.branch)
   const [formData, setFormData] = useState(
@@ -60,6 +58,7 @@ export default function SupAdminTeacherRegister() {
       [name]: value,
     }));
   };
+
   const handleReset = () => {
     setFormData({
       name: '',
@@ -87,7 +86,6 @@ export default function SupAdminTeacherRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('o')
-    setLoading(true);
 
     const [year, month, day] = formData.DOB.split('-');
     const formattedDate = `${day}-${month}-${year}`;
@@ -117,10 +115,6 @@ export default function SupAdminTeacherRegister() {
       const errorMessage = err.response?.data?.error || 'An error occurred';
       toast.error(errorMessage);
     }
-    finally {
-      setLoading(false);
-
-    }
   };
 
 
@@ -132,16 +126,16 @@ export default function SupAdminTeacherRegister() {
     { name: "gender", label: "Gender", icon: <FaUser />, type: "select", options: ["Select gender", "Male", "Female", "Other"] },
     { name: "email", label: "Email", icon: <FaEnvelope />, type: "email" },
     { name: "admin", label: "Admin", icon: <MdAdminPanelSettings />, type: "select", options: ["Select admin", "False", "True"] },
-    { name: "aadhaarNumber", label: "Aadhaar Number", icon: <FaIdCard />, type: "text" },
+    { name: "aadhaarNumber", label: "Aadhaar Number", icon: <FaIdCard />, type: "number" },
     { name: "permanentAddress", label: "Permanent Address", icon: <FaMapMarkerAlt />, type: "text" },
     { name: "religion", label: "Religion", icon: <FaPray />, type: "select", options: ["Select religion", "Hindu", "Christian", "Other"] },
     { name: "subject", label: "Subject", icon: <FaBook />, type: "text" },
-    { name: "employeeId", label: "ID Number", icon: <FaIdCard />, type: "text" },
+    { name: "employeeId", label: "Employee ID Number", icon: <FaIdCard />, type: "text" },
     { name: "DOB", label: "Date of Birth", icon: <FaBirthdayCake />, type: "date" },
-    { name: "phoneNumber", label: "Phone Number", icon: <FaPhone />, type: "text" },
+    { name: "phoneNumber", label: "Phone Number", icon: <FaPhone />, type: "number" },
     { name: "experience", label: "Experience", icon: <FaBriefcase />, type: "text" },
     { name: "education", label: "Education", icon: <FaGraduationCap />, type: "text" },
-    { name: "salary", label: "Salary", icon: <FaMoneyBillWave />, type: "text" },
+    { name: "salary", label: "Salary", icon: <FaMoneyBillWave />, type: "number" },
     // { name: "profileLink", label: "Google Drive Link for Photo", icon: <FaGoogle />, type: "text" },
   ];
 
@@ -165,7 +159,7 @@ export default function SupAdminTeacherRegister() {
             <label className={labelClasses} htmlFor={field.name}>
               <div className="flex items-center mb-2">
                 {field.icon}
-                <span className="ml-1 whitespace-nowrap mobile:max-tablet:text-sm">{field.label}</span>
+                <span className="ml-1 whitespace-nowrap mobile:max-tablet:text-sm">{field.label} *</span>
               </div>
               {field.type === 'select' ? (
                 <select
@@ -174,6 +168,7 @@ export default function SupAdminTeacherRegister() {
                   value={formData[field.name]}
                   onChange={handleChange}
                   className={inputClasses}
+
                   required
                 >
                   {field.options.map(option => (
@@ -187,16 +182,27 @@ export default function SupAdminTeacherRegister() {
                   type={field.type}
                   name={field.name}
                   value={formData[field.name]}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const maxLen = field.name === "aadhaarNumber" ? 12 : field.name === "phoneNumber" ? 10 : 25;
+                    if (e.target.value.length > maxLen) {
+                      toast.warning(`${field.label} can not be greater than ${maxLen}, only first ${maxLen} digits/letters will be considered`);
+                      e.target.value = e.target.value.slice(0, maxLen);
+                    }
+                    handleChange(e);
+                  }}
+                  maxLength={25}
                   placeholder={field.name === 'salary' ? "Per month in Rs." : ""}
+                  inputMode={["phoneNumber", "aadhaarNumber","salary"].includes(field.name) ? "numeric" : "text"}
+
                   required
                 />
+
               )}
             </label>
           </motion.div>
         ))}
         <FileUploadField
-          label="Profile Photo"
+          label="Profile Photo *"
           name="profileLink"
           value={formData?.profileLink || ""}
           onChange={handleChange}

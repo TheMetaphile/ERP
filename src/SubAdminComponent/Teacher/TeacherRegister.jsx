@@ -39,11 +39,8 @@ const itemVariants = {
 
 export default function TeacherRegister() {
   const { authState } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [formFields, setFormFields] = useState(initialFields);
+
   const [showModal, setShowModal] = useState(false);
-  const currentYear = (new Date().getFullYear()).toString();
 
 
   const [formData, setFormData] = useState(
@@ -55,7 +52,7 @@ export default function TeacherRegister() {
   const [extraFormData, setExtraFormData] = useState([]);
 
   const [customFields, setCustomFields] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [newField, setNewField] = useState({
     label: "",
     name: "",
@@ -63,13 +60,6 @@ export default function TeacherRegister() {
     required: false,
     options: "",
   });
-  const handleFieldChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setNewField((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
 
   const handleAddField = () => {
     if (!newField.label || !newField.name) {
@@ -81,24 +71,23 @@ export default function TeacherRegister() {
       fieldData.options = newField.options.split(",").map((opt) => opt.trim());
     }
     setCustomFields([...customFields, fieldData]);
-    setIsModalOpen(false);
     setNewField({ label: "", name: "", type: "text", required: false, options: "" });
   };
 
   const handleChange = (e) => {
     const { name, value, files, type } = e.target;
     if (type === 'file') {
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: files[0],
-        }));
-        return;
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: files[0],
+      }));
+      return;
     }
     setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
+      ...prevData,
+      [name]: value,
     }));
-};
+  };
 
   const handleCustomFieldValueChange = (e) => {
     const { name, value, files, type } = e.target;
@@ -141,7 +130,6 @@ export default function TeacherRegister() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
     console.log(extraFormData);
 
@@ -153,9 +141,7 @@ export default function TeacherRegister() {
     try {
       const payload = new FormData();
       for (const key in formData) {
-
         payload.append(key, formData[key]); // Append files properly
-
       }
       extraFormData.forEach((item, index) => {
         if (item.value instanceof File) {
@@ -177,10 +163,6 @@ export default function TeacherRegister() {
       console.log(err);
       const errorMessage = err.response?.data?.error || 'An error occurred';
       toast.error(errorMessage);
-    }
-    finally {
-      setLoading(false);
-
     }
   };
 
@@ -225,7 +207,7 @@ export default function TeacherRegister() {
   };
 
   const handleMultiSignUp = async (data) => {
-    setLoading(true);
+
 
     try {
       for (let i = 0; i < data.length; i++) {
@@ -242,7 +224,7 @@ export default function TeacherRegister() {
       const errorMessage = err.response?.data?.error || 'An error occurred';
       toast.error(errorMessage);
     } finally {
-      setLoading(false);
+
     }
   }
 
@@ -250,8 +232,6 @@ export default function TeacherRegister() {
     fetchFieldsForUserType();
   }, [authState]);
 
-  const inputClasses = "border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300";
-  const labelClasses = "block text-lg mb-2 text-blue-700 font-semibold";
 
 
   return (
@@ -448,21 +428,30 @@ export default function TeacherRegister() {
             )}
 
             <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="required"
-                name="required"
-                checked={newField.required || false}
-                onChange={(e) => setNewField({ ...newField, required: e.target.checked })}
-                className="peer hidden"
-              />
-              <div className="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center cursor-pointer peer-checked:bg-green-500 peer-checked:border-green-500">
-                {newField.required && <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586l-2.293-2.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" clipRule="evenodd" />
-                </svg>}
-              </div>
-              <label htmlFor="required" className="text-gray-700 cursor-pointer">Required Field</label>
+              <label htmlFor="required" className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  id="required"
+                  name="required"
+                  checked={newField.required || false}
+                  onChange={(e) => setNewField({ ...newField, required: e.target.checked })}
+                  className="peer hidden"
+                />
+                <div className="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-green-500 peer-checked:border-green-500">
+                  {newField.required && (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586l-2.293-2.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+                </div>
+                <span className="text-gray-700">Required Field</span>
+              </label>
             </div>
+
 
 
             <div className="flex justify-between mt-2">

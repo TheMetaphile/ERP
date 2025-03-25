@@ -95,9 +95,7 @@ export const AuthProvider = ({ children }) => {
 
     }, [navigate]);
 
-    useEffect(() => {
-        //console.log("Auth state updated:", authState);
-    }, [authState]);
+
 
     const login = useCallback((userDetails, tokens, subject, ClassDetails, Co_scholastic, subjects, token) => {
         console.log(userDetails, tokens, subject, ClassDetails, Co_scholastic, subjects, token)
@@ -140,14 +138,8 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('authState');
 
         // Reset auth state
-        setAuthState({
-            userDetails: null,
-            accessToken: null,
-            refreshToken: null,
-            otpToken: null,
-            token: null
-        });
-        console.log("logout complete")
+        setAuthState(null);
+        // console.log("logout complete")
 
         // Navigate to login page
         navigate('/');

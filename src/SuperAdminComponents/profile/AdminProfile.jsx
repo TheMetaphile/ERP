@@ -49,7 +49,7 @@ console.log(authState?.userDetails)
           <motion.h2 className="text-2xl font-bold mb-4" variants={itemVariants}>Personal Information</motion.h2>
           <motion.div className="grid laptop:grid-cols-3 mobile:max-tablet:grid-cols-1 tablet:grid-cols-2 gap-4" variants={containerVariants}>
             <InfoItem icon={<FaEnvelope />} label="Email" value={userDetails?.email} />
-            <InfoItem icon={<FaPhoneAlt  />} label="Phone Number" value={userDetails?.phoneNumber} />
+            <InfoItem icon={<FaPhoneAlt className='rotate-90' />} label="Phone Number" value={userDetails?.phoneNumber} />
             <InfoItem icon={<MdBloodtype />} label="Blood Group" value={userDetails?.bloodGroup} />
             {userDetails?.co_ordinator ? (
               <InfoItem icon={<FaEnvelope />} label="Co-Ordnator Wing" value={userDetails?.co_ordinator_wing} />
@@ -57,7 +57,7 @@ console.log(authState?.userDetails)
             <InfoItem icon={<FaBirthdayCake />} label="Date of Birth" value={userDetails?.dob} />
             <InfoItem icon={<CgProfile />} label="Role" value={userDetails?.role} />
             <InfoItem icon={<FaTint />} label="Aadhaar Number" value={userDetails?.aadhaarNumber} />
-            <InfoItem icon={<FaPhoneAlt />} label="Emergency Contact" value={userDetails?.emergencyContactNumber} />
+            <InfoItem icon={<FaPhoneAlt className='rotate-90'/>} label="Emergency Contact" value={userDetails?.emergencyContactNumber} />
             <InfoItem icon={<GiIndiaGate />} label="Permanent Address" value={userDetails?.permanentAddress} />
             <InfoItem icon={<TbMapPinCode />} label="Pincode" value={userDetails?.permanentPincode} />
 
@@ -82,7 +82,7 @@ const InfoItem = ({ icon, label, value }) => (
     </div>
     <div className="flex-grow">
       <p className="text-sm font-semibold text-gray-500">{label}</p>
-      <p className="text-lg font-medium text-gray-800 truncate overflow-hidden whitespace-nowrap">{value}</p>
+      <p className="text-lg font-medium text-gray-800 laptop:w-40  truncate overflow-hidden whitespace-nowrap">{value}</p>
     </div>
   </motion.div>
 );

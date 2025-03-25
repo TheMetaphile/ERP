@@ -54,8 +54,7 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
 
         setBranches((prevBranches) => [...prevBranches, newBranch]);
         setSelectedBranch(newBranch);
-        alert("After adding a branch it is recommended to Re-Login");
-
+        
         setAuthState((prevState) => ({
           ...prevState,
           userDetails: {
