@@ -243,24 +243,25 @@ export default function TeacherRegister() {
     >
       <ToastContainer />
       <h1 className="text-3xl mobile:max-tablet:text-lg font-bold text-blue-700 mb-8 text-center">Add New Teacher</h1>
-      <form className="grid grid-cols-3 mobile:max-tablet:grid-cols-1 gap-6">
-        <InputField icon={<FaUser />} label="Name" name="name" value={formData.name} onChange={handleChange} required />
-        <InputField icon={<FaEnvelope />} label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required />
-        <InputField icon={<FaAddressCard />} label="Aadhaar Number" name="aadhaarNumber" type="text" value={formData.aadhaarNumber} onChange={handleChange} required />
-        <SelectField icon={<FaVenusMars />} label="Gender" name="gender" value={formData.gender} onChange={handleChange} options={['male', 'female', 'other']} required />
-        <SelectField icon={<MdAdminPanelSettings />} label="Admin" name="admin" value={formData.admin} onChange={handleChange} options={["False", "True"]} required />
-        {/* <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} /> */}
-        <InputField icon={<FaCalendarAlt />} label="Date of Birth" name="DOB" type="date" value={formData.DOB} onChange={handleChange} required />
+      <form onSubmit={handleSubmit}>
+        <div className="grid grid-cols-3 mobile:max-tablet:grid-cols-1 gap-6">
+          <InputField icon={<FaUser />} label="Name" name="name" value={formData.name} onChange={handleChange} required />
+          <InputField icon={<FaEnvelope />} label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required />
+          <InputField icon={<FaAddressCard />} label="Aadhaar Number" name="aadhaarNumber" type="text" value={formData.aadhaarNumber} onChange={handleChange} required />
+          <SelectField icon={<FaVenusMars />} label="Gender" name="gender" value={formData.gender} onChange={handleChange} options={['male', 'female', 'other']} required />
+          <SelectField icon={<MdAdminPanelSettings />} label="Admin" name="admin" value={formData.admin} onChange={handleChange} options={["False", "True"]} required />
+          {/* <InputField icon={<FaCloudUploadAlt />} label="Profile Photo Link" name="profileLink" value={formData.profileLink} onChange={handleChange} /> */}
+          <InputField icon={<FaCalendarAlt />} label="Date of Birth" name="DOB" type="date" value={formData.DOB} onChange={handleChange} required />
 
-        <FileUploadField
+          <FileUploadField
 
-          label="Profile Photo"
-          name="profileLink"
-          value={formData?.profileLink || ""}
-          onChange={handleChange}
-          accept=".jpeg,.jpg,.png "
-        />
-        {/* {formFields.map((field, index) => (
+            label="Profile Photo"
+            name="profileLink"
+            value={formData?.profileLink || ""}
+            onChange={handleChange}
+            accept=".jpeg,.jpg,.png "
+          />
+          {/* {formFields.map((field, index) => (
           <motion.div
             key={field.name}
             initial={{ opacity: 0, x: -20 }}
@@ -301,95 +302,95 @@ export default function TeacherRegister() {
           </motion.div>
         ))} */}
 
-        {customFields.map((field, index) => {
-          switch (field.type) {
-            case "select":
-              return (
-                <SelectField
-                  key={index}
-                  label={field.label}
-                  name={field.label}
-                  options={field.options}
-                  onChange={handleCustomFieldValueChange}
-                  value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
-                  required={field.required}
-                />
-              );
-            case "text":
-              return (
-                <InputField
-                  key={index}
-                  label={field.label}
-                  name={field.label}
-                  value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
-                  onChange={handleCustomFieldValueChange}
-                  type="text"
-                  required={field.required}
-                />
-              );
-            case "number":
-              return (
-                <InputField
-                  key={index}
-                  label={field.label}
-                  name={field.label}
-                  value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
-                  onChange={handleCustomFieldValueChange}
-                  type="number"
-                  required={field.required}
-                />
-              );
-            case "document":
-              return (
-                <FileUploadField
-                  key={index}
-                  label={field.label}
-                  name={field.label}
-                  required={field.required}
-                  value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
-                  onChange={handleCustomFieldValueChange}
-                />
-              );
-            default:
-              return (
-                <InputField
-                  key={index}
-                  label={field.label}
-                  name={field.label}
-                  type={field.type}
-                  value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
-                  onChange={handleCustomFieldValueChange}
-                  required={field.required}
-                />
-              );
-          }
-        })}
-
+          {customFields.map((field, index) => {
+            switch (field.type) {
+              case "select":
+                return (
+                  <SelectField
+                    key={index}
+                    label={field.label}
+                    name={field.label}
+                    options={field.options}
+                    onChange={handleCustomFieldValueChange}
+                    value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                    required={field.required}
+                  />
+                );
+              case "text":
+                return (
+                  <InputField
+                    key={index}
+                    label={field.label}
+                    name={field.label}
+                    value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                    onChange={handleCustomFieldValueChange}
+                    type="text"
+                    required={field.required}
+                  />
+                );
+              case "number":
+                return (
+                  <InputField
+                    key={index}
+                    label={field.label}
+                    name={field.label}
+                    value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                    onChange={handleCustomFieldValueChange}
+                    type="number"
+                    required={field.required}
+                  />
+                );
+              case "document":
+                return (
+                  <FileUploadField
+                    key={index}
+                    label={field.label}
+                    name={field.label}
+                    required={field.required}
+                    value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                    onChange={handleCustomFieldValueChange}
+                  />
+                );
+              default:
+                return (
+                  <InputField
+                    key={index}
+                    label={field.label}
+                    name={field.label}
+                    type={field.type}
+                    value={extraFormData.find((fields) => fields.label === field.label)?.value || ""}
+                    onChange={handleCustomFieldValueChange}
+                    required={field.required}
+                  />
+                );
+            }
+          })}
+        </div>
+        <div className="flex justify-center mt-8 space-x-4">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300"
+            type="reset"
+            onClick={handleReset}
+          >
+            Reset
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300"
+            type="submit"
+          >
+            Save
+          </motion.button>
+        </div>
       </form>
 
-      <div className="flex justify-center mt-8 space-x-4">
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300"
-          type="reset"
-          onClick={handleReset}
-        >
-          Reset
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300"
-          type="submit"
-          onClick={handleSubmit}
-        >
-          Save
-        </motion.button>
-      </div>
+
 
       <div className="flex justify-center gap-2 mt-6">
-        <motion.label
+        {/* <motion.label
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setShowModal(true)}
@@ -397,7 +398,7 @@ export default function TeacherRegister() {
         >
           Add Field
           <FaPlus className="ml-2" />
-        </motion.label>
+        </motion.label> */}
 
         <motion.label
           whileHover={{ scale: 1.05 }}

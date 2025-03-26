@@ -468,12 +468,12 @@ export default function StudentRegister() {
                 </div>
 
                 <motion.div className="col-span-full flex gap-3 justify-center mt-6" variants={itemVariants}>
-                    <motion.button
+                    {/* <motion.button
                         className={`${darkMode ? 'bg-blue-700 hover:bg-blue-800' : 'bg-blue-500 hover:bg-blue-600'} text-white font-bold py-2 px-6 rounded flex items-center gap-2`}
                         onClick={() => setIsModalOpen(true)}
                     >
                         <FaPlus /> Add Field
-                    </motion.button>
+                    </motion.button> */}
                     <motion.label
                         className={`${darkMode ? 'bg-blue-700 hover:bg-blue-800' : 'bg-blue-500 hover:bg-blue-600'} text-white font-bold py-2 px-6 rounded cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 flex items-center`}
                         whileHover={{ scale: 1.05 }}
