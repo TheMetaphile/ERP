@@ -1,11 +1,8 @@
-import { useLocation } from "react-router-dom";
-import { FaCheck } from 'react-icons/fa';
 import React, { useState, useEffect, useContext } from "react";
-import { callIcon, location, userimg } from "./images";
-import { MdEmail } from 'react-icons/md';
+import { useLocation } from "react-router-dom";
+import { FaSave, FaTimes, FaEdit, FaIdCard, FaEnvelope, FaPhone, FaBirthdayCake } from 'react-icons/fa';
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
-import { CiEdit } from "react-icons/ci";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from "../../../LoadingScreen/Loading";
@@ -14,35 +11,14 @@ import { BASE_URL } from "../../../Config";
 export default function ProfileDetails() {
     const [error, setError] = useState(null);
     const [userData, setUserData] = useState(null);
-    const query = new URLSearchParams(useLocation().search);
-    const employeeId = query.get('employeeId');
-    const name = query.get('name');
-    const profile = query.get('profileLogo');
-    const { authState } = useContext(AuthContext);
-    const [editMode, setEditMode] = useState({});
+    const [editMode, setEditMode] = useState(false);
     const [tempData, setTempData] = useState({});
 
-    const fetchUserData = async () => {
-        try {
-            const response = await axios.post(`${BASE_URL}/fetchSingle/teacher`, {
-                accessToken: authState?.accessToken,
-                employeeId
-            });
-            console.log("API response Single teacher:", response.data);
-            if (response.data.TeacherDetails && response.data.TeacherDetails.length > 0) {
-                setUserData(response.data.TeacherDetails[0]);
-                setTempData(response.data.TeacherDetails[0]);
-                // console.log("Experience:", response.data.TeacherDetails[0].experience);
-            } else {
-                setError('No teacher details found');
-            }
-        } catch (err) {
-            setError(err.message);
-            console.log(err);
-        }
-    };
-    useEffect(() => {
+    const query = new URLSearchParams(useLocation().search);
+    const employeeId = query.get('employeeId');
+    const { authState } = useContext(AuthContext);
 
+    useEffect(() => {
         if (authState?.accessToken) {
             fetchUserData();
         } else {
@@ -51,33 +27,70 @@ export default function ProfileDetails() {
         }
     }, [authState?.accessToken, employeeId]);
 
-    const handleEdit = (field) => {
-        setEditMode({ ...editMode, [field]: true });
+    const fetchUserData = async () => {
+        try {
+            const response = await axios.post(`${BASE_URL}/fetchSingle/teacher`, {
+                accessToken: authState?.accessToken,
+                employeeId
+            });
+
+            if (response.data.TeacherDetails && response.data.TeacherDetails.length > 0) {
+                setUserData(response.data.TeacherDetails[0]);
+                setTempData(response.data.TeacherDetails[0]);
+            } else {
+                setError('No teacher details found');
+            }
+        } catch (err) {
+            setError(err.message);
+            console.log(err);
+        }
+    };
+
+    const handleEdit = () => {
+        setEditMode(true);
+    };
+
+    const handleSave = async () => {
+        try {
+            const payload = { email: userData.email, accessToken: authState?.accessToken };
+
+            Object.keys(tempData).forEach((key) => {
+                if (key !== "extra" && tempData[key] !== userData[key]) {
+                    payload[key] = tempData[key];
+                }
+            });
+
+            if (JSON.stringify(tempData.extra) !== JSON.stringify(userData.extra)) {
+                payload.extra = tempData.extra;
+            }
+
+            const response = await axios.put(`${BASE_URL}/edit/teacher`, payload);
+            toast.success('Field Updated');
+            setUserData(tempData);
+            setEditMode(false);
+        } catch (error) {
+            toast.error(error.response?.data?.error || 'An error occurred');
+        }
+    };
+
+    const handleCancel = () => {
+        setTempData(userData);
+        setEditMode(false);
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setTempData({ ...tempData, [name]: value });
-    };
 
-    const handleSave = async (field) => {
-        try {
-            const response = await axios.put(`${BASE_URL}/edit/teacher`, {
-                accessToken: authState?.accessToken,
-                email: userData.email,
-                [field]: tempData[field]
-            });
-            console.log("API response updated:", response.data);
-            toast.success('Field Updated');
-
-            // fetchUserData();
-
-            setUserData({ ...userData, [field]: tempData[field] });
-            setEditMode({ ...editMode, [field]: false });
-
-        } catch (err) {
-            setError(err.message);
-            console.log(err);
+        if (name.startsWith("extra_")) {
+            const fieldId = name.replace("extra_", "");
+            setTempData((prev) => ({
+                ...prev,
+                extra: prev.extra.map((field) =>
+                    field._id === fieldId ? { ...field, value } : field
+                ),
+            }));
+        } else {
+            setTempData({ ...tempData, [name]: value });
         }
     };
 
@@ -85,118 +98,109 @@ export default function ProfileDetails() {
         return <Loading />;
     }
 
+    const teacherDetails = {
+        "DOB": "Date of Birth",
+        "branch": "Branch",
+        "gender": "Gender",
+        "email": "Email ID",
+    };
+
+    const getIcon = (apiField) => {
+        switch (apiField) {
+            case 'DOB': return <FaBirthdayCake />;
+            case 'branch': return <FaIdCard />;
+            case 'gender': return <FaPhone />;
+            case 'email': return <FaEnvelope />;
+            default: return <FaUser />;
+        }
+    };
+
     return (
-        <div className="flex justify-center mobile:max-tablet:flex-col bg-white shadow-lg w-full rounded-xl p-4">
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300 mt-3">
             <ToastContainer />
-
-            <div className="flex flex-col items-center gap-4 mx-4">
-                <div className="mx-4">
-                    <img src={profile} alt="" className="h-16 w-16 rounded-full" />
-                </div>
-
-                <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-semibold text-2xl">{name}</h1>
-                    <p className="text-gray-600">Maths & Science Teacher</p>
-                </div>
-                <div className="flex mt-4 tablet:gap-2 mobile:max-tablet:gap-2 mobile:max-laptop:flex-col mobile:max-laptop:items-center">
-                    <div className="flex items-center">
-                        <div>
-                            <img src={callIcon} alt="" className="w-5 h-5 mobile:max-tablet:w-4 mobile:max-tablet:h-4" />
-                        </div>
-                        <div className="ml-2 flex gap-2 mobile:max-tablet:gap-1 mobile:max-tablet:mx-auto">
-                            <h1 className="font-semibold text-gray-600">Phone&nbsp;:</h1>
-                            {editMode.phoneNumber ? (
-                                <input
-                                    type="text"
-                                    name="phoneNumber"
-                                    value={tempData.phoneNumber}
-                                    onChange={handleChange}
-                                    onBlur={() => handleSave('phoneNumber')}
-                                    className="border p-1"
-                                />
-                            ) : (
-                                <h1>(+91){userData.phoneNumber}</h1>
-
-                            )}
-                        </div>
-                        <div className="ml-4 mobile:max-tablet:ml-2 cursor-pointer" onClick={() => handleEdit('phoneNumber')}>
-                            <CiEdit />
-                        </div>
-                    </div>
-                    <div className="flex items-center">
-                        <div className="ml-2 flex gap-2 mobile:max-tablet:gap-1 mobile:max-tablet:">
-                            <h1 className="flex font-semibold text-gray-600"><MdEmail className="w-6 h-6 mobile:max-tablet:w-4" />&nbsp;Email&nbsp;:</h1>
-                            {editMode.email ? (
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={tempData.email}
-                                    onChange={handleChange}
-                                    onBlur={() => handleSave('email')}
-                                    className="border p-1"
-                                />
-                            ) : (
-                                <h1>
-                                    {userData.email}
-                                </h1>
-                            )}
-                        </div>
-                        <div className="ml-4 cursor-pointer mobile:max-tablet:ml-1" onClick={() => handleEdit('email')}>
-                            <CiEdit />
-                        </div>
-                    </div>
-                    <div className="flex items-center">
-                        <div>
-                            <img src={location} alt="" className="w-5 h-5 mobile:max-tablet:w-4 mobile:max-tablet:h-4" />
-                        </div>
-                        <div className="ml-2 flex gap-2">
-                            <h1 className="font-semibold text-gray-600">Address&nbsp;:</h1>
-                            {editMode.permanentAddress ? (
-                                <input
-                                    type="text"
-                                    name="permanentAddress"
-                                    value={tempData.permanentAddress}
-                                    onChange={handleChange}
-                                    onBlur={() => handleSave('permanentAddress')}
-                                    className="border p-1"
-                                />
-                            ) : (
-                                <h1>
-                                    {userData.permanentAddress}
-                                </h1>
-                            )}
-                        </div>
-                        <div className="ml-4 cursor-pointer mobile:max-tablet:ml-2" onClick={() => handleEdit('permanentAddress')}>
-                            <CiEdit />
-                        </div>
-                    </div>
-                </div>
+            <div className="bg-gradient-to-r from-blue-200 to-blue-400 p-3 flex justify-between items-center">
                 <div className="flex items-center">
-                    <div className="ml-2 flex gap-2">
-                        <h1 className="text-xl">Education&nbsp;:</h1>
-                        <div className="text-lg text-gray-400">
-                            {editMode.education ? (
-                                <input
-                                    type="text"
-                                    name="education"
-                                    value={tempData.education}
-                                    onChange={handleChange}
-                                    onBlur={() => handleSave('education')}
-                                    className="border p-1"
-                                />
-                            ) : (
-                                <h1>
-                                    {userData.education}
-                                </h1>
-                            )}
-                        </div>
+                    <div className="flex items-center">
+                        <img src={userData.profileLink} alt="" className="h-16 w-16 borser border-2 border-blue-600 rounded-full object-cover mr-2" />
                     </div>
-                    <div className="ml-4 cursor-pointer" onClick={() => handleEdit('education')}>
-                        <CiEdit />
+                    <div>
+                        <h2 className="text-3xl font-bold">{userData.name}</h2>
+                        <p className="text-lg">Teacher Profile</p>
                     </div>
-
                 </div>
+
+
+                <div>
+                    {editMode ? (
+                        <>
+                            <button
+                                onClick={handleSave}
+                                className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 transition duration-300 mr-2"
+                            >
+                                Save
+                            </button>
+                            <button
+                                onClick={handleCancel}
+                                className="bg-white text-red-500 px-4 py-2 rounded-full hover:bg-red-100 transition duration-300"
+                            >
+                                Cancel
+                            </button>
+                        </>
+                    ) : (
+                        <button
+                            onClick={handleEdit}
+                            className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 transition duration-300"
+                        >
+                            Edit
+                        </button>
+                    )}
+                </div>
+            </div>
+            <div className="p-6 grid grid-cols-3 mobile:max-tablet:grid-cols-2 gap-6">
+                {Object.entries(teacherDetails).map(([apiField, label]) => (
+                    <ProfileItem
+                        key={apiField}
+                        icon={getIcon(apiField)}
+                        label={label}
+                        value={userData[apiField]}
+                        editMode={editMode}
+                        name={apiField}
+                        onChange={handleChange}
+                        editedValue={tempData[apiField]}
+                    />
+                ))}
+                {userData.extra?.map((field) => (
+                    <ProfileItem
+                        key={field._id}
+                        label={field.label}
+                        value={field.value}
+                        editMode={editMode}
+                        name={`extra_${field._id}`}
+                        onChange={handleChange}
+                        editedValue={tempData.extra?.find((item) => item._id === field._id)?.value || ""}
+                    />
+                ))}
             </div>
         </div>
     );
 }
+
+const ProfileItem = ({ icon, label, value, editMode, name, onChange, editedValue }) => (
+    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg transition duration-300 hover:bg-gray-100">
+        <div className="text-blue-500 text-xl">{icon}</div>
+        <div className="flex-grow">
+            <p className="text-sm text-gray-500">{label}</p>
+            {editMode ? (
+                <input
+                    type="text"
+                    name={name}
+                    value={editedValue}
+                    onChange={onChange}
+                    className="w-full p-1 border rounded"
+                />
+            ) : (
+                <p className="font-semibold">{value}</p>
+            )}
+        </div>
+    </div>
+);

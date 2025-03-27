@@ -1,80 +1,90 @@
-import { motion } from 'framer-motion';
-import { FaCheck, FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaBirthdayCake, FaIdCard, FaHome, FaCalendarAlt, FaAddressCard } from 'react-icons/fa';
-import { useLocation, useParams } from "react-router-dom";
 import React, { useState, useEffect, useContext } from "react";
+import { useLocation } from "react-router-dom";
 import axios from 'axios';
 import AuthContext from '../../../../Context/AuthContext';
-import { CiEdit } from "react-icons/ci";
-import Loading from '../../../../LoadingScreen/Loading'
-import { ToastContainer, toast } from 'react-toastify';
+import { FaUser, FaEnvelope, FaGraduationCap, FaBirthdayCake, FaIdCard, FaCalendarAlt, FaMapMarkerAlt, FaFlag, FaListAlt } from 'react-icons/fa';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from '../../../../Config';
-import { MdWork } from 'react-icons/md';
+import Loading from '../../../../LoadingScreen/Loading';
 
-export default function StudentBasicDetails() {
+const StudentBasicDetails = () => {
     const [userData, setUserData] = useState(null);
-    const [error, setError] = useState(null);
+    const [editMode, setEditMode] = useState(false);
+    const [tempData, setTempData] = useState({});
     const { authState } = useContext(AuthContext);
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const email = searchParams.get('email');
-    const [editMode, setEditMode] = useState({});
-    const [tempData, setTempData] = useState({});
-
-    const fetchUserData = async () => {
-        console.log(email)
-        try {
-            const response = await axios.post(`${BASE_URL}/fetchSingle/student`, {
-                accessToken: authState?.accessToken,
-                email: email
-            });
-            console.log("API response Single Student:", response.data);
-            if (response.data.StudentDetails && response.data.StudentDetails.length > 0) {
-                setUserData(response.data.StudentDetails[0]);
-                setTempData(response.data.StudentDetails[0]);
-            } else {
-                setError('No student details found');
-            }
-        } catch (err) {
-            setError(err.message);
-            console.log(err);
-        }
-    };
 
     useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.post(`${BASE_URL}/fetchSingle/student`, {
+                    accessToken: authState?.accessToken,
+                    email: email
+                });
+                if (response.data.StudentDetails && response.data.StudentDetails.length > 0) {
+                    setUserData(response.data.StudentDetails[0]);
+                    setTempData(response.data.StudentDetails[0]);
+                } else {
+                    toast.error('No student details found');
+                }
+            } catch (err) {
+                toast.error(err.message);
+            }
+        };
+
         if (authState?.accessToken) {
             fetchUserData();
-        } else {
-            setError('No access token available');
-            console.log('No access token available');
         }
     }, [authState?.accessToken, email]);
 
-    const handleEdit = (field) => {
-        setEditMode({ ...editMode, [field]: true });
+    const handleEdit = () => {
+        setEditMode(true);
+    };
+
+    const handleSave = async () => {
+        try {
+            const payload = { email: userData.email, accessToken: authState?.accessToken };
+
+            Object.keys(tempData).forEach((key) => {
+                if (key !== "extra" && tempData[key] !== userData[key]) {
+                    payload[key] = tempData[key];
+                }
+            });
+
+            if (JSON.stringify(tempData.extra) !== JSON.stringify(userData.extra)) {
+                payload.extra = tempData.extra;
+            }
+
+            const response = await axios.put(`${BASE_URL}/edit/student`, payload);
+            toast.success('Field Updated');
+            setUserData(tempData);
+            setEditMode(false);
+        } catch (error) {
+            toast.error(error.response?.data?.error || 'An error occurred');
+        }
+    };
+
+    const handleCancel = () => {
+        setTempData(userData);
+        setEditMode(false);
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setTempData({ ...tempData, [name]: value });
-    };
 
-    const handleSave = async (field) => {
-        try {
-            const response = await axios.put(`${BASE_URL}/edit/student`, {
-                accessToken: authState?.accessToken,
-                email: userData.email,
-                [field]: tempData[field]
-            });
-            console.log("API response updated:", response.data);
-            toast.success('Field Updated');
-            setUserData({ ...userData, [field]: tempData[field] });
-            setEditMode({ ...editMode, [field]: false });
-        } catch (error) {
-            console.log(error);
-            const errorMessage = error.response?.data?.error || 'An error occured'
-            setError(errorMessage);
-            toast.error(errorMessage);
+        if (name.startsWith("extra_")) {
+            const fieldId = name.replace("extra_", "");
+            setTempData((prev) => ({
+                ...prev,
+                extra: prev.extra.map((field) =>
+                    field._id === fieldId ? { ...field, value } : field
+                ),
+            }));
+        } else {
+            setTempData({ ...tempData, [name]: value });
         }
     };
 
@@ -85,132 +95,139 @@ export default function StudentBasicDetails() {
     const studentDetails = {
         "rollNumber": "Roll No.",
         "currentClass": "Class",
+        "admissionClass": "Admission Class",
+        "section": "Section",
         "DOB": "Date of Birth",
         "admissionDate": "Admission Date",
-        "registrationNumber": "Registration Number",
-        "permanentAddress": "Permanent Address",
         "academicYear": "Academic Year",
         "aadhaarNumber": "Aadhar Number",
         "email": "Personal Email",
-        "emergencyContactNumber": "Emergency Contact"
+        "gender": "Gender",
+        "nationality": "Nationality",
+        "category": "Category",
+        "branch": "Branch",
     };
 
     const parentsDetails = {
         "fatherName": "Father Name",
-        "motherName": "Mother Name",
-        "fatherPhoneNumber": "Father Phone Number",
-        "motherPhoneNumber": "Mother Phone Number",
-        "fatherEmailId": "Parent Email",
-        "fathersOccupation": "Father Occupation",
-        "motherOccupation": "Mother's Occupation"
+        "guardiansName": "Guardian's Name"
     };
 
     const getIcon = (apiField) => {
-        switch(apiField) {
+        switch (apiField) {
             case 'rollNumber': return <FaIdCard />;
-            case 'currentClass': return <FaGraduationCap />;
+            case 'currentClass': case 'admissionClass': return <FaGraduationCap />;
             case 'DOB': return <FaBirthdayCake />;
             case 'admissionDate': case 'academicYear': return <FaCalendarAlt />;
-            case 'registrationNumber': return <FaAddressCard />;
-            case 'permanentAddress': return <FaHome />;
             case 'aadhaarNumber': return <FaIdCard />;
-            case 'email': case 'fatherEmailId': return <FaEnvelope />;
-            case 'emergencyContactNumber': case 'fatherPhoneNumber': case 'motherPhoneNumber': return <FaPhone />;
-            case 'fatherName': case 'motherName': return <FaUser />;
-            case 'fathersOccupation': case 'motherOccupation': return <MdWork />;
+            case 'email': return <FaEnvelope />;
+            case 'gender': return <FaUser />;
+            case 'nationality': return <FaFlag />;
+            case 'category': return <FaListAlt />;
+            case 'branch': return <FaMapMarkerAlt />;
+            case 'fatherName': case 'guardiansName': return <FaUser />;
             default: return <FaUser />;
         }
     };
 
-    const containerVariants = {
-        hidden: { opacity: 0, y: 50 },
-        visible: { 
-            opacity: 1, 
-            y: 0,
-            transition: {
-                duration: 0.5,
-                when: "beforeChildren",
-                staggerChildren: 0.1
-            }
-        }
-    };
-
-    const itemVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0 }
-    };
-
-    const renderField = (apiField, label, details) => (
-        <motion.div 
-            className='flex w-full text-base mb-4 items-center' 
-            key={apiField}
-            variants={itemVariants}
-        >
-            <div className="flex items-center w-2/5">
-                <span className="text-blue-500 mr-2">{getIcon(apiField)}</span>
-                <h1 className='font-medium text-blue-600'>{label}</h1>
+    return (
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300 mt-3">
+            <ToastContainer />
+            <div className="bg-gradient-to-r from-blue-200 to-blue-400 p-3 flex justify-between items-center">
+                <div className="flex items-center">
+                    <div className="flex items-center">
+                        <img src={userData.profileLink} alt="" className="h-16 w-16 borser border-2 border-blue-600 rounded-full object-cover mr-2" />
+                    </div>
+                    <div>
+                        <h2 className="text-3xl font-bold">{userData.name}</h2>
+                        <p className="text-lg">Student Profile</p>
+                    </div>
+                </div>
+                <div>
+                    {editMode ? (
+                        <>
+                            <button
+                                onClick={handleSave}
+                                className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 transition duration-300 mr-2"
+                            >
+                                Save
+                            </button>
+                            <button
+                                onClick={handleCancel}
+                                className="bg-white text-red-500 px-4 py-2 rounded-full hover:bg-red-100 transition duration-300"
+                            >
+                                Cancel
+                            </button>
+                        </>
+                    ) : (
+                        <button
+                            onClick={handleEdit}
+                            className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 transition duration-300"
+                        >
+                            Edit
+                        </button>
+                    )}
+                </div>
             </div>
-            {editMode[apiField] ? (
-                <motion.input
+            <div className="p-6 grid grid-cols-3 mobile:max-tablet:grid-cols-2 gap-6">
+                {Object.entries(studentDetails).map(([apiField, label]) => (
+                    <ProfileItem
+                        key={apiField}
+                        icon={getIcon(apiField)}
+                        label={label}
+                        value={userData[apiField]}
+                        editMode={editMode}
+                        name={apiField}
+                        onChange={handleChange}
+                        editedValue={tempData[apiField]}
+                    />
+                ))}
+                {Object.entries(parentsDetails).map(([apiField, label]) => (
+                    <ProfileItem
+                        key={apiField}
+                        icon={getIcon(apiField)}
+                        label={label}
+                        value={userData[apiField]}
+                        editMode={editMode}
+                        name={apiField}
+                        onChange={handleChange}
+                        editedValue={tempData[apiField]}
+                    />
+                ))}
+                {userData.extra?.map((field) => (
+                    <ProfileItem
+                        key={field._id}
+                        label={field.label}
+                        value={field.value}
+                        editMode={editMode}
+                        name={`extra_${field._id}`}
+                        onChange={handleChange}
+                        editedValue={tempData.extra?.find((item) => item._id === field._id)?.value || ""}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const ProfileItem = ({ icon, label, value, editMode, name, onChange, editedValue }) => (
+    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg transition duration-300 hover:bg-gray-100">
+        <div className="text-blue-500 text-xl">{icon}</div>
+        <div className="flex-grow">
+            <p className="text-sm text-gray-500">{label}</p>
+            {editMode ? (
+                <input
                     type="text"
-                    name={apiField}
-                    value={tempData[apiField] || ''}
-                    onChange={handleChange}
-                    onBlur={() => handleSave(apiField)}
-                    className='border-b border-blue-300 p-1 focus:outline-none focus:border-blue-500 transition-colors duration-300'
-                    initial={{ scale: 0.95 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
+                    name={name}
+                    value={editedValue}
+                    onChange={onChange}
+                    className="w-full p-1 border rounded"
                 />
             ) : (
-                <motion.h1 
-                    className='w-fit ml-2 font-normal text-gray-600'
-                    whileHover={{ scale: 1.05 }}
-                >
-                    {userData[apiField]}
-                </motion.h1>
+                <p className="font-semibold">{value}</p>
             )}
-            <motion.div 
-                className="ml-4 cursor-pointer" 
-                onClick={() => handleEdit(apiField)}
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-            >
-                {editMode[apiField] ? 
-                    <FaCheck className='text-green-400' /> : 
-                    <CiEdit className='text-blue-500' />
-                }
-            </motion.div>
-        </motion.div>
-    );
+        </div>
+    </div>
+);
 
-    return (
-        <motion.div 
-            className="flex-1 w-full mt-3 mb-2 shadow-lg rounded-lg bg-white p-6 h-fit"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-        >
-            <ToastContainer />
-            <motion.div 
-                className="flex justify-between flex-grow items-center mb-6"
-                variants={itemVariants}
-            >
-                <h1 className="text-2xl font-bold text-blue-700">
-                    <FaUser className="inline-block mr-2" /> All Details
-                </h1>
-            </motion.div>
-            <motion.div className='border-blue-200 border-t-2 mb-6' variants={itemVariants} />
-            <div className='tablet:flex mt-2'>
-                <motion.div className='tablet:w-1/2 pr-4' variants={containerVariants}>
-                    <h2 className="text-xl font-semibold text-blue-600 mb-4">Student Details</h2>
-                    {Object.entries(studentDetails).map(([apiField, label]) => renderField(apiField, label, studentDetails))}
-                </motion.div>
-                <motion.div className='tablet:w-1/2 pl-4' variants={containerVariants}>
-                    <h2 className="text-xl font-semibold text-blue-600 mb-4">Parent Details</h2>
-                    {Object.entries(parentsDetails).map(([apiField, label]) => renderField(apiField, label, parentsDetails))}
-                </motion.div>
-            </div>
-        </motion.div>
-    );
-}
+export default StudentBasicDetails;

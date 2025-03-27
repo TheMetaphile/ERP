@@ -3,15 +3,15 @@ import { useParams } from 'react-router-dom';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import axios from 'axios';
-import { FaIdCard, FaMapMarkerAlt, FaEnvelope, FaPhone, FaEdit, FaSave, FaTimes, FaBirthdayCake, FaTint } from 'react-icons/fa';
+import { FaIdCard, FaEnvelope, FaPhone, FaEdit, FaSave, FaTimes, FaBirthdayCake } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const SubAdminProfile = () => {
     const { id } = useParams();
     const { authState } = useContext(AuthContext);
-    const [subAdmin, setsubAdmin] = useState({});
+    const [subAdmin, setSubAdmin] = useState({});
     const [editMode, setEditMode] = useState(false);
-    const [editedsubAdmin, setEditedsubAdmin] = useState({});
+    const [editedSubAdmin, setEditedSubAdmin] = useState({});
 
     useEffect(() => {
         const fetchSubAdminDetails = async () => {
@@ -20,11 +20,10 @@ const SubAdminProfile = () => {
                     accessToken: authState?.accessToken,
                 });
 
-                setsubAdmin(response.data.SubAdminDetails[0]);
-                setEditedsubAdmin(response.data.SubAdminDetails[0]);
+                setSubAdmin(response.data.SubAdminDetails[0]);
+                setEditedSubAdmin(response.data.SubAdminDetails[0]);
             } catch (error) {
-                console.error('Error fetching subAdmins:', error.response.data.error);
-
+                console.error('Error fetching subAdmins:', error.response?.data?.error);
             }
         };
 
@@ -37,18 +36,17 @@ const SubAdminProfile = () => {
 
     const handleSave = async () => {
         try {
-            const payload = {
-                _id: id,
-                accessToken: authState?.accessToken,
-                name: editedsubAdmin.name,
-                phoneNumber: editedsubAdmin.phoneNumber,
-                bloodGroup: editedsubAdmin.bloodGroup,
-                permanentAddress: editedsubAdmin.permanentAddress,
-                permanentPincode: editedsubAdmin.permanentPincode,
-                DOB: editedsubAdmin.dob,
-                newEmail: editedsubAdmin.email,
-                branch: editedsubAdmin.branch,
-            };
+            const payload = { _id: id, accessToken: authState?.accessToken };
+
+            Object.keys(editedSubAdmin).forEach((key) => {
+                if (key !== "extra" && editedSubAdmin[key] !== subAdmin[key]) {
+                    payload[key === "dob" ? "DOB" : key] = editedSubAdmin[key];
+                }
+            });
+
+            if (JSON.stringify(editedSubAdmin.extra) !== JSON.stringify(subAdmin.extra)) {
+                payload.extra = editedSubAdmin.extra;
+            }
 
             const config = {
                 method: 'put',
@@ -61,32 +59,48 @@ const SubAdminProfile = () => {
             };
 
             await axios.request(config);
-            setsubAdmin(editedsubAdmin);
+            setSubAdmin(prev => ({ ...prev, ...editedSubAdmin }));
             setEditMode(false);
             toast.success('Field Updated Successfully');
         } catch (error) {
-            console.error('Error fetching subAdmins:', error.response.data.error);
-
+            console.error('Error updating subAdmin:', error.response?.data?.error);
         }
     };
 
     const handleCancel = () => {
-        setEditedsubAdmin(subAdmin);
+        setEditedSubAdmin(subAdmin);
         setEditMode(false);
     };
 
     const handleChange = (e) => {
-        setEditedsubAdmin({ ...editedsubAdmin, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+
+        if (name.startsWith("extra_")) {
+            const fieldId = name.replace("extra_", "");
+            setEditedSubAdmin((prev) => ({
+                ...prev,
+                extra: prev.extra.map((field) =>
+                    field._id === fieldId ? { ...field, value } : field
+                ),
+            }));
+        } else {
+            setEditedSubAdmin({ ...editedSubAdmin, [name]: value });
+        }
     };
 
-
     return (
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300 mx-3">
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300 mt-3">
             <div className="bg-gradient-to-r from-blue-200 to-blue-400 p-3 flex justify-between items-center">
-                <div>
-                    <h2 className="text-3xl font-bold">{subAdmin.name}</h2>
-                    <p className="text-lg">Staff Profile</p>
+                <div className="flex items-center">
+                    <div className="flex items-center">
+                        <img src={subAdmin.profileLink} alt="" className="h-16 w-16 borser border-2 border-blue-600 rounded-full object-cover mr-2" />
+                    </div>
+                    <div>
+                        <h2 className="text-3xl font-bold">{subAdmin.name}</h2>
+                        <p className="text-lg">Staff Profile</p>
+                    </div>
                 </div>
+
                 <div>
                     {editMode ? (
                         <>
@@ -114,13 +128,23 @@ const SubAdminProfile = () => {
                 </div>
             </div>
             <div className="p-6 grid grid-cols-3 mobile:max-tablet:grid-cols-2 gap-6">
-                <ProfileItem icon={<FaBirthdayCake />} label="Date of Birth" value={subAdmin.dob} editMode={editMode} name="dob" onChange={handleChange} editedValue={editedsubAdmin.dob} />
-                <ProfileItem icon={<FaTint />} label="Blood Group" value={subAdmin.bloodGroup} editMode={editMode} name="bloodGroup" onChange={handleChange} editedValue={editedsubAdmin.bloodGroup} />
-                <ProfileItem icon={<FaIdCard />} label="Branch" value={subAdmin.branch} editMode={editMode} name="branch" onChange={handleChange} editedValue={editedsubAdmin.branch} />
-                <ProfileItem icon={<FaMapMarkerAlt />} label="Address" value={subAdmin.permanentAddress} editMode={editMode} name="permanentAddress" onChange={handleChange} editedValue={editedsubAdmin.permanentAddress} />
-                <ProfileItem icon={<FaMapMarkerAlt />} label="PIN" value={subAdmin.permanentPincode} editMode={editMode} name="permanentPincode" onChange={handleChange} editedValue={editedsubAdmin.permanentPincode} />
-                <ProfileItem icon={<FaPhone />} label="Phone No" value={subAdmin.phoneNumber} editMode={editMode} name="phoneNumber" onChange={handleChange} editedValue={editedsubAdmin.phoneNumber} />
-                <ProfileItem icon={<FaEnvelope />} label="Email ID" value={subAdmin.email} editMode={editMode} name="email" onChange={handleChange} editedValue={editedsubAdmin.email} /> </div>
+                <ProfileItem icon={<FaBirthdayCake />} label="Date of Birth" value={subAdmin.dob} editMode={editMode} name="dob" onChange={handleChange} editedValue={editedSubAdmin.dob} />
+                <ProfileItem icon={<FaIdCard />} label="Branch" value={subAdmin.branch} editMode={editMode} name="branch" onChange={handleChange} editedValue={editedSubAdmin.branch} />
+                <ProfileItem icon={<FaPhone />} label="Phone No" value={subAdmin.phoneNumber} editMode={editMode} name="phoneNumber" onChange={handleChange} editedValue={editedSubAdmin.phoneNumber} />
+                <ProfileItem icon={<FaEnvelope />} label="Email ID" value={subAdmin.email} editMode={editMode} name="email" onChange={handleChange} editedValue={editedSubAdmin.email} />
+
+                {subAdmin.extra?.map((field) => (
+                    <ProfileItem
+                        key={field._id}
+                        label={field.label}
+                        value={field.value}
+                        editMode={editMode}
+                        name={`extra_${field._id}`}
+                        onChange={handleChange}
+                        editedValue={editedSubAdmin.extra?.find((item) => item._id === field._id)?.value || ""}
+                    />
+                ))}
+            </div>
         </div>
     );
 };

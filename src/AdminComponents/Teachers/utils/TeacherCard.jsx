@@ -191,7 +191,7 @@ export default function TeacherCard({ userData }) {
 
                         <Link to={{
                             pathname: "/Admin-Dashboard/Teachers/profile",
-                            search: `?employeeId=${user.employeeId}&name=${user.name}&profileLogo=${user.profileLogo}`,
+                            search: `?employeeId=${user._id}&name=${user.name}&profileLogo=${user.profileLogo}`,
                         }}>
                             <div className="flex gap-2 items-center bg-blue-300 mx-2 justify-evenly rounded-md px-2 cursor-pointer">
                                 <CgProfile className="text-white" />
