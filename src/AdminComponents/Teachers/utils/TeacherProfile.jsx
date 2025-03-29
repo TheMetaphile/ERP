@@ -23,12 +23,12 @@ export default function TeacherProfile() {
 
             <h1 className="text-2xl font-semibold mt-4 mb-2">Basic Details</h1>
             <ProfileDetails />
-            <h1 className="text-2xl font-semibold mt-4 mb-2">Classes Activity</h1>
+            {/* <h1 className="text-2xl font-semibold mt-4 mb-2">Classes Activity</h1>
 
 
             <div className="h-96 w-full shadow-lg rounded-lg">
                 <ClassesActivityChart />
-            </div>
+            </div> */}
 
         </div>
     )

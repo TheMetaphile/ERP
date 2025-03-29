@@ -3,8 +3,9 @@ import { useParams } from 'react-router-dom';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import axios from 'axios';
-import { FaIdCard, FaEnvelope, FaPhone, FaEdit, FaSave, FaTimes, FaBirthdayCake } from 'react-icons/fa';
+import { FaIdCard, FaEnvelope, FaPhone, FaEdit, FaSave, FaTimes, FaBirthdayCake, FaTag } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import FileUploadField from '../../../SubAdminComponent/Student/FileUploadField';
 
 const SubAdminProfile = () => {
     const { id } = useParams();
@@ -12,6 +13,7 @@ const SubAdminProfile = () => {
     const [subAdmin, setSubAdmin] = useState({});
     const [editMode, setEditMode] = useState(false);
     const [editedSubAdmin, setEditedSubAdmin] = useState({});
+    const [customFields, setCustomFields] = useState([]);
 
     useEffect(() => {
         const fetchSubAdminDetails = async () => {
@@ -20,8 +22,10 @@ const SubAdminProfile = () => {
                     accessToken: authState?.accessToken,
                 });
 
-                setSubAdmin(response.data.SubAdminDetails[0]);
-                setEditedSubAdmin(response.data.SubAdminDetails[0]);
+                const subAdminDetails = response.data.SubAdminDetails[0];
+                subAdminDetails.extra = subAdminDetails.extra || [];
+                setSubAdmin(subAdminDetails);
+                setEditedSubAdmin(subAdminDetails);
             } catch (error) {
                 console.error('Error fetching subAdmins:', error.response?.data?.error);
             }
@@ -44,9 +48,15 @@ const SubAdminProfile = () => {
                 }
             });
 
-            if (JSON.stringify(editedSubAdmin.extra) !== JSON.stringify(subAdmin.extra)) {
-                payload.extra = editedSubAdmin.extra;
-            }
+            const updatedExtra = [...(editedSubAdmin.extra || [])];
+            customFields.forEach(field => {
+                const existingFieldIndex = updatedExtra.findIndex(extraField => extraField.label === field.label);
+                if (existingFieldIndex === -1) {
+                    updatedExtra.push({ label: field.label, value: '', _id: field._id });
+                }
+            });
+
+            payload.extra = updatedExtra;
 
             const config = {
                 method: 'put',
@@ -72,28 +82,55 @@ const SubAdminProfile = () => {
         setEditMode(false);
     };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const handleCustomFieldValueChange = (e) => {
+        if (!editMode) return;
 
-        if (name.startsWith("extra_")) {
-            const fieldId = name.replace("extra_", "");
-            setEditedSubAdmin((prev) => ({
-                ...prev,
-                extra: prev.extra.map((field) =>
-                    field._id === fieldId ? { ...field, value } : field
-                ),
-            }));
-        } else {
-            setEditedSubAdmin({ ...editedSubAdmin, [name]: value });
+        const { name, value, files } = e.target;
+        setEditedSubAdmin((prev) => ({
+            ...prev,
+            extra: prev.extra.map((field) =>
+                field.label === name ? { ...field, value: files ? files[0] : value } : field
+            ),
+        }));
+    };
+
+    const fetchFieldsForUserType = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/registrationFields/fetch/SubAdmin`, {
+                headers: {
+                    'Authorization': `Bearer ${authState?.accessToken}`
+                }
+            });
+            if (response.status === 200) {
+                setCustomFields(response.data?.fields?.fields || []);
+            }
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || 'An error occurred';
+            console.log(error);
+            toast.error(errorMessage);
         }
     };
+
+    useEffect(() => {
+        fetchFieldsForUserType();
+    }, [authState]);
+
+    useEffect(() => {
+        const updatedExtraFields = [...(subAdmin.extra || [])];
+        customFields.forEach(field => {
+            if (!updatedExtraFields.some(extraField => extraField.label === field.label)) {
+                updatedExtraFields.push({ label: field.label, value: '', _id: field._id });
+            }
+        });
+        setEditedSubAdmin(prev => ({ ...prev, extra: updatedExtraFields }));
+    }, [customFields, subAdmin]);
 
     return (
         <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300 mt-3">
             <div className="bg-gradient-to-r from-blue-200 to-blue-400 p-3 flex justify-between items-center">
                 <div className="flex items-center">
                     <div className="flex items-center">
-                        <img src={subAdmin.profileLink} alt="" className="h-16 w-16 borser border-2 border-blue-600 rounded-full object-cover mr-2" />
+                        <img src={subAdmin.profileLink} alt="" className="h-16 w-16 border-2 border-blue-600 rounded-full object-cover mr-2" />
                     </div>
                     <div>
                         <h2 className="text-3xl font-bold">{subAdmin.name}</h2>
@@ -128,22 +165,72 @@ const SubAdminProfile = () => {
                 </div>
             </div>
             <div className="p-6 grid grid-cols-3 mobile:max-tablet:grid-cols-2 gap-6">
-                <ProfileItem icon={<FaBirthdayCake />} label="Date of Birth" value={subAdmin.dob} editMode={editMode} name="dob" onChange={handleChange} editedValue={editedSubAdmin.dob} />
-                <ProfileItem icon={<FaIdCard />} label="Branch" value={subAdmin.branch} editMode={editMode} name="branch" onChange={handleChange} editedValue={editedSubAdmin.branch} />
-                <ProfileItem icon={<FaPhone />} label="Phone No" value={subAdmin.phoneNumber} editMode={editMode} name="phoneNumber" onChange={handleChange} editedValue={editedSubAdmin.phoneNumber} />
-                <ProfileItem icon={<FaEnvelope />} label="Email ID" value={subAdmin.email} editMode={editMode} name="email" onChange={handleChange} editedValue={editedSubAdmin.email} />
+                <ProfileItem icon={<FaBirthdayCake />} label="Date of Birth" value={subAdmin.dob} editMode={editMode} name="dob" onChange={handleCustomFieldValueChange} editedValue={editedSubAdmin.dob} />
+                <ProfileItem icon={<FaIdCard />} label="Branch" value={subAdmin.branch} editMode={editMode} name="branch" onChange={handleCustomFieldValueChange} editedValue={editedSubAdmin.branch} />
+                <ProfileItem icon={<FaPhone />} label="Phone No" value={subAdmin.phoneNumber} editMode={editMode} name="phoneNumber" onChange={handleCustomFieldValueChange} editedValue={editedSubAdmin.phoneNumber} />
+                <ProfileItem icon={<FaEnvelope />} label="Email ID" value={subAdmin.email} editMode={editMode} name="email" onChange={handleCustomFieldValueChange} editedValue={editedSubAdmin.email} />
 
-                {subAdmin.extra?.map((field) => (
-                    <ProfileItem
-                        key={field._id}
-                        label={field.label}
-                        value={field.value}
-                        editMode={editMode}
-                        name={`extra_${field._id}`}
-                        onChange={handleChange}
-                        editedValue={editedSubAdmin.extra?.find((item) => item._id === field._id)?.value || ""}
-                    />
-                ))}
+                {customFields.map((field, index) => {
+                    const fieldValue = editedSubAdmin.extra.find((fields) => fields.label === field.label)?.value || "";
+                    switch (field.type) {
+                        case "select":
+                            return (
+                                <SelectField
+                                    key={index}
+                                    icon={<FaTag />}
+                                    label={field.label}
+                                    name={field.label}
+                                    options={field.options}
+                                    onChange={handleCustomFieldValueChange}
+                                    value={fieldValue}
+                                    required={field.required}
+                                    editMode={editMode}
+                                />
+                            );
+                        case "text":
+                        case "number":
+                            return (
+                                <InputField
+                                    key={index}
+                                    icon={<FaTag />}
+                                    label={field.label}
+                                    name={field.label}
+                                    value={fieldValue}
+                                    onChange={handleCustomFieldValueChange}
+                                    type={field.type}
+                                    required={field.required}
+                                    editMode={editMode}
+                                />
+                            );
+                        case "document":
+                            return (
+                                <FileUploadField
+                                    key={index}
+                                    icon={<FaTag />}
+                                    label={field.label}
+                                    name={field.label}
+                                    required={field.required}
+                                    value={fieldValue}
+                                    onChange={handleCustomFieldValueChange}
+                                    editMode={editMode}
+                                />
+                            );
+                        default:
+                            return (
+                                <InputField
+                                    key={index}
+                                    icon={<FaTag />}
+                                    label={field.label}
+                                    name={field.label}
+                                    type={field.type}
+                                    value={fieldValue}
+                                    onChange={handleCustomFieldValueChange}
+                                    required={field.required}
+                                    editMode={editMode}
+                                />
+                            );
+                    }
+                })}
             </div>
         </div>
     );
@@ -167,6 +254,56 @@ const ProfileItem = ({ icon, label, value, editMode, name, onChange, editedValue
             )}
         </div>
     </div>
+);
+
+const InputField = ({ icon, label, name, type = "text", value, onChange, required, editMode }) => (
+    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg transition duration-300 hover:bg-gray-100">
+    <div className="text-blue-500 text-xl">{icon}</div>
+    <div className="flex-grow">
+        <p className="text-sm text-gray-500">{label}</p>
+        {editMode ? (
+            <input
+                className="border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                id={name}
+                type={type}
+                name={name}
+                value={value}
+                onChange={onChange}
+                required={required}
+            />
+        ) : (
+            <p className="font-semibold">{value}</p>
+        )}
+    </div>
+    </div>
+
+);
+
+const SelectField = ({ icon, label, name, value, onChange, options, required, editMode }) => (
+    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg transition duration-300 hover:bg-gray-100">
+        <div className="text-blue-500 text-xl">{icon}</div>
+        <div className="flex-grow">
+            <p className="text-sm text-gray-500">{label}</p>
+        {editMode ? (
+            <select
+                className="border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                id={name}
+                name={name}
+                value={value}
+                onChange={onChange}
+                required={required}
+            >
+                <option value="">Select {label}</option>
+                {options.map(option => (
+                    <option key={option} value={option}>{option}</option>
+                ))}
+            </select>
+        ) : (
+            <p className="font-semibold">{value}</p>
+        )}
+    </div>
+    </div>
+
 );
 
 export default SubAdminProfile;

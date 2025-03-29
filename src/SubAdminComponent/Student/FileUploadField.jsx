@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import AuthContext from "../../Context/AuthContext";
 
 
-const FileUploadField = ({ label, name, required, accept = ".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.bmp,.webp", value = '', onChange }) => {
+const FileUploadField = ({ icon, label, name, required, accept = ".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.bmp,.webp", value = '', onChange }) => {
     const { darkMode } = useContext(AuthContext);
     const [fileName, setFileName] = useState('');
     const [filePreview, setFilePreview] = useState(null);
@@ -116,13 +116,16 @@ const FileUploadField = ({ label, name, required, accept = ".pdf,.doc,.docx,.jpg
     };
 
     return (
-        <div className="mb-4">
-            <label className={`block text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'} mb-1`}>
-                {label} {required && <span className="text-red-500">*</span>}
-            </label>
+        <div className="flex-grow">
+            <div className='flex items-center gap-2'>
+                <div className="text-blue-500 text-xl">{icon}</div>
+                <label className={`text-sm text-gray-500 ${darkMode ? 'text-gray-300' : 'text-gray-700'} mb-1`}>
+                    {label} {required && <span className="text-red-500">*</span>}
+                </label>
+            </div>
             <div
-                className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 ${darkMode 
-                    ? 'border-gray-600 hover:bg-gray-800' 
+                className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 ${darkMode
+                    ? 'border-gray-600 hover:bg-gray-800'
                     : 'border-gray-300 hover:bg-gray-50'} 
                     border-dashed rounded-md cursor-pointer ${darkMode ? 'bg-gray-900' : 'bg-white'}`}
                 onClick={handleClick}

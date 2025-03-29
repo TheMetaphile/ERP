@@ -2,16 +2,18 @@ import React, { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import axios from 'axios';
 import AuthContext from '../../../../Context/AuthContext';
-import { FaUser, FaEnvelope, FaGraduationCap, FaBirthdayCake, FaIdCard, FaCalendarAlt, FaMapMarkerAlt, FaFlag, FaListAlt } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaGraduationCap, FaBirthdayCake, FaIdCard, FaCalendarAlt, FaMapMarkerAlt, FaFlag, FaListAlt, FaTag } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from '../../../../Config';
 import Loading from '../../../../LoadingScreen/Loading';
+import FileUploadField from '../../../../SubAdminComponent/Student/FileUploadField';
 
 const StudentBasicDetails = () => {
     const [userData, setUserData] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [tempData, setTempData] = useState({});
+    const [customFields, setCustomFields] = useState([]);
     const { authState } = useContext(AuthContext);
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -25,8 +27,10 @@ const StudentBasicDetails = () => {
                     email: email
                 });
                 if (response.data.StudentDetails && response.data.StudentDetails.length > 0) {
-                    setUserData(response.data.StudentDetails[0]);
-                    setTempData(response.data.StudentDetails[0]);
+                    const studentDetails = response.data.StudentDetails[0];
+                    studentDetails.extra = studentDetails.extra || [];
+                    setUserData(studentDetails);
+                    setTempData(studentDetails);
                 } else {
                     toast.error('No student details found');
                 }
@@ -37,8 +41,38 @@ const StudentBasicDetails = () => {
 
         if (authState?.accessToken) {
             fetchUserData();
+            fetchFieldsForUserType();
         }
     }, [authState?.accessToken, email]);
+
+    const fetchFieldsForUserType = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/registrationFields/fetch/Student`, {
+                headers: {
+                    'Authorization': `Bearer ${authState?.accessToken}`
+                }
+            });
+            if (response.status === 200) {
+                setCustomFields(response.data?.fields?.fields || []);
+            }
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || 'An error occurred';
+            console.log(error);
+            toast.error(errorMessage);
+        }
+    };
+
+    useEffect(() => {
+        if (userData) {
+            const updatedExtraFields = [...(userData.extra || [])];
+            customFields.forEach(field => {
+                if (!updatedExtraFields.some(extraField => extraField.label === field.label)) {
+                    updatedExtraFields.push({ label: field.label, value: '', _id: field._id });
+                }
+            });
+            setTempData(prev => ({ ...prev, extra: updatedExtraFields }));
+        }
+    }, [customFields, userData]);
 
     const handleEdit = () => {
         setEditMode(true);
@@ -58,7 +92,7 @@ const StudentBasicDetails = () => {
                 payload.extra = tempData.extra;
             }
 
-            const response = await axios.put(`${BASE_URL}/edit/student`, payload);
+            await axios.put(`${BASE_URL}/edit/student`, payload);
             toast.success('Field Updated');
             setUserData(tempData);
             setEditMode(false);
@@ -72,20 +106,16 @@ const StudentBasicDetails = () => {
         setEditMode(false);
     };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const handleCustomFieldValueChange = (e) => {
+        if (!editMode) return;
 
-        if (name.startsWith("extra_")) {
-            const fieldId = name.replace("extra_", "");
-            setTempData((prev) => ({
-                ...prev,
-                extra: prev.extra.map((field) =>
-                    field._id === fieldId ? { ...field, value } : field
-                ),
-            }));
-        } else {
-            setTempData({ ...tempData, [name]: value });
-        }
+        const { name, value, files } = e.target;
+        setTempData((prev) => ({
+            ...prev,
+            extra: prev.extra.map((field) =>
+                field.label === name ? { ...field, value: files ? files[0] : value } : field
+            ),
+        }));
     };
 
     if (!userData) {
@@ -126,7 +156,7 @@ const StudentBasicDetails = () => {
             case 'category': return <FaListAlt />;
             case 'branch': return <FaMapMarkerAlt />;
             case 'fatherName': case 'guardiansName': return <FaUser />;
-            default: return <FaUser />;
+            default: return <FaTag />;
         }
     };
 
@@ -136,7 +166,7 @@ const StudentBasicDetails = () => {
             <div className="bg-gradient-to-r from-blue-200 to-blue-400 p-3 flex justify-between items-center">
                 <div className="flex items-center">
                     <div className="flex items-center">
-                        <img src={userData.profileLink} alt="" className="h-16 w-16 borser border-2 border-blue-600 rounded-full object-cover mr-2" />
+                        <img src={userData.profileLink} alt="" className="h-16 w-16 border-2 border-blue-600 rounded-full object-cover mr-2" />
                     </div>
                     <div>
                         <h2 className="text-3xl font-bold">{userData.name}</h2>
@@ -178,7 +208,7 @@ const StudentBasicDetails = () => {
                         value={userData[apiField]}
                         editMode={editMode}
                         name={apiField}
-                        onChange={handleChange}
+                        onChange={handleCustomFieldValueChange}
                         editedValue={tempData[apiField]}
                     />
                 ))}
@@ -190,21 +220,69 @@ const StudentBasicDetails = () => {
                         value={userData[apiField]}
                         editMode={editMode}
                         name={apiField}
-                        onChange={handleChange}
+                        onChange={handleCustomFieldValueChange}
                         editedValue={tempData[apiField]}
                     />
                 ))}
-                {userData.extra?.map((field) => (
-                    <ProfileItem
-                        key={field._id}
-                        label={field.label}
-                        value={field.value}
-                        editMode={editMode}
-                        name={`extra_${field._id}`}
-                        onChange={handleChange}
-                        editedValue={tempData.extra?.find((item) => item._id === field._id)?.value || ""}
-                    />
-                ))}
+                {customFields.map((field) => {
+                    const fieldValue = tempData.extra.find((fields) => fields.label === field.label)?.value || "";
+                    switch (field.type) {
+                        case "select":
+                            return (
+                                <SelectField
+                                    key={field._id}
+                                    icon={getIcon()}
+                                    label={field.label}
+                                    name={field.label}
+                                    options={field.options}
+                                    onChange={handleCustomFieldValueChange}
+                                    value={fieldValue}
+                                    required={field.required}
+                                    editMode={editMode}
+                                />
+                            );
+                        case "text":
+                        case "number":
+                            return (
+                                <ProfileItem
+                                    key={field._id}
+                                    icon={getIcon()}
+                                    label={field.label}
+                                    value={fieldValue}
+                                    editMode={editMode}
+                                    name={field.label}
+                                    onChange={handleCustomFieldValueChange}
+                                    editedValue={fieldValue}
+                                />
+                            );
+                        case "document":
+                            return (
+                                <FileUploadField
+                                    key={field._id}
+                                    icon={getIcon()}
+                                    label={field.label}
+                                    name={field.label}
+                                    required={field.required}
+                                    value={fieldValue}
+                                    onChange={handleCustomFieldValueChange}
+                                    editMode={editMode}
+                                />
+                            );
+                        default:
+                            return (
+                                <ProfileItem
+                                    key={field._id}
+                                    icon={getIcon()}
+                                    label={field.label}
+                                    value={fieldValue}
+                                    editMode={editMode}
+                                    name={field.label}
+                                    onChange={handleCustomFieldValueChange}
+                                    editedValue={fieldValue}
+                                />
+                            );
+                    }
+                })}
             </div>
         </div>
     );
@@ -228,6 +306,33 @@ const ProfileItem = ({ icon, label, value, editMode, name, onChange, editedValue
             )}
         </div>
     </div>
+);
+
+const SelectField = ({ icon, label, name, value, onChange, options, required, editMode }) => (
+    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg transition duration-300 hover:bg-gray-100">
+        <div className="text-blue-500 text-xl">{icon}</div>
+        <div className="flex-grow">
+            <p className="text-sm text-gray-500">{label}</p>
+            {editMode ? (
+                <select
+                    className="border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                    id={name}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    required={required}
+                >
+                    <option value="">Select {label}</option>
+                    {options.map(option => (
+                        <option key={option} value={option}>{option}</option>
+                    ))}
+                </select>
+            ) : (
+                <p className="font-semibold">{value}</p>
+            )}
+        </div>
+    </div>
+
 );
 
 export default StudentBasicDetails;

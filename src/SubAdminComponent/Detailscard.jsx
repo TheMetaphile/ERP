@@ -3,10 +3,14 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../Config';
 import AuthContext from '../Context/AuthContext';
+import {
+    FaUser, FaEnvelope, FaBirthdayCake, FaIdCard,
+    FaTransgender, FaMapMarkerAlt, FaGraduationCap,
+    FaTag, FaCalendarAlt, FaFlag, FaUserFriends, FaUniversity
+} from 'react-icons/fa';
 
 export default function Detailscard() {
     const { email } = useParams();
-    const [selectedTab, setSelectedTab] = useState('personal');
     const { authState, darkMode } = useContext(AuthContext);
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -29,123 +33,175 @@ export default function Detailscard() {
                 setUserData(response.data.StudentDetails[0]);
                 setImageError(false);
             }
-            console.log(response.data);
         } catch (err) {
             console.error(err);
         } finally {
             setLoading(false);
         }
     };
-    
+
     const handleImageError = () => {
         setImageError(true);
     };
 
-    const InfoItem = ({ label, value }) => (
-        <div className={`mb-4 p-3 rounded-lg transition-all duration-300 ease-in-out hover:shadow-md ${
-            darkMode 
-                ? 'bg-gray-700 hover:bg-gray-600' 
-                : 'bg-blue-50 hover:bg-blue-100'
-        }`}>
-            <span className={`font-semibold ${
-                darkMode ? 'text-blue-300' : 'text-blue-700'
-            }`}>{label}:</span>
-            <span className={`ml-2 ${
-                darkMode ? 'text-gray-200' : 'text-gray-800'
-            }`}>{value || 'N/A'}</span>
+    const DetailCard = ({ icon: Icon, label, value }) => (
+        <div className={`flex items-center p-4 rounded-lg shadow-md transition-all duration-300 
+            ${darkMode
+                ? 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+                : 'bg-white hover:bg-blue-50 text-gray-800'
+            }`}>
+            <div className={`mr-4 text-2xl ${darkMode ? 'text-blue-300' : 'text-blue-600'
+                }`}>
+                <Icon />
+            </div>
+            <div>
+                <p className={`text-sm font-medium ${darkMode ? 'text-blue-300' : 'text-blue-700'
+                    }`}>{label}</p>
+                <p className="font-semibold">{value || 'N/A'}</p>
+            </div>
         </div>
     );
 
+    const ExtraFieldsSection = () => {
+        if (!userData?.extra || userData.extra.length === 0) return null;
+
+        return (
+            <div className="mt-6">
+                <h2 className={`text-2xl font-bold mb-4 ${darkMode ? 'text-blue-300' : 'text-blue-700'
+                    }`}>
+                    Additional Information
+                </h2>
+                <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
+                    {userData.extra.map((field, index) => (
+                        <DetailCard
+                            key={field._id || index}
+                            icon={FaTag}
+                            label={field.label}
+                            value={field.value || 'N/A'}
+                        />
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
     if (loading) {
         return (
-            <div className={`flex justify-center items-center h-screen ${
-                darkMode ? 'bg-gray-900' : ''
-            }`}>
+            <div className={`flex justify-center items-center h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-100'
+                }`}>
                 <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
             </div>
         );
     }
 
     return (
-        <div className="pt-1 w-full mobile:max-sm:p-2">
-            <div className={`${
-                darkMode 
-                    ? 'bg-gray-800 shadow-lg text-gray-200' 
-                    : 'bg-white shadow-lg'
-            } rounded-lg overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl`}>
-                <div className={`${
-                    darkMode ? 'bg-gray-700' : 'bg-blue-100'
-                } p-6 mobile:max-sm:p-1`}>
-                    <div className="flex items-center space-x-4">
-                        <div className={`w-20 h-20 rounded-full overflow-hidden flex items-center justify-center ${
-                            darkMode ? 'bg-gray-600 text-blue-300' : 'bg-blue-300 text-blue-600'
-                        } text-2xl font-bold`}>
-                            {imageError || !userData?.profileLink ? (
-                                <span>{userData?.name?.charAt(0)}</span>
-                            ) : (
-                                <img
-                                    src={userData.profileLink}
-                                    alt={userData?.name}
-                                    className="w-full h-full object-cover"
-                                    onError={handleImageError}
-                                />
-                            )}
-                        </div>
-                        <div>
-                            <h2 className={`text-2xl font-bold ${
-                                darkMode ? 'text-blue-300' : 'text-blue-700'
-                            }`}>{userData?.name}</h2>
-                            <p className={darkMode ? 'text-blue-300' : 'text-blue-700'}>Roll No: {userData?.rollNumber}</p>
-                        </div>
+        <div className={`min-h-screen p-6 ${darkMode ? 'bg-gray-900' : 'bg-gray-100'
+            }`}>
+            <div className={` mx-auto rounded-xl overflow-hidden shadow-2xl ${darkMode ? 'bg-gray-800' : 'bg-white'
+                }`}>
+                <div className={`p-6 flex items-center space-x-6 ${darkMode ? 'bg-gray-700' : 'bg-blue-500'
+                    }`}>
+                    <div className={`w-24 h-24 rounded-full overflow-hidden border-4 ${darkMode
+                        ? 'border-gray-600 bg-gray-600'
+                        : 'border-white bg-blue-300'
+                        }`}>
+                        {imageError || !userData?.profileLink ? (
+                            <div className={`w-full h-full flex items-center justify-center text-4xl font-bold ${darkMode ? 'text-blue-300' : 'text-white'
+                                }`}>
+                                {userData?.name?.charAt(0)}
+                            </div>
+                        ) : (
+                            <img
+                                src={userData.profileLink}
+                                alt={userData?.name}
+                                className="w-full h-full object-cover"
+                                onError={handleImageError}
+                            />
+                        )}
+                    </div>
+                    <div>
+                        <h1 className={`text-3xl font-bold ${darkMode ? 'text-blue-300' : 'text-white'
+                            }`}>{userData?.name}</h1>
+                        <p className={`text-lg ${darkMode ? 'text-blue-200' : 'text-blue-100'
+                            }`}>Roll No: {userData?.rollNumber}</p>
                     </div>
                 </div>
-                <div className="p-6 mobile:max-sm:p-2">
-                    <div className="flex mb-6">
-                        {['personal', 'parent'].map((tab) => (
-                            <button
-                                key={tab}
-                                className={`flex-1 py-2 px-4 transition-all duration-300 ease-in-out ${
-                                    selectedTab === tab
-                                        ? darkMode
-                                            ? 'bg-blue-600 text-white shadow-md'
-                                            : 'bg-blue-400 text-white shadow-md'
-                                        : darkMode
-                                            ? 'bg-gray-600 hover:bg-gray-500'
-                                            : 'bg-gray-200 hover:bg-blue-100'
-                                }`}
-                                onClick={() => setSelectedTab(tab)}
-                            >
-                                {tab === 'personal' ? 'Personal Information' : 'Parent Details'}
-                            </button>
-                        ))}
+
+                <div className="p-6">
+                    <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
+                        <DetailCard
+                            icon={FaUser}
+                            label="Full Name"
+                            value={userData?.name}
+                        />
+                        <DetailCard
+                            icon={FaEnvelope}
+                            label="Email"
+                            value={userData?.email}
+                        />
+                        <DetailCard
+                            icon={FaBirthdayCake}
+                            label="Date of Birth"
+                            value={userData?.DOB}
+                        />
+                        <DetailCard
+                            icon={FaIdCard}
+                            label="Aadhar Number"
+                            value={userData?.aadhaarNumber}
+                        />
+                        <DetailCard
+                            icon={FaTransgender}
+                            label="Gender"
+                            value={userData?.gender}
+                        />
+                        <DetailCard
+                            icon={FaMapMarkerAlt}
+                            label="Branch"
+                            value={userData?.branch}
+                        />
+                        <DetailCard
+                            icon={FaGraduationCap}
+                            label="Current Class"
+                            value={`${userData?.currentClass} ${userData?.section}`}
+                        />
+                        <DetailCard
+                            icon={FaGraduationCap}
+                            label="Admission Class"
+                            value={userData?.admissionClass}
+                        />
+                        <DetailCard
+                            icon={FaUser}
+                            label="Father's Name"
+                            value={userData?.fatherName}
+                        />
+                        <DetailCard
+                            icon={FaCalendarAlt}
+                            label="Admission Date"
+                            value={userData?.admissionDate}
+                        />
+                        <DetailCard
+                            icon={FaUserFriends}
+                            label="Guardian's Name"
+                            value={userData?.guardiansName}
+                        />
+                        <DetailCard
+                            icon={FaFlag}
+                            label="Nationality"
+                            value={userData?.nationality}
+                        />
+                        <DetailCard
+                            icon={FaTag}
+                            label="Category"
+                            value={userData?.category}
+                        />
+                        <DetailCard
+                            icon={FaUniversity}
+                            label="Branch"
+                            value={userData?.branch}
+                        />
                     </div>
-                    <div className="transition-opacity duration-300 ease-in-out"
-                        style={{ opacity: loading ? 0 : 1 }}>
-                        {selectedTab === 'personal' && (
-                            <div className="grid grid-cols-2 gap-4">
-                                <InfoItem label="Class & Section" value={`${userData?.currentClass} ${userData?.section}`} />
-                                <InfoItem label="Date of Birth" value={userData?.DOB} />
-                                <InfoItem label="Gender" value={userData?.gender} />
-                                <InfoItem label="Admission Date" value={userData?.admissionDate} />
-                                <InfoItem label="Address" value={userData?.permanentAddress} />
-                                <InfoItem label="Academic Year" value={userData?.academicYear} />
-                                <InfoItem label="Aadhar Number" value={userData?.aadhaarNumber} />
-                                <InfoItem label="Email" value={userData?.email} />
-                                <InfoItem label="Emergency Contact" value={userData?.guardiansPhoneNumber} />
-                            </div>
-                        )}
-                        {selectedTab === 'parent' && (
-                            <div className="grid grid-cols-2 gap-4">
-                                <InfoItem label="Father's Name" value={userData?.fatherName} />
-                                <InfoItem label="Mother's Name" value={userData?.motherName} />
-                                <InfoItem label="Father's Phone" value={userData?.fatherPhoneNumber} />
-                                <InfoItem label="Mother's Phone" value={userData?.motherPhoneNumber} />
-                                <InfoItem label="Parent Email" value={userData?.parentEmail} />
-                                <InfoItem label="Father's Occupation" value={userData?.fathersOccupation} />
-                                <InfoItem label="Mother's Occupation" value={userData?.motherOccupation} />
-                            </div>
-                        )}
-                    </div>
+
+                    <ExtraFieldsSection />
                 </div>
             </div>
         </div>
