@@ -113,8 +113,8 @@ export default function TodayClassWork() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.5 }}
       >
-        <h1 className={`text-2xl mobile:max-tablet:text-lg mr-1 font-semibold ${textClass} flex items-center`}>
-          <FaBook className={`mr-2 ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
+        <h1 className={`text-2xl mobile:max-tablet:text-lg mr-1 font-semibold ${darkMode ? 'text-indigo-400 hover:text-indigo-300' : 'text-blue-600 hover:text-blue-800'} flex items-center`}>
+          <FaBook className={`mr-2 ${darkMode ? 'text-indigo-400' : 'text-blue-600'}`} />
           Classwork
         </h1>
         <SubjectSelection onSubjectSelect={handleSubjectSelect} />

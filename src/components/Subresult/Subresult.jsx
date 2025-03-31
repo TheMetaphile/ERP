@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import AuthContext from '../../Context/AuthContext';
 import Loading from './../../LoadingScreen/Loading';
 import axios from 'axios';
-import { BASE_URL} from '../../Config';
+import { BASE_URL } from '../../Config';
 import ScholasticRow from './utils/ScholasticRow';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -10,13 +10,19 @@ import jsPDF from 'jspdf';
 const Result = () => {
 
     const [loading, setLoading] = useState(true);
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [details, setDetails] = useState({ term1: [], term2: [] });
     const profile = authState?.userDetails;
     const [selectedTermValue, setSelectedTerm] = useState('term1');
     const [selectedTermlabel, setSelectedTermLabel] = useState('Term 1');
     const [attendance, SetAttendance] = useState({});
 
+    const bgClass = darkMode ? 'bg-gray-700' : 'bg-white';
+    const textClass = darkMode ? 'text-white' : 'text-gray-900';
+    const borderClass = darkMode ? 'border-gray-600' : 'border-gray-300';
+    const focusClass = darkMode
+        ? 'focus:ring-indigo-400 focus:border-indigo-400'
+        : 'focus:ring-indigo-500 focus:border-indigo-500';
     const ref = useRef();
     // const ref2 = useRef();
 
@@ -175,10 +181,14 @@ const Result = () => {
     return (
         <div className="p-2 w-full">
             <div className="flex justify-between items-center mb-4 mobile:max-tablet:flex-col mobile:max-tablet:items-start">
-                <h1 className='text-xl mobile:max-tablet:text-lg font-medium'>{profile.name} Progress Report</h1>
+                <h1 className={`text-2xl mobile:max-tablet:text-lg font-bold ${darkMode ? 'text-indigo-400 hover:text-indigo-300' : 'text-blue-600 hover:text-blue-800'}`}>{profile.name} Progress Report</h1>
                 <div className='flex gap-2 items-center'>
                     <div className="w-36 mr-3 self-center">
-                        <select id="section" className="w-full px-2 py-2 border rounded-md" onChange={handleTermChange}>
+                        <select id="section" className={`
+           mobile:w-full border block p-2 mx-2 text-base 
+          ${bgClass} ${textClass} ${borderClass} ${focusClass}
+          focus:outline-none sm:text-sm rounded-md
+        `} onChange={handleTermChange}>
                             {terms.map((sectionOption, index) => (
                                 <option key={index} value={sectionOption.value}>{sectionOption.label}</option>
                             ))}

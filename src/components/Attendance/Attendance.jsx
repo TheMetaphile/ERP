@@ -93,14 +93,14 @@ export default function Attendance() {
   }, [authState?.accessToken, selectedMonth, selectedYear]);
 
   const bgClass = darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black';
-  const selectClass = darkMode 
-    ? 'bg-gray-700 text-white border-gray-600' 
+  const selectClass = darkMode
+    ? 'bg-gray-700 text-white border-gray-600'
     : 'bg-white text-black border-gray-300';
 
   return (
     <div className={`flex flex-col w-full overflow-y-auto items-start px-2 mb-1 pb-4 no-scrollbar mt-2 ${bgClass}`}>
       <div className="flex mobile:max-tablet:flex-col justify-between w-full mb-2 gap-2 mobile:max-tablet:mt-2">
-        <h1 className={`text-2xl mobile:max-tablet:text-lg font-medium ${darkMode ? 'text-white' : 'text-black'}`}>
+        <h1 className={`text-2xl mobile:max-tablet:text-lg font-medium ${darkMode ? 'text-indigo-400 hover:text-indigo-300' : 'text-blue-600 hover:text-blue-800'}`}>
           Attendance
         </h1>
         <div className="mobile:max-tablet:flex gap-2">

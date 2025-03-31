@@ -108,7 +108,7 @@ export default function ImageTextInRow(props) {
           to={props.route}
           className={`flex px-4 py-2 items-center text-sm no-underline ${textClass}`}
         >
-          <img src={props.image} alt={props.alternateText} className="w-1/6" />
+          <img src={props.image} alt={props.alternateText} className={`w-1/6 ${textClass}`} />
           <span className="ml-2">{props.text}</span>
         </Link>
       ) : (
@@ -116,7 +116,7 @@ export default function ImageTextInRow(props) {
           onClick={handleButtonClick}
           className={`flex items-center px-4 py-2 text-sm no-underline ${textClass}`}
         >
-          <img src={props.image} alt={props.alternateText} className="w-1/6" />
+          <img src={props.image} alt={props.alternateText} className={`w-1/6 ${textClass}`} />
           <span className="ml-2">{props.text}</span>
         </button>
       )}

@@ -96,7 +96,7 @@ export default function TimeTable() {
             transition={{ duration: 0.5 }}
         >
             <div className="flex justify-between items-center mb-6">
-                <h1 className={`text-3xl mobile:max-laptop:text-lg font-bold ${textClass} mb-4 mobile:max-laptop:mb-0`}>
+                <h1 className={`text-3xl mobile:max-laptop:text-lg font-bold ${darkMode ? 'text-indigo-400 hover:text-indigo-300' : 'text-blue-600 hover:text-blue-800'} mb-4 mobile:max-laptop:mb-0`}>
                     Time Table
                 </h1>
             </div>

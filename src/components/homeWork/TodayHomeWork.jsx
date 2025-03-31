@@ -8,6 +8,7 @@ import SubjectHomeWorkTile from "./utils/SubjectHomeWorkTile";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SubjectSelection from "../classWork/utils/SubjectSelection";
+import { FaBook } from "react-icons/fa";
 
 export default function TodayHomeWork() {
     const [selectedSubject, setSelectedSubject] = useState('Maths');
@@ -104,7 +105,8 @@ export default function TodayHomeWork() {
         <div className={`flex flex-col ${bgClass}`}>
             <ToastContainer />
             <div className="flex justify-between items-center px-3 mobile:max-tablet:mt-4">
-                <h1 className={`text-3xl mobile:max-laptop:text-lg font-medium px-2 ${textClass}`}>
+                <h1 className={`text-2xl mobile:max-tablet:text-lg mr-1 font-semibold ${darkMode ? 'text-indigo-400 hover:text-indigo-300' : 'text-blue-600 hover:text-blue-800'} flex items-center`}>
+                    <FaBook className={`mr-2 ${darkMode ? 'text-indigo-400' : 'text-blue-600'}`} />
                     Homework
                 </h1>
                 <SubjectSelection onSubjectSelect={handleSubjectSelect} />
@@ -118,10 +120,10 @@ export default function TodayHomeWork() {
                 </div>
             ) : (
                 <>
-                    <SubjectHomeWorkTile 
-                        subject={selectedSubject} 
-                        details={details} 
-                        darkMode={darkMode} 
+                    <SubjectHomeWorkTile
+                        subject={selectedSubject}
+                        details={details}
+                        darkMode={darkMode}
                     />
                     <div ref={sentinelRef} className="h-10"></div>
                     {loading && start > 0 && (
