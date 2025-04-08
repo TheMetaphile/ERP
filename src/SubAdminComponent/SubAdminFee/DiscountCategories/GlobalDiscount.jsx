@@ -182,7 +182,42 @@ function GlobalDiscount() {
                         placeholder={discountType === "percentage" ? "Enter percentage (0-100%)" : "Enter discount amount"}
                     />
                 </div>
+                <div>
+                    <label className="block text-gray-700 font-medium mb-2">Duration (Months)</label>
+                    <select
+                        name="duration"
+                        value={duration}
+                        required
+                        onChange={(e) => setDuration(e.target.value)}
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="">Enter duration</option>
+                        <option value={-1}>Remainig Session</option>
+                        {
+                            Array.from({ length: 12 }, (_, i) => (
+                                <option key={i} value={i}>{i + 1} month</option>
+                            ))
+                        }
+                    </select>
 
+                </div>
+                <div>
+                    <label className="block text-gray-700 font-medium mb-2">Discount Target Type</label>
+                    <select
+                        name="discountTargetType"
+                        value={discountTargetType}
+                        onChange={(e) => setDiscountTargetType(e.target.value)}
+                        className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                    >
+                        <option value="">Select Target Type</option>
+                        <option value="all">All</option>
+                        <option value="wing">Wing</option>
+                        <option value="particular class">Particular Class</option>
+
+
+                    </select>
+                </div>
                 {/* Similar modifications for other form elements */}
                 <div>
                     <label className={`block font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -206,9 +241,30 @@ function GlobalDiscount() {
                     </select>
                 </div>
 
+
+                {discountTargetType === 'wing' && (
+                    <div>
+                        <label className="block text-gray-700 font-medium mb-2">Select Wing</label>
+                        <select
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                            value={selectedWing}
+                            onChange={(e) => setSelectedWing(e.target.value)}
+
+
+
+
+                        >
+                            <option value="">Select Wing</option>
+                            {wingOptions.map(wing => (
+                                <option key={wing} value={wing}>{wing}</option>
+                            ))}
+                        </select>
+                    </div>
+                )}
                 {/* For particular class section */}
                 {discountTargetType === 'particular class' && (
                     <div>
+                        <label className="block text-gray-700 font-medium mb-2">Select Class</label>
                         <div className="flex mb-4 space-x-4">
                             <select
                                 className={`w-full border rounded-lg px-3 py-2
