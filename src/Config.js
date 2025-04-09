@@ -1,6 +1,6 @@
-// const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'http://localhost:8000';
 
-const BASE_URL = 'https://schoolerp.metaphile.in/api';
+// const BASE_URL = 'https://schoolerp.metaphile.in/api';
 
 
 // const BASE_URL = 'https://schoolerp.metaphile.in/api';

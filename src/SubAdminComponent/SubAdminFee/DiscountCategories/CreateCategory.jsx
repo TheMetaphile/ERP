@@ -6,6 +6,7 @@ import axios from "axios";
 import { BASE_URL } from "../../../Config";
 import AuthContext from "../../../Context/AuthContext";
 import DiscountRow from "./DiscountRow";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function () {
     const [discounts, setDiscounts] = useState([]);
@@ -39,14 +40,16 @@ export default function () {
 
     const handleDeleteDiscount = async (discountId) => {
         try {
-            await axios.delete(`${BASE_URL}/fee/delete/discountCategory/${discountId}`, {
+            const response = await axios.delete(`${BASE_URL}/fee/delete/discountCategory/${discountId}`, {
                 headers: {
                     Authorization: `Bearer ${authState?.accessToken}`,
                 },
             });
+            if (response.status === 200) {
+                toast.success('Deleted Successfully');
+                setDiscounts(discounts.filter((discount) => discount._id !== discountId));
+            }
 
-            toast.success('Deleted Successfully');
-            setDiscounts(discounts.filter((discount) => discount._id !== discountId));
         } catch (error) {
             console.error("Failed to delete discount", error);
             toast.error("Failed to delete discount.");
@@ -55,6 +58,7 @@ export default function () {
 
     return (
         <div className={`overflow-auto w-full rounded-md mt-2 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white'}`}>
+            <ToastContainer />
             <div className='flex justify-between p-2'>
                 <h1 className={`text-2xl p-2 mobile:max-tablet:text-lg ${darkMode ? 'text-gray-200' : 'text-black'}`}>
                     Available Discounts

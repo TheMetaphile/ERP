@@ -281,6 +281,24 @@ function GlobalDiscount() {
                                 ))}
                             </select>
                             {/* Similar dark mode styling for other selects */}
+                            <select
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                                value={selectedSection}
+                                onChange={(e) => setSelectedSection(e.target.value)}
+                                disabled={!selectedClass || loading}
+                            >
+                                <option value="">Select Section</option>
+                                {sectionOptions.map(section => (
+                                    <option key={section} value={section}>{section}</option>
+                                ))}
+                            </select>
+                            <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                onClick={handleAddClass}
+                                disabled={!selectedClass || !selectedSection}
+                            >
+                                Add
+                            </button>
                         </div>
 
                         {/* Class and section list with dark mode */}
@@ -309,6 +327,14 @@ function GlobalDiscount() {
                                                 onClick={() => handleRemoveClass(cls.Class)}
                                             />
                                         </div>
+                                        <ul>
+                                         {cls.sections.map(section => (
+                                             <li key={section} className="flex justify-between mt-2 border border-gray-300 shadow-md rounded-full px-2 items-center py-1">
+                                                 <span>{section}</span>
+                                                 <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => handleRemoveSection(cls.Class, section)} />
+                                             </li>
+                                         ))}
+                                     </ul>
                                     </li>
                                 ))}
                             </ul>

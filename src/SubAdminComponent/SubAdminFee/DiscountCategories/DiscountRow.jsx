@@ -16,16 +16,21 @@ export default function DiscountRow({ discount, handleDeleteDiscount, darkMode }
             <td className={`px-6 py-4 whitespace-nowrap text-sm 
                 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                 <span className="font-semibold">
-                    {discount.discountTargetType === "wing"
-                        ? discount.selectedWing
-                        : discount.discountTargetType === "particular class"
-                            ? discount.classes.map(cls => `${cls.Class} - Sections: ${cls.sections.join(", ")}`).join("; ")
-                            : discount.discountType || "N/A"}
+                    {discount.discountType }
                 </span>
             </td>
             <td className={`px-6 py-4 whitespace-nowrap text-sm 
                 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                <span className="font-semibold">{discount.discountTargetType || 'N/A'}</span>
+                <span className="font-semibold">{discount.discountTargetType || 'N/A'} - (
+                    <span className="font-semibold">
+                    {discount.discountTargetType === "wing"
+                        ? discount.selectedWing
+                        : discount.discountTargetType === "particular class"
+                            ? discount.classes.map(cls => `${cls.Class} - Sections: ${cls.sections.join(", ")}`).join("; ")
+                            : ""}
+                </span>
+                )
+                </span>
             </td>
             <td className={`px-6 py-4 whitespace-nowrap text-sm 
                 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
