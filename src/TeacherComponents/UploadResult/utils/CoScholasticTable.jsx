@@ -62,6 +62,10 @@ export default function CoScholasticTable({
             const updatedGrades = { ...grades };
             Object.keys(fetchedGrades).forEach(studentEmail => {
                 const studentData = fetchedGrades[studentEmail];
+                if (!updatedGrades[studentEmail]) {
+                    updatedGrades[studentEmail] = {};
+                }
+            
                 Subjects.forEach(subject => {
                     if (studentData[subject.subject]) {
                         updatedGrades[studentEmail][subject.subject] = studentData[subject.subject];
