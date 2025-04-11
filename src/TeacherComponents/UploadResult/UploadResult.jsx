@@ -13,6 +13,7 @@ import { motion } from 'framer-motion';
 import { FaFilter, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { Outlet } from 'react-router-dom';
 
+
 function UploadResult() {
   const [students, setStudents] = useState([]);
   const { authState, darkMode } = useContext(AuthContext);
@@ -85,11 +86,11 @@ function UploadResult() {
     visible: { opacity: 1, height: 'auto', transition: { duration: 0.3 } }
   };
 
+
   return (
     <motion.div
-      className={`overflow-y-auto w-full items-start px-2 py-1 no-scrollbar ${
-        darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'
-      }`}
+      className={`overflow-y-auto w-full items-start px-2 py-1 no-scrollbar ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'
+        }`}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -98,9 +99,8 @@ function UploadResult() {
       <div className='w-full flex items-center justify-between my-2'>
         <div className='flex-1'>
           <motion.h1
-            className={`mb-2 text-3xl font-medium mobile:max-tablet:text-lg whitespace-nowrap ${
-              darkMode ? 'text-white' : 'text-black'
-            }`}
+            className={`mb-2 text-3xl font-medium mobile:max-tablet:text-lg whitespace-nowrap ${darkMode ? 'text-white' : 'text-black'
+              }`}
             whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 300 }}
           >
@@ -109,11 +109,10 @@ function UploadResult() {
         </div>
         <div className="flex flex-1 justify-end sm:hidden w-full items-end mobile:max-laptop:text-end">
           <motion.button
-            className={`p-2 border rounded flex items-center ${
-              darkMode 
-                ? 'bg-gray-700 text-white border-gray-600' 
+            className={`p-2 border rounded flex items-center ${darkMode
+                ? 'bg-gray-700 text-white border-gray-600'
                 : 'bg-white text-black border-gray-300'
-            }`}
+              }`}
             onClick={() => setDropdownVisible(!isDropdownVisible)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -128,23 +127,21 @@ function UploadResult() {
             animate={isDropdownVisible ? "visible" : "hidden"}
           >
             {isDropdownVisible && (
-              <div className={`flex absolute left-0 right-0 p-4 gap-2 justify-between mobile:max-tablet:flex-col ${
-                darkMode ? 'bg-gray-800' : 'bg-white'
-              }`}>
-                <Selection 
-                  setClass={setClass} 
-                  setSection={setSection} 
-                  setSubject={setSubject} 
+              <div className={`flex absolute left-0 right-0 p-4 gap-2 justify-between mobile:max-tablet:flex-col ${darkMode ? 'bg-gray-800' : 'bg-white'
+                }`}>
+                <Selection
+                  setClass={setClass}
+                  setSection={setSection}
+                  setSubject={setSubject}
                   darkMode={darkMode}
                 />
                 <div className="w-36 mobile:max-tablet:w-full mobile:max-tablet:mr-0 mr-3 self-center">
-                  <select 
-                    id="section" 
-                    className={`w-full px-2 py-2 border-2 rounded-md ${
-                      darkMode 
-                        ? 'bg-gray-700 text-white border-gray-600' 
+                  <select
+                    id="section"
+                    className={`w-full px-2 py-2 border-2 rounded-md ${darkMode
+                        ? 'bg-gray-700 text-white border-gray-600'
                         : 'border-blue-300'
-                    }`}
+                      }`}
                     onChange={handleTermChange}
                   >
                     <option value="">Select Term</option>
@@ -155,10 +152,10 @@ function UploadResult() {
                     ))}
                   </select>
                 </div>
-                <Switch 
-                  checked={scholastic} 
-                  changeRole={handleRoleChange} 
-                  darkMode={darkMode} 
+                <Switch
+                  checked={scholastic}
+                  changeRole={handleRoleChange}
+                  darkMode={darkMode}
                 />
               </div>
             )}
@@ -166,20 +163,19 @@ function UploadResult() {
         </div>
 
         <div className='flex items-end mobile:max-laptop:hidden'>
-          <Selection 
-            setClass={setClass} 
-            setSection={setSection} 
-            setSubject={setSubject} 
+          <Selection
+            setClass={setClass}
+            setSection={setSection}
+            setSubject={setSubject}
             darkMode={darkMode}
           />
           <div className="w-36 mr-3 self-center">
-            <select 
-              id="section" 
-              className={`w-full px-2 py-2 border-2 rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${
-                darkMode 
-                  ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600' 
+            <select
+              id="section"
+              className={`w-full px-2 py-2 border-2 rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${darkMode
+                  ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
                   : 'border-blue-300 focus:ring-blue-500'
-              }`}
+                }`}
               onChange={handleTermChange}
             >
               <option value="">Select Term</option>
@@ -190,30 +186,30 @@ function UploadResult() {
               ))}
             </select>
           </div>
-          <Switch 
-            checked={scholastic} 
-            changeRole={handleRoleChange} 
-            darkMode={darkMode} 
+          <Switch
+            checked={scholastic}
+            changeRole={handleRoleChange}
+            darkMode={darkMode}
           />
         </div>
       </div>
-      <Outlet context={{ darkMode }} />
+      {/* <Outlet context={{ darkMode }} /> */}
       {loading ? (
         <Loading />
       ) : scholastic ? (
-        <ScholasticTable 
-          students={students} 
-          subject={Subject} 
-          term={selectedTerm} 
-          Class={Class} 
+        <ScholasticTable
+          students={students}
+          subject={Subject}
+          term={selectedTerm}
+          Class={Class}
           section={Section}
           darkMode={darkMode}
         />
       ) : (
-        <CoScholasticTable 
-          students={students} 
-          Class={Class} 
-          term={selectedTerm} 
+        <CoScholasticTable
+          students={students}
+          Class={Class}
+          term={selectedTerm}
           section={Section}
           darkMode={darkMode}
         />

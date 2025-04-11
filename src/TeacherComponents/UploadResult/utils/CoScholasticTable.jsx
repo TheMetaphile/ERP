@@ -6,6 +6,7 @@ import { BASE_URL } from '../../../Config';
 import { motion } from "framer-motion";
 import { FaSave, FaGraduationCap, FaUserGraduate, FaBook } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { BookOpen, Calendar, Info, User } from "react-feather";
 
 export default function CoScholasticTable({
     students,
@@ -36,11 +37,16 @@ export default function CoScholasticTable({
     const [clickedIndex, setClickedIndex] = useState(null);
 
     useEffect(() => {
-        fetchLastUpload();
+        if(Subjects){
+            fetchLastUpload();
+        }
     }, [Class, section, term, Subjects]);
 
     const fetchLastUpload = async () => {
         try {
+            if(!Class || !section || !term || !Subjects) {
+                toast.warning("Please apply all filters!");
+                return ;} 
             const subjectArray = Subjects.map((item) => item.subject);
             const response = await axios.get(
                 `${BASE_URL}/result/fetch/Coscholastic/${Class}/${section}/${term}?subject=${subjectArray}`,
@@ -143,6 +149,43 @@ export default function CoScholasticTable({
         }
     };
 
+    if(!Subjects || Subjects.length < 1){
+        return (
+            <div className=" mx-auto bg-white rounded-lg shadow-lg overflow-hidden border border-blue-100">
+              <div className="p-5">
+                <div className="flex items-start mb-4">
+                  <div className="bg-blue-100 rounded-full p-3 mr-4">
+                    <BookOpen className="text-blue-600" size={24} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-800 text-lg mb-1">No Co-Scholastic Subjects Assigned</h3>
+                    <p className="text-gray-600">You currently do not have any co-scholastic subjects assigned to your teaching schedule.</p>
+                  </div>
+                </div>
+                
+                <div className="bg-blue-50 rounded-lg p-4 mb-4">
+                  <div className="flex items-center text-blue-700 mb-2">
+                    <Info size={16} className="mr-2" />
+                    <span className="font-medium">What are co-scholastic subjects?</span>
+                  </div>
+                  <p className="text-sm text-gray-600">Co-scholastic subjects include areas like art, music, physical education, and other subjects that complement the main academic curriculum.</p>
+                </div>
+                
+                <div className="space-y-3 mb-4">
+                  <div className="flex items-center text-gray-700">
+                    <Calendar className="mr-3 text-blue-600" size={18} />
+                    <span>Please check back later for updates.</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <User className="mr-3 text-blue-600" size={18} />
+                    <span>Contact the academic coordinator if you have any questions.</span>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          );
+    }
     return (
         <motion.div
             className={`w-full overflow-x-auto rounded-lg shadow-lg ${darkMode ? 'bg-gray-900' : 'bg-white'

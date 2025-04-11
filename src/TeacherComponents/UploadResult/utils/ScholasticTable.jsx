@@ -6,6 +6,7 @@ import AuthContext from "../../../Context/AuthContext";
 import { motion } from "framer-motion";
 import { FaSave, FaUserGraduate, FaBook, FaPencilAlt, FaFlask, FaClipboardCheck } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { Briefcase, Calendar, Info, User } from 'react-feather';
 
 export default function ScholasticTable({
     students,
@@ -40,11 +41,13 @@ export default function ScholasticTable({
 
     useEffect(() => {
         fetchLastUpload();
-    }, [subject]);
+    }, [subject,term]);
 
     const fetchLastUpload = async () => {
         try {
-            if (!subject) return;
+            if (!subject || !Class || !section || !term ) {
+                toast.warning("Please apply all filters!");
+                return ;} 
 
             const response = await axios.get(
                 `${BASE_URL}/result/fetch/scholastic/${Class}/${section}/${subject}/${term}`,
@@ -149,6 +152,55 @@ export default function ScholasticTable({
         }
     };
 
+    if(Class){
+
+        const uniqueClasses = Array.from(new Set(
+          authState?.subject ? authState?.subject
+            .filter(subj => subj.class === Class)
+            .map(subj => subj.section) : []
+        ));
+    
+        if(!uniqueClasses || uniqueClasses.length < 1){
+          
+            return (
+              <div className=" mx-auto bg-white rounded-lg shadow-lg overflow-hidden border border-amber-100">
+                
+                
+                <div className="p-5">
+                  <div className="flex items-start mb-4">
+                    <div className="bg-amber-100 rounded-full p-3 mr-4">
+                      <Briefcase className="text-amber-600" size={24} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-800 text-lg mb-1">No Subjects Assigned</h3>
+                      <p className="text-gray-600">You currently do not have any subjects assigned to your teaching schedule.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-amber-50 rounded-lg p-4 mb-4">
+                    <div className="flex items-center text-amber-700 mb-2">
+                      <Info size={16} className="mr-2" />
+                      <span className="font-medium">What this means</span>
+                    </div>
+                    <p className="text-sm text-gray-600">This could be due to ongoing schedule preparation, recent staff changes, or administrative updates. Your teaching load will be updated once assignments are finalized.</p>
+                  </div>
+                  
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center text-gray-700">
+                      <Calendar className="mr-3 text-amber-600" size={18} />
+                      <span>Please check the portal regularly for updates.</span>
+                    </div>
+                    <div className="flex items-center text-gray-700">
+                      <User className="mr-3 text-amber-600" size={18} />
+                      <span>Contact the department head or academic coordinator for more information.</span>
+                    </div>
+                  </div>
+    
+                </div>
+              </div>
+            );
+          };
+        }
     return (
         <motion.div
             className={`w-full overflow-x-auto rounded-lg shadow-lg ${darkMode ? 'bg-gray-900' : 'bg-white'

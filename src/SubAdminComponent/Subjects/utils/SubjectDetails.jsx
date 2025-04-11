@@ -144,7 +144,7 @@ function SubjectDetails({ Class, section, selectedStream }) {
     }, [temp, authState?.accessToken]);
 
     const handleDelete = async (index) => {
-        const { email, subject } = subjectDetails[index];
+        const { subject } = subjectDetails[index];
 
         try {
             const response = await axios.delete(`${BASE_URL}/delete${additionalLink}`, {
@@ -267,7 +267,7 @@ function SubjectDetails({ Class, section, selectedStream }) {
                         <div className={`px-2 flex justify-between py-2 pl-2 h-fit border gap-4 ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-gray-50'}`}>
                             <div className='w-full text-lg font-medium mobile:max-tablet:text-sm mobile:max-tablet:font-sm whitespace-nowrap'></div>
                             
-                            {!scholastic ? (
+                            
                                 <select
                                     value={newRow.subject}
                                     onChange={(e) => handleChange(e, 'subject')}
@@ -286,16 +286,7 @@ function SubjectDetails({ Class, section, selectedStream }) {
                                         </option>
                                     ))}
                                 </select>
-                            ) : (
-                                <input
-                                    type="text"
-                                    value={newRow.subject}
-                                    onChange={(e) => handleChange(e, 'subject')}
-                                    className={`w-full px-2 py-2 border rounded-lg ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-black'}`}
-                                    placeholder="Enter Subject"
-                                    required
-                                />
-                            )}
+                           
                             
                             <div className='relative w-full'>
                                 <input
