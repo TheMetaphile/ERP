@@ -211,14 +211,16 @@ export default function CoScholasticTable({
                         <th className="py-3 px-6 text-center">
                             <FaGraduationCap className="inline mr-2" />Name
                         </th>
-                        {Subjects.map((Subject, index) => (
+                        {/* {Subjects.map((Subject, index) => (
                             <th
                                 key={index}
                                 className="py-3 px-6 text-center"
                             >
                                 <FaBook className="inline mr-2" />{Subject.subject}
                             </th>
-                        ))}
+                        ))} */}
+                        <th className="py-3 px-6 text-center rounded-tr-lg">Marks</th>
+
                         <th className="py-3 px-6 text-center rounded-tr-lg">Action</th>
                     </tr>
                 </thead>

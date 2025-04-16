@@ -108,10 +108,10 @@ export default function MyDoubts() {
 
     }, [selectedSubject, status]);
     useEffect(() => {
-        if (start === 0 && data.length === 0 && !allDataFetched && !loading) {
+        if (start === 0 && data.length === 0 && !allDataFetched ) {
             fetchDoubt();
         }
-    }, [start, data, allDataFetched, loading]);
+    }, [start, data, allDataFetched]);
 
     useEffect(() => {
         if (start != 0) {
