@@ -6,7 +6,7 @@ import { BASE_URL } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Switch from './utils/switch';
-import Selection from '../notebook/utils/Selection';
+import Selection from './utils/Selection';
 import CoScholasticTable from './utils/CoScholasticTable';
 import ScholasticTable from './utils/ScholasticTable';
 import { motion } from 'framer-motion';
@@ -110,8 +110,8 @@ function UploadResult() {
         <div className="flex flex-1 justify-end sm:hidden w-full items-end mobile:max-laptop:text-end">
           <motion.button
             className={`p-2 border rounded flex items-center ${darkMode
-                ? 'bg-gray-700 text-white border-gray-600'
-                : 'bg-white text-black border-gray-300'
+              ? 'bg-gray-700 text-white border-gray-600'
+              : 'bg-white text-black border-gray-300'
               }`}
             onClick={() => setDropdownVisible(!isDropdownVisible)}
             whileHover={{ scale: 1.05 }}
@@ -134,13 +134,14 @@ function UploadResult() {
                   setSection={setSection}
                   setSubject={setSubject}
                   darkMode={darkMode}
+                  scholastic={scholastic}
                 />
                 <div className="w-36 mobile:max-tablet:w-full mobile:max-tablet:mr-0 mr-3 self-center">
                   <select
                     id="section"
                     className={`w-full px-2 py-2 border-2 rounded-md ${darkMode
-                        ? 'bg-gray-700 text-white border-gray-600'
-                        : 'border-blue-300'
+                      ? 'bg-gray-700 text-white border-gray-600'
+                      : 'border-blue-300'
                       }`}
                     onChange={handleTermChange}
                   >
@@ -168,13 +169,15 @@ function UploadResult() {
             setSection={setSection}
             setSubject={setSubject}
             darkMode={darkMode}
+            scholastic={scholastic}
+
           />
           <div className="w-36 mr-3 self-center">
             <select
               id="section"
               className={`w-full px-2 py-2 border-2 rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${darkMode
-                  ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
-                  : 'border-blue-300 focus:ring-blue-500'
+                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
+                : 'border-blue-300 focus:ring-blue-500'
                 }`}
               onChange={handleTermChange}
             >
