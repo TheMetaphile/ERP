@@ -9,9 +9,11 @@ const SubjectManagement = () => {
 
   const { darkMode, authState } = useContext(AuthContext);
   const classes = ['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'];
-  const streams = ['PCM','PCMB',"PCB", 'Commerce', 'Arts', 'General'];
+  const streams = ['PCM', 'PCMB', "PCB", 'Commerce', 'Arts', 'General'];
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedStream, setSelectedStream] = useState('');
+  const [newOptionalSubjectName, setNewOptionalSubjectName] = useState('');
+  const [newOptionalSubjectType, setNewOptionalSubjectType] = useState('scholastic');
   const [coreSubjects, setCoreSubjects] = useState([]);
   const [optionalSubjects, setOptionalSubjects] = useState([]);
   const [newCoreSubject, setNewCoreSubject] = useState('');
@@ -62,7 +64,7 @@ const SubjectManagement = () => {
         Class: selectedClass,
         stream: selectedStream,
         coreSubjects,
-        optionalSubjects
+        optionalSubjects,
       }, {
         headers: {
           'Content-Type': 'application/json',
@@ -92,11 +94,17 @@ const SubjectManagement = () => {
   };
 
   const addOptionalSubject = () => {
-    if (newOptionalSubject.trim()) {
-      setOptionalSubjects([...optionalSubjects, newOptionalSubject.trim()]);
-      setNewOptionalSubject('');
+    if (newOptionalSubjectName.trim()) {
+      const newSubject = {
+        subject: newOptionalSubjectName.trim(),
+        type: newOptionalSubjectType
+      };
+      setOptionalSubjects([...optionalSubjects, newSubject]);
+      setNewOptionalSubjectName('');
+      setNewOptionalSubjectType('scholastic');
     }
   };
+
 
   const removeCoreSubject = (index) => {
     setCoreSubjects(coreSubjects.filter((_, i) => i !== index));
@@ -236,17 +244,30 @@ const SubjectManagement = () => {
                 <h2 className="text-xl font-semibold">Optional Subjects</h2>
               </div>
 
-              <div className="mb-4">
-                <div className="flex">
+              <div className="w-full flex justify-between items-center gap-3">
+                <div className="flex w-full">
                   <input
                     type="text"
-                    value={newOptionalSubject}
-                    onChange={(e) => setNewOptionalSubject(e.target.value)}
+                    value={newOptionalSubjectName}
+                    onChange={(e) => setNewOptionalSubjectName(e.target.value)}
                     placeholder="Add new optional subject"
                     className={`flex-grow p-2 rounded-l-md border ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-300 text-gray-900'
                       } focus:ring-blue-500 focus:border-blue-500`}
                     onKeyPress={(e) => e.key === 'Enter' && addOptionalSubject()}
                   />
+
+                </div>
+                <div className='w-full flex'>
+                  <select
+                    value={newOptionalSubjectType}
+                    onChange={(e) => setNewOptionalSubjectType(e.target.value)}
+                    className={`w-full p-2 rounded-md border ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-300 text-gray-900'
+                      } focus:ring-blue-500 focus:border-blue-500`}
+                  >
+                    <option value="">Select Type</option>
+                    <option value="scholastic">Scholastic</option>
+                    <option value="co_Scholastic">Co_Scholastic</option>
+                  </select>
                   <button
                     onClick={addOptionalSubject}
                     className="bg-green-600 text-white p-2 rounded-r-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -264,7 +285,7 @@ const SubjectManagement = () => {
                     <div key={index} className="flex justify-between items-center py-3">
                       <div className="flex items-center">
                         <FaBook className="mr-2 text-green-500" />
-                        <span>{subject}</span>
+                        <span>{subject.subject} - {subject.type}</span>
                       </div>
                       <button
                         onClick={() => removeOptionalSubject(index)}

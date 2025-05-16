@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import AuthContext from "../../Context/AuthContext";
 
-
 const FileUploadField = ({ icon, label, name, required, accept = ".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.bmp,.webp", value = '', onChange }) => {
     const { darkMode } = useContext(AuthContext);
     const [fileName, setFileName] = useState('');
@@ -17,7 +16,6 @@ const FileUploadField = ({ icon, label, name, required, accept = ".pdf,.doc,.doc
             setFileType(file.type);
             setError('');
 
-            // Generate preview for images
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -27,12 +25,13 @@ const FileUploadField = ({ icon, label, name, required, accept = ".pdf,.doc,.doc
             } else {
                 setFilePreview(null);
             }
+
+            onChange && onChange(e);
         } else {
             setFileName('');
             setFilePreview(null);
             setFileType('');
         }
-        onChange(e);
     };
 
     const handleClick = () => {
@@ -48,27 +47,15 @@ const FileUploadField = ({ icon, label, name, required, accept = ".pdf,.doc,.doc
         e.preventDefault();
         e.stopPropagation();
 
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            const file = e.dataTransfer.files[0];
-            fileInputRef.current.files = e.dataTransfer.files;
-            setFileName(file.name);
-            setFileType(file.type);
-            setError('');
+        const fileInput = fileInputRef.current;
+        const file = e.dataTransfer.files[0];
 
-            // Generate preview for images
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    setFilePreview(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                setFilePreview(null);
-            }
+        if (file) {
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            fileInput.files = dataTransfer.files;
 
-            // Trigger the onChange event
-            const event = new Event('change', { bubbles: true });
-            fileInputRef.current.dispatchEvent(event);
+            handleFileChange({ target: { name, files: dataTransfer.files } });
         }
     };
 
@@ -79,9 +66,7 @@ const FileUploadField = ({ icon, label, name, required, accept = ".pdf,.doc,.doc
         setFileType('');
         fileInputRef.current.value = '';
 
-        // Trigger the onChange event with an empty value
-        const event = { target: { name, value: '', files: [] } };
-        onChange(event);
+        onChange && onChange({ target: { name, value: '', files: [] } });
     };
 
     useEffect(() => {
@@ -92,7 +77,6 @@ const FileUploadField = ({ icon, label, name, required, accept = ".pdf,.doc,.doc
         }
     }, [value]);
 
-    // Function to render appropriate file icon based on file type
     const renderFileIcon = () => {
         if (fileType.startsWith('application/pdf')) {
             return (
@@ -114,6 +98,8 @@ const FileUploadField = ({ icon, label, name, required, accept = ".pdf,.doc,.doc
             );
         }
     };
+
+    const inputStyle = { display: fileName ? 'none' : 'block' };
 
     return (
         <div className="flex-grow">
@@ -154,11 +140,11 @@ const FileUploadField = ({ icon, label, name, required, accept = ".pdf,.doc,.doc
                                 id={name}
                                 name={name}
                                 type="file"
-                                className="sr-only"
                                 required={required}
                                 onChange={handleFileChange}
                                 ref={fileInputRef}
                                 accept={accept}
+                                style={inputStyle}
                             />
                         </div>
                         <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>PDF, DOC, DOCX up to 10MB</p>
@@ -195,17 +181,6 @@ const FileUploadField = ({ icon, label, name, required, accept = ".pdf,.doc,.doc
                                 {fileName}
                             </span>
                         </div>
-
-                        <input
-                            id={name}
-                            name={name}
-                            type="file"
-                            className="sr-only"
-                            required={required}
-                            onChange={handleFileChange}
-                            ref={fileInputRef}
-                            accept={accept}
-                        />
                     </div>
                 )}
             </div>
