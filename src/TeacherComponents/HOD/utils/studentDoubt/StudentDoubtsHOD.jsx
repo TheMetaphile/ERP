@@ -62,8 +62,14 @@ function StudentDoubtsHOD() {
             console.log(response.data)
             const data = response.data;
 
-            setAllSubjects([...(data?.coreSubjects || []), ...(data?.optionalSubjects || [])]);
-
+            setAllSubjects([
+                ...(data?.coreSubjects || []).map(s =>
+                    typeof s === 'string' ? { subject: s } : s
+                ),
+                ...(data?.optionalSubjects || []).map(s =>
+                    typeof s === 'string' ? { subject: s } : s
+                ),
+            ]);
         } catch (error) {
             toast.error({ text: 'Error connecting to server', type: 'error' });
         }
@@ -205,10 +211,10 @@ function StudentDoubtsHOD() {
                             {subjects.map((subjectOption, index) => (
                                 <option
                                     key={index}
-                                    value={subjectOption}
+                                    value={subjectOption.subject}
                                     className={darkMode ? 'bg-gray-800 text-white' : ''}
                                 >
-                                    {subjectOption}
+                                    {subjectOption.subject}
                                 </option>
                             ))}
                         </select>

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function StudentDetailTile({ userData }) {
-    const { authState,darkMode } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [newData, setNewData] = useState(userData);
     const [loadingIndex, setLoadingIndex] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,9 +41,7 @@ export default function StudentDetailTile({ userData }) {
                 setOptionalSubjects(fetchedOptionalSubjects);
 
                 setSelectedSubjects(
-                    fetchedOptionalSubjects.filter((subject) =>
-                        user.optionalSubjects?.includes(subject)
-                    )
+                    user.optionalSubjects.map((subjectObj) => subjectObj.subject)
                 );
             }
         } catch (error) {
@@ -64,10 +62,15 @@ export default function StudentDetailTile({ userData }) {
 
     const submitSubjects = async () => {
         try {
-            const updatedSubjects = selectedSubjects;
+             const updatedSubjects = optionalSubjects
+            .filter(subjectObj => selectedSubjects.includes(subjectObj.subject))
+            .map(subjectObj => ({
+                subject: subjectObj.subject,
+                type: subjectObj.type
+            }));
             const response = await axios.post(
                 `${BASE_URL}/allocateSubject/create`,
-                { email: selectedUser.email, selectedSubjects: updatedSubjects  },
+                { email: selectedUser.email, selectedSubjects: updatedSubjects },
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -78,12 +81,10 @@ export default function StudentDetailTile({ userData }) {
             if (response.status === 200) {
                 toast.success("Subjects updated successfully!");
                 setSelectedSubjects(updatedSubjects);
-                setOptionalSubjects(updatedSubjects);
-
             }
             setIsModalOpen(false);
         } catch (error) {
-            toast.error(error);
+            toast.error("Error saving subjects");
         }
     };
 
@@ -95,12 +96,20 @@ export default function StudentDetailTile({ userData }) {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className={`border-b ${darkMode ? 'border-gray-700 hover:bg-gray-700' : 'border-gray-200 hover:bg-blue-100'} transition-colors mb-2`}
+                    className={`border-b ${
+                        darkMode ? 'border-gray-700 hover:bg-gray-700' : 'border-gray-200 hover:bg-blue-100'
+                    } transition-colors mb-2`}
                 >
-                    <div className={`flex text-center items-center justify-evenly border rounded-lg py-2 pl-2 ${darkMode ? 'border-gray-700' : ''}`}>
+                    <div 
+                        className={`flex text-center items-center justify-evenly border rounded-lg py-2 pl-2 ${
+                            darkMode ? 'border-gray-700' : ''
+                        }`}
+                    >
                         <Link
                             to={`/Sub-Admin/Students/details/${user.email}`}
-                            className={`rounded-full text-center px-3 py-2 font-semibold ${darkMode ? 'bg-blue-900 text-blue-100' : 'bg-blue-100 text-blue-800'}`}
+                            className={`rounded-full text-center px-3 py-2 font-semibold ${
+                                darkMode ? 'bg-blue-900 text-blue-100' : 'bg-blue-100 text-blue-800'
+                            }`}
                         >
                             <div className="w-40 flex justify-center items-center space-x-2">
                                 <img
@@ -154,11 +163,11 @@ export default function StudentDetailTile({ userData }) {
                                 <p>Loading subjects...</p>
                             ) : (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {optionalSubjects.map((subject) => (
+                                    {optionalSubjects.map((subjectObj) => (
                                         <label
-                                            key={subject}
+                                            key={subjectObj._id}
                                             className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                                                selectedSubjects.includes(subject) 
+                                                selectedSubjects.includes(subjectObj.subject)
                                                     ? darkMode 
                                                         ? "border-blue-500 bg-blue-900 shadow-sm" 
                                                         : "border-blue-500 bg-blue-50 shadow-sm" 
@@ -169,9 +178,9 @@ export default function StudentDetailTile({ userData }) {
                                         >
                                             <input
                                                 type="checkbox"
-                                                value={subject}
-                                                checked={selectedSubjects.includes(subject)}
-                                                onChange={() => handleCheckboxChange(subject)}
+                                                value={subjectObj.subject}
+                                                checked={selectedSubjects.includes(subjectObj.subject)}
+                                                onChange={() => handleCheckboxChange(subjectObj.subject)}
                                                 className={`appearance-none w-6 h-6 border-2 rounded-md ${
                                                     darkMode 
                                                         ? "border-gray-500 checked:border-blue-400 checked:bg-blue-600" 
@@ -179,7 +188,7 @@ export default function StudentDetailTile({ userData }) {
                                                 } transition-all`}
                                             />
                                             <span className="ml-3 text-base font-medium">
-                                                {subject}
+                                                {subjectObj.subject}  ({subjectObj.type})
                                             </span>
                                         </label>
                                     ))}

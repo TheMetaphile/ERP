@@ -12,7 +12,6 @@ function Selection({ setClass, setSection, setSubject, setStream }) {
     const [selectedSection, setSelectedSection] = useState('');
     const [uniqueSections, setUniqueSections] = useState([]);
     const [uniqueSubjects, setUniqueSubjects] = useState([]);
-    console.log(authState)
     const streams = ['PCM', 'PCMB', "PCB", 'Commerce', 'Arts', 'General'];
     const [selectedStream, setSelectedStream] = useState('');
     const [subjects, setAllSubjects] = useState([]);
@@ -89,13 +88,19 @@ function Selection({ setClass, setSection, setSubject, setStream }) {
             console.log(response.data)
             const data = response.data;
 
-            setAllSubjects([...(data?.coreSubjects || []), ...(data?.optionalSubjects || [])]);
-
+            setAllSubjects([
+                ...(data?.coreSubjects || []).map(s =>
+                    typeof s === 'string' ? { subject: s } : s
+                ),
+                ...(data?.optionalSubjects || []).map(s =>
+                    typeof s === 'string' ? { subject: s } : s
+                ),
+            ]);
         } catch (error) {
             toast.error({ text: 'Error connecting to server', type: 'error' });
         }
     };
-
+    console.log(subjects)
     return (
         <div className={`container p-3 w-fit mobile:max-tablet:w-full ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
             <div className="flex justify-between gap-3 mobile:max-tablet:flex-col">
@@ -160,7 +165,7 @@ function Selection({ setClass, setSection, setSubject, setStream }) {
                     >
                         <option value="">Select Subject</option>
                         {subjects.map((subjectOption, index) => (
-                            <option key={index} value={subjectOption}>{subjectOption}</option>
+                            <option key={index} value={subjectOption.subject}>{subjectOption.subject}</option>
                         ))}
                     </select>
                 </div>

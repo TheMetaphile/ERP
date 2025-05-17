@@ -31,16 +31,23 @@ function Selection({ setClass, setSection, setSubject, darkMode }) {
         )));
     }, [selectedClass]);
 
-
     useEffect(() => {
-        setUniqueSubjects(Array.from(new Set(
-            authState?.subject ? authState?.subject
+        const mainSubjects = authState?.subject
+            ? authState.subject
                 .filter(subj => subj.section === selectedSection && subj.class === selectedClass)
-                .map(subj => subj.subject) : []
-        )));
-    }, [selectedSection, selectedClass]);
+                .map(subj => subj.subject)
+            : [];
 
+        const coScholasticSubjects = authState?.Co_scholastic
+            ? authState.Co_scholastic
+                .filter(subj => subj.section === selectedSection && subj.class === selectedClass)
+                .map(subj => subj.subject)
+            : [];
+        const allSubjects = Array.from(new Set([...mainSubjects, ...coScholasticSubjects]));
 
+        setUniqueSubjects(allSubjects);
+
+    }, [selectedSection, selectedClass, authState]);
 
     return (
         <div className="container p-3 w-fit mobile:max-tablet:w-full  ">

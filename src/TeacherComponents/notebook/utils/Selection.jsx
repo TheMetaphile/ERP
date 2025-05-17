@@ -36,12 +36,22 @@ function Selection({ setClass, setSection, setSubject, darkMode }) {
   }, [selectedClass]);
 
   useEffect(() => {
-    setUniqueSubjects(Array.from(new Set(
-      authState?.subject ? authState?.subject
+    const mainSubjects = authState?.subject
+      ? authState.subject
         .filter(subj => subj.section === selectedSection && subj.class === selectedClass)
-        .map(subj => subj.subject) : []
-    )));
-  }, [selectedSection, selectedClass]);
+        .map(subj => subj.subject)
+      : [];
+
+    const coScholasticSubjects = authState?.Co_scholastic
+      ? authState.Co_scholastic
+        .filter(subj => subj.section === selectedSection && subj.class === selectedClass)
+        .map(subj => subj.subject)
+      : [];
+    const allSubjects = Array.from(new Set([...mainSubjects, ...coScholasticSubjects]));
+
+    setUniqueSubjects(allSubjects);
+
+  }, [selectedSection, selectedClass, authState]);
 
   const containerVariants = {
     hidden: { opacity: 0, y: -20 },
@@ -72,8 +82,8 @@ function Selection({ setClass, setSection, setSubject, darkMode }) {
           <select
             id="class"
             className={`w-full px-2 py-2 pl-8 border-2 focus:outline-none focus:ring-2 focus:border-transparent rounded-md ${darkMode
-                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
-                : 'border-blue-300 focus:ring-blue-500'
+              ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
+              : 'border-blue-300 focus:ring-blue-500'
               }`}
             onChange={handleClassChange}
             value={selectedClass}
@@ -95,8 +105,8 @@ function Selection({ setClass, setSection, setSubject, darkMode }) {
           <select
             id="section"
             className={`w-full px-2 py-2 pl-8 border-2 focus:outline-none focus:ring-2 focus:border-transparent rounded-md ${darkMode
-                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
-                : 'border-blue-300 focus:ring-blue-500'
+              ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
+              : 'border-blue-300 focus:ring-blue-500'
               }`}
             onChange={handleSectionChange}
             value={selectedSection}
@@ -118,8 +128,8 @@ function Selection({ setClass, setSection, setSubject, darkMode }) {
           <select
             id="subject"
             className={`w-full px-2 py-2 pl-8 border-2 focus:outline-none focus:ring-2 focus:border-transparent rounded-md ${darkMode
-                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
-                : 'border-blue-300 focus:ring-blue-500'
+              ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
+              : 'border-blue-300 focus:ring-blue-500'
               }`}
             onChange={handleSubjectChange}
           >

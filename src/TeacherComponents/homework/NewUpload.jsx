@@ -77,7 +77,10 @@ function NewUpload({ onClose, onNewWork }) {
 
     const uniqueSections = Array.from(new Set(authState?.subject.map(subj => subj.section)));
 
-    const uniqueSubjects = Array.from(new Set(authState?.subject.map(subj => subj.subject)));
+    const uniqueSubjects = Array.from(new Set([
+        ...(authState?.subject ? authState.subject.map(subj => subj.subject) : []),
+        ...(authState?.Co_scholastic ? authState.Co_scholastic.map(subj => subj.subject) : [])
+    ]));
 
     const inputVariants = {
         focus: { scale: 1.02, boxShadow: "0px 0px 8px rgba(79, 70, 229, 0.6)" }
