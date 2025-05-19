@@ -11,7 +11,6 @@ export default function Switch({ checked, changeRole }) {
                     {checked ? <Check size={15} /> : <X size={15} />}
                 </div>
             </div>
-            Scholastic
         </label>);
 }
 

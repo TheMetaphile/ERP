@@ -60,9 +60,15 @@ export default function UploadTimetable({ handleChange }) {
 
             console.log(response.data)
             const data = response.data;
-
-            setAllSubjects([...(data?.coreSubjects || []), ...(data?.optionalSubjects || [])]);
-
+            setAllSubjects([
+                ...(data?.coreSubjects || []).map(s =>
+                    typeof s === 'string' ? { subject: s } : s
+                ),
+                ...(data?.optionalSubjects || []).map(s =>
+                    typeof s === 'string' ? { subject: s } : s
+                ),
+            ]);
+           
         } catch (error) {
             toast.error({ text: 'Error connecting to server', type: 'error' });
         } finally {
@@ -131,7 +137,7 @@ export default function UploadTimetable({ handleChange }) {
             console.log("upload", timetable);
 
             for (const day of Object.keys(timetable)) {
-                if(day === 'Subday') continue;
+                if (day === 'Subday') continue;
                 for (const lecture of timetable[day]) {
                     console.log(lecture, day)
                     lecture.teacher = typeof lecture.teacher === 'object' ? lecture.teacher._id : lecture.teacher;

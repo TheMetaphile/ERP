@@ -5,13 +5,11 @@ import AuthContext from '../../Context/AuthContext';
 import { BASE_URL } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Switch from './utils/switch';
 import Selection from './utils/Selection';
 import CoScholasticTable from './utils/CoScholasticTable';
 import ScholasticTable from './utils/ScholasticTable';
 import { motion } from 'framer-motion';
 import { FaFilter, FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { Outlet } from 'react-router-dom';
 
 
 function UploadResult() {
@@ -22,8 +20,9 @@ function UploadResult() {
   const [Class, setClass] = useState(localStorage.getItem('Class') || '');
   const [Section, setSection] = useState(localStorage.getItem('Section') || '');
   const [Subject, setSubject] = useState(localStorage.getItem('Subject') || '');
-  const [scholastic, setScholastic] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState(localStorage.getItem('selectedTerm') || '');
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [selectedStream, setSelectedStream] = useState('');
 
   useEffect(() => {
     localStorage.setItem('Class', Class);
@@ -38,43 +37,45 @@ function UploadResult() {
     { label: 'Term 2', value: "term2" },
     { label: 'Final', value: "final" }
   ];
+  const streams = ['PCM', 'PCMB', "PCB", 'Commerce', 'Arts', 'General'];
 
   const handleTermChange = (event) => {
     setSelectedTerm(event.target.value);
   }
 
-  const handleRoleChange = (event) => {
-    setScholastic(event);
-  };
-
   useEffect(() => {
-    setStudents([]);
-    fetchStudents();
-  }, [Class, Section]);
+    if (Class && Section && Subject && selectedStream) {
+      setStudents([]);
+      fetchStudents();
+    }
+  }, [Class, Section, Subject, selectedStream]);
+
 
   const fetchStudents = async () => {
-    if (!Class || !Section) return;
+    if (!Class || !Section || !Subject || !selectedStream) return;
 
     setLoading(true);
     try {
-      const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
+      const selectedSubj = [...authState.subject, ...authState.Co_scholastic].find(subj => subj.subject === Subject);
+
+      const response = await axios.post(`${BASE_URL}/fetchMultiple/student/particularSubject`, {
         accessToken: authState?.accessToken,
         currentClass: Class,
+        subject: Subject,
         section: Section,
-        end: end
+        stream: selectedStream,
+        end: end,
+        optional: selectedSubj.optional
       });
-      if (response.status == 200) {
+      if (response.status === 200) {
         setStudents(prevData => [...prevData, ...response.data.Students]);
       }
     } catch (error) {
-      console.error("Error fetching student:", error);
-    }
-    finally {
-      setLoading(false)
+      console.error("Error fetching students:", error);
+    } finally {
+      setLoading(false);
     }
   };
-
-  const [isDropdownVisible, setDropdownVisible] = useState(false);
 
   const containerVariants = {
     hidden: { opacity: 0, y: -20 },
@@ -101,7 +102,6 @@ function UploadResult() {
           <motion.h1
             className={`mb-2 text-3xl font-medium mobile:max-tablet:text-lg whitespace-nowrap ${darkMode ? 'text-white' : 'text-black'
               }`}
-            whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 300 }}
           >
             Upload Report Card
@@ -134,8 +134,24 @@ function UploadResult() {
                   setSection={setSection}
                   setSubject={setSubject}
                   darkMode={darkMode}
-                  scholastic={scholastic}
                 />
+                <div className="w-36 mobile:max-tablet:w-full mobile:max-tablet:mr-0 mr-3 self-center">
+                  <select
+                    value={selectedStream}
+                    onChange={(e) => setSelectedStream(e.target.value)}
+                    className={`w-full px-2 py-2 border-2 rounded-md ${darkMode
+                      ? 'bg-gray-700 text-white border-gray-600'
+                      : 'border-blue-300'
+                      }`}
+                  >
+                    <option value="">Select Stream</option>
+                    {streams.map((stream) => (
+                      <option key={stream} value={stream}>
+                        {stream}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div className="w-36 mobile:max-tablet:w-full mobile:max-tablet:mr-0 mr-3 self-center">
                   <select
                     id="section"
@@ -153,11 +169,6 @@ function UploadResult() {
                     ))}
                   </select>
                 </div>
-                <Switch
-                  checked={scholastic}
-                  changeRole={handleRoleChange}
-                  darkMode={darkMode}
-                />
               </div>
             )}
           </motion.div>
@@ -169,9 +180,24 @@ function UploadResult() {
             setSection={setSection}
             setSubject={setSubject}
             darkMode={darkMode}
-            scholastic={scholastic}
-
           />
+          <div className="w-36 mr-3 self-center">
+            <select
+              value={selectedStream}
+              onChange={(e) => setSelectedStream(e.target.value)}
+              c className={`w-full px-2 py-2 border-2 rounded-md focus:outline-none focus:ring-2 focus:border-transparent ${darkMode
+                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600'
+                : 'border-blue-300 focus:ring-blue-500'
+                }`}
+            >
+              <option value="">Select Stream</option>
+              {streams.map((stream) => (
+                <option key={stream} value={stream}>
+                  {stream}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="w-36 mr-3 self-center">
             <select
               id="section"
@@ -189,33 +215,30 @@ function UploadResult() {
               ))}
             </select>
           </div>
-          <Switch
-            checked={scholastic}
-            changeRole={handleRoleChange}
-            darkMode={darkMode}
-          />
         </div>
       </div>
-      {/* <Outlet context={{ darkMode }} /> */}
       {loading ? (
         <Loading />
-      ) : scholastic ? (
-        <ScholasticTable
-          students={students}
-          subject={Subject}
-          term={selectedTerm}
-          Class={Class}
-          section={Section}
-          darkMode={darkMode}
-        />
       ) : (
-        <CoScholasticTable
-          students={students}
-          Class={Class}
-          term={selectedTerm}
-          section={Section}
-          darkMode={darkMode}
-        />
+        authState.Co_scholastic.some(subj => subj.subject === Subject) ? (
+          <CoScholasticTable
+            students={students}
+            subject={Subject}
+            Class={Class}
+            term={selectedTerm}
+            section={Section}
+            darkMode={darkMode}
+          />
+        ) : (
+          <ScholasticTable
+            students={students}
+            subject={Subject}
+            term={selectedTerm}
+            Class={Class}
+            section={Section}
+            darkMode={darkMode}
+          />
+        )
       )}
     </motion.div>
   );

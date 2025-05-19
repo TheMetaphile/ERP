@@ -475,7 +475,7 @@ const LectureCell = ({
         >
           <option value="">Select Subject</option>
           {subjects.map((subject, i) => (
-            <option key={i} value={subject}>{subject}</option>
+            <option key={i} value={subject.subject}>{subject.subject}</option>
           ))}
         </select>
 
