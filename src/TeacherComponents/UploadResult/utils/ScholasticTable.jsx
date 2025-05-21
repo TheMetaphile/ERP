@@ -19,7 +19,6 @@ export default function ScholasticTable({
     const { authState } = useContext(AuthContext);
     const [totalTheoryMarks, setTotalMarks] = useState({
         noteBook: "",
-        practical: "",
         subjectEnrichment: "",
         theory: ""
     });
@@ -28,7 +27,6 @@ export default function ScholasticTable({
             noteBook: '',
             subjectEnrichment: '',
             practical: '',
-            theory: '',
             lastNoteBookChecked: ''
         };
         return acc;
@@ -40,7 +38,9 @@ export default function ScholasticTable({
     };
 
     useEffect(() => {
-        fetchLastUpload();
+        if (subject && term) {
+            fetchLastUpload();
+        }
     }, [subject, term]);
 
     const fetchLastUpload = async () => {
@@ -68,7 +68,6 @@ export default function ScholasticTable({
                     updatedMarks[email] = {
                         ...updatedMarks[email],
                         noteBook: studentResult.obtainedNoteBookMarks || '',
-                        practical: studentResult.obtainedPracticalMarks || '',
                         subjectEnrichment: studentResult.obtainedSubjectEnrichmentMarks || '',
                         theory: studentResult.marksObtained || '',
                         lastNoteBookChecked: studentResult.totalNoteBookMarks || '',
@@ -107,28 +106,38 @@ export default function ScholasticTable({
         }
         const studentMarks = marks[email];
         const validationErrors = [];
-        ['noteBook', 'theory', 'practical', 'subjectEnrichment'].forEach(field => {
+
+        const fieldsToValidate = term === 'halfYearly' || term === 'final'
+            ? ['noteBook', 'theory', 'subjectEnrichment']
+            : ['theory'];
+
+        fieldsToValidate.forEach(field => {
             const obtainedMarks = Number(studentMarks[field]);
             const totalMarks = Number(totalTheoryMarks[field]);
             if (obtainedMarks < 0 || obtainedMarks > totalMarks) {
                 validationErrors.push(`Obtained ${field} marks should be between 0 and ${totalMarks}`);
             }
         });
+
         if (validationErrors.length > 0) {
             validationErrors.forEach(error => toast.error(error));
             return;
         }
-        const schedules = [{
-            subject,
-            marksObtained: Number(studentMarks.theory),
-            totalMarks: Number(totalTheoryMarks.theory),
-            totalPracticalMarks: Number(totalTheoryMarks.practical),
-            obtainedPracticalMarks: Number(studentMarks.practical),
-            totalNoteBookMarks: Number(totalTheoryMarks.noteBook),
-            obtainedNoteBookMarks: Number(studentMarks.noteBook),
-            totalSubjectEnrichmentMarks: Number(totalTheoryMarks.subjectEnrichment),
-            obtainedSubjectEnrichmentMarks: Number(studentMarks.subjectEnrichment),
-        }];
+        const schedules = term === 'halfYearly' || term === 'final'
+            ? [{
+                subject,
+                marksObtained: Number(studentMarks.theory),
+                totalMarks: Number(totalTheoryMarks.theory),
+                totalNoteBookMarks: Number(totalTheoryMarks.noteBook),
+                obtainedNoteBookMarks: Number(studentMarks.noteBook),
+                totalSubjectEnrichmentMarks: Number(totalTheoryMarks.subjectEnrichment),
+                obtainedSubjectEnrichmentMarks: Number(studentMarks.subjectEnrichment),
+            }]
+            : [{
+                subject,
+                marksObtained: Number(studentMarks.theory),
+                totalMarks: Number(totalTheoryMarks.theory)
+            }];
         const resultData = {
             email,
             class: Class,
@@ -204,37 +213,34 @@ export default function ScholasticTable({
     }
     return (
         <motion.div
-            className={`w-full overflow-x-auto rounded-lg shadow-lg ${darkMode ? 'bg-gray-900' : 'bg-white'
-                }`}
+            className={`w-full overflow-x-auto rounded-lg shadow-lg ${darkMode ? 'bg-gray-900' : 'bg-white'}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
-            <div className={`flex gap-3 ml-2 overflow-auto p-4 rounded-t-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'
-                }`}>
-                {['noteBook', 'subjectEnrichment', 'practical', 'theory'].map((field) => (
-                    <motion.div key={field} className="flex flex-col mb-4" whileHover={{ scale: 1.05 }}>
-                        <label className={`mb-2 font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'
-                            }`}>
-                            Total {field.charAt(0).toUpperCase() + field.slice(1)} Marks
-                        </label>
-                        <motion.input
-                            type="number"
-                            value={totalTheoryMarks[field]}
-                            onChange={(e) => handletotalMarksChange(field, e.target.value)}
-                            className={`border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 ${darkMode
-                                ? 'bg-gray-700 text-white border-gray-600'
-                                : 'bg-white text-black border-gray-300'
-                                }`}
-                            placeholder={`Enter total ${field} marks`}
-                            whileFocus={{ scale: 1.05 }}
-                        />
-                    </motion.div>
-                ))}
+            <div className={`flex gap-3 ml-2 overflow-auto p-4 rounded-t-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                {['theory', ...(term === 'halfYearly' || term === 'final' ? ['noteBook', 'subjectEnrichment'] : [])]
+                    .map((field) => (
+                        <motion.div key={field} className="flex flex-col mb-4" whileHover={{ scale: 1.05 }}>
+                            <label className={`mb-2 font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                Total {field.charAt(0).toUpperCase() + field.slice(1)} Marks
+                            </label>
+                            <motion.input
+                                type="number"
+                                value={totalTheoryMarks[field]}
+                                onChange={(e) => handletotalMarksChange(field, e.target.value)}
+                                className={`border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 ${darkMode
+                                    ? 'bg-gray-700 text-white border-gray-600'
+                                    : 'bg-white text-black border-gray-300'
+                                    }`}
+                                placeholder={`Enter total ${field} marks`}
+                                whileFocus={{ scale: 1.05 }}
+                            />
+                        </motion.div>
+                    ))}
             </div>
             <div className="overflow-auto">
-                <table className={`min-w-full whitespace-nowrap border rounded-lg text-center ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
-                    }`}>
+                <table className={`min-w-full whitespace-nowrap border rounded-lg text-center ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
                     <thead>
                         <tr className={`${darkMode
                             ? 'bg-gradient-to-r from-blue-900 to-blue-700'
@@ -244,16 +250,16 @@ export default function ScholasticTable({
                                 { icon: FaUserGraduate, text: 'Roll No.' },
                                 { icon: FaUserGraduate, text: 'Name' },
                                 { icon: FaBook, text: 'Last Note Book Checked' },
-                                { icon: FaBook, text: 'Note Book' },
-                                { icon: FaPencilAlt, text: 'Subject Enrichment' },
-                                { icon: FaFlask, text: 'Practical Marks' },
-                                { icon: FaClipboardCheck, text: 'Theory Marks' },
+                                ...(['theory', ...(term === 'halfYearly' || term === 'final'
+                                    ? ['noteBook', 'subjectEnrichment'] : [])].map(field => (
+                                        { icon: FaClipboardCheck, text: `${field.charAt(0).toUpperCase() + field.slice(1)} Marks` }
+                                    ))),
                                 { text: 'Action' }
                             ].map((header, index) => (
                                 <th
                                     key={index}
                                     className={`py-3 px-2 text-center ${index === 0 ? 'rounded-tl-lg' :
-                                        index === 7 ? 'rounded-tr-lg' : ''
+                                        index === 5 ? 'rounded-tr-lg' : ''
                                         }`}
                                 >
                                     {header.icon && <header.icon className="inline mr-2" />}
@@ -262,8 +268,7 @@ export default function ScholasticTable({
                             ))}
                         </tr>
                     </thead>
-                    <tbody className={`${darkMode ? 'text-gray-300' : 'text-gray-600'
-                        } text-md font-normal`}>
+                    <tbody className={`${darkMode ? 'text-gray-300' : 'text-gray-600'} text-md font-normal`}>
                         {students.map((student, index) => (
                             <motion.tr
                                 key={index}
@@ -281,8 +286,7 @@ export default function ScholasticTable({
                                         <img
                                             src={student.profileLink}
                                             alt=""
-                                            className={`h-10 w-10 rounded-full border ${darkMode ? 'border-gray-600' : 'border-blue-200'
-                                                }`}
+                                            className={`h-10 w-10 rounded-full border ${darkMode ? 'border-gray-600' : 'border-blue-200'}`}
                                         />
                                         {student.name}
                                     </td>
@@ -290,22 +294,23 @@ export default function ScholasticTable({
                                 <td className="py-3 px-2 text-center">
                                     {marks[student.email]?.lastNoteBookChecked?.topic || 'No data'}
                                 </td>
-                                {['noteBook', 'subjectEnrichment', 'practical', 'theory'].map((field) => (
-                                    <td key={field} className="py-3 px-2 text-center">
-                                        <motion.input
-                                            type="number"
-                                            value={marks[student.email]?.[field] || ''}
-                                            onChange={(e) => handleInputChange(student.email, field, e.target.value)}
-                                            className={`border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ${darkMode
-                                                ? 'bg-gray-700 text-white border-gray-600'
-                                                : 'border-gray-300 bg-white'
-                                                }`}
-                                            placeholder={`${field.charAt(0).toUpperCase() + field.slice(1)} Marks`}
-                                            whileHover={{ scale: 1.05 }}
-                                            whileFocus={{ scale: 1.05 }}
-                                        />
-                                    </td>
-                                ))}
+                                {['theory', ...(term === 'halfYearly' || term === 'final' ? ['noteBook', 'subjectEnrichment'] : [])]
+                                    .map((field) => (
+                                        <td key={field} className="py-3 px-2 text-center">
+                                            <motion.input
+                                                type="number"
+                                                value={marks[student.email]?.[field] || ''}
+                                                onChange={(e) => handleInputChange(student.email, field, e.target.value)}
+                                                className={`border rounded-md py-2 px-4 w-28 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ${darkMode
+                                                    ? 'bg-gray-700 text-white border-gray-600'
+                                                    : 'border-gray-300 bg-white'
+                                                    }`}
+                                                placeholder={`${field.charAt(0).toUpperCase() + field.slice(1)} Marks`}
+                                                whileHover={{ scale: 1.05 }}
+                                                whileFocus={{ scale: 1.05 }}
+                                            />
+                                        </td>
+                                    ))}
                                 <td className="py-3 px-2 text-center">
                                     <motion.button
                                         type="button"

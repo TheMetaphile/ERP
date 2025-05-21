@@ -3,7 +3,6 @@ import AuthContext from '../../Context/AuthContext';
 import Loading from './../../LoadingScreen/Loading';
 import axios from 'axios';
 import { BASE_URL } from '../../Config';
-import ScholasticRow from './utils/ScholasticRow';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
@@ -11,11 +10,9 @@ const Result = () => {
 
     const [loading, setLoading] = useState(true);
     const { authState, darkMode } = useContext(AuthContext);
-    const [details, setDetails] = useState({ term1: [], term2: [] });
+    const [details, setDetails] = useState({});
     const profile = authState?.userDetails;
-    const [selectedTermValue, setSelectedTerm] = useState('term1');
-    const [selectedTermlabel, setSelectedTermLabel] = useState('Term 1');
-    const [attendance, SetAttendance] = useState({});
+    const [attendance, setAttendance] = useState({});
 
     const bgClass = darkMode ? 'bg-gray-700' : 'bg-white';
     const textClass = darkMode ? 'text-white' : 'text-gray-900';
@@ -24,7 +21,6 @@ const Result = () => {
         ? 'focus:ring-indigo-400 focus:border-indigo-400'
         : 'focus:ring-indigo-500 focus:border-indigo-500';
     const ref = useRef();
-    // const ref2 = useRef();
 
     const scholastic = [
         { range: "91-100", grade: "A1" },
@@ -36,41 +32,14 @@ const Result = () => {
         { range: "33-40", grade: "D" },
         { range: "32 & below", grade: "E" },
     ];
+
     const coscholastic = [
         { range: "OUTSTANDING", grade: "A" },
         { range: "VERY GOOD", grade: "B" },
         { range: "FAIR", grade: "C" },
     ];
-    const terms = [
-        {
-            label: 'Term 1',
-            value: "term1"
-        },
-        {
-            label: 'Half Yearly',
-            value: "halfYearly"
-        },
-        {
-            label: 'Term 2',
-            value: "term2"
-        },
-        {
-            label: 'Final',
-            value: "final"
-        }
-    ];
-
-    const handleTermChange = (event) => {
-        console.log(event.target.value)
-        setSelectedTerm(event.target.value);
-        const selectedTerm = terms.find(term => term.value === event.target.value);
-        console.log(selectedTerm);
-        setSelectedTermLabel(selectedTerm.label);
-    }
-
 
     useEffect(() => {
-
 
         const fetchResult = async () => {
             setLoading(true);
@@ -82,7 +51,6 @@ const Result = () => {
                 });
                 if (response.status === 200) {
                     setDetails(response.data);
-                    console.log(response.data);
                 }
             } catch (error) {
                 console.error("Error fetching student result:", error);
@@ -91,31 +59,11 @@ const Result = () => {
             }
         };
 
-        // const fetchAttendance = async () => {
-        //     let config = {
-        //         method: 'get',
-        //         maxBodyLength: Infinity,
-        //         url: 'http://13.201.247.28:8000/studentAttendance/fetch/completeStats?class=9th&id=664c4da3a8cd53da5751bdba&year=2024',
-        //         headers: {
-        //             'Authorization': `Bearer ${authState?.accessToken}`
-        //         }
-        //     };
-
-        //     axios.request(config)
-        //         .then((response) => {
-        //             SetAttendance(response.data);
-        //         })
-        //         .catch((error) => {
-        //             console.log(error);
-        //         });
-
-        // }
-
         const processAll = async () => {
             await Promise.all([fetchResult()]);
         }
         processAll();
-    }, [authState?.accessToken]);
+    }, [authState?.accessToken, profile.email]);
 
     if (loading) {
         return <Loading />;
@@ -123,9 +71,8 @@ const Result = () => {
 
     const handlePrint = async () => {
         const page1 = ref.current;
-        // const page2 = ref2.current;
 
-        const pdf = new jsPDF('p', 'mm', 'a4', true,);
+        const pdf = new jsPDF('p', 'mm', 'a4', true);
         const pageWidth = pdf.internal.pageSize.width;
         const pageHeight = pdf.internal.pageSize.height;
         const marginTop = pageHeight * 0.1;
@@ -164,8 +111,6 @@ const Result = () => {
 
         try {
             await addPageContent(page1);
-            // pdf.addPage(); // Add a new page for the second component
-            // await addPageContent(page2);
 
             const pdfBlob = pdf.output('blob');
             const pdfUrl = URL.createObjectURL(pdfBlob);
@@ -176,112 +121,147 @@ const Result = () => {
         }
     };
 
+    const combineData = () => {
+        if (!details || !details.term1 || !details.halfYearly || !details.term2 || !details.final) {
+            return [];
+        }
 
+        const subjects = Array.from(new Set([
+            ...details.term1.map(item => item.subject),
+            ...details.halfYearly.map(item => item.subject),
+            ...details.term2.map(item => item.subject),
+            ...details.final.map(item => item.subject),
+        ]));
+
+        return subjects.map(subject => {
+            const term1 = details.term1.find(item => item.subject === subject) || {};
+            const halfYearly = details.halfYearly.find(item => item.subject === subject) || {};
+            const term2 = details.term2.find(item => item.subject === subject) || {};
+            const final = details.final.find(item => item.subject === subject) || {};
+
+            return {
+                subject,
+                term1,
+                halfYearly,
+                term2,
+                final
+            };
+        });
+    };
+
+    const combineCoScholasticData = () => {
+        if (!details || !details.halfYearly_Co_scholastic || !details.final_Co_scholastic) {
+            return [];
+        }
+
+        const subjects = Array.from(new Set([
+            ...details.halfYearly_Co_scholastic.map(item => item.subject),
+            ...details.final_Co_scholastic.map(item => item.subject),
+        ]));
+
+        return subjects.map(subject => {
+            const halfYearly = details.halfYearly_Co_scholastic.find(item => item.subject === subject) || {};
+            const final = details.final_Co_scholastic.find(item => item.subject === subject) || {};
+
+            return {
+                subject,
+                halfYearly,
+                final
+            };
+        });
+    };
+
+    const tableData = combineData();
+    const coScholasticData = combineCoScholasticData();
 
     return (
         <div className="p-2 w-full">
             <div className="flex justify-between items-center mb-4 mobile:max-tablet:flex-col mobile:max-tablet:items-start">
                 <h1 className={`text-2xl mobile:max-tablet:text-lg font-bold ${darkMode ? 'text-indigo-400 hover:text-indigo-300' : 'text-blue-600 hover:text-blue-800'}`}>{profile.name} Progress Report</h1>
-                <div className='flex gap-2 items-center'>
-                    <div className="w-36 mr-3 self-center">
-                        <select id="section" className={`
-           mobile:w-full border block p-2 mx-2 text-base 
-          ${bgClass} ${textClass} ${borderClass} ${focusClass}
-          focus:outline-none sm:text-sm rounded-md
-        `} onChange={handleTermChange}>
-                            {terms.map((sectionOption, index) => (
-                                <option key={index} value={sectionOption.value}>{sectionOption.label}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <button className='text-lg font-semibold border rounded-md px-2 py-1 mobile:max-tablet:hidden' onClick={handlePrint}>Print</button>
-                </div>
+                <button className='text-lg font-semibold border rounded-md px-2 py-1 mobile:max-tablet:hidden' onClick={handlePrint}>Print</button>
             </div>
-            {details ? <div className="report-card border border-black " ref={ref} >
+            {details ? <div className="report-card border border-black" ref={ref} >
 
-                <div className=' border-b border-black py-3 items-center bg-gradient-to-r from-blue-200 to-blue-100 text-center'>
-                    <h1 className={`text-3xl mobile:max-tablet:text-xl font-semibold mb-2`}>{selectedTermlabel} : {profile.session || "2024-25"}</h1>
-                    <h6 className="text-2xl mobile:max-tablet:text-lg mb-2">Report Card</h6>
+                <div className='border-b border-black py-3 items-center bg-gradient-to-r from-blue-200 to-blue-100 text-center'>
+                    <h1 className={`text-3xl mobile:max-tablet:text-xl font-semibold mb-2`}>Report Card : {profile.session || "2024-25"}</h1>
                 </div>
 
                 <div className="mb-4 flex justify-between m-3 text-xl">
-                    <div className=' leading-loose'>
+                    <div className='leading-loose'>
                         <p><strong className='font-medium'>Student's Name:</strong> {profile.name}</p>
                         <p><strong className='font-medium'>Father's Name:</strong> {profile.fatherName}</p>
                         <p><strong className='font-medium'>Mother's Name:</strong> {profile.motherName}</p></div>
-                    <div className=' leading-loose'>
+                    <div className='leading-loose'>
                         <p><strong className='font-medium'>Admission No.:</strong> {profile.admissionNumber || 123456}</p>
                         <p><strong className='font-medium'>Class & Section:</strong> {profile.currentClass} {profile.section}</p>
                         <p><strong className='font-medium'>Date of Birth:</strong> {profile.DOB}</p>
                     </div>
-
-
                 </div>
-                <div className=' overflow-auto'>
+                <div className='overflow-auto'>
                     <table className="min-w-full border border-gray-200">
-                        <thead className=' bg-gradient-to-r from-blue-200 to-blue-100 text-xl font-medium '>
+                        <thead className='bg-gradient-to-r from-blue-200 to-blue-100 text-xl font-medium'>
                             <tr className='text-center'>
-                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Scholastic Areas</th>
-                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">
-                                    Note Book
-                                    <p>
-                                        ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalNoteBookMarks : ""})
-                                    </p>
-                                </th>
-                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">
-                                    S.Enrichment
-                                    <p>
-                                        ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalSubjectEnrichmentMarks : ""})
-                                    </p>
-
-                                </th>
-                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">
-                                    Marks Obt
-                                    <p>
-                                        ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalMarks : ""})
-                                    </p>
-
-                                </th>
-                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Total</th>
-                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">%</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">SUBJECT</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Term 1</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Half Yearly NB</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Half Yearly SE</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Half Yearly</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Grade</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Term 2</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Final NB</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Final SE</th>
+                                <th className="px-4 py-2 border mobile:max-tablet:text-sm">Final</th>
                                 <th className="px-4 py-2 border mobile:max-tablet:text-sm">Grade</th>
                             </tr>
                         </thead>
                         <tbody className='tablet:pb-6 mobile:max-tablet:text-xs'>
-                            {details[selectedTermValue].map((area, index) => (
-                                <ScholasticRow index={index} area={area} />
-                            ))}
-                            <tr></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div className=" overflow-auto">
-                    <table className="min-w-full bg-white border border-gray-200">
-                        <thead className=' bg-gradient-to-r from-blue-200 to-blue-100 text-xl font-medium'>
-                            <tr>
-                                <th className="px-4 py-4 mobile:max-tablet:py-2 border text-start mobile:max-tablet:text-lg">Co-Scholastic Areas:</th>
-                                <th className="px-4 py-4 mobile:max-tablet:py-2 border text-end mobile:max-tablet:text-lg">Grade</th>
-                            </tr>
-                        </thead>
-                        <tbody className='text-lg font-normal '>
-                            {details[`${selectedTermValue}_Co_scholastic`].map((area, index) => (
-                                <tr key={index}>
-                                    <td className="px-4 pb-4 border text-start">{area.subject}</td>
-                                    <td className="px-4 pb-4 border text-end">{area.grade}</td>
+                            {tableData.map((item, index) => (
+                                <tr key={index} className="text-center">
+                                    <td className="px-4 py-2 border">{item.subject}</td>
+                                    <td className="px-4 py-2 border">{item.term1.marksObtained || '-'}</td>
+                                    <td className="px-4 py-2 border">{item.halfYearly.obtainedNoteBookMarks || '-'}</td>
+                                    <td className="px-4 py-2 border">{item.halfYearly.obtainedSubjectEnrichmentMarks || '-'}</td>
+                                    <td className="px-4 py-2 border">{item.halfYearly.marksObtained || '-'}</td>
+                                    <td className="px-4 py-2 border">{/* Add grade logic */}</td>
+                                    <td className="px-4 py-2 border">{item.term2.marksObtained || '-'}</td>
+                                    <td className="px-4 py-2 border">{item.final.obtainedNoteBookMarks || '-'}</td>
+                                    <td className="px-4 py-2 border">{item.final.obtainedSubjectEnrichmentMarks || '-'}</td>
+                                    <td className="px-4 py-2 border">{item.final.marksObtained || '-'}</td>
+                                    <td className="px-4 py-2 border">{/* Add grade logic */}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
 
+                <div className="overflow-auto mb-6">
+                    <h2 className={`text-xl font-semibold mb-3 ${darkMode ? 'text-blue-300' : 'text-blue-600'}`}>Co-Scholastic Areas</h2>
+                    <table className="min-w-full bg-white border border-gray-200">
+                        <thead className='bg-gradient-to-r from-blue-200 to-blue-100 text-xl font-medium'>
+                            <tr>
+                                <th className="px-4 py-4 mobile:max-tablet:py-2 border text-start mobile:max-tablet:text-lg">SUBJECT</th>
+                                <th className="px-4 py-4 mobile:max-tablet:py-2 border text-end mobile:max-tablet:text-lg">Half Yearly</th>
+                                <th className="px-4 py-4 mobile:max-tablet:py-2 border text-end mobile:max-tablet:text-lg">Final</th>
+                            </tr>
+                        </thead>
+                        <tbody className='text-lg font-normal'>
+                            {coScholasticData.map((item, index) => (
+                                <tr key={index} className="text-center">
+                                    <td className="px-4 pb-4 border">{item.subject}</td>
+                                    <td className="px-4 pb-4 border">{item.halfYearly.grade || '-'}</td>
+                                    <td className="px-4 pb-4 border">{item.final.grade || '-'}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
 
-                <div className=' border-b border-black'>
+                <div className='border-b border-black'>
                     <div className="flex bg-gradient-to-r from-blue-200 to-blue-100 text-xl items-center justify-between px-4 py-4 mobile:max-tablet:py-2 mobile:max-tablet:flex-col mobile:max-tablet:items-start">
-                        <h2 className='  font-semibold mobile:max-tablet:text-lg'>Attendance:</h2>
-                        <p><strong className='  font-medium mobile:max-tablet:text-sm'>Total:</strong> {attendance.total}</p>
-                        <p><strong className=' font-medium mobile:max-tablet:text-sm'>Present:</strong> {attendance.present}</p>
-                        <p><strong className=' font-medium mobile:max-tablet:text-sm'>Percentage:</strong> {attendance.total !== 0 ? (attendance.present / attendance.total) * 100 : 0}%</p>
+                        <h2 className='font-semibold mobile:max-tablet:text-lg'>Attendance:</h2>
+                        <p><strong className='font-medium mobile:max-tablet:text-sm'>Total:</strong> {attendance.total}</p>
+                        <p><strong className='font-medium mobile:max-tablet:text-sm'>Present:</strong> {attendance.present}</p>
+                        <p><strong className='font-medium mobile:max-tablet:text-sm'>Percentage:</strong> {attendance.total !== 0 ? ((attendance.present / attendance.total) * 100).toFixed(1) : 0}%</p>
                     </div>
 
                     <div className="mb-12 flex items-center gap-2 px-4">
@@ -294,11 +274,11 @@ const Result = () => {
                     </div>
                 </div>
 
-                <div className=' flex gap-2 mobile:max-tablet:flex-col'>
+                <div className='flex gap-2 mobile:max-tablet:flex-col'>
                     <div className="flex-1">
-                        <h1 className=' text-center text-xl my-2'>SCHOLASTIC</h1>
+                        <h1 className='text-center text-xl my-2'>SCHOLASTIC GRADING</h1>
                         <table className="w-full bg-white border border-gray-200">
-                            <thead className=' bg-gradient-to-r from-blue-200 to-blue-100'>
+                            <thead className='bg-gradient-to-r from-blue-200 to-blue-100'>
                                 <tr>
                                     <th className="px-4 py-4 mobile:max-tablet:py-2 border">MARKS RANGE</th>
                                     <th className="px-4 py-4 mobile:max-tablet:py-2 border">GRADE</th>
@@ -306,7 +286,7 @@ const Result = () => {
                             </thead>
                             <tbody>
                                 {scholastic.map((item, index) => (
-                                    <tr className=' text-center text-lg' key={index}>
+                                    <tr className='text-center text-lg' key={index}>
                                         <td className="px-2 pb-4 border w-1/2">{item.range}</td>
                                         <td className="px-4 pb-4 border w-1/2">{item.grade}</td>
                                     </tr>
@@ -315,12 +295,12 @@ const Result = () => {
                         </table>
                     </div>
                     <div className="flex-1 h-full">
-                        <h1 className=' text-center text-xl my-2 whitespace-nowrap mobile:max-tablet:text-lg'>CO-SCHOLASTIC AND DISCIPLINE</h1>
+                        <h1 className='text-center text-xl my-2 whitespace-nowrap mobile:max-tablet:text-lg'>CO-SCHOLASTIC GRADING</h1>
                         <table className="w-full bg-white border border-gray-200">
-                            <thead className=' bg-gradient-to-r from-blue-200 to-blue-100'>
+                            <thead className='bg-gradient-to-r from-blue-200 to-blue-100'>
                                 <tr>
-                                    <th className="px-4 mobile:max-tablet:px-2 py-4 mobile:max-tablet:py-2 border">PERFOMANCE INDICATORS</th>
-                                    <th className="px-4 mobile:max-tablet:px-2 py-4 mobile:max-tablet:py-2 border">GRADE</th>
+                                    <th className="px-4 py-4 mobile:max-tablet:py-2 border">PERFORMANCE INDICATORS</th>
+                                    <th className="px-4 py-4 mobile:max-tablet:py-2 border">GRADE</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -336,9 +316,8 @@ const Result = () => {
                 </div>
             </div>
                 :
-                <div className='text-2xl text-center'>Not Result found</div>
+                <div className='text-2xl text-center'>No Result found</div>
             }
-
         </div>
     );
 };

@@ -220,25 +220,26 @@ function UploadResult() {
       {loading ? (
         <Loading />
       ) : (
-        authState.Co_scholastic.some(subj => subj.subject === Subject) ? (
-          <CoScholasticTable
+        authState.Co_scholastic.some(subj => subj.subject === Subject)
+          ? (selectedTerm !== 'term1' && selectedTerm !== 'term2'
+            ? <CoScholasticTable
+              students={students}
+              subject={Subject}
+              Class={Class}
+              term={selectedTerm}
+              section={Section}
+              darkMode={darkMode}
+            />
+            : null
+          )
+          : <ScholasticTable
             students={students}
             subject={Subject}
-            Class={Class}
             term={selectedTerm}
+            Class={Class}
             section={Section}
             darkMode={darkMode}
           />
-        ) : (
-          <ScholasticTable
-            students={students}
-            subject={Subject}
-            term={selectedTerm}
-            Class={Class}
-            section={Section}
-            darkMode={darkMode}
-          />
-        )
       )}
     </motion.div>
   );
