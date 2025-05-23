@@ -87,7 +87,7 @@ const FeePaymentRowQuarter = ({ student, key, darkMode }) => {
                     by: authState?.userDetails?._id,
                     title: "Quarterly Fee",
                     email: authState?.userDetails?.email,
-                    number: authState?.userDetails?.fatherPhoneNumber,
+                    number: authState?.userDetails?.phoneNumber,
                     semester: authState?.userDetails?.section,
                     session: authState?.userDetails?.session,
                     course: authState?.userDetails?.currentClass,

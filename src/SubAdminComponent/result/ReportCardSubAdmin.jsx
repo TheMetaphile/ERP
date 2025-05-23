@@ -1,64 +1,15 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import Selection from './utils/Selection';
-import Header from './utils/Header';
+import Header from '../../AdminComponents/Home/utils/TeachersDetails/LeftCard/Header';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import Loading from '../../LoadingScreen/Loading';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
-import { motion } from 'framer-motion';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-
-const scholastic = [
-  { range: "91-100", grade: "A1" },
-  { range: "81-90", grade: "A2" },
-  { range: "71-80", grade: "B1" },
-  { range: "61-70", grade: "B2" },
-  { range: "51-60", grade: "C1" },
-  { range: "41-50", grade: "C2" },
-  { range: "33-40", grade: "D" },
-  { range: "32 & below", grade: "E" },
-];
-const coscholastic = [
-  { range: "OUTSTANDING", grade: "A" },
-  { range: "VERY GOOD", grade: "B" },
-  { range: "FAIR", grade: "C" },
-];
-
-function ScholasticRow(area, index) {
-  console.log(area, 'in row func')
-  const totalobtained = parseInt(area.obtainedNoteBookMarks) + parseInt(area.obtainedSubjectEnrichmentMarks) + parseInt(area.marksObtained);
-  const total = parseInt(area.totalMarks) + parseInt(area.totalNoteBookMarks) + parseInt(area.totalSubjectEnrichmentMarks);
-  const percentage = total !== 0 ? (totalobtained / total) * 100 : 0;
-
-  const scholastic = [
-    { lower: 91, grade: "A1", upper: 100 },
-    { lower: 81, grade: "A2", upper: 90 },
-    { lower: 71, grade: "B1", upper: 80 },
-    { lower: 61, grade: "B2", upper: 70 },
-    { lower: 51, grade: "C1", upper: 60 },
-    { lower: 41, grade: "C2", upper: 50 },
-    { lower: 33, grade: "D", upper: 40 },
-    { lower: 0, grade: "E", upper: 32 }
-  ];
-
-  const grade = scholastic.find(range => percentage >= range.lower && percentage <= range.upper)?.grade || 'N/A';
-
-  return `
-        <tr class="text-center text-lg font-normal" key="${index}">
-            <td class="px-4 pb-4 border-x border-gray-200">${area.subject}</td>
-            <td class="px-4 pb-4 border-x border-gray-200">${area.obtainedNoteBookMarks}</td>
-            <td class="px-4 pb-4 border-x border-gray-200">${area.obtainedSubjectEnrichmentMarks}</td>
-            <td class="px-4 pb-4 border-x border-gray-200">${area.marksObtained}</td>
-            <td class="px-4 pb-4 border-x border-gray-200">${totalobtained}</td>
-            <td class="px-4 pb-4 border-x border-gray-200">${percentage.toFixed(2)}</td>
-            <td class="px-4 pb-4 border-x border-gray-200">${grade}</td>
-        </tr>
-    `;
-}
-
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaFilter } from 'react-icons/fa';
+import { FiCheck, FiDownload, FiRefreshCw } from "react-icons/fi";
 
 function ReportCardSubAdmin() {
   const { authState, darkMode } = useContext(AuthContext);
@@ -68,13 +19,15 @@ function ReportCardSubAdmin() {
   const [Section, setSection] = useState(localStorage.getItem('Section') || '');
   const [selectedSession, setSelectedSession] = useState(localStorage.getItem('selectedSession') || '');
   const [error, setError] = useState(null);
-  const containerRef = useRef(null);
   const [userData, setUserData] = useState([]);
   const [start, setStart] = useState(0);
-  const end = 10;
+  const [end, setEnd] = useState(20);
   const [allDataFetched, setAllDataFetched] = useState(false);
-  const sentinelRef = useRef(null);
-  const [selectedTermValue, setSelectedTermValue] = useState('');
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [selectedStudents, setSelectedStudents] = useState([]);
+  const [downloadLoading, setDownloadLoading] = useState(false);
+  const [fetchedFields, setFetchedFields] = useState([]);
+  const [selectedResultReference, setSelectedResultReference] = useState('');
 
   useEffect(() => {
     localStorage.setItem('Class', Class);
@@ -90,6 +43,7 @@ function ReportCardSubAdmin() {
   };
 
   const handleSectionChange = (event) => {
+
     setUserData([]);
     setAllDataFetched(false);
     setSection(event.target.value);
@@ -101,32 +55,8 @@ function ReportCardSubAdmin() {
   };
 
   const handleViewMore = () => {
-    if (!allDataFetched && !loading) {
-      setStart((prevStart) => prevStart + end);
-    }
+    setStart(prevStart => prevStart + end);
   };
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !allDataFetched && !loading) {
-          console.log("Fetching more data...");
-          handleViewMore();
-        }
-      },
-      { root: null, rootMargin: '0px', threshold: 1.0 }
-    );
-
-    if (sentinelRef.current) {
-      observer.observe(sentinelRef.current);
-    }
-
-    return () => {
-      if (sentinelRef.current) {
-        observer.unobserve(sentinelRef.current);
-      }
-    };
-  }, [allDataFetched, loading]);
 
   useEffect(() => {
     if (start !== 0) {
@@ -134,26 +64,37 @@ function ReportCardSubAdmin() {
     }
   }, [start]);
 
+  useEffect(() => {
+    setUserData([]);
+    setStart(0);
+    setAllDataFetched(false);
+  }, [Class, Section, selectedSession]);
+
   console.log('ll', Class, Section, selectedSession)
   useEffect(() => {
     fetchStudents();
-  }, [authState.accessToken, Class, Section]);
+  }, [authState?.accessToken, Class, Section, selectedSession]);
 
   const fetchStudents = async () => {
-    if (loading || allDataFetched) return;
     setLoading(true);
     try {
       console.log(start, "-", end);
       const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
-        accessToken: authState.accessToken,
+        accessToken: authState?.accessToken,
         currentClass: Class,
         section: Section,
         end: end,
-        start: start
+        start: start,
+        session: selectedSession
       });
       console.log("API response:", response.data, response.data.Students.length);
 
       if (response.data.Students) {
+        // const users = response.data.Students.map(user => ({
+        //     ...user,
+        //     profileLogo: user.profileLink || profilelogo,
+        // }));
+
         const list = response.data.Students.length;
         if (list < end) {
           toast.success('All data fetched');
@@ -161,6 +102,8 @@ function ReportCardSubAdmin() {
           setAllDataFetched(true);
         }
         setUserData(prevUsers => [...prevUsers, ...response.data.Students]);
+
+
       } else {
         setError('Unexpected response format');
         setTimeout(() => {
@@ -179,348 +122,390 @@ function ReportCardSubAdmin() {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.2,
+        duration: 0.5,
+        ease: "easeInOut"
+      }
+    }
+  };
 
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const itemVariants = {
+    hidden: { y: 10, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "tween",
+        duration: 0.4,
+        ease: "easeOut"
+      }
+    }
+  };
 
-  const generateStudentResult = async (studentData, term) => {
-    // Create temporary container
-    const container = document.createElement('div');
-    container.className = 'report-card border border-black';
-    document.body.appendChild(container);
+  const toggleRow = (id) => {
+    setSelectedStudents((prev) =>
+      prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id]
+    );
+  };
 
+  useEffect(() => {
+    fetchFieldsForUserType();
+  }, [Class, Section, selectedSession]);
+
+  const fetchFieldsForUserType = async () => {
     try {
-      // Fetch student's result and profile
-      const [resultResponse, profileResponse] = await Promise.all([
-        axios.get(`${BASE_URL}/result/fetch/teacher?email=${studentData.email}`, {
-          headers: {
-            Authorization: `Bearer ${authState.accessToken}`,
-          }
-        }),
-        axios.post(`${BASE_URL}/fetchSingle/student`, {
-          accessToken: authState.accessToken,
-          email: studentData.email
-        })
-      ]);
-
-      const profile = profileResponse.data.StudentDetails[0];
-      const details = resultResponse.data;
-      console.log(details, 'nn', details[term])
-
-      // Populate container with result content
-      container.innerHTML = `
-              <div class="p-2 w-full">
-                <div class="border border-black">
-                  <div class="border-b border-black py-3 items-center bg-gradient-to-r from-blue-200 to-blue-100 text-center">
-                    <h1 class="text-3xl font-semibold mb-2">Term 1: ${profile.session || "2024-25"}</h1>
-                    <h6 class="text-2xl mb-2">Report Card</h6>
-                  </div>
-            
-                  <div class="mb-4 flex justify-between m-3 text-xl">
-                    <div class="leading-loose">
-                      <p><strong class="font-medium">Student's Name:</strong> ${profile.name}</p>
-                      <p><strong class="font-medium">Father's Name:</strong> ${profile.fatherName}</p>
-                      <p><strong class="font-medium">Mother's Name:</strong> ${profile.motherName}</p>
-                    </div>
-                    <div class="leading-loose">
-                      <p><strong class="font-medium">Admission No.:</strong> ${profile.admissionNumber || '123456'}</p>
-                      <p><strong class="font-medium">Class & Section:</strong> ${profile.currentClass} ${profile.section}</p>
-                      <p><strong class="font-medium">Date of Birth:</strong> ${profile.DOB}</p>
-                    </div>
-                  </div>
-            
-                  ${details ? `
-                    ${details[term]?.length ? `
-                      <div class="overflow-auto">
-                        <table class="min-w-full border border-gray-200">
-                          <thead class="bg-gradient-to-r from-blue-200 to-blue-100 text-xl font-medium whitespace-nowrap">
-                            <tr class="text-center">
-                              <th class="px-4 py-2 border">Scholastic Areas</th>
-                              <th class="px-4 py-2 border">Note Book (${details[term][0]?.totalNoteBookMarks || ""})</th>
-                              <th class="px-4 py-2 border">S.Enrichment (${details[term][0]?.totalSubjectEnrichmentMarks || ""})</th>
-                              <th class="px-4 py-2 border">Marks Obt (${details[term][0]?.totalMarks || ""})</th>
-                              <th class="px-4 py-2 border">Total</th>
-                              <th class="px-4 py-2 border">%</th>
-                              <th class="px-4 py-2 border">Grade</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            ${details[term].map((area, index) => ScholasticRow(area, index)).join("")}
-                          </tbody>
-                        </table>
-                      </div>
-                    ` : '<div class="font-medium text-center text-red-500">No Scholastic Data Available</div>'}
-            
-                    ${details[`${term}_Co_scholastic`]?.length ? `
-                      <table class="min-w-full bg-white border border-gray-200">
-                        <thead class="bg-gradient-to-r from-blue-200 to-blue-100 text-xl font-medium">
-                          <tr>
-                            <th class="px-4 pb-4 border text-start">Co-Scholastic Areas</th>
-                            <th class="px-4 pb-4 border text-end">Grade</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          ${details[`${term}_Co_scholastic`].map((area, index) => `
-                            <tr key=${index}>
-                              <td class="px-4 pb-4 border text-start">${area.subject}</td>
-                              <td class="px-4 pb-4 border text-end">${area.grade}</td>
-                            </tr>
-                          `).join("")}
-                        </tbody>
-                      </table>
-                    ` : '<div class="font-medium text-center text-red-500">No Co-Scholastic Data Available</div>'}
-                  ` : '<div class="font-medium text-center text-red-500">No Result Found</div>'}
-            
-                  <div class="border-b border-black">
-                    <div class="flex items-center justify-between px-4 pb-4 bg-gradient-to-r from-blue-200 to-blue-100 text-xl">
-                      <h2 class="font-semibold">Attendance:</h2>
-                      <p><strong className='font-medium'>Total:</strong>20</p>
-                      <p><strong className='font-medium'>Present:</strong> 20</p>
-                      <p><strong className='font-medium'>Percentage:</strong>20%</p>
-                    </div>
-                    <div class="mb-12 px-4">
-                      <h2 class="text-xl font-semibold">Remarks:</h2>
-                    </div>
-            
-                    <div class="sign flex items-baseline py-3 text-xl justify-evenly">
-                      <p>Class Teacher</p>
-                      <p>Coordinator</p>
-                      <p>Principal</p>
-                    </div>
-                  </div>
-         
-                  <div class="flex gap-2">
-                    <div class="flex-1">
-                      <h1 class="text-center text-xl my-2">SCHOLASTIC</h1>
-                      <table class="w-full bg-white border border-gray-200">
-                        <thead class="bg-gradient-to-r from-blue-200 to-blue-100">
-                          <tr>
-                            <th class="px-4 pb-4 border">MARKS RANGE</th>
-                            <th class="px-4 pb-4 border">GRADE</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          ${scholastic.map((item, index) => `
-                            <tr class="text-center text-lg" key=${index}>
-                              <td class="px-2 pb-4 border">${item.range}</td>
-                              <td class="px-4 pb-4 border">${item.grade}</td>
-                            </tr>
-                          `).join("")}
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="flex-1">
-                      <h1 class="text-center text-xl my-2">CO-SCHOLASTIC AND DISCIPLINE</h1>
-                      <table class="w-full bg-white border border-gray-200">
-                        <thead class="bg-gradient-to-r from-blue-200 to-blue-100">
-                          <tr>
-                            <th class="px-4 pb-4 border">PERFORMANCE INDICATORS</th>
-                            <th class="px-4 pb-4 border">GRADE</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          ${coscholastic.map((item, index) => `
-                            <tr class="text-center text-lg" key=${index}>
-                              <td class="px-4 pb-4 border">${item.range}</td>
-                              <td class="px-4 pb-4 border">${item.grade}</td>
-                            </tr>
-                          `).join("")}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            `;
-
-
-      // Convert to canvas
-      const canvas = await html2canvas(container, {
-        scale: 2,
-        useCORS: true,
-        logging: true,
-        allowTaint: true,
+      const response = await axios.get(`${BASE_URL}/templates/fetch`, {
+        headers: {
+          'Authorization': `Bearer ${authState?.accessToken}`
+        }
       });
 
-      // Clean up
-      document.body.removeChild(container);
+      if (response.status === 200) {
+        const filteredFields = response.data || [];
+        setFetchedFields(filteredFields);
 
-      return canvas.toDataURL('image/png');
-    } catch (error) {
-      console.error(`Error generating result for ${studentData.name}:`, error);
-      throw error;
-    }
-  };
+        // Auto-select first template if available
+        const resultTemplates = filteredFields.filter(doc => doc.documentName === "Result");
 
-  const handleBulkDownload = async () => {
-    if (!selectedTermValue) {
-      alert('Please select a term before downloading.');
-      return;
-    }
-    setIsGenerating(true);
-    setProgress(0);
-    if (!Class) return;
-    console.log(userData, 'in bulk')
-    const pdf = new jsPDF('p', 'mm', 'a4', true);
-    const pageWidth = pdf.internal.pageSize.width;
-    const pageHeight = pdf.internal.pageSize.height;
-    const margin = 10;
-
-    try {
-      let isFirstPage = true;
-      for (let i = 0; i < userData.length; i++) {
-        const student = userData[i];
-        const imgData = await generateStudentResult(student, selectedTermValue);
-
-        if (!isFirstPage) {
-          pdf.addPage();
+        if (resultTemplates.length > 0 && !selectedResultReference) {
+          setSelectedResultReference(resultTemplates[0].referenceNo + "." + resultTemplates[0].documentType);
         }
 
-        // Add image to PDF
-        const imgProps = pdf.getImageProperties(imgData);
-        const imgWidth = pageWidth - (2 * margin);
-        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-        pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
-
-        isFirstPage = false;
-        setProgress(((i + 1) / userData.length) * 100);
       }
-
-      // Save the PDF
-      pdf.save(`Class_${Class}_Results_${selectedSession}_Term_${selectedTermValue}.pdf`);
     } catch (error) {
-      console.error('Error generating bulk PDF:', error);
-      alert('Error generating PDF. Please try again.');
-    } finally {
-      setIsGenerating(false);
-      setProgress(0);
+      const errorMessage = error.response?.data?.error || 'Failed to load templates';
+      console.log(error);
+      setFetchedFields([]);
     }
   };
 
-  return (
-    <>
-      <div className={`${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
-        <ToastContainer theme={darkMode ? 'dark' : 'light'} />
-       
-        <div className={`flex items-center justify-between px-3 py-2 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-          <h1 className={`text-xl font-medium mb-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>Report Card</h1>
-          <span className='w-fit flex items-center gap-2 mobile:max-laptop:hidden'>
-            <Selection
-              Class={Class}
-              Section={Section}
-              Session={selectedSession}
-              handleClassChange={handleClassChange}
-              handleSectionChange={handleSectionChange}
-              handleSessionChange={handleSessionChange}
-            />
+  const themeClasses = {
+    container: darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-800",
+    card: darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200",
+    button: {
+      primary: darkMode
+        ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+        : "bg-blue-600 hover:bg-blue-700 text-white",
+      secondary: darkMode
+        ? "bg-gray-700 hover:bg-gray-600 text-gray-200"
+        : "bg-gray-200 hover:bg-gray-300 text-gray-800",
+      disabled: darkMode
+        ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+    },
+    input: darkMode
+      ? "bg-gray-700 border-gray-600 text-white focus:ring-indigo-500 focus:border-indigo-500"
+      : "bg-white border-blue-300 text-gray-800 focus:ring-blue-500 focus:border-blue-500",
+    table: {
+      header: darkMode ? "bg-gray-800 text-gray-200" : "bg-blue-100 text-gray-800",
+      row: darkMode ? "border-gray-700 hover:bg-gray-700" : "border-gray-200 hover:bg-blue-50",
+      altRow: darkMode ? "bg-gray-750" : "bg-blue-50"
+    },
+    dialog: {
+      overlay: darkMode ? "bg-black bg-opacity-70" : "bg-black bg-opacity-50",
+      container: darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200",
+    },
+    checkbox: darkMode
+      ? "border-indigo-500 checked:bg-indigo-600"
+      : "border-blue-500 checked:bg-blue-600",
+    icon: darkMode ? "text-indigo-400" : "text-blue-500",
+    loading: darkMode ? "text-indigo-400" : "text-blue-500",
+    header: darkMode ? "border-gray-700" : "border-gray-300",
+    error: darkMode ? "bg-red-900 border-red-700" : "bg-red-100 border-red-300"
+  };
 
-            <select
-              value={selectedTermValue}
-              onChange={(e) => setSelectedTermValue(e.target.value)}
-              className={`border-2 focus:outline-none focus:ring-2 focus:ring-blue-500 p-2 rounded ${
-                darkMode 
-                  ? 'bg-gray-800 border-blue-500 text-white' 
-                  : 'bg-white border-blue-300 text-gray-800'
-              }`}
-            >
-              <option value="" disabled>Select Term</option>
-              <option value="term1">Term 1</option>
-              <option value="halfYearly">Half Yearly</option>
-              <option value="term2">Term 2</option>
-              <option value="final">Final</option>
-            </select>
-            <div className="flex justify-between items-center">
-              <motion.button
-                className={`text-white px-6 py-2 rounded-full text-sm font-medium transition-colors duration-200 disabled:bg-gray-400 ${
-                  darkMode ? 'bg-green-600 hover:bg-green-700' : 'bg-green-500 hover:bg-green-600'
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleBulkDownload}
-                disabled={isGenerating}
-              >
-                {isGenerating ? `Generating... ${Math.round(progress)}%` : 'Download All Results'}
-              </motion.button>
-            </div>
-          </span>
-        </div>
-      </div>
-      <div className={`w-full items-start overflow-y-auto px-2 no-scrollbar mobile:max-tablet:mt-2 ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-800'}`}>
-        {loading && start == 0 ? (
+  const downloadCertificate = async (type, customStudent = null, customTemplate = null) => {
+    setDownloadLoading(true);
+
+    try {
+      const students = customStudent ? [customStudent] : selectedStudents;
+
+      if (!students || students.length <= 0) {
+        toast.warn("Please select students");
+        setDownloadLoading(false);
+        return;
+      }
+
+      let selectedTemplate;
+      let endpoint;
+
+      if (type === 'Result') {
+        selectedTemplate = customTemplate || selectedResultReference;
+        if (!selectedTemplate) {
+          toast.warn("Please select Result Template");
+          setDownloadLoading(false);
+          return;
+        }
+        endpoint = 'result';
+      }
+      console.log(students, '11', selectedTemplate)
+      const apiUrl = `${BASE_URL}/certificate/${endpoint}/${selectedSession}/${selectedTemplate}`;
+
+      const response = await axios.post(apiUrl, {
+        students: students,
+        templateReference: selectedTemplate
+      }, {
+        headers: {
+          Authorization: `Bearer ${authState?.accessToken}`
+        },
+        responseType: "blob"
+      });
+
+      const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+
+      const link = document.createElement("a");
+      link.href = pdfUrl;
+      link.download = `${type === 'Result' ? 'Result_Certificate' : ''}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(pdfUrl);
+
+      toast.success(`${type} downloaded successfully!`);
+
+    } catch (error) {
+      console.error(`Error downloading ${type}:`, error);
+      const errorMessage = error.response?.data?.error || `Failed to download ${type}`;
+      toast.error(errorMessage);
+    } finally {
+      setDownloadLoading(false);
+    }
+  };
+
+
+  return (
+    <motion.div
+      className=" flex flex-col mx-2  min-h-screen"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
+      <ToastContainer />
+
+      <motion.div
+        className="flex justify-between items-center py-4  text-black mb-4 mobile:max-tablet:mb-0"
+        variants={itemVariants}
+      >
+        <h1 className="text-3xl font-semibold mobile:max-tablet:text-lg">Report Card</h1>
+        <motion.button
+          className="p-2 bg-blue-500 rounded-full shadow-md hover:bg-blue-400 transition-colors duration-200 mobile:max-tablet:block hidden"
+          onClick={() => setDropdownVisible(!isDropdownVisible)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <FaFilter />
+        </motion.button>
+        <motion.div className="mobile:max-tablet:hidden flex justify-center items-center gap-2" variants={itemVariants}>
+          <Selection
+            Class={Class}
+            Section={Section}
+            Session={selectedSession}
+            handleClassChange={handleClassChange}
+            handleSectionChange={handleSectionChange}
+            handleSessionChange={handleSessionChange}
+          />
+          <select
+            value={selectedResultReference}
+            onChange={(e) => setSelectedResultReference(e.target.value)}
+            className="px-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2"
+          >
+            <option value="">Select Result Template</option>
+            {fetchedFields
+              .filter((doc) => doc.documentName === "Result")
+              .map((reference, index) => (
+                <option key={index} value={reference.referenceNo + "." + reference.documentType}>
+                  {reference.referenceNo + "." + reference.documentType}
+                </option>
+              ))
+            }
+          </select>
+        </motion.div>
+      </motion.div>
+
+
+      {isDropdownVisible && (
+        <motion.div
+          className="absolute bg-white py-2 rounded-lg shadow-xl right-4 left-4 z-20 mobile:max-tablet:mt-16 flex justify-center items-center"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+        >
+          <Selection
+            Class={Class}
+            Section={Section}
+            Session={selectedSession}
+            handleClassChange={handleClassChange}
+            handleSectionChange={handleSectionChange}
+            handleSessionChange={handleSessionChange}
+          />
+          <select
+            value={selectedResultReference}
+            onChange={(e) => setSelectedResultReference(e.target.value)}
+            className="w-full px-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2"
+          >
+            <option value="">Select Result Template</option>
+            {fetchedFields
+              .filter((doc) => doc.documentName === "Result")
+              .map((reference, index) => (
+                <option key={index} value={reference.referenceNo + "." + reference.documentType}>
+                  {reference.referenceNo + "." + reference.documentType}
+                </option>
+              ))
+            }
+          </select>
+        </motion.div>
+      )}
+
+
+
+
+      <motion.div
+        className="bg-white rounded-lg shadow-lg  overflow-auto"
+        variants={itemVariants}
+      >
+        {loading && userData.length === 0 ? (
           <Loading />
         ) : userData.length === 0 ? (
-          <div className={`text-center p-8 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>No student found</div>
+          <div className="p-4 text-center text-gray-500">No student found</div>
         ) : (
-          <motion.div
-            className={`rounded-lg shadow-lg w-full mb-4 overflow-hidden ${
-              darkMode 
-                ? 'bg-gray-800 border border-gray-700' 
-                : 'bg-white border border-blue-200'
-            }`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            ref={containerRef}
+          <motion.table
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            className='w-full border text-center'
           >
-            <table className={`min-w-full border-collapse ${darkMode ? 'border border-gray-700' : 'border border-gray-200'}`}>
-              <Header headings={['Name', 'Class', 'Section', 'Email', 'Action']} />
-              <tbody>
-                {userData.map((detail, index) => (
+
+            <thead className={`transition-colors duration-300 ${themeClasses.table.header}`}>
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Class</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Section</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      onChange={(e) => {
+                        setSelectedStudents(e.target.checked ? userData.map((row) => row._id) : []);
+                      }}
+                      className={`appearance-none w-5 h-5 border rounded cursor-pointer transition-all duration-200 ${themeClasses.checkbox}`}
+                    />
+                    <span className="ml-2">Select All</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <AnimatePresence>
+              <motion.tbody
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                className="divide-y divide-blue-200"
+              >
+                {userData.map((detail) => (
                   <motion.tr
-                    className={`transition-colors duration-200 ${
-                      darkMode 
-                        ? 'hover:bg-gray-700 border-b border-gray-700' 
-                        : 'hover:bg-blue-100 border-b border-gray-200'
-                    }`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
                     key={detail.email}
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
                   >
-                    <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                      <Link to={`/Sub-Admin/Students/details/${detail.email}`} className={`rounded-full text-center px-3 py-2 font-semibold ${
-                        darkMode 
-                          ? 'bg-blue-900 text-blue-200' 
-                          : 'bg-blue-100 text-blue-800'
-                      }`}>
-                        {detail.name}
-                      </Link>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium">
+                      {detail.name}
+
                     </td>
-                    <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>{detail.currentClass}</td>
-                    <td className={`py-3 px-6 text-center whitespace-nowrap ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>{detail.section}</td>
-                    <td className={`py-3 px-6 text-center whitespace-nowrap flex items-center gap-3 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                      <img src={detail.profileLink} alt={detail.name} className={`w-8 h-8 rounded-full object-cover mobile:max-tablet:hidden ${
-                        darkMode ? 'border-2 border-blue-500' : 'border-2 border-blue-300'
-                      }`} />
-                      <span className={darkMode ? 'text-blue-400' : 'text-blue-600'}>{detail.email}</span>
-                    </td>
-                    <td className="py-3 px-4 text-center whitespace-nowrap">
-                      <Link to={`/Sub-Admin/Result/${detail.email}?session=${selectedSession}&Class=${Class}`}>
-                        <motion.button
-                          className={`text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
-                            darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'
-                          }`}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          Result
-                        </motion.button>
-                      </Link>
+                    <td className="px-6 py-4 whitespace-nowrap">{detail.currentClass}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{detail.section}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{detail.email}</td>
+
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="relative flex items-center justify-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedStudents.includes(detail._id)}
+                          onChange={() => toggleRow(detail._id)}
+                          className={`appearance-none w-5 h-5 border rounded cursor-pointer transition-all duration-200 ${themeClasses.checkbox}`}
+                        />
+                        {selectedStudents.includes(detail._id) && (
+                          <FiCheck className="absolute text-white pointer-events-none" />
+                        )}
+                      </div>
                     </td>
                   </motion.tr>
                 ))}
-              </tbody>
-            </table>
-            <div ref={sentinelRef} className="h-10"></div>
-            {loading && start > 0 && (
-              <div className={`text-center w-full text-sm py-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Loading more...</div>
+              </motion.tbody>
+            </AnimatePresence>
+            {!allDataFetched && (
+              <motion.div
+                className="text-center py-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <motion.button
+                  className="text-blue-600 hover:text-blue-800 font-semibold"
+                  onClick={handleViewMore}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  View More
+                </motion.button>
+              </motion.div>
             )}
-          </motion.div>
+          </motion.table>
         )}
-      </div>
-    </>
+        <div className='p-3 flex justify-center'>
+          <button
+            onClick={() => downloadCertificate('Result')}
+            disabled={selectedStudents.length === 0 || !selectedResultReference || downloadLoading}
+            className={`flex items-center px-4 py-2 rounded-lg transition-all duration-200 ${selectedStudents.length === 0 || !selectedResultReference || downloadLoading
+                ? themeClasses.button.disabled
+                : themeClasses.button.primary
+              }`}
+          >
+            {downloadLoading ? (
+              <FiRefreshCw className="animate-spin mr-2" />
+            ) : (
+              <FiDownload className="mr-2" />
+            )}
+            Download Result
+          </button>
+        </div>
+
+      </motion.div>
+    </motion.div>
   )
 }
 
 export default ReportCardSubAdmin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

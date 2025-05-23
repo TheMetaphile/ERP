@@ -62,7 +62,7 @@ const buttonVariants = {
     tap: { scale: 0.95 }
 };
 
-export default function Template() {
+export default function FieldMaping() {
     const { authState } = useContext(AuthContext);
     const [fetchedFields, setFetchedFields] = useState([]);
     const [fields, setFields] = useState([
@@ -286,7 +286,7 @@ export default function Template() {
                 variants={itemVariants}
             >
                 <h1 className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600 mb-4">
-                    Template Management
+                    Field Maping Management
                 </h1>
 
                 <div className="relative min-w-[200px]">

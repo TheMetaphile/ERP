@@ -245,7 +245,7 @@ const BacklogTransactionRow = ({ student, session, data }) => {
 
             <tr className="bg-white border-b hover:bg-gray-50">
                 <td className="px-3 py-4">
-                    <Link to={`/Department-Dashboard/student/${student.student._id}`} className="flex flex-col rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
+                    <Link to={`/Sub-Admin/Students/details/${student.student.email}`} className="flex flex-col rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
 
                         <div>
                             {student.student.name}

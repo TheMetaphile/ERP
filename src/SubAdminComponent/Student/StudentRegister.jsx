@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../Config";
 import AuthContext from "../../Context/AuthContext";
 import SubjectInputs from "./SubjectInputs";
-import { FaUser, FaVenusMars, FaGraduationCap, FaEnvelope, FaAddressCard, FaBriefcase, FaStream, FaCalendarAlt, FaUsers, FaCloudUploadAlt, FaPlus } from 'react-icons/fa';
+import { FaUser, FaVenusMars, FaGraduationCap, FaEnvelope, FaAddressCard, FaBriefcase, FaStream, FaCalendarAlt, FaUsers, FaCloudUploadAlt, FaPlus, FaPhone } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import FileUploadField from "./FileUploadField";
 
@@ -333,6 +333,7 @@ export default function StudentRegister() {
                 <InputField darkMode={darkMode} icon={<FaBriefcase />} label="Father's Name" name="fatherName" value={formData.fatherName} onChange={handleChange} required />
                 <InputField darkMode={darkMode} icon={<FaBriefcase />} label="Mother's Name" name="motherName" value={formData.motherName} onChange={handleChange} required />
                 <InputField darkMode={darkMode} icon={<FaBriefcase />} label="Guardian's Name" name="guardiansName" value={formData.guardiansName} onChange={handleChange} required />
+                <InputField darkMode={darkMode} icon={<FaPhone />} label="Phone Number" name="phoneNumber" value={formData.phoneNUmber} onChange={handleChange} required />
 
                 <FileUploadField
                     darkMode={darkMode}

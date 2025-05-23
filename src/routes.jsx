@@ -12,6 +12,7 @@ import SubjectManagement from "./SubAdminComponent/SubjectManagement/SubjectMana
 import AllStudentsListSubject from "./SubAdminComponent/AllocateSubject/AllStudentsListSubject.jsx";
 import CreateCategory from "./SubAdminComponent/SubAdminFee/DiscountCategories/CreateCategory.jsx";
 
+const FieldMaping = lazy(() => import("./SubAdminComponent/FieldMaping/FieldMaping.jsx"));
 const AssignSubjectSubAdmin = lazy(() => import("./SubAdminComponent/Subjects/utils/AssignSubjectSubAdmin"));
 const TimeTableSubAdmin = lazy(() => import("./SubAdminComponent/timetable/TimeTableSubAdmin.jsx"));
 const TeachersTimeTableSubAdmin = lazy(() => import("./SubAdminComponent/timetable/utils/Teacher/main.jsx"));
@@ -20,8 +21,6 @@ const UploadSubAdmin = lazy(() => import("./SubAdminComponent/timetable/utils/Up
 const AssigncoordinatorSubAdmin = lazy(() => import("./SubAdminComponent/Coordinator/AssigncoordinatorSubAdmin.jsx"));
 const SubstituteCoordinatorSubAdmin = lazy(() => import("./SubAdminComponent/SubstituteCoordinator/SubstituteCoordinatorSubAdmin.jsx"));
 const StudentCard = lazy(() => import("./AdminComponents/StudentDetails.jsx"));
-
-
 const Transactions = lazy(() => import("./SubAdminComponent/SubAdminFee/Transaction/Transactions.jsx"));
 const BacklogTransaction = lazy(() => import("./SubAdminComponent/SubAdminFee/Transaction/utils/BacklogFeeTransaction.jsx"));
 const PendingFee = lazy(() => import("./SubAdminComponent/SubAdminFee/Pending Fee/PendingFee.jsx"));
@@ -1653,6 +1652,11 @@ const router = createBrowserRouter([
         path: '/Sub-Admin/SubjectAllocate',
         element: <SuspenseWrapper fallback={Loading}>
           <AllStudentsListSubject /></SuspenseWrapper>
+      },
+      {
+        path: '/Sub-Admin/FieldMaping',
+        element: <SuspenseWrapper fallback={Loading}>
+          <FieldMaping /></SuspenseWrapper>
       },
     ]
   },

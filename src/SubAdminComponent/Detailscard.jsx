@@ -6,7 +6,8 @@ import AuthContext from '../Context/AuthContext';
 import {
     FaUser, FaEnvelope, FaBirthdayCake, FaIdCard,
     FaTransgender, FaMapMarkerAlt, FaGraduationCap,
-    FaTag, FaCalendarAlt, FaFlag, FaUserFriends, FaUniversity
+    FaTag, FaCalendarAlt, FaFlag, FaUserFriends, FaUniversity,
+    FaPhone
 } from 'react-icons/fa';
 
 export default function Detailscard() {
@@ -77,7 +78,11 @@ export default function Detailscard() {
                             key={field._id || index}
                             icon={FaTag}
                             label={field.label}
-                            value={field.value || 'N/A'}
+                            value={
+                                typeof field.value === 'object' && field.value !== null
+                                    ? JSON.stringify(field.value)
+                                    : field.value || 'N/A'
+                            }
                         />
                     ))}
                 </div>
@@ -93,7 +98,7 @@ export default function Detailscard() {
             </div>
         );
     }
-
+    console.log(userData)
     return (
         <div className={`min-h-screen p-6 ${darkMode ? 'bg-gray-900' : 'bg-gray-100'
             }`}>
@@ -148,6 +153,11 @@ export default function Detailscard() {
                             icon={FaIdCard}
                             label="Aadhar Number"
                             value={userData?.aadhaarNumber}
+                        />
+                         <DetailCard
+                            icon={FaPhone}
+                            label="Phone Number"
+                            value={userData?.phoneNumber}
                         />
                         <DetailCard
                             icon={FaTransgender}

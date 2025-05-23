@@ -4,7 +4,8 @@ import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 
 function Selection({ handleClassChange, handleSectionChange, handleSessionChange, Class, Section, Session }) {
-  const { authState, darkMode } = useContext(AuthContext);
+
+  const { authState } = useContext(AuthContext);
   const [sectionsDetails, setSectionsDetails] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState('');
@@ -52,54 +53,32 @@ function Selection({ handleClassChange, handleSectionChange, handleSessionChange
     handleSessionChange(selectedSessionValue); 
   };
 
-  // Common styles for select elements with dark mode support
-  const selectClasses = `w-full px-4 py-2 border-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2 ${
-    darkMode 
-      ? 'bg-gray-800 border-blue-500 text-white' 
-      : 'bg-white border-blue-300 text-gray-800'
-  }`;
-
-  // Apply different styles to option elements based on dark mode
-  const optionStyles = darkMode ? { backgroundColor: '#1f2937', color: 'white' } : {};
-
   return (
     <div className="w-fit flex items-center gap-2 mobile:max-tablet:flex-col mobile:max-tablet:w-full mobile:max-tablet:px-4">
-      <select 
-        id="class" 
-        value={Class} 
-        className={selectClasses}
-        onChange={handleClassChangeWithFetch}
-        style={{ color: darkMode ? 'white' : 'inherit' }}
-      >
-        <option value="" style={optionStyles}>Search by Class</option>
-        <option value="Pre-Nursery" style={optionStyles}>Pre-Nursery</option>
-        <option value="Nursery" style={optionStyles}>Nursery</option>
-        <option value="L.K.G" style={optionStyles}>L.K.G</option>
-        <option value="U.K.G" style={optionStyles}>U.K.G</option>
-        <option value="1st" style={optionStyles}>1st</option>
-        <option value="2nd" style={optionStyles}>2nd</option>
-        <option value="3rd" style={optionStyles}>3rd</option>
-        <option value="4th" style={optionStyles}>4th</option>
-        <option value="5th" style={optionStyles}>5th</option>
-        <option value="6th" style={optionStyles}>6th</option>
-        <option value="7th" style={optionStyles}>7th</option>
-        <option value="8th" style={optionStyles}>8th</option>
-        <option value="9th" style={optionStyles}>9th</option>
-        <option value="10th" style={optionStyles}>10th</option>
-        <option value="11th" style={optionStyles}>11th</option>
-        <option value="12th" style={optionStyles}>12th</option>
+      <select id="class" value={Class} className="w-full px-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2" onChange={handleClassChangeWithFetch}>
+        <option value="">Search by Class</option>
+        <option value="Pre-Nursery">Pre-Nursery</option>
+        <option value="Nursery">Nursery</option>
+        <option value="L.K.G">L.K.G</option>
+        <option value="U.K.G">U.K.G</option>
+        <option value="1st">1st</option>
+        <option value="2nd">2nd</option>
+        <option value="3rd">3rd</option>
+        <option value="4th">4th</option>
+        <option value="5th">5th</option>
+        <option value="6th">6th</option>
+        <option value="7th">7th</option>
+        <option value="8th">8th</option>
+        <option value="9th">9th</option>
+        <option value="10th">10th</option>
+        <option value="11th">11th</option>
+        <option value="12th">12th</option>
       </select>
 
-      <select 
-        id="section" 
-        value={Section} 
-        onChange={handleSectionChange} 
-        className={selectClasses}
-        style={{ color: darkMode ? 'white' : 'inherit' }}
-      >
-        <option value="" style={optionStyles}>Search by Section</option>
+      <select id="section" value={Section} onChange={handleSectionChange} className="w-full px-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2">
+        <option value="">Search by Section</option>
         {sectionsDetails.map((section, index) => (
-          <option key={index} value={section} style={optionStyles}>{section}</option>
+          <option key={index} value={section}>{section}</option>
         ))}
       </select>
 
@@ -107,12 +86,11 @@ function Selection({ handleClassChange, handleSectionChange, handleSessionChange
         id="session"
         value={Session}
         onChange={handleSessionChangeInternal}
-        className={selectClasses}
-        style={{ color: darkMode ? 'white' : 'inherit' }}
+        className="w-full px-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2"
       >
-        <option value="" style={optionStyles}>Select Session</option>
+        <option value="">Select Session</option>
         {sessions.map((session, index) => (
-          <option key={index} value={session} style={optionStyles}>
+          <option key={index} value={session}>
             {session}
           </option>
         ))}
