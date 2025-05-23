@@ -167,6 +167,13 @@ const menuItems = [
     route: "/Sub-Admin/Template",
     children: [],
   },
+   {
+    image: dashboardLeaveImage,
+    alt: "Notice image",
+    title: "Field Maping",
+    route: "/Sub-Admin/FieldMaping",
+    children: [],
+  },
   {
     image: dashboardLeaveImage,
     alt: "Notice image",
@@ -184,8 +191,8 @@ const menuItems = [
   {
     image: dashboardLeaveImage,
     alt: "Notice image",
-    title: "Field Maping",
-    route: "/Sub-Admin/FieldMaping",
+    title: "Other Certificates",
+    route: "/Sub-Admin/OtherCertificates",
     children: [],
   },
 ];

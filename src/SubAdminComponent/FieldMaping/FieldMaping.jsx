@@ -11,22 +11,12 @@ import {
     MdAdd,
     MdSave,
     MdLabel,
-    MdOutlineCheckBoxOutlineBlank,
-    MdOutlineCheckBox,
     MdKeyboardArrowDown,
     MdPerson,
     MdSchool,
     MdSupervisorAccount
 } from 'react-icons/md';
-import {
-    FaSort,
-    FaTrash,
-    FaPen,
-    FaRegCheckCircle,
-    FaRegTimesCircle,
-    FaUpload
-} from 'react-icons/fa';
-import { AiOutlineDownload } from "react-icons/ai";
+import { FaTrash, FaPen } from 'react-icons/fa';
 const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -66,72 +56,15 @@ export default function FieldMaping() {
     const { authState } = useContext(AuthContext);
     const [fetchedFields, setFetchedFields] = useState([]);
     const [fields, setFields] = useState([
-        { referenceNo: "", file: null },
-    ]);
-    const [userType, setUserType] = useState("TC");
+        { key: "", mapping: null, type: "" },
+    ])
+    const [userType, setUserType] = useState("Student");
     const [isLoading, setIsLoading] = useState(false);
     const [showTypeOptions, setShowTypeOptions] = useState(false);
-    const fileInputRefs = useRef([]);
+    const [userFields, setUserFields] = useState({ fields: [] });
 
 
-    const getPresignedUrl = async (fileName) => {
-        try {
-            console.log(fileName);
-            const response = await axios.get(`${BASE_URL}/fetch/url/${encodeURIComponent(fileName)}`, {
-                headers: {
-                    Authorization: `Bearer ${authState?.accessToken}`, // Pass the JWT token for authentication
-                },
-            });
-            return response.data.signedUrl; // Return the pre-signed URL
-        } catch (error) {
-            console.error("Error fetching pre-signed URL:", error.response?.data || error.message);
-            return null;
-        }
-    };
-
-    const downloadFile = async (doc) => {
-        try {
-            console.log(authState?.userDetails);
-            const fileName = "documents/" + authState?.userDetails?.branch + '/' + userType + "/" + doc.referenceNo + '.' + doc.documentType
-            const signedUrl = await getPresignedUrl(fileName);
-            if (!signedUrl) {
-                alert("Failed to get download URL");
-                return;
-            }
-
-            console.log(signedUrl);
-            // Fetch the file and trigger download
-            const fileResponse = await fetch(signedUrl);
-            const blob = await fileResponse.blob();
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", fileName.split("/").pop()); // Use only the file name for download
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (error) {
-            console.error("Error downloading file:", error);
-        }
-    };
-
-    const openFile = async (doc) => {
-        try {
-            console.log(authState?.userDetails);
-            const fileName = "documents/" + authState?.userDetails?.branch + '/' + userType + "/" + doc.referenceNo + '.' + doc.documentType
-            const signedUrl = await getPresignedUrl(fileName);
-            if (!signedUrl) {
-                alert("Failed to get download URL");
-                return;
-            }
-
-            window.open(signedUrl, "_blank");
-
-        } catch (error) {
-            console.error("Error downloading file:", error);
-        }
-    }
-
-    const userTypeOptions = ["TC", "CC", "Result", "Bonafide", "Admit Card"];
+    const userTypeOptions = ["Student", "Teacher", "SubAdmin"];
     const userTypeIcons = {
         Student: <MdSchool className="text-blue-500" />,
         Teacher: <MdPerson className="text-green-500" />,
@@ -139,35 +72,26 @@ export default function FieldMaping() {
     };
 
     const addRow = () => {
-        setFields([...fields, { referenceNo: "", file: null }]);
+        setFields([...fields, { key: "", mapping: null, type: "" }]);
     };
 
-    const handleChange = (index, key, value) => {
-        const updatedFields = [...fields];
-        updatedFields[index][key] = value;
-        setFields(updatedFields);
-    };
-
-    // Handle file selection
-    const handleFileChange = (index, event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const updatedFields = [...fields];
-            updatedFields[index].file = file;
-            setFields(updatedFields);
+    const handleChange = (index, field, value) => {
+        const newFields = [...fields];
+        if (field === "mapping") {
+            const selectedField = userFields.fields.find(f => f.label === value);
+            newFields[index] = {
+                ...newFields[index],
+                mapping: selectedField ? selectedField.label : value,
+                type: selectedField ? selectedField.type : ""
+            };
+        } else {
+            newFields[index][field] = value;
         }
+        setFields(newFields);
     };
 
-    // Handle removing a row
     const removeField = (index) => {
         setFields(fields.filter((_, i) => i !== index));
-    };
-
-    // Function to trigger file selection
-    const triggerFileInput = (index) => {
-        if (fileInputRefs.current[index]) {
-            fileInputRefs.current[index].click();
-        }
     };
 
 
@@ -176,23 +100,19 @@ export default function FieldMaping() {
             toast.warning("Add at least one field to save");
             return;
         }
-        const formData = new FormData();
-        formData.append("documentName", userType);
+        const fieldsWithRole = fields.map(field => ({
+            ...field,
+            role: userType
+        }));
 
-        // Append all reference numbers and files
-        fields.forEach((field, index) => {
-            formData.append(`referenceNo[${index}]`, field.referenceNo);
-            if (field.file) {
-                formData.append(`file[${index}]`, field.file);
-            }
-        });
-        // console.log(formData, fields);
+        console.log(fieldsWithRole);
+
         setIsLoading(true);
         try {
 
             const response = await axios.post(
-                `${BASE_URL}/templates/create`,
-                formData,
+                `${BASE_URL}/fieldMaping/upload`,
+                fieldsWithRole,
                 {
                     headers: {
                         Authorization: `Bearer ${authState?.accessToken}`
@@ -201,12 +121,8 @@ export default function FieldMaping() {
             );
 
             if (response.status === 200) {
-
-                console.log(typeof fields[0].file.name);
-                setFetchedFields(prev => [...prev, ...fields.map((field) => { return { ...field, _id: response.data.ids[field.referenceNo], documentType: field.file.name.split('.').pop() } })]);
-                console.log(fetchedFields);
-                fetchFieldsForUserType(userType);
                 setFields([]);
+                fetchFieldsForUserType(userType);
                 toast.success("Form saved successfully!");
             }
         } catch (error) {
@@ -220,7 +136,7 @@ export default function FieldMaping() {
         setIsLoading(true);
         try {
             const response = await axios.delete(
-                `${BASE_URL}/templates/delete/${fieldId}`,
+                `${BASE_URL}/fieldMaping/delete?id=${fieldId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${authState?.accessToken}`
@@ -239,16 +155,36 @@ export default function FieldMaping() {
         }
     };
 
-
-
     useEffect(() => {
         fetchFieldsForUserType(userType);
-    }, [authState?.accessToken]);
+        fetchFields(userType);
+    }, [authState?.accessToken, userType]);
+
+    const fetchFields = async (type) => {
+        setIsLoading(true);
+        try {
+            const response = await axios.get(`${BASE_URL}/fieldMaping/fetch/user?role=${type}`, {
+                headers: {
+                    'Authorization': `Bearer ${authState?.accessToken}`
+                }
+            });
+
+            if (response.status === 200) {
+                setUserFields(response.data || { fields: [] });
+            }
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || 'An error occurred';
+            console.log(error);
+            toast.error(errorMessage);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const fetchFieldsForUserType = async (type) => {
         setIsLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL}/templates/fetch`, {
+            const response = await axios.get(`${BASE_URL}/fieldMaping/fetch?role=${userType}`, {
                 headers: {
                     'Authorization': `Bearer ${authState?.accessToken}`
                 }
@@ -268,8 +204,6 @@ export default function FieldMaping() {
         }
     };
 
-
-
     return (
         <motion.div
             className="p-8 h-screen overflow-y-auto bg-gradient-to-br from-white to-blue-50"
@@ -285,7 +219,7 @@ export default function FieldMaping() {
                 className="mb-8 flex flex-col items-center"
                 variants={itemVariants}
             >
-                <h1 className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600 mb-4">
+                <h1 className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-600 mb-4 p-3">
                     Field Maping Management
                 </h1>
 
@@ -333,7 +267,7 @@ export default function FieldMaping() {
             >
                 <div className="p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
                     <h2 className="text-xl font-semibold flex items-center gap-2">
-                        <MdLabel /> Current Form Fields
+                        <MdLabel /> Current Field Maping
                     </h2>
                 </div>
 
@@ -341,53 +275,35 @@ export default function FieldMaping() {
                     <table className="w-full border-collapse">
                         <thead>
                             <tr className="bg-gray-50">
-                                <th className="p-3 text-left font-semibold text-gray-600 border-b">Refrence  No.</th>
-                                <th className="p-3 text-left font-semibold text-gray-600 border-b">File</th>
+                                <th className="p-3 text-left font-semibold text-gray-600 border-b">Key</th>
+                                <th className="p-3 text-left font-semibold text-gray-600 border-b">Mapping</th>
                                 <th className="p-3 text-center font-semibold text-gray-600 border-b">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <AnimatePresence>
-                                {fetchedFields.filter(field => field.documentName == userType).length > 0 ? (
-                                    fetchedFields.filter(field => field.documentName == userType).map((field, index) => (
-                                        <motion.tr
-                                            key={`fetched-${field._id || index}`}
-                                            className="border-b hover:bg-blue-50 transition-colors"
-                                            variants={itemVariants}
-                                            initial="hidden"
-                                            animate="visible"
-                                            exit="hidden"
-                                        >
-                                            <td className="p-3 font-medium text-gray-700">{field.referenceNo}</td>
-                                            <td className="p-3 text-blue-600 hover:cursor-pointer" onClick={() => { openFile(field) }}>
-                                                {userType}_{field.referenceNo}.{field.documentType}
-                                            </td>
-                                            <td className="p-3 text-center flex justify-center gap-3">
-                                                <button
-                                                    className="p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-colors"
-                                                    onClick={() => handleDelete(field._id)}
-                                                    disabled={isLoading}
-                                                >
-                                                    <MdDelete size={20} />
-                                                </button>
-                                                <button
-                                                    className="p-2 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition-colors"
-                                                    onClick={() => downloadFile(field)}
-                                                    disabled={isLoading}
-                                                >
-                                                    <AiOutlineDownload size={20} />
-                                                </button>
-
-                                            </td>
-                                        </motion.tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="4" className="p-4 text-center text-gray-500">
-                                            No fields found for {userType} form. Add some fields below.
+                                {fetchedFields.map((field, index) => (
+                                    <motion.tr
+                                        key={`fetched-${field._id || index}`}
+                                        className="border-b hover:bg-blue-50 transition-colors"
+                                        variants={itemVariants}
+                                        initial="hidden"
+                                        animate="visible"
+                                        exit="hidden"
+                                    >
+                                        <td className="p-3 font-medium text-gray-700">{field.key}</td>
+                                        <td className="p-3 font-medium text-gray-700">{field.dbKey}</td>
+                                        <td className="p-3 text-center flex justify-center gap-3">
+                                            <button
+                                                className="p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-colors"
+                                                onClick={() => handleDelete(field._id)}
+                                                disabled={isLoading}
+                                            >
+                                                <MdDelete size={20} />
+                                            </button>
                                         </td>
-                                    </tr>
-                                )}
+                                    </motion.tr>
+                                ))}
                             </AnimatePresence>
                         </tbody>
                     </table>
@@ -401,7 +317,7 @@ export default function FieldMaping() {
             >
                 <div className="p-4 bg-gradient-to-r from-green-500 to-teal-600 text-white">
                     <h2 className="text-xl font-semibold flex items-center gap-2">
-                        <FaPen /> Add New Template
+                        <FaPen /> Add New Maping
                     </h2>
                 </div>
 
@@ -409,8 +325,8 @@ export default function FieldMaping() {
                     <table className="w-full border-collapse">
                         <thead>
                             <tr className="bg-gray-50">
-                                <th className="p-3 text-left font-semibold text-gray-600 border-b">Reference No.</th>
-                                <th className="p-3 text-left font-semibold text-gray-600 border-b">File</th>
+                                <th className="p-3 text-left font-semibold text-gray-600 border-b">Key</th>
+                                <th className="p-3 text-left font-semibold text-gray-600 border-b">Mapping</th>
                                 <th className="p-3 text-center font-semibold text-gray-600 border-b">Actions</th>
                             </tr>
                         </thead>
@@ -421,38 +337,37 @@ export default function FieldMaping() {
                                         key={index}
                                         className="border-b"
                                         variants={itemVariants}
-                                        initial="hidden"
-                                        animate="visible"
-                                        exit={{ opacity: 0, x: -100 }}
                                     >
                                         <td className="p-3">
                                             <input
                                                 type="text"
-                                                value={field.referenceNo}
-                                                onChange={(e) => handleChange(index, "referenceNo", e.target.value)}
-                                                placeholder="Enter Reference No."
+                                                value={field.key}
+                                                onChange={(e) => handleChange(index, "key", e.target.value)}
+                                                placeholder="Enter Key"
                                                 required
                                                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent transition-all"
                                             />
                                         </td>
-                                        <td className="p-3 flex items-center space-x-2">
-                                            <input
-                                                type="file"
-                                                accept=".docx"
-                                                className="hidden"
-                                                ref={(el) => (fileInputRefs.current[index] = el)}
-                                                onChange={(e) => handleFileChange(index, e)}
-                                            />
-                                            <button
-                                                type="button"
-                                                className="p-2 bg-blue-50 text-blue-500 rounded-full hover:bg-blue-100 transition-colors"
-                                                onClick={() => triggerFileInput(index)}
+                                        <td className="p-3">
+                                            <select
+                                                value={field.mapping}
+                                                onChange={(e) => handleChange(index, "mapping", e.target.value)}
+                                                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent transition-all"
                                             >
-                                                <FaUpload size={16} />
-                                            </button>
-                                            {field.file && (
-                                                <span className="text-gray-600 text-sm">{field.file.name}</span>
-                                            )}
+                                                <option value="">Select Mapping</option>
+                                                {Object.keys(userFields).map((key) => (
+                                                    key !== 'fields' ? (
+                                                        <option key={key} value={key}>
+                                                            {key}
+                                                        </option>
+                                                    ) : null
+                                                ))}
+                                                {userFields.fields.map((f) => (
+                                                    <option key={f._id} value={f.label}>
+                                                        {f.label}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </td>
                                         <td className="p-3 text-center">
                                             <button
@@ -469,7 +384,7 @@ export default function FieldMaping() {
 
                             {fields.length === 0 && (
                                 <tr>
-                                    <td colSpan="4" className="p-4 text-center text-gray-500">
+                                    <td colSpan="3" className="p-4 text-center text-gray-500">
                                         Click "Add Field" to start creating your form
                                     </td>
                                 </tr>
@@ -477,6 +392,7 @@ export default function FieldMaping() {
                         </tbody>
                     </table>
                 </div>
+
 
                 <div className="p-4 bg-gray-50 flex flex-wrap gap-3 justify-end">
                     <motion.button

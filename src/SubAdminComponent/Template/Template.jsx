@@ -131,7 +131,7 @@ export default function Template() {
         }
     }
 
-    const userTypeOptions = ["TC", "CC", "Result", "Bonafide", "Admit Card"];
+    const userTypeOptions = ["TC", "CC", "Result", "Bonafide", "Admit Card", "Others"];
     const userTypeIcons = {
         Student: <MdSchool className="text-blue-500" />,
         Teacher: <MdPerson className="text-green-500" />,

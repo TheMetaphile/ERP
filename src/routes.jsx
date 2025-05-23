@@ -11,6 +11,7 @@ import TimeTableStructure from "./SubAdminComponent/timetable/utils/Upload/creat
 import SubjectManagement from "./SubAdminComponent/SubjectManagement/SubjectManagement.jsx";
 import AllStudentsListSubject from "./SubAdminComponent/AllocateSubject/AllStudentsListSubject.jsx";
 import CreateCategory from "./SubAdminComponent/SubAdminFee/DiscountCategories/CreateCategory.jsx";
+import OtherCertificate from "./SubAdminComponent/OtherCertificate/OtherCertificate.jsx";
 
 const FieldMaping = lazy(() => import("./SubAdminComponent/FieldMaping/FieldMaping.jsx"));
 const AssignSubjectSubAdmin = lazy(() => import("./SubAdminComponent/Subjects/utils/AssignSubjectSubAdmin"));
@@ -1657,6 +1658,11 @@ const router = createBrowserRouter([
         path: '/Sub-Admin/FieldMaping',
         element: <SuspenseWrapper fallback={Loading}>
           <FieldMaping /></SuspenseWrapper>
+      },
+      {
+        path: "/Sub-Admin/OtherCertificates",
+        element: <SuspenseWrapper fallback={Loading}>
+          <OtherCertificate /></SuspenseWrapper>
       },
     ]
   },
