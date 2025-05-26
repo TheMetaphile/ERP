@@ -143,7 +143,13 @@ export default function SubadminDrawer({ isOpen }) {
                                             : "hover:bg-gray-100"
                                         } transition-all duration-200`}
                                 >
-                                    <div onClick={() => handleClick(index)}>
+                                    <div onClick={() => {
+                                        if (menuItem.title === "My Inbox") {
+                                            window.open(menuItem.route, "_blank", "noopener,noreferrer");
+                                        } else {
+                                            handleClick(index);
+                                        }
+                                    }}>
                                         <ExpansionTile
                                             image={menuItem.image}
                                             alternateText={menuItem.alt}
@@ -154,6 +160,7 @@ export default function SubadminDrawer({ isOpen }) {
                                             route={menuItem.route}
                                             darkMode={darkMode}
                                             isActive={active === index}
+                                            openInNewTab={menuItem.title === "My Inbox"}
                                         />
                                     </div>
                                 </motion.div>

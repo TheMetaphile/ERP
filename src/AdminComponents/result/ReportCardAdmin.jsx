@@ -418,9 +418,9 @@ function ReportCardAdmin() {
                     initial="hidden"
                     animate="visible"
                   >
-                    <td className="px-6 py-4 whitespace-nowrap font-medium">
-                      {detail.name}
-
+                    <td className="px-6 py-4 whitespace-nowrap font-medium flex justify-center">
+                      <img src={detail.profileLink} alt="" className="h-8 w-8 rounded-full" />
+                      <h1 className="text-base w-32">{detail.name}</h1>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{detail.currentClass}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{detail.section}</td>
@@ -467,8 +467,8 @@ function ReportCardAdmin() {
             onClick={() => downloadCertificate('Result')}
             disabled={selectedStudents.length === 0 || !selectedResultReference || downloadLoading}
             className={`flex items-center px-4 py-2 rounded-lg transition-all duration-200 ${selectedStudents.length === 0 || !selectedResultReference || downloadLoading
-                ? themeClasses.button.disabled
-                : themeClasses.button.primary
+              ? themeClasses.button.disabled
+              : themeClasses.button.primary
               }`}
           >
             {downloadLoading ? (

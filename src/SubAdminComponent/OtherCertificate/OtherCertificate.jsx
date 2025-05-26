@@ -231,19 +231,17 @@ function OtherCertificate() {
       }
 
       let selectedTemplate;
-      let endpoint;
 
-      if (type === 'Result') {
+      if (type === 'Others') {
         selectedTemplate = customTemplate || selectedResultReference;
         if (!selectedTemplate) {
-          toast.warn("Please select Result Template");
+          toast.warn("Please select Template");
           setDownloadLoading(false);
           return;
         }
-        endpoint = 'result';
       }
       console.log(students, '11', selectedTemplate)
-      const apiUrl = `${BASE_URL}/certificate/${endpoint}/${selectedSession}/${selectedTemplate}`;
+      const apiUrl = `${BASE_URL}/certificate/api/placeholders/${selectedTemplate}`;
 
       const response = await axios.post(apiUrl, {
         students: students,
@@ -260,7 +258,7 @@ function OtherCertificate() {
 
       const link = document.createElement("a");
       link.href = pdfUrl;
-      link.download = `${type === 'Result' ? 'Result_Certificate' : ''}.pdf`;
+      link.download = `${type === 'Others' ? 'Other_Certificate' : ''}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -416,9 +414,9 @@ function OtherCertificate() {
                     initial="hidden"
                     animate="visible"
                   >
-                    <td className="px-6 py-4 whitespace-nowrap font-medium">
-                      {detail.name}
-
+                    <td className="px-6 py-4 whitespace-nowrap font-medium flex justify-center">
+                      <img src={detail.profileLink} alt="" className="h-8 w-8 rounded-full" />
+                      <h1 className="text-base w-32">{detail.name}</h1>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{detail.currentClass}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{detail.section}</td>
@@ -462,7 +460,7 @@ function OtherCertificate() {
         )}
         <div className='p-3 flex justify-center'>
           <button
-            onClick={() => downloadCertificate('Result')}
+            onClick={() => downloadCertificate('Others')}
             disabled={selectedStudents.length === 0 || !selectedResultReference || downloadLoading}
             className={`flex items-center px-4 py-2 rounded-lg transition-all duration-200 ${selectedStudents.length === 0 || !selectedResultReference || downloadLoading
               ? themeClasses.button.disabled

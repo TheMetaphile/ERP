@@ -82,7 +82,8 @@ export default function FieldMaping() {
             newFields[index] = {
                 ...newFields[index],
                 mapping: selectedField ? selectedField.label : value,
-                type: selectedField ? selectedField.type : ""
+                type: selectedField ? selectedField.type : "",
+                isExtra: !!selectedField
             };
         } else {
             newFields[index][field] = value;
@@ -102,7 +103,8 @@ export default function FieldMaping() {
         }
         const fieldsWithRole = fields.map(field => ({
             ...field,
-            role: userType
+            role: userType,
+            isExtra: field.isExtra
         }));
 
         console.log(fieldsWithRole);
@@ -355,14 +357,13 @@ export default function FieldMaping() {
                                                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent transition-all"
                                             >
                                                 <option value="">Select Mapping</option>
-                                                {Object.keys(userFields).map((key) => (
-                                                    key !== 'fields' ? (
-                                                        <option key={key} value={key}>
-                                                            {key}
-                                                        </option>
-                                                    ) : null
+                                                {userFields?.userInfo?.map((key) => (
+                                                    <option key={key} value={key}>
+                                                        {key}
+                                                    </option>
                                                 ))}
-                                                {userFields.fields.map((f) => (
+
+                                                {userFields?.fields?.map((f) => (
                                                     <option key={f._id} value={f.label}>
                                                         {f.label}
                                                     </option>

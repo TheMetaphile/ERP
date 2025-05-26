@@ -12,6 +12,7 @@ import SubjectManagement from "./SubAdminComponent/SubjectManagement/SubjectMana
 import AllStudentsListSubject from "./SubAdminComponent/AllocateSubject/AllStudentsListSubject.jsx";
 import CreateCategory from "./SubAdminComponent/SubAdminFee/DiscountCategories/CreateCategory.jsx";
 import OtherCertificate from "./SubAdminComponent/OtherCertificate/OtherCertificate.jsx";
+import MyInbox from "./SubAdminComponent/MyInbox/MyInbox.jsx";
 
 const FieldMaping = lazy(() => import("./SubAdminComponent/FieldMaping/FieldMaping.jsx"));
 const AssignSubjectSubAdmin = lazy(() => import("./SubAdminComponent/Subjects/utils/AssignSubjectSubAdmin"));
@@ -227,6 +228,14 @@ const router = createBrowserRouter([
     path: "/newPassword",
     element: <SuspenseWrapper >
       <SetNewPassword /></SuspenseWrapper>,
+  },
+  {
+    path: "/Sub-Admin/MyInbox",
+    element: (
+      <SuspenseWrapper>
+        <MyInbox />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/Student-Dashboard",

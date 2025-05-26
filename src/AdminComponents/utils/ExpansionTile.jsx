@@ -3,7 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronRight, FaCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-function ExpansionTile({ title, childrens, image, alternateText, route, darkMode = false, isActive = false }) {
+function ExpansionTile({
+  title,
+  childrens,
+  image,
+  alternateText,
+  route,
+  darkMode = false,
+  isActive = false,
+  openInNewTab = false,
+}) {
   const [expanded, setExpanded] = useState(isActive);
 
   const toggleExpanded = (e) => {
@@ -14,44 +23,35 @@ function ExpansionTile({ title, childrens, image, alternateText, route, darkMode
   };
 
   const childVariants = {
-    hidden: { 
+    hidden: {
       height: 0,
-      opacity: 0
+      opacity: 0,
     },
-    visible: { 
+    visible: {
       height: 'auto',
       opacity: 1,
-      transition: { 
-        height: {
-          duration: 0.3
-        },
-        opacity: { 
-          duration: 0.25,
-          delay: 0.1
-        }
-      }
+      transition: {
+        height: { duration: 0.3 },
+        opacity: { duration: 0.25, delay: 0.1 },
+      },
     },
     exit: {
       height: 0,
       opacity: 0,
-      transition: { 
-        height: {
-          duration: 0.2
-        },
-        opacity: { 
-          duration: 0.15 
-        }
-      }
-    }
+      transition: {
+        height: { duration: 0.2 },
+        opacity: { duration: 0.15 },
+      },
+    },
   };
 
   const iconVariants = {
     collapsed: { rotate: 0 },
-    expanded: { rotate: 90 }
+    expanded: { rotate: 90 },
   };
 
   const itemClasses = `
-    flex  px-2 py-2 
+    flex px-2 py-2
     ${darkMode ? 'text-gray-200' : 'text-gray-700'}
     ${isActive ? (darkMode ? 'bg-transparent' : 'bg-transparent') : ''}
     rounded-lg transition-colors
@@ -59,65 +59,61 @@ function ExpansionTile({ title, childrens, image, alternateText, route, darkMode
 
   const childClasses = `
     flex items-center gap-2.5 pl-9 py-2.5 my-1 rounded-md
-    ${darkMode 
-      ? 'text-gray-300 hover:bg-gray-800' 
-      : 'text-gray-600 hover:bg-blue-50'
-    }
+    ${darkMode ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-600 hover:bg-blue-50'}
     cursor-pointer transition-colors
   `;
 
-  const svgFilter = darkMode 
-    ? 'invert(100%) opacity(80%)' 
-    : 'none';
+  const svgFilter = darkMode ? 'invert(100%) opacity(80%)' : 'none';
 
   return (
-    <div className="w-full ">
+    <div className="w-full">
       {childrens && childrens.length > 0 ? (
         <>
           <div className={itemClasses} onClick={toggleExpanded}>
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 flex items-center justify-center rounded-md ${
-                  isActive
+                <div
+                  className={`w-10 h-10 flex items-center justify-center rounded-md ${isActive
                     ? darkMode
                       ? 'bg-blue-900/60 text-blue-400'
                       : 'bg-blue-200/70 text-blue-700'
                     : darkMode
                       ? 'bg-gray-800 text-gray-300'
                       : 'bg-gray-100 text-gray-500'
-                }`}>
+                    }`}
+                >
                   {image ? (
-                    <img 
-                      src={image} 
-                      alt={alternateText} 
+                    <img
+                      src={image}
+                      alt={alternateText}
                       className="w-8 h-8 object-contain"
-                      style={{ filter: svgFilter }} 
+                      style={{ filter: svgFilter }}
                     />
                   ) : (
                     <span className="text-lg">•</span>
                   )}
                 </div>
-                <span className={`text-base ${
-                  isActive 
-                    ? darkMode
-                      ? 'text-blue-400 font-medium'
-                      : 'text-blue-800 font-medium'
-                    : 'font-normal'
-                }`}>
+                <span
+                  className={`text-base ${isActive ? (darkMode ? 'text-blue-400 font-medium' : 'text-blue-800 font-medium') : 'font-normal'
+                    }`}
+                >
                   {title}
                 </span>
               </div>
               <motion.div
                 variants={iconVariants}
                 initial="collapsed"
-                animate={expanded ? "expanded" : "collapsed"}
+                animate={expanded ? 'expanded' : 'collapsed'}
                 transition={{ duration: 0.2 }}
               >
-                <FaChevronRight size={12} className={isActive && darkMode ? 'text-blue-400' : isActive ? 'text-blue-600' : ''} />
+                <FaChevronRight
+                  size={12}
+                  className={isActive && darkMode ? 'text-blue-400' : isActive ? 'text-blue-600' : ''}
+                />
               </motion.div>
             </div>
           </div>
-          
+
           <AnimatePresence initial={false}>
             {expanded && (
               <motion.div
@@ -144,36 +140,66 @@ function ExpansionTile({ title, childrens, image, alternateText, route, darkMode
             )}
           </AnimatePresence>
         </>
-      ) : (
-        <Link to={route} className={itemClasses}>
+      ) : openInNewTab ? (
+        <div className={itemClasses} style={{ cursor: 'pointer' }}>
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 flex items-center justify-center rounded-md ${
-              isActive
+            <div
+              className={`w-10 h-10 flex items-center justify-center rounded-md ${isActive
                 ? darkMode
                   ? 'bg-blue-900/60 text-blue-400'
                   : 'bg-blue-200/70 text-blue-700'
                 : darkMode
                   ? 'bg-gray-800 text-gray-300'
                   : 'bg-gray-100 text-gray-500'
-            }`}>
+                }`}
+            >
               {image ? (
-                <img 
-                  src={image} 
-                  alt={alternateText} 
+                <img
+                  src={image}
+                  alt={alternateText}
                   className="w-8 h-8 object-contain"
-                  style={{ filter: svgFilter }} 
+                  style={{ filter: svgFilter }}
                 />
               ) : (
                 <span className="text-lg">•</span>
               )}
             </div>
-            <span className={`text-base ${
-              isActive 
+            <span
+              className={`text-base ${isActive ? (darkMode ? 'text-blue-400 font-medium' : 'text-blue-800 font-medium') : 'font-normal'
+                }`}
+            >
+              {title}
+            </span>
+          </div>
+        </div>
+      ) : (
+        <Link to={route} className={itemClasses}>
+          <div className="flex items-center gap-3">
+            <div
+              className={`w-10 h-10 flex items-center justify-center rounded-md ${isActive
                 ? darkMode
-                  ? 'text-blue-400 font-medium'
-                  : 'text-blue-800 font-medium'
-                : 'font-normal'
-            }`}>
+                  ? 'bg-blue-900/60 text-blue-400'
+                  : 'bg-blue-200/70 text-blue-700'
+                : darkMode
+                  ? 'bg-gray-800 text-gray-300'
+                  : 'bg-gray-100 text-gray-500'
+                }`}
+            >
+              {image ? (
+                <img
+                  src={image}
+                  alt={alternateText}
+                  className="w-8 h-8 object-contain"
+                  style={{ filter: svgFilter }}
+                />
+              ) : (
+                <span className="text-lg">•</span>
+              )}
+            </div>
+            <span
+              className={`text-base ${isActive ? (darkMode ? 'text-blue-400 font-medium' : 'text-blue-800 font-medium') : 'font-normal'
+                }`}
+            >
               {title}
             </span>
           </div>
