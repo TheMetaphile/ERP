@@ -230,7 +230,7 @@ const router = createBrowserRouter([
       <SetNewPassword /></SuspenseWrapper>,
   },
   {
-    path: "/Sub-Admin/MyInbox",
+    path: "/Sub-Admin/MyInbox/:section?",
     element: (
       <SuspenseWrapper>
         <MyInbox />

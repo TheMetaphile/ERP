@@ -222,7 +222,7 @@ function ReportCardSubAdmin() {
 
   const downloadCertificate = async (type, customStudent = null, customTemplate = null) => {
     setDownloadLoading(true);
-    if (!selectedSession || !selectedTemplate) {
+    if (!selectedSession) {
       toast.warn('Select all filters');
       return;
     }

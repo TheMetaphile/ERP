@@ -26,6 +26,7 @@ function OtherCertificate() {
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [fetchedFields, setFetchedFields] = useState([]);
   const [selectedResultReference, setSelectedResultReference] = useState('');
+  const [selectedRole, setSelectedRole] = useState('Teacher');
 
   useEffect(() => {
     localStorage.setItem('Class', Class);
@@ -64,20 +65,41 @@ function OtherCertificate() {
 
   useEffect(() => {
     setUserData([]);
+    setSelectedStudents([]);
     setStart(0);
     setAllDataFetched(false);
-  }, [Class, Section, selectedSession]);
+  }, [Class, Section, selectedSession, selectedRole]);
 
   console.log('ll', Class, Section, selectedSession)
   useEffect(() => {
     fetchStudents();
-  }, [authState?.accessToken, Class, Section, selectedSession]);
+  }, [authState?.accessToken, Class, Section, selectedSession, selectedRole]);
 
   const fetchStudents = async () => {
     setLoading(true);
     try {
       console.log(start, "-", end);
-      const response = await axios.post(`${BASE_URL}/fetchMultiple/student`, {
+
+      let endpoint = '';
+      let responseKey = '';
+
+      if (selectedRole === 'Student') {
+        endpoint = 'fetchMultiple/student';
+        responseKey = 'Students';
+      } else if (selectedRole === 'Teacher') {
+        endpoint = 'fetchMultiple/teacher';
+        responseKey = 'Teachers';
+      } else if (selectedRole === 'SubAdmin') {
+        endpoint = 'fetchMultiple/subadmin';
+        responseKey = 'SubAdmins';
+      } else {
+        setError('Invalid role selected');
+        setTimeout(() => setError(''), 2000);
+        setLoading(false);
+        return;
+      }
+
+      const response = await axios.post(`${BASE_URL}/${endpoint}`, {
         accessToken: authState?.accessToken,
         currentClass: Class,
         section: Section,
@@ -85,40 +107,34 @@ function OtherCertificate() {
         start: start,
         session: selectedSession
       });
-      console.log("API response:", response.data, response.data.Students.length);
 
-      if (response.data.Students) {
-        // const users = response.data.Students.map(user => ({
-        //     ...user,
-        //     profileLogo: user.profileLink || profilelogo,
-        // }));
+      console.log("API response:", response.data, response.data[responseKey]?.length);
 
-        const list = response.data.Students.length;
+      const fetchedData = response.data[responseKey];
+
+      if (fetchedData) {
+        const list = fetchedData.length;
         if (list < end) {
           toast.success('All data fetched');
-          console.log('All data fetched')
+          console.log('All data fetched');
           setAllDataFetched(true);
         }
-        setUserData(prevUsers => [...prevUsers, ...response.data.Students]);
 
-
+        setUserData(prevUsers => [...prevUsers, ...fetchedData]);
       } else {
         setError('Unexpected response format');
-        setTimeout(() => {
-          setError('');
-        }, 2000);
+        setTimeout(() => setError(''), 2000);
       }
 
       setLoading(false);
     } catch (err) {
       setError(err.message);
       console.log(err);
-      setTimeout(() => {
-        setError('');
-      }, 2000);
+      setTimeout(() => setError(''), 2000);
       setLoading(false);
     }
   };
+
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -245,7 +261,8 @@ function OtherCertificate() {
 
       const response = await axios.post(apiUrl, {
         students: students,
-        templateReference: selectedTemplate
+        templateReference: selectedTemplate,
+        role: selectedRole
       }, {
         headers: {
           Authorization: `Bearer ${authState?.accessToken}`
@@ -290,7 +307,7 @@ function OtherCertificate() {
         className="flex justify-between items-center py-4  text-black mb-4 mobile:max-tablet:mb-0"
         variants={itemVariants}
       >
-        <h1 className="text-3xl font-semibold mobile:max-tablet:text-lg">Report Card</h1>
+        <h1 className="text-3xl font-semibold mobile:max-tablet:text-lg">Other Certificates</h1>
         <motion.button
           className="p-2 bg-blue-500 rounded-full shadow-md hover:bg-blue-400 transition-colors duration-200 mobile:max-tablet:block hidden"
           onClick={() => setDropdownVisible(!isDropdownVisible)}
@@ -300,14 +317,28 @@ function OtherCertificate() {
           <FaFilter />
         </motion.button>
         <motion.div className="mobile:max-tablet:hidden flex justify-center items-center gap-2" variants={itemVariants}>
-          <Selection
-            Class={Class}
-            Section={Section}
-            Session={selectedSession}
-            handleClassChange={handleClassChange}
-            handleSectionChange={handleSectionChange}
-            handleSessionChange={handleSessionChange}
-          />
+          {selectedRole === 'Student' && (
+            <Selection
+              Class={Class}
+              Section={Section}
+              Session={selectedSession}
+              handleClassChange={handleClassChange}
+              handleSectionChange={handleSectionChange}
+              handleSessionChange={handleSessionChange}
+            />
+          )}
+
+          <select
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value)}
+            className="px-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2"
+          >
+            <option value="">Select Role</option>
+            <option value="Student">Student</option>
+            <option value="Teacher">Teacher</option>
+            <option value="SubAdmin">Subadmin</option>
+          </select>
+
           <select
             value={selectedResultReference}
             onChange={(e) => setSelectedResultReference(e.target.value)}
@@ -334,14 +365,28 @@ function OtherCertificate() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
         >
-          <Selection
-            Class={Class}
-            Section={Section}
-            Session={selectedSession}
-            handleClassChange={handleClassChange}
-            handleSectionChange={handleSectionChange}
-            handleSessionChange={handleSessionChange}
-          />
+          {selectedRole === 'Student' && (
+            <Selection
+              Class={Class}
+              Section={Section}
+              Session={selectedSession}
+              handleClassChange={handleClassChange}
+              handleSectionChange={handleSectionChange}
+              handleSessionChange={handleSessionChange}
+            />
+          )}
+
+          <select
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value)}
+            className="px-4 py-2 border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 rounded-md mobile:max-tablet:text-xs mobile:max-tablet:px-1 mobile:max-tablet:py-2"
+          >
+            <option value="">Select Role</option>
+            <option value="Student">Student</option>
+            <option value="Teacher">Teacher</option>
+            <option value="SubAdmin">Subadmin</option>
+          </select>
+
           <select
             value={selectedResultReference}
             onChange={(e) => setSelectedResultReference(e.target.value)}
@@ -382,8 +427,13 @@ function OtherCertificate() {
             <thead className={`transition-colors duration-300 ${themeClasses.table.header}`}>
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Class</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Section</th>
+                {selectedRole === 'Student' && (
+                  <>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Class</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Section</th>
+                  </>
+                )}
+
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                   <div className="flex items-center">
@@ -418,8 +468,13 @@ function OtherCertificate() {
                       <img src={detail.profileLink} alt="" className="h-8 w-8 rounded-full" />
                       <h1 className="text-base w-32">{detail.name}</h1>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">{detail.currentClass}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{detail.section}</td>
+                    {selectedRole === 'Student' && (
+                      <>
+                        <td className="px-6 py-4 whitespace-nowrap">{detail.currentClass}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{detail.section}</td>
+                      </>
+                    )}
+
                     <td className="px-6 py-4 whitespace-nowrap">{detail.email}</td>
 
                     <td className="px-6 py-4 whitespace-nowrap">
