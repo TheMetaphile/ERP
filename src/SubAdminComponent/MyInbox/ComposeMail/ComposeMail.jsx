@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { LuXCircle } from "react-icons/lu";
-
+import { BASE_URL } from '../../../Config';
+import AuthContext from '../../../Context/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 const ComposeEmail = () => {
+    const { authState } = useContext(AuthContext);
     const [to, setTo] = useState('');
     const [cc, setCc] = useState('');
-    const [bcc, setBcc] = useState('');
     const [subject, setSubject] = useState('');
     const [body, setBody] = useState('');
     const [attachments, setAttachments] = useState([]);
@@ -30,39 +34,58 @@ const ComposeEmail = () => {
     };
 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        const formData = new FormData();
-        formData.append('to', to);
-        formData.append('cc', cc);
-        formData.append('bcc', bcc);
-        formData.append('subject', subject);
-        formData.append('body', body);
-        attachments.forEach((file, index) => {
-            formData.append('attachments', file);
-        });
+    const toRecipients = to.split(',').map(item => item.trim()).filter(Boolean);
+    const ccRecipients = cc.split(',').map(item => item.trim()).filter(Boolean);
 
-        console.log('Sending email with data:', {
-            to,
-            cc,
-            bcc,
-            subject,
-            body,
-            attachments,
-        });
+    if (toRecipients.length === 0) {
+        toast.warning("Please add at least one recipient in 'To'");
+        return;
+    }
 
-        // Example fetch
-        /*
-        fetch('/api/send-email', {
-          method: 'POST',
-          body: formData,
-        })
-        .then(response => response.json())
-        .then(data => console.log('Email sent', data))
-        .catch(err => console.error('Send error', err));
-        */
-    };
+    try {
+        const payload = {
+            Sender: String(authState?.userDetails?._id || ""),
+            MessageBody: body || "",
+            Link: "",
+            Subject: subject || "",
+            DraftStatus: false,
+            IsClosed: false,
+            Role: authState?.userDetails?.rolee || "",
+            Attachment: null,  // You can extend this to base64 if needed
+            ToRecipients: toRecipients,
+            CcRecipients: ccRecipients
+        };
+
+        const response = await axios.post(
+            `${BASE_URL}/myInbox/start-conversation`,
+            payload,
+            {
+                headers: {
+                    Authorization: `Bearer ${authState?.accessToken}`,
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        if (response.status === 200) {
+            toast.success("Message sent successfully");
+            setTo('');
+            setCc('');
+            setSubject('');
+            setBody('');
+            setAttachments([]);
+        }
+    } catch (error) {
+        console.error(error);
+        toast.error("Failed to send message");
+    }
+};
+
+
+
 
     const modules = {
         toolbar: [
@@ -81,6 +104,7 @@ const ComposeEmail = () => {
 
     return (
         <div className=" p-4 bg-white shadow rounded-lg">
+            <ToastContainer position="top-right" autoClose={3000} />
             <h2 className="text-2xl font-semibold mb-4">Compose Email</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
@@ -104,16 +128,6 @@ const ComposeEmail = () => {
                             onChange={(e) => setCc(e.target.value)}
                             className="w-full mt-1 p-2 border rounded"
                             placeholder="cc@example.com"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium">BCC:</label>
-                        <input
-                            type="text"
-                            value={bcc}
-                            onChange={(e) => setBcc(e.target.value)}
-                            className="w-full mt-1 p-2 border rounded"
-                            placeholder="bcc@example.com"
                         />
                     </div>
                 </div>

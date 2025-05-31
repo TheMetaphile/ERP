@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Star, UserX } from 'react-feather';
-import { getMailsBySection, getSectionTitle } from '../MailData'; 
+import { getMailsBySection, getSectionTitle } from '../MailData';
 
 function MailList({ setSelectedMail, selectedMail, isOpen, onClose, darkMode, currentSection }) {
     const emails = getMailsBySection(currentSection);
@@ -9,7 +9,7 @@ function MailList({ setSelectedMail, selectedMail, isOpen, onClose, darkMode, cu
     return (
         <div className={`${darkMode ? 'bg-gray-50 dark:bg-gray-900' : 'bg-gray-50'} transform transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} flex flex-col border-r border-gray-200 dark:border-gray-700 h-full`}>
             <div className={`p-4 border-b ${darkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-white'}`}>
-                <div className="flex items-center justify-between mb-4">
+                {/* <div className="flex items-center justify-between mb-4">
                     <h2 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                         {sectionTitle}
                     </h2>
@@ -19,7 +19,7 @@ function MailList({ setSelectedMail, selectedMail, isOpen, onClose, darkMode, cu
                     >
                         <UserX className="w-5 h-5" />
                     </button>
-                </div>
+                </div> */}
 
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />

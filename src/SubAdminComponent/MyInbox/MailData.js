@@ -1,5 +1,18 @@
 export const getMailsBySection = (section) => {
     const allMails = {
+        default: [
+            {
+                id: 401,
+                subject: "Congratulations! You've won!",
+                sender: "Suspicious Sender",
+                email: "spam@suspicious.com",
+                preview: "You've won a million dollars! Click here to claim your prize...",
+                time: "2 days ago",
+                unread: true,
+                starred: false,
+                avatar: "SS"
+            }
+        ],
         inbox: [
             {
                 id: 1,
