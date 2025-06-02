@@ -49,12 +49,10 @@ const handleSubmit = async (e) => {
         const payload = {
             Sender: String(authState?.userDetails?._id || ""),
             MessageBody: body || "",
-            Link: "",
             Subject: subject || "",
             DraftStatus: false,
             IsClosed: false,
             Role: authState?.userDetails?.rolee || "",
-            Attachment: null,  // You can extend this to base64 if needed
             ToRecipients: toRecipients,
             CcRecipients: ccRecipients
         };
@@ -104,7 +102,6 @@ const handleSubmit = async (e) => {
 
     return (
         <div className=" p-4 bg-white shadow rounded-lg">
-            <ToastContainer position="top-right" autoClose={3000} />
             <h2 className="text-2xl font-semibold mb-4">Compose Email</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">

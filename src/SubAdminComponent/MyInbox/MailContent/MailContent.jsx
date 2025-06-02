@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Mail, Star, Trash2 } from 'react-feather';
 import {
     Archive,
@@ -7,8 +7,15 @@ import {
     Folder,
 } from 'lucide-react';
 import { LuArrowDownUp } from "react-icons/lu";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AuthContext from '../../../Context/AuthContext';
+import { BASE_URL } from '../../../Config';
+import axios from 'axios';
 
 function MailContent({ mail, darkMode }) {
+    const { authState } = useContext(AuthContext);
+
     const [showCreateFolderModal, setShowCreateFolderModal] = useState(false);
     const [newFolderName, setNewFolderName] = useState('');
     const [folders, setFolders] = useState([
@@ -28,11 +35,72 @@ function MailContent({ mail, darkMode }) {
         setShowCreateFolderModal(true);
     };
 
-    const handleSaveFolder = () => {
-        if (newFolderName.trim()) {
-            setFolders(prev => [...prev, { id: Date.now(), name: newFolderName.trim() }]);
-            setNewFolderName('');
-            setShowCreateFolderModal(false);
+    useEffect(() => {
+        const fetchCustomFolders = async () => {
+            try {
+                const response = await axios.post(
+                    `${BASE_URL}/myInbox/fetch/getFolder`,
+                    { UserID: authState?.userDetails?._id || '' },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${authState?.accessToken}`,
+                            'Content-Type': 'application/json',
+                        }
+                    }
+                );
+                const customFolders = response.data.Folders.map((folder, index) => ({
+                    id: `custom-${index}`,
+                    name: folder.Name,
+                    _id: folder._id,
+                    unSeenCount: folder.unSeenCount
+                }));
+
+                setFolders(prev => [...prev, ...customFolders]);
+            } catch (error) {
+                console.error('Error fetching folders:', error?.response?.data?.message || error.message);
+            }
+        };
+
+        if (authState?.userDetails?._id) {
+            fetchCustomFolders();
+        }
+    }, [authState?.userDetails?._id]);
+
+    const handleSaveFolder = async () => {
+        if (!newFolderName.trim()) return;
+
+        try {
+            const payload = {
+                FolderName: newFolderName.trim(),
+                UserID: authState?.userDetails?._id || ''
+            };
+
+            const response = await axios.post(
+                `${BASE_URL}/myInbox/createFolder`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+
+            if (response.status === 200) {
+                const newFolder = {
+                    id: response.data.result?.FolderID || Date.now(),
+                    name: newFolderName.trim()
+                };
+                setFolders(prev => [...prev, newFolder]);
+                setNewFolderName('');
+                setShowCreateFolderModal(false);
+                toast.success('Folder created successfully');
+            } else {
+                toast.error(response.data?.error || 'Failed to create folder');
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error(error.response?.data?.error || 'An error occurred while creating the folder');
         }
     };
 

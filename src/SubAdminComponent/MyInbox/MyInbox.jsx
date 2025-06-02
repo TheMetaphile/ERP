@@ -6,6 +6,8 @@ import MailList from './MailList/MailList';
 import MailContent from './MailContent/MailContent';
 import ComposeMail from './ComposeMail/ComposeMail';
 import { ChevronLeft, ChevronRight, Menu } from 'react-feather';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function MyInbox() {
     const { section } = useParams(); // Get current section from URL
@@ -55,6 +57,7 @@ function MyInbox() {
 
     return (
         <div className={`h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+            <ToastContainer />
             <div className={`lg:hidden fixed top-0 left-0 right-0 z-50 ${darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border-b p-4 flex items-center justify-between`}>
                 <div className="flex items-center gap-3">
                     <button onClick={() => setSidebarOpen(true)} className={`p-2 rounded-lg ${darkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'}`}>
