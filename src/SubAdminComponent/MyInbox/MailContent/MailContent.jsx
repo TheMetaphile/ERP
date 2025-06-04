@@ -16,6 +16,7 @@ function MailContent({ mail, darkMode }) {
     const { authState } = useContext(AuthContext);
     const [showCreateFolderModal, setShowCreateFolderModal] = useState(false);
     const [newFolderName, setNewFolderName] = useState('');
+    const [tags, setTags] = useState([]);
     const [folders, setFolders] = useState([
         { id: 1, name: 'Archived' },
         { id: 2, name: 'Starred' },
@@ -23,8 +24,6 @@ function MailContent({ mail, darkMode }) {
         { id: 4, name: 'Favourite' },
 
     ]);
-    const [tags, setTags] = useState([]);
-
 
     const handleCreateNewFolder = () => {
         setShowCreateFolderModal(true);
@@ -200,6 +199,35 @@ function MailContent({ mail, darkMode }) {
         }
     };
 
+
+    useEffect(() => {
+        if (!mail) return;
+        const markSeen = async () => {
+            try {
+                const payload = {
+                    MessageID: mail.id,
+                    UserID: authState?.userDetails?._id,
+                    seen: true
+                };
+
+                const response = await axios.put(
+                    `${BASE_URL}/myInbox/update/markSeen`,
+                    payload,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${authState?.accessToken}`,
+                            'Content-Type': 'application/json',
+                        }
+                    }
+                );
+            } catch (err) {
+                console.error(err);
+                toast.error(err);
+            }
+        };
+
+        markSeen();
+    }, [authState?.userDetails?._id, mail]);
 
     if (!mail) {
         return (
