@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Mail, Star, Trash2 } from 'react-feather';
 import {
     Archive,
     Heart,
-    ShieldAlert,
     Folder,
 } from 'lucide-react';
 import { LuArrowDownUp } from "react-icons/lu";
@@ -15,20 +14,16 @@ import axios from 'axios';
 
 function MailContent({ mail, darkMode }) {
     const { authState } = useContext(AuthContext);
-
     const [showCreateFolderModal, setShowCreateFolderModal] = useState(false);
     const [newFolderName, setNewFolderName] = useState('');
     const [folders, setFolders] = useState([
         { id: 1, name: 'Archived' },
         { id: 2, name: 'Starred' },
         { id: 3, name: 'Deleted' },
-        { id: 4, name: 'Favourate' },
-        { id: 5, name: 'Spam' },
+        { id: 4, name: 'Favourite' },
 
     ]);
-    const [priorityMenuOpen, setPriorityMenuOpen] = useState(false);
-    const [priority, setPriority] = useState(null);
-    const priorityRef = useRef(null);
+    const [tags, setTags] = useState([]);
 
 
     const handleCreateNewFolder = () => {
@@ -64,6 +59,26 @@ function MailContent({ mail, darkMode }) {
         if (authState?.userDetails?._id) {
             fetchCustomFolders();
         }
+    }, [authState?.userDetails?._id]);
+
+    useEffect(() => {
+        const fetchTags = async () => {
+            try {
+                const res = await axios.post(`${BASE_URL}/myInbox/fetch/getTag`, {
+                    UserID: authState?.userDetails?._id,
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`,
+                    }
+                });
+
+                setTags(res.data.Tags || []);
+            } catch (err) {
+                console.error('Failed to load tags:', err);
+            }
+        };
+
+        fetchTags();
     }, [authState?.userDetails?._id]);
 
     const handleSaveFolder = async () => {
@@ -104,26 +119,85 @@ function MailContent({ mail, darkMode }) {
         }
     };
 
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (priorityRef.current && !priorityRef.current.contains(event.target)) {
-                setPriorityMenuOpen(false);
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    const handleMarkAs = async (conversationID, actionFlags) => {
+        try {
+            const payload = {
+                ConversationID: conversationID,
+                UserID: authState?.userDetails?._id,
+                ...actionFlags
+            };
 
-    const priorityColor = {
-        top: 'text-red-600',
-        moderate: 'text-yellow-500',
-        least: 'text-green-600',
+            const response = await axios.put(
+                `${BASE_URL}/myInbox/update/markAs`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+
+            console.log('Status updated:', response.data);
+        } catch (error) {
+            console.error('Failed to update status:', error);
+        }
     };
 
-    const priorityLabel = {
-        top: 'Top',
-        moderate: 'Moderate',
-        least: 'Least',
+    const handleApplyTag = async (tagId, mailId) => {
+        try {
+            const response = await axios.post(
+                `${BASE_URL}/myInbox/applyTag`,
+                {
+                    TagID: tagId,
+                    ConversationID: mailId,
+                    UserID: authState?.userDetails?._id,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                toast.success('Tag applied successfully');
+            } else {
+                toast.error(response.data?.error || 'Failed to apply tag');
+            }
+        } catch (error) {
+            console.error('Error applying tag:', error);
+            toast.error(error.response?.data?.error || 'An error occurred while applying the tag');
+        }
+    };
+
+    const handleMoveToFolder = async (folderId, mailId) => {
+        try {
+            const response = await axios.post(
+                `${BASE_URL}/myInbox/moveToFolder`,
+                {
+                    FolderID: folderId,
+                    ConversationID: mailId,
+                    UserID: authState?.userDetails?._id,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                toast.success('Mail moved to folder successfully');
+            } else {
+                toast.error(response.data?.error || 'Failed to move mail to folder');
+            }
+        } catch (error) {
+            console.error('Error moving mail to folder:', error);
+            toast.error(error.response?.data?.error || 'An error occurred while moving the mail');
+        }
     };
 
 
@@ -146,66 +220,62 @@ function MailContent({ mail, darkMode }) {
                     } sticky top-0 z-10`}
             >
                 <div className="flex items-center gap-4 text-sm">
-                    <button className="flex items-center gap-1 hover:text-blue-600 transition">
+                    <button
+                        onClick={() => handleMarkAs(mail.id, { Archived: true })}
+                        className="flex items-center gap-1 hover:text-blue-600 transition"
+                    >
                         <Archive size={16} /> Archive
                     </button>
-                    <button className="flex items-center gap-1 hover:text-red-500 transition">
+                    <button
+                        onClick={() => handleMarkAs(mail.id, { Deleted: true })}
+                        className="flex items-center gap-1 hover:text-red-500 transition"
+                    >
                         <Trash2 size={16} /> Delete
                     </button>
-                    <button className="flex items-center gap-1 hover:text-yellow-500 transition">
+                    <button
+                        onClick={() => handleMarkAs(mail.id, { Starred: true })}
+                        className="flex items-center gap-1 hover:text-yellow-500 transition"
+                    >
                         <Star size={16} /> Star
                     </button>
-                    <button className="flex items-center gap-1 hover:text-pink-500 transition">
+                    <button
+                        onClick={() => handleMarkAs(mail.id, { Favourite: true })}
+                        className="flex items-center gap-1 hover:text-pink-500 transition"
+                    >
                         <Heart size={16} /> Favorite
                     </button>
-                    <button className="flex items-center gap-1 hover:text-orange-500 transition">
-                        <ShieldAlert size={16} /> Spam
-                    </button>
-                    <div className="relative">
-                        <button
-                            onClick={() => setPriorityMenuOpen((open) => !open)}
-                            className={`flex items-center gap-1 transition  ${priority ? priorityColor[priority] : 'hover:text-gray-700 dark:hover:text-gray-300'
-                                }`}
-                        >
-                            <LuArrowDownUp size={16} /> Priority {priority ? `: ${priorityLabel[priority]}` : ''}
-                        </button>
 
-                        {priorityMenuOpen && (
-                            <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-50">
-                                <button
-                                    onClick={() => {
-                                        setPriority('top');
-                                        setPriorityMenuOpen(false);
-                                    }}
-                                    className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900 rounded transition"
-                                >
-                                    Top Priority (Red)
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setPriority('moderate');
-                                        setPriorityMenuOpen(false);
-                                    }}
-                                    className="w-full text-left px-4 py-2 text-yellow-500 hover:bg-yellow-100 dark:hover:bg-yellow-900 rounded transition"
-                                >
-                                    Moderate Priority (Yellow)
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setPriority('least');
-                                        setPriorityMenuOpen(false);
-                                    }}
-                                    className="w-full text-left px-4 py-2 text-green-600 hover:bg-green-100 dark:hover:bg-green-900 rounded transition"
-                                >
-                                    Least Priority (Green)
-                                </button>
+                    {tags.length > 0 && (
+                        <div className="relative group inline-block">
+                            <div className="flex items-center gap-1 text-sm hover:text-green-600 transition cursor-pointer">
+                                <Folder size={16} /> Apply Tag ▾
                             </div>
-                        )}
-                    </div>
+
+                            <div className="absolute right-0 mt-1 w-52 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-20">
+                                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 max-h-60 overflow-y-auto">
+                                    {tags.map((tag, index) => (
+                                        <li
+                                            key={`tag-${index}`}
+                                            className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                                            onClick={() => handleApplyTag(tag._id, mail.id)}
+                                        >
+                                            <span
+                                                className="w-3 h-3 rounded-full"
+                                                style={{ backgroundColor: tag.TagColor }}
+                                            ></span>
+                                            <span className="truncate font-medium">{tag.TagName}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    )}
+
                 </div>
 
+
                 <div className="relative group inline-block">
-                    <div className="flex items-center gap-1 text-sm hover:text-green-600 transition cursor-pointer">
+                    <div className="flex items-center gap-1 text-sm font-medium hover:text-green-600 transition cursor-pointer">
                         <Folder size={16} /> Move to Folder ▾
                     </div>
 
@@ -215,6 +285,7 @@ function MailContent({ mail, darkMode }) {
                                 <li
                                     key={folder.id}
                                     className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                                    onClick={() => handleMoveToFolder(folder._id, mail.id)}
                                 >
                                     {folder.name}
                                 </li>

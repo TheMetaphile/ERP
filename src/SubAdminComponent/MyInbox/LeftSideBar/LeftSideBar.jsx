@@ -4,13 +4,14 @@ import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import { BASE_URL } from '../../../Config';
 import { FaTrash } from 'react-icons/fa';
+import { MdDeleteForever, MdAdd, MdSave, MdCancel } from "react-icons/md";
+import { toast } from 'react-toastify';
 
 function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onSectionChange }) {
     const [customFolders, setCustomFolders] = useState([
         { Name: 'Projects' }
     ]);
     const { authState } = useContext(AuthContext);
-
     const [showMore, setShowMore] = useState(false);
 
     const sidebarItems = [
@@ -24,6 +25,140 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
         { icon: Star, label: 'Favourite', count: 3, section: 'favourite' },
         { icon: AlertTriangle, label: 'Spam', count: 1, section: 'spam' },
     ];
+    const [tags, setTags] = useState([]);
+    const [showCreateTagInline, setShowCreateTagInline] = useState(false);
+    const [newTagName, setNewTagName] = useState('');
+    const [newTagColor, setNewTagColor] = useState("#ff0000");
+    const [showTags, setShowTags] = useState(false);
+    const [showCreateFolderInline, setShowCreateFolderInline] = useState(false);
+    const [newFolderName, setNewFolderName] = useState('');
+
+    const handleSaveTag = async () => {
+        if (!newTagName.trim()) return;
+
+        try {
+            const payload = {
+                TagName: newTagName.trim(),
+                UserID: authState?.userDetails?._id || '',
+                TagColor: newTagColor
+            };
+
+            const response = await axios.post(
+                `${BASE_URL}/myInbox/createTag`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+
+            if (response.status === 200) {
+                const newTag = {
+                    id: response.data.result?.TagID || Date.now(),
+                    TagName: newTagName.trim(),
+                    TagColor: newTagColor
+                };
+                setTags(prev => [...prev, newTag]);
+                setNewTagName('');
+                setNewTagColor('#ff0000');
+                setShowCreateTagInline(false);
+                toast.success('Tag created successfully');
+            } else {
+                toast.error(response.data?.error || 'Failed to create tag');
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error(error.response?.data?.error || 'An error occurred while creating the tag');
+        }
+    };
+
+
+    const handleDeleteTag = async (tagId) => {
+        try {
+            const response = await axios.delete(
+                `${BASE_URL}/myInbox/deleteTag`,
+                {
+                    data: {
+                        UserID: authState?.userDetails?._id,
+                        TagID: tagId
+                    },
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+
+            if (response.status === 200) {
+                toast.success("Tag Deleted successfully");
+                setTags(tags.filter(tag => tag._id !== tagId));
+            }
+
+        } catch (error) {
+            console.error('Error deleting tag:', error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchTags = async () => {
+            try {
+                const res = await axios.post(`${BASE_URL}/myInbox/fetch/getTag`, {
+                    UserID: authState?.userDetails?._id,
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`,
+                    }
+                });
+
+                setTags(res.data.Tags || []);
+            } catch (err) {
+                console.error('Failed to load tags:', err);
+            }
+        };
+
+        fetchTags();
+    }, [authState?.userDetails?._id]);
+
+    const handleSaveFolder = async () => {
+        if (!newFolderName.trim()) return;
+
+        try {
+            const payload = {
+                FolderName: newFolderName.trim(),
+                UserID: authState?.userDetails?._id || ''
+            };
+
+            const response = await axios.post(
+                `${BASE_URL}/myInbox/createFolder`,
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+
+            if (response.status === 200) {
+                const newFolder = {
+                    _id: response.data.result?.FolderID || Date.now(),
+                    Name: newFolderName.trim(),
+                };
+                setCustomFolders((prev) => [...prev, newFolder]);
+                setNewFolderName('');
+                setShowCreateFolderInline(false);
+                toast.success('Folder created successfully');
+            } else {
+                toast.error(response.data?.error || 'Failed to create folder');
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error(error.response?.data?.error || 'An error occurred while creating the folder');
+        }
+    };
+
 
     useEffect(() => {
         const fetchCustomFolders = async () => {
@@ -107,7 +242,7 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
                         </button>
                     </div>
 
-                    <nav className="flex-1 px-4 space-y-1 overflow-y-auto mb-2">
+                    <nav className="flex-1 px-4 space-y-1 overflow-y-auto mb-2 py-2">
                         {sidebarItems.map((item, index) => (
                             <button
                                 key={index}
@@ -137,51 +272,178 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
                             </button>
                         ))}
 
-                        {customFolders.length > 0 && (
-                            <>
-                                <button
-                                    onClick={() => setShowMore((prev) => !prev)}
-                                    className="w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-200 font-medium text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
-                                >
-                                    <span>{showMore ? 'Less' : 'More'}</span>
-                                    <span>{showMore ? '▲' : '▼'}</span>
-                                </button>
+                        <>
+                            <button
+                                onClick={() => setShowMore((prev) => !prev)}
+                                className="w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-200 font-medium text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+                            >
+                                <span>{showMore ? 'Less' : 'More'}</span>
+                                <span>{showMore ? '▲' : '▼'}</span>
+                            </button>
 
-                                {showMore && (
-                                    <div className="mt-1 pl-2 space-y-1">
-                                        {customFolders.map((folder, index) => (
-                                            <div
-                                                key={`custom-${index}`}
-                                                className="flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md group"
+                            {showMore && (
+                                <div className="mt-1 pl-2 space-y-2">
+                                    {customFolders.map((folder, index) => (
+                                        <div
+                                            key={`custom-${index}`}
+                                            className="flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md group"
+                                        >
+                                            <button
+                                                onClick={() => onSectionChange(folder.Name.toLowerCase())}
+                                                className={`flex-1 text-left font-medium text-sm truncate transition-colors ${currentSection === folder.Name.toLowerCase()
+                                                    ? 'text-blue-600 dark:text-blue-400'
+                                                    : darkMode
+                                                        ? 'text-gray-300'
+                                                        : 'text-gray-700'
+                                                    }`}
                                             >
-                                                <button
-                                                    onClick={() => onSectionChange(folder.Name.toLowerCase())}
-                                                    className={`flex-1 text-left font-medium text-sm truncate transition-colors ${currentSection === folder.Name.toLowerCase()
-                                                        ? 'text-blue-600 dark:text-blue-400'
-                                                        : darkMode
-                                                            ? 'text-gray-300'
-                                                            : 'text-gray-700'
-                                                        }`}
-                                                >
-                                                    {folder.Name}
-                                                </button>
+                                                {folder.Name}
+                                            </button>
 
-                                                <button
-                                                    onClick={() => handleDeleteFolder(folder._id)}
-                                                    className="ml-3 p-2 rounded-full text-red-500 hover:bg-red-100 dark:hover:bg-red-800 transition-opacity opacity-0 group-hover:opacity-100"
-                                                    title="Delete Folder"
+                                            <button
+                                                onClick={() => handleDeleteFolder(folder._id)}
+                                                className="ml-3 p-2 rounded-full text-red-500 hover:bg-red-100 dark:hover:bg-red-800 transition-opacity opacity-0 group-hover:opacity-100"
+                                                title="Delete Folder"
+                                            >
+                                                <FaTrash className="h-4 w-4" />
+                                            </button>
+                                        </div>
+                                    ))}
+
+                                    {showCreateFolderInline ? (
+                                        <div className="flex items-center gap-2">
+                                            <input
+                                                type="text"
+                                                placeholder="Folder name"
+                                                value={newFolderName}
+                                                onChange={(e) => setNewFolderName(e.target.value)}
+                                                className="flex-1 p-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                                            />
+                                            <button
+                                                onClick={handleSaveFolder}
+                                                className="px-2 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm"
+                                            >
+                                                <MdSave size={16} />
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setShowCreateFolderInline(false);
+                                                    setNewFolderName('');
+                                                }}
+                                                className="px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 text-sm"
+                                            >
+                                                <MdCancel size={16} />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div
+                                            className="px-4 py-2 text-blue-600 hover:underline cursor-pointer text-sm flex items-center gap-2"
+                                            onClick={() => setShowCreateFolderInline(true)}
+                                        >
+                                            <MdAdd size={16} /> Create New Folder
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </>
+
+
+                        <>
+                            <button
+                                onClick={() => setShowTags(prev => !prev)}
+                                className="w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-200 font-medium text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+                            >
+                                <span>{showTags ? 'Tags ' : 'Tags '}</span>
+                                <span>{showTags ? '▲' : '▼'}</span>
+                            </button>
+
+                            {showTags && (
+                                <>
+                                    {tags.length > 0 && (
+                                        <div className="mt-2 px-4 space-y-2">
+                                            {tags.map((tag, index) => (
+                                                <div
+                                                    key={`tag-${index}`}
+                                                    className="flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 shadow-sm hover:scale-[1.02] hover:shadow-md group transition-transform cursor-pointer"
                                                 >
-                                                    <FaTrash className="h-4 w-4" />
-                                                </button>
+                                                    <span
+                                                        className="flex items-center gap-2 px-2 py-2"
+                                                    >
+                                                        <span
+                                                            className="w-3 h-3 rounded-full"
+                                                            style={{ backgroundColor: tag.TagColor }}
+                                                        ></span>
+                                                        <span className="truncate font-medium">{tag.TagName}</span>
+                                                    </span>
+
+                                                    <button
+                                                        onClick={() => handleDeleteTag(tag._id)}
+                                                        className="ml-3 p-2 rounded-full text-red-500 hover:bg-red-100 dark:hover:bg-red-800 transition-opacity opacity-0 group-hover:opacity-100"
+                                                        title="Delete Tag"
+                                                    >
+                                                        <FaTrash className="h-4 w-4" />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    <div className="mt-3 space-y-2">
+                                        {showCreateTagInline ? (
+                                            <div className="flex flex-col gap-2">
+                                                <div className="flex items-center gap-2">
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Tag name"
+                                                        value={newTagName}
+                                                        onChange={(e) => setNewTagName(e.target.value)}
+                                                        className="flex-1 p-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                                                    />
+                                                    <button
+                                                        onClick={handleSaveTag}
+                                                        className="px-2 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm"
+                                                    >
+                                                        <MdSave size={16} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            setShowCreateTagInline(false);
+                                                            setNewTagName('');
+                                                            setNewTagColor('red');
+                                                        }}
+                                                        className="px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 text-sm"
+                                                    >
+                                                        <MdCancel size={16} />
+                                                    </button>
+                                                </div>
+
+                                                <div className="flex gap-2 items-center text-sm ml-1">
+                                                    <label className="text-gray-600 dark:text-gray-300" htmlFor="tag-color-picker">
+                                                        Choose color:
+                                                    </label>
+                                                    <input
+                                                        type="color"
+                                                        id="tag-color-picker"
+                                                        value={newTagColor}
+                                                        onChange={(e) => setNewTagColor(e.target.value)}
+                                                        className="w-8 h-8 p-0 border-none cursor-pointer bg-transparent"
+                                                    />
+                                                </div>
+
                                             </div>
-                                        ))}
-
+                                        ) : (
+                                            <div
+                                                onClick={() => setShowCreateTagInline(true)}
+                                                className="text-blue-600 hover:underline p-2 text-sm cursor-pointer flex items-center gap-2"
+                                            >
+                                                <MdAdd size={16} /> Create New Tag
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </>
-                        )}
 
-
+                                </>
+                            )}
+                        </>
                     </nav>
 
                     <div className={`p-4 border-t ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
@@ -205,6 +467,7 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </>
