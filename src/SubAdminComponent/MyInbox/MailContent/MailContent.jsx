@@ -11,12 +11,20 @@ import 'react-toastify/dist/ReactToastify.css';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import axios from 'axios';
+import ForwardDialog from './ForwardDialog';
+import ReplyDialog from './ReplyDialog';
+import { useParams } from 'react-router-dom';
 
 function MailContent({ mail, darkMode }) {
     const { authState } = useContext(AuthContext);
     const [showCreateFolderModal, setShowCreateFolderModal] = useState(false);
     const [newFolderName, setNewFolderName] = useState('');
     const [tags, setTags] = useState([]);
+    const [mailContent, setMailContent] = useState([]);
+    const [showForwardDialog, setShowForwardDialog] = useState(false);
+    const [showReplyDialog, setShowReplyDialog] = useState(false);
+    const { section, id } = useParams();
+
     const [folders, setFolders] = useState([
         { id: 1, name: 'Archived' },
         { id: 2, name: 'Starred' },
@@ -24,7 +32,7 @@ function MailContent({ mail, darkMode }) {
         { id: 4, name: 'Favourite' },
 
     ]);
-
+    console.log(mail)
     const handleCreateNewFolder = () => {
         setShowCreateFolderModal(true);
     };
@@ -199,13 +207,39 @@ function MailContent({ mail, darkMode }) {
         }
     };
 
+    const handleRemoveFromFolder = async (mailId) => {
+        try {
+            const response = await axios.put(
+                `${BASE_URL}/myInbox/update/removeFromFolder`,
+                {
+                    ConversationID: mailId,
+                    UserID: authState?.userDetails?._id,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                toast.success('Mail removed from folder successfully');
+            } else {
+                toast.error(response.data?.error || 'Failed to remove mail from folder');
+            }
+        } catch (error) {
+            console.error('Error removing mail from folder:', error);
+            toast.error(error.response?.data?.error || 'An error occurred while removing the mail');
+        }
+    };
 
     useEffect(() => {
         if (!mail) return;
         const markSeen = async () => {
             try {
                 const payload = {
-                    MessageID: mail.id,
+                    MessageID: mail._id,
                     UserID: authState?.userDetails?._id,
                     seen: true
                 };
@@ -229,6 +263,41 @@ function MailContent({ mail, darkMode }) {
         markSeen();
     }, [authState?.userDetails?._id, mail]);
 
+    useEffect(() => {
+        if (!mail) return;
+        const fetchMail = async () => {
+            try {
+                const payload = {
+                    ConversationID: mail._id,
+                    UserID: authState?.userDetails?._id,
+                    seen: true
+                };
+
+                const response = await axios.post(
+                    `${BASE_URL}/myInbox/fetch/getMessages`,
+                    payload,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${authState?.accessToken}`,
+                            'Content-Type': 'application/json',
+                        }
+                    }
+                );
+                setMailContent(response.data.Thread);
+                console.log(response.data)
+            } catch (err) {
+                console.error(err);
+                toast.error(err);
+            }
+        };
+
+        fetchMail();
+    }, [authState?.userDetails?._id, mail]);
+
+    const addNewMessage = (newMessage) => {
+        setMailContent((prevContent) => [...prevContent, newMessage]);
+    };
+
     if (!mail) {
         return (
             <div className={`flex-1 ${darkMode ? 'bg-gray-900' : 'bg-white'} flex flex-col items-center justify-center p-8`}>
@@ -241,6 +310,7 @@ function MailContent({ mail, darkMode }) {
         );
     }
 
+    console.log(section, 'here', id)
     return (
         <div className={``}>
             <div
@@ -249,25 +319,25 @@ function MailContent({ mail, darkMode }) {
             >
                 <div className="flex items-center gap-4 text-sm">
                     <button
-                        onClick={() => handleMarkAs(mail.id, { Archived: true })}
+                        onClick={() => handleMarkAs(mail._id, { Archived: true })}
                         className="flex items-center gap-1 hover:text-blue-600 transition"
                     >
                         <Archive size={16} /> Archive
                     </button>
                     <button
-                        onClick={() => handleMarkAs(mail.id, { Deleted: true })}
+                        onClick={() => handleMarkAs(mail._id, { Deleted: true })}
                         className="flex items-center gap-1 hover:text-red-500 transition"
                     >
                         <Trash2 size={16} /> Delete
                     </button>
                     <button
-                        onClick={() => handleMarkAs(mail.id, { Starred: true })}
+                        onClick={() => handleMarkAs(mail._id, { Starred: true })}
                         className="flex items-center gap-1 hover:text-yellow-500 transition"
                     >
                         <Star size={16} /> Star
                     </button>
                     <button
-                        onClick={() => handleMarkAs(mail.id, { Favourite: true })}
+                        onClick={() => handleMarkAs(mail._id, { Favourite: true })}
                         className="flex items-center gap-1 hover:text-pink-500 transition"
                     >
                         <Heart size={16} /> Favorite
@@ -302,55 +372,69 @@ function MailContent({ mail, darkMode }) {
                 </div>
 
 
-                <div className="relative group inline-block">
-                    <div className="flex items-center gap-1 text-sm font-medium hover:text-green-600 transition cursor-pointer">
-                        <Folder size={16} /> Move to Folder ▾
+                {section && id ?
+                    <div className="relative group inline-block">
+                        <div className="flex items-center gap-1 text-sm font-medium hover:text-green-600 transition cursor-pointer"
+                            onClick={() => handleRemoveFromFolder(mail._id)}
+                        >
+                            <Folder size={16} /> Remove from Folder
+                        </div>
                     </div>
+                    :
+                    <div className="relative group inline-block">
+                        <div className="flex items-center gap-1 text-sm font-medium hover:text-green-600 transition cursor-pointer">
+                            <Folder size={16} /> Move to Folder ▾
+                        </div>
 
-                    <div className="absolute right-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-20">
-                        <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                            {folders.map((folder) => (
+                        <div className="absolute right-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-20">
+                            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                {folders.map((folder) => (
+                                    <li
+                                        key={folder.id}
+                                        className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                                        onClick={() => handleMoveToFolder(folder._id, mail._id)}
+                                    >
+                                        {folder.name}
+                                    </li>
+                                ))}
                                 <li
-                                    key={folder.id}
-                                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-                                    onClick={() => handleMoveToFolder(folder._id, mail.id)}
+                                    className="px-4 py-2 text-blue-600 hover:underline cursor-pointer"
+                                    onClick={handleCreateNewFolder}
                                 >
-                                    {folder.name}
+                                    ➕ Create New Folder
                                 </li>
-                            ))}
-                            <li
-                                className="px-4 py-2 text-blue-600 hover:underline cursor-pointer"
-                                onClick={handleCreateNewFolder}
-                            >
-                                ➕ Create New Folder
-                            </li>
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                }
 
             </div>
             <div className={`p-6 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
                 <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                         <h2 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                            {mail.subject}
+                            {mail.Subject}
                         </h2>
                         <div className="flex items-center gap-4 text-sm">
                             <div className="flex items-center gap-2">
                                 <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                                    {mail.avatar}
+                                    <img
+                                        src={mail.CreatedUser.profileLink}
+                                        alt="avatar"
+                                        className="w-full h-full object-cover rounded-full"
+                                    />
                                 </div>
                                 <div>
                                     <p className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                                        {mail.sender}
+                                        {mail.CreatedUser.name}
                                     </p>
                                     <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                        {mail.email}
+                                        {mail.CreatedUser.email}
                                     </p>
                                 </div>
                             </div>
                             <span className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                {mail.time}
+                                {new Date(mail.LastMessageAt).toLocaleString()}
                             </span>
                         </div>
                     </div>
@@ -368,31 +452,52 @@ function MailContent({ mail, darkMode }) {
 
             <div className="flex-1 p-6 overflow-y-auto">
                 <div className={`prose max-w-none ${darkMode ? 'prose-invert' : ''}`}>
-                    <p className={`text-base leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                        {mail.preview}
-                    </p>
-
-                    <div className="mt-6 space-y-4">
-                        <p className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </p>
-                        <p className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                        </p>
-                    </div>
+                    {mailContent.map((message) => (
+                        <div key={message._id} className="mb-6">
+                            <div className="mb-2 text-sm">
+                                <p className={darkMode ? 'text-gray-400' : 'text-gray-500'}>
+                                    {new Date(message.SentAt).toLocaleString()}
+                                </p>
+                            </div>
+                            <div
+                                className={`text-base leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}
+                                dangerouslySetInnerHTML={{ __html: message.MessageBody }}
+                            />
+                        </div>
+                    ))}
                 </div>
             </div>
 
             <div className={`p-6 border-t ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
                 <div className="flex gap-3">
-                    <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                    <button
+                        onClick={() => setShowReplyDialog(true)}
+                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
                         Reply
                     </button>
-                    <button className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 ${darkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+                    <button
+                        onClick={() => setShowForwardDialog(true)}
+                        className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 ${darkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                    >
                         Forward
                     </button>
                 </div>
             </div>
+
+            {showReplyDialog && (
+                <ReplyDialog
+                    onClose={() => setShowReplyDialog(false)}
+                    ConversationID={mail._id}
+                    addNewMessage={addNewMessage}
+                />
+            )}
+
+            {showForwardDialog && (
+                <ForwardDialog
+                    onClose={() => setShowForwardDialog(false)}
+                    ConversationID={mail._id}
+                />
+            )}
 
             {showCreateFolderModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

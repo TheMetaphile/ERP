@@ -246,7 +246,7 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
                         {sidebarItems.map((item, index) => (
                             <button
                                 key={index}
-                                onClick={() => onSectionChange(item.section)}
+                                onClick={() => onSectionChange(item.section, item._id)}
                                 className={`w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-200 group ${currentSection === item.section
                                     ? 'bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 text-blue-600 dark:text-blue-400 shadow-sm'
                                     : `${darkMode ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-50'}`
@@ -289,7 +289,7 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
                                             className="flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md group"
                                         >
                                             <button
-                                                onClick={() => onSectionChange(folder.Name.toLowerCase())}
+                                                onClick={() => onSectionChange(folder.Name.toLowerCase(), folder._id)}
                                                 className={`flex-1 text-left font-medium text-sm truncate transition-colors ${currentSection === folder.Name.toLowerCase()
                                                     ? 'text-blue-600 dark:text-blue-400'
                                                     : darkMode

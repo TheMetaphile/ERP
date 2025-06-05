@@ -10,7 +10,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function MyInbox() {
-    const { section } = useParams(); // Get current section from URL
+    const { section } = useParams();
     const navigate = useNavigate();
     const { darkMode } = useContext(AuthContext);
     const [selectedMail, setSelectedMail] = useState(null);
@@ -50,11 +50,10 @@ function MyInbox() {
         setSelectedMail(null);
     };
 
-    const handleSectionChange = (sectionName) => {
-        navigate(`/Sub-Admin/MyInbox/${sectionName}`);
-        if (isMobile) setSidebarOpen(false);
-    };
-
+ const handleSectionChange = (sectionName = 'default', folderId) => {
+    navigate(`/Sub-Admin/MyInbox/${sectionName}/${folderId || ''}`);
+    if (isMobile) setSidebarOpen(false);
+};
     return (
         <div className={`h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
             <ToastContainer />

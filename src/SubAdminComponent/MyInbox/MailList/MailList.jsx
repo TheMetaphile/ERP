@@ -1,10 +1,42 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Search, Star, UserX } from 'react-feather';
 import { getMailsBySection, getSectionTitle } from '../MailData';
+import { useParams } from 'react-router-dom';
+import AuthContext from '../../../Context/AuthContext';
+import axios from 'axios';
+import { BASE_URL } from '../../../Config';
 
 function MailList({ setSelectedMail, selectedMail, isOpen, onClose, darkMode, currentSection }) {
-    const emails = getMailsBySection(currentSection);
-    const sectionTitle = getSectionTitle(currentSection);
+    const { authState } = useContext(AuthContext);
+    // const emails = getMailsBySection(currentSection);
+    const { section, id: folderId } = useParams();
+    const [emails, setEmails] = useState([]);
+
+    useEffect(() => {
+        const fetchMails = async () => {
+            try {
+                const response = await axios.post(
+                    `${BASE_URL}/myInbox/fetch/getConversations`,
+                    {
+                        UserID: authState?.userDetails?._id,
+                        folderID: folderId
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${authState?.accessToken}`,
+                            'Content-Type': 'application/json',
+                        }
+                    }
+                );
+
+                setEmails(response.data.Conversation);
+            } catch (error) {
+                console.error('Error fetching emails:', error);
+            }
+        };
+
+        fetchMails();
+    }, [folderId])
 
     return (
         <div className={`${darkMode ? 'bg-gray-50 dark:bg-gray-900' : 'bg-gray-50'} transform transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} flex flex-col border-r border-gray-200 dark:border-gray-700 h-full`}>
@@ -25,7 +57,7 @@ function MailList({ setSelectedMail, selectedMail, isOpen, onClose, darkMode, cu
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input
                         type="text"
-                        placeholder={`Search ${sectionTitle.toLowerCase()}...`}
+                        placeholder={`Search ${section}...`}
                         className={`
                             w-full pl-10 pr-4 py-2 rounded-lg border transition-all duration-200
                             ${darkMode
@@ -41,7 +73,7 @@ function MailList({ setSelectedMail, selectedMail, isOpen, onClose, darkMode, cu
             <div className="flex-1 overflow-y-auto">
                 {emails.length === 0 ? (
                     <div className={`p-8 text-center ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                        <p>No emails in {sectionTitle.toLowerCase()}</p>
+                        <p>No emails in {section}</p>
                     </div>
                 ) : (
                     emails.map((email) => (
@@ -60,38 +92,46 @@ function MailList({ setSelectedMail, selectedMail, isOpen, onClose, darkMode, cu
                             onClick={() => setSelectedMail(email)}
                         >
                             <div className="flex items-start gap-3">
-                                <div className={`
-                                    w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0
-                                    ${email.unread
-                                        ? 'bg-gradient-to-r from-blue-500 to-purple-500'
-                                        : 'bg-gray-400'
-                                    }
-                                `}>
-                                    {email.avatar}
+                                <div
+                                    className={`
+    w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0
+    ${email.unread
+                                            ? 'bg-gradient-to-r from-blue-500 to-purple-500'
+                                            : 'bg-gray-400'
+                                        }
+  `}
+                                >
+                                    <img
+                                        src={email.CreatedUser.profileLink}
+                                        alt="avatar"
+                                        className="w-full h-full object-cover rounded-full"
+                                    />
                                 </div>
+
 
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center justify-between mb-1">
                                         <h4 className={`truncate ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                                            {email.sender}
+
+                                            {email.CreatedUser?.name}
                                         </h4>
                                         <div className="flex items-center gap-2 flex-shrink-0">
                                             {email.starred && (
                                                 <Star className="w-4 h-4 text-yellow-400 fill-current" />
                                             )}
                                             <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                                {email.time}
+                                                {new Date(email.LastMessageAt).getDate()}/{new Date(email.LastMessageAt).getMonth() + 1}/{new Date(email.LastMessageAt).getFullYear()}
                                             </span>
                                         </div>
                                     </div>
 
                                     <h5 className={`text-sm mb-1 truncate ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                                        {email.subject}
+                                        {email.Subject}
                                     </h5>
 
-                                    <p className={`text-xs leading-relaxed line-clamp-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    {/* <p className={`text-xs leading-relaxed line-clamp-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                                         {email.preview}
-                                    </p>
+                                    </p> */}
 
                                     {email.unread && (
                                         <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
