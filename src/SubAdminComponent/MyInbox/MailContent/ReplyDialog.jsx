@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { LuXCircle } from "react-icons/lu";
+import { LuCircleX } from "react-icons/lu";
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import { toast } from "react-toastify";

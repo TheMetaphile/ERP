@@ -235,11 +235,11 @@ function MailContent({ mail, darkMode }) {
     };
 
     useEffect(() => {
-        if (!mail) return;
-        const markSeen = async () => {
+        if (!mailContent || !Array.isArray(mailContent) || mailContent.length == 0) return;
+        const markSeen = async (msgId) => {
             try {
                 const payload = {
-                    MessageID: mail._id,
+                    MessageID: msgId,
                     UserID: authState?.userDetails?._id,
                     seen: true
                 };
@@ -260,8 +260,10 @@ function MailContent({ mail, darkMode }) {
             }
         };
 
-        markSeen();
-    }, [authState?.userDetails?._id, mail]);
+        for(const msg of mailContent){
+            if(!msg?.status?.IsRead){markSeen(msg._id)}
+        }
+    }, [authState?.userDetails?._id, mailContent]);
 
     useEffect(() => {
         if (!mail) return;
@@ -355,7 +357,7 @@ function MailContent({ mail, darkMode }) {
                                         <li
                                             key={`tag-${index}`}
                                             className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                                            onClick={() => handleApplyTag(tag._id, mail.id)}
+                                            onClick={() => handleApplyTag(tag._id, mail._id)}
                                         >
                                             <span
                                                 className="w-3 h-3 rounded-full"
