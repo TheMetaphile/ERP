@@ -5,6 +5,7 @@ import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./Context/AuthContext.jsx";
 import BeforeUnload from "./BeforeUnload.jsx"; // Import the new component
+import { SocketProvider } from "./Context/SocketContext.jsx";
 // import * as serviceWorkerRegistration from './firebase-messaging-sw.js';
 
 if ('serviceWorker' in navigator) {
@@ -21,9 +22,11 @@ if ('serviceWorker' in navigator) {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
-    {/* <BeforeUnload> */}
+    {/* <SocketProvider> */}
+      {/* <BeforeUnload> */}
       <RouterProvider router={router} />
-    {/* </BeforeUnload> */}
+      {/* </BeforeUnload> */}
+    {/* </SocketProvider> */}
   </AuthProvider>
 );
 

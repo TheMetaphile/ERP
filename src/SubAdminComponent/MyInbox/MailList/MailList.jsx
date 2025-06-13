@@ -4,7 +4,7 @@ import { getMailsBySection, getSectionTitle } from '../MailData';
 import { useParams } from 'react-router-dom';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
-import { BASE_URL } from '../../../Config';
+import { BASE_URL, WEB_SOCKET_BASE_URL } from '../../../Config';
 
 function MailList({ setSelectedMail, selectedMail, isOpen, onClose, darkMode, currentSection }) {
     const { authState } = useContext(AuthContext);
@@ -15,21 +15,41 @@ function MailList({ setSelectedMail, selectedMail, isOpen, onClose, darkMode, cu
     useEffect(() => {
         const fetchMails = async () => {
             try {
-                const response = await axios.post(
-                    `${BASE_URL}/myInbox/fetch/getConversations`,
-                    {
-                        UserID: authState?.userDetails?._id,
-                        folderID: folderId
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${authState?.accessToken}`,
-                            'Content-Type': 'application/json',
-                        }
-                    }
-                );
+                const socket = new WebSocket(`${WEB_SOCKET_BASE_URL}/getConversations`);
 
-                setEmails(response.data.Conversation);
+                socket.onopen = () => {
+                    console.log('WebSocket connected');
+                };
+
+                socket.onmessage = (event) => {
+                    try {
+                        const seenUpdate = JSON.parse(event.data);
+                        console.log(event.data)
+                        // setEmails(response.data.Conversation);
+
+                        // setEmails(prevEmails =>
+                        //     prevEmails.map(email =>
+                        //         email._id === seenUpdate.conversationId
+                        //             ? { ...email, unread: !seenUpdate.seen }
+                        //             : email
+                        //     )
+                        // );
+                    } catch (err) {
+                        console.error('Error parsing WebSocket message:', err);
+                    }
+                };
+
+                socket.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                };
+
+                socket.onclose = () => {
+                    console.log('WebSocket disconnected');
+                };
+
+                return () => {
+                    socket.close();
+                };
             } catch (error) {
                 console.error('Error fetching emails:', error);
             }
@@ -37,6 +57,9 @@ function MailList({ setSelectedMail, selectedMail, isOpen, onClose, darkMode, cu
 
         fetchMails();
     }, [folderId])
+
+
+
 
     return (
         <div className={`${darkMode ? 'bg-gray-50 dark:bg-gray-900' : 'bg-gray-50'} transform transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} flex flex-col border-r border-gray-200 dark:border-gray-700 h-full`}>
