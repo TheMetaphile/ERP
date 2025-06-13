@@ -15,15 +15,12 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
     const [showMore, setShowMore] = useState(false);
 
     const sidebarItems = [
-        { icon: Inbox, label: 'Default', count: 24, section: 'default' },
         { icon: Inbox, label: 'Inbox', count: 24, section: 'inbox' },
         { icon: Send, label: 'Sent', count: null, section: 'sent' },
-        { icon: Mail, label: 'Drafts', count: 2, section: 'drafts' },
         { icon: Star, label: 'Archived', count: 3, section: 'archived' },
         { icon: Star, label: 'Starred', count: 3, section: 'starred' },
         { icon: Star, label: 'Deleted', count: 3, section: 'deleted' },
-        { icon: Star, label: 'Favourite', count: 3, section: 'favourite' },
-        { icon: AlertTriangle, label: 'Spam', count: 1, section: 'spam' },
+        { icon: Star, label: 'Favourite', count: 3, section: 'favourite' }
     ];
     const [tags, setTags] = useState([]);
     const [showCreateTagInline, setShowCreateTagInline] = useState(false);

@@ -19,7 +19,7 @@ function MyInbox() {
     const [isMobile, setIsMobile] = useState(false);
     const [isComposing, setIsComposing] = useState(false);
 
-    const currentSection = section || 'default';
+    const currentSection = section || 'inbox';
 
     useEffect(() => {
         const checkMobile = () => {
