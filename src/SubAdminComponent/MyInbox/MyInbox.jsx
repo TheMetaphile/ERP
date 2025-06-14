@@ -50,10 +50,10 @@ function MyInbox() {
         setSelectedMail(null);
     };
 
- const handleSectionChange = (sectionName = 'default', folderId) => {
-    navigate(`/Sub-Admin/MyInbox/${sectionName}/${folderId || ''}`);
-    if (isMobile) setSidebarOpen(false);
-};
+    const handleSectionChange = (sectionName = 'inbox', folderId) => {
+        navigate(`/Sub-Admin/MyInbox/${sectionName}/${folderId || ''}`);
+        if (isMobile) setSidebarOpen(false);
+    };
     return (
         <div className={`h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
             <ToastContainer />
@@ -81,22 +81,31 @@ function MyInbox() {
                     onSectionChange={handleSectionChange}
                 />
 
-                <div className="w-full h-full grid grid-cols-[30%_70%] mt-20">
-                    <MailList
-                        setSelectedMail={handleMailSelect}
-                        selectedMail={selectedMail}
-                        isOpen={mailListOpen || !isMobile}
-                        onClose={() => setMailListOpen(false)}
-                        darkMode={darkMode}
-                        currentSection={currentSection}
-                    />
+                <div className="w-full h-[calc(100vh-5rem)] grid grid-cols-[30%_70%] mt-20 overflow-hidden">
+                    <div className="h-full overflow-y-auto">
+                        <MailList
+                            setSelectedMail={handleMailSelect}
+                            selectedMail={selectedMail}
+                            isOpen={mailListOpen || !isMobile}
+                            onClose={() => setMailListOpen(false)}
+                            darkMode={darkMode}
+                            currentSection={currentSection}
+                        />
+                    </div>
 
-                    {isComposing ? (
-                        <ComposeMail darkMode={darkMode} onCancel={() => setIsComposing(false)} />
-                    ) : (
-                        <MailContent mail={selectedMail} darkMode={darkMode} currentSection={currentSection} />
-                    )}
+                    <div className="h-full overflow-y-auto hide-scrollbar">
+                        {isComposing ? (
+                            <ComposeMail darkMode={darkMode} onCancel={() => setIsComposing(false)} />
+                        ) : (
+                            <MailContent
+                                mail={selectedMail}
+                                darkMode={darkMode}
+                                currentSection={currentSection}
+                            />
+                        )}
+                    </div>
                 </div>
+
             </div>
 
             {isMobile && selectedMail && !isComposing && (
