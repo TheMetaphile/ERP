@@ -299,15 +299,15 @@ function MailContent({ mail, darkMode }) {
                                 setMailContent((prevEmails) => [response.newMessage, ...prevEmails]);
                                 break;
 
-                            // case "update":
-                            //     setMailContent((prevEmails) =>
-                            //         prevEmails.map((email) =>
-                            //             email._id === response.conversationId
-                            //                 ? { ...email, unread: !response.seen }
-                            //                 : email
-                            //         )
-                            //     );
-                            //     break;
+                            case "update":
+                                setMailContent((prevEmails) =>
+                                    prevEmails.map((email) =>
+                                        email._id === response.messageId
+                                            ? { ...email, SeenBy: response.SeenBy }
+                                            : email
+                                    )
+                                );
+                                break;
                             default:
                                 console.log("Default");
                         }
@@ -579,6 +579,9 @@ function MailContent({ mail, darkMode }) {
 
                     <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                         {new Date(mail.LastMessageAt).toLocaleString()}
+                    </span>
+                    <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {mail.unSeenCount > 0 ? mail.unSeenCount : ''}
                     </span>
                 </div>
             </div>

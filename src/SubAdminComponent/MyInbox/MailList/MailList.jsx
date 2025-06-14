@@ -244,20 +244,21 @@ function MailList({
                     {email.Subject}
                   </h5>
 
-                   <h5
+                  <div
                     className={`text-sm mb-1 truncate ${darkMode ? "text-gray-200" : "text-gray-800"
                       }`}
-                  >
-                    {email.lastMessage}
-                  </h5>
+                    dangerouslySetInnerHTML={{ __html: email.lastMessage }}
+                  />
+
+
 
                   {/* <p className={`text-xs leading-relaxed line-clamp-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                                         {email.preview}
                                     </p> */}
 
-                  {email.unSeenCount && (
+                  {/* {email.unSeenCount && (
                     <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
