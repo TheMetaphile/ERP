@@ -36,7 +36,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         { id: 4, name: 'Favourite' },
 
     ]);
-    console.log(mail)
+    console.log(mail, mailContent)
     const handleCreateNewFolder = () => {
         setShowCreateFolderModal(true);
     };
@@ -435,9 +435,9 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         fetchMail();
     }, [authState?.userDetails?._id, mail]);
 
-    const addNewMessage = (newMessage) => {
-        setMailContent((prevContent) => [...prevContent, newMessage]);
-    };
+    // const addNewMessage = (newMessage) => {
+    //     setMailContent((prevContent) => [...prevContent, newMessage]);
+    // };
 
     if (!mail) {
         return (
@@ -681,10 +681,10 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
                         )}
 
 
-                        {mail.Cc && (
-                            <div className="flex items-center gap-1 flex-wrap text-sm">
+                        {mailCc && (
+                            <div className="flex items-center gap-1 flex-wrap text-sm mt-2">
                                 <span className={`${darkMode ? 'text-gray-300' : 'text-gray-700'} font-medium`}>
-                                    To:
+                                    Cc:
                                 </span>
                                 {mailCc?.slice(0, 1).map((recipient, index) => (
                                     <span
@@ -870,7 +870,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
                     <ReplyDialog
                         onClose={() => setShowReplyDialog(false)}
                         ConversationID={mail._id}
-                        addNewMessage={addNewMessage}
+                        // addNewMessage={addNewMessage}
                     />
                 </div>
             )}

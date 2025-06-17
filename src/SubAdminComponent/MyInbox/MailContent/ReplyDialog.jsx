@@ -39,11 +39,11 @@ const ReplyDialog = ({ onClose, ConversationID, addNewMessage }) => {
 
             if (response.status === 200) {
                 toast.success("Message replied successfully");
-                addNewMessage({
-                    _id: response.data.result.MessageID,
-                    SentAt: new Date().toISOString(),
-                    MessageBody: body
-                });
+                // addNewMessage({
+                //     _id: response.data.result.MessageID,
+                //     SentAt: new Date().toISOString(),
+                //     MessageBody: body
+                // });
                 onClose();
             }
         } catch (error) {
