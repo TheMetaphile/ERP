@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { LuXCircle } from "react-icons/lu";
@@ -23,6 +23,15 @@ const ComposeEmail = () => {
     const [ccSearchString, setCcSearchString] = useState('');
     const [ccShowRoles, setCcShowRoles] = useState(false);
     const [ccIsFocused, setCcIsFocused] = useState(false);
+    const [fetchedFields, setFetchedFields] = useState([]);
+    const [showFieldSuggestions, setShowFieldSuggestions] = useState(false);
+    const [showFieldSuggestionsSubject, setShowFieldSuggestionsSubject] = useState(false);
+    const [cursorPosition, setCursorPosition] = useState(null);
+    const [editorRef, setEditorRef] = useState(null);
+    const suggestionsRef = useRef(null);
+    const [subjectCursorPos, setSubjectCursorPos] = useState(null);
+    const subjectInputRef = useRef(null);
+    const subjectSuggestionsRef = useRef(null);
 
     // New states for IDs
     const [toIds, setToIds] = useState([]);
@@ -177,6 +186,108 @@ const ComposeEmail = () => {
         }
     }, [searchString, ccSearchString, role, authState?.accessToken]);
 
+    useEffect(() => {
+        fetchFields();
+        const handleClickOutside = (e) => {
+            if (suggestionsRef.current && !suggestionsRef.current.contains(e.target)) {
+                setShowFieldSuggestions(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const fetchFields = async () => {
+        try {
+            const res = await axios.get(`${BASE_URL}/fieldMaping/fetch/combinedField`, {
+                headers: {
+                    Authorization: `Bearer ${authState?.accessToken}`,
+                },
+            });
+            if (res.status === 200) {
+                setFetchedFields(res.data || []);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === '{') {
+            setShowFieldSuggestions(true);
+        } else if (e.key === 'Backspace') {
+            const editor = editorRef;
+            const selection = editor?.getSelection();
+
+            if (selection?.index > 0) {
+                const textBeforeCursor = editor.getText(selection.index - 1, 1);
+                if (textBeforeCursor !== '{') {
+                    setShowFieldSuggestions(false);
+                }
+            } else {
+                setShowFieldSuggestions(false);
+            }
+        } else if (e.key === 'Escape') {
+            setShowFieldSuggestions(false);
+        }
+    };
+
+    const handleSelectSuggestion = (key) => {
+        if (editorRef && cursorPosition != null) {
+            const indexToReplace = cursorPosition - 1;
+            editorRef.deleteText(indexToReplace, 1);
+            editorRef.insertText(indexToReplace, `{${key}}`);
+            editorRef.setSelection(indexToReplace + key.length + 2);
+            setShowFieldSuggestionsSubject(false);
+        }
+    };
+
+    const handleSubjectKeyDown = (e) => {
+        const value = subject;
+        const cursorPos = e.target.selectionStart;
+
+        if (e.key === '{') {
+            setSubjectCursorPos(cursorPos);
+            setShowFieldSuggestionsSubject(true);
+        } else if (e.key === 'Backspace') {
+            if (cursorPos > 0 && value[cursorPos - 1] !== '{') {
+                setShowFisetShowFieldSuggestionsSubjecteldSuggestions(false);
+            }
+        } else if (e.key === 'Escape') {
+            setShowFieldSuggestionsSubject(false);
+        }
+    };
+
+    const handleSelectSuggestionForSubject = (key) => {
+        if (subjectInputRef.current && subjectCursorPos != null) {
+            const value = subject;
+            const newValue =
+                value.slice(0, subjectCursorPos - 1) + `{${key}}` + value.slice(subjectCursorPos);
+
+            setSubject(newValue);
+            const newCursorPos = subjectCursorPos - 1 + key.length + 2;
+            setTimeout(() => {
+                subjectInputRef.current.setSelectionRange(newCursorPos, newCursorPos);
+                subjectInputRef.current.focus();
+            }, 0);
+
+            setShowFieldSuggestionsSubject(false);
+        }
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (
+                !suggestionsRef.current?.contains(e.target) &&
+                !subjectSuggestionsRef.current?.contains(e.target)
+            ) {
+                setShowFieldSuggestionsSubject(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     return (
         <div className="p-4 bg-white shadow rounded-lg">
             <h2 className="text-2xl font-semibold mb-4">Compose Email</h2>
@@ -288,27 +399,71 @@ const ComposeEmail = () => {
                     </div>
                 )}
 
-                <div className="mb-4">
+                <div className="mb-4 relative">
                     <label className="block text-sm font-medium">Subject:</label>
                     <input
                         type="text"
                         value={subject}
+                        ref={subjectInputRef}
                         onChange={(e) => setSubject(e.target.value)}
+                        onKeyDown={handleSubjectKeyDown}
                         className="w-full mt-1 p-2 border rounded"
                         placeholder="Email subject"
                         required
                     />
+
+                    {showFieldSuggestionsSubject && (
+                        <div
+                            ref={subjectSuggestionsRef}
+                            className="absolute top-[65px] left-0 w-60 max-h-64 overflow-y-auto border border-gray-300 bg-white shadow-md rounded z-50"
+                        >
+                            {fetchedFields.map((field, index) => (
+                                <div
+                                    key={index}
+                                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() => handleSelectSuggestionForSubject(field.key)}
+                                >
+                                    {field.key}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
-                <div className="mb-4">
+
+                <div className="mb-4 relative" onKeyDown={handleKeyDown}>
                     <label className="block text-sm font-medium">Body:</label>
                     <ReactQuill
                         value={body}
                         onChange={setBody}
                         modules={modules}
                         theme="snow"
+                        onChangeSelection={(range) => {
+                            if (range) setCursorPosition(range.index);
+                        }}
+                        ref={(el) => {
+                            if (el !== null) setEditorRef(el.getEditor());
+                        }}
                     />
+
+                    {showFieldSuggestions && (
+                        <div
+                            ref={suggestionsRef}
+                            className="absolute top-[110px] left-0 w-60 max-h-64 overflow-y-auto border border-gray-300 bg-white shadow-md rounded z-50"
+                        >
+                            {fetchedFields.map((field, index) => (
+                                <div
+                                    key={index}
+                                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() => handleSelectSuggestion(field.key)}
+                                >
+                                    {field.key}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
+
 
                 <button
                     type="submit"
