@@ -114,6 +114,13 @@ const menuItems = [
     text: "Notebook Record",
     route: "/Student-Dashboard/notebook"
   },
+  {
+    image: notebook,
+    alt: "Notice image",
+    text: "My Inbox",
+    route: "/Student-Dashboard/MyInbox",
+    children: [],
+  },
   // {
   //   image: lifestyle,
   //   alt: "lifestyle image",

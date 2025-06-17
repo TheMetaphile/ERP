@@ -245,7 +245,54 @@ const router = createBrowserRouter([
       </SuspenseWrapper>
     ),
   },
-
+  {
+    path: "/Teacher-Dashboard/MyInbox/",
+    element: (
+      <SuspenseWrapper>
+        <MyInbox />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: "/Teacher-Dashboard/MyInbox/:section/:id?",
+    element: (
+      <SuspenseWrapper>
+        <MyInbox />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: "/Student-Dashboard/MyInbox/",
+    element: (
+      <SuspenseWrapper>
+        <MyInbox />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: "/Student-Dashboard/MyInbox/:section/:id?",
+    element: (
+      <SuspenseWrapper>
+        <MyInbox />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: "/Admin-Dashboard/MyInbox/",
+    element: (
+      <SuspenseWrapper>
+        <MyInbox />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: "/Admin-Dashboard/MyInbox/:section/:id?",
+    element: (
+      <SuspenseWrapper>
+        <MyInbox />
+      </SuspenseWrapper>
+    ),
+  },
   {
     path: "/Student-Dashboard",
     element: (

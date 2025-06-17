@@ -104,13 +104,27 @@ export default function ImageTextInRow(props) {
   return (
     <div className={`${hoverClass} rounded-full`}>
       {props.route ? (
-        <Link
-          to={props.route}
-          className={`flex px-4 py-2 items-center text-sm no-underline ${textClass}`}
-        >
-          <img src={props.image} alt={props.alternateText} className={`w-1/6 ${textClass}`} />
-          <span className="ml-2">{props.text}</span>
-        </Link>
+        props.openInNewTab ? (
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              window.open(props.route, "_blank", "noopener,noreferrer");
+            }}
+            className={`flex px-4 py-2 items-center text-sm no-underline cursor-pointer ${textClass}`}
+          >
+            <img src={props.image} alt={props.alternateText} className={`w-1/6 ${textClass}`} />
+            <span className="ml-2">{props.text}</span>
+          </div>
+        ) : (
+          <Link
+            to={props.route}
+            className={`flex px-4 py-2 items-center text-sm no-underline ${textClass}`}
+          >
+            <img src={props.image} alt={props.alternateText} className={`w-1/6 ${textClass}`} />
+            <span className="ml-2">{props.text}</span>
+          </Link>
+        )
       ) : (
         <button
           onClick={handleButtonClick}
@@ -120,6 +134,7 @@ export default function ImageTextInRow(props) {
           <span className="ml-2">{props.text}</span>
         </button>
       )}
+
 
       <AnimatePresence>
         {isDialogOpen && (

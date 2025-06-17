@@ -176,6 +176,13 @@ const menuItems = [
     route: "/Teacher-Dashboard/HOD",
     children: [],
   },
+  {
+    image: dashboardLeaveImage,
+    alt: "Notice image",
+    title: "My Inbox",
+    route: "/Teacher-Dashboard/MyInbox",
+    children: [],
+  },
 ];
 
 export default menuItems;

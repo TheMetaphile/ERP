@@ -146,7 +146,7 @@ const ComposeEmail = () => {
                 setShowSuggestions(true);
                 const searchRole = async () => {
                     try {
-                        const response = await axios.post(`${BASE_URL}/search/${role}`, {
+                        const response = await axios.post(`${BASE_URL}/search/myInbox/${role}`, {
                             accessToken: authState?.accessToken,
                             searchString: searchString || ccSearchString,
                             start: 0,

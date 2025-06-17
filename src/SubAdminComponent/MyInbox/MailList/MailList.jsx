@@ -7,6 +7,8 @@ import axios from "axios";
 import { BASE_URL, WEB_SOCKET_BASE_URL } from "../../../Config";
 
 function MailList({
+  emails,
+  setEmails,
   setSelectedMail,
   selectedMail,
   isOpen,
@@ -17,7 +19,6 @@ function MailList({
   const { authState } = useContext(AuthContext);
   // const emails = getMailsBySection(currentSection);
   const { section, id: folderId } = useParams();
-  const [emails, setEmails] = useState([]);
   const socketRef = useRef(null);
 
   useEffect(() => {

@@ -14,8 +14,9 @@ import axios from 'axios';
 import ForwardDialog from './ForwardDialog';
 import ReplyDialog from './ReplyDialog';
 import { useParams } from 'react-router-dom';
+import { AiOutlineUnlock, AiOutlineLock } from 'react-icons/ai';
 
-function MailContent({ mail, darkMode }) {
+function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
     const { authState } = useContext(AuthContext);
     const [showCreateFolderModal, setShowCreateFolderModal] = useState(false);
     const [newFolderName, setNewFolderName] = useState('');
@@ -147,7 +148,12 @@ function MailContent({ mail, darkMode }) {
                     }
                 }
             );
+            const updatedFlags = {};
+            for (const key in actionFlags) {
+                updatedFlags[`Is${key}`] = actionFlags[key];
+            }
 
+            onStatusUpdateMail(conversationID, updatedFlags);
             console.log('Status updated:', response.data);
         } catch (error) {
             console.error('Failed to update status:', error);
@@ -173,12 +179,48 @@ function MailContent({ mail, darkMode }) {
 
             if (response.status === 200) {
                 toast.success('Tag applied successfully');
+                onUpdateMail(mailId, {
+                    status: {
+                        ...mail.status,
+                        TagData: [...(mail.status?.TagData || []), tags.find(tag => tag._id === tagId)]
+                    }
+                });
             } else {
                 toast.error(response.data?.error || 'Failed to apply tag');
             }
         } catch (error) {
             console.error('Error applying tag:', error);
             toast.error(error.response?.data?.error || 'An error occurred while applying the tag');
+        }
+    };
+
+    const handleRemoveTag = async (tagId, mailId) => {
+        try {
+            const payload = {
+                ConversationID: mailId,
+                TagID: tagId,
+                UserID: authState?.userDetails?._id,
+            };
+
+            await axios.put(`${BASE_URL}/myInbox/update/removeTag`, payload, {
+                headers: {
+                    Authorization: `Bearer ${authState?.accessToken}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            toast.success("Tag removed");
+
+            onUpdateMail(mailId, {
+                status: {
+                    ...mail.status,
+                    TagData: mail.status?.TagData?.filter(tag => tag._id !== tagId)
+                }
+            });
+
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to remove tag");
         }
     };
 
@@ -234,6 +276,63 @@ function MailContent({ mail, darkMode }) {
         } catch (error) {
             console.error('Error removing mail from folder:', error);
             toast.error(error.response?.data?.error || 'An error occurred while removing the mail');
+        }
+    };
+
+    const handleOpenConversation = async (mailId) => {
+        try {
+            const response = await axios.put(
+                `${BASE_URL}/myInbox/update/openConversation`,
+                {
+                    ConversationID: mailId,
+                    UserID: authState?.userDetails?._id,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                toast.success('Conversation opened successfully');
+                onUpdateMail(mailId, { IsClosed: false });
+            } else {
+                toast.error(response.data?.error || 'Failed to open conversation');
+            }
+        } catch (error) {
+            console.error('Error while opening conversation:', error);
+            toast.error(error.response?.data?.error || 'An error occurred while opening conversation');
+        }
+    };
+
+    const handleCloseConversation = async (mailId) => {
+        try {
+            const response = await axios.put(
+                `${BASE_URL}/myInbox/update/closeConversation`,
+                {
+                    ConversationID: mailId,
+                    UserID: authState?.userDetails?._id,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authState?.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                toast.success('Conversation Closed successfully');
+                onUpdateMail(mailId, { IsClosed: true });
+
+            } else {
+                toast.error(response.data?.error || 'Failed to close conversation');
+            }
+        } catch (error) {
+            console.error('Error closing conversation:', error);
+            toast.error(error.response?.data?.error || 'An error occurred while closing conversation');
         }
     };
 
@@ -353,7 +452,7 @@ function MailContent({ mail, darkMode }) {
     }
 
 
-    console.log(section, 'here', id)
+    console.log(section, 'here', id, authState)
     return (
         <div className={``}>
             <div
@@ -363,27 +462,45 @@ function MailContent({ mail, darkMode }) {
                 <div className="flex items-center gap-4 text-sm">
                     <button
                         onClick={() => handleMarkAs(mail._id, { Archived: true })}
-                        className="flex items-center gap-1 hover:text-blue-600 transition"
+                        className={`flex items-center gap-1 transition ${mail.status?.IsArchived ? 'text-blue-600' : 'hover:text-blue-600'
+                            }`}
                     >
-                        <Archive size={16} /> Archive
+                        <Archive
+                            size={16}
+                            fill={mail.status?.IsArchived ? 'currentColor' : 'none'}
+                            stroke="currentColor" /> Archive
                     </button>
                     <button
                         onClick={() => handleMarkAs(mail._id, { Deleted: true })}
-                        className="flex items-center gap-1 hover:text-red-500 transition"
+                        className={`flex items-center gap-1 transition ${mail.status?.IsDeleted ? 'hover:text-red-500' : 'hover:hover:text-red-500'
+                            }`}
                     >
-                        <Trash2 size={16} /> Delete
+                        <Trash2
+                            size={16}
+                            fill={mail.status?.IsDeleted ? 'currentColor' : 'none'}
+                            stroke="currentColor" /> Delete
                     </button>
                     <button
                         onClick={() => handleMarkAs(mail._id, { Starred: true })}
-                        className="flex items-center gap-1 hover:text-yellow-500 transition"
+                        className={`flex items-center gap-1 transition ${mail.status?.IsStarred ? 'text-yellow-500' : 'hover:text-yellow-500'
+                            }`}
                     >
-                        <Star size={16} /> Star
+                        <Star
+                            size={16}
+                            fill={mail.status?.IsStarred ? 'currentColor' : 'none'}
+                            stroke="currentColor" /> Star
                     </button>
                     <button
                         onClick={() => handleMarkAs(mail._id, { Favourite: true })}
-                        className="flex items-center gap-1 hover:text-pink-500 transition"
+                        className={`flex items-center gap-1 transition ${mail.status?.IsFavourite ? 'text-pink-500' : 'hover:text-pink-500'
+                            }`}
                     >
-                        <Heart size={16} /> Favorite
+                        <Heart
+                            size={16}
+                            fill={mail.status?.IsFavourite ? 'currentColor' : 'none'}
+                            stroke="currentColor"
+                        />
+                        Favorite
                     </button>
 
                     {tags.length > 0 && (
@@ -394,26 +511,63 @@ function MailContent({ mail, darkMode }) {
 
                             <div className="absolute right-0 mt-1 w-52 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-20">
                                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 max-h-60 overflow-y-auto">
-                                    {tags.map((tag, index) => (
-                                        <li
-                                            key={`tag-${index}`}
-                                            className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                                            onClick={() => handleApplyTag(tag._id, mail._id)}
-                                        >
-                                            <span
-                                                className="w-3 h-3 rounded-full"
-                                                style={{ backgroundColor: tag.TagColor }}
-                                            ></span>
-                                            <span className="truncate font-medium">{tag.TagName}</span>
-                                        </li>
-                                    ))}
+                                    {tags.map((tag, index) => {
+                                        const isApplied = Array.isArray(mail?.status?.TagData) && mail.status.TagData.some(t => t.TagName === tag.TagName);
+                                        return (
+                                            <li
+                                                key={`tag-${index}`}
+                                                className={`flex items-center gap-2 px-4 py-2 cursor-pointer transition-colors 
+                                ${isApplied
+                                                        ? 'bg-green-100 dark:bg-green-700 font-semibold'
+                                                        : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+                                                    }`}
+                                                onClick={() =>
+                                                    isApplied
+                                                        ? handleRemoveTag(tag._id, mail._id)
+                                                        : handleApplyTag(tag._id, mail._id)
+                                                }
+                                            >
+                                                <span
+                                                    className="w-3 h-3 rounded-full"
+                                                    style={{ backgroundColor: tag.TagColor }}
+                                                ></span>
+                                                <span className="truncate">{tag.TagName}</span>
+                                            </li>
+                                        );
+                                    })}
                                 </ul>
                             </div>
                         </div>
                     )}
 
-                </div>
 
+                    {(authState.userDetails.rolee === 'Admin-Dashboard' || authState.userDetails.rolee === 'Sub-Admin') && (
+                        <div className="relative group inline-block">
+                            <div
+                                className={`flex items-center gap-1 text-sm transition cursor-pointer 
+        ${mail.IsClosed ? 'text-red-600 hover:underline' : 'text-green-600 hover:underline'}`}
+                                onClick={() =>
+                                    mail.IsClosed
+                                        ? handleOpenConversation(mail._id)
+                                        : handleCloseConversation(mail._id)
+                                }
+                            >
+                                {mail.IsClosed ? (
+                                    <>
+                                        <AiOutlineLock size={16} /> Close Conversation
+                                    </>
+                                ) : (
+                                    <>
+                                        <AiOutlineUnlock size={16} /> Open Conversation
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+
+
+                </div>
 
                 {section && id ?
                     <div className="relative group inline-block">
@@ -711,30 +865,37 @@ function MailContent({ mail, darkMode }) {
                 </div>
             </div>
 
+            {showReplyDialog && (
+                <div className="px-6 pb-2">
+                    <ReplyDialog
+                        onClose={() => setShowReplyDialog(false)}
+                        ConversationID={mail._id}
+                        addNewMessage={addNewMessage}
+                    />
+                </div>
+            )}
 
             <div className={`p-6 border-t ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
                 <div className="flex gap-3">
-                    <button
-                        onClick={() => setShowReplyDialog(true)}
-                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
-                        Reply
-                    </button>
+                    {!mail.IsClosed && (
+                        <button
+                            onClick={() => setShowReplyDialog(true)}
+                            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                            Reply
+                        </button>
+                    )}
+
                     <button
                         onClick={() => setShowForwardDialog(true)}
-                        className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 ${darkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                        className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-2 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
                     >
                         Forward
                     </button>
+
                 </div>
             </div>
 
-            {showReplyDialog && (
-                <ReplyDialog
-                    onClose={() => setShowReplyDialog(false)}
-                    ConversationID={mail._id}
-                    addNewMessage={addNewMessage}
-                />
-            )}
+
 
             {showForwardDialog && (
                 <ForwardDialog

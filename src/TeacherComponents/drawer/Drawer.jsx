@@ -117,7 +117,17 @@ export default function TeacherDrawer({ isOpen }) {
                       : "hover:bg-gray-200"
                     } transition-all duration-200`}
                 >
-                  <div onClick={() => handleClick(index)}>
+                  <div
+                    onClick={(e) => {
+                      if (menuItem.title === "My Inbox") {
+                        e.preventDefault(); 
+                        e.stopPropagation();
+                        window.open(menuItem.route, "_blank", "noopener,noreferrer");
+                      } else {
+                        handleClick(index);
+                      }
+                    }}
+                  >
                     <ExpansionTile
 
                       image={menuItem.image}
@@ -127,6 +137,7 @@ export default function TeacherDrawer({ isOpen }) {
                       route={menuItem.route}
                       darkMode={darkMode}
                       isActive={active === index}
+                      openInNewTab={menuItem.title === "My Inbox"}
                     />
                   </div>
                 </motion.div>

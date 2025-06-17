@@ -8,8 +8,10 @@ import ComposeMail from './ComposeMail/ComposeMail';
 import { ChevronLeft, ChevronRight, Menu } from 'react-feather';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useLocation } from 'react-router-dom';
 
 function MyInbox() {
+    const location = useLocation();
     const { section } = useParams();
     const navigate = useNavigate();
     const { darkMode } = useContext(AuthContext);
@@ -18,8 +20,59 @@ function MyInbox() {
     const [mailListOpen, setMailListOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [isComposing, setIsComposing] = useState(false);
+    const [emails, setEmails] = useState([]);
 
     const currentSection = section || 'inbox';
+
+    const updateMailProperty = (mailId, updatedFields) => {
+        setEmails(prev =>
+            prev.map(email =>
+                email._id === mailId ? { ...email, ...updatedFields } : email
+            )
+        );
+        setSelectedMail(prev =>
+            prev && prev._id === mailId ? { ...prev, ...updatedFields } : prev
+        );
+    };
+
+    const updateMailStatus = (mailId, updatedStatus) => {
+        setEmails(prev =>
+            prev.map(email => {
+                if (email._id !== mailId) return email;
+
+                const newStatus = Object.keys(email.status || {}).reduce((acc, key) => {
+                    acc[key] = false;
+                    return acc;
+                }, {});
+
+                const updatedKey = Object.keys(updatedStatus)[0];
+                newStatus[updatedKey] = updatedStatus[updatedKey];
+
+                return {
+                    ...email,
+                    status: newStatus
+                };
+            })
+        );
+
+        setSelectedMail(prev => {
+            if (!prev || prev._id !== mailId) return prev;
+
+            const newStatus = Object.keys(prev.status || {}).reduce((acc, key) => {
+                acc[key] = false;
+                return acc;
+            }, {});
+
+            const updatedKey = Object.keys(updatedStatus)[0];
+            newStatus[updatedKey] = updatedStatus[updatedKey];
+
+            return {
+                ...prev,
+                status: newStatus
+            };
+        });
+    };
+
 
     useEffect(() => {
         const checkMobile = () => {
@@ -51,7 +104,20 @@ function MyInbox() {
     };
 
     const handleSectionChange = (sectionName = 'inbox', folderId) => {
-        navigate(`/Sub-Admin/MyInbox/${sectionName}/${folderId || ''}`);
+        const currentPath = location.pathname;
+
+        let basePath = '/Sub-Admin';
+
+        if (currentPath.includes('Teacher-Dashboard')) {
+            basePath = '/Teacher-Dashboard';
+        } else if (currentPath.includes('Student-Dashboard')) {
+            basePath = '/Student-Dashboard';
+        } else if (currentPath.includes('Admin-Dashboard')) {
+            basePath = '/Admin-Dashboard';
+        }
+
+        navigate(`${basePath}/MyInbox/${sectionName}/${folderId || ''}`);
+
         if (isMobile) setSidebarOpen(false);
     };
     return (
@@ -84,6 +150,8 @@ function MyInbox() {
                 <div className="w-full h-[calc(100vh-5rem)] grid grid-cols-[30%_70%] mt-20 overflow-hidden">
                     <div className="h-full overflow-y-auto">
                         <MailList
+                            emails={emails}
+                            setEmails={setEmails}
                             setSelectedMail={handleMailSelect}
                             selectedMail={selectedMail}
                             isOpen={mailListOpen || !isMobile}
@@ -101,6 +169,8 @@ function MyInbox() {
                                 mail={selectedMail}
                                 darkMode={darkMode}
                                 currentSection={currentSection}
+                                onUpdateMail={updateMailProperty}
+                                onStatusUpdateMail={updateMailStatus}
                             />
                         )}
                     </div>

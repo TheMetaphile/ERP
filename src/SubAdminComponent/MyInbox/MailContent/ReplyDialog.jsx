@@ -68,34 +68,32 @@ const ReplyDialog = ({
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg w-[90%] max-w-xl p-6">
-                <h2 className="text-lg font-bold mb-4 text-gray-800 dark:text-white">Reply Message</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-lg shadow w-full p-4 border border-gray-300 dark:border-gray-700">
+            <h2 className="text-md font-semibold mb-3 text-gray-800 dark:text-white">Reply Message</h2>
 
-                <div className="mb-4">
-                    <ReactQuill
-                        value={body}
-                        onChange={setBody}
-                        modules={modules}
-                        theme="snow"
-                    // style={{ height: '300px' }}
-                    />
-                </div>
+            <div className="mb-3">
+                <ReactQuill
+                    value={body}
+                    onChange={setBody}
+                    modules={modules}
+                    theme="snow"
+                // style={{ height: '300px' }}
+                />
+            </div>
 
-                <div className="flex justify-end gap-3 mt-4">
-                    <button
-                        onClick={onClose}
-                        className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        onClick={handleSave}
-                        className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold"
-                    >
-                        Save
-                    </button>
-                </div>
+            <div className="flex justify-end gap-3">
+                <button
+                    onClick={onClose}
+                    className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold"
+                >
+                    Cancel
+                </button>
+                <button
+                    onClick={handleSave}
+                    className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                >
+                    Send
+                </button>
             </div>
         </div>
     );

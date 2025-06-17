@@ -107,7 +107,15 @@ export default function Drawer({ isOpen }) {
                       : "hover:bg-gray-100 text-black"
                     } transition-all duration-200`}
                 >
-                  <div onClick={() => handleClick(index)}>
+                  <div onClick={(e) => {
+                    if (menuItem.text === "My Inbox") {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      window.open(menuItem.route, "_blank", "noopener,noreferrer");
+                    } else {
+                      handleClick(index);
+                    }
+                  }}>
                     <ImageTextInRow
                       key={index}
                       image={menuItem.image}
@@ -116,6 +124,7 @@ export default function Drawer({ isOpen }) {
                       route={menuItem.route}
                       isActive={active === index}
                       darkMode={darkMode}
+                      openInNewTab={menuItem.text === "My Inbox"}
                     />
                   </div>
                 </motion.div>

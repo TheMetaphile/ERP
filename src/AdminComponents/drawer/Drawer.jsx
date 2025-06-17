@@ -36,7 +36,15 @@ export default function AdminDrawer({ isOpen }) {
           {menuItems.map((menuItem, index) => (
             <div
               key={index}
-              onClick={() => handleClick(index)}
+              onClick={(e) => {
+                if (menuItem.title === "My Inbox") {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  window.open(menuItem.route, "_blank", "noopener,noreferrer");
+                } else {
+                  handleClick(index);
+                }
+              }}
               className={`cursor-pointer rounded-lg ${active === index ? 'bg-blue-300' : ''}`}
             >
               <ExpansionTile
@@ -46,6 +54,8 @@ export default function AdminDrawer({ isOpen }) {
                 title={menuItem.title}
                 childrens={menuItem.children}
                 route={menuItem.route}
+                openInNewTab={menuItem.title === "My Inbox"}
+
               />
             </div>
           ))}

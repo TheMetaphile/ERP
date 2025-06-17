@@ -242,6 +242,13 @@ const menuItems = [
     route: "/Admin-Dashboard/Employee",
     children: [],
   },
+  {
+    image: leaveImage,
+    alt: "Notice image",
+    title: "My Inbox",
+    route: "/Admin-Dashboard/MyInbox",
+    children: [],
+  },
   // {
   //   image: leaveImage,
   //   alt: "img",
