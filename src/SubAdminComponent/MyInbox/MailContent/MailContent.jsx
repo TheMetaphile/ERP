@@ -28,6 +28,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
     const [showReplyDialog, setShowReplyDialog] = useState(false);
     const { section, id } = useParams();
     const socketRef = useRef(null);
+    const bottomRef = useRef(null);
 
     const [folders, setFolders] = useState([
         { id: 1, name: 'Archived' },
@@ -40,6 +41,10 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
     const handleCreateNewFolder = () => {
         setShowCreateFolderModal(true);
     };
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [mail]);
 
     useEffect(() => {
         const fetchCustomFolders = async () => {
@@ -395,6 +400,15 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
                                 break;
 
                             case "new":
+                                var sender = '';
+                                sender = mailTo.find((user) => user._id == response.newMessage.Sender);
+                                if (!(typeof sender == 'object')) {
+                                    sender = mailCc.find((user) => user._id == response.newMessage.Sender);
+                                }
+                                if (mail.CreatedUser._id == response.newMessage.Sender) {
+                                    sender = mail.CreatedUser;
+                                }
+                                response.newMessage.Sender = sender;
                                 setMailContent((prevEmails) => [response.newMessage, ...prevEmails]);
                                 break;
 
@@ -402,7 +416,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
                                 setMailContent((prevEmails) =>
                                     prevEmails.map((email) =>
                                         email._id === response.messageId
-                                            ? { ...email, SeenBy: response.SeenBy }
+                                            ? { ...email, SeenBy: email.SeenBy.push(response?.SeenBy) || [] }
                                             : email
                                     )
                                 );
@@ -438,6 +452,10 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
     // const addNewMessage = (newMessage) => {
     //     setMailContent((prevContent) => [...prevContent, newMessage]);
     // };
+
+    useEffect(() => {
+        setShowReplyDialog(false);
+    }, [mail]);
 
     if (!mail) {
         return (
@@ -734,15 +752,14 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
                     <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                         {new Date(mail.LastMessageAt).toLocaleString()}
                     </span>
-                    <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {mail.unSeenCount > 0 ? mail.unSeenCount : ''}
-                    </span>
                 </div>
             </div>
 
 
 
-            <div className="flex-1 p-6 overflow-y-auto bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:to-gray-800">
+            <div className="flex-1 p-6 overflow-y-auto bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:to-gray-800"
+            // ref={bottomRef}
+            >
                 <div className={`space-y-6 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                     {mailContent.map((message, index) => (
                         <div
@@ -870,7 +887,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
                     <ReplyDialog
                         onClose={() => setShowReplyDialog(false)}
                         ConversationID={mail._id}
-                        // addNewMessage={addNewMessage}
+                    // addNewMessage={addNewMessage}
                     />
                 </div>
             )}

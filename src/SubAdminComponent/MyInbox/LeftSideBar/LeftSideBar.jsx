@@ -14,13 +14,13 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
     const { authState } = useContext(AuthContext);
     const [showMore, setShowMore] = useState(false);
 
-    const sidebarItems = [
-        { icon: Inbox, label: 'Inbox', count: 24, section: 'inbox' },
-        { icon: Send, label: 'Sent', count: null, section: 'sent' },
-        { icon: Star, label: 'Archived', count: 3, section: 'archived' },
-        { icon: Star, label: 'Starred', count: 3, section: 'starred' },
-        { icon: Star, label: 'Deleted', count: 3, section: 'deleted' },
-        { icon: Star, label: 'Favourite', count: 3, section: 'favourite' }
+    const staticSidebarItems = [
+        { icon: Inbox, label: 'Inbox', section: 'inbox' },
+        { icon: Send, label: 'Sent', section: 'sent' },
+        { icon: Star, label: 'Archived', section: 'archived' },
+        { icon: Star, label: 'Starred', section: 'starred' },
+        { icon: Star, label: 'Deleted', section: 'deleted' },
+        { icon: Star, label: 'Favourite', section: 'favourite' }
     ];
     const [tags, setTags] = useState([]);
     const [showCreateTagInline, setShowCreateTagInline] = useState(false);
@@ -29,6 +29,24 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
     const [showTags, setShowTags] = useState(false);
     const [showCreateFolderInline, setShowCreateFolderInline] = useState(false);
     const [newFolderName, setNewFolderName] = useState('');
+
+    const sidebarItems = staticSidebarItems.map(item => {
+        let matchName = item.label.toLowerCase();
+
+        if (matchName === "sent") {
+            matchName = "outbox";
+        }
+
+        const folder = customFolders.find(f =>
+            f.Name?.toLowerCase() === matchName
+        );
+
+        return {
+            ...item,
+            count: folder?.unSeenCount ?? null
+        };
+    });
+
 
     const handleSaveTag = async () => {
         if (!newTagName.trim()) return;
@@ -97,6 +115,8 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
             console.error('Error deleting tag:', error);
         }
     };
+
+    console.log(authState?.userDetails)
 
     useEffect(() => {
         const fetchTags = async () => {
@@ -256,7 +276,7 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
                                     />
                                     <span className="font-medium">{item.label}</span>
                                 </div>
-                                {item.count && (
+                                {item.count > 0 && (
                                     <span
                                         className={`px-2 py-1 rounded-full text-xs font-semibold ${currentSection === item.section
                                             ? 'bg-blue-600 text-white'
@@ -281,31 +301,38 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
                             {showMore && (
                                 <div className="mt-1 pl-2 space-y-2">
                                     {customFolders.map((folder, index) => (
-                                        <div
-                                            key={`custom-${index}`}
-                                            className="flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md group"
-                                        >
-                                            <button
-                                                onClick={() => onSectionChange(folder.Name.toLowerCase(), folder._id)}
-                                                className={`flex-1 text-left font-medium text-sm truncate transition-colors ${currentSection === folder.Name.toLowerCase()
-                                                    ? 'text-blue-600 dark:text-blue-400'
-                                                    : darkMode
-                                                        ? 'text-gray-300'
-                                                        : 'text-gray-700'
-                                                    }`}
+                                        folder._id && (
+                                            <div
+                                                key={`custom-${index}`}
+                                                className="flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md group"
                                             >
-                                                {folder.Name}
-                                            </button>
-
-                                            <button
-                                                onClick={() => handleDeleteFolder(folder._id)}
-                                                className="ml-3 p-2 rounded-full text-red-500 hover:bg-red-100 dark:hover:bg-red-800 transition-opacity opacity-0 group-hover:opacity-100"
-                                                title="Delete Folder"
-                                            >
-                                                <FaTrash className="h-4 w-4" />
-                                            </button>
-                                        </div>
+                                                <button
+                                                    onClick={() => onSectionChange(folder.Name.toLowerCase(), folder._id)}
+                                                    className={`flex-1 text-left font-medium text-sm truncate transition-colors ${currentSection === folder.Name.toLowerCase()
+                                                        ? 'text-blue-600 dark:text-blue-400'
+                                                        : darkMode
+                                                            ? 'text-gray-300'
+                                                            : 'text-gray-700'
+                                                        }`}
+                                                >
+                                                    {folder.Name}
+                                                </button>
+                                                {folder.unSeenCount > 0 && (
+                                                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-blue-600 text-white">
+                                                        {folder.unSeenCount}
+                                                    </span>
+                                                )}
+                                                <button
+                                                    onClick={() => handleDeleteFolder(folder._id)}
+                                                    className="ml-3 p-2 rounded-full text-red-500 hover:bg-red-100 dark:hover:bg-red-800 transition-opacity opacity-0 group-hover:opacity-100"
+                                                    title="Delete Folder"
+                                                >
+                                                    <FaTrash className="h-4 w-4" />
+                                                </button>
+                                            </div>
+                                        )
                                     ))}
+
 
                                     {showCreateFolderInline ? (
                                         <div className="flex items-center gap-2">

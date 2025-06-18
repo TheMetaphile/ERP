@@ -20,6 +20,7 @@ function MailList({
   // const emails = getMailsBySection(currentSection);
   const { section, id: folderId } = useParams();
   const socketRef = useRef(null);
+  const [socketChange, setSocketChange] = useState([]);
 
   useEffect(() => {
     const fetchMails = async () => {
@@ -30,6 +31,7 @@ function MailList({
         socketRef.current = socket;
         socket.onopen = () => {
           console.log("WebSocket connected");
+          setSocketChange(socket);
         };
 
         socket.onmessage = (event) => {
@@ -49,13 +51,22 @@ function MailList({
                 break;
 
               case "update":
-                setEmails((prevEmails) =>
-                  prevEmails.map((email) =>
-                    email._id === response.conversationId
-                      ? { ...email, unSeenCount: email.unSeenCount++, lastMessage: response.messageId.MessageBody, LastMessageAt: response.messageId.SentAt }
-                      : email
-                  )
-                );
+                setEmails((prevEmails) => {
+                  const updatedEmail = prevEmails.find(email => email._id === response.conversationId);
+                  if (!updatedEmail) return prevEmails;
+
+                  const newEmail = {
+                    ...updatedEmail,
+                    unSeenCount: updatedEmail.unSeenCount + 1,
+                    lastMessage: response.messageId.MessageBody,
+                    LastMessageAt: response.messageId.SentAt,
+                  };
+
+                  return [
+                    newEmail,
+                    ...prevEmails.filter(email => email._id !== response.conversationId),
+                  ];
+                });
                 break;
               default:
                 console.log("Default");
@@ -114,6 +125,9 @@ function MailList({
         case "deleted":
           IsDeleted = true;
           break;
+        default:
+          IsInbox = true;
+          break;
       }
       socketRef.current.send(
         JSON.stringify({
@@ -129,53 +143,44 @@ function MailList({
         })
       );
     }
-  }, [folderId, section]);
+    console.log('initial call')
+  }, [folderId, section, socketChange]);
 
   return (
     <div
-      className={`${darkMode ? "bg-gray-50 dark:bg-gray-900" : "bg-gray-50"
-        } transform transition-all duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        } flex flex-col border-r border-gray-200 dark:border-gray-700 h-full`}
+      className={`
+    ${darkMode ? "bg-gray-900" : "bg-gray-50"}
+    transform transition-all duration-300 ease-in-out
+    ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+    flex flex-col border-r border-gray-200 dark:border-gray-700 h-full
+  `}
     >
       <div
-        className={`p-4 border-b ${darkMode ? "border-gray-700 bg-gray-900" : "border-gray-200 bg-white"
-          }`}
+        className={`
+      p-4 border-b
+      ${darkMode ? "border-gray-700 bg-gray-900" : "border-gray-200 bg-white"}
+    `}
       >
-        {/* <div className="flex items-center justify-between mb-4">
-                    <h2 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {sectionTitle}
-                    </h2>
-                    <button
-                        onClick={onClose}
-                        className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                    >
-                        <UserX className="w-5 h-5" />
-                    </button>
-                </div> */}
-
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
             placeholder={`Search ${section}...`}
             className={`
-                            w-full pl-10 pr-4 py-2 rounded-lg border transition-all duration-200
-                            ${darkMode
-                ? "bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+          w-full pl-10 pr-4 py-2 rounded-lg border transition-all duration-200 shadow-sm
+          ${darkMode
+                ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-blue-500"
                 : "bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500"
               }
-                            focus:outline-none focus:ring-2 focus:ring-blue-500/20
-                        `}
+          focus:outline-none focus:ring-2 focus:ring-blue-500/30
+        `}
           />
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto px-2 py-4 space-y-3">
         {emails.length === 0 ? (
-          <div
-            className={`p-8 text-center ${darkMode ? "text-gray-400" : "text-gray-500"
-              }`}
-          >
+          <div className={`text-center ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
             <p>No emails in {section}</p>
           </div>
         ) : (
@@ -183,83 +188,66 @@ function MailList({
             <div
               key={email._id}
               className={`
-                                p-4 border-b border-gray-200 dark:border-gray-700 cursor-pointer
-                                transition-all duration-200 hover:shadow-md
-                                ${selectedMail?._id === email._id
-                  ? "bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500"
-                  : `${darkMode
-                    ? "bg-gray-900 hover:bg-gray-800"
-                    : "bg-white hover:bg-gray-50"
-                  }`
+            p-4 rounded-2xl border transition-all duration-300 ease-in-out
+            shadow-sm hover:shadow-lg hover:scale-[1.01] hover:translate-x-1 cursor-pointer
+            ${selectedMail?._id === email?._id
+                  ? "bg-blue-50 dark:bg-blue-900/30 border-blue-500 border-l-4"
+                  : darkMode
+                    ? "bg-gray-800 border-gray-700 hover:bg-gray-700"
+                    : "bg-white border-gray-200 hover:bg-gray-50"
                 }
-                                ${email.unSeenCount ? "font-semibold" : "font-normal"
-                }
-                                transform hover:scale-[1.02] hover:translate-x-1
-                            `}
-              onClick={() => setSelectedMail(email)}
+            ${email?.unSeenCount ? "font-semibold" : "font-normal"}
+          `}
+              onClick={() => {
+                setSelectedMail(email);
+                setEmails(prevEmails =>
+                  prevEmails.map(e =>
+                    e._id === email._id ? { ...e, unSeenCount: 0 } : e
+                  )
+                );
+              }}
             >
-              <div className="flex items-start gap-3">
-                <div
-                  className={`
-    w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0
-    ${email.unSeenCount
-                      ? "bg-gradient-to-r from-blue-500 to-purple-500"
-                      : "bg-gray-400"
-                    }
-  `}
-                >
+              <div className="flex items-start gap-4">
+                <div className="relative w-12 h-12 flex-shrink-0">
                   <img
                     src={email.CreatedUser.profileLink}
                     alt="avatar"
-                    className="w-full h-full object-cover rounded-full"
+                    className="w-full h-full object-cover rounded-full border-2 border-white shadow-md"
                   />
+                  {email.unSeenCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-md">
+                      {email.unSeenCount}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
-                    <h4
-                      className={`truncate ${darkMode ? "text-white" : "text-gray-900"
-                        }`}
-                    >
+                    <h4 className={`truncate text-md font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
                       {email.CreatedUser?.name}
                     </h4>
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      {email.starred && (
-                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                      )}
-                      <span
-                        className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"
-                          }`}
-                      >
-                        {new Date(email.LastMessageAt).getDate()}/
-                        {new Date(email.LastMessageAt).getMonth() + 1}/
-                        {new Date(email.LastMessageAt).getFullYear()}
+                      <span className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                        {new Date(email.LastMessageAt).toLocaleDateString("en-GB")}
                       </span>
+                      {email?.status?.TagData?.length > 0 && (
+                        <div
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: email.status.TagData[0].TagColor }}
+                          title={email.status.TagData[0].TagName}
+                        />
+                      )}
                     </div>
                   </div>
 
-                  <h5
-                    className={`text-sm mb-1 truncate ${darkMode ? "text-gray-200" : "text-gray-800"
-                      }`}
-                  >
+                  <h5 className={`text-sm truncate font-semibold ${darkMode ? "text-gray-300" : "text-gray-800"}`}>
                     {email.Subject}
                   </h5>
 
                   <div
-                    className={`text-sm mb-1 truncate ${darkMode ? "text-gray-200" : "text-gray-800"
-                      }`}
+                    className={`text-sm line-clamp-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}
                     dangerouslySetInnerHTML={{ __html: email.lastMessage }}
                   />
-
-
-
-                  {/* <p className={`text-xs leading-relaxed line-clamp-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                                        {email.preview}
-                                    </p> */}
-
-                  {/* {email.unSeenCount && (
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                  )} */}
                 </div>
               </div>
             </div>
@@ -267,6 +255,7 @@ function MailList({
         )}
       </div>
     </div>
+
   );
 }
 

@@ -148,7 +148,7 @@ function MyInbox() {
                 />
 
                 <div className="w-full h-[calc(100vh-5rem)] grid grid-cols-[30%_70%] mt-20 overflow-hidden">
-                    <div className="h-full overflow-y-auto">
+                    <div className="h-full overflow-y-auto no-scrollbar">
                         <MailList
                             emails={emails}
                             setEmails={setEmails}
@@ -161,7 +161,7 @@ function MyInbox() {
                         />
                     </div>
 
-                    <div className="h-full overflow-y-auto hide-scrollbar">
+                    <div className="h-full overflow-y-auto no-scrollbar">
                         {isComposing ? (
                             <ComposeMail darkMode={darkMode} onCancel={() => setIsComposing(false)} />
                         ) : (
