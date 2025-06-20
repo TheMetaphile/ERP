@@ -1,7 +1,7 @@
 // ForwardDialog.jsx
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { LuXCircle } from "react-icons/lu";
+import { LuCircleX } from "react-icons/lu";
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import { toast } from "react-toastify";
@@ -113,7 +113,7 @@ const ForwardDialog = ({
             {to.map((email, idx) => (
               <div key={idx} className="bg-gray-300 p-1 rounded flex items-center">
                 <span>{email}</span>
-                <LuXCircle
+                <LuCircleX
                   className="ml-1 text-red-600 hover:text-red-800 cursor-pointer"
                   onClick={() => removeRecipient(email, 'to')}
                 />
