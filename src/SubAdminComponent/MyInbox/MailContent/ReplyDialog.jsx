@@ -169,7 +169,7 @@ const ReplyDialog = ({ onClose, ConversationID, addNewMessage }) => {
                             className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
                             onClick={() => handleSelectSuggestion(field.key)}
                         >
-                            {field.key}
+                            {field.key} - ({field.for})
                         </div>
                     ))}
                 </div>

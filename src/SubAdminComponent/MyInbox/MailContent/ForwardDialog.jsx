@@ -1,7 +1,7 @@
 // ForwardDialog.jsx
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { LuCircleX } from "react-icons/lu";
+import { LuXCircle } from "react-icons/lu";
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import { toast } from "react-toastify";
@@ -74,7 +74,7 @@ const ForwardDialog = ({
       const payload = {
         Sender: String(authState?.userDetails?._id || ""),
         ConversationID: ConversationID,
-        Role: authState?.userDetails?.rolee || "",
+        Role: authState?.userDetails?.rolee.split('-')[0] || "",
         ToRecipients: toIds,
       };
       console.log(payload)
@@ -113,7 +113,7 @@ const ForwardDialog = ({
             {to.map((email, idx) => (
               <div key={idx} className="bg-gray-300 p-1 rounded flex items-center">
                 <span>{email}</span>
-                <LuCircleX
+                <LuXCircle
                   className="ml-1 text-red-600 hover:text-red-800 cursor-pointer"
                   onClick={() => removeRecipient(email, 'to')}
                 />
@@ -132,11 +132,11 @@ const ForwardDialog = ({
 
           {showRoles && (
             <div
-              className="mt-2 mb-4 grid grid-cols-3 gap-4"
+              className="mt-2 mb-4 grid grid-cols-4 gap-4"
               onMouseEnter={() => setIsFocused(true)}
               onMouseLeave={() => setIsFocused(false)}
             >
-              {['teacher', 'student', 'subAdmin'].map((roleOption) => (
+              {['teacher', 'student', 'subAdmin', 'admin'].map((roleOption) => (
                 <button
                   key={roleOption}
                   type="button"

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import {  LuCircleX } from "react-icons/lu";
+import { LuXCircle } from "react-icons/lu";
 import { BASE_URL } from '../../../Config';
 import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -298,7 +298,7 @@ const ComposeEmail = () => {
                         {to.map((email, idx) => (
                             <div key={idx} className="bg-gray-300 p-1 rounded flex items-center">
                                 <span>{email}</span>
-                                <LuCircleX
+                                <LuXCircle
                                     className="ml-1 text-red-600 hover:text-red-800 cursor-pointer"
                                     onClick={() => removeRecipient(email, 'to')}
                                 />
@@ -316,11 +316,11 @@ const ComposeEmail = () => {
                     </div>
                     {showRoles && (
                         <div
-                            className="mt-2 mb-4 grid grid-cols-3 gap-4"
+                            className="mt-2 mb-4 grid grid-cols-4 gap-4"
                             onMouseEnter={() => setIsFocused(true)}
                             onMouseLeave={() => setIsFocused(false)}
                         >
-                            {['teacher', 'student', 'subAdmin'].map((roleOption) => (
+                            {['teacher', 'student', 'subAdmin', 'admin'].map((roleOption) => (
                                 <button
                                     key={roleOption}
                                     type="button"
@@ -340,7 +340,7 @@ const ComposeEmail = () => {
                         {cc.map((email, idx) => (
                             <div key={idx} className="bg-gray-300 p-1 rounded flex items-center">
                                 <span>{email}</span>
-                                <LuCircleX
+                                <LuXCircle
                                     className="ml-1 text-red-600 hover:text-red-800 cursor-pointer"
                                     onClick={() => removeRecipient(email, 'cc')}
                                 />
@@ -358,11 +358,11 @@ const ComposeEmail = () => {
                     </div>
                     {ccShowRoles && (
                         <div
-                            className="mt-2 mb-4 grid grid-cols-3 gap-4"
+                            className="mt-2 mb-4 grid grid-cols-4 gap-4"
                             onMouseEnter={() => setCcIsFocused(true)}
                             onMouseLeave={() => setCcIsFocused(false)}
                         >
-                            {['teacher', 'student', 'subAdmin'].map((roleOption) => (
+                            {['teacher', 'student', 'subAdmin', 'admin'].map((roleOption) => (
                                 <button
                                     key={roleOption}
                                     type="button"
@@ -423,7 +423,7 @@ const ComposeEmail = () => {
                                     className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
                                     onClick={() => handleSelectSuggestionForSubject(field.key)}
                                 >
-                                    {field.key}
+                                    {field.key} - ({field.for})
                                 </div>
                             ))}
                         </div>
@@ -444,6 +444,7 @@ const ComposeEmail = () => {
                         ref={(el) => {
                             if (el !== null) setEditorRef(el.getEditor());
                         }}
+                         style={{ height: '300px' }}
                     />
 
                     {showFieldSuggestions && (
@@ -457,7 +458,7 @@ const ComposeEmail = () => {
                                     className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
                                     onClick={() => handleSelectSuggestion(field.key)}
                                 >
-                                    {field.key}
+                                    {field.key} - ({field.for})
                                 </div>
                             ))}
                         </div>
