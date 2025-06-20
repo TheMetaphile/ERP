@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AlertTriangle, Inbox, Mail, Plus, Send, Star, Trash2, UserX } from 'react-feather';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
-import { BASE_URL } from '../../../Config';
+import { BASE_URL, WEB_SOCKET_BASE_URL } from '../../../Config';
 import { FaTrash } from 'react-icons/fa';
 import { MdDeleteForever, MdAdd, MdSave, MdCancel } from "react-icons/md";
 import { toast } from 'react-toastify';
@@ -29,23 +29,31 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
     const [showTags, setShowTags] = useState(false);
     const [showCreateFolderInline, setShowCreateFolderInline] = useState(false);
     const [newFolderName, setNewFolderName] = useState('');
+    const socketRef = useRef(null);
+    const [sidebarItems, setSideBarItems] = useState(staticSidebarItems);
 
-    const sidebarItems = staticSidebarItems.map(item => {
-        let matchName = item.label.toLowerCase();
+    useEffect(() => {
+        const newSideBarItems = staticSidebarItems.map(item => {
+            let matchName = item.label.toLowerCase();
 
-        if (matchName === "sent") {
-            matchName = "outbox";
-        }
+            if (matchName === "sent") {
+                matchName = "outbox";
+            }
 
-        const folder = customFolders.find(f =>
-            f.Name?.toLowerCase() === matchName
-        );
+            const folder = customFolders.find(f =>
+                f.Name?.toLowerCase() === matchName
+            );
 
-        return {
-            ...item,
-            count: folder?.unSeenCount ?? null
-        };
-    });
+            return {
+                ...item,
+                count: folder?.unSeenCount ?? null
+            };
+        });
+        console.log("newSideBarItems", newSideBarItems);
+
+        setSideBarItems(newSideBarItems);
+    }, [customFolders])
+
 
 
     const handleSaveTag = async () => {
@@ -180,18 +188,75 @@ function LeftSideBar({ isOpen, onClose, darkMode, onCompose, currentSection, onS
     useEffect(() => {
         const fetchCustomFolders = async () => {
             try {
-                const response = await axios.post(
-                    `${BASE_URL}/myInbox/fetch/getFolder`,
-                    { UserID: authState?.userDetails?._id || '' },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${authState?.accessToken}`,
-                            'Content-Type': 'application/json',
-                        }
-                    }
+                const socket = new WebSocket(
+                    `${WEB_SOCKET_BASE_URL}/getFolders?token=${authState?.accessToken}`
                 );
-                setCustomFolders(response.data.Folders);
-            } catch (error) {
+                socketRef.current = socket;
+                socket.onopen = () => {
+                    console.log("WebSocket connected");
+                };
+
+                socket.onmessage = (event) => {
+                    try {
+                        const response = JSON.parse(event.data);
+                        console.log(response);
+
+                        switch (response.type) {
+                            case "initial":
+                                console.log("here", response.FolderCount);
+                                setCustomFolders(response.FolderCount.Folders);
+                                break;
+
+                            case "update":
+                                console.log("here in update", response.FolderCount.Folders);
+                                const Ids = [];
+                                const Names = [];
+                                response.FolderCount.map(folder => {
+                                    if (folder.Name) {
+                                        Names.push(folder.Name);
+                                    }
+                                    else {
+                                        Ids.push(folder._id);
+                                    }
+                                })
+                                console.log("Ids", Ids,Names );
+
+                                setCustomFolders((prevFolders) => Ids.includes(prevFolders._id) || Names.includes(prevFolders.Name) ? { ...prevFolders, unSeenCount: prevFolders.unSeenCount - 1 } : prevFolders);
+                                break;
+                            default:
+                                console.log("Default");
+                        }
+                    } catch (err) {
+                        console.error("Error parsing WebSocket message:", err);
+                    }
+                };
+
+                socket.onerror = (error) => {
+                    console.error("WebSocket error:", error);
+                };
+
+                socket.onclose = () => {
+                    console.log("WebSocket disconnected");
+                };
+
+                return () => {
+                    socket.close();
+                };
+            }
+            // try {
+            //     const response = await axios.post(
+            //         `${BASE_URL}/myInbox/fetch/getFolder`,
+            //         { UserID: authState?.userDetails?._id || '' },
+            //         {
+            //             headers: {
+            //                 Authorization: `Bearer ${authState?.accessToken}`,
+            //                 'Content-Type': 'application/json',
+            //             }
+            //         }
+            //     );
+            //     setCustomFolders(response.data.Folders);
+            // } 
+            catch (error) {
                 console.error('Error fetching folders:', error?.response?.data?.message || error.message);
             }
         };

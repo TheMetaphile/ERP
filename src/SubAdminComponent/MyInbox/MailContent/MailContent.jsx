@@ -32,7 +32,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
     { id: 3, name: "Deleted" },
     { id: 4, name: "Favourite" },
   ]);
-  console.log(mail, mailContent);
+  // console.log(mail, mailContent);
   const handleCreateNewFolder = () => {
     setShowCreateFolderModal(true);
   };
@@ -164,7 +164,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       }
 
       onStatusUpdateMail(conversationID, updatedFlags);
-      console.log("Status updated:", response.data);
+      // console.log("Status updated:", response.data);
     } catch (error) {
       console.error("Failed to update status:", error);
     }
@@ -377,7 +377,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         setMailContent((prev) =>
           prev.map((msg) => {
             if (msg._id != msgId) return msg;
-            console.log("msg from mark seen", msg);
+            // console.log("msg from mark seen", msg);
             return { ...msg, isRead: true };
           })
         );
@@ -400,7 +400,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
 
     for (const msg of mailContent) {
       if (!msg?.isRead) {
-        console.log("Msg from id", msg);
+        // console.log("Msg from id", msg);
         markSeen(msg._id);
       }
     }
@@ -415,17 +415,17 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         );
         socketRef.current = socket;
         socket.onopen = () => {
-          console.log("WebSocket connected");
+          // console.log("WebSocket connected");
         };
 
         socket.onmessage = (event) => {
           try {
             const response = JSON.parse(event.data);
-            console.log(response);
+            // console.log(response);
 
             switch (response.type) {
               case "initial":
-                console.log("here", response.messages);
+                // console.log("here", response.messages);
                 setMailTo(response.To);
                 setMailCc(response.Cc);
                 setMailContent(response.messages);
@@ -436,20 +436,20 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
                 sender = mailTo.find(
                   (user) => user._id == response.newMessage.Sender
                 );
-                console.log("Check sender 1", sender);
+                // console.log("Check sender 1", sender);
 
                 if (!sender ||  typeof sender == "string") {
                   sender = mailCc.find(
                     (user) => user._id == response.newMessage.Sender
                   );
-                  console.log("Check sender 2", sender);
+                  // console.log("Check sender 2", sender);
                 }
                 if (!sender || mail.CreatedUser._id == response.newMessage.Sender) {
                   sender = mail.CreatedUser;
-                  console.log("Check sender 3", sender);
+                  // console.log("Check sender 3", sender);
                 }
                 response.newMessage.Sender = sender;
-                console.log("Check sender", response.newMessage.Sender);
+                // console.log("Check sender", response.newMessage.Sender);
                 setMailContent((prevEmails) => [
                   ...prevEmails,
                   response.newMessage,
@@ -460,7 +460,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
                 setMailContent((prevEmails) =>
                   prevEmails.map((email) => {
                     if (email._id !== response.messageId) return email;
-                    console.log(" check this", email);
+                    // console.log(" check this", email);
                     const seenByArray = Array.isArray(response.SeenBy)
                       ? response.SeenBy
                       : [response.SeenBy];
@@ -474,7 +474,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
 
                 break;
               default:
-                console.log("Default");
+                // console.log("Default");
             }
           } catch (err) {
             console.error("Error parsing WebSocket message:", err);
@@ -486,7 +486,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         };
 
         socket.onclose = () => {
-          console.log("WebSocket disconnected");
+          // console.log("WebSocket disconnected");
         };
 
         return () => {
@@ -528,7 +528,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
     );
   }
 
-  console.log(section, "here", id, authState);
+  // console.log(section, "here", id, authState);
   return (
     <div className={``}>
       <div
