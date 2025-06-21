@@ -14,7 +14,7 @@ import '../../utils/utils.dart';
 import 'package:http/http.dart' as http;
 
 class TeacherAuthentication{
-    static String baseUrl = "https://school.bdssl.edu.in/api";
+    static String baseUrl = "http://10.0.2.2:8000";
 
 
   Future<dynamic> loginUser(String email, String password, BuildContext context) async {

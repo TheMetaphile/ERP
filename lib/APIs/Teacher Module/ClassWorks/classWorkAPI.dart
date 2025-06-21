@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ClassWorkAPI{
-  static const String _baseUrl = 'https://school.bdssl.edu.in/api';
+  static const String _baseUrl = 'http://10.0.2.2:8000';
 
   Future<List<dynamic>> fetchClassWorkList(String accessToken,String Class,String month,String year,String section,String subject,int start) async {
 
@@ -167,6 +167,8 @@ class ClassWorkAPI{
       throw Exception('Network error: $e');
     }
   }
+
+  fetchClasswork(String accessToken, String section, String selectedSubject, int start) {}
 
 
 }

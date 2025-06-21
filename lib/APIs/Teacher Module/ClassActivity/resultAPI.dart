@@ -4,7 +4,7 @@ import 'package:untitled/utils/utils.dart';
 
 
 class ResultApi {
-  static const String _baseUrl = 'https://school.bdssl.edu.in/api';
+  static const String _baseUrl = 'http://10.0.2.2:8000';
 
   Future<dynamic> fetchResult(String accessToken,String email) async {
     final url = Uri.parse('$_baseUrl/result/fetch/teacher?email=$email');

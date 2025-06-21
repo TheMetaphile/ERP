@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class StudentLeaveAPI {
-  String baseUrl = 'https://school.bdssl.edu.in/api';
+  String baseUrl = 'http://10.0.2.2:8000';
 
 
   Future<List<dynamic>> fetchLeaves(String accessToken, int start, String status) async {

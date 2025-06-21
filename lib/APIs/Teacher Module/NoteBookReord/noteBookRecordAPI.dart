@@ -7,7 +7,7 @@ import 'package:untitled/utils/utils.dart';
 
 class NoteBookRecordAPI{
 
-  static String baseUrl = "https://school.bdssl.edu.in/api";
+  static String baseUrl = "http://10.0.2.2:8000";
 
   Future<bool> uploadNoteBook( String accessToken, String Class,  String section,  String date,  String chapter, String topic, String session, String subject, List<String> submittedBy) async {
 

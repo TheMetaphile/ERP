@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class TimetableApi {
-  static const String baseUrl = 'https://school.bdssl.edu.in/api';
+  static const String baseUrl = 'http://10.0.2.2:8000';
 
   Future<List<dynamic>> fetchClassTeacherTimetable(String accessToken,String day) async {
 

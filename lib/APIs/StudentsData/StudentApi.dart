@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:untitled/utils/utils.dart';
 class StudentApi{
 
-  static const String _baseUrl = 'https://school.bdssl.edu.in/api';
+  static const String _baseUrl = 'http://10.0.2.2:8000';
   Future<List<dynamic>> fetchStudents(String accessToken,String Class,String section,int start) async {
 
     if (Class == "" && section == "") {
@@ -82,7 +82,7 @@ class StudentApi{
   }
 
   Future<bool> studentEditData(String accessToken, Map<String,String> editFields) async{
-    final url=Uri.parse("https://school.bdssl.edu.in/api/edit/student");
+    final url=Uri.parse("http://10.0.2.2:8000/edit/student");
     Map<String,String> body={
       "accessToken":accessToken,
     };

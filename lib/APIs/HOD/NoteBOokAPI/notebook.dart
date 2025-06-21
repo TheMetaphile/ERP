@@ -9,7 +9,7 @@ import 'package:untitled/utils/utils.dart';
 
 class NoteBooksRecords{
 
-  static String baseUrl="https://school.bdssl.edu.in/api";
+  static String baseUrl="http://10.0.2.2:8000";
 
   Future<List<dynamic>> fetchNoteBooksRecords(String accessToken,String Class,String section,String subject,int start) async{
     print("accessToken $accessToken");
