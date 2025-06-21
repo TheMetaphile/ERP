@@ -238,7 +238,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/Sub-Admin/MyInbox/:section/:id?",
+    path: "/Sub-Admin/MyInbox/:id/:conversationID?",
     element: (
       <SuspenseWrapper>
         <MyInbox />
@@ -254,7 +254,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/Teacher-Dashboard/MyInbox/:section/:id?",
+    path: "/Teacher-Dashboard/MyInbox/:id/:conversationID?",
     element: (
       <SuspenseWrapper>
         <MyInbox />
@@ -270,7 +270,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/Student-Dashboard/MyInbox/:section/:id?",
+    path: "/Student-Dashboard/MyInbox/:id/:conversationID?",
     element: (
       <SuspenseWrapper>
         <MyInbox />
@@ -286,7 +286,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/Admin-Dashboard/MyInbox/:section/:id?",
+    path: "/Admin-Dashboard/MyInbox/:id/:conversationID?",
     element: (
       <SuspenseWrapper>
         <MyInbox />

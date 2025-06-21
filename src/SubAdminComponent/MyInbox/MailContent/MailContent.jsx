@@ -38,6 +38,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
   };
 
   useEffect(() => {
+    console.log('here*****************')
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [mail]);
 
@@ -55,7 +56,6 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
           }
         );
         const customFolders = response.data.Folders.map((folder, index) => ({
-          id: `custom-${index}`,
           name: folder.Name,
           _id: folder._id,
           unSeenCount: folder.unSeenCount,
@@ -683,9 +683,9 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
 
             <div className="absolute right-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-20">
               <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                {folders.map((folder) => (
+                {folders.map((folder,index) => (
                   <li
-                    key={folder.id}
+                    key={index}
                     className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
                     onClick={() => handleMoveToFolder(folder._id, mail._id)}
                   >
@@ -859,147 +859,135 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         </div>
       </div>
 
-      <div
-        className="flex-1 p-6 overflow-y-auto bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:to-gray-800"
-        // ref={bottomRef}
-      >
-        <div
-          className={`space-y-6 ${darkMode ? "text-white" : "text-gray-800"}`}
-        >
-          {mailContent.map((message, index) => (
-            <div
-              key={message._id}
-              className={`p-6 rounded-2xl shadow-lg border transition-all duration-300 hover:shadow-xl group
-          ${
-            darkMode
-              ? index % 2 === 0
-                ? "bg-gray-800 border-gray-700"
-                : "bg-gray-700 border-gray-600"
-              : index % 2 === 0
-              ? "bg-white border-gray-200"
-              : "bg-gray-200 border-gray-100"
-          }`}
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={message.Sender?.profileLink}
-                    alt={message.Sender?.name}
-                    className="w-12 h-12 rounded-full border-2 border-blue-500 object-cover shadow-sm"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-lg">
-                      {message.Sender?.name}{" "}
-                      <span className="text-sm text-gray-400">
-                        ({message.Sender?.Role})
-                      </span>
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      {message.Sender?.email}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex justify-center items-center gap-2 text-xs sm:text-sm text-gray-400">
-                  <span>
-                    Sent At: {new Date(message.SentAt).toLocaleString()}
-                  </span>
-                  {/* <span
-                                        className={`inline-block px-2 py-1 rounded-full font-medium ${message.isRead
-                                            ? 'bg-green-100 text-green-800'
-                                            : 'bg-red-100 text-red-700'
-                                            }`}
-                                    >
-                                        {message.isRead ? 'Read' : 'Unread'}
-                                    </span> */}
+       <div
+      className="flex-1 p-6 overflow-y-auto bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:to-gray-800"
+    >
+      <div className={`space-y-6 ${darkMode ? "text-white" : "text-gray-800"}`}>
+        {mailContent.map((message, index) => (
+          <div
+            key={message._id}
+            className={`p-6 rounded-2xl shadow-lg border transition-all duration-300 hover:shadow-xl group
+            ${
+              darkMode
+                ? index % 2 === 0
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-gray-700 border-gray-600"
+                : index % 2 === 0
+                ? "bg-white border-gray-200"
+                : "bg-gray-200 border-gray-100"
+            }`}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <div className="flex items-center gap-3">
+                <img
+                  src={message.Sender?.profileLink}
+                  alt={message.Sender?.name}
+                  className="w-12 h-12 rounded-full border-2 border-blue-500 object-cover shadow-sm"
+                />
+                <div>
+                  <h4 className="font-semibold text-lg">
+                    {message.Sender?.name}{" "}
+                    <span className="text-sm text-gray-400">
+                      ({message.Sender?.Role})
+                    </span>
+                  </h4>
+                  <p className="text-sm text-gray-500">{message.Sender?.email}</p>
                 </div>
               </div>
+              <div className="flex justify-center items-center gap-2 text-xs sm:text-sm text-gray-400">
+                <span>
+                  Sent At: {new Date(message.SentAt).toLocaleString()}
+                </span>
+              </div>
+            </div>
 
-              {/* Body */}
-              <div
-                className={`prose max-w-none leading-relaxed text-[15px] ${
-                  darkMode ? "prose-invert" : ""
-                }`}
-                dangerouslySetInnerHTML={{ __html: message.MessageBody }}
-              />
+            {/* Body */}
+            <div
+              className={`prose max-w-none leading-relaxed text-[15px] ${
+                darkMode ? "prose-invert" : ""
+              }`}
+              dangerouslySetInnerHTML={{ __html: message.MessageBody }}
+            />
 
-              {/* Seen By */}
-              {message.SeenBy && message.SeenBy.length > 0 && (
-                <div className="flex items-center gap-1 flex-wrap text-sm">
-                  <span
-                    className={`${
-                      darkMode ? "text-gray-300" : "text-gray-700"
-                    } font-medium`}
-                  >
-                    Seen By ({message.SeenBy.length})
-                  </span>
+            {/* Seen By */}
+            {message.SeenBy && message.SeenBy.length > 0 && (
+              <div className="flex items-center gap-1 flex-wrap text-sm">
+                <span
+                  className={`${
+                    darkMode ? "text-gray-300" : "text-gray-700"
+                  } font-medium`}
+                >
+                  Seen By ({message.SeenBy.length})
+                </span>
 
-                  <ul className="text-sm pl-2 space-y-2">
-                    {message.SeenBy.slice(0, 1).map((seen, idx) => (
-                      <li key={idx} className="flex items-center gap-3">
-                        <img
-                          src={seen.UserID?.profileLink}
-                          alt={seen.UserID?.name}
-                          className="w-8 h-8 rounded-full object-cover border"
-                        />
-                        <div className="flex gap-3 items-center flex-wrap">
-                          <div className="font-medium">{seen.UserID?.name}</div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                <ul className="text-sm pl-2 space-y-2">
+                  {message.SeenBy.slice(0, 1).map((seen, idx) => (
+                    <li key={idx} className="flex items-center gap-3">
+                      <img
+                        src={seen.UserID?.profileLink}
+                        alt={seen.UserID?.name}
+                        className="w-8 h-8 rounded-full object-cover border"
+                      />
+                      <div className="flex gap-3 items-center flex-wrap">
+                        <div className="font-medium">{seen.UserID?.name}</div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
 
-                  {message.SeenBy.length > 1 && (
-                    <div className="relative inline-block">
-                      <div className="group/seen relative inline-block">
-                        <span className="text-blue-600 cursor-pointer underline group-hover/seen:text-blue-800 text-xs font-medium ml-1">
-                          +{message.SeenBy.length - 1} more
-                        </span>
+                {message.SeenBy.length > 1 && (
+                  <div className="relative inline-block">
+                    <div className="group/seen relative inline-block">
+                      <span className="text-blue-600 cursor-pointer underline group-hover/seen:text-blue-800 text-xs font-medium ml-1">
+                        +{message.SeenBy.length - 1} more
+                      </span>
 
-                        <div className="absolute z-50 hidden group-hover/seen:block bg-white dark:bg-gray-800 border dark:border-gray-600 shadow-lg p-4 rounded-lg w-72 max-h-64 overflow-y-auto mt-2 left-0">
-                          <h4 className="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                            Seen By
-                          </h4>
-                          <ul className="space-y-2 text-sm">
-                            {message.SeenBy.map((seen, index) => (
-                              <li
-                                key={index}
-                                className="flex items-center gap-2"
-                              >
-                                <img
-                                  src={seen.UserID?.profileLink}
-                                  alt={seen.UserID?.name}
-                                  className="w-6 h-6 rounded-full object-cover border"
-                                />
-                                <div>
-                                  <div className="font-medium text-gray-800 dark:text-gray-100">
-                                    {seen.UserID?.name}
-                                  </div>
-                                  <div className="text-xs text-gray-500 dark:text-gray-400">
-                                    &lt;{seen.UserID?.email}&gt;
-                                  </div>
-                                  <div className="text-xs text-gray-500 dark:text-gray-400">
-                                    {seen.IsRead
-                                      ? `Read at ${new Date(
-                                          seen.ReadAt
-                                        ).toLocaleString()}`
-                                      : "Unread"}
-                                  </div>
+                      <div className="absolute z-50 hidden group-hover/seen:block bg-white dark:bg-gray-800 border dark:border-gray-600 shadow-lg p-4 rounded-lg w-72 max-h-64 overflow-y-auto mt-2 left-0">
+                        <h4 className="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                          Seen By
+                        </h4>
+                        <ul className="space-y-2 text-sm">
+                          {message.SeenBy.map((seen, index) => (
+                            <li
+                              key={index}
+                              className="flex items-center gap-2"
+                            >
+                              <img
+                                src={seen.UserID?.profileLink}
+                                alt={seen.UserID?.name}
+                                className="w-6 h-6 rounded-full object-cover border"
+                              />
+                              <div>
+                                <div className="font-medium text-gray-800 dark:text-gray-100">
+                                  {seen.UserID?.name}
                                 </div>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  &lt;{seen.UserID?.email}&gt;
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  {seen.IsRead
+                                    ? `Read at ${new Date(
+                                        seen.ReadAt
+                                      ).toLocaleString()}`
+                                    : "Unread"}
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        ))}
+
+        <div ref={bottomRef} />
       </div>
+    </div>
 
       {showReplyDialog && (
         <div className="px-6 pb-2">

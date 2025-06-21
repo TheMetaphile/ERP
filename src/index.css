@@ -71,3 +71,9 @@ input {
   -moz-appearance: none;
   appearance: none;
 }
+
+.custom-quill-editor .ql-editor {
+  min-height: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+}

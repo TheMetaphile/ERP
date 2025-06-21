@@ -152,7 +152,8 @@ const ReplyDialog = ({ onClose, ConversationID, addNewMessage }) => {
                     ref={(el) => {
                         if (el !== null) setEditorRef(el.getEditor());
                     }}
-                // style={{ height: '300px' }}
+                    className="custom-quill-editor"
+
 
                 />
             </div>

@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import AuthContext from "../../../Context/AuthContext";
 import axios from "axios";
 import { BASE_URL, WEB_SOCKET_BASE_URL } from "../../../Config";
+import { Archive, Trash2, Heart } from "lucide-react";
 
 function MailList({
   emails,
@@ -18,9 +19,51 @@ function MailList({
 }) {
   const { authState } = useContext(AuthContext);
   // const emails = getMailsBySection(currentSection);
-  const { section, id: folderId } = useParams();
+  const { id: folderId } = useParams();
   const socketRef = useRef(null);
   const [socketChange, setSocketChange] = useState([]);
+  const [page, setPage] = useState(1);
+  const listRef = useRef(null);
+  const [hasMore, setHasMore] = useState(true);
+
+  const getStatus = (status) => {
+    if (!status) return null;
+
+    if (status.IsStarred) {
+      return { label: "Starred", icon: Star, colorClass: "text-yellow-500" };
+    } else if (status.IsArchived) {
+      return { label: "Archived", icon: Archive, colorClass: "text-blue-600" };
+    } else if (status.IsDeleted) {
+      return { label: "Deleted", icon: Trash2, colorClass: "text-red-500" };
+    } else if (status.IsFavourite) {
+      return { label: "Favourite", icon: Heart, colorClass: "text-pink-500" };
+    }
+
+    return null;
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!listRef.current || !hasMore) return;
+      const { scrollTop, scrollHeight, clientHeight } = listRef.current;
+
+      if (scrollHeight - scrollTop - clientHeight < 100) {
+        setPage(prev => prev + 1);
+        setHasMore(false);
+
+      }
+    };
+
+    const el = listRef.current;
+    el?.addEventListener("scroll", handleScroll);
+
+    return () => el?.removeEventListener("scroll", handleScroll);
+  }, [hasMore]);
+
+  useEffect(() => {
+    setPage(1);
+    setHasMore(true);
+  }, [folderId]);
 
   useEffect(() => {
     const fetchMails = async () => {
@@ -42,8 +85,24 @@ function MailList({
 
             switch (response.type) {
               case "initial":
+                setHasMore(true);
                 console.log("here", response.conversations);
                 setEmails(response.conversations);
+                break;
+
+              case "more":
+                if (Array.isArray(response.conversations)) {
+                  if (response.conversations.length === 0) {
+                    setHasMore(false);
+                  } else {
+                    setHasMore(true);
+                    if (page === 1) {
+                      setEmails(response.conversations);
+                    } else {
+                      setEmails(prev => [...prev, ...response.conversations]);
+                    }
+                  }
+                }
                 break;
 
               case "new":
@@ -96,7 +155,7 @@ function MailList({
   }, [authState]);
 
   useEffect(() => {
-    console.log("executed", section);
+    console.log("executed", folderId);
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
       console.log("executed too");
 
@@ -106,7 +165,8 @@ function MailList({
       var IsInbox = false;
       var IsOutbox = false;
       var IsDeleted = false;
-      switch (section) {
+      var id = '';
+      switch (folderId) {
         case "starred":
           IsStarred = true;
           break;
@@ -126,14 +186,14 @@ function MailList({
           IsDeleted = true;
           break;
         default:
-          IsInbox = true;
+          id = folderId;
           break;
       }
       socketRef.current.send(
         JSON.stringify({
           action: "loadPage",
-          page: 1,
-          folderID: folderId, // Or pass as IsInbox/IsStarred/etc
+          page: page,
+          folderID: id, // Or pass as IsInbox/IsStarred/etc
           IsStarred,
           IsFavourite,
           IsArchived,
@@ -144,7 +204,7 @@ function MailList({
       );
     }
     console.log('initial call')
-  }, [folderId, section, socketChange]);
+  }, [folderId, socketChange, page]);
 
   return (
     <div
@@ -165,7 +225,7 @@ function MailList({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder={`Search ${section}...`}
+            placeholder={`Search ${folderId}...`}
             className={`
           w-full pl-10 pr-4 py-2 rounded-lg border transition-all duration-200 shadow-sm
           ${darkMode
@@ -178,10 +238,10 @@ function MailList({
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-2 py-4 space-y-3">
+      <div ref={listRef} className="flex-1 overflow-y-auto px-2 py-4 space-y-3">
         {emails.length === 0 ? (
           <div className={`text-center ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-            <p>No emails in {section}</p>
+            <p>No emails in {folderId}</p>
           </div>
         ) : (
           emails.map((email) => (
@@ -199,7 +259,7 @@ function MailList({
             ${email?.unSeenCount ? "font-semibold" : "font-normal"}
           `}
               onClick={() => {
-                setSelectedMail(email);
+                setSelectedMail(email, folderId);
                 setEmails(prevEmails =>
                   prevEmails.map(e =>
                     e._id === email._id ? { ...e, unSeenCount: 0 } : e
@@ -209,11 +269,70 @@ function MailList({
             >
               <div className="flex items-start gap-4">
                 <div className="relative w-12 h-12 flex-shrink-0">
-                  <img
-                    src={email.CreatedUser.profileLink}
-                    alt="avatar"
-                    className="w-full h-full object-cover rounded-full border-2 border-white shadow-md"
-                  />
+                  {email?.CreatedUser._id === authState?.userDetails?._id ? (
+                    Array.isArray(email?.TO) && email.TO.length > 0 ? (
+                      <div className="relative w-full h-full">
+                        {email.TO.length === 1 && (
+                          <img
+                            src={email.TO[0].profileLink}
+                            alt={email.TO[0].name}
+                            className="w-full h-full object-cover rounded-full border-2 border-white shadow-md"
+                            title={`${email.TO[0].name} (${email.TO[0].email}) [${email.TO[0].Role}]`}
+                          />
+                        )}
+
+                        {email.TO.length === 2 && (
+                          <>
+                            <img
+                              src={email.TO[0].profileLink}
+                              alt={email.TO[0].name}
+                              className="absolute top-0 left-0 w-8 h-8 object-cover rounded-full border-2 border-white shadow-md"
+                              title={`${email.TO[0].name} (${email.TO[0].email}) [${email.TO[0].Role}]`}
+                            />
+                            <img
+                              src={email.TO[1].profileLink}
+                              alt={email.TO[1].name}
+                              className="absolute bottom-0 right-0 w-8 h-8 object-cover rounded-full border-2 border-white shadow-md"
+                              title={`${email.TO[1].name} (${email.TO[1].email}) [${email.TO[1].Role}]`}
+                            />
+                          </>
+                        )}
+
+                        {email.TO.length >= 3 && (
+                          <div className="relative w-12 h-12">
+                            {email.TO.slice(0, 3).map((recipient, index) => {
+                              const positions = [
+                                "top-0 left-1/2 -translate-x-1/2",
+                                "bottom-1 left-0",
+                                "bottom-1 right-0",
+                              ];
+                              const size = "w-7 h-7";
+                              const commonStyles = `absolute ${size} object-cover rounded-full border-2 border-white shadow-md`;
+
+                              return (
+                                <img
+                                  key={recipient._id}
+                                  src={recipient.profileLink}
+                                  alt={recipient.name}
+                                  className={`${commonStyles} ${positions[index]}`}
+                                  title={`${recipient.name} (${recipient.email}) [${recipient.Role}]`}
+                                />
+                              );
+                            })}
+                          </div>
+
+                        )}
+                      </div>
+                    ) : null
+                  ) : (
+                    <img
+                      src={email.CreatedUser.profileLink}
+                      alt={email.CreatedUser.name}
+                      className="w-full h-full object-cover rounded-full border-2 border-white shadow-md"
+                      title={`${email.CreatedUser.name}`}
+                    />
+                  )}
+
                   {email.unSeenCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-md">
                       {email.unSeenCount}
@@ -221,11 +340,35 @@ function MailList({
                   )}
                 </div>
 
+
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
-                    <h4 className={`truncate text-md font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
-                      {email.CreatedUser?.name}
-                    </h4>
+                    {email?.CreatedUser._id === authState?.userDetails?._id ? (
+                      <h4 className={`truncate text-md font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
+                        {Array.isArray(email?.TO) && email.TO.length > 0 ? (
+                          <>
+                            {email.TO.slice(0, 2).map((recipient, index) => (
+                              <span key={recipient._id}>
+                                {recipient.name}
+                                {index === 0 && email.TO.length > 1 ? ', ' : ''}
+                              </span>
+                            ))}
+                            {email.TO.length > 2 && (
+                              <span className="text-sm text-gray-500 dark:text-gray-400">
+                                +{email.TO.length - 2} more
+                              </span>
+                            )}
+                          </>
+                        ) : (<></>
+                        )}
+                      </h4>
+                    ) : (
+                      <h4 className={`truncate text-md font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>
+                        {email.CreatedUser?.name}
+                      </h4>
+                    )}
+
+
                     <div className="flex items-center gap-2 flex-shrink-0">
                       <span className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
                         {new Date(email.LastMessageAt).toLocaleDateString("en-GB")}
@@ -240,21 +383,45 @@ function MailList({
                     </div>
                   </div>
 
-                  <h5 className={`text-sm truncate font-semibold ${darkMode ? "text-gray-300" : "text-gray-800"}`}>
-                    {email.Subject}
-                  </h5>
+                  <div className="flex justify-between items-center">
+                    <h5 className={`text-sm truncate font-semibold ${darkMode ? "text-gray-300" : "text-gray-800"}`}>
+                      {email.Subject}
+                    </h5>
+
+                    {(() => {
+                      const statusInfo = getStatus(email.status);
+                      if (!statusInfo) return null;
+
+                      const Icon = statusInfo.icon;
+                      const isActive = !!statusInfo?.colorClass;
+                      const color = statusInfo.colorClass;
+
+                      return (
+                        <span
+                          className={`flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full transition-colors duration-200 
+          ${darkMode ? "bg-gray-700" : "bg-gray-100"} 
+          ${color} hover:opacity-90`}
+                        >
+                          <Icon size={12} className={`stroke-current fill-current ${color}`} />
+                        </span>
+                      );
+                    })()}
+                  </div>
+
+
 
                   <div
-                    className={`text-sm line-clamp-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}
+                    className={`text-sm overflow-hidden whitespace-nowrap text-ellipsis ${darkMode ? "text-gray-400" : "text-gray-600"}`}
                     dangerouslySetInnerHTML={{ __html: email.lastMessage }}
                   />
+
                 </div>
               </div>
             </div>
           ))
         )}
       </div>
-    </div>
+    </div >
 
   );
 }

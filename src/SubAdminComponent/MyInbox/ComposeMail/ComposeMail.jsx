@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { LuCircleX } from "react-icons/lu";
+import { LuXCircle } from "react-icons/lu";
 import { BASE_URL } from '../../../Config';
 import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -51,7 +51,7 @@ const ComposeEmail = () => {
                 Subject: subject || "",
                 DraftStatus: false,
                 IsClosed: false,
-                Role: authState?.userDetails?.rolee || "",
+                Role: authState?.userDetails?.rolee.split('-')[0] || "",
                 ToRecipients: toIds,
                 CcRecipients: ccIds
             };
@@ -298,7 +298,7 @@ const ComposeEmail = () => {
                         {to.map((email, idx) => (
                             <div key={idx} className="bg-gray-300 p-1 rounded flex items-center">
                                 <span>{email}</span>
-                                <LuCircleX
+                                <LuXCircle
                                     className="ml-1 text-red-600 hover:text-red-800 cursor-pointer"
                                     onClick={() => removeRecipient(email, 'to')}
                                 />
@@ -340,7 +340,7 @@ const ComposeEmail = () => {
                         {cc.map((email, idx) => (
                             <div key={idx} className="bg-gray-300 p-1 rounded flex items-center">
                                 <span>{email}</span>
-                                <LuCircleX
+                                <LuXCircle
                                     className="ml-1 text-red-600 hover:text-red-800 cursor-pointer"
                                     onClick={() => removeRecipient(email, 'cc')}
                                 />
@@ -444,7 +444,7 @@ const ComposeEmail = () => {
                         ref={(el) => {
                             if (el !== null) setEditorRef(el.getEditor());
                         }}
-                         style={{ height: '300px' }}
+                         className="custom-quill-editor"
                     />
 
                     {showFieldSuggestions && (

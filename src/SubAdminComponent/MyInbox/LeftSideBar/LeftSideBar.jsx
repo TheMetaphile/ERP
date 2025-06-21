@@ -107,7 +107,7 @@ function LeftSideBar({
       console.error(error);
       toast.error(
         error.response?.data?.error ||
-          "An error occurred while creating the tag"
+        "An error occurred while creating the tag"
       );
     }
   };
@@ -196,7 +196,7 @@ function LeftSideBar({
       console.error(error);
       toast.error(
         error.response?.data?.error ||
-          "An error occurred while creating the folder"
+        "An error occurred while creating the folder"
       );
     }
   };
@@ -238,11 +238,11 @@ function LeftSideBar({
 
                 setCustomFolders((prevFolders) => prevFolders.map(prevFolder => {
                   return (Ids.includes(prevFolder._id) ||
-                  Names.includes(prevFolder.Name))
+                    Names.includes(prevFolder.Name))
                     ? {
-                        ...prevFolder,
-                        unSeenCount: prevFolder.unSeenCount - 1,
-                      }
+                      ...prevFolder,
+                      unSeenCount: prevFolder.unSeenCount - 1,
+                    }
                     : prevFolder;
                 }));
                 break;
@@ -319,27 +319,25 @@ function LeftSideBar({
     }
   };
 
+  console.log(customFolders)
+
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 lg:hidden ${
-          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 lg:hidden ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         onClick={onClose}
       />
       <div
-        className={`fixed lg:relative inset-y-0 left-0 z-50 w-80 lg:w-72 ${
-          darkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-200"
-        } border-r transform transition-all duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        } flex flex-col h-full`}
+        className={`fixed lg:relative inset-y-0 left-0 z-50 w-80 lg:w-72 ${darkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-200"
+          } border-r transform transition-all duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          } flex flex-col h-full`}
       >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
             <h1
-              className={`text-xl font-bold ${
-                darkMode ? "text-white" : "text-gray-900"
-              }`}
+              className={`text-xl font-bold ${darkMode ? "text-white" : "text-gray-900"
+                }`}
             >
               Mail
             </h1>
@@ -365,34 +363,30 @@ function LeftSideBar({
             {sidebarItems.map((item, index) => (
               <button
                 key={index}
-                onClick={() => onSectionChange(item.section, item._id)}
-                className={`w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-200 group ${
-                  currentSection === item.section
+                onClick={() => onSectionChange(item.section)}
+                className={`w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-200 group ${currentSection === item.section
                     ? "bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 text-blue-600 dark:text-blue-400 shadow-sm"
-                    : `${
-                        darkMode
-                          ? "text-gray-300 hover:bg-gray-800"
-                          : "text-gray-700 hover:bg-gray-50"
-                      }`
-                } hover:shadow-md hover:scale-105`}
+                    : `${darkMode
+                      ? "text-gray-300 hover:bg-gray-800"
+                      : "text-gray-700 hover:bg-gray-50"
+                    }`
+                  } hover:shadow-md hover:scale-105`}
               >
                 <div className="flex items-center gap-3">
                   <item.icon
-                    className={`w-5 h-5 ${
-                      currentSection === item.section
+                    className={`w-5 h-5 ${currentSection === item.section
                         ? "text-blue-600 dark:text-blue-400"
                         : ""
-                    }`}
+                      }`}
                   />
                   <span className="font-medium">{item.label}</span>
                 </div>
                 {item.count > 0 && (
                   <span
-                    className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                      currentSection === item.section
+                    className={`px-2 py-1 rounded-full text-xs font-semibold ${currentSection === item.section
                         ? "bg-blue-600 text-white"
                         : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
-                    }`}
+                      }`}
                   >
                     {item.count}
                   </span>
@@ -421,17 +415,15 @@ function LeftSideBar({
                           <button
                             onClick={() =>
                               onSectionChange(
-                                folder.Name.toLowerCase(),
                                 folder._id
                               )
                             }
-                            className={`flex-1 text-left font-medium text-sm truncate transition-colors ${
-                              currentSection === folder.Name.toLowerCase()
+                            className={`flex-1 text-left font-medium text-sm truncate transition-colors ${currentSection === folder.Name.toLowerCase()
                                 ? "text-blue-600 dark:text-blue-400"
                                 : darkMode
-                                ? "text-gray-300"
-                                : "text-gray-700"
-                            }`}
+                                  ? "text-gray-300"
+                                  : "text-gray-700"
+                              }`}
                           >
                             {folder.Name}
                           </button>
@@ -588,9 +580,8 @@ function LeftSideBar({
           </nav>
 
           <div
-            className={`p-4 border-t ${
-              darkMode ? "border-gray-700" : "border-gray-200"
-            }`}
+            className={`p-4 border-t ${darkMode ? "border-gray-700" : "border-gray-200"
+              }`}
           >
             <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer">
               <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
@@ -603,16 +594,14 @@ function LeftSideBar({
               </div>
               <div className="flex-1 min-w-0">
                 <p
-                  className={`font-semibold truncate ${
-                    darkMode ? "text-white" : "text-gray-900"
-                  }`}
+                  className={`font-semibold truncate ${darkMode ? "text-white" : "text-gray-900"
+                    }`}
                 >
                   {authState?.userDetails?.name}
                 </p>
                 <p
-                  className={`text-sm truncate ${
-                    darkMode ? "text-gray-400" : "text-gray-500"
-                  }`}
+                  className={`text-sm truncate ${darkMode ? "text-gray-400" : "text-gray-500"
+                    }`}
                 >
                   {authState?.userDetails?.email}
                 </p>

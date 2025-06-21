@@ -12,7 +12,7 @@ import { useLocation } from 'react-router-dom';
 
 function MyInbox() {
     const location = useLocation();
-    const { section } = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
     const { darkMode } = useContext(AuthContext);
     const [selectedMail, setSelectedMail] = useState(null);
@@ -22,7 +22,6 @@ function MyInbox() {
     const [isComposing, setIsComposing] = useState(false);
     const [emails, setEmails] = useState([]);
 
-    const currentSection = section || 'inbox';
 
     const updateMailProperty = (mailId, updatedFields) => {
         setEmails(prev =>
@@ -90,21 +89,50 @@ function MyInbox() {
     useEffect(() => {
         setSelectedMail(null);
         setIsComposing(false);
-    }, [currentSection]);
+    }, [id]);
 
-    const handleMailSelect = (mail) => {
+    const handleMailSelect = (mail, folderId = 'inbox') => {
         setSelectedMail(mail);
         setIsComposing(false);
+        const currentPath = location.pathname;
+
+        let basePath = '/Sub-Admin';
+        if (currentPath.includes('Teacher-Dashboard')) {
+            basePath = '/Teacher-Dashboard';
+        } else if (currentPath.includes('Student-Dashboard')) {
+            basePath = '/Student-Dashboard';
+        } else if (currentPath.includes('Admin-Dashboard')) {
+            basePath = '/Admin-Dashboard';
+        }
+
+        // Default to 'inbox' if section is not defined
+
+        const targetUrl = `${basePath}/MyInbox/${folderId}/${mail._id}`;
+        console.log('target1', targetUrl)
+        navigate(targetUrl);
+
         if (isMobile) setMailListOpen(false);
     };
+
+    useEffect(() => {
+        console.log('************')
+        setSelectedMail(null);
+    }, [id])
 
     const handleCompose = () => {
         setIsComposing(true);
         setSelectedMail(null);
     };
 
-    const handleSectionChange = (sectionName = 'inbox', folderId) => {
+    console.log('selected', selectedMail)
+
+    useEffect(() => {
+        handleSectionChange(id);
+    }, [selectedMail])
+
+    const handleSectionChange = (folderId = 'inbox') => {
         const currentPath = location.pathname;
+        console.log(folderId, 'here for id')
 
         let basePath = '/Sub-Admin';
 
@@ -116,7 +144,13 @@ function MyInbox() {
             basePath = '/Admin-Dashboard';
         }
 
-        navigate(`${basePath}/MyInbox/${sectionName}/${folderId || ''}`);
+        let targetUrl = `${basePath}/MyInbox/${folderId}`;
+        if (selectedMail?._id) {
+            targetUrl += `/${selectedMail._id}`;
+        }
+
+        console.log("Navigating to:", targetUrl);
+        navigate(targetUrl);
 
         if (isMobile) setSidebarOpen(false);
     };
@@ -129,7 +163,7 @@ function MyInbox() {
                         <Menu className="w-6 h-6" />
                     </button>
                     <h1 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {currentSection.charAt(0).toUpperCase() + currentSection.slice(1)}
+                        {id ? id.toUpperCase() : 'Inbox'}
                     </h1>
                 </div>
                 <button onClick={() => setMailListOpen(true)} className={`p-2 rounded-lg ${darkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'}`}>
@@ -143,7 +177,7 @@ function MyInbox() {
                     onClose={() => setSidebarOpen(false)}
                     darkMode={darkMode}
                     onCompose={handleCompose}
-                    currentSection={currentSection}
+                    currentSection={id}
                     onSectionChange={handleSectionChange}
                 />
 
@@ -157,7 +191,7 @@ function MyInbox() {
                             isOpen={mailListOpen || !isMobile}
                             onClose={() => setMailListOpen(false)}
                             darkMode={darkMode}
-                            currentSection={currentSection}
+                            currentSection={id}
                         />
                     </div>
 
@@ -168,7 +202,7 @@ function MyInbox() {
                             <MailContent
                                 mail={selectedMail}
                                 darkMode={darkMode}
-                                currentSection={currentSection}
+                                currentSection={id}
                                 onUpdateMail={updateMailProperty}
                                 onStatusUpdateMail={updateMailStatus}
                             />
