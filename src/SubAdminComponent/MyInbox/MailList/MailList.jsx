@@ -16,6 +16,7 @@ function MailList({
   onClose,
   darkMode,
   currentSection,
+  folderName
 }) {
   const { authState } = useContext(AuthContext);
   // const emails = getMailsBySection(currentSection);
@@ -26,21 +27,23 @@ function MailList({
   const listRef = useRef(null);
   const [hasMore, setHasMore] = useState(true);
 
-  const getStatus = (status) => {
-    if (!status) return null;
+  const getStatuses = (status) => {
+    if (!status) return [];
 
-    if (status.IsStarred) {
-      return { label: "Starred", icon: Star, colorClass: "text-yellow-500" };
-    } else if (status.IsArchived) {
-      return { label: "Archived", icon: Archive, colorClass: "text-blue-600" };
-    } else if (status.IsDeleted) {
-      return { label: "Deleted", icon: Trash2, colorClass: "text-red-500" };
-    } else if (status.IsFavourite) {
-      return { label: "Favourite", icon: Heart, colorClass: "text-pink-500" };
-    }
+    const statuses = [];
 
-    return null;
+    if (status.IsStarred)
+      statuses.push({ label: "Starred", icon: Star, colorClass: "text-yellow-500" });
+    if (status.IsArchived)
+      statuses.push({ label: "Archived", icon: Archive, colorClass: "text-blue-600" });
+    if (status.IsDeleted)
+      statuses.push({ label: "Deleted", icon: Trash2, colorClass: "text-red-500" });
+    if (status.IsFavourite)
+      statuses.push({ label: "Favourite", icon: Heart, colorClass: "text-pink-500" });
+
+    return statuses;
   };
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -206,6 +209,7 @@ function MailList({
     console.log('initial call')
   }, [folderId, socketChange, page]);
 
+  console.log(authState.userDetails._id)
   return (
     <div
       className={`
@@ -225,7 +229,7 @@ function MailList({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder={`Search ${folderId}...`}
+            placeholder={`Search ${folderName.toUpperCase()}...`}
             className={`
           w-full pl-10 pr-4 py-2 rounded-lg border transition-all duration-200 shadow-sm
           ${darkMode
@@ -241,7 +245,7 @@ function MailList({
       <div ref={listRef} className="flex-1 overflow-y-auto px-2 py-4 space-y-3">
         {emails.length === 0 ? (
           <div className={`text-center ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-            <p>No emails in {folderId}</p>
+            <p>No emails in {folderName}</p>
           </div>
         ) : (
           emails.map((email) => (
@@ -388,24 +392,23 @@ function MailList({
                       {email.Subject}
                     </h5>
 
-                    {(() => {
-                      const statusInfo = getStatus(email.status);
-                      if (!statusInfo) return null;
-
-                      const Icon = statusInfo.icon;
-                      const isActive = !!statusInfo?.colorClass;
-                      const color = statusInfo.colorClass;
-
-                      return (
-                        <span
-                          className={`flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full transition-colors duration-200 
-          ${darkMode ? "bg-gray-700" : "bg-gray-100"} 
-          ${color} hover:opacity-90`}
-                        >
-                          <Icon size={12} className={`stroke-current fill-current ${color}`} />
-                        </span>
-                      );
-                    })()}
+                    {getStatuses(email.status).length > 0 && (
+                      <div className="flex gap-1">
+                        {getStatuses(email.status).map((statusInfo, index) => {
+                          const Icon = statusInfo.icon;
+                          return (
+                            <span
+                              key={index}
+                              className={`flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full transition-colors duration-200
+            ${darkMode ? "bg-gray-700" : "bg-gray-100"}
+            ${statusInfo.colorClass} hover:opacity-90`}
+                            >
+                              <Icon size={12} className={`stroke-current fill-current ${statusInfo.colorClass}`} />
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
 
 

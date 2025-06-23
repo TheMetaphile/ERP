@@ -23,8 +23,9 @@ function LeftSideBar({
   onCompose,
   currentSection,
   onSectionChange,
+  customFolders,
+  setCustomFolders
 }) {
-  const [customFolders, setCustomFolders] = useState([{ Name: "Projects" }]);
   const { authState } = useContext(AuthContext);
   const [showMore, setShowMore] = useState(false);
 
@@ -365,18 +366,18 @@ function LeftSideBar({
                 key={index}
                 onClick={() => onSectionChange(item.section)}
                 className={`w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-200 group ${currentSection === item.section
-                    ? "bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 text-blue-600 dark:text-blue-400 shadow-sm"
-                    : `${darkMode
-                      ? "text-gray-300 hover:bg-gray-800"
-                      : "text-gray-700 hover:bg-gray-50"
-                    }`
+                  ? "bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 text-blue-600 dark:text-blue-400 shadow-sm"
+                  : `${darkMode
+                    ? "text-gray-300 hover:bg-gray-800"
+                    : "text-gray-700 hover:bg-gray-50"
+                  }`
                   } hover:shadow-md hover:scale-105`}
               >
                 <div className="flex items-center gap-3">
                   <item.icon
                     className={`w-5 h-5 ${currentSection === item.section
-                        ? "text-blue-600 dark:text-blue-400"
-                        : ""
+                      ? "text-blue-600 dark:text-blue-400"
+                      : ""
                       }`}
                   />
                   <span className="font-medium">{item.label}</span>
@@ -384,8 +385,8 @@ function LeftSideBar({
                 {item.count > 0 && (
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-semibold ${currentSection === item.section
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
                       }`}
                   >
                     {item.count}
@@ -409,7 +410,7 @@ function LeftSideBar({
                     (folder, index) =>
                       folder._id && (
                         <div
-                          key={`custom-${index}`}
+                          key={`${index}`}
                           className="flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md group"
                         >
                           <button
@@ -419,10 +420,10 @@ function LeftSideBar({
                               )
                             }
                             className={`flex-1 text-left font-medium text-sm truncate transition-colors ${currentSection === folder.Name.toLowerCase()
-                                ? "text-blue-600 dark:text-blue-400"
-                                : darkMode
-                                  ? "text-gray-300"
-                                  : "text-gray-700"
+                              ? "text-blue-600 dark:text-blue-400"
+                              : darkMode
+                                ? "text-gray-300"
+                                : "text-gray-700"
                               }`}
                           >
                             {folder.Name}

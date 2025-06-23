@@ -21,9 +21,11 @@ function MyInbox() {
     const [isMobile, setIsMobile] = useState(false);
     const [isComposing, setIsComposing] = useState(false);
     const [emails, setEmails] = useState([]);
+    const [customFolders, setCustomFolders] = useState([]);
 
 
     const updateMailProperty = (mailId, updatedFields) => {
+        console.log(emails, mailId, updatedFields)
         setEmails(prev =>
             prev.map(email =>
                 email._id === mailId ? { ...email, ...updatedFields } : email
@@ -35,21 +37,15 @@ function MyInbox() {
     };
 
     const updateMailStatus = (mailId, updatedStatus) => {
+        console.log(emails, mailId, updatedStatus)
+
         setEmails(prev =>
             prev.map(email => {
                 if (email._id !== mailId) return email;
 
-                const newStatus = Object.keys(email.status || {}).reduce((acc, key) => {
-                    acc[key] = false;
-                    return acc;
-                }, {});
-
-                const updatedKey = Object.keys(updatedStatus)[0];
-                newStatus[updatedKey] = updatedStatus[updatedKey];
-
                 return {
                     ...email,
-                    status: newStatus
+                    status: { ...email.status, ...updatedStatus }
                 };
             })
         );
@@ -57,17 +53,10 @@ function MyInbox() {
         setSelectedMail(prev => {
             if (!prev || prev._id !== mailId) return prev;
 
-            const newStatus = Object.keys(prev.status || {}).reduce((acc, key) => {
-                acc[key] = false;
-                return acc;
-            }, {});
-
-            const updatedKey = Object.keys(updatedStatus)[0];
-            newStatus[updatedKey] = updatedStatus[updatedKey];
-
             return {
                 ...prev,
-                status: newStatus
+                status: { ...prev.status, ...updatedStatus }
+
             };
         });
     };
@@ -75,10 +64,9 @@ function MyInbox() {
 
     useEffect(() => {
         const checkMobile = () => {
-            setIsMobile(window.innerWidth < 1024);
-            if (window.innerWidth >= 1024) {
-                setSidebarOpen(false);
-                setMailListOpen(false);
+            setIsMobile(window.innerWidth < 768); // Consider mobile for widths < 768px
+            if (window.innerWidth >= 768) {
+                setMailListOpen(true); // Open MailList by default on tablet and above
             }
         };
         checkMobile();
@@ -122,12 +110,15 @@ function MyInbox() {
     const handleCompose = () => {
         setIsComposing(true);
         setSelectedMail(null);
+        setMailListOpen(false);
     };
 
     console.log('selected', selectedMail)
 
     useEffect(() => {
-        handleSectionChange(id);
+        if (selectedMail) {
+            handleSectionChange(id);
+        }
     }, [selectedMail])
 
     const handleSectionChange = (folderId = 'inbox') => {
@@ -154,8 +145,9 @@ function MyInbox() {
 
         if (isMobile) setSidebarOpen(false);
     };
+
     return (
-        <div className={`h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+        <div className={` ${darkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
             <ToastContainer />
             <div className={`lg:hidden fixed top-0 left-0 right-0 z-50 ${darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border-b p-4 flex items-center justify-between`}>
                 <div className="flex items-center gap-3">
@@ -163,12 +155,11 @@ function MyInbox() {
                         <Menu className="w-6 h-6" />
                     </button>
                     <h1 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {id ? id.toUpperCase() : 'Inbox'}
+                        <span>
+                            {customFolders.find(folder => folder?._id === id)?.Name || id.toUpperCase()}
+                        </span>
                     </h1>
                 </div>
-                <button onClick={() => setMailListOpen(true)} className={`p-2 rounded-lg ${darkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'}`}>
-                    <ChevronRight className="w-6 h-6" />
-                </button>
             </div>
 
             <div className="w-full h-full">
@@ -179,37 +170,43 @@ function MyInbox() {
                     onCompose={handleCompose}
                     currentSection={id}
                     onSectionChange={handleSectionChange}
+                    customFolders={customFolders}
+                    setCustomFolders={setCustomFolders}
                 />
 
-                <div className="w-full h-[calc(100vh-5rem)] grid grid-cols-[30%_70%] mt-20 overflow-hidden">
-                    <div className="h-full overflow-y-auto no-scrollbar">
-                        <MailList
-                            emails={emails}
-                            setEmails={setEmails}
-                            setSelectedMail={handleMailSelect}
-                            selectedMail={selectedMail}
-                            isOpen={mailListOpen || !isMobile}
-                            onClose={() => setMailListOpen(false)}
-                            darkMode={darkMode}
-                            currentSection={id}
-                        />
-                    </div>
-
-                    <div className="h-full overflow-y-auto no-scrollbar">
-                        {isComposing ? (
-                            <ComposeMail darkMode={darkMode} onCancel={() => setIsComposing(false)} />
-                        ) : (
-                            <MailContent
-                                mail={selectedMail}
+                <div className={`w-full h-[calc(100vh-5rem)] ${isMobile ? 'flex flex-col' : 'grid grid-cols-[30%_70%]'} mt-20 overflow-hidden`}>
+                    {(!isMobile || mailListOpen) && (
+                        <div className="h-full overflow-y-auto no-scrollbar">
+                            <MailList
+                                emails={emails}
+                                setEmails={setEmails}
+                                setSelectedMail={handleMailSelect}
+                                selectedMail={selectedMail}
+                                isOpen={mailListOpen || !isMobile}
+                                onClose={() => setMailListOpen(false)}
                                 darkMode={darkMode}
                                 currentSection={id}
-                                onUpdateMail={updateMailProperty}
-                                onStatusUpdateMail={updateMailStatus}
+                                folderName={customFolders.find(folder => folder?._id === id)?.Name || id}
                             />
-                        )}
-                    </div>
-                </div>
+                        </div>
+                    )}
 
+                    {(!isMobile || !mailListOpen) && (
+                        <div className="h-full overflow-y-auto no-scrollbar">
+                            {isComposing ? (
+                                <ComposeMail darkMode={darkMode} onCancel={() => setIsComposing(false)} />
+                            ) : (
+                                <MailContent
+                                    mail={selectedMail}
+                                    darkMode={darkMode}
+                                    currentSection={id}
+                                    onUpdateMail={updateMailProperty}
+                                    onStatusUpdateMail={updateMailStatus}
+                                />
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
 
             {isMobile && selectedMail && !isComposing && (

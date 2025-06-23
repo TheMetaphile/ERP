@@ -22,17 +22,13 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
   const [mailCc, setMailCc] = useState([]);
   const [showForwardDialog, setShowForwardDialog] = useState(false);
   const [showReplyDialog, setShowReplyDialog] = useState(false);
-  const { section, id } = useParams();
+  const { section, id, conversationID } = useParams();
   const socketRef = useRef(null);
   const bottomRef = useRef(null);
+  const [data, setData] = useState([]);
 
-  const [folders, setFolders] = useState([
-    { id: 1, name: "Archived" },
-    { id: 2, name: "Starred" },
-    { id: 3, name: "Deleted" },
-    { id: 4, name: "Favourite" },
-  ]);
-  // console.log(mail, mailContent);
+  const [folders, setFolders] = useState([]);
+  // console.log(mail);
   const handleCreateNewFolder = () => {
     setShowCreateFolderModal(true);
   };
@@ -40,7 +36,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
   useEffect(() => {
     console.log('here*****************')
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [mail]);
+  }, [data]);
 
   useEffect(() => {
     const fetchCustomFolders = async () => {
@@ -135,7 +131,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       console.error(error);
       toast.error(
         error.response?.data?.error ||
-          "An error occurred while creating the folder"
+        "An error occurred while creating the folder"
       );
     }
   };
@@ -164,6 +160,10 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       }
 
       onStatusUpdateMail(conversationID, updatedFlags);
+      setData((prev) => ({
+        ...prev, status: { ...prev.status, ...updatedFlags }
+      })
+      );
       // console.log("Status updated:", response.data);
     } catch (error) {
       console.error("Failed to update status:", error);
@@ -191,13 +191,23 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         toast.success("Tag applied successfully");
         onUpdateMail(mailId, {
           status: {
-            ...mail.status,
+            ...data.status,
             TagData: [
-              ...(mail.status?.TagData || []),
+              // ...(data.status?.TagData || []),
               tags.find((tag) => tag._id === tagId),
             ],
           },
         });
+        setData((prev) => ({
+          ...prev, status: {
+            ...data.status,
+            TagData: [
+              // ...(data.status?.TagData || []),
+              tags.find((tag) => tag._id === tagId),
+            ],
+          }
+        })
+        );
       } else {
         toast.error(response.data?.error || "Failed to apply tag");
       }
@@ -205,7 +215,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       console.error("Error applying tag:", error);
       toast.error(
         error.response?.data?.error ||
-          "An error occurred while applying the tag"
+        "An error occurred while applying the tag"
       );
     }
   };
@@ -229,10 +239,17 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
 
       onUpdateMail(mailId, {
         status: {
-          ...mail.status,
-          TagData: mail.status?.TagData?.filter((tag) => tag._id !== tagId),
+          ...data.status,
+          TagData: [],
         },
       });
+      setData((prev) => ({
+        ...prev, status: {
+          ...data.status,
+          TagData: [],
+        }
+      })
+      );
     } catch (error) {
       console.error(error);
       toast.error("Failed to remove tag");
@@ -296,7 +313,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       console.error("Error removing mail from folder:", error);
       toast.error(
         error.response?.data?.error ||
-          "An error occurred while removing the mail"
+        "An error occurred while removing the mail"
       );
     }
   };
@@ -320,6 +337,9 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       if (response.status === 200) {
         toast.success("Conversation opened successfully");
         onUpdateMail(mailId, { IsClosed: false });
+        setData((prev) => ({
+          ...prev, IsClosed: false
+        }));
       } else {
         toast.error(response.data?.error || "Failed to open conversation");
       }
@@ -327,7 +347,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       console.error("Error while opening conversation:", error);
       toast.error(
         error.response?.data?.error ||
-          "An error occurred while opening conversation"
+        "An error occurred while opening conversation"
       );
     }
   };
@@ -351,6 +371,9 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       if (response.status === 200) {
         toast.success("Conversation Closed successfully");
         onUpdateMail(mailId, { IsClosed: true });
+        setData((prev) => ({
+          ...prev, IsClosed: true
+        }));
       } else {
         toast.error(response.data?.error || "Failed to close conversation");
       }
@@ -358,7 +381,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       console.error("Error closing conversation:", error);
       toast.error(
         error.response?.data?.error ||
-          "An error occurred while closing conversation"
+        "An error occurred while closing conversation"
       );
     }
   };
@@ -372,7 +395,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
           MessageID: msgId,
           UserID: authState?.userDetails?._id,
           seen: true,
-          ConversationID: mail._id,
+          ConversationID: conversationID,
         };
         setMailContent((prev) =>
           prev.map((msg) => {
@@ -407,11 +430,11 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
   }, [authState?.userDetails?._id, mailContent]);
 
   useEffect(() => {
-    if (!mail) return;
+    if (!conversationID) return;
     const fetchMail = async () => {
       try {
         const socket = new WebSocket(
-          `${WEB_SOCKET_BASE_URL}/getThreadedMessages/${mail._id}?token=${authState?.accessToken}`
+          `${WEB_SOCKET_BASE_URL}/getThreadedMessages/${conversationID}?token=${authState?.accessToken}`
         );
         socketRef.current = socket;
         socket.onopen = () => {
@@ -426,6 +449,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
             switch (response.type) {
               case "initial":
                 // console.log("here", response.messages);
+                setData(response);
                 setMailTo(response.To);
                 setMailCc(response.Cc);
                 setMailContent(response.messages);
@@ -438,14 +462,14 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
                 );
                 // console.log("Check sender 1", sender);
 
-                if (!sender ||  typeof sender == "string") {
+                if (!sender || typeof sender == "string") {
                   sender = mailCc.find(
                     (user) => user._id == response.newMessage.Sender
                   );
                   // console.log("Check sender 2", sender);
                 }
-                if (!sender || mail.CreatedUser._id == response.newMessage.Sender) {
-                  sender = mail.CreatedUser;
+                if (!sender || data.CreatedUser._id == response.newMessage.Sender) {
+                  sender = data.CreatedUser;
                   // console.log("Check sender 3", sender);
                 }
                 response.newMessage.Sender = sender;
@@ -474,7 +498,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
 
                 break;
               default:
-                // console.log("Default");
+              // console.log("Default");
             }
           } catch (err) {
             console.error("Error parsing WebSocket message:", err);
@@ -498,7 +522,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
     };
 
     fetchMail();
-  }, [authState?.userDetails?._id, mail]);
+  }, [authState?.userDetails?._id, conversationID]);
 
   // const addNewMessage = (newMessage) => {
   //     setMailContent((prevContent) => [...prevContent, newMessage]);
@@ -506,19 +530,17 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
 
   useEffect(() => {
     setShowReplyDialog(false);
-  }, [mail]);
+  }, [conversationID]);
 
-  if (!mail) {
+  if (!conversationID) {
     return (
       <div
-        className={`h-full w-full flex items-center justify-center ${
-          darkMode ? "bg-gray-900" : "bg-white"
-        }`}
+        className={`h-full w-full flex items-center justify-center ${darkMode ? "bg-gray-900" : "bg-white"
+          }`}
       >
         <div
-          className={`text-center ${
-            darkMode ? "text-gray-400" : "text-gray-500"
-          }`}
+          className={`text-center ${darkMode ? "text-gray-400" : "text-gray-500"
+            }`}
         >
           <Mail className="w-16 h-16 mx-auto mb-4 opacity-50" />
           <h3 className="text-xl font-semibold mb-2">No email selected</h3>
@@ -532,95 +554,97 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
   return (
     <div className={``}>
       <div
-        className={`flex items-center justify-between px-6 py-3 border-b ${
-          darkMode ? "border-gray-700 bg-gray-900" : "border-gray-100 bg-white"
-        } sticky top-0 z-10`}
+        className={`flex flex-wrap lg:flex-nowrap items-center justify-between px-4 sm:px-6 py-3 border-b ${darkMode ? "border-gray-700 bg-gray-900" : "border-gray-100 bg-white"
+          } sticky top-0 z-10`}
       >
-        <div className="flex items-center gap-4 text-sm">
+        <div className="flex flex-wrap gap-4 text-sm">
           <button
-            onClick={() => handleMarkAs(mail._id, { Archived: true })}
-            className={`flex items-center gap-1 transition ${
-              mail.status?.IsArchived ? "text-blue-600" : "hover:text-blue-600"
-            }`}
+            onClick={() =>
+              handleMarkAs(conversationID, { Archived: !data.status?.IsArchived })
+            }
+            className={`flex items-center gap-1 transition ${data.status?.IsArchived ? "text-blue-600" : "hover:text-blue-600"
+              }`}
           >
             <Archive
               size={16}
-              fill={mail.status?.IsArchived ? "currentColor" : "none"}
+              fill={data.status?.IsArchived ? "currentColor" : "none"}
               stroke="currentColor"
-            />{" "}
-            Archive
+            />
+            <span className="hidden sm:inline">Archive</span>
           </button>
+
           <button
-            onClick={() => handleMarkAs(mail._id, { Deleted: true })}
-            className={`flex items-center gap-1 transition ${
-              mail.status?.IsDeleted
-                ? "hover:text-red-500"
-                : "hover:hover:text-red-500"
-            }`}
+            onClick={() =>
+              handleMarkAs(conversationID, { Deleted: !data.status?.IsDeleted })
+            }
+            className={`flex items-center gap-1 transition ${data.status?.IsDeleted ? "text-red-500" : "hover:text-red-500"
+              }`}
           >
             <Trash2
               size={16}
-              fill={mail.status?.IsDeleted ? "currentColor" : "none"}
+              fill={data.status?.IsDeleted ? "currentColor" : "none"}
               stroke="currentColor"
-            />{" "}
-            Delete
+            />
+            <span className="hidden sm:inline">Delete</span>
           </button>
+
           <button
-            onClick={() => handleMarkAs(mail._id, { Starred: true })}
-            className={`flex items-center gap-1 transition ${
-              mail.status?.IsStarred
-                ? "text-yellow-500"
-                : "hover:text-yellow-500"
-            }`}
+            onClick={() =>
+              handleMarkAs(conversationID, { Starred: !data.status?.IsStarred })
+            }
+            className={`flex items-center gap-1 transition ${data.status?.IsStarred ? "text-yellow-500" : "hover:text-yellow-500"
+              }`}
           >
             <Star
               size={16}
-              fill={mail.status?.IsStarred ? "currentColor" : "none"}
+              fill={data.status?.IsStarred ? "currentColor" : "none"}
               stroke="currentColor"
-            />{" "}
-            Star
+            />
+            <span className="hidden sm:inline">Star</span>
           </button>
+
           <button
-            onClick={() => handleMarkAs(mail._id, { Favourite: true })}
-            className={`flex items-center gap-1 transition ${
-              mail.status?.IsFavourite ? "text-pink-500" : "hover:text-pink-500"
-            }`}
+            onClick={() =>
+              handleMarkAs(conversationID, {
+                Favourite: !data.status?.IsFavourite,
+              })
+            }
+            className={`flex items-center gap-1 transition ${data.status?.IsFavourite ? "text-red-600" : "hover:text-red-500"
+              }`}
           >
             <Heart
               size={16}
-              fill={mail.status?.IsFavourite ? "currentColor" : "none"}
+              fill={data.status?.IsFavourite ? "currentColor" : "none"}
               stroke="currentColor"
             />
-            Favorite
+            <span className="hidden sm:inline">Favorite</span>
           </button>
 
           {tags.length > 0 && (
-            <div className="relative group inline-block">
-              <div className="flex items-center gap-1 text-sm hover:text-green-600 transition cursor-pointer">
-                <Folder size={16} /> Apply Tag ▾
+            <div className="relative group">
+              <div className="flex items-center gap-1 cursor-pointer hover:text-green-600">
+                <Folder size={16} />
+                <span className="hidden sm:inline">Apply Tag ▾</span>
               </div>
-
-              <div className="absolute right-0 mt-1 w-52 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-20">
+              <div
+                className="absolute left-0 mt-1 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-20"
+              >
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 max-h-60 overflow-y-auto">
                   {tags.map((tag, index) => {
                     const isApplied =
-                      Array.isArray(mail?.status?.TagData) &&
-                      mail.status.TagData.some(
-                        (t) => t.TagName === tag.TagName
-                      );
+                      Array.isArray(data?.status?.TagData) &&
+                      data.status.TagData.some((t) => t.TagName === tag.TagName);
                     return (
                       <li
                         key={`tag-${index}`}
-                        className={`flex items-center gap-2 px-4 py-2 cursor-pointer transition-colors 
-                                ${
-                                  isApplied
-                                    ? "bg-green-100 dark:bg-green-700 font-semibold"
-                                    : "hover:bg-gray-200 dark:hover:bg-gray-700"
-                                }`}
+                        className={`flex items-center gap-2 px-4 py-2 cursor-pointer transition-colors ${isApplied
+                          ? "bg-green-100 dark:bg-green-700 font-semibold"
+                          : "hover:bg-gray-200 dark:hover:bg-gray-700"
+                          }`}
                         onClick={() =>
                           isApplied
-                            ? handleRemoveTag(tag._id, mail._id)
-                            : handleApplyTag(tag._id, mail._id)
+                            ? handleRemoveTag(tag._id, conversationID)
+                            : handleApplyTag(tag._id, conversationID)
                         }
                       >
                         <span
@@ -638,106 +662,107 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
 
           {(authState.userDetails.rolee === "Admin-Dashboard" ||
             authState.userDetails.rolee === "Sub-Admin") && (
-            <div className="relative group inline-block">
+              <div className="relative group">
+                <div
+                  className={`flex items-center gap-1 text-sm cursor-pointer transition ${data?.IsClosed
+                    ? "text-red-600 hover:underline"
+                    : "text-green-600 hover:underline"
+                    }`}
+                  onClick={() =>
+                    data?.IsClosed
+                      ? handleOpenConversation(conversationID)
+                      : handleCloseConversation(conversationID)
+                  }
+                >
+                  {data?.IsClosed ? (
+                    <>
+                      <AiOutlineLock size={16} />
+                      <span className="hidden sm:inline">Close Conversation</span>
+                    </>
+                  ) : (
+                    <>
+                      <AiOutlineUnlock size={16} />
+                      <span className="hidden sm:inline">Open Conversation</span>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+        </div>
+
+        <div className="">
+          {section && id ? (
+            <div className="relative group">
               <div
-                className={`flex items-center gap-1 text-sm transition cursor-pointer 
-        ${
-          mail.IsClosed
-            ? "text-red-600 hover:underline"
-            : "text-green-600 hover:underline"
-        }`}
-                onClick={() =>
-                  mail.IsClosed
-                    ? handleOpenConversation(mail._id)
-                    : handleCloseConversation(mail._id)
-                }
+                className="flex items-center gap-1 text-sm font-medium hover:text-green-600 cursor-pointer"
+                onClick={() => handleRemoveFromFolder(conversationID)}
               >
-                {mail.IsClosed ? (
-                  <>
-                    <AiOutlineLock size={16} /> Close Conversation
-                  </>
-                ) : (
-                  <>
-                    <AiOutlineUnlock size={16} /> Open Conversation
-                  </>
-                )}
+                <Folder size={16} />
+                <span className="hidden sm:inline">Remove from Folder</span>
+              </div>
+            </div>
+          ) : (
+            <div className="relative group">
+              <div className="flex items-center gap-1 text-sm font-medium hover:text-green-600 cursor-pointer">
+                <Folder size={16} />
+                <span className="hidden sm:inline">Move to Folder ▾</span>
+              </div>
+              <div className="absolute right-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-20">
+                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                  {folders.map((folder, index) => (
+                    <li
+                      key={index}
+                      className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      onClick={() => handleMoveToFolder(folder._id, conversationID)}
+                    >
+                      {folder.name}
+                    </li>
+                  ))}
+                  <li
+                    className="px-4 py-2 text-blue-600 hover:underline cursor-pointer"
+                    onClick={handleCreateNewFolder}
+                  >
+                    ➕ Create New Folder
+                  </li>
+                </ul>
               </div>
             </div>
           )}
         </div>
-
-        {section && id ? (
-          <div className="relative group inline-block">
-            <div
-              className="flex items-center gap-1 text-sm font-medium hover:text-green-600 transition cursor-pointer"
-              onClick={() => handleRemoveFromFolder(mail._id)}
-            >
-              <Folder size={16} /> Remove from Folder
-            </div>
-          </div>
-        ) : (
-          <div className="relative group inline-block">
-            <div className="flex items-center gap-1 text-sm font-medium hover:text-green-600 transition cursor-pointer">
-              <Folder size={16} /> Move to Folder ▾
-            </div>
-
-            <div className="absolute right-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-20">
-              <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                {folders.map((folder,index) => (
-                  <li
-                    key={index}
-                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-                    onClick={() => handleMoveToFolder(folder._id, mail._id)}
-                  >
-                    {folder.name}
-                  </li>
-                ))}
-                <li
-                  className="px-4 py-2 text-blue-600 hover:underline cursor-pointer"
-                  onClick={handleCreateNewFolder}
-                >
-                  ➕ Create New Folder
-                </li>
-              </ul>
-            </div>
-          </div>
-        )}
       </div>
+
       <div
-        className={`p-6 border-b ${
-          darkMode ? "border-gray-700" : "border-gray-200"
-        }`}
+        className={`p-6 border-b ${darkMode ? "border-gray-700" : "border-gray-200"
+          }`}
       >
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <h2
-              className={`text-2xl font-bold mb-2 ${
-                darkMode ? "text-white" : "text-gray-900"
-              }`}
+              className={`text-2xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-900"
+                }`}
             >
-              {mail.Subject}
+              {data.Subject}
             </h2>
 
             <div className="flex items-center gap-2 text-sm mb-3">
               <div className="w-8 h-8 rounded-full overflow-hidden">
                 <img
-                  src={mail.CreatedUser.profileLink}
+                  src={data.CreatedUser?.UserDetails[0]?.profileLink}
                   alt="avatar"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div>
                 <p
-                  className={`font-semibold ${
-                    darkMode ? "text-white" : "text-gray-900"
-                  }`}
+                  className={`font-semibold ${darkMode ? "text-white" : "text-gray-900"
+                    }`}
                 >
-                  {mail.CreatedUser.name}
+                  {data.CreatedUser?.UserDetails[0]?.name}
                 </p>
                 <p
                   className={`${darkMode ? "text-gray-400" : "text-gray-500"}`}
                 >
-                  {mail.CreatedUser.email}
+                  {data.CreatedUser?.UserDetails[0]?.email}
                 </p>
               </div>
             </div>
@@ -745,9 +770,8 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
             {mailTo && (
               <div className="flex items-center gap-1 flex-wrap text-sm">
                 <span
-                  className={`${
-                    darkMode ? "text-gray-300" : "text-gray-700"
-                  } font-medium`}
+                  className={`${darkMode ? "text-gray-300" : "text-gray-700"
+                    } font-medium`}
                 >
                   To:
                 </span>
@@ -798,9 +822,8 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
             {mailCc && (
               <div className="flex items-center gap-1 flex-wrap text-sm mt-2">
                 <span
-                  className={`${
-                    darkMode ? "text-gray-300" : "text-gray-700"
-                  } font-medium`}
+                  className={`${darkMode ? "text-gray-300" : "text-gray-700"
+                    } font-medium`}
                 >
                   Cc:
                 </span>
@@ -849,163 +872,156 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
             )}
           </div>
 
-          <span
+          {/* <span
             className={`text-sm ${
               darkMode ? "text-gray-400" : "text-gray-500"
             }`}
           >
             {new Date(mail.LastMessageAt).toLocaleString()}
-          </span>
+          </span> */}
         </div>
       </div>
 
-       <div
-      className="flex-1 p-6 overflow-y-auto bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:to-gray-800"
-    >
-      <div className={`space-y-6 ${darkMode ? "text-white" : "text-gray-800"}`}>
-        {mailContent.map((message, index) => (
-          <div
-            key={message._id}
-            className={`p-6 rounded-2xl shadow-lg border transition-all duration-300 hover:shadow-xl group
-            ${
-              darkMode
-                ? index % 2 === 0
-                  ? "bg-gray-800 border-gray-700"
-                  : "bg-gray-700 border-gray-600"
-                : index % 2 === 0
-                ? "bg-white border-gray-200"
-                : "bg-gray-200 border-gray-100"
-            }`}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-              <div className="flex items-center gap-3">
-                <img
-                  src={message.Sender?.profileLink}
-                  alt={message.Sender?.name}
-                  className="w-12 h-12 rounded-full border-2 border-blue-500 object-cover shadow-sm"
-                />
-                <div>
-                  <h4 className="font-semibold text-lg">
-                    {message.Sender?.name}{" "}
-                    <span className="text-sm text-gray-400">
-                      ({message.Sender?.Role})
-                    </span>
-                  </h4>
-                  <p className="text-sm text-gray-500">{message.Sender?.email}</p>
+      <div
+        className="flex-1 p-6 overflow-y-auto bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:to-gray-800"
+      >
+        <div className={`space-y-6 ${darkMode ? "text-white" : "text-gray-800"}`}>
+          {mailContent.map((message, index) => (
+            <div
+              key={message._id}
+              className={`p-6 rounded-2xl shadow-lg border transition-all duration-300 hover:shadow-xl group
+                ${message.Sender._id == authState.userDetails._id
+                  ? "bg-white border-gray-200"
+                  :
+                  "bg-gray-200 border-gray-100"
+                }`}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={message.Sender?.profileLink}
+                    alt={message.Sender?.name}
+                    className="w-12 h-12 rounded-full border-2 border-blue-500 object-cover shadow-sm"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-lg">
+                      {message.Sender?.name}{" "}
+                      <span className="text-sm text-gray-400">
+                        ({message.Sender?.Role})
+                      </span>
+                    </h4>
+                    <p className="text-sm text-gray-500">{message.Sender?.email}</p>
+                  </div>
+                </div>
+                <div className="flex justify-center items-center gap-2 text-xs sm:text-sm text-gray-400">
+                  <span>
+                    Sent At: {new Date(message.SentAt).toLocaleString()}
+                  </span>
                 </div>
               </div>
-              <div className="flex justify-center items-center gap-2 text-xs sm:text-sm text-gray-400">
-                <span>
-                  Sent At: {new Date(message.SentAt).toLocaleString()}
-                </span>
-              </div>
-            </div>
 
-            {/* Body */}
-            <div
-              className={`prose max-w-none leading-relaxed text-[15px] ${
-                darkMode ? "prose-invert" : ""
-              }`}
-              dangerouslySetInnerHTML={{ __html: message.MessageBody }}
-            />
+              {/* Body */}
+              <div
+                className={`prose max-w-none leading-relaxed text-[15px] ${darkMode ? "prose-invert" : ""
+                  }`}
+                dangerouslySetInnerHTML={{ __html: message.MessageBody }}
+              />
 
-            {/* Seen By */}
-            {message.SeenBy && message.SeenBy.length > 0 && (
-              <div className="flex items-center gap-1 flex-wrap text-sm">
-                <span
-                  className={`${
-                    darkMode ? "text-gray-300" : "text-gray-700"
-                  } font-medium`}
-                >
-                  Seen By ({message.SeenBy.length})
-                </span>
+              {/* Seen By */}
+              {message.SeenBy && message.SeenBy.length > 0 && (
+                <div className="flex items-center gap-1 flex-wrap text-sm">
+                  <span
+                    className={`${darkMode ? "text-gray-300" : "text-gray-700"
+                      } font-medium`}
+                  >
+                    Seen By ({message.SeenBy.length})
+                  </span>
 
-                <ul className="text-sm pl-2 space-y-2">
-                  {message.SeenBy.slice(0, 1).map((seen, idx) => (
-                    <li key={idx} className="flex items-center gap-3">
-                      <img
-                        src={seen.UserID?.profileLink}
-                        alt={seen.UserID?.name}
-                        className="w-8 h-8 rounded-full object-cover border"
-                      />
-                      <div className="flex gap-3 items-center flex-wrap">
-                        <div className="font-medium">{seen.UserID?.name}</div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                  <ul className="text-sm pl-2 space-y-2">
+                    {message.SeenBy.slice(0, 1).map((seen, idx) => (
+                      <li key={idx} className="flex items-center gap-3">
+                        <img
+                          src={seen.UserID?.profileLink}
+                          alt={seen.UserID?.name}
+                          className="w-8 h-8 rounded-full object-cover border"
+                        />
+                        <div className="flex gap-3 items-center flex-wrap">
+                          <div className="font-medium">{seen.UserID?.name}</div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
 
-                {message.SeenBy.length > 1 && (
-                  <div className="relative inline-block">
-                    <div className="group/seen relative inline-block">
-                      <span className="text-blue-600 cursor-pointer underline group-hover/seen:text-blue-800 text-xs font-medium ml-1">
-                        +{message.SeenBy.length - 1} more
-                      </span>
+                  {message.SeenBy.length > 1 && (
+                    <div className="relative inline-block">
+                      <div className="group/seen relative inline-block">
+                        <span className="text-blue-600 cursor-pointer underline group-hover/seen:text-blue-800 text-xs font-medium ml-1">
+                          +{message.SeenBy.length - 1} more
+                        </span>
 
-                      <div className="absolute z-50 hidden group-hover/seen:block bg-white dark:bg-gray-800 border dark:border-gray-600 shadow-lg p-4 rounded-lg w-72 max-h-64 overflow-y-auto mt-2 left-0">
-                        <h4 className="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                          Seen By
-                        </h4>
-                        <ul className="space-y-2 text-sm">
-                          {message.SeenBy.map((seen, index) => (
-                            <li
-                              key={index}
-                              className="flex items-center gap-2"
-                            >
-                              <img
-                                src={seen.UserID?.profileLink}
-                                alt={seen.UserID?.name}
-                                className="w-6 h-6 rounded-full object-cover border"
-                              />
-                              <div>
-                                <div className="font-medium text-gray-800 dark:text-gray-100">
-                                  {seen.UserID?.name}
-                                </div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400">
-                                  &lt;{seen.UserID?.email}&gt;
-                                </div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400">
-                                  {seen.IsRead
-                                    ? `Read at ${new Date(
+                        <div className="absolute z-50 hidden group-hover/seen:block bg-white dark:bg-gray-800 border dark:border-gray-600 shadow-lg p-4 rounded-lg w-64 max-h-64 overflow-y-auto mt-2 left-0">
+                          <h4 className="text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                            Seen By
+                          </h4>
+                          <ul className="space-y-2 text-sm">
+                            {message.SeenBy.map((seen, index) => (
+                              <li
+                                key={index}
+                                className="flex items-center gap-2"
+                              >
+                                <img
+                                  src={seen.UserID?.profileLink}
+                                  alt={seen.UserID?.name}
+                                  className="w-6 h-6 rounded-full object-cover border"
+                                />
+                                <div>
+                                  <div className="font-medium text-gray-800 dark:text-gray-100">
+                                    {seen.UserID?.name}
+                                  </div>
+                                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                                    &lt;{seen.UserID?.email}&gt;
+                                  </div>
+                                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                                    {seen.IsRead
+                                      ? `Read at ${new Date(
                                         seen.ReadAt
                                       ).toLocaleString()}`
-                                    : "Unread"}
+                                      : "Unread"}
+                                  </div>
                                 </div>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        ))}
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
 
-        <div ref={bottomRef} />
+          <div ref={bottomRef} />
+        </div>
       </div>
-    </div>
 
       {showReplyDialog && (
         <div className="px-6 pb-2">
           <ReplyDialog
             onClose={() => setShowReplyDialog(false)}
-            ConversationID={mail._id}
-            // addNewMessage={addNewMessage}
+            ConversationID={conversationID}
+          // addNewMessage={addNewMessage}
           />
         </div>
       )}
 
       <div
-        className={`p-6 border-t ${
-          darkMode ? "border-gray-700" : "border-gray-200"
-        }`}
+        className={`p-6 border-t ${darkMode ? "border-gray-700" : "border-gray-200"
+          }`}
       >
         <div className="flex gap-3">
-          {!mail.IsClosed && (
+          {!data?.IsClosed && (
             <button
               onClick={() => setShowReplyDialog(true)}
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
@@ -1026,7 +1042,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       {showForwardDialog && (
         <ForwardDialog
           onClose={() => setShowForwardDialog(false)}
-          ConversationID={mail._id}
+          ConversationID={conversationID}
         />
       )}
 
