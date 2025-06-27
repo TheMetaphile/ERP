@@ -216,10 +216,10 @@ function MailList({
     ${darkMode ? "bg-gray-900" : "bg-gray-50"}
     transform transition-all duration-300 ease-in-out
     ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-    flex flex-col border-r border-gray-200 dark:border-gray-700 h-full
+    flex flex-col border-r border-gray-200 dark:border-gray-700 h-full 
   `}
     >
-      <div
+      {/* <div
         className={`
       p-4 border-b
       ${darkMode ? "border-gray-700 bg-gray-900" : "border-gray-200 bg-white"}
@@ -240,9 +240,9 @@ function MailList({
         `}
           />
         </div>
-      </div>
+      </div> */}
 
-      <div ref={listRef} className="flex-1 overflow-y-auto px-2 py-4 space-y-3">
+      <div ref={listRef} className="flex-1 overflow-y-auto px-2 py-4 space-y-3 no-scrollbar">
         {emails.length === 0 ? (
           <div className={`text-center ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
             <p>No emails in {folderName}</p>
@@ -252,16 +252,15 @@ function MailList({
             <div
               key={email._id}
               className={`
-            p-4 rounded-2xl border transition-all duration-300 ease-in-out
-            shadow-sm hover:shadow-lg hover:scale-[1.01] hover:translate-x-1 cursor-pointer
-            ${selectedMail?._id === email?._id
-                  ? "bg-blue-50 dark:bg-blue-900/30 border-blue-500 border-l-4"
-                  : darkMode
-                    ? "bg-gray-800 border-gray-700 hover:bg-gray-700"
-                    : "bg-white border-gray-200 hover:bg-gray-50"
+  p-4 rounded-2xl border transition-all duration-300 ease-in-out 
+  shadow-sm hover:shadow-lg hover:scale-[1.01] hover:translate-x-1 cursor-pointer
+  ${selectedMail?._id === email._id
+                  ? `${darkMode ? "bg-blue-900/30 border-blue-500 border-l-4" : "bg-blue-50 border-blue-500 border-l-4"}`
+                  : `${darkMode ? "bg-gray-800 border-gray-700 hover:bg-gray-700" : "bg-white border-gray-200 hover:bg-gray-50"}`
                 }
-            ${email?.unSeenCount ? "font-semibold" : "font-normal"}
-          `}
+  ${email?.unSeenCount ? "font-semibold" : "font-normal"}
+`}
+
               onClick={() => {
                 setSelectedMail(email, folderId);
                 setEmails(prevEmails =>

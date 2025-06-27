@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 const ComposeEmail = () => {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [to, setTo] = useState([]);
     const [cc, setCc] = useState([]);
     const [subject, setSubject] = useState('');
@@ -289,14 +289,14 @@ const ComposeEmail = () => {
     }, []);
 
     return (
-        <div className="p-4 bg-white shadow rounded-lg">
+        <div className={`p-4 shadow rounded-lg ${darkMode ? "bg-gray-900 text-white" : "bg-white text-black"}`}>
             <h2 className="text-2xl font-semibold mb-4">Compose Email</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label className="block text-sm font-medium">To:</label>
-                    <div className="flex items-center space-x-2 overflow-x-auto border p-2 rounded">
+                    <div className={`flex items-center space-x-2 overflow-x-auto border p-2 rounded ${darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300"}`}>
                         {to.map((email, idx) => (
-                            <div key={idx} className="bg-gray-300 p-1 rounded flex items-center">
+                            <div key={idx} className={`p-1 rounded flex items-center ${darkMode ? "bg-gray-700 text-white" : "bg-gray-300"}`}>
                                 <span>{email}</span>
                                 <LuXCircle
                                     className="ml-1 text-red-600 hover:text-red-800 cursor-pointer"
@@ -308,12 +308,13 @@ const ComposeEmail = () => {
                             type="text"
                             value={searchString}
                             onChange={(e) => setSearchString(e.target.value)}
-                            className="flex-grow p-1 outline-none"
+                            className={`flex-grow p-1 outline-none ${darkMode ? "bg-gray-900 text-white" : ""}`}
                             placeholder={`Search ${role.charAt(0).toUpperCase() + role.slice(1)}s`}
                             onFocus={handleInputFocus}
                             onBlur={handleInputBlur}
                         />
                     </div>
+
                     {showRoles && (
                         <div
                             className="mt-2 mb-4 grid grid-cols-4 gap-4"
@@ -325,7 +326,7 @@ const ComposeEmail = () => {
                                     key={roleOption}
                                     type="button"
                                     onClick={() => setRole(roleOption)}
-                                    className={`p-2 border rounded text-center ${role === roleOption ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                                    className={`p-2 border rounded text-center ${role === roleOption ? 'bg-blue-500 text-white' : darkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-black'}`}
                                 >
                                     {roleOption.charAt(0).toUpperCase() + roleOption.slice(1)}
                                 </button>
@@ -336,9 +337,9 @@ const ComposeEmail = () => {
 
                 <div className="mb-4">
                     <label className="block text-sm font-medium">CC:</label>
-                    <div className="flex items-center space-x-2 overflow-x-auto border p-2 rounded">
+                    <div className={`flex items-center space-x-2 overflow-x-auto border p-2 rounded ${darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300"}`}>
                         {cc.map((email, idx) => (
-                            <div key={idx} className="bg-gray-300 p-1 rounded flex items-center">
+                            <div key={idx} className={`p-1 rounded flex items-center ${darkMode ? "bg-gray-700 text-white" : "bg-gray-300"}`}>
                                 <span>{email}</span>
                                 <LuXCircle
                                     className="ml-1 text-red-600 hover:text-red-800 cursor-pointer"
@@ -350,12 +351,13 @@ const ComposeEmail = () => {
                             type="text"
                             value={ccSearchString}
                             onChange={(e) => setCcSearchString(e.target.value)}
-                            className="flex-grow p-1 outline-none"
+                            className={`flex-grow p-1 outline-none ${darkMode ? "bg-gray-900 text-white" : ""}`}
                             placeholder={`Search ${role.charAt(0).toUpperCase() + role.slice(1)}s`}
                             onFocus={handleCcInputFocus}
                             onBlur={handleCcInputBlur}
                         />
                     </div>
+
                     {ccShowRoles && (
                         <div
                             className="mt-2 mb-4 grid grid-cols-4 gap-4"
@@ -367,7 +369,7 @@ const ComposeEmail = () => {
                                     key={roleOption}
                                     type="button"
                                     onClick={() => setRole(roleOption)}
-                                    className={`p-2 border rounded text-center ${role === roleOption ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                                    className={`p-2 border rounded text-center ${role === roleOption ? 'bg-blue-500 text-white' : darkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-black'}`}
                                 >
                                     {roleOption.charAt(0).toUpperCase() + roleOption.slice(1)}
                                 </button>
@@ -377,12 +379,12 @@ const ComposeEmail = () => {
                 </div>
 
                 {showSuggestions && (
-                    <div className="mt-2">
-                        <ul className="max-h-40 overflow-y-auto shadow-lg bg-white rounded-md">
+                    <div className={`mt-2`}>
+                        <ul className={`max-h-40 overflow-y-auto shadow-lg rounded-md ${darkMode ? "bg-gray-800 text-white" : "bg-white text-black"}`}>
                             {suggestions.map((suggestion, idx) => (
                                 <li
                                     key={idx}
-                                    className="flex items-center p-2 cursor-pointer hover:bg-gray-100"
+                                    className={`flex items-center p-2 cursor-pointer ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`}
                                     onClick={() => handleSuggestionClick(suggestion, searchString ? 'to' : 'cc')}
                                 >
                                     <img
@@ -390,9 +392,7 @@ const ComposeEmail = () => {
                                         alt="Profile"
                                         className='w-6 h-6 rounded-full mr-2'
                                     />
-                                    <span>
-                                        {suggestion.email}
-                                    </span>
+                                    <span>{suggestion.email}</span>
                                 </li>
                             ))}
                         </ul>
@@ -407,20 +407,19 @@ const ComposeEmail = () => {
                         ref={subjectInputRef}
                         onChange={(e) => setSubject(e.target.value)}
                         onKeyDown={handleSubjectKeyDown}
-                        className="w-full mt-1 p-2 border rounded"
+                        className={`w-full mt-1 p-2 border rounded ${darkMode ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-300"}`}
                         placeholder="Email subject"
                         required
                     />
-
                     {showFieldSuggestionsSubject && (
                         <div
                             ref={subjectSuggestionsRef}
-                            className="absolute top-[65px] left-0 w-60 max-h-64 overflow-y-auto border border-gray-300 bg-white shadow-md rounded z-50"
+                            className={`absolute top-[65px] left-0 w-60 max-h-64 overflow-y-auto border rounded shadow-md z-50 ${darkMode ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-300 text-black"}`}
                         >
                             {fetchedFields.map((field, index) => (
                                 <div
                                     key={index}
-                                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                                    className={`px-3 py-2 cursor-pointer ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`}
                                     onClick={() => handleSelectSuggestionForSubject(field.key)}
                                 >
                                     {field.key} - ({field.for})
@@ -429,7 +428,6 @@ const ComposeEmail = () => {
                         </div>
                     )}
                 </div>
-
 
                 <div className="mb-4 relative" onKeyDown={handleKeyDown}>
                     <label className="block text-sm font-medium">Body:</label>
@@ -444,18 +442,17 @@ const ComposeEmail = () => {
                         ref={(el) => {
                             if (el !== null) setEditorRef(el.getEditor());
                         }}
-                         className="custom-quill-editor"
+                        className={`custom-quill-editor ${darkMode ? "bg-gray-900" : ""}`}
                     />
-
                     {showFieldSuggestions && (
                         <div
                             ref={suggestionsRef}
-                            className="absolute top-[110px] left-0 w-60 max-h-64 overflow-y-auto border border-gray-300 bg-white shadow-md rounded z-50"
+                            className={`absolute top-[110px] left-0 w-60 max-h-64 overflow-y-auto border rounded shadow-md z-50 ${darkMode ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-300 text-black"}`}
                         >
                             {fetchedFields.map((field, index) => (
                                 <div
                                     key={index}
-                                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                                    className={`px-3 py-2 cursor-pointer ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`}
                                     onClick={() => handleSelectSuggestion(field.key)}
                                 >
                                     {field.key} - ({field.for})
@@ -465,7 +462,6 @@ const ComposeEmail = () => {
                     )}
                 </div>
 
-
                 <button
                     type="submit"
                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -474,6 +470,7 @@ const ComposeEmail = () => {
                 </button>
             </form>
         </div>
+
     );
 };
 

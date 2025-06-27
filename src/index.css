@@ -77,3 +77,7 @@ input {
   max-height: 300px;
   overflow-y: auto;
 }
+
+.mt-18 {
+  margin-top: 4.5rem
+}

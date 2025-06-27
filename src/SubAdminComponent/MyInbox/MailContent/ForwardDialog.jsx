@@ -9,7 +9,7 @@ const ForwardDialog = ({
   onClose,
   ConversationID
 }) => {
-  const { authState } = useContext(AuthContext);
+  const { authState, darkMode } = useContext(AuthContext);
   const [searchString, setSearchString] = useState('');
   const [role, setRole] = useState('teacher');
   const [suggestions, setSuggestions] = useState([]);
@@ -104,14 +104,17 @@ const ForwardDialog = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg w-[90%] max-w-xl p-6">
-        <h2 className="text-lg font-bold mb-4 text-gray-800 dark:text-white">Forward Message</h2>
+      <div className={`rounded-lg shadow-lg w-[90%] max-w-xl p-6 ${darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}>
+        <h2 className={`text-lg font-bold mb-4 ${darkMode ? " text-white" : "text-gray-900"} `}>Forward Message</h2>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">To:</label>
-          <div className="flex items-center space-x-2 overflow-x-auto border p-2 rounded">
+          <label className={`block text-sm font-medium ${darkMode ? "text-white" : "text-gray-900"}`}>To:</label>
+          <div className={`flex items-center space-x-2 overflow-x-auto border p-2 rounded ${darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300"}`}>
             {to.map((email, idx) => (
-              <div key={idx} className="bg-gray-300 p-1 rounded flex items-center">
+              <div
+                key={idx}
+                className={`p-1 rounded flex items-center ${darkMode ? "bg-gray-700 text-white" : "bg-gray-300 text-black"}`}
+              >
                 <span>{email}</span>
                 <LuXCircle
                   className="ml-1 text-red-600 hover:text-red-800 cursor-pointer"
@@ -123,7 +126,7 @@ const ForwardDialog = ({
               type="text"
               value={searchString}
               onChange={(e) => setSearchString(e.target.value)}
-              className="flex-grow p-1 outline-none bg-transparent"
+              className={`flex-grow p-1 outline-none bg-transparent ${darkMode ? "text-white" : "text-black"}`}
               placeholder={`Search ${role.charAt(0).toUpperCase() + role.slice(1)}s`}
               onFocus={() => setShowRoles(true)}
               onBlur={() => setTimeout(() => setShowRoles(false), 200)}
@@ -141,7 +144,12 @@ const ForwardDialog = ({
                   key={roleOption}
                   type="button"
                   onClick={() => setRole(roleOption)}
-                  className={`p-2 border rounded text-center ${role === roleOption ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                  className={`p-2 border rounded text-center ${role === roleOption
+                      ? "bg-blue-500 text-white"
+                      : darkMode
+                        ? "bg-gray-700 text-white border-gray-600"
+                        : "bg-gray-200 text-black"
+                    }`}
                 >
                   {roleOption.charAt(0).toUpperCase() + roleOption.slice(1)}
                 </button>
@@ -150,11 +158,11 @@ const ForwardDialog = ({
           )}
 
           {showSuggestions && (
-            <div className="mt-2 border rounded max-h-48 overflow-y-auto bg-white shadow">
+            <div className={`mt-2 border rounded max-h-48 overflow-y-auto shadow ${darkMode ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-300"}`}>
               {suggestions.map((suggestion, index) => (
                 <div
                   key={index}
-                  className="p-2 hover:bg-gray-100 cursor-pointer flex items-center"
+                  className={`p-2 cursor-pointer flex items-center ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`}
                   onClick={() => handleSuggestionClick(suggestion)}
                 >
                   <img
@@ -162,9 +170,7 @@ const ForwardDialog = ({
                     alt="Profile"
                     className='w-6 h-6 rounded-full mr-2'
                   />
-                  <span>
-                    {suggestion.email}
-                  </span>
+                  <span>{suggestion.email}</span>
                 </div>
               ))}
             </div>
@@ -174,7 +180,10 @@ const ForwardDialog = ({
         <div className="flex justify-end gap-3 mt-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold"
+            className={`px-4 py-2 rounded font-semibold ${darkMode
+                ? "bg-gray-700 text-white hover:bg-gray-600"
+                : "bg-gray-300 text-gray-800 hover:bg-gray-400"
+              }`}
           >
             Cancel
           </button>
@@ -187,6 +196,7 @@ const ForwardDialog = ({
         </div>
       </div>
     </div>
+
   );
 };
 

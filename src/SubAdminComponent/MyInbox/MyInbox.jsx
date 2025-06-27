@@ -9,12 +9,13 @@ import { ChevronLeft, ChevronRight, Menu } from 'react-feather';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useLocation } from 'react-router-dom';
+import { MdOutlineDarkMode, MdOutlineLightMode } from 'react-icons/md';
 
 function MyInbox() {
     const location = useLocation();
-    const { id } = useParams();
+    const { id = 'inbox' } = useParams();
     const navigate = useNavigate();
-    const { darkMode } = useContext(AuthContext);
+    const { darkMode, toggleDarkMode } = useContext(AuthContext);
     const [selectedMail, setSelectedMail] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [mailListOpen, setMailListOpen] = useState(false);
@@ -113,7 +114,7 @@ function MyInbox() {
         setMailListOpen(false);
     };
 
-    console.log('selected', selectedMail)
+    console.log('selected', selectedMail, id, darkMode)
 
     useEffect(() => {
         if (selectedMail) {
@@ -151,7 +152,7 @@ function MyInbox() {
             <ToastContainer />
             <div className={`lg:hidden fixed top-0 left-0 right-0 z-50 ${darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border-b p-4 flex items-center justify-between`}>
                 <div className="flex items-center gap-3">
-                    <button onClick={() => setSidebarOpen(true)} className={`p-2 rounded-lg ${darkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'}`}>
+                    <button onClick={() => setSidebarOpen(true)} className={`p-2 rounded-lg ${darkMode ? 'hover:bg-gray-800 text-white' : 'hover:bg-gray-100'}`}>
                         <Menu className="w-6 h-6" />
                     </button>
                     <h1 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -159,7 +160,21 @@ function MyInbox() {
                             {customFolders.find(folder => folder?._id === id)?.Name || id.toUpperCase()}
                         </span>
                     </h1>
+
                 </div>
+                <button
+                    onClick={toggleDarkMode}
+                    className={`p-2 rounded-full ${darkMode
+                        ? "bg-gray-800 text-yellow-400 hover:bg-gray-700"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        } transition-colors`}
+                >
+                    {darkMode ? (
+                        <MdOutlineLightMode size={18} />
+                    ) : (
+                        <MdOutlineDarkMode size={18} />
+                    )}
+                </button>
             </div>
 
             <div className="w-full h-full">
@@ -174,7 +189,7 @@ function MyInbox() {
                     setCustomFolders={setCustomFolders}
                 />
 
-                <div className={`w-full h-[calc(100vh-5rem)] ${isMobile ? 'flex flex-col' : 'grid grid-cols-[30%_70%]'} mt-20 overflow-hidden`}>
+                <div className={`w-full h-[calc(100vh-5rem)] ${isMobile ? 'flex flex-col' : 'grid grid-cols-[30%_70%]'} mt-18 overflow-hidden`}>
                     {(!isMobile || mailListOpen) && (
                         <div className="h-full overflow-y-auto no-scrollbar">
                             <MailList

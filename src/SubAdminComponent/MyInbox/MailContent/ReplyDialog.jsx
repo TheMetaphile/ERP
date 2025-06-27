@@ -7,7 +7,7 @@ import { BASE_URL } from '../../../Config';
 import { toast } from "react-toastify";
 
 const ReplyDialog = ({ onClose, ConversationID, addNewMessage }) => {
-    const { authState } = useContext(AuthContext);
+    const { authState, darkMode } = useContext(AuthContext);
     const [body, setBody] = useState('');
     const [fetchedFields, setFetchedFields] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -133,8 +133,15 @@ const ReplyDialog = ({ onClose, ConversationID, addNewMessage }) => {
     };
 
     return (
-        <div className="relative bg-white dark:bg-gray-900 rounded-lg shadow w-full p-4 border border-gray-300 dark:border-gray-700">
-            <h2 className="text-md font-semibold mb-3 text-gray-800 dark:text-white">Reply Message</h2>
+        <div
+            className={`
+    relative rounded-lg shadow w-full p-4 border
+    ${darkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-300"}
+  `}
+        >
+            <h2 className={`text-md font-semibold mb-3 ${darkMode ? "text-white" : "text-gray-800"}`}>
+                Reply Message
+            </h2>
 
             <div
                 className="mb-3"
@@ -152,22 +159,25 @@ const ReplyDialog = ({ onClose, ConversationID, addNewMessage }) => {
                     ref={(el) => {
                         if (el !== null) setEditorRef(el.getEditor());
                     }}
-                    className="custom-quill-editor"
-
-
+                    className={`custom-quill-editor ${darkMode ? "bg-gray-900 text-white" : ""}`}
                 />
             </div>
 
-            {/* Suggestions Dropdown */}
             {showSuggestions && (
                 <div
                     ref={suggestionsRef}
-                    className="absolute top-[160px] left-4 w-60 max-h-64 overflow-y-auto border border-gray-300 bg-white shadow-md rounded z-50"
+                    className={`
+        absolute top-[160px] left-4 w-60 max-h-64 overflow-y-auto rounded z-50 border shadow-md
+        ${darkMode ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-300 text-black"}
+      `}
                 >
                     {fetchedFields.map((field, index) => (
                         <div
                             key={index}
-                            className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                            className={`
+            px-3 py-2 cursor-pointer
+            ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}
+          `}
                             onClick={() => handleSelectSuggestion(field.key)}
                         >
                             {field.key} - ({field.for})
@@ -179,7 +189,12 @@ const ReplyDialog = ({ onClose, ConversationID, addNewMessage }) => {
             <div className="flex justify-end gap-3 mt-4">
                 <button
                     onClick={onClose}
-                    className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold"
+                    className={`
+        px-4 py-2 rounded font-semibold
+        ${darkMode
+                            ? "bg-gray-700 hover:bg-gray-600 text-white"
+                            : "bg-gray-300 hover:bg-gray-400 text-gray-800"}
+      `}
                 >
                     Cancel
                 </button>
@@ -191,6 +206,7 @@ const ReplyDialog = ({ onClose, ConversationID, addNewMessage }) => {
                 </button>
             </div>
         </div>
+
     );
 };
 

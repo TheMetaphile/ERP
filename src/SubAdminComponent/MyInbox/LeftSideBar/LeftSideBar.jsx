@@ -344,7 +344,8 @@ function LeftSideBar({
             </h1>
             <button
               onClick={onClose}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className={`lg:hidden p-2 rounded-lg transition-colors ${darkMode ? "text-white hover:bg-gray-800" : "text-gray-900 hover:bg-gray-100 "
+                }`}
             >
               <UserX className="w-5 h-5" />
             </button>
@@ -360,7 +361,7 @@ function LeftSideBar({
             </button>
           </div>
 
-          <nav className="flex-1 px-4 space-y-1 overflow-y-auto mb-2 py-2">
+          <nav className="flex-1 px-4 space-y-1 overflow-y-auto mb-2 py-2 no-scrollbar">
             {sidebarItems.map((item, index) => (
               <button
                 key={index}
@@ -398,7 +399,7 @@ function LeftSideBar({
             <>
               <button
                 onClick={() => setShowMore((prev) => !prev)}
-                className="w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-200 font-medium text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+                className={`w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-200 font-medium text-sm hover:${darkMode ? "bg-gray-800 text-white" : "bg-gray-100 text-gray-900"}`}
               >
                 <span>{showMore ? "Less" : "More"}</span>
                 <span>{showMore ? "▲" : "▼"}</span>
@@ -406,43 +407,44 @@ function LeftSideBar({
 
               {showMore && (
                 <div className="mt-1 pl-2 space-y-2">
-                  {customFolders.map(
-                    (folder, index) =>
-                      folder._id && (
-                        <div
-                          key={`${index}`}
-                          className="flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md group"
+                  {customFolders.map((folder, index) =>
+                    folder._id ? (
+                      <button
+                        key={index}
+                        onClick={() => onSectionChange(folder._id)}
+                        className={`w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-200 group
+        ${currentSection === folder._id
+                            ? "bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 text-blue-600 dark:text-blue-400 shadow-sm"
+                            : `${darkMode
+                              ? "text-gray-300 hover:bg-gray-800"
+                              : "text-gray-700 hover:bg-gray-50"
+                            }`}
+        hover:shadow-md hover:scale-105`}
+                      >
+                        <span className="flex-1 text-sm font-medium truncate">
+                          {folder.Name}
+                        </span>
+
+                        {folder.unSeenCount > 0 && (
+                          <span className="ml-2 px-2 py-1 rounded-full text-xs font-semibold bg-blue-600 text-white">
+                            {folder.unSeenCount}
+                          </span>
+                        )}
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteFolder(folder._id);
+                          }}
+                          className="ml-3 p-2 rounded-full text-red-500 hover:bg-red-100 dark:hover:bg-red-800 transition-opacity opacity-0 group-hover:opacity-100"
+                          title="Delete Folder"
                         >
-                          <button
-                            onClick={() =>
-                              onSectionChange(
-                                folder._id
-                              )
-                            }
-                            className={`flex-1 text-left font-medium text-sm truncate transition-colors ${currentSection === folder.Name.toLowerCase()
-                              ? "text-blue-600 dark:text-blue-400"
-                              : darkMode
-                                ? "text-gray-300"
-                                : "text-gray-700"
-                              }`}
-                          >
-                            {folder.Name}
-                          </button>
-                          {folder.unSeenCount > 0 && (
-                            <span className="px-2 py-1 rounded-full text-xs font-semibold bg-blue-600 text-white">
-                              {folder.unSeenCount}
-                            </span>
-                          )}
-                          <button
-                            onClick={() => handleDeleteFolder(folder._id)}
-                            className="ml-3 p-2 rounded-full text-red-500 hover:bg-red-100 dark:hover:bg-red-800 transition-opacity opacity-0 group-hover:opacity-100"
-                            title="Delete Folder"
-                          >
-                            <FaTrash className="h-4 w-4" />
-                          </button>
-                        </div>
-                      )
+                          <FaTrash className="h-4 w-4" />
+                        </button>
+                      </button>
+                    ) : null
                   )}
+
 
                   {showCreateFolderInline ? (
                     <div className="flex items-center gap-2">
@@ -451,7 +453,10 @@ function LeftSideBar({
                         placeholder="Folder name"
                         value={newFolderName}
                         onChange={(e) => setNewFolderName(e.target.value)}
-                        className="flex-1 p-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                        className={`flex-1 p-2 border rounded-lg ${darkMode
+                          ? "bg-gray-800 border-gray-700 text-white"
+                          : "bg-gray-50 border-gray-300 text-gray-900"
+                          }`}
                       />
                       <button
                         onClick={handleSaveFolder}
@@ -464,7 +469,10 @@ function LeftSideBar({
                           setShowCreateFolderInline(false);
                           setNewFolderName("");
                         }}
-                        className="px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 text-sm"
+                        className={`px-2 py-2 rounded-lg ${darkMode
+                          ? "bg-gray-700 text-white hover:bg-gray-600"
+                          : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                          } text-sm`}
                       >
                         <MdCancel size={16} />
                       </button>
@@ -479,14 +487,12 @@ function LeftSideBar({
                   )}
                 </div>
               )}
-            </>
 
-            <>
               <button
                 onClick={() => setShowTags((prev) => !prev)}
-                className="w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-200 font-medium text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+                className={`w-full flex items-center justify-between p-3 rounded-xl text-left transition-all duration-200 font-medium text-sm hover:${darkMode ? "bg-gray-800 text-white" : "bg-gray-100 text-gray-900"} `}
               >
-                <span>{showTags ? "Tags " : "Tags "}</span>
+                <span>Tags</span>
                 <span>{showTags ? "▲" : "▼"}</span>
               </button>
 
@@ -497,16 +503,17 @@ function LeftSideBar({
                       {tags.map((tag, index) => (
                         <div
                           key={`tag-${index}`}
-                          className="flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 shadow-sm hover:scale-[1.02] hover:shadow-md group transition-transform cursor-pointer"
+                          className={`flex items-center justify-between cursor-pointer border rounded-xl px-4 py-2 shadow-sm hover:scale-[1.02] hover:shadow-md group transition-transform ${darkMode
+                            ? "bg-gray-800 text-white border-gray-700"
+                            : "bg-white text-gray-800 border-gray-200"
+                            }`}
                         >
                           <span className="flex items-center gap-2 px-2 py-2">
                             <span
                               className="w-3 h-3 rounded-full"
                               style={{ backgroundColor: tag.TagColor }}
                             ></span>
-                            <span className="truncate font-medium">
-                              {tag.TagName}
-                            </span>
+                            <span className="truncate font-medium">{tag.TagName}</span>
                           </span>
 
                           <button
@@ -530,7 +537,10 @@ function LeftSideBar({
                             placeholder="Tag name"
                             value={newTagName}
                             onChange={(e) => setNewTagName(e.target.value)}
-                            className="flex-1 p-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                            className={`flex-1 p-2 border rounded-lg ${darkMode
+                              ? "bg-gray-800 border-gray-700 text-white"
+                              : "bg-gray-50 border-gray-300 text-gray-900"
+                              }`}
                           />
                           <button
                             onClick={handleSaveTag}
@@ -544,7 +554,10 @@ function LeftSideBar({
                               setNewTagName("");
                               setNewTagColor("red");
                             }}
-                            className="px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 text-sm"
+                            className={`px-2 py-2 rounded-lg ${darkMode
+                              ? "bg-gray-700 text-white hover:bg-gray-600"
+                              : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                              } text-sm`}
                           >
                             <MdCancel size={16} />
                           </button>
@@ -552,7 +565,7 @@ function LeftSideBar({
 
                         <div className="flex gap-2 items-center text-sm ml-1">
                           <label
-                            className="text-gray-600 dark:text-gray-300"
+                            className={`${darkMode ? "text-gray-300" : "text-gray-600"}`}
                             htmlFor="tag-color-picker"
                           >
                             Choose color:
@@ -578,6 +591,7 @@ function LeftSideBar({
                 </>
               )}
             </>
+
           </nav>
 
           <div
