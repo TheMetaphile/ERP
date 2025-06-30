@@ -8,9 +8,10 @@ import axios from 'axios';
 import AuthContext from '../../Context/AuthContext';
 import { BASE_URL } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
+import { refreshAccessToken } from '../../RefreshTokenHelper';
 
 function StudentLeave() {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [status, setStatus] = useState('Pending');
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -24,8 +25,8 @@ function StudentLeave() {
     const textClass = darkMode ? 'text-white' : 'text-black';
     const subTextClass = darkMode ? 'text-gray-300' : 'text-gray-600';
     const iconClass = darkMode ? 'text-indigo-400' : 'text-black';
-    const selectClass = darkMode 
-        ? 'bg-gray-800 text-white border-gray-700 focus:border-indigo-600' 
+    const selectClass = darkMode
+        ? 'bg-gray-800 text-white border-gray-700 focus:border-indigo-600'
         : 'bg-white text-blue-700 border-blue-300 focus:border-blue-500';
 
     const handleStatusChange = (e) => {
@@ -78,6 +79,19 @@ function StudentLeave() {
             setData(prevData => [...prevData, ...response.data.StudentsLeaves]);
         } catch (err) {
             setError(err.message);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUserData();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }
@@ -122,15 +136,15 @@ function StudentLeave() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
             >
-                <h1 
+                <h1
                     className={`
                         text-3xl mobile:max-tablet:text-sm 
                         font-medium flex items-center 
                         ${textClass}
                     `}
                 >
-                    <FaUserGraduate 
-                        className={`mr-3 ${iconClass}`} 
+                    <FaUserGraduate
+                        className={`mr-3 ${iconClass}`}
                     />
                     Student Leave
                 </h1>
@@ -148,19 +162,19 @@ function StudentLeave() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 >
-                    <option 
+                    <option
                         value="Pending"
                         className={darkMode ? 'bg-gray-800' : 'bg-white'}
                     >
                         Pending
                     </option>
-                    <option 
+                    <option
                         value="Approved"
                         className={darkMode ? 'bg-gray-800' : 'bg-white'}
                     >
                         Approved
                     </option>
-                    <option 
+                    <option
                         value="Rejected"
                         className={darkMode ? 'bg-gray-800' : 'bg-white'}
                     >
@@ -175,14 +189,14 @@ function StudentLeave() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
             >
-                <NewTile 
-                    data={data} 
-                    setData={setData} 
-                    darkMode={darkMode} 
+                <NewTile
+                    data={data}
+                    setData={setData}
+                    darkMode={darkMode}
                 />
                 <div ref={sentinelRef} className="h-10">
                     {loading && start > 0 && (
-                        <div 
+                        <div
                             className={`
                                 text-center w-full text-sm 
                                 ${subTextClass}

@@ -6,11 +6,13 @@ import AcademicMiddleTile from "./AcademicMiddleTile";
 import axios from "axios";
 import Loading from "../../../../LoadingScreen/Loading";
 import AuthContext from "../../../../Context/AuthContext";
-import { BASE_URL} from "../../../../Config";
+import { BASE_URL } from "../../../../Config";
 import logo from '../../../../assets/school logo.png';
 import './Print.css';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 const PrintableComponent = React.forwardRef((props, ref,) => {
   return (
@@ -84,7 +86,7 @@ const PrintableComponent2 = React.forwardRef((props, ref) => {
 const PerformanceProfile = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [details, setDetails] = useState({ term1: [], term2: [] });
   const [profile, setProfile] = useState({});
   const [profileLoading, setProfileLoading] = useState(true);
@@ -105,6 +107,19 @@ const PerformanceProfile = () => {
         }
       } catch (error) {
         console.error('Error fetching profile:', error);
+        if (
+          error.response &&
+          error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchProfile();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(error.response?.data?.error || "An error occurred");
+        }
       }
       setProfileLoading(false);
     };
@@ -122,6 +137,19 @@ const PerformanceProfile = () => {
         }
       } catch (error) {
         console.error("Error fetching student result:", error);
+        if (
+          error.response &&
+          error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchResult();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(error.response?.data?.error || "An error occurred");
+        }
       } finally {
         setLoading(false);
       }

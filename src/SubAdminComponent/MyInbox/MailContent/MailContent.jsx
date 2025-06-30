@@ -11,9 +11,10 @@ import ForwardDialog from "./ForwardDialog";
 import ReplyDialog from "./ReplyDialog";
 import { useParams } from "react-router-dom";
 import { AiOutlineUnlock, AiOutlineLock } from "react-icons/ai";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [showCreateFolderModal, setShowCreateFolderModal] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const [tags, setTags] = useState([]);
@@ -63,6 +64,19 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
           "Error fetching folders:",
           error?.response?.data?.message || error.message
         );
+        if (
+          error.response &&
+          error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchCustomFolders();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(error.response?.data?.error || "An error occurred");
+        }
       }
     };
 
@@ -89,6 +103,19 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         setTags(res.data.Tags || []);
       } catch (err) {
         console.error("Failed to load tags:", err);
+        if (
+          err.response &&
+          err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchTags();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(err.response?.data?.error || "An error occurred");
+        }
       }
     };
 
@@ -133,6 +160,19 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         error.response?.data?.error ||
         "An error occurred while creating the folder"
       );
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleSaveFolder();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -167,6 +207,19 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       // console.log("Status updated:", response.data);
     } catch (error) {
       console.error("Failed to update status:", error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleMarkAs(conversationID, actionFlags);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -217,6 +270,19 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         error.response?.data?.error ||
         "An error occurred while applying the tag"
       );
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleApplyTag(tagId, mailId);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -253,6 +319,19 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
     } catch (error) {
       console.error(error);
       toast.error("Failed to remove tag");
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleRemoveTag(tagId, mailId);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -283,6 +362,19 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       toast.error(
         error.response?.data?.error || "An error occurred while moving the mail"
       );
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleMoveToFolder(folderId, mailId);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -315,6 +407,19 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         error.response?.data?.error ||
         "An error occurred while removing the mail"
       );
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleRemoveFromFolder(mailId);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -349,6 +454,19 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         error.response?.data?.error ||
         "An error occurred while opening conversation"
       );
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleOpenConversation(mailId);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -383,6 +501,19 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         error.response?.data?.error ||
         "An error occurred while closing conversation"
       );
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleCloseConversation(mailId);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -418,6 +549,19 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
       } catch (err) {
         console.error(err);
         toast.error(err);
+        if (
+          err.response &&
+          err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await markSeen(msgId);
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(err.response?.data?.error || "An error occurred");
+        }
       }
     };
 
@@ -518,6 +662,19 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         };
       } catch (error) {
         console.error("Error fetching emails:", error);
+        if (
+          error.response &&
+          error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchMail();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(error.response?.data?.error || "An error occurred");
+        }
       }
     };
 
@@ -643,8 +800,8 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
 
               <div
                 className={`absolute left-0 mt-1 p-3 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-20 ${darkMode
-                    ? "bg-gray-900 border border-gray-700"
-                    : "bg-white border border-gray-200"
+                  ? "bg-gray-900 border border-gray-700"
+                  : "bg-white border border-gray-200"
                   }`}
               >
                 <ul
@@ -660,12 +817,12 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
                       <li
                         key={`tag-${index}`}
                         className={`flex items-center gap-2 px-4 py-2 cursor-pointer transition-colors rounded-md ${isApplied
-                            ? darkMode
-                              ? "bg-green-600/30 text-green-200 font-semibold"
-                              : "bg-green-100 text-green-800 font-semibold"
-                            : darkMode
-                              ? "hover:bg-gray-800"
-                              : "hover:bg-gray-200"
+                          ? darkMode
+                            ? "bg-green-600/30 text-green-200 font-semibold"
+                            : "bg-green-100 text-green-800 font-semibold"
+                          : darkMode
+                            ? "hover:bg-gray-800"
+                            : "hover:bg-gray-200"
                           }`}
                         onClick={() =>
                           isApplied

@@ -7,11 +7,12 @@ import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL } from "../../Config";
 import { ToastContainer, toast } from "react-toastify";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 export default function AllStudentsListSubject() {
     const [userData, setUserData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [start, setStart] = useState(0);
     const end = 9;
     const [allDataFetched, setAllDataFetched] = useState(false);
@@ -110,6 +111,19 @@ export default function AllStudentsListSubject() {
 
         } catch (err) {
             console.log(err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUserData();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }

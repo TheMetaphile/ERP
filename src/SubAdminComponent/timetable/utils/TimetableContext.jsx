@@ -3,11 +3,13 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import { BASE_URL } from '../../../Config';
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 const TimetableContext = createContext();
 
 export const StructureProvider = ({ children }) => {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [structureDetails, setStructureDetails] = useState({});
 
 
@@ -46,6 +48,19 @@ export const StructureProvider = ({ children }) => {
             }
         } catch (err) {
             console.error(err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleTimeFetch();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -63,7 +78,7 @@ export const StructureProvider = ({ children }) => {
     }, [selectClass]); // Update effect to depend on both selectClass and classRange
 
     return (
-        <TimetableContext.Provider value={{ structureDetails,setStructureDetails, selectClass, setClass,classRange,setClassRange, selectedSection, setSection, dayStudent, setDayStudent, dayTeacher, setDayTeacher }}>
+        <TimetableContext.Provider value={{ structureDetails, setStructureDetails, selectClass, setClass, classRange, setClassRange, selectedSection, setSection, dayStudent, setDayStudent, dayTeacher, setDayTeacher }}>
             {children}
         </TimetableContext.Provider>
     );

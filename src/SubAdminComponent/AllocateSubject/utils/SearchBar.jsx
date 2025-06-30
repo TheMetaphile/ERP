@@ -2,10 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 export default function SearchBar({ rollNumber, handleClassChange, handleNameChange, handleRollNumberChange, handleSectionChange, handlebothEventsCalled, name, Class, Section, darkMode }) {
 
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [sectionsDetails, setSectionsDetails] = useState([]);
 
     const fetchSections = async (selectedClass) => {
@@ -19,6 +21,19 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
             setSectionsDetails(sectionsDetail);
         } catch (error) {
             console.error("Error while fetching section:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSections(selectedClass);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -35,15 +50,14 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
     return (
         <div className="w-full">
             <div className="flex tablet:flex-wrap mobile:max-tablet:flex-col w-full mobile:max-tablet:gap-2 mobile:max-tablet:p-2 tablet:w-full tablet:max-laptop:mx-2 tablet:max-laptop:gap-2 tablet:z-0 my-4">
-                <select 
-                    id="class" 
-                    value={Class} 
-                    onChange={handleClassChangeWithFetch} 
-                    className={`rounded-lg shadow-md px-3 py-1 ${
-                        darkMode 
-                            ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-400' 
-                            : 'bg-white border-blue-300 focus:ring-blue-500'
-                    } border-2 focus:outline-none focus:ring-2 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1`}
+                <select
+                    id="class"
+                    value={Class}
+                    onChange={handleClassChangeWithFetch}
+                    className={`rounded-lg shadow-md px-3 py-1 ${darkMode
+                        ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-400'
+                        : 'bg-white border-blue-300 focus:ring-blue-500'
+                        } border-2 focus:outline-none focus:ring-2 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1`}
                 >
                     <option value="">Search by Class</option>
                     <option value="Pre-Nursery">Pre-Nursery</option>
@@ -64,15 +78,14 @@ export default function SearchBar({ rollNumber, handleClassChange, handleNameCha
                     <option value="12th">12th</option>
                 </select>
 
-                <select 
-                    id="section" 
-                    value={Section} 
-                    onChange={handleSectionChange} 
-                    className={`rounded-lg shadow-md px-3 py-1 ${
-                        darkMode 
-                            ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-400' 
-                            : 'bg-white border-blue-300 focus:ring-blue-500'
-                    } border-2 focus:outline-none focus:ring-2 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1`}
+                <select
+                    id="section"
+                    value={Section}
+                    onChange={handleSectionChange}
+                    className={`rounded-lg shadow-md px-3 py-1 ${darkMode
+                        ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-400'
+                        : 'bg-white border-blue-300 focus:ring-blue-500'
+                        } border-2 focus:outline-none focus:ring-2 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1`}
                 >
                     <option value="">Search by Section</option>
                     {sectionsDetails.map((section, index) => (

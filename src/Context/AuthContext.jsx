@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
     const [darkMode, setDarkMode] = useState(() => {
         const savedMode = localStorage.getItem('darkMode');
         return savedMode ? JSON.parse(savedMode) : false;
-      });
+    });
 
 
     const navigate = useCallback((path) => {
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
         const storedAuthState = localStorage.getItem('authState');
 
         //console.log("stored", storedAuthState);
-        
+
         if (storedAuthState) {
             try {
                 const decryptedAuthState = unhashData(storedAuthState);
@@ -75,17 +75,32 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     useEffect(() => {
+        const handleStorageChange = (event) => {
+            if (event.key === 'darkMode') {
+                const newMode = JSON.parse(event.newValue);
+                setDarkMode(newMode);
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
+
+
+    useEffect(() => {
         if (darkMode) {
-          document.documentElement.classList.add('dark');
+            document.documentElement.classList.add('dark');
         } else {
-          document.documentElement.classList.remove('dark');
+            document.documentElement.classList.remove('dark');
         }
         localStorage.setItem('darkMode', JSON.stringify(darkMode));
-      }, [darkMode]);
-    
-      const toggleDarkMode = () => {
+    }, [darkMode]);
+
+    const toggleDarkMode = () => {
         setDarkMode(prevMode => !prevMode);
-      };
+    };
 
     const updateAccessToken = useCallback((accessToken, authState) => {
         const newAuthState = { ...authState, accessToken };
@@ -193,7 +208,7 @@ export const AuthProvider = ({ children }) => {
             setAuthState,
             checkAuthState,
             updateAccessToken,
-            darkMode, 
+            darkMode,
             toggleDarkMode,
             isLoading
         }}>

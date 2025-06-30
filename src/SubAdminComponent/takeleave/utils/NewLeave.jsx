@@ -7,9 +7,10 @@ import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import { FiCalendar, FiType, FiMessageSquare } from 'react-icons/fi';
 import { IoClose } from 'react-icons/io5';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 function NewLeave({ onClose, onNewLeave }) {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
@@ -89,6 +90,19 @@ function NewLeave({ onClose, onNewLeave }) {
     catch (error) {
       console.log(error);
       toast.error(error.response.data.error)
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleSubmit();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
     finally {
       setLoading(false)

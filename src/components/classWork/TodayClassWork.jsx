@@ -9,12 +9,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import SubjectSelection from "./utils/SubjectSelection";
 import { motion } from "framer-motion";
 import { FaBook, FaChevronDown } from "react-icons/fa";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 export default function TodayClassWork() {
   const [selectedSubject, setSelectedSubject] = useState('Maths');
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState([]);
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [start, setStart] = useState(0);
   const end = 5;
   const [allDataFetched, setAllDataFetched] = useState(false);
@@ -72,6 +73,19 @@ export default function TodayClassWork() {
       setDetails(prevData => [...prevData, ...response.data.classwork]);
     } catch (error) {
       console.error("Error fetching student classwork:", error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchClassWork();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
     finally {
       setLoading(false)

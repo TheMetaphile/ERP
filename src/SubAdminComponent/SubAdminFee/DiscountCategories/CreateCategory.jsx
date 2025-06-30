@@ -7,6 +7,7 @@ import { BASE_URL } from "../../../Config";
 import AuthContext from "../../../Context/AuthContext";
 import DiscountRow from "./DiscountRow";
 import { ToastContainer, toast } from "react-toastify";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 export default function () {
     const [discounts, setDiscounts] = useState([]);
@@ -30,6 +31,19 @@ export default function () {
             } catch (error) {
                 console.error("Failed to fetch discounts", error);
                 setDiscounts([]);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchDiscounts();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             }
         };
 
@@ -53,6 +67,19 @@ export default function () {
         } catch (error) {
             console.error("Failed to delete discount", error);
             toast.error("Failed to delete discount.");
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleDeleteDiscount(discountId);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

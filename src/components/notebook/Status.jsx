@@ -7,10 +7,11 @@ import { toast, ToastContainer } from "react-toastify";
 import Loading from '../../LoadingScreen/Loading';
 import { BASE_URL } from "../../Config";
 import SubjectSelection from "../classWork/utils/SubjectSelection";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 const Status = () => {
     const { id } = useParams();
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedSubject, setSelectedSubject] = useState('Maths');
@@ -19,8 +20,8 @@ const Status = () => {
     const textClass = darkMode ? 'text-white' : 'text-black';
     const subTextClass = darkMode ? 'text-gray-300' : 'text-gray-600';
     const borderClass = darkMode ? 'border-gray-700' : 'border-gray-300';
-    const headerBgClass = darkMode 
-        ? 'bg-gradient-to-r from-gray-800 to-gray-700' 
+    const headerBgClass = darkMode
+        ? 'bg-gradient-to-r from-gray-800 to-gray-700'
         : 'bg-gradient-to-r from-blue-300 to-blue-100';
     const headerTextClass = darkMode ? 'text-gray-300' : 'text-gray-600';
 
@@ -40,6 +41,19 @@ const Status = () => {
                 setData(response.data.notebookRecord);
             } catch (error) {
                 console.error("Error fetching notice:", error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchData();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             }
             finally {
                 setLoading(false)
@@ -55,9 +69,9 @@ const Status = () => {
                 <h1 className={`text-xl mobile:max-tablet:text-lg font-medium my-3 ${textClass}`}>
                     Checked Notebooks
                 </h1>
-                <SubjectSelection 
-                    onSubjectSelect={handleSubjectSelect} 
-                    darkMode={darkMode} 
+                <SubjectSelection
+                    onSubjectSelect={handleSubjectSelect}
+                    darkMode={darkMode}
                 />
             </div>
             {loading ? (
@@ -80,8 +94,8 @@ const Status = () => {
                         </thead>
                         <tbody className={`${subTextClass} text-md font-normal`}>
                             {data.map((Student, index) => (
-                                <tr 
-                                    key={index} 
+                                <tr
+                                    key={index}
                                     className={`
                                         border-b 
                                         ${borderClass} 
@@ -90,10 +104,10 @@ const Status = () => {
                                     `}
                                 >
                                     <td className={`flex py-3 px-6 items-center gap-2 ${textClass}`}>
-                                        <img 
-                                            src={Student.by.profileLink} 
-                                            alt="img" 
-                                            className="rounded-full h-10 w-10 border-2 border-indigo-500" 
+                                        <img
+                                            src={Student.by.profileLink}
+                                            alt="img"
+                                            className="rounded-full h-10 w-10 border-2 border-indigo-500"
                                         />
                                         {Student.by.name}
                                     </td>
@@ -101,9 +115,9 @@ const Status = () => {
                                     <td className="py-3 px-6 text-center">{Student.chapter}</td>
                                     <td className="py-3 px-6 text-center whitespace-nowrap">{Student.topic}</td>
                                     <td className="flex py-3 px-6 justify-center">
-                                        <Switch 
-                                            checked={Student.status} 
-                                            darkMode={darkMode} 
+                                        <Switch
+                                            checked={Student.status}
+                                            darkMode={darkMode}
                                         />
                                     </td>
                                 </tr>

@@ -6,17 +6,18 @@ import AuthContext from "../../../Context/AuthContext.jsx";
 import { toast } from "react-toastify";
 import { MdEmail, MdOutlineSecurity } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { refreshAccessToken } from "../../../RefreshTokenHelper.js";
 
 
 export default function SubAdminCard({ userData, setUserData }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     console.log(userData);
     const [permission, setPermission] = useState(false);
     const [selectedPermissions, setSelectedPermissions] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState(null);
 
     const availablePermissions = ["Exam", "Certificate", "Result", "Student Fees", "Student Registration", "Teacher Registration", "SubAdmin Registration", "Readmission", "New Admission", "New Section", "Assign Subject",
-        "Time Table", "Assign Coordinator", "Substitute Coordinator", "ClassTeacher Substitute", "Lecture Substitute", "Access Control", "Custom Registration Builder", "Template","Subject Management", "Subject Allocate",
+        "Time Table", "Assign Coordinator", "Substitute Coordinator", "ClassTeacher Substitute", "Lecture Substitute", "Access Control", "Custom Registration Builder", "Template", "Subject Management", "Subject Allocate",
         "Terminate Students", "Student Details", "Student Details Edit", "Field Maping", "Other Certificates", "My Inbox"
     ];
 
@@ -61,6 +62,19 @@ export default function SubAdminCard({ userData, setUserData }) {
         } catch (error) {
             toast.error(error?.response?.data?.error || "Failed to update Permission")
             console.error("Error updating permissions:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSave();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

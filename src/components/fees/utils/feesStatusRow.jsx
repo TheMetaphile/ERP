@@ -5,9 +5,10 @@ import AuthContext from "../../../Context/AuthContext.jsx";
 import { BASE_URL } from "../../../Config.js";
 import { motion } from "framer-motion";
 import { toast } from 'react-toastify';
+import { refreshAccessToken } from "../../../RefreshTokenHelper.js";
 
 export default function FeeStatusRow({ darkMode }) {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState([]);
 
@@ -39,6 +40,19 @@ export default function FeeStatusRow({ darkMode }) {
     }
     catch (error) {
       console.log(error)
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchStatus();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
     finally {
       setLoading(false)

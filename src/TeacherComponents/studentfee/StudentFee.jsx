@@ -8,11 +8,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import { FaUserGraduate, FaMoneyBillWave, FaPercent, FaWallet, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { refreshAccessToken } from '../../RefreshTokenHelper';
 
 function StudentFee() {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [filter, setFilter] = useState('');
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(1);
@@ -73,6 +74,19 @@ function StudentFee() {
             }
         } catch (err) {
             console.log("Error:", err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchDetails();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }

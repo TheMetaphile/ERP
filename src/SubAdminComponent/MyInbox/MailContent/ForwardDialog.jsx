@@ -5,11 +5,12 @@ import { LuXCircle } from "react-icons/lu";
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import { toast } from "react-toastify";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 const ForwardDialog = ({
   onClose,
   ConversationID
 }) => {
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [searchString, setSearchString] = useState('');
   const [role, setRole] = useState('teacher');
   const [suggestions, setSuggestions] = useState([]);
@@ -41,6 +42,19 @@ const ForwardDialog = ({
             setSuggestions(roleSuggestions);
           } catch (error) {
             console.error("Error searching for roles:", error);
+            if (
+              error.response &&
+              error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+              toast.warn('Access denied. Attempting to refresh token...');
+              try {
+                const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                await searchRole();
+              } catch (refreshError) {
+              }
+            } else {
+              toast.error(error.response?.data?.error || "An error occurred");
+            }
           }
         };
         searchRole();
@@ -99,6 +113,19 @@ const ForwardDialog = ({
     } catch (error) {
       console.error(error);
       toast.error("Failed to send message");
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleSave();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -145,10 +172,10 @@ const ForwardDialog = ({
                   type="button"
                   onClick={() => setRole(roleOption)}
                   className={`p-2 border rounded text-center ${role === roleOption
-                      ? "bg-blue-500 text-white"
-                      : darkMode
-                        ? "bg-gray-700 text-white border-gray-600"
-                        : "bg-gray-200 text-black"
+                    ? "bg-blue-500 text-white"
+                    : darkMode
+                      ? "bg-gray-700 text-white border-gray-600"
+                      : "bg-gray-200 text-black"
                     }`}
                 >
                   {roleOption.charAt(0).toUpperCase() + roleOption.slice(1)}
@@ -181,8 +208,8 @@ const ForwardDialog = ({
           <button
             onClick={onClose}
             className={`px-4 py-2 rounded font-semibold ${darkMode
-                ? "bg-gray-700 text-white hover:bg-gray-600"
-                : "bg-gray-300 text-gray-800 hover:bg-gray-400"
+              ? "bg-gray-700 text-white hover:bg-gray-600"
+              : "bg-gray-300 text-gray-800 hover:bg-gray-400"
               }`}
           >
             Cancel

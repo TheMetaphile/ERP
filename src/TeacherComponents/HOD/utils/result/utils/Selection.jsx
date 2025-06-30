@@ -2,9 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import AuthContext from '../../../../../Context/AuthContext';
 import { BASE_URL } from '../../../../../Config';
+import { refreshAccessToken } from '../../../../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 function Selection({ handleClassChange, handleSectionChange, handleSessionChange, Class, Section, Session }) {
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [sectionsDetails, setSectionsDetails] = useState([]);
 
   const wingClasses = {
@@ -27,6 +29,19 @@ function Selection({ handleClassChange, handleSectionChange, handleSessionChange
       setSectionsDetails(sectionsDetail);
     } catch (error) {
       console.error('Error while fetching section:', error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchSections(selectedClass);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 

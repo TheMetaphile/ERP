@@ -4,9 +4,11 @@ import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext'
 import { BASE_URL } from '../../../Config'
+import { toast } from 'react-toastify'
+import { refreshAccessToken } from '../../../RefreshTokenHelper'
 
 export default function Approved() {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -25,6 +27,19 @@ export default function Approved() {
 
         } catch (err) {
             setError(err.message);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUserData();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
 
         }
         finally {

@@ -6,6 +6,7 @@ import AuthContext from "../../../Context/AuthContext";
 import axios from "axios";
 import { BASE_URL, WEB_SOCKET_BASE_URL } from "../../../Config";
 import { Archive, Trash2, Heart } from "lucide-react";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 function MailList({
   emails,
@@ -18,7 +19,7 @@ function MailList({
   currentSection,
   folderName
 }) {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   // const emails = getMailsBySection(currentSection);
   const { id: folderId } = useParams();
   const socketRef = useRef(null);
@@ -151,6 +152,19 @@ function MailList({
         };
       } catch (error) {
         console.error("Error fetching emails:", error);
+        if (
+          error.response &&
+          error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchMails();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(error.response?.data?.error || "An error occurred");
+        }
       }
     };
 
@@ -252,15 +266,25 @@ function MailList({
             <div
               key={email._id}
               className={`
-  p-4 rounded-2xl border transition-all duration-300 ease-in-out 
-  shadow-sm hover:shadow-lg hover:scale-[1.01] hover:translate-x-1 cursor-pointer
-  ${selectedMail?._id === email._id
-                  ? `${darkMode ? "bg-blue-900/30 border-blue-500 border-l-4" : "bg-blue-50 border-blue-500 border-l-4"}`
-                  : `${darkMode ? "bg-gray-800 border-gray-700 hover:bg-gray-700" : "bg-white border-gray-200 hover:bg-gray-50"}`
-                }
-  ${email?.unSeenCount ? "font-semibold" : "font-normal"}
-`}
+    group relative p-4 rounded-2xl border transition-all duration-300 ease-in-out 
+    shadow-sm hover:shadow-lg hover:scale-[1.01] hover:translate-x-1 cursor-pointer
 
+    ${selectedMail?._id === email._id
+                  ? darkMode
+                    ? "bg-blue-900/30 border-blue-500 border-l-4"
+                    : "bg-blue-50 border-blue-500 border-l-4"
+                  : darkMode
+                    ? "bg-gray-800 border-gray-700 hover:bg-gray-700"
+                    : "bg-white border-gray-200 hover:bg-gray-50"}
+
+    ${email?.unSeenCount
+                  ? darkMode
+                    ? "bg-orange-900/20 border-l-[6px] border-orange-400 shadow-orange-500/20 animate-pulse"
+                    : "bg-orange-50 border-l-[6px] border-orange-500 shadow-orange-200/60 animate-pulse"
+                  : ""}
+    
+    ${email?.unSeenCount ? "font-semibold" : "font-normal"}
+  `}
               onClick={() => {
                 setSelectedMail(email, folderId);
                 setEmails(prevEmails =>
@@ -270,6 +294,7 @@ function MailList({
                 );
               }}
             >
+
               <div className="flex items-start gap-4">
                 <div className="relative w-12 h-12 flex-shrink-0">
                   {email?.CreatedUser._id === authState?.userDetails?._id ? (

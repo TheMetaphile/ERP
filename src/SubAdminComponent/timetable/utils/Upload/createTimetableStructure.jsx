@@ -7,6 +7,7 @@ import AuthContext from '../../../../Context/AuthContext';
 import { useTimetableContext } from '../TimetableContext';
 import { BASE_URL } from '../../../../Config';
 import axios from 'axios';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 
 const TimeTableStructure = () => {
     // const [darkMode, setIsDarkMode] = useState(false);
@@ -20,7 +21,7 @@ const TimeTableStructure = () => {
     });
 
 
-    const { darkMode, authState } = useContext(AuthContext);
+    const { darkMode, authState, updateAccessToken, logout } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -40,6 +41,19 @@ const TimeTableStructure = () => {
         catch (error) {
             console.error('Error creating time table structure:', error);
             toast.error('Failed to create time table structure!');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmit();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -65,7 +79,7 @@ const TimeTableStructure = () => {
             ]
         }));
     };
-    
+
 
     const handleLectureChange = (index, field, value) => {
         const updatedStructure = [...formData.lectureStructure];

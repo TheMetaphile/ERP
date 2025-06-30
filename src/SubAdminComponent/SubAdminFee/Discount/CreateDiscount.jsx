@@ -6,9 +6,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import StudentCard from '../StudentFee/utils/ProfileCard';
 import ApplicableDiscounts from '../StudentFee/utils/ApplicableDiscounts';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 function CreateDiscount({ selectedSession }) {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [selectedSuggestion, setSelectedSuggestion] = useState();
     const [appliedDis, setAppliedDis] = useState(null);
     const [temp, setTemp] = useState('');
@@ -80,6 +81,19 @@ function CreateDiscount({ selectedSession }) {
                 } catch (error) {
                     console.error("Error searching for Students:", error);
                     toast.error("Error searching for students");
+                    if (
+                        error.response &&
+                        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                    ) {
+                        toast.warn('Access denied. Attempting to refresh token...');
+                        try {
+                            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                            await searchStudent();
+                        } catch (refreshError) {
+                        }
+                    } else {
+                        toast.error(error.response?.data?.error || "An error occurred");
+                    }
                 }
             }
             searchStudent();
@@ -118,6 +132,19 @@ function CreateDiscount({ selectedSession }) {
         } catch (error) {
             console.error('Error:', error);
             toast.error('Error creating discount');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmit();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setIsLoading(false);
         }

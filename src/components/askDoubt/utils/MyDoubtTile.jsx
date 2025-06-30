@@ -5,9 +5,10 @@ import AuthContext from '../../../Context/AuthContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { BASE_URL } from '../../../Config';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 export default function MyDoubtTile({ data, darkMode }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [editMode, setEditMode] = useState(null);
     const [editedData, setEditedData] = useState({});
     const [doubts, setDoubts] = useState(data);
@@ -64,6 +65,19 @@ export default function MyDoubtTile({ data, darkMode }) {
         } catch (error) {
             console.error("Error deleting Doubt:", error);
             toast.error(error.response.data.error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleDelete(index, id);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -104,6 +118,19 @@ export default function MyDoubtTile({ data, darkMode }) {
         } catch (error) {
             console.error("Error editing Doubt:", error);
             toast.error(error.response.data.error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleConfirmEdit(index, id);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

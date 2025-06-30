@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 const DoubtCard = ({ doubt, index, expanded, handleClick, handleDelete, darkMode }) => {
 
@@ -111,7 +112,7 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, handleDelete, darkMode
 
 export default function AnsweredTile({ data, Class, darkMode }) {
     const [expanded, setExpanded] = useState(null);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [resolvedDoubts, setResolvedDoubts] = useState([]);
 
     const textClass = darkMode ? 'text-white' : 'text-black';
@@ -146,6 +147,19 @@ export default function AnsweredTile({ data, Class, darkMode }) {
         } catch (error) {
             console.error("Error deleting Doubt:", error);
             toast.error(error.response.data.error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleDelete(index, id);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

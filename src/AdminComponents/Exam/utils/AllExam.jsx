@@ -8,11 +8,12 @@ import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL } from "../../../Config";
 import { MdEdit, MdDeleteForever, MdCheck, MdCancel } from "react-icons/md";
 import { motion } from 'framer-motion';
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 export default function AllExam() {
     const [exams, setExams] = useState([]);
     const [popUp, setPopUp] = useState(false);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [edit, setEdit] = useState(null);
     const [tempExam, setTempExam] = useState({});
     const [selectedClass, setSelectedClass] = useState("");
@@ -91,7 +92,19 @@ export default function AllExam() {
         }
         catch (error) {
             toast.error(error.error);
-
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await deleteExam(index);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
 
     };
@@ -131,6 +144,19 @@ export default function AllExam() {
         }
         catch (error) {
             console.log(error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchExam();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }
@@ -184,6 +210,19 @@ export default function AllExam() {
             }
         } catch (error) {
             toast.error(error.error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSave(index);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

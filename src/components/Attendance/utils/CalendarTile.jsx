@@ -5,9 +5,11 @@ import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import { BASE_URL } from '../../../Config';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 const Calendar = ({ month, year }) => {
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date(`${year}-${month}-01`));
@@ -32,6 +34,19 @@ const Calendar = ({ month, year }) => {
       setData(response.data);
     } catch (error) {
       console.error("Error fetching student month attendance:", error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchStudentAttendance();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     } finally {
       setLoading(false);
     }

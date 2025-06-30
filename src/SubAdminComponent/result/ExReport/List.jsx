@@ -6,10 +6,11 @@ import { BASE_URL } from '../../../Config';
 import Loading from "../../../LoadingScreen/Loading";
 import { ToastContainer, toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 const List = () => {
     const [data, setData] = useState([]);
-    const { authState, darkMode } = useContext(AuthContext); // Fixed typo in 'darkMode'
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext); // Fixed typo in 'darkMode'
     const [loading, setLoading] = useState(false);
     const [Class, setClass] = useState('9th');
     const [start, setStart] = useState(0);
@@ -111,6 +112,19 @@ const List = () => {
             }
         } catch (err) {
             console.log(err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUsers();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }
@@ -126,15 +140,14 @@ const List = () => {
             <div className="flex items-center justify-between px-3 py-2">
                 <h1 className={`text-xl font-medium mb-2 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>Ex Student Result</h1>
                 <div className="flex items-center gap-2">
-                    <select 
-                        id="class" 
-                        value={Class} 
-                        onChange={handleClassChange} 
-                        className={`rounded-lg shadow-md px-3 py-1 border-2 ${
-                            darkMode 
-                            ? 'border-blue-700 bg-gray-800 text-gray-200 focus:ring-blue-600' 
-                            : 'border-blue-300 bg-white text-gray-800 focus:ring-blue-500'
-                        } focus:outline-none focus:ring-2 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1`}
+                    <select
+                        id="class"
+                        value={Class}
+                        onChange={handleClassChange}
+                        className={`rounded-lg shadow-md px-3 py-1 border-2 ${darkMode
+                                ? 'border-blue-700 bg-gray-800 text-gray-200 focus:ring-blue-600'
+                                : 'border-blue-300 bg-white text-gray-800 focus:ring-blue-500'
+                            } focus:outline-none focus:ring-2 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1`}
                     >
                         <option value="">Search by Class</option>
                         <option value="Pre-Nursery">Pre-Nursery</option>
@@ -156,15 +169,14 @@ const List = () => {
                     </select>
 
                     <div>
-                        <select 
-                            id="school-sessions" 
-                            value={selectedSession} 
-                            onChange={handleSessionChange} 
-                            className={`rounded-lg shadow-md px-3 py-1 border-2 ${
-                                darkMode 
-                                ? 'border-blue-700 bg-gray-800 text-gray-200 focus:ring-blue-600' 
-                                : 'border-blue-300 bg-white text-gray-800 focus:ring-blue-500'
-                            } focus:outline-none focus:ring-2 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1`}
+                        <select
+                            id="school-sessions"
+                            value={selectedSession}
+                            onChange={handleSessionChange}
+                            className={`rounded-lg shadow-md px-3 py-1 border-2 ${darkMode
+                                    ? 'border-blue-700 bg-gray-800 text-gray-200 focus:ring-blue-600'
+                                    : 'border-blue-300 bg-white text-gray-800 focus:ring-blue-500'
+                                } focus:outline-none focus:ring-2 transition duration-300 text-lg mr-3 mobile:max-tablet:mr-0 flex-1`}
                         >
                             <option value="">Select Session</option>
                             {sessions.map((session, index) => (
@@ -205,11 +217,10 @@ const List = () => {
                                 {data.map((item, index) => (
                                     <motion.tr
                                         key={index}
-                                        className={`border-b ${
-                                            darkMode 
-                                            ? 'hover:bg-gray-800 border-gray-700' 
-                                            : 'hover:bg-blue-100 border-gray-200'
-                                        } transition-colors`}
+                                        className={`border-b ${darkMode
+                                                ? 'hover:bg-gray-800 border-gray-700'
+                                                : 'hover:bg-blue-100 border-gray-200'
+                                            } transition-colors`}
                                         onClick={() => handleClick(index)}
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -218,20 +229,18 @@ const List = () => {
                                     >
                                         <td className="py-3 px-4 text-center">{item.rollNumber}</td>
                                         <td className="py-3 px-4 text-center">
-                                            <Link 
-                                                to={`/Sub-Admin/Students/details/${item.email}`} 
-                                                className={`flex gap-2 items-center rounded-full text-center px-3 py-2 font-semibold ${
-                                                    darkMode 
-                                                    ? 'bg-gray-800 text-blue-300' 
-                                                    : 'bg-blue-100 text-blue-800'
-                                                }`}
+                                            <Link
+                                                to={`/Sub-Admin/Students/details/${item.email}`}
+                                                className={`flex gap-2 items-center rounded-full text-center px-3 py-2 font-semibold ${darkMode
+                                                        ? 'bg-gray-800 text-blue-300'
+                                                        : 'bg-blue-100 text-blue-800'
+                                                    }`}
                                             >
-                                                <img 
-                                                    src={item.profileLink} 
-                                                    alt="" 
-                                                    className={`w-10 h-10 rounded-full object-cover border-2 ${
-                                                        darkMode ? 'border-blue-700' : 'border-blue-300'
-                                                    }`} 
+                                                <img
+                                                    src={item.profileLink}
+                                                    alt=""
+                                                    className={`w-10 h-10 rounded-full object-cover border-2 ${darkMode ? 'border-blue-700' : 'border-blue-300'
+                                                        }`}
                                                 />
                                                 {item.name}
                                             </Link>
@@ -241,11 +250,10 @@ const List = () => {
                                         <td className="py-3 px-4 text-center whitespace-nowrap">
                                             <Link to={`/Sub-Admin/Result/exStudent/${item._id}?Class=${item.currentClass}&session=${selectedSession}`}>
                                                 <motion.button
-                                                    className={`${
-                                                        darkMode 
-                                                        ? 'bg-blue-700 hover:bg-blue-800' 
-                                                        : 'bg-blue-500 hover:bg-blue-600'
-                                                    } text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200`}
+                                                    className={`${darkMode
+                                                            ? 'bg-blue-700 hover:bg-blue-800'
+                                                            : 'bg-blue-500 hover:bg-blue-600'
+                                                        } text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200`}
                                                     whileHover={{ scale: 1.05 }}
                                                     whileTap={{ scale: 0.95 }}
                                                 >

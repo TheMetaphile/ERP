@@ -9,11 +9,12 @@ import { BASE_URL } from '../../../../Config';
 import { motion } from 'framer-motion';
 import { useTimetableContext } from '../TimetableContext';
 import { FaSpinner } from 'react-icons/fa';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 
 export default function UploadTimetable({ handleChange }) {
     const days = ["monday", 'tuesday', 'wednesday', 'thursday', "friday", 'saturday'];
     const [sectionsDetails, setSectionsDetails] = useState([]);
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const { setClass, structureDetails } = useTimetableContext();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -68,9 +69,22 @@ export default function UploadTimetable({ handleChange }) {
                     typeof s === 'string' ? { subject: s } : s
                 ),
             ]);
-           
+
         } catch (error) {
             toast.error({ text: 'Error connecting to server', type: 'error' });
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSubjects();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -101,6 +115,19 @@ export default function UploadTimetable({ handleChange }) {
             setSectionsDetails(sectionsDetail);
         } catch (error) {
             toast.error("Error fetching sections: " + error.message);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSections(selectedClass);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -167,6 +194,19 @@ export default function UploadTimetable({ handleChange }) {
             console.log(error);
             const errorMessage = error.response?.data?.error || 'Failed to upload timetable';
             toast.error(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmit();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -218,6 +258,19 @@ export default function UploadTimetable({ handleChange }) {
                 }));
             });
             setSchedule(initialSchedule);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchTimeTable();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -241,6 +294,19 @@ export default function UploadTimetable({ handleChange }) {
             return response.data.remark;
         } catch (error) {
             console.error('Availability check failed:', error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchTeacherAvailability(lecture, email, day);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
             return "Availability unknown";
         }
     };

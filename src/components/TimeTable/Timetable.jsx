@@ -6,10 +6,12 @@ import axios from 'axios';
 import TimeTableHeader from './utils/TimeTableHeader'
 import { BASE_URL } from '../../Config';
 import { motion } from 'framer-motion';
+import { refreshAccessToken } from '../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 export default function TimeTable() {
     const [data, setData] = useState([]);
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [fetchedTimeTableStructure, setTimetableStructure] = useState(null);
     const days = ["monday", 'tuesday', 'wednesday', 'thursday', "friday", 'saturday'];
@@ -55,6 +57,19 @@ export default function TimeTable() {
             }
         } catch (err) {
             console.error(err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleTimeFetch();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     }
 
@@ -82,6 +97,19 @@ export default function TimeTable() {
             }
         } catch (error) {
             console.error('Error fetching data:', error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleFetch(index);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setLoading(false);
@@ -103,9 +131,9 @@ export default function TimeTable() {
 
             <div className={`w-full ${cardBgClass} rounded-lg shadow overflow-auto ${borderClass}`}>
                 <table className='w-full'>
-                    <TimeTableHeader 
-                        fields={fetchedTimeTableStructure?.lectureStructure} 
-                        numberOfLecturesBeforeLunch={fetchedTimeTableStructure?.numberOfLeacturesBeforeLunch} 
+                    <TimeTableHeader
+                        fields={fetchedTimeTableStructure?.lectureStructure}
+                        numberOfLecturesBeforeLunch={fetchedTimeTableStructure?.numberOfLeacturesBeforeLunch}
                         darkMode={darkMode}
                     />
                     <tbody>

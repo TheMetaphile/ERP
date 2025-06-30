@@ -8,9 +8,10 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../../Config.js";
 import { usePaymentContext } from "./PaymentContext.jsx";
+import { refreshAccessToken } from "../../../RefreshTokenHelper.js";
 
 export default function TransactionRow({ darkMode }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false)
     const paymentDetail = usePaymentContext();
     const { setPaymentDetails } = paymentDetail;
@@ -42,6 +43,19 @@ export default function TransactionRow({ darkMode }) {
         catch (error) {
             const errorMessage = error.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchTransaction();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setLoading(false)
@@ -49,7 +63,7 @@ export default function TransactionRow({ darkMode }) {
     }
 
     return (
-        <div 
+        <div
             className={`
                 w-full h-fit mb-4 shadow-md rounded-lg border 
                 ${bgClass} ${borderClass} 
@@ -64,9 +78,9 @@ export default function TransactionRow({ darkMode }) {
                 </div>
             ) : (
                 <div>
-                    <TransactionField 
-                        data={data} 
-                        darkMode={darkMode} 
+                    <TransactionField
+                        data={data}
+                        darkMode={darkMode}
                     />
                 </div>
             )}

@@ -12,10 +12,11 @@ import {
     FiGrid,
     FiSearch
 } from "react-icons/fi";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 const Certificates = () => {
     const [tcData, setTcData] = useState([]);
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
     const [downloadLoading, setDownloadLoading] = useState(false);
     const [Class, setClass] = useState('9th');
@@ -135,6 +136,19 @@ const Certificates = () => {
             const errorMessage = error.response?.data?.error || `Failed to download ${type}`;
             toast.error(errorMessage);
             setError(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmit(type, customTemplate);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setDownloadLoading(false);
         }
@@ -220,6 +234,19 @@ const Certificates = () => {
             toast.error(errorMessage);
             setError(errorMessage);
             setFetchedFields([]);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchFieldsForUserType();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -302,6 +329,19 @@ const Certificates = () => {
             const errorMessage = err.response?.data?.error || 'Failed to fetch students data';
             toast.error(errorMessage);
             setError(errorMessage);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUserTc();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }
@@ -330,6 +370,19 @@ const Certificates = () => {
             const errorMessage = error.response?.data?.error || 'Failed to fetch sections';
             toast.error(errorMessage);
             setError(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSections();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -427,6 +480,19 @@ const Certificates = () => {
             const errorMessage = error.response?.data?.error || `Failed to download ${type}`;
             toast.error(errorMessage);
             setError(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await downloadCertificate(type, customStudent, customTemplate);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setDownloadLoading(false);
         }
@@ -484,6 +550,19 @@ const Certificates = () => {
                     }
                     catch (error) {
                         console.error("Error searching for teachers:", error);
+                        if (
+                            error.response &&
+                            error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                        ) {
+                            toast.warn('Access denied. Attempting to refresh token...');
+                            try {
+                                const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                                await searchTeacher();
+                            } catch (refreshError) {
+                            }
+                        } else {
+                            toast.error(error.response?.data?.error || "An error occurred");
+                        }
                     }
                 }
                 searchTeacher();

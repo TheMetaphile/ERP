@@ -8,14 +8,15 @@ import { BASE_URL } from '../../../../Config';
 import Payable from './../../../../assets/coins.png';
 import Paid from './../../../../assets/paid.png';
 import Pending from './../../../../assets/pending.png';
+import { refreshAccessToken } from "../../../../RefreshTokenHelper";
 
 export default function FeeStatus({ darkMode }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
     const [details, setDetails] = useState(null);
 
-    const bgClass = darkMode 
-        ? 'bg-gradient-to-r from-gray-800 to-gray-900' 
+    const bgClass = darkMode
+        ? 'bg-gradient-to-r from-gray-800 to-gray-900'
         : 'bg-gradient-to-r from-bg_blue to-secondary';
     const textClass = darkMode ? 'text-white' : 'text-text_blue';
     const borderClass = darkMode ? 'border-gray-700' : 'border-gray-300';
@@ -42,6 +43,19 @@ export default function FeeStatus({ darkMode }) {
         } catch (error) {
             console.error("Error fetching fee status:", error);
             toast.error('Failed to fetch fee status');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchStatus();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }
@@ -87,14 +101,14 @@ export default function FeeStatus({ darkMode }) {
     ];
 
     return (
-        <div 
+        <div
             className={`
                 rounded-xl w-full shadow-lg 
                 p-4 mobile:p-3 tablet:p-6 
                 ${bgClass} ${borderClass}
             `}
         >
-            <h2 
+            <h2
                 className={`
                     text-xl tablet:text-2xl 
                     font-bold ${textClass} 
@@ -103,7 +117,7 @@ export default function FeeStatus({ darkMode }) {
             >
                 Fee Status
             </h2>
-            <div 
+            <div
                 className="
                     grid grid-cols-1 mobile:grid-cols-1 
                     tablet:grid-cols-2 laptop:grid-cols-4 
@@ -111,11 +125,11 @@ export default function FeeStatus({ darkMode }) {
                 "
             >
                 {feeCards.map((card, index) => (
-                    <FeeCard 
+                    <FeeCard
                         key={index}
-                        img={card.img} 
-                        amount={card.amount} 
-                        title={card.title} 
+                        img={card.img}
+                        amount={card.amount}
+                        title={card.title}
                         color={card.color}
                         darkMode={darkMode}
                         textColor={card.textColor}

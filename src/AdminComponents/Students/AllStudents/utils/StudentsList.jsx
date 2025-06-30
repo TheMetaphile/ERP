@@ -8,13 +8,14 @@ import Loading from '../../../../LoadingScreen/Loading';
 import { BASE_URL } from "../../../../Config";
 import { ToastContainer, toast } from "react-toastify";
 import { motion } from 'framer-motion';
+import { refreshAccessToken } from "../../../../RefreshTokenHelper";
 
 export default function StudentsList() {
     const [name, setName] = useState('');
     const [userData, setUserData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [rollNumber, setRollNumber] = useState('');
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(10);
@@ -132,6 +133,19 @@ export default function StudentsList() {
             setUserData(prevData => [...prevData, ...response.data.Students]);
         } catch (err) {
             setError(err.message);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUserData();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }
@@ -168,6 +182,19 @@ export default function StudentsList() {
             fetchUserData();
         } catch (err) {
             setError(err.message);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleRollNumber();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     };
 

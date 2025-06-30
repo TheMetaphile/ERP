@@ -9,11 +9,12 @@ import AuthContext from "../../../Context/AuthContext";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../../Config";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 export default function AddmissionForm() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
 
     const currentYear = new Date().getFullYear();
     const nextYear = currentYear + 1;
@@ -118,6 +119,19 @@ export default function AddmissionForm() {
             console.error(error);
             const errorMessage = error.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmit();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setLoading(false);
@@ -172,6 +186,19 @@ export default function AddmissionForm() {
             console.log("here", err,);
             const errorMessage = err.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleMultiSignUp(data);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         } finally {
             toast.success("Students account created Successfully");
             setLoading(false);

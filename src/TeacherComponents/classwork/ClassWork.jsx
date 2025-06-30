@@ -9,9 +9,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiFilter, FiUpload, FiBook, FiUsers, FiLayers } from 'react-icons/fi';
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 function ClassWork() {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -133,6 +134,19 @@ function ClassWork() {
             console.log('fetch', response.data)
         } catch (error) {
             console.error("Error fetching student classwork:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchClassWork();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setLoading(false)

@@ -8,9 +8,10 @@ import HistoryTile from './HistoryTile';
 import { motion } from 'framer-motion';
 import { FaHistory, FaChevronDown } from 'react-icons/fa';
 import { MdRefresh } from 'react-icons/md';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 function History({ additionalData }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [start, setStart] = useState(0);
@@ -77,6 +78,19 @@ function History({ additionalData }) {
         }
         catch (error) {
             toast.error(error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchLeaves();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setLoading(false)

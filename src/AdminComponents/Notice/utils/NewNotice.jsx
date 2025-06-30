@@ -2,13 +2,14 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import Loading from './../../../LoadingScreen/Loading';
-import { BASE_URL} from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaRegTimesCircle } from "react-icons/fa";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 function NewNotice({ setShowModal }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [selectedOption, setSelectedOption] = useState('For All');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -102,6 +103,19 @@ function NewNotice({ setShowModal }) {
             } catch (error) {
                 toast.error(error.message);
                 console.error("Error in posting notice:", error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await handleSubmit();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             } finally {
                 setLoading(false);
             }
@@ -124,6 +138,19 @@ function NewNotice({ setShowModal }) {
 
         } catch (error) {
             console.error("Error fetching sections:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSections();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }
@@ -201,6 +228,19 @@ function NewNotice({ setShowModal }) {
             setSearchResultsStudent(response.data.Teachers);
         } catch (error) {
             console.error("Error searching users:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await searchStudents(query);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -215,6 +255,19 @@ function NewNotice({ setShowModal }) {
             setSearchResultsSubAdmin(response.data.Teachers);
         } catch (error) {
             console.error("Error searching users:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await searchSubAdmin(query);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -228,6 +281,19 @@ function NewNotice({ setShowModal }) {
             setSearchResults(response.data.Teachers);
         } catch (error) {
             console.error("Error searching users:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await searchUsers(query);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

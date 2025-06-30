@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { FaSave, FaUserGraduate, FaBook, FaPencilAlt, FaFlask, FaClipboardCheck } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Briefcase, Calendar, Info, User } from 'react-feather';
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 export default function ScholasticTable({
     students,
@@ -16,7 +17,7 @@ export default function ScholasticTable({
     section,
     darkMode
 }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [totalTheoryMarks, setTotalMarks] = useState({
         noteBook: "",
         subjectEnrichment: "",
@@ -79,6 +80,19 @@ export default function ScholasticTable({
         } catch (error) {
             toast.error('Error fetching last result data');
             console.error('Error fetching last result data:', error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchLastUpload();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -159,6 +173,19 @@ export default function ScholasticTable({
         } catch (error) {
             toast.error(error.response?.data?.error || 'Error saving result');
             console.error('Error saving result:', error.response?.data?.error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSave(email);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

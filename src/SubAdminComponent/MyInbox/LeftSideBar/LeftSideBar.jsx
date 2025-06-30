@@ -15,6 +15,7 @@ import { BASE_URL, WEB_SOCKET_BASE_URL } from "../../../Config";
 import { FaTrash } from "react-icons/fa";
 import { MdDeleteForever, MdAdd, MdSave, MdCancel } from "react-icons/md";
 import { toast } from "react-toastify";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 function LeftSideBar({
   isOpen,
@@ -26,7 +27,7 @@ function LeftSideBar({
   customFolders,
   setCustomFolders
 }) {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [showMore, setShowMore] = useState(false);
 
   const staticSidebarItems = [
@@ -110,6 +111,19 @@ function LeftSideBar({
         error.response?.data?.error ||
         "An error occurred while creating the tag"
       );
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleSaveTag();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -132,6 +146,19 @@ function LeftSideBar({
       }
     } catch (error) {
       console.error("Error deleting tag:", error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleDeleteTag(tagId);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -155,6 +182,19 @@ function LeftSideBar({
         setTags(res.data.Tags || []);
       } catch (err) {
         console.error("Failed to load tags:", err);
+        if (
+          err.response &&
+          err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchTags();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(err.response?.data?.error || "An error occurred");
+        }
       }
     };
 
@@ -199,6 +239,19 @@ function LeftSideBar({
         error.response?.data?.error ||
         "An error occurred while creating the folder"
       );
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleSaveFolder();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -284,6 +337,19 @@ function LeftSideBar({
           "Error fetching folders:",
           error?.response?.data?.message || error.message
         );
+        if (
+          error.response &&
+          error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchCustomFolders();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(error.response?.data?.error || "An error occurred");
+        }
       }
     };
 
@@ -317,6 +383,19 @@ function LeftSideBar({
         error?.response?.data?.message || error.message
       );
       toast.error(error?.response?.data?.message);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleDeleteFolder(folderId);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 

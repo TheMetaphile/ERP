@@ -7,9 +7,10 @@ import { toast } from "react-toastify";
 import AdmissionInputs from './AdmissionInputs';
 import { motion } from "framer-motion";
 import { FaUserGraduate, FaStream, FaSave, FaTimes } from "react-icons/fa";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [subject, Setselectedsubject] = useState([])
     const [stream, Setselectedstream] = useState('')
@@ -92,6 +93,19 @@ const ReadmissionDialog = ({ isOpen, onClose, onSave, user }) => {
         } catch (error) {
             console.error("There was an error readmitted the student!", error);
             toast.error("Failed to readmitted the student");
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSave(email);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setLoading(false);

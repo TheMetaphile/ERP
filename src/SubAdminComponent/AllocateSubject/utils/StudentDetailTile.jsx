@@ -5,9 +5,10 @@ import { BASE_URL } from "../../../Config";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 export default function StudentDetailTile({ userData }) {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [newData, setNewData] = useState(userData);
     const [loadingIndex, setLoadingIndex] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,6 +47,19 @@ export default function StudentDetailTile({ userData }) {
             }
         } catch (error) {
             toast.error("Error connecting to server");
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSubjects();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setIsLoading(false);
             setIsModalOpen(true);
@@ -62,12 +76,12 @@ export default function StudentDetailTile({ userData }) {
 
     const submitSubjects = async () => {
         try {
-             const updatedSubjects = optionalSubjects
-            .filter(subjectObj => selectedSubjects.includes(subjectObj.subject))
-            .map(subjectObj => ({
-                subject: subjectObj.subject,
-                type: subjectObj.type
-            }));
+            const updatedSubjects = optionalSubjects
+                .filter(subjectObj => selectedSubjects.includes(subjectObj.subject))
+                .map(subjectObj => ({
+                    subject: subjectObj.subject,
+                    type: subjectObj.type
+                }));
             const response = await axios.post(
                 `${BASE_URL}/allocateSubject/create`,
                 { email: selectedUser.email, selectedSubjects: updatedSubjects },
@@ -85,6 +99,19 @@ export default function StudentDetailTile({ userData }) {
             setIsModalOpen(false);
         } catch (error) {
             toast.error("Error saving subjects");
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await submitSubjects();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -96,20 +123,17 @@ export default function StudentDetailTile({ userData }) {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className={`border-b ${
-                        darkMode ? 'border-gray-700 hover:bg-gray-700' : 'border-gray-200 hover:bg-blue-100'
-                    } transition-colors mb-2`}
+                    className={`border-b ${darkMode ? 'border-gray-700 hover:bg-gray-700' : 'border-gray-200 hover:bg-blue-100'
+                        } transition-colors mb-2`}
                 >
-                    <div 
-                        className={`flex text-center items-center justify-evenly border rounded-lg py-2 pl-2 ${
-                            darkMode ? 'border-gray-700' : ''
-                        }`}
+                    <div
+                        className={`flex text-center items-center justify-evenly border rounded-lg py-2 pl-2 ${darkMode ? 'border-gray-700' : ''
+                            }`}
                     >
                         <Link
                             to={`/Sub-Admin/Students/details/${user.email}`}
-                            className={`rounded-full text-center px-3 py-2 font-semibold ${
-                                darkMode ? 'bg-blue-900 text-blue-100' : 'bg-blue-100 text-blue-800'
-                            }`}
+                            className={`rounded-full text-center px-3 py-2 font-semibold ${darkMode ? 'bg-blue-900 text-blue-100' : 'bg-blue-100 text-blue-800'
+                                }`}
                         >
                             <div className="w-40 flex justify-center items-center space-x-2">
                                 <img
@@ -166,26 +190,24 @@ export default function StudentDetailTile({ userData }) {
                                     {optionalSubjects.map((subjectObj) => (
                                         <label
                                             key={subjectObj._id}
-                                            className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                                                selectedSubjects.includes(subjectObj.subject)
-                                                    ? darkMode 
-                                                        ? "border-blue-500 bg-blue-900 shadow-sm" 
-                                                        : "border-blue-500 bg-blue-50 shadow-sm" 
-                                                    : darkMode 
-                                                        ? "border-gray-600 hover:border-blue-700" 
+                                            className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${selectedSubjects.includes(subjectObj.subject)
+                                                    ? darkMode
+                                                        ? "border-blue-500 bg-blue-900 shadow-sm"
+                                                        : "border-blue-500 bg-blue-50 shadow-sm"
+                                                    : darkMode
+                                                        ? "border-gray-600 hover:border-blue-700"
                                                         : "border-gray-200 hover:border-blue-300"
-                                            }`}
+                                                }`}
                                         >
                                             <input
                                                 type="checkbox"
                                                 value={subjectObj.subject}
                                                 checked={selectedSubjects.includes(subjectObj.subject)}
                                                 onChange={() => handleCheckboxChange(subjectObj.subject)}
-                                                className={`appearance-none w-6 h-6 border-2 rounded-md ${
-                                                    darkMode 
-                                                        ? "border-gray-500 checked:border-blue-400 checked:bg-blue-600" 
+                                                className={`appearance-none w-6 h-6 border-2 rounded-md ${darkMode
+                                                        ? "border-gray-500 checked:border-blue-400 checked:bg-blue-600"
                                                         : "border-gray-300 checked:border-blue-500 checked:bg-blue-500"
-                                                } transition-all`}
+                                                    } transition-all`}
                                             />
                                             <span className="ml-3 text-base font-medium">
                                                 {subjectObj.subject}  ({subjectObj.type})
@@ -199,21 +221,19 @@ export default function StudentDetailTile({ userData }) {
                         <div className={`border-t ${darkMode ? 'border-gray-700 bg-gray-900' : 'border-gray-200 bg-gray-50'} p-4 flex justify-end gap-3`}>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className={`px-4 py-2 rounded-lg border-2 ${
-                                    darkMode 
-                                        ? "border-gray-600 text-gray-300 hover:bg-gray-700" 
+                                className={`px-4 py-2 rounded-lg border-2 ${darkMode
+                                        ? "border-gray-600 text-gray-300 hover:bg-gray-700"
                                         : "border-gray-300 text-gray-700 hover:bg-gray-100"
-                                } transition-colors font-medium`}
+                                    } transition-colors font-medium`}
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={submitSubjects}
-                                className={`px-6 py-2 rounded-lg ${
-                                    darkMode 
-                                        ? "bg-gradient-to-r from-blue-700 to-blue-900" 
+                                className={`px-6 py-2 rounded-lg ${darkMode
+                                        ? "bg-gradient-to-r from-blue-700 to-blue-900"
                                         : "bg-gradient-to-r from-blue-500 to-blue-700"
-                                } text-white hover:shadow-lg transition-all font-medium`}
+                                    } text-white hover:shadow-lg transition-all font-medium`}
                             >
                                 Save Changes
                             </button>

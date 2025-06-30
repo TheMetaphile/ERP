@@ -6,11 +6,12 @@ import { FaTimes } from "react-icons/fa";
 import { MdCheck, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 import { motion } from 'framer-motion';
+import { refreshAccessToken } from "../../../../../RefreshTokenHelper";
 
 
 export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }) {
 
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const inputRef = useRef(null);
     const suggestionsRef = useRef(null);
     const [email, setEmail] = useState('');
@@ -120,6 +121,19 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
         } catch (error) {
             toast.error(error.message);
             console.error("Error in posting notice:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSendNotice(currentTeacher, SubstituteEmail, classs, sectionn);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -158,6 +172,19 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
                 }
                 catch (error) {
                     console.error("Error searching for teachers:", error);
+                    if (
+                        error.response &&
+                        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                    ) {
+                        toast.warn('Access denied. Attempting to refresh token...');
+                        try {
+                            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                            await searchTeacher();
+                        } catch (refreshError) {
+                        }
+                    } else {
+                        toast.error(error.response?.data?.error || "An error occurred");
+                    }
                 }
             }
             searchTeacher();

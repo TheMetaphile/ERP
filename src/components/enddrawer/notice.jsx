@@ -5,17 +5,19 @@ import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL } from "../../Config";
 import { motion } from 'framer-motion';
 import { FaBell, FaCalendarAlt, FaSpinner } from 'react-icons/fa';
+import { refreshAccessToken } from "../../RefreshTokenHelper";
+import { toast } from "react-toastify";
 
 export default function Notice({ darkMode }) {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState([]);
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(5);
 
   // Dark mode classes
-  const bgClass = darkMode 
-    ? 'bg-gradient-to-r from-gray-800 to-gray-900' 
+  const bgClass = darkMode
+    ? 'bg-gradient-to-r from-gray-800 to-gray-900'
     : 'bg-gradient-to-r from-blue-100 to-indigo-50';
   const borderClass = darkMode ? 'border-gray-700' : 'border-gray-200';
   const textClass = {
@@ -36,6 +38,19 @@ export default function Notice({ darkMode }) {
         setDetails(response.data.notices);
       } catch (error) {
         console.error("Error fetching notice:", error);
+        if (
+          error.response &&
+          error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchNotice();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(error.response?.data?.error || "An error occurred");
+        }
       } finally {
         setLoading(false);
       }
@@ -65,22 +80,22 @@ export default function Notice({ darkMode }) {
     >
       {loading ? (
         <div className="flex justify-center items-center h-40">
-          <FaSpinner 
+          <FaSpinner
             className={`
               animate-spin text-4xl 
               ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}
-            `} 
+            `}
           />
         </div>
       ) : details.length === 0 ? (
         <div className="text-center py-10">
-          <FaBell 
+          <FaBell
             className={`
               text-5xl mb-4 mx-auto 
               ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}
-            `} 
+            `}
           />
-          <p 
+          <p
             className={`
               text-xl font-semibold 
               ${darkMode ? 'text-indigo-300' : 'text-indigo-600'}
@@ -99,7 +114,7 @@ export default function Notice({ darkMode }) {
             <h3 className={`text-xl font-bold mb-2 ${textClass.title}`}>
               {detail.title}
             </h3>
-            <p 
+            <p
               className={`
                 ${textClass.description} 
                 text-opacity-80 leading-relaxed 
@@ -108,7 +123,7 @@ export default function Notice({ darkMode }) {
             >
               {detail.description}
             </p>
-            <div 
+            <div
               className={`
                 flex justify-end items-center 
                 border-t ${darkMode ? 'border-gray-700' : 'border-gray-400'} 

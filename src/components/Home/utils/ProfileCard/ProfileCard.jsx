@@ -5,9 +5,11 @@ import NotificationIcon from './../../../../assets/notificationIcon.png';
 import AuthContext from '../../../../Context/AuthContext';
 import { Badge } from '@mui/material';
 import { BASE_URL } from "../../../../Config";
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 export default function ProfileCard({ darkMode }) {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [teacher, setTeacher] = useState('');
 
   const bgClass = darkMode
@@ -41,6 +43,19 @@ export default function ProfileCard({ darkMode }) {
       }
     } catch (error) {
       console.error("Error searching for teachers:", error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchTeacher();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   }
 

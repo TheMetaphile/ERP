@@ -7,6 +7,7 @@ import Loading from '../../../LoadingScreen/Loading'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from '../../../Config';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 export default function RightCard() {
     const [newPassword, setNewPassword] = useState('');
@@ -15,7 +16,7 @@ export default function RightCard() {
     const navigate = useNavigate();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const handleNewPasswordChange = (event) => {
         setNewPassword(event.target.value);
     };
@@ -28,7 +29,7 @@ export default function RightCard() {
         if (newPassword !== confirmPassword) {
             const errorMessage = 'Passwords do not match';
             toast.error(errorMessage);
-           
+
             setIsSubmitting(false);
             return;
         }
@@ -56,6 +57,19 @@ export default function RightCard() {
             console.error(error);
             const errorMessage = error.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleConfirm();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setIsSubmitting(false);
@@ -96,7 +110,7 @@ export default function RightCard() {
 
             <button className="flex w-64 shadow-md rounded-2xl py-2 justify-center self-center  bg-blue-600 mt-8" onClick={handleConfirm} disabled={isSubmitting}>
 
-            {isSubmitting ? <Loading /> : <h1 className="font-medium text-2xl text-white">Change</h1>}
+                {isSubmitting ? <Loading /> : <h1 className="font-medium text-2xl text-white">Change</h1>}
             </button>
         </div>
 

@@ -162,7 +162,7 @@ function MyInbox() {
                     </h1>
 
                 </div>
-                <button
+                {/* <button
                     onClick={toggleDarkMode}
                     className={`p-2 rounded-full ${darkMode
                         ? "bg-gray-800 text-yellow-400 hover:bg-gray-700"
@@ -174,7 +174,7 @@ function MyInbox() {
                     ) : (
                         <MdOutlineDarkMode size={18} />
                     )}
-                </button>
+                </button> */}
             </div>
 
             <div className="w-full h-full">

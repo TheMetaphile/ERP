@@ -7,9 +7,10 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CurrentWeekAdminRow from './CurrentWeekAdminRow';
 import { motion } from "framer-motion";
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 const CurrentWeekAdmin = ({ selectedTab, Class, section, subject }) => {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [error, setError] = useState(null);
@@ -26,10 +27,10 @@ const CurrentWeekAdmin = ({ selectedTab, Class, section, subject }) => {
     const currentWeekStart = new Date(currentDate);  // Create a new Date object to avoid modifying the original
     currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay() + 1);  // Adjust to Monday (start of the week)
 
-    const currentWeekFormattedDate = `${currentWeekStart.getFullYear()}-${ currentWeekStart.getMonth() <10 ? `0${currentWeekStart.getMonth()+1}` : currentWeekStart.getMonth()+1}-${currentWeekStart.getDate()}`;
+    const currentWeekFormattedDate = `${currentWeekStart.getFullYear()}-${currentWeekStart.getMonth() < 10 ? `0${currentWeekStart.getMonth() + 1}` : currentWeekStart.getMonth() + 1}-${currentWeekStart.getDate()}`;
 
 
-    
+
     console.log(selectedTab)
     useEffect(() => {
         console.log(currentWeekFormattedDate)
@@ -48,6 +49,19 @@ const CurrentWeekAdmin = ({ selectedTab, Class, section, subject }) => {
                 console.log(err.response.data.error);
                 setError(err.response.data.error);
                 setLoading(false);
+                if (
+                    err.response &&
+                    err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchPlan();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(err.response?.data?.error || "An error occurred");
+                }
             }
         };
         if (Class && section && subject) {

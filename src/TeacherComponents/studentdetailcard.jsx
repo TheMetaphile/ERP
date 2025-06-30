@@ -3,11 +3,13 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../Config';
 import AuthContext from '../Context/AuthContext';
+import { refreshAccessToken } from '../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 export default function Studentdetailscard() {
     const { email } = useParams();
     const [selectedTab, setSelectedTab] = useState('personal');
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [imageError, setImageError] = useState(false);
@@ -32,6 +34,19 @@ export default function Studentdetailscard() {
             console.log(response.data);
         } catch (err) {
             console.error(err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUserData();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }

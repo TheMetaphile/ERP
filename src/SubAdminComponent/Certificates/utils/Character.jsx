@@ -7,6 +7,8 @@ import './Print.css';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 const PrintableComponent = React.forwardRef((props, ref) => {
     return (
@@ -60,7 +62,7 @@ const Character = () => {
     const { tc, class: className, section: secttions, session: sessions } = useParams();
     const ref1 = useRef();
     const [data, setData] = useState([]);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [editing, setEditing] = useState(true);
     const [name, setName] = useState('');
     const [father, setFather] = useState('');
@@ -89,6 +91,19 @@ const Character = () => {
             }
         } catch (err) {
             console.log(err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUserCc();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -147,7 +162,7 @@ const Character = () => {
     }
 
     useEffect(() => {
-        if(!editing){handlePrint();}
+        if (!editing) { handlePrint(); }
     }, [download]);
     return (
         <div className="tablet:max-laptop:max-w-xl pt-4 px-60 w-full">

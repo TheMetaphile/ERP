@@ -6,11 +6,12 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdDeleteForever, MdAdd, MdSave, MdCancel } from "react-icons/md";
 import { BASE_URL } from '../../../Config';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 function SubjectDetails({ Class, section, selectedStream }) {
     const [subjectDetails, setSubjects] = useState([]);
     const [subjectLoading, setSubjectLoading] = useState(false);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [newRow, setNewRow] = useState({ email: '', subject: '', name: '', profileLink: '', subjectType: '', optional: false });
     const [showNewRow, setShowNewRow] = useState(false);
     const [temp, setTemp] = useState('');
@@ -28,7 +29,7 @@ function SubjectDetails({ Class, section, selectedStream }) {
         try {
             const response = await axios.post(`${BASE_URL}/fetch`, {
                 accessToken: authState?.accessToken,
-                class: Class,
+                Class: Class,
                 section: section
             });
             const sectionsdetail = response.data.teacher;
@@ -36,6 +37,19 @@ function SubjectDetails({ Class, section, selectedStream }) {
         } catch (error) {
             console.error("Error fetching subjects:", error);
             toast.error("Failed to fetch subjects");
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSubject();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setSubjectLoading(false);
         }
@@ -68,6 +82,19 @@ function SubjectDetails({ Class, section, selectedStream }) {
         } catch (error) {
             console.error("Error assigning subject:", error);
             toast.error('Failed to assign subject');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleAddRow();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -120,6 +147,19 @@ function SubjectDetails({ Class, section, selectedStream }) {
                         setSuggestions(teacherEmails);
                     } catch (error) {
                         console.error("Error searching for teachers:", error);
+                        if (
+                            error.response &&
+                            error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                        ) {
+                            toast.warn('Access denied. Attempting to refresh token...');
+                            try {
+                                const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                                await searchTeacher();
+                            } catch (refreshError) {
+                            }
+                        } else {
+                            toast.error(error.response?.data?.error || "An error occurred");
+                        }
                     }
                 };
                 searchTeacher();
@@ -155,6 +195,19 @@ function SubjectDetails({ Class, section, selectedStream }) {
         } catch (error) {
             console.error("Error deleting subject:", error);
             toast.error('Error deleting subject');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleDelete(index);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -176,6 +229,19 @@ function SubjectDetails({ Class, section, selectedStream }) {
             }
         } catch (error) {
             toast.error('Error connecting to server');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSubjects();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

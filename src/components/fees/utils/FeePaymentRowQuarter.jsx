@@ -3,9 +3,11 @@ import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import Loading from '../../../LoadingScreen/Loading';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 const FeePaymentRowQuarter = ({ student, key, darkMode }) => {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [paymentMode, setPaymentMode] = useState('');
     const [discount, setDiscount] = useState(0);
     const [amount, setAmount] = useState(0);
@@ -15,27 +17,27 @@ const FeePaymentRowQuarter = ({ student, key, darkMode }) => {
     const bgClass = darkMode ? 'bg-gray-800' : 'bg-white';
     const hoverBgClass = darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50';
     const textClass = darkMode ? 'text-gray-300' : 'text-gray-900';
-    const inputClass = darkMode 
-        ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600 focus:border-blue-600 placeholder-gray-500' 
+    const inputClass = darkMode
+        ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-600 focus:border-blue-600 placeholder-gray-500'
         : 'bg-white text-gray-900 border-blue-200 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400';
 
     const getBadgeClasses = (type) => {
-        switch(type) {
+        switch (type) {
             case 'total':
-                return darkMode 
-                    ? 'text-blue-400 bg-blue-900 border-blue-700' 
+                return darkMode
+                    ? 'text-blue-400 bg-blue-900 border-blue-700'
                     : 'text-blue-500 bg-blue-100 border-blue-600';
             case 'paid':
-                return darkMode 
-                    ? 'text-green-400 bg-green-900 border-green-700' 
+                return darkMode
+                    ? 'text-green-400 bg-green-900 border-green-700'
                     : 'text-green-700 bg-green-100 border-green-600';
             case 'discount':
-                return darkMode 
-                    ? 'text-green-400 bg-green-900 border-green-700' 
+                return darkMode
+                    ? 'text-green-400 bg-green-900 border-green-700'
                     : 'text-green-700 bg-green-100 border-green-600';
             case 'pending':
-                return darkMode 
-                    ? 'text-red-400 bg-red-900 border-red-700' 
+                return darkMode
+                    ? 'text-red-400 bg-red-900 border-red-700'
                     : 'text-red-600 bg-red-100 border-red-600';
             default:
                 return '';
@@ -45,11 +47,11 @@ const FeePaymentRowQuarter = ({ student, key, darkMode }) => {
     const getStatusClasses = () => {
         const isPaid = student.totalFee === student.paidFee;
         return darkMode
-            ? (isPaid 
-                ? 'text-green-400 bg-green-900 border-green-700' 
+            ? (isPaid
+                ? 'text-green-400 bg-green-900 border-green-700'
                 : 'text-red-400 bg-red-900 border-red-700')
-            : (isPaid 
-                ? 'text-green-600 bg-green-200 border-green-600' 
+            : (isPaid
+                ? 'text-green-600 bg-green-200 border-green-600'
                 : 'text-red-600 bg-red-200 border-red-600');
     };
 
@@ -72,6 +74,19 @@ const FeePaymentRowQuarter = ({ student, key, darkMode }) => {
             }
         } catch (error) {
             console.error('Error fetching agents:', error.response.data.error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await payOnline(data);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         setLoading(false);
     };
@@ -178,8 +193,8 @@ const FeePaymentRowQuarter = ({ student, key, darkMode }) => {
                     <div className="relative">
                         <button
                             className={`
-                                ${darkMode 
-                                    ? 'text-blue-400 bg-blue-900 hover:bg-blue-800' 
+                                ${darkMode
+                                    ? 'text-blue-400 bg-blue-900 hover:bg-blue-800'
                                     : 'text-blue-600 bg-blue-200 hover:bg-blue-300'
                                 } 
                                 focus:outline-none px-5 py-1 rounded-full text-center
@@ -192,8 +207,8 @@ const FeePaymentRowQuarter = ({ student, key, darkMode }) => {
                 )}
                 {student.totalFee === student.paidFee && (
                     <span className={`
-                        ${darkMode 
-                            ? 'text-gray-400 bg-gray-700' 
+                        ${darkMode
+                            ? 'text-gray-400 bg-gray-700'
                             : 'text-gray-600 bg-gray-200'
                         } 
                         px-5 py-1 rounded-full

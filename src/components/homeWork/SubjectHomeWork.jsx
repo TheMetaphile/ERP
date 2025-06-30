@@ -8,6 +8,8 @@ import axios from 'axios'
 import Loading from "../../LoadingScreen/Loading";
 import AuthContext from "../../Context/AuthContext";
 import { BASE_URL } from "../../Config";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
+import { toast } from "react-toastify";
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
@@ -16,7 +18,7 @@ export default function SubjectHomeWork() {
 
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchHomework = async () => {
@@ -33,6 +35,19 @@ export default function SubjectHomeWork() {
                 console.log('fetch', response.data)
             } catch (error) {
                 console.error("Error fetching student homework:", error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchHomework();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             }
             finally {
                 setLoading(false)

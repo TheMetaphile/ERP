@@ -7,9 +7,10 @@ import { BASE_URL } from "../../../Config";
 import { ToastContainer, toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { FaCalendarAlt, FaEye } from "react-icons/fa";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 function NoticeSubAdmin() {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [start, setStart] = useState(0);
@@ -58,6 +59,19 @@ function NoticeSubAdmin() {
         } catch (error) {
             console.error("Error fetching notice:", error);
             toast.error("Failed to fetch notices");
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchNotice();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setLoading(false)

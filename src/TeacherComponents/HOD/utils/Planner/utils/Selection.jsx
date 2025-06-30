@@ -2,9 +2,11 @@ import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../../../../../Context/AuthContext";
 import { BASE_URL } from "../../../../../Config";
 import axios from "axios";
+import { refreshAccessToken } from "../../../../../RefreshTokenHelper";
+import { toast } from "react-toastify";
 
 function Selection({ setClass, setSection, setSubject, setStream }) {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const co_ordinator_wing = authState?.userDetails?.co_ordinator_wing;
     const wingClasses = wingMap[co_ordinator_wing] || [];
 
@@ -98,6 +100,19 @@ function Selection({ setClass, setSection, setSubject, setStream }) {
             ]);
         } catch (error) {
             toast.error({ text: 'Error connecting to server', type: 'error' });
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSubjects();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
     console.log(subjects)

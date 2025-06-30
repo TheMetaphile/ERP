@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { BASE_URL } from '../../../Config';
 import { MdEdit, MdDeleteForever, MdCheck, MdCancel, MdAdd } from "react-icons/md";
 import { motion, AnimatePresence } from 'framer-motion';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 export default function AssignTeacherRow({ Class }) {
 
     const [expanded, setExpanded] = useState(false);
@@ -18,7 +19,7 @@ export default function AssignTeacherRow({ Class }) {
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [loading, setLoading] = useState(false);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [showNewRow, setShowNewRow] = useState(false);
     const [editingRow, setEditingRow] = useState(null);
     const [additionalData, setAdditionalData] = useState([]);
@@ -52,10 +53,10 @@ export default function AssignTeacherRow({ Class }) {
         if (temp) {
             const handler = setTimeout(() => {
                 setShowSuggestions(true);
-                const searchTeacher = async () => {
+                const searchTeacher = async (token = authState?.accessToken) => {
                     try {
                         const response = await axios.post(`${BASE_URL}/search/teacher`, {
-                            accessToken: authState?.accessToken,
+                            accessToken: token,
                             searchString: temp,
                             start: 0,
                             end: 30
@@ -70,7 +71,20 @@ export default function AssignTeacherRow({ Class }) {
 
                     }
                     catch (error) {
-                        console.error("Error searching for teachers:", error);
+                        // console.error("Error searching for teachers:", error);
+                        if (
+                            error.response &&
+                            error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                        ) {
+                            toast.warn('Access denied. Attempting to refresh token...');
+                            try {
+                                const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                                await searchTeacher(newToken);
+                            } catch (refreshError) {
+                            }
+                        } else {
+                            toast.error(error.response?.data?.error || "An error occurred");
+                        }
                     }
                 }
                 searchTeacher();
@@ -94,11 +108,11 @@ export default function AssignTeacherRow({ Class }) {
         setNewSection(section);
     }
 
-    const fetchSections = async () => {
+    const fetchSections = async (token = authState?.accessToken) => {
         try {
             if (sectionsDetails.length <= 0) {
                 const response = await axios.post(`${BASE_URL}/classTeacher/fetch/sections`, {
-                    accessToken: authState?.accessToken,
+                    accessToken: token,
                     class: Class,
                 });
                 const sectionsdetail = response.data.sections;
@@ -107,7 +121,20 @@ export default function AssignTeacherRow({ Class }) {
                 setSections(sectionsdetail);
             }
         } catch (error) {
-            console.error("Error searching for teachers:", error);
+            // console.error("Error searching for teachers:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSections(newToken);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }
@@ -145,6 +172,19 @@ export default function AssignTeacherRow({ Class }) {
 
         } catch (error) {
             toast.error('Error assigning teacher');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleAddSection();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -192,6 +232,19 @@ export default function AssignTeacherRow({ Class }) {
             }
         } catch (error) {
             toast.error('Error updating teacher');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleConfirmClick(index);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setShowSuggestions(false);
@@ -216,6 +269,19 @@ export default function AssignTeacherRow({ Class }) {
         } catch (error) {
             console.error("Error deleting section:", error);
             toast.error('Error deleting section');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleDelete(index, section);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

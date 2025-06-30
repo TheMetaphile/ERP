@@ -2,15 +2,16 @@ import React, { useState, useEffect, useContext } from 'react';
 import AuthContext from '../../../../Context/AuthContext';
 import { motion } from 'framer-motion';
 import { FaQuestionCircle, FaCheck } from 'react-icons/fa';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NewDoubt from './utils/NewDoubt';
 import Answered from './utils/Answered';
 import axios from 'axios';
 import { BASE_URL } from '../../../../Config';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 
 function StudentDoubtsHOD() {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [Class, setClass] = useState('');
     const [Section, setSection] = useState('');
     const [Subject, setSubject] = useState('');
@@ -43,6 +44,19 @@ function StudentDoubtsHOD() {
             console.log(sectionsDetail);
         } catch (error) {
             console.error('Error while fetching section:', error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSections(selectedClass);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -72,6 +86,19 @@ function StudentDoubtsHOD() {
             ]);
         } catch (error) {
             toast.error({ text: 'Error connecting to server', type: 'error' });
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSubjects();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

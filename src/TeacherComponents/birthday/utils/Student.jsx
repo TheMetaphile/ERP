@@ -4,9 +4,11 @@ import axios from "axios";
 import Loading from "../../../LoadingScreen/Loading";
 import StudentTile from './StudentTile';
 import { BASE_URL } from "../../../Config";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
+import { toast } from "react-toastify";
 
 export default function Student() {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [birthdays, setBirthDays] = useState([]);
 
@@ -32,6 +34,19 @@ export default function Student() {
                 setBirthDays(response.data);
             } catch (error) {
                 console.error("Error fetching student birthday:", error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchBirthday();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             }
             finally {
                 setLoading(false);

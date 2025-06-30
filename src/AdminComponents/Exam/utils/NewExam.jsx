@@ -6,9 +6,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from '../../../Config';
 import { motion } from 'framer-motion';
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 const NewExam = ({ onClose, addExam }) => {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [selectedTerm, setSelectedTerm] = useState('');
   const [classs, setClass] = useState('');
   const [stream, setStream] = useState('');
@@ -97,6 +98,19 @@ const NewExam = ({ onClose, addExam }) => {
     } catch (error) {
       const errorMessage = error.response?.data?.error;
       toast.error(errorMessage);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleSubmit();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 

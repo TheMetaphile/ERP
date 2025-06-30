@@ -10,11 +10,12 @@ import CoScholasticTable from './utils/CoScholasticTable';
 import ScholasticTable from './utils/ScholasticTable';
 import { motion } from 'framer-motion';
 import { FaFilter, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { refreshAccessToken } from '../../RefreshTokenHelper';
 
 
 function UploadResult() {
   const [students, setStudents] = useState([]);
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const end = 100;
   const [Class, setClass] = useState(localStorage.getItem('Class') || '');
@@ -72,6 +73,19 @@ function UploadResult() {
       }
     } catch (error) {
       console.error("Error fetching students:", error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchStudents();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     } finally {
       setLoading(false);
     }

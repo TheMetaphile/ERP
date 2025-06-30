@@ -9,11 +9,12 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from '../../../../Config';
 import { useTimetableContext } from '../TimetableContext';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 
 function StudentsTimeTableSubAdmin() {
     const { structureDetails, selectClass, setClass, dayStudent, setDayStudent } = useTimetableContext();
     const [data, setData] = useState(null);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [lectureTimes, setLectureTimes] = useState([]);
     const [selectedClass, setSelectedClass] = useState('');
@@ -31,6 +32,19 @@ function StudentsTimeTableSubAdmin() {
             setSectionsDetails(sectionsDetail);
         } catch (error) {
             console.error("Error while fetching section:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSections(selectClass);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -122,13 +136,14 @@ function StudentsTimeTableSubAdmin() {
         if (selectedClass && selectedSection) {
             setLoading(true);
             try {
-               
+
 
                 var response = await axios.post(`${BASE_URL}/timetable/fetch/student`,
-                    {  
+                    {
                         class: selectedClass,
                         section: selectedSection,
-                        day: dayStudent },
+                        day: dayStudent
+                    },
                     {
                         headers: {
                             'Authorization': `Bearer ${authState?.accessToken}`  // Safe access
@@ -143,6 +158,19 @@ function StudentsTimeTableSubAdmin() {
             } catch (error) {
                 toast.error(error.response.data.error);
                 console.error('Error fetching data:', error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await handleSearch();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             } finally {
                 setLoading(false);
             }

@@ -9,7 +9,7 @@ import NextWeekAdminRow from './NextWeekAdminRow';
 import { motion } from "framer-motion";
 
 const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [remark, setRemark] = useState('');
@@ -36,14 +36,14 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
     const currentDate = new Date();
     const day = currentDate.getDay();
     const currentWeekStart = new Date();
-    const diff = 1 - day;  
+    const diff = 1 - day;
     currentWeekStart.setDate(currentDate.getDate() + diff);
-    
-    const nextWeekStart = new Date(currentWeekStart);  
+
+    const nextWeekStart = new Date(currentWeekStart);
     nextWeekStart.setDate(currentWeekStart.getDate() + 7);
 
 
-    const nextWeekFormattedDate = `${nextWeekStart.getFullYear()}-${ nextWeekStart.getMonth() <10 ? `0${nextWeekStart.getMonth()+1}` : nextWeekStart.getMonth()+1}-${nextWeekStart.getDate()}`;
+    const nextWeekFormattedDate = `${nextWeekStart.getFullYear()}-${nextWeekStart.getMonth() < 10 ? `0${nextWeekStart.getMonth() + 1}` : nextWeekStart.getMonth() + 1}-${nextWeekStart.getDate()}`;
 
     const [details, setDetails] = useState(defaultPlan());
 
@@ -74,6 +74,19 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
                 setDetails(defaultPlan());
                 setError(err.response.data.error);
                 setLoading(false);
+                if (
+                    err.response &&
+                    err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchPlan();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(err.response?.data?.error || "An error occurred");
+                }
             }
         };
         if (Class && section && subject) {
@@ -112,7 +125,19 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
         } catch (err) {
             console.log(err.response.data.error);
             toast.error(err.response.data.error);
-
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmit();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -162,13 +187,13 @@ const NextWeekAdmin = ({ selectedTab, Class, section, subject }) => {
                         </thead>
                         <tbody className="text-center whitespace-nowrap">
                             {details.map((data, index) => (
-                              
-                                    <NextWeekAdminRow
-                                        details={data}
-                                        index={index}
-                                        setDetails={setDetails}
-                                    />
-                               
+
+                                <NextWeekAdminRow
+                                    details={data}
+                                    index={index}
+                                    setDetails={setDetails}
+                                />
+
                             ))}
                         </tbody>
                     </motion.table>

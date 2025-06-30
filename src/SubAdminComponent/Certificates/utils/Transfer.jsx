@@ -9,9 +9,11 @@ import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import TCRow from './Tc_Row';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 const PrintableComponent = React.forwardRef((props, ref) => {
-    console.log(props.data , "print");
+    console.log(props.data, "print");
     return (
         <div ref={ref} className={`print:your-component px-3 pb-4 ${props.editing ? "rounded-lg border border-gray-300" : ""}`}>
 
@@ -23,7 +25,7 @@ const PrintableComponent = React.forwardRef((props, ref) => {
             </div>
             {/* name={id} */}
 
-            <div className= {`justify-between flex px-4 mt-2 mobile:max-tablet:flex-col mobile:max-tablet:gap-1 ${props.editing ? "text-lg" : "text-xl"}`}>
+            <div className={`justify-between flex px-4 mt-2 mobile:max-tablet:flex-col mobile:max-tablet:gap-1 ${props.editing ? "text-lg" : "text-xl"}`}>
                 <div className='font-medium'>
                     T.C No. : 123456
                 </div>
@@ -58,7 +60,7 @@ const PrintableComponent = React.forwardRef((props, ref) => {
                 <TCRow no={8} label='Class in which the Student last studied' detail={props.data.currentClass} field1={"currentClass"} handleChange={props.handleChange} editing={props.editing} />
                 <TCRow no={9} label='School/ Board Annual Examination last taken with results' detail={props.data.resultStatus} field1={"resultStatus"} handleChange={props.handleChange} editing={props.editing} />
                 <TCRow no={10} label='Main Subject studied' detail={props.data.subjects} field1={"subjects"} handleChange={props.handleChange} editing={props.editing} />
-                <TCRow no={11} label='Whether qualified for promotion' detail={props.data.resultStatus === 'Pass' ? 'Yes' : 'No'} editing={props.editing}/>
+                <TCRow no={11} label='Whether qualified for promotion' detail={props.data.resultStatus === 'Pass' ? 'Yes' : 'No'} editing={props.editing} />
                 <TCRow no={12} label='Month up to which the pupil has paid School dues' detail={props.data.lastFeeSubmittedDate} field1={"lastFeeSubmittedDate"} handleChange={props.handleChange} editing={props.editing} />
                 <TCRow no={13} label='Total number of Working days in the Academic Session' detail={props.data.totalLectures} field1={'totalLectures'} handleChange={props.handleChange} editing={props.editing} />
                 <TCRow no={14} label='Total number of Working days Pupil Present' detail={props.data.totalLecturesAttended} field1={'totalLecturesAttended'} handleChange={props.handleChange} editing={props.editing} />
@@ -70,22 +72,22 @@ const PrintableComponent = React.forwardRef((props, ref) => {
                 <TCRow no={20} label='Any other remarks' detail={props.data.remark} field1={"remark"} handleChange={props.handleChange} editing={props.editing} />
             </div>
             <div className={`justify-between  flex px-4  ${props.editing ? "text-lg mt-20" : "text-xl mt-36"} font-medium`}>
-                
-                    <h1 className='mt-16'>
-                        
-                        Prepared By
-                    </h1>
-               
-                    <h1 className='mt-16'>
-                       
-                        Checked By
-                    </h1>
-                
-                    <h1 className='mt-16'>
-                        
-                        Principal
-                    </h1>
-                
+
+                <h1 className='mt-16'>
+
+                    Prepared By
+                </h1>
+
+                <h1 className='mt-16'>
+
+                    Checked By
+                </h1>
+
+                <h1 className='mt-16'>
+
+                    Principal
+                </h1>
+
             </div>
         </div>
     )
@@ -94,7 +96,7 @@ const Transfer = () => {
     const { tc, class: className, section: secttions, session: sessions } = useParams();
     const ref1 = useRef();
     const date = new Date();
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         name: "",
         motherName: "",
@@ -123,7 +125,7 @@ const Transfer = () => {
             [fieldName]: value
         }));
     };
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [reset, setReset] = useState(false);
     const [editing, setEditing] = useState(true);
     const [download, setdownload] = useState(false);
@@ -146,7 +148,7 @@ const Transfer = () => {
         const pdf = new jsPDF('p', 'mm', 'a4', true,);
         const pageWidth = pdf.internal.pageSize.width;
         const pageHeight = pdf.internal.pageSize.height;
-        const marginTop = pageHeight*0.1;
+        const marginTop = pageHeight * 0.1;
         const marginLeft = 5;
 
         const addPageContent = async (element) => {
@@ -204,7 +206,7 @@ const Transfer = () => {
         setEditing(false);
         setLoading(true);
         setdownload(true);
-        
+
     }
     const fetchUserTc = async () => {
         console.log('hit', authState.accessToken, tc, className, secttions)
@@ -235,6 +237,19 @@ const Transfer = () => {
 
         } catch (err) {
             console.log(err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUserTc();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
 
         }
     };
@@ -250,7 +265,7 @@ const Transfer = () => {
             if (response.status === 200) {
                 console.log("API response subject:", response.data.subjects);
                 var formattedSubjects = '';
-                for(const subject in response.data.subjects){
+                for (const subject in response.data.subjects) {
                     formattedSubjects += `${parseInt(subject) + 1}. ` + response.data.subjects[subject] + ", ";
                     console.log(formattedSubjects);
                 }
@@ -263,6 +278,19 @@ const Transfer = () => {
 
         } catch (err) {
             console.log(err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSubjects();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
 
         }
 
@@ -288,7 +316,19 @@ const Transfer = () => {
 
         } catch (err) {
             console.log(err);
-
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchResult();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
 
     };
@@ -313,7 +353,19 @@ const Transfer = () => {
             }
         } catch (err) {
             console.log(err);
-
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchAttendence();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
 
     };
@@ -333,8 +385,8 @@ const Transfer = () => {
                     </div>
 
                 </div> :
-                <Loading />
-}
+                    <Loading />
+                }
                 <PrintableComponent ref={ref1} data={data} editing={editing} handleChange={handleFieldChange} />
 
             </div>

@@ -4,10 +4,12 @@ import { IoMdSchool } from 'react-icons/io';
 import { BASE_URL } from '../../Config';
 import AuthContext from '../../Context/AuthContext';
 import axios from 'axios';
+import { refreshAccessToken } from '../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 const SubjectManagement = () => {
 
-  const { darkMode, authState } = useContext(AuthContext);
+  const { darkMode, authState, updateAccessToken, logout } = useContext(AuthContext);
   const classes = ['Pre-Nursery', 'Nursery', 'L.K.G', 'U.K.G', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'];
   const streams = ['PCM', 'PCMB', "PCB", 'Commerce', 'Arts', 'General'];
   const [selectedClass, setSelectedClass] = useState('');
@@ -52,6 +54,19 @@ const SubjectManagement = () => {
       }
     } catch (error) {
       setMessage({ text: 'Error connecting to server', type: 'error' });
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchSubjects();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -81,6 +96,19 @@ const SubjectManagement = () => {
       }
     } catch (error) {
       setMessage({ text: 'Error connecting to server', type: 'error' });
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await saveSubjects();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     } finally {
       setIsLoading(false);
     }

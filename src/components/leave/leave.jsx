@@ -11,12 +11,13 @@ import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL } from "../../Config";
 import { FaCalendarAlt } from "react-icons/fa";
 import Calendar from "../Attendance/utils/CalendarTile";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
 export default function Leave() {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState({ approved: 0, pending: 0, rejected: 0 });
     const [additionalData, setAdditionalData] = useState([]);
@@ -43,6 +44,19 @@ export default function Leave() {
                 setDetails(response.data);
             } catch (error) {
                 console.error("Error fetching student stats:", error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchStats();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             } finally {
                 setLoading(false);
             }

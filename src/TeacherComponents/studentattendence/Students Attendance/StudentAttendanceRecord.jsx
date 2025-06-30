@@ -6,9 +6,11 @@ import Loading from "../../../LoadingScreen/Loading";
 import axios from 'axios';
 import AuthContext from "../../../Context/AuthContext";
 import { BASE_URL } from "../../../Config";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
+import { toast } from "react-toastify";
 
 export default function StudentAttendanceRecord() {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const todayDate = new Date();
@@ -34,6 +36,19 @@ export default function StudentAttendanceRecord() {
                 setData(response.data);
             } catch (error) {
                 console.error("Error fetching student month attendance:", error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchStudents();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             } finally {
                 setLoading(false);
             }

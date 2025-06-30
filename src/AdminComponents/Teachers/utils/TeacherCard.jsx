@@ -10,8 +10,9 @@ import { toast } from "react-toastify";
 import { MdOutlineSecurity } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { RxCrossCircled } from "react-icons/rx";
+import { refreshAccessToken } from "../../../RefreshTokenHelper.js";
 export default function TeacherCard({ userData }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [isCapturing, setIsCapturing] = useState(false);
     const [capturedImages, setCapturedImages] = useState([]);
     const [mediaStream, setMediaStream] = useState(null);
@@ -126,6 +127,19 @@ export default function TeacherCard({ userData }) {
         } catch (error) {
             toast.error(error?.response?.data?.error || "Error while getting Permission")
             console.error("Error fetching permissions:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handlePermission(userId);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         setPermission(true);
 
@@ -158,6 +172,19 @@ export default function TeacherCard({ userData }) {
         } catch (error) {
             toast.error(error?.response?.data?.error || "Failed to update Permission")
             console.error("Error updating permissions:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSave();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

@@ -10,6 +10,7 @@ import { BASE_URL } from '../../../Config';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRef } from 'react';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 const getSessions = () => {
     const currentYear = new Date().getFullYear();
@@ -25,7 +26,7 @@ const getSessions = () => {
 }
 
 const Transactions = () => {
-    const { authState, logout, updateAccessToken, darkMode } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout, darkMode } = useContext(AuthContext);
 
     const session = getSessions();
     const [selectedSession, setSelectedSession] = useState(session[0]);
@@ -150,7 +151,19 @@ const Transactions = () => {
         } catch (error) {
             console.error('Error fetching back fee status:', error);
             //console.error('Error fetching agents:', error.response.data.error);
-
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmitTransaction();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -177,7 +190,19 @@ const Transactions = () => {
             setSuggestions([]);
             setShowSuggestions(false);
             console.error('Error fetching agents:', error.response.data.error);
-
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSuggestions(value);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -228,7 +253,19 @@ const Transactions = () => {
         } catch (error) {
             console.error('Error fetching back fee status:', error);
             //console.error('Error fetching agents:', error.response.data.error);
-
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleDownload();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

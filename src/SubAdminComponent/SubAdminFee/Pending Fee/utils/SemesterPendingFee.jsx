@@ -5,10 +5,11 @@ import AuthContext from '../../../../Context/AuthContext';
 import { BASE_URL } from '../../../../Config';
 import { toast } from 'react-toastify';
 import Loading from '../../../../LoadingScreen/Loading';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 
 const SemesterPendingFee = ({ selectedClass, selectedSection, selectedMonth, selectedSession }) => {
   const [data, setData] = useState([]);
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 
 
@@ -37,6 +38,19 @@ const SemesterPendingFee = ({ selectedClass, selectedSection, selectedMonth, sel
     } catch (error) {
       console.log(error);
       //console.error('Error fetching agents:', error.response.data.error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchStudents();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
     setLoading(false);
   };

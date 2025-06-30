@@ -5,9 +5,11 @@ import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL } from "../../Config";
 import { motion } from 'framer-motion';
 import { FaBell, FaSpinner, FaCalendarAlt, FaInfoCircle } from 'react-icons/fa';
+import { refreshAccessToken } from "../../RefreshTokenHelper";
+import { toast } from "react-toastify";
 
 export default function Notice() {
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [details, setDetails] = useState([]);
   const [error, setError] = useState(null);
@@ -37,11 +39,24 @@ export default function Notice() {
       } catch (error) {
         console.error("Error fetching notice:", error);
         setError("Failed to load notices. Please try again later.");
+        if (
+          error.response &&
+          error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchNotice();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(error.response?.data?.error || "An error occurred");
+        }
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchNotice();
   }, [authState?.accessToken, start, end, session]);
 
@@ -62,8 +77,8 @@ export default function Notice() {
 
   const itemVariants = {
     hidden: { y: 10, opacity: 0 },
-    visible: { 
-      y: 0, 
+    visible: {
+      y: 0,
       opacity: 1,
       transition: {
         type: "spring",
@@ -85,11 +100,10 @@ export default function Notice() {
 
   return (
     <motion.div
-      className={` border rounded-xl transition-colors duration-300 ${
-        darkMode 
-          ? 'bg-gradient-to-r from-gray-800 to-gray-700 border-gray-600 shadow-lg shadow-blue-900/10' 
+      className={` border rounded-xl transition-colors duration-300 ${darkMode
+          ? 'bg-gradient-to-r from-gray-800 to-gray-700 border-gray-600 shadow-lg shadow-blue-900/10'
           : 'bg-gradient-to-r from-blue-100 to-indigo-50 border-gray-200 shadow-lg shadow-blue-200/30'
-      }`}
+        }`}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -97,14 +111,14 @@ export default function Notice() {
       {loading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
-            <motion.div 
+            <motion.div
               key={i}
               className={`rounded-lg p-4 ${darkMode ? 'bg-gray-700' : 'bg-white/50'}`}
               variants={shimmerVariants}
               animate="animate"
               style={{
                 backgroundSize: "200% 100%",
-                backgroundImage: darkMode 
+                backgroundImage: darkMode
                   ? "linear-gradient(90deg, #374151 0%, #4B5563 50%, #374151 100%)"
                   : "linear-gradient(90deg, #F9FAFB 0%, #F3F4F6 50%, #F9FAFB 100%)"
               }}
@@ -117,39 +131,34 @@ export default function Notice() {
           ))}
         </div>
       ) : error ? (
-        <motion.div 
-          className={`text-center py-8 px-4 rounded-lg ${
-            darkMode ? 'bg-red-900/20 text-red-300' : 'bg-red-50 text-red-600'
-          }`}
+        <motion.div
+          className={`text-center py-8 px-4 rounded-lg ${darkMode ? 'bg-red-900/20 text-red-300' : 'bg-red-50 text-red-600'
+            }`}
           variants={itemVariants}
         >
           <FaInfoCircle className="text-4xl mb-3 mx-auto" />
           <p className="text-lg font-medium mb-2">{error}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
-            className={`mt-3 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              darkMode 
-                ? 'bg-gray-700 hover:bg-gray-600 text-white' 
+            className={`mt-3 px-4 py-2 rounded-md text-sm font-medium transition-colors ${darkMode
+                ? 'bg-gray-700 hover:bg-gray-600 text-white'
                 : 'bg-white hover:bg-gray-100 text-gray-800'
-            }`}
+              }`}
           >
             Refresh
           </button>
         </motion.div>
       ) : details.length === 0 ? (
-        <motion.div 
-          className={`text-center py-10 px-4 rounded-lg ${
-            darkMode ? 'bg-gray-700/50 text-gray-300' : 'bg-white/50 text-blue-600'
-          }`}
+        <motion.div
+          className={`text-center py-10 px-4 rounded-lg ${darkMode ? 'bg-gray-700/50 text-gray-300' : 'bg-white/50 text-blue-600'
+            }`}
           variants={itemVariants}
         >
-          <FaBell className={`text-5xl mb-4 mx-auto ${
-            darkMode ? 'text-blue-400' : 'text-blue-500'
-          }`} />
+          <FaBell className={`text-5xl mb-4 mx-auto ${darkMode ? 'text-blue-400' : 'text-blue-500'
+            }`} />
           <p className="text-xl font-semibold">No notices available</p>
-          <p className={`mt-2 text-sm ${
-            darkMode ? 'text-gray-400' : 'text-gray-500'
-          }`}>
+          <p className={`mt-2 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'
+            }`}>
             Check back later for updates
           </p>
         </motion.div>
@@ -157,50 +166,44 @@ export default function Notice() {
         details.map((detail, index) => (
           <motion.div
             key={index}
-            className={`mb-6 last:mb-0 p-4 rounded-lg transition-all duration-300 ${
-              darkMode 
-                ? 'bg-gray-700/70 hover:bg-gray-700' 
+            className={`mb-6 last:mb-0 p-4 rounded-lg transition-all duration-300 ${darkMode
+                ? 'bg-gray-700/70 hover:bg-gray-700'
                 : 'bg-white/50 hover:bg-white/80'
-            }`}
+              }`}
             variants={itemVariants}
             whileHover={{ scale: 1.01 }}
           >
             <div className="flex justify-between items-start mb-2">
-              <h3 className={`text-xl font-bold ${
-                darkMode ? 'text-blue-300' : 'text-blue-600'
-              }`}>
+              <h3 className={`text-xl font-bold ${darkMode ? 'text-blue-300' : 'text-blue-600'
+                }`}>
                 {detail.title}
               </h3>
-              
+
               {detail.createdAt && (
-                <div className={`flex items-center gap-1 text-xs ${
-                  darkMode ? 'text-gray-400' : 'text-gray-500'
-                }`}>
+                <div className={`flex items-center gap-1 text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
                   <FaCalendarAlt />
                   <span>{formatDate(detail.createdAt)}</span>
                 </div>
               )}
             </div>
-            
-            <p className={`leading-relaxed line-clamp-4 mb-2 ${
-              darkMode ? 'text-gray-300' : 'text-blue-600 text-opacity-80'
-            }`}>
+
+            <p className={`leading-relaxed line-clamp-4 mb-2 ${darkMode ? 'text-gray-300' : 'text-blue-600 text-opacity-80'
+              }`}>
               {detail.description}
             </p>
-            
+
             {detail.forClass && (
-              <div className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-2 ${
-                darkMode 
-                  ? 'bg-gray-600 text-blue-300' 
+              <div className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-2 ${darkMode
+                  ? 'bg-gray-600 text-blue-300'
                   : 'bg-blue-100 text-blue-700'
-              }`}>
+                }`}>
                 For: {detail.forClass}
               </div>
             )}
-            
-            <div className={`mt-3 h-px ${
-              darkMode ? 'bg-gray-600' : 'bg-blue-200'
-            }`}></div>
+
+            <div className={`mt-3 h-px ${darkMode ? 'bg-gray-600' : 'bg-blue-200'
+              }`}></div>
           </motion.div>
         ))
       )}

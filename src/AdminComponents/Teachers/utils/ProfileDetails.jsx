@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL } from "../../../Config";
 import FileUploadField from '../../../SubAdminComponent/Student/FileUploadField';
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 export default function ProfileDetails() {
     const [error, setError] = useState(null);
@@ -18,7 +19,7 @@ export default function ProfileDetails() {
 
     const query = new URLSearchParams(useLocation().search);
     const employeeId = query.get('employeeId');
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
 
     useEffect(() => {
         if (authState?.accessToken) {
@@ -48,6 +49,19 @@ export default function ProfileDetails() {
         } catch (err) {
             setError(err.message);
             console.log(err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUserData();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -65,6 +79,19 @@ export default function ProfileDetails() {
             const errorMessage = error.response?.data?.error || 'An error occurred';
             console.log(error);
             toast.error(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchFieldsForUserType(index);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -92,6 +119,19 @@ export default function ProfileDetails() {
             setEditMode(false);
         } catch (error) {
             toast.error(error.response?.data?.error || 'An error occurred');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSave();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

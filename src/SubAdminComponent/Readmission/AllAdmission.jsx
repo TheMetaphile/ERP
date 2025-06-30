@@ -6,14 +6,15 @@ import axios from 'axios';
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL } from "../../Config";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 export default function AllAdmission() {
     const [name, setName] = useState('');
     const [userData, setUserData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const containerRef = useRef(null);
     const [rollNumber, setRollNumber] = useState('');
     const [start, setStart] = useState(0);
@@ -32,7 +33,7 @@ export default function AllAdmission() {
         setUserData([]);
         setName(event.target.value);
     };
-    
+
     const [Class, setClass] = useState('');
     const handleClassChange = (event) => {
         setStart(0);
@@ -103,6 +104,19 @@ export default function AllAdmission() {
                 setError('');
             }, 2000);
             setLoading(false);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUserData();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     };
 

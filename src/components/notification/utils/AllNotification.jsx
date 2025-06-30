@@ -5,9 +5,10 @@ import AuthContext from "../../../Context/AuthContext";
 import Loading from "../../../LoadingScreen/Loading";
 import { BASE_URL } from "../../../Config";
 import { toast } from "react-toastify";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 function AllNotification() {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [globalLoading, setGlobalLoading] = useState(false);
     const [fetchingMore, setFetchingMore] = useState(false);
     const [details, setDetails] = useState([]);
@@ -60,6 +61,19 @@ function AllNotification() {
             setDetails(prevData => [...prevData, ...response.data.notices]);
         } catch (error) {
             console.error("Error fetching notice:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchNotice(isInitialLoad);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             if (isInitialLoad) {
@@ -101,9 +115,9 @@ function AllNotification() {
                 </div>
             ) : (
                 <>
-                    <AllNotificationTile 
-                        details={details} 
-                        darkMode={darkMode} 
+                    <AllNotificationTile
+                        details={details}
+                        darkMode={darkMode}
                     />
                     <div ref={sentinelRef} className="h-10">
                         {fetchingMore && (

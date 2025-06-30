@@ -7,10 +7,12 @@ import { motion } from 'framer-motion';
 import { FaMoneyBillWave, FaCalendarAlt, FaPercent, FaCheckCircle, FaCreditCard, FaUser, FaChalkboardTeacher, FaSchool } from 'react-icons/fa';
 import FeePaymentRow from "./FeePaymentRow";
 import FeePaymentRowQuarter from "./FeePaymentRowQuarter";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
+import { toast } from "react-toastify";
 
-export default function FeeStructureField({ fees, selectedOption, setFees, Student, selectedDiscount ,removeDiscount}) {
+export default function FeeStructureField({ fees, selectedOption, setFees, Student, selectedDiscount, removeDiscount }) {
     const [Razorpay] = useRazorpay();
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [mode, setMode] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
@@ -19,7 +21,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
     const [clickedIndex, setClickedIndex] = useState(null);
 
 
-    console.log('SelectedDiscount: ',selectedDiscount, "removeDiscount: ", removeDiscount)
+    console.log('SelectedDiscount: ', selectedDiscount, "removeDiscount: ", removeDiscount)
     const handleClick = (index) => {
         setClickedIndex(index);
     };
@@ -174,6 +176,19 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
 
         } catch (error) {
             console.error('Error posting payment details:', error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await postPaymentDetails(paymentDetails);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -251,7 +266,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                     <FeeStructureHeader />
                     {fees.monthlyStatus.map((data, index) => (
                         <tbody>
-                            <FeePaymentRow student={data} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
+                            <FeePaymentRow student={data} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount} />
                         </tbody>
 
                         // <motion.tbody
@@ -306,7 +321,7 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                     <QuarterFeeHeader />
                     {fees.quarterlyStatus.map((data, index) => (
                         <tbody>
-                            <FeePaymentRowQuarter student={data} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount}/>
+                            <FeePaymentRowQuarter student={data} key={index} selectedStudent={Student} selectedDiscount={selectedDiscount} />
                         </tbody>
                         // <motion.tbody
                         //     key={index}

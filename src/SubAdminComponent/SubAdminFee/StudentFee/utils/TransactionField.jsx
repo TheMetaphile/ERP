@@ -8,6 +8,7 @@ import AuthContext from '../../../../Context/AuthContext';
 import { BASE_URL } from '../../../../Config';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -20,7 +21,7 @@ const rowVariants = {
 };
 
 export default function TransactionField({ data, selectedStudent, setData }) {
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [clickedIndex, setClickedIndex] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [password, setPassword] = useState('');
@@ -224,6 +225,19 @@ export default function TransactionField({ data, selectedStudent, setData }) {
     } catch (error) {
       console.error("Error deleting Discount:", error);
       toast.error('Error deleting Discount');
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleDelete(index, id);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -271,6 +285,19 @@ export default function TransactionField({ data, selectedStudent, setData }) {
       closePopup();
     } catch (error) {
       console.log(error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await confirmDelete(stud);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 

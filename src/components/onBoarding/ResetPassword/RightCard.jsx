@@ -8,6 +8,7 @@ import Loading from '../../../LoadingScreen/Loading'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../../Config";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 export default function RightCard() {
     const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ export default function RightCard() {
     // const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const { authState, reset } = useContext(AuthContext);
+    const { authState, reset, updateAccessToken, logout } = useContext(AuthContext);
 
     const handleRoleChange = (event) => {
         setRole(event.target.value);
@@ -54,6 +55,19 @@ export default function RightCard() {
             console.error(error);
             const errorMessage = error.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await sendOTP();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setIsSubmitting(false);
@@ -80,6 +94,19 @@ export default function RightCard() {
             console.error(error);
             const errorMessage = error.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await verifyOTP();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setIsSubmitting(false);

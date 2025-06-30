@@ -12,12 +12,13 @@ import Attendance from "./Attendence";
 import AcademicMiddleTile from "./AcademicMiddleTile";
 import logo from '../../../../assets/school logo.png';
 import './Print.css';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 
 
 const ExResult = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [details, setDetails] = useState({ term1: [], term2: [] });
   const [profile, setProfile] = useState({});
   const [profileLoading, setProfileLoading] = useState(true);
@@ -95,6 +96,19 @@ const ExResult = () => {
         }
       } catch (err) {
         console.log(err);
+        if (
+          err.response &&
+          err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchUser();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(err.response?.data?.error || "An error occurred");
+        }
       }
     };
 
@@ -112,7 +126,19 @@ const ExResult = () => {
           console.log(response.data.term1_Co_scholastic)
         }
       } catch (err) {
-        console.log(err);
+        console.log(err); if (
+          err.response &&
+          err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchResult();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(err.response?.data?.error || "An error occurred");
+        }
       }
     };
 

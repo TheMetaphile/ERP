@@ -5,13 +5,14 @@ import axios from "axios";
 import { BASE_URL } from "../../../Config.js";
 import { ToastContainer, toast } from "react-toastify";
 import { motion, AnimatePresence } from 'framer-motion';
+import { refreshAccessToken } from "../../../RefreshTokenHelper.js";
 
 export default function StudentLeaves() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [expanded, setExpanded] = useState(null);
   const [start, setStart] = useState(0);
   const end = 4;
@@ -74,6 +75,19 @@ export default function StudentLeaves() {
       setData(prevData => [...prevData, ...response.data.StudentsLeaves]);
     } catch (err) {
       setError(err);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchUserData();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     } finally {
       setLoading(false);
     }

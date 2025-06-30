@@ -4,10 +4,12 @@ import Loading from '../../../LoadingScreen/Loading'
 import axios from 'axios'
 import AuthContext from '../../../Context/AuthContext'
 import { BASE_URL } from '../../../Config'
+import { refreshAccessToken } from '../../../RefreshTokenHelper'
+import { toast } from 'react-toastify'
 
-export default  function Rejected() {
+export default function Rejected() {
 
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -22,13 +24,25 @@ export default  function Rejected() {
                 }
             });
             console.log("API response:", response.data);
-            setData(response.data || []); 
-            
+            setData(response.data || []);
+
         } catch (err) {
             setError(err.message);
-        
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUserData();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
-        finally{
+        finally {
             setLoading(false);
 
         }
@@ -51,10 +65,10 @@ export default  function Rejected() {
         return <div>Error: {error}</div>;
     }
 
-   
+
     return (
         <div className='w-full mr-3'>
-            <RejectedTile data={data}/>   
+            <RejectedTile data={data} />
         </div>
     )
 }

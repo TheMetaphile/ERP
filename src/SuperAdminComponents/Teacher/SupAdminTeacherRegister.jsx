@@ -8,9 +8,10 @@ import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaIdCard, FaMapMarkerAlt, FaPray, FaBook, FaBirthdayCake, FaPhone, FaBriefcase, FaGraduationCap, FaMoneyBillWave, FaCloudUploadAlt, FaGoogle } from 'react-icons/fa';
 import { MdAdminPanelSettings } from 'react-icons/md';
 import FileUploadField from "../../SubAdminComponent/Student/FileUploadField";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 export default function SupAdminTeacherRegister() {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
 
   console.log(authState?.userDetails?.branch)
   const [formData, setFormData] = useState(
@@ -114,6 +115,19 @@ export default function SupAdminTeacherRegister() {
       console.log(err);
       const errorMessage = err.response?.data?.error || 'An error occurred';
       toast.error(errorMessage);
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleSubmit();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -192,7 +206,7 @@ export default function SupAdminTeacherRegister() {
                   }}
                   maxLength={25}
                   placeholder={field.name === 'salary' ? "Per month in Rs." : ""}
-                  inputMode={["phoneNumber", "aadhaarNumber","salary"].includes(field.name) ? "numeric" : "text"}
+                  inputMode={["phoneNumber", "aadhaarNumber", "salary"].includes(field.name) ? "numeric" : "text"}
 
                   required
                 />

@@ -7,11 +7,12 @@ import { MdEdit, MdCheck, MdCancel, MdDeleteForever } from 'react-icons/md';
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown, FaChevronUp, FaUserCircle } from 'react-icons/fa';
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 const AllNotice = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [error, setError] = useState('');
   const [editingIndex, setEditingIndex] = useState(null);
@@ -76,6 +77,19 @@ const AllNotice = () => {
       setData(prevData => [...prevData, ...response.data.notices]);
     } catch (err) {
       setError(err.message);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchAllNotices();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
     finally {
       setLoading(false);
@@ -101,6 +115,19 @@ const AllNotice = () => {
       setEditingIndex(null);
     } catch (err) {
       setError(err);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleSave(index);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -116,6 +143,19 @@ const AllNotice = () => {
       setData(newDetail);
     } catch (err) {
       console.log(err);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleDelete(index);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 

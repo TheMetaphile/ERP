@@ -8,11 +8,12 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TeacherLeavesTile from "./TeacherLeavesTile.jsx";
 import { motion } from "framer-motion";
+import { refreshAccessToken } from "../../../RefreshTokenHelper.js";
 
 export default function TeacherLeaves() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [start, setStart] = useState(0);
   const end = 4;
   const [allDataFetched, setAllDataFetched] = useState(false);
@@ -72,6 +73,19 @@ export default function TeacherLeaves() {
       setData(prevData => [...prevData, ...response.data.Leaves]);
     } catch (err) {
       setError(err.message);
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchTeacherData();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     }
     finally {
       setLoading(false);

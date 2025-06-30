@@ -6,10 +6,11 @@ import axios from 'axios';
 import { FaIdCard, FaEnvelope, FaPhone, FaEdit, FaSave, FaTimes, FaBirthdayCake, FaTag } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import FileUploadField from '../../../SubAdminComponent/Student/FileUploadField';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 const SubAdminProfile = () => {
     const { id } = useParams();
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [subAdmin, setSubAdmin] = useState({});
     const [editMode, setEditMode] = useState(false);
     const [editedSubAdmin, setEditedSubAdmin] = useState({});
@@ -28,6 +29,19 @@ const SubAdminProfile = () => {
                 setEditedSubAdmin(subAdminDetails);
             } catch (error) {
                 console.error('Error fetching subAdmins:', error.response?.data?.error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchSubAdminDetails();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             }
         };
 
@@ -74,6 +88,19 @@ const SubAdminProfile = () => {
             toast.success('Field Updated Successfully');
         } catch (error) {
             console.error('Error updating subAdmin:', error.response?.data?.error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSave();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -108,6 +135,19 @@ const SubAdminProfile = () => {
             const errorMessage = error.response?.data?.error || 'An error occurred';
             console.log(error);
             toast.error(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchFieldsForUserType();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -258,23 +298,23 @@ const ProfileItem = ({ icon, label, value, editMode, name, onChange, editedValue
 
 const InputField = ({ icon, label, name, type = "text", value, onChange, required, editMode }) => (
     <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg transition duration-300 hover:bg-gray-100">
-    <div className="text-blue-500 text-xl">{icon}</div>
-    <div className="flex-grow">
-        <p className="text-sm text-gray-500">{label}</p>
-        {editMode ? (
-            <input
-                className="border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-                id={name}
-                type={type}
-                name={name}
-                value={value}
-                onChange={onChange}
-                required={required}
-            />
-        ) : (
-            <p className="font-semibold">{value}</p>
-        )}
-    </div>
+        <div className="text-blue-500 text-xl">{icon}</div>
+        <div className="flex-grow">
+            <p className="text-sm text-gray-500">{label}</p>
+            {editMode ? (
+                <input
+                    className="border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                    id={name}
+                    type={type}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    required={required}
+                />
+            ) : (
+                <p className="font-semibold">{value}</p>
+            )}
+        </div>
     </div>
 
 );
@@ -284,24 +324,24 @@ const SelectField = ({ icon, label, name, value, onChange, options, required, ed
         <div className="text-blue-500 text-xl">{icon}</div>
         <div className="flex-grow">
             <p className="text-sm text-gray-500">{label}</p>
-        {editMode ? (
-            <select
-                className="border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-                id={name}
-                name={name}
-                value={value}
-                onChange={onChange}
-                required={required}
-            >
-                <option value="">Select {label}</option>
-                {options.map(option => (
-                    <option key={option} value={option}>{option}</option>
-                ))}
-            </select>
-        ) : (
-            <p className="font-semibold">{value}</p>
-        )}
-    </div>
+            {editMode ? (
+                <select
+                    className="border-2 border-blue-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                    id={name}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    required={required}
+                >
+                    <option value="">Select {label}</option>
+                    {options.map(option => (
+                        <option key={option} value={option}>{option}</option>
+                    ))}
+                </select>
+            ) : (
+                <p className="font-semibold">{value}</p>
+            )}
+        </div>
     </div>
 
 );

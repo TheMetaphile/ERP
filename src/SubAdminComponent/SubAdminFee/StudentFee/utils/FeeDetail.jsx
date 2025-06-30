@@ -7,6 +7,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../../../Config';
 import StudentCard from './ProfileCard';
 import ApplicableDiscounts from './ApplicableDiscounts';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 
 export default function FeeDetail() {
 
@@ -18,7 +19,7 @@ export default function FeeDetail() {
     const [isLoading, setIsLoading] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [searchString, setsearchString] = useState('');
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [Fee, setFee] = useState([]);
     const [appliedDis, setAppliedDis] = useState(null);
     const [data, setData] = useState([]);
@@ -50,6 +51,19 @@ export default function FeeDetail() {
             const errorMessage = error.response?.data?.error || 'An error occurred';
             // console.log(error)
             toast.error(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchFees();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
     useEffect(() => {
@@ -85,6 +99,19 @@ export default function FeeDetail() {
                     }
                     catch (error) {
                         console.error("Error searching for teachers:", error);
+                        if (
+                            error.response &&
+                            error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                        ) {
+                            toast.warn('Access denied. Attempting to refresh token...');
+                            try {
+                                const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                                await searchTeacher();
+                            } catch (refreshError) {
+                            }
+                        } else {
+                            toast.error(error.response?.data?.error || "An error occurred");
+                        }
                     }
                 }
                 searchTeacher();
@@ -140,6 +167,19 @@ export default function FeeDetail() {
         } catch (error) {
             console.error('Error:', error);
             toast.error('Error creating discount');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmit();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -165,6 +205,19 @@ export default function FeeDetail() {
         catch (error) {
             const errorMessage = error.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchTransaction();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setLoading(false)

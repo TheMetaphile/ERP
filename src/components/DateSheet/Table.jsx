@@ -7,9 +7,10 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../Config";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 export default function Table() {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [exams, setExams] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,6 +31,19 @@ export default function Table() {
     } catch (error) {
       const errorMessage = error.response?.data?.error || 'An error occurred';
       toast.error(errorMessage);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchDateSheet();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     } finally {
       setIsLoading(false);
     }

@@ -5,10 +5,11 @@ import { BASE_URL } from "../../../Config";
 import { FaArrowDown } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { motion } from 'framer-motion';
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 
 export default function AdminRow({ Teacher, index, onNewWork, setAdmins }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
 
     const handleUpdateClick = async (_id) => {
         const config = {
@@ -36,6 +37,19 @@ export default function AdminRow({ Teacher, index, onNewWork, setAdmins }) {
             setAdmins((prevAdmins) => prevAdmins.filter(admin => admin._id !== _id));
         } catch (error) {
             console.error('Error updating admin status:', error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleUpdateClick(_id);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     }
 

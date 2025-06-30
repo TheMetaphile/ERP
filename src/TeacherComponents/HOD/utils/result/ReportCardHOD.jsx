@@ -8,9 +8,10 @@ import AuthContext from '../../../../Context/AuthContext';
 import { BASE_URL } from '../../../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 
 function ReportCardHOD() {
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [loading, setLoading] = useState(false)
   // State to control the dropdown visibility
   const [Class, setClass] = useState(localStorage.getItem('Class') || '');
@@ -115,6 +116,19 @@ function ReportCardHOD() {
         setError('');
       }, 2000);
       setLoading(false);
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchStudents();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     }
   };
 

@@ -7,11 +7,12 @@ import { FaTimes } from "react-icons/fa";
 import { BASE_URL } from "../../../../../Config";
 import AuthContext from "../../../../../Context/AuthContext";
 import { motion } from "framer-motion";
+import { refreshAccessToken } from "../../../../../RefreshTokenHelper";
 
 function AllNoteBookRecordRow({ record, index }) {
   const [remark, setRemark] = useState(record.remark || "");
   const [editingRow, setEditingRow] = useState(false);
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
 
   const date = new Date();
   var session =
@@ -42,6 +43,19 @@ function AllNoteBookRecordRow({ record, index }) {
     } catch (error) {
       console.error(error);
       toast.error("Failed to update remark");
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleConfirmClick();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 

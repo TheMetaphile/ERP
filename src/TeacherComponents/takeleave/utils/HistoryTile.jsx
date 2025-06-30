@@ -6,12 +6,13 @@ import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import { motion } from 'framer-motion';
 import { MdCheck, MdCancel, MdEdit, MdDeleteForever, MdExpandMore, MdExpandLess } from 'react-icons/md';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 
 export default function HistoryTile({ details }) {
     const [data, setData] = useState([]);
     const [editRowIndex, setEditRowIndex] = useState(null);
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [editData, setEditData] = useState({});
     const [expanded, setExpanded] = useState(null);
 
@@ -50,6 +51,19 @@ export default function HistoryTile({ details }) {
                 }
             } catch (err) {
                 toast.error(err.response.data.error);
+                if (
+                    err.response &&
+                    err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await handleDelete(index);
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(err.response?.data?.error || "An error occurred");
+                }
             }
         } else {
             toast.error('Cannot delete leave that is not pending');
@@ -102,6 +116,19 @@ export default function HistoryTile({ details }) {
             }
         } catch (err) {
             toast.error(err.response.data.error);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleUpdate(index);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     };
 

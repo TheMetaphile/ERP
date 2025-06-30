@@ -6,9 +6,10 @@ import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 import { MdCheck, MdEdit } from "react-icons/md";
 import { FaTimes } from "react-icons/fa";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 export default function Row({ con }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [selectedTeacher, setSelectedTeacher] = useState({});
     const [coordinator, setCoordinator] = useState({
         name: con.name,
@@ -44,6 +45,19 @@ export default function Row({ con }) {
                     setSuggestions(response.data.Teachers);
                 } catch (error) {
                     console.error('Error searching for teachers', error);
+                    if (
+                        error.response &&
+                        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                    ) {
+                        toast.warn('Access denied. Attempting to refresh token...');
+                        try {
+                            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                            await fetchSuggestions();
+                        } catch (refreshError) {
+                        }
+                    } else {
+                        toast.error(error.response?.data?.error || "An error occurred");
+                    }
                 }
             };
 
@@ -77,6 +91,19 @@ export default function Row({ con }) {
         } catch (error) {
             console.error('Error saving coordinator', error);
             toast.error('Error saving coordinator');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSave();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

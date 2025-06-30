@@ -11,18 +11,19 @@ import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from '../../../../Config';
 import { useTimetableContext } from '../TimetableContext';
 import TimeTableHeader from './TimeTableHeader';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 
 function TeachersTimeTableSubAdmin() {
     const { structureDetails, dayTeacher } = useTimetableContext();
 
     const [data, setData] = useState(null);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [teacherEmail, setTeacherEmail] = useState('');
-    const [Teacher, setTeacher] = useState({ });
+    const [Teacher, setTeacher] = useState({});
     const [loading, setLoading] = useState(false);
     const days = ["monday", 'tuesday', 'wednesday', 'thursday', "friday", 'saturday'];
 
- 
+
 
     useEffect(() => {
         if (structureDetails) {
@@ -54,6 +55,19 @@ function TeachersTimeTableSubAdmin() {
             } catch (error) {
                 toast.error(error)
                 console.error('Error fetching dataaaa:', error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await handleSearch();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             } finally {
                 setLoading(false);
             }

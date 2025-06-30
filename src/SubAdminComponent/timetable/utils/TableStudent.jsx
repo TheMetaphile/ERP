@@ -4,16 +4,17 @@ import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BASE_URL} from '../../../Config';
+import { BASE_URL } from '../../../Config';
 import { motion } from 'framer-motion';
 import { FaEdit, FaSave, FaUtensils, FaBookOpen, FaChalkboardTeacher, FaClock } from 'react-icons/fa';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOfLeacturesBeforeLunch, Time }) {
     const timetableData = data || {};
     const [lectures, setLectures] = useState(timetableData[dayStudent] || []);
     const [editingLectureId, setEditingLectureId] = useState(null);
     const [editedData, setEditedData] = useState({});
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [suggestions, setSuggestions] = useState([]);
     const [teacherInput, setTeacherInput] = useState('');
     const subjects = ["Hindi", "English", "Mathematics", "Science", " Social Science", "Drawing", "Computer", "Sanskrit", "Physics", "Chemistry", "Economics", "Business", " Accounts"];
@@ -78,6 +79,19 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
         } catch (error) {
             toast.error(error.message || 'Error updating data');
             console.error('Error updating data:', error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSaveClick(lectureId);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -115,6 +129,19 @@ function TableStudent({ data, selectClass, selectedSection, dayStudent, numberOf
         } catch (error) {
             console.error("Error searching for teachers:", error);
             setSuggestions([]);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchTeacherSuggestions(searchString);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     }, [authState?.accessToken]);
 

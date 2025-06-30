@@ -8,6 +8,7 @@ import { BASE_URL } from '../../../Config';
 import { Link, Outlet } from 'react-router-dom';
 import { MdSchool } from 'react-icons/md';
 import { motion } from "framer-motion";
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 const getSessions = () => {
     const currentYear = new Date().getFullYear();
@@ -25,7 +26,7 @@ const getSessions = () => {
 function PreviousFeeDetailsSubAdmin() {
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([])
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const session = getSessions();
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(2);
@@ -88,6 +89,19 @@ function PreviousFeeDetailsSubAdmin() {
         } catch (err) {
             console.log(err);
             setLoading(false);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchDetails();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     }
 

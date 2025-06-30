@@ -6,16 +6,17 @@ import { chatLogo, profilelogo } from "./utils/images/index.js";
 import axios from 'axios';
 import AuthContext from "../../Context/AuthContext.jsx";
 import Loading from "../../LoadingScreen/Loading.jsx"
-import { BASE_URL} from "../../Config.js";
+import { BASE_URL } from "../../Config.js";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { refreshAccessToken } from "../../RefreshTokenHelper.js";
 
 export default function AllTeachers() {
     const [name, setName] = useState('');
     const [userData, setUserData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [kerasFile, setKerasFile] = useState(null);
     const [pklFile, setPklFile] = useState(null);
@@ -75,6 +76,19 @@ export default function AllTeachers() {
                 console.error('Error uploading files:', error);
                 setFileLoading(false);
                 toast.error('Failed to upload files');
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await handleSubmit();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             }
         } else {
             toast.error('Please select both .keras and .pkl files.');
@@ -105,6 +119,19 @@ export default function AllTeachers() {
             } catch (err) {
                 setError(err.message);
                 setLoading(false);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchUserData();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             }
         };
 

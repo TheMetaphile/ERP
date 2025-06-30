@@ -3,15 +3,17 @@ import { useParams } from 'react-router-dom';
 import AuthContext from '../../Context/AuthContext';
 import Loading from './../../LoadingScreen/Loading';
 import axios from 'axios';
-import { BASE_URL} from '../../Config';
+import { BASE_URL } from '../../Config';
 import ScholasticRow from './utils/ScholasticRow';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 const Result = () => {
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [details, setDetails] = useState({ term1: [], term2: [] });
     const [profile, setProfile] = useState({});
     const [profileLoading, setProfileLoading] = useState(true);
@@ -81,6 +83,19 @@ const Result = () => {
                 }
             } catch (error) {
                 console.error('Error fetching profile:', error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchProfile();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             }
             setProfileLoading(false);
         };
@@ -99,6 +114,19 @@ const Result = () => {
                 }
             } catch (error) {
                 console.error("Error fetching student result:", error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchResult();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             } finally {
                 setLoading(false);
             }
@@ -229,46 +257,46 @@ const Result = () => {
                     <div className='font-medium text-center text-red-500'>No Result found</div>
                 ) : (
                     <>
-                        {details[selectedTermValue].length === 0 ?(
+                        {details[selectedTermValue].length === 0 ? (
                             <div className='font-medium text-center text-red-500'> No Scholastic Data Available</div>
                         ) : (
-                        <table className="min-w-full border border-gray-200">
-                            <thead className=' bg-teal-200 text-xl font-medium '>
-                                <tr className='text-center'>
-                                    <th className="px-4 py-2 border">Scholastic Areas</th>
-                                    <th className="px-4 py-2 border">
-                                        Note Book
-                                        <p>
-                                            ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalNoteBookMarks : ""})
-                                        </p>
-                                    </th>
-                                    <th className="px-4 py-2 border">
-                                        S.Enrichment
-                                        <p>
-                                            ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalSubjectEnrichmentMarks : ""})
-                                        </p>
+                            <table className="min-w-full border border-gray-200">
+                                <thead className=' bg-teal-200 text-xl font-medium '>
+                                    <tr className='text-center'>
+                                        <th className="px-4 py-2 border">Scholastic Areas</th>
+                                        <th className="px-4 py-2 border">
+                                            Note Book
+                                            <p>
+                                                ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalNoteBookMarks : ""})
+                                            </p>
+                                        </th>
+                                        <th className="px-4 py-2 border">
+                                            S.Enrichment
+                                            <p>
+                                                ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalSubjectEnrichmentMarks : ""})
+                                            </p>
 
-                                    </th>
-                                    <th className="px-4 py-2 border">
-                                        Marks Obt
-                                        <p>
-                                            ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalMarks : ""})
-                                        </p>
+                                        </th>
+                                        <th className="px-4 py-2 border">
+                                            Marks Obt
+                                            <p>
+                                                ({details[selectedTermValue][0] ? details[selectedTermValue][0].totalMarks : ""})
+                                            </p>
 
-                                    </th>
-                                    <th className="px-4 py-2 border">Total</th>
-                                    <th className="px-4 py-2 border">%</th>
-                                    <th className="px-4 py-2 border">Grade</th>
-                                </tr>
-                            </thead>
-                            <tbody className='pb-6'>
-                                {details[selectedTermValue].map((area, index) => (
-                                    <ScholasticRow index={index} area={area} />
-                                ))}
-                                <tr></tr>
-                            </tbody>
-                        </table>
-                )}
+                                        </th>
+                                        <th className="px-4 py-2 border">Total</th>
+                                        <th className="px-4 py-2 border">%</th>
+                                        <th className="px-4 py-2 border">Grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody className='pb-6'>
+                                    {details[selectedTermValue].map((area, index) => (
+                                        <ScholasticRow index={index} area={area} />
+                                    ))}
+                                    <tr></tr>
+                                </tbody>
+                            </table>
+                        )}
 
 
 

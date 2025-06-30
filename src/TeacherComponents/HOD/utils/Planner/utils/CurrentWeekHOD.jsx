@@ -7,9 +7,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import CurrentWeekHODRow from './CurrentWeekHODRow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
+import { refreshAccessToken } from '../../../../../RefreshTokenHelper';
 
 const CurrentWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
 
@@ -53,6 +54,19 @@ const CurrentWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
                 console.log(err.response.data.error);
                 toast.error(err.response.data.error);
                 setLoading(false);
+                if (
+                    err.response &&
+                    err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchPlan();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(err.response?.data?.error || "An error occurred");
+                }
             }
         };
         if (Class && section && subject && stream) {

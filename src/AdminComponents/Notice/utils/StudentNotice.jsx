@@ -7,11 +7,12 @@ import { MdEdit, MdCheck, MdCancel, MdDeleteForever } from 'react-icons/md';
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown, FaChevronUp, FaUserCircle } from 'react-icons/fa';
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 const StudentNotice = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [expanded, setExpanded] = useState(null);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedNotice, setEditedNotice] = useState({});
@@ -89,6 +90,19 @@ const StudentNotice = () => {
       setData(prevData => [...prevData, ...response.data.notices]);
     } catch (err) {
       setError(err.message);
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchStudentNotices();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     }
     finally {
       setLoading(false);
@@ -115,6 +129,19 @@ const StudentNotice = () => {
       setExpanded(index);
     } catch (err) {
       setError(err.message);
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleSave(index);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -130,6 +157,19 @@ const StudentNotice = () => {
       setData(newDetail);
     } catch (err) {
       console.log(err);
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleDelete(index);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     }
   };
 

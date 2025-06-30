@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import NextWeekRow from './NextWeekRow';
 import { motion } from 'framer-motion';
 import { FaSave, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 const NextWeek = ({
     selectedTab,
@@ -16,7 +17,7 @@ const NextWeek = ({
     subject,
     darkMode
 }) => {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [HODStatus, setHODStatus] = useState('');
@@ -73,6 +74,19 @@ const NextWeek = ({
             toast.success('Plan Saved Successfully');
         } catch (err) {
             toast.error(err.response.data.error);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmit();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -107,6 +121,19 @@ const NextWeek = ({
                 setadminRemark('');
                 setError(err.response.data.error);
                 setLoading(false);
+                if (
+                    err.response &&
+                    err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchPlan();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(err.response?.data?.error || "An error occurred");
+                }
             }
         };
         if (Class && section && subject) {

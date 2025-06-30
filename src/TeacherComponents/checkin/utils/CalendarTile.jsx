@@ -3,9 +3,11 @@ import { startOfMonth, endOfMonth, eachDayOfInterval, format, isSameMonth, isSun
 import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import { BASE_URL } from '../../../Config';
+import { toast } from 'react-toastify';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
-const CalendarTile = ( {month,year}) => {
-  const { authState } = useContext(AuthContext);
+const CalendarTile = ({ month, year }) => {
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [data, setData] = useState('');
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -20,6 +22,19 @@ const CalendarTile = ( {month,year}) => {
         setData(response.data)
       } catch (error) {
         console.error("Error fetching student month attendance:", error);
+        if (
+          error.response &&
+          error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchStudents();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(error.response?.data?.error || "An error occurred");
+        }
       }
       finally {
         setLoading(false)
@@ -38,7 +53,7 @@ const CalendarTile = ( {month,year}) => {
 
   // Calculate the year and month for the previous month
   const prevMonthYear = month === 1 ? year - 1 : year;
-  const prevMonth = month === 1 ? 12 : month -1;
+  const prevMonth = month === 1 ? 12 : month - 1;
   // Create a new Date object for the first day of the previous month
   const prevMonthDate = new Date(`${prevMonthYear}-${prevMonth}-1`);
 
@@ -52,34 +67,34 @@ const CalendarTile = ( {month,year}) => {
   const currentMonthRange = getDateRange(currentDate);
   const prevMonthRange = getDateRange(prevMonthDate);
   const startDateDay = currentMonthRange[0].getDay();
-  console.log('startDateDAy',startDateDay)
+  console.log('startDateDAy', startDateDay)
   const monthName = format(currentDate, 'MMMM yyyy');
   const weekdayShortNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   var negativeNum;
-  switch (startDateDay){
+  switch (startDateDay) {
     case 0:
-      negativeNum=-6;
+      negativeNum = -6;
       break;
     case 1:
-      negativeNum=0;
+      negativeNum = 0;
       break;
-      case 2:
-      negativeNum=-1;
+    case 2:
+      negativeNum = -1;
       break;
-      case 3:
-      negativeNum=-2;
+    case 3:
+      negativeNum = -2;
       break;
-      case 4:
-      negativeNum=-3;
+    case 4:
+      negativeNum = -3;
       break;
-      case 5:
-      negativeNum=-4;
+    case 5:
+      negativeNum = -4;
       break;
-      case 6:
-      negativeNum=-5;
+    case 6:
+      negativeNum = -5;
       break;
   }
-  const finalDateRange = negativeNum==0 ? currentMonthRange : [...prevMonthRange.slice(negativeNum), ...currentMonthRange];
+  const finalDateRange = negativeNum == 0 ? currentMonthRange : [...prevMonthRange.slice(negativeNum), ...currentMonthRange];
   //console.log("final range",finalDateRange);
   const getStatusDotColor = (date) => {
     // const formattedDate =  format(date, 'yyyy-MM-dd') ;

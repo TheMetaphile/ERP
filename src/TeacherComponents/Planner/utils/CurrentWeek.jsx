@@ -7,6 +7,7 @@ import Loading from '../../../LoadingScreen/Loading';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CurrentWeekRow from './CurrentWeekRow';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 const CurrentWeek = ({
     selectedTab,
@@ -15,7 +16,7 @@ const CurrentWeek = ({
     subject,
     darkMode
 }) => {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [details, setDetails] = useState([]);
     const [error, setError] = useState(null);
@@ -52,6 +53,19 @@ const CurrentWeek = ({
                 console.log(err.response.data.error);
                 setError(err.response.data.error);
                 toast.error(err.response.data.error);
+                if (
+                    err.response &&
+                    err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchPlan();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(err.response?.data?.error || "An error occurred");
+                }
             } finally {
                 setLoading(false);
             }

@@ -10,6 +10,7 @@ import SubjectInputs from "./SubjectInputs";
 import { FaUser, FaVenusMars, FaGraduationCap, FaEnvelope, FaAddressCard, FaBriefcase, FaStream, FaCalendarAlt, FaUsers, FaCloudUploadAlt, FaPlus, FaPhone } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import FileUploadField from "./FileUploadField";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 const containerVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -43,7 +44,7 @@ const getLast5Sessions = () => {
 }
 
 export default function StudentRegister() {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const currentYear = (new Date().getFullYear()).toString();
@@ -75,6 +76,19 @@ export default function StudentRegister() {
             setSectionsDetails(sectionsDetail);
         } catch (error) {
             console.error("Error while fetching section:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSections(selectedClass);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -177,6 +191,19 @@ export default function StudentRegister() {
             console.error(err);
             const errorMessage = error.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmit();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setLoading(false);
@@ -219,6 +246,19 @@ export default function StudentRegister() {
             toast.error(errorMessage);
             setFetchedFields([]);
             setDocId(null);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchFieldsForUserType();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -250,6 +290,19 @@ export default function StudentRegister() {
             console.log("here", err,);
             const errorMessage = err.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleMultiSignUp(data);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             toast.success("Students account created Successfully");
             setLoading(false);
@@ -283,6 +336,19 @@ export default function StudentRegister() {
             }
         } catch (error) {
             // setMessage({ text: 'Error connecting to server', type: 'error' });
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSubjects();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

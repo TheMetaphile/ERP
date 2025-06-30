@@ -7,9 +7,10 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NextWeekHODRow from './NextWeekHODRow';
 import { motion, AnimatePresence } from 'framer-motion';
+import { refreshAccessToken } from '../../../../../RefreshTokenHelper';
 
 const NextWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [remark, setRemark] = useState('');
@@ -85,6 +86,19 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
                 setDetails(defaultPlan());
                 toast.error(err.response.data.error);
                 setLoading(false);
+                if (
+                    err.response &&
+                    err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchPlan();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(err.response?.data?.error || "An error occurred");
+                }
             }
         };
         if (Class && section && subject && stream) {
@@ -123,6 +137,19 @@ const NextWeekHOD = ({ selectedTab, Class, section, subject, stream }) => {
         } catch (err) {
             console.log(err.response.data.error);
             toast.error(err.response.data.error);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmit();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
 
         }
     };

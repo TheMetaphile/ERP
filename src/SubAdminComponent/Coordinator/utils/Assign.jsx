@@ -5,9 +5,10 @@ import AuthContext from '../../../Context/AuthContext';
 import axios from 'axios';
 import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 function Assign() {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
 
 
     const [content, setContent] = useState([
@@ -31,7 +32,7 @@ function Assign() {
                 setContent(prevContent =>
                     prevContent.map(item => {
                         const coordinator = coordinators.find(c => c.co_ordinator_wing === item.classRange);
-                        console.log(coordinator,"rerere", item.classRange );
+                        console.log(coordinator, "rerere", item.classRange);
                         return coordinator ? {
                             ...item,
                             name: coordinator.name,
@@ -46,6 +47,19 @@ function Assign() {
         } catch (error) {
             console.error('Failed to fetch coordinator', error);
             toast.error('Failed to fetch coordinator');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchCoordinator();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

@@ -6,10 +6,11 @@ import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion } from "framer-motion";
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 export default function TeacherLeavesTile({ data }) {
     const [expanded, setExpanded] = useState(null);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [leaves, setLeaves] = useState([]);
     const [selectedLeave, setSelectedLeave] = useState(null);
@@ -59,8 +60,21 @@ export default function TeacherLeavesTile({ data }) {
                 toast.error('Failed to update leave status');
             }
         } catch (err) {
-            console.error('Error updating leave:', err.message,err);
+            console.error('Error updating leave:', err.message, err);
             toast.error('Error updating leave');
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleAction(actionType, id);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }

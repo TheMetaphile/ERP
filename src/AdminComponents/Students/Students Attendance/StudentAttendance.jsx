@@ -7,11 +7,13 @@ import AuthContext from "../../../Context/AuthContext";
 import { BASE_URL } from "../../../Config";
 import { motion } from 'framer-motion';
 import { FaFilter } from 'react-icons/fa';
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
+import { toast } from "react-toastify";
 
 export default function StudentAttendance() {
 
     const [data, setData] = useState(null);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     // State to control the dropdown visibility
     const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -75,7 +77,20 @@ export default function StudentAttendance() {
 
             } catch (error) {
                 console.error("Error fetching student month attendance:", error);
-                setError(error.response.data.error)
+                setError(error.response.data.error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchStudents();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             } finally {
                 setLoading(false);
             }
@@ -133,14 +148,14 @@ export default function StudentAttendance() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                 >
-                    <SearchBar 
-                    Class={Class}
-                    Section={Section}
-                    Month={Month}
-                    handleClassChange={handleClassChange}
-                    handleSectionChange={handleSectionChange}
-                    handlebothEventsCalled={handlebothEventsCalled}
-                    handleMonthChange={handleMonthChange}
+                    <SearchBar
+                        Class={Class}
+                        Section={Section}
+                        Month={Month}
+                        handleClassChange={handleClassChange}
+                        handleSectionChange={handleSectionChange}
+                        handlebothEventsCalled={handlebothEventsCalled}
+                        handleMonthChange={handleMonthChange}
                     />
                 </motion.div>
             )}

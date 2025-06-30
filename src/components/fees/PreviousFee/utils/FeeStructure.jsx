@@ -6,10 +6,11 @@ import FeeStructureField from './feeStructureField.jsx';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../../../Config.js";
+import { refreshAccessToken } from "../../../../RefreshTokenHelper.js";
 
 
 export default function FeeStructure() {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [fees, setFees] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -46,6 +47,19 @@ export default function FeeStructure() {
     catch (error) {
       const errorMessage = error.response?.data?.error;
       toast.error(errorMessage);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchFees();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
     finally {
       setLoading(false)

@@ -8,6 +8,7 @@ import { BASE_URL } from '../../../../../Config';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdDeleteForever } from "react-icons/md";
+import { refreshAccessToken } from '../../../../../RefreshTokenHelper';
 
 const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerChange, handleStatusUpdate, loading, handleDelete, darkMode }) => {
 
@@ -123,7 +124,7 @@ const DoubtCard = ({ doubt, index, expanded, handleClick, answers, handleAnswerC
 
 export default function NewDoubtTile({ data, Class }) {
   const [expanded, setExpanded] = useState(null);
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [answers, setAnswers] = useState({});
   const [pendingDoubts, setPendingDoubts] = useState([]);
@@ -145,6 +146,19 @@ export default function NewDoubtTile({ data, Class }) {
     } catch (error) {
       console.error("Error deleting Doubt:", error);
       toast.error(error.response.data.error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleDelete(index, id);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -190,6 +204,19 @@ export default function NewDoubtTile({ data, Class }) {
     } catch (error) {
       console.error('Error updating status:', error);
       toast.error(error.response?.data?.error || 'An error occurred');
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleStatusUpdate(id, index);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     } finally {
       setLoading(false);
     }

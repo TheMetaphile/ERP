@@ -8,6 +8,7 @@ import { MdDeleteForever } from "react-icons/md";
 import jsPDF from 'jspdf';
 import { Link } from 'react-router-dom';
 import logo from '../../../../assets/metaphile_logo.png';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 
 const BacklogTransactionRow = ({ student, session, data }) => {
     const { authState, logout, updateAccessToken } = useContext(AuthContext);
@@ -107,6 +108,19 @@ const BacklogTransactionRow = ({ student, session, data }) => {
         } catch (error) {
             console.log(error);
             //console.error('Error fetching agents:', error.response.data.error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await confirmDelete();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -241,7 +255,7 @@ const BacklogTransactionRow = ({ student, session, data }) => {
 
     return (
         <>
-            
+
 
             <tr className="bg-white border-b hover:bg-gray-50">
                 <td className="px-3 py-4">
@@ -284,7 +298,7 @@ const BacklogTransactionRow = ({ student, session, data }) => {
 
             </tr>
 
-           
+
             {showPopup && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-4xl transform transition-all duration-300 scale-100 mx-4">

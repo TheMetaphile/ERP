@@ -5,6 +5,7 @@ import { MdCheck, MdCancel, MdOutlineModeEdit } from 'react-icons/md';
 import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 function CurrentWeekRow({
     details,
@@ -12,7 +13,7 @@ function CurrentWeekRow({
     mapId,
     darkMode
 }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [editMode, setEditMode] = useState(null);
     const [editedData, setEditedData] = useState({});
     const [localUserData, setLocalUserData] = useState(details);
@@ -48,6 +49,19 @@ function CurrentWeekRow({
         } catch (error) {
             console.error('Error updating student data:', error);
             toast.error('Error while saving status');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleConfirmEdit(id);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

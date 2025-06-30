@@ -7,9 +7,10 @@ import axios from 'axios';
 import AuthContext from "../../Context/AuthContext";
 import Loading from "../../LoadingScreen/Loading";
 import { BASE_URL } from "../../Config";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 export default function Home() {
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [data, setData] = useState({ absent: 0, present: 0, leave: 0 });
   const [loading, setLoading] = useState(false);
 
@@ -26,7 +27,7 @@ export default function Home() {
       label: 'Attendance',
       data: [data.absent, data.present, data.leave],
       backgroundColor: darkMode
-        ? ['#ef4444', '#22c55e', '#eab308'] 
+        ? ['#ef4444', '#22c55e', '#eab308']
         : ['#EB3232', '#7BD850', '#F8EE00'],
       bg: darkMode
         ? ['text-red-500', 'text-green-500', 'text-yellow-500']
@@ -53,6 +54,19 @@ export default function Home() {
         setData(response.data);
       } catch (error) {
         console.error("Error fetching student month attendance:", error);
+        if (
+          error.response &&
+          error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchStudents();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(error.response?.data?.error || "An error occurred");
+        }
       } finally {
         setLoading(false);
       }

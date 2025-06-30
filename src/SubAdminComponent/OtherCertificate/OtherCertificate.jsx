@@ -8,9 +8,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaFilter } from 'react-icons/fa';
 import { FiCheck, FiDownload, FiRefreshCw } from "react-icons/fi";
+import { refreshAccessToken } from '../../RefreshTokenHelper';
 
 function OtherCertificate() {
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [loading, setLoading] = useState(false)
   // State to control the dropdown visibility
   const [Class, setClass] = useState(localStorage.getItem('Class') || '');
@@ -132,6 +133,19 @@ function OtherCertificate() {
       console.log(err);
       setTimeout(() => setError(''), 2000);
       setLoading(false);
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchStudents();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -196,6 +210,19 @@ function OtherCertificate() {
       const errorMessage = error.response?.data?.error || 'Failed to load templates';
       console.log(error);
       setFetchedFields([]);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchFieldsForUserType();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -288,6 +315,19 @@ function OtherCertificate() {
       console.error(`Error downloading ${type}:`, error);
       const errorMessage = error.response?.data?.error || `Failed to download ${type}`;
       toast.error(errorMessage);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await downloadCertificate(type, customStudent, customTemplate);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     } finally {
       setDownloadLoading(false);
     }

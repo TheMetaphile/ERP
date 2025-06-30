@@ -7,6 +7,7 @@ import { BASE_URL } from '../../../Config';
 import axios from 'axios';
 import SemesterPendingFee from './utils/SemesterPendingFee';
 import { toast, ToastContainer } from 'react-toastify';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 const getSessions = () => {
     const currentYear = new Date().getFullYear();
@@ -22,7 +23,7 @@ const getSessions = () => {
 }
 
 const PendingFee = () => {
-    const { authState, logout, updateAccessToken } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const session = getSessions();
     const [selectedSession, setSelectedSession] = useState(session[0]);
     const [selectedMonth, setSelectedMonth] = useState("");
@@ -64,6 +65,19 @@ const PendingFee = () => {
             setSectionsDetails(sectionsDetail);
         } catch (error) {
             console.error("Error while fetching section:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSections(selectedClass);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -99,6 +113,19 @@ const PendingFee = () => {
         } catch (error) {
             console.error('Error fetching back fee status:', error);
             //console.error('Error fetching agents:', error.response.data.error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleDownload();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -147,7 +174,7 @@ const PendingFee = () => {
                     </button>
                 </div>
 
-                <SemesterPendingFee selectedClass={selectedClass} selectedSection={section} selectedMonth={selectedMonth} selectedSession={selectedSession}/>
+                <SemesterPendingFee selectedClass={selectedClass} selectedSection={section} selectedMonth={selectedMonth} selectedSession={selectedSession} />
             </div>
         </div>
     );

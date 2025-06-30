@@ -17,6 +17,7 @@ import {
     MdSupervisorAccount
 } from 'react-icons/md';
 import { FaTrash, FaPen } from 'react-icons/fa';
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -53,7 +54,7 @@ const buttonVariants = {
 };
 
 export default function FieldMaping() {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [fetchedFields, setFetchedFields] = useState([]);
     const [fields, setFields] = useState([
         { key: "", mapping: null, type: "" },
@@ -129,6 +130,19 @@ export default function FieldMaping() {
             }
         } catch (error) {
             toast.error("Error saving form: " + (error.response?.data?.message || error));
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSave();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -152,6 +166,19 @@ export default function FieldMaping() {
             }
         } catch (error) {
             toast.error("Error deleting field: " + (error.response?.data?.message || "Unknown error"));
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleDelete(fieldId);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -178,6 +205,19 @@ export default function FieldMaping() {
             const errorMessage = error.response?.data?.error || 'An error occurred';
             console.log(error);
             toast.error(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchFields(type);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -201,6 +241,19 @@ export default function FieldMaping() {
             console.log(error);
             toast.error(errorMessage);
             setFetchedFields([]);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchFieldsForUserType(type);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setIsLoading(false);
         }

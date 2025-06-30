@@ -5,9 +5,10 @@ import 'react-quill/dist/quill.snow.css';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import { toast } from "react-toastify";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 const ReplyDialog = ({ onClose, ConversationID, addNewMessage }) => {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [body, setBody] = useState('');
     const [fetchedFields, setFetchedFields] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -49,6 +50,19 @@ const ReplyDialog = ({ onClose, ConversationID, addNewMessage }) => {
         } catch (error) {
             console.error(error);
             toast.error("Failed to reply message");
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSave();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -79,6 +93,19 @@ const ReplyDialog = ({ onClose, ConversationID, addNewMessage }) => {
             console.log(error);
             toast.error(errorMessage);
             setFetchedFields([]);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchFields();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

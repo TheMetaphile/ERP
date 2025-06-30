@@ -7,10 +7,12 @@ import { motion } from 'framer-motion';
 import { FaMoneyBillWave, FaCalendarAlt, FaPercent, FaCreditCard, FaUser, FaChalkboardTeacher, FaSchool } from 'react-icons/fa';
 import FeePaymentRow from "./FeePaymentRow";
 import FeePaymentRowQuarter from "./FeePaymentRowQuarter";
+import { refreshAccessToken } from "../../../../RefreshTokenHelper";
+import { toast } from "react-toastify";
 
 export default function FeeStructureField({ fees, selectedOption, setFees, Student, fetchFees, selectedDiscount, removeDiscount, fetchTransaction }) {
     const [Razorpay] = useRazorpay();
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [mode, setMode] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
@@ -174,6 +176,19 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
 
         } catch (error) {
             console.error('Error posting payment details:', error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await postPaymentDetails(paymentDetails);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

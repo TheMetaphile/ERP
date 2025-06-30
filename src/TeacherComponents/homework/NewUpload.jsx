@@ -6,9 +6,10 @@ import { BASE_URL } from '../../Config';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import { FiCalendar, FiBook, FiBookOpen, FiClipboard, FiClock } from 'react-icons/fi';
+import { refreshAccessToken } from '../../RefreshTokenHelper';
 
 function NewUpload({ onClose, onNewWork }) {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [subject, setSubject] = useState('');
     const [classLevel, setClassLevel] = useState('');
     const [section, setSection] = useState('');
@@ -57,7 +58,19 @@ function NewUpload({ onClose, onNewWork }) {
         } catch (error) {
             console.error("Error creating homework:", error);
             toast.error(error.response.data.error);
-
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSave();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setLoading(false)

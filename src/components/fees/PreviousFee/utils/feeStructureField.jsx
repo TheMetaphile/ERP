@@ -6,10 +6,12 @@ import { BASE_URL } from "../../../../Config";
 import Header from './feestructureheader.jsx';
 import { motion } from 'framer-motion';
 import { FaCheckCircle, FaCreditCard } from 'react-icons/fa';
+import { toast } from "react-toastify";
+import { refreshAccessToken } from "../../../../RefreshTokenHelper.js";
 
 export default function FeeStructureField({ fees }) {
     const [Razorpay] = useRazorpay();
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
 
 
     console.log(fees);
@@ -95,6 +97,19 @@ export default function FeeStructureField({ fees }) {
 
         } catch (error) {
             console.error('Error posting payment details:', error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await postPaymentDetails(NewpaymentDetails);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

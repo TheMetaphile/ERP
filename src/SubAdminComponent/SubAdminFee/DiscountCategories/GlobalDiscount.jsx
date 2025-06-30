@@ -5,9 +5,10 @@ import { BASE_URL } from '../../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaRegTimesCircle } from 'react-icons/fa';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 function GlobalDiscount() {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [amount, setAmount] = useState('');
     const [discountType, setDiscountType] = useState('fixed');
 
@@ -40,6 +41,19 @@ function GlobalDiscount() {
             }
         } catch (error) {
             console.error("Error fetching sections:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchSections();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }
@@ -117,6 +131,19 @@ function GlobalDiscount() {
 
         } catch (error) {
             toast.error('Failed to create discount.');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmit();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -328,13 +355,13 @@ function GlobalDiscount() {
                                             />
                                         </div>
                                         <ul>
-                                         {cls.sections.map(section => (
-                                             <li key={section} className="flex justify-between mt-2 border border-gray-300 shadow-md rounded-full px-2 items-center py-1">
-                                                 <span>{section}</span>
-                                                 <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => handleRemoveSection(cls.Class, section)} />
-                                             </li>
-                                         ))}
-                                     </ul>
+                                            {cls.sections.map(section => (
+                                                <li key={section} className="flex justify-between mt-2 border border-gray-300 shadow-md rounded-full px-2 items-center py-1">
+                                                    <span>{section}</span>
+                                                    <FaRegTimesCircle className="text-red-500 h-5 w-5" onClick={() => handleRemoveSection(cls.Class, section)} />
+                                                </li>
+                                            ))}
+                                        </ul>
                                     </li>
                                 ))}
                             </ul>

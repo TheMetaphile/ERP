@@ -6,11 +6,13 @@ import axios from 'axios';
 import { BASE_URL } from '../../Config';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { refreshAccessToken } from '../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 const Result = () => {
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [details, setDetails] = useState({});
     const [profile, setProfile] = useState({});
     const [profileLoading, setProfileLoading] = useState(true);
@@ -49,6 +51,19 @@ const Result = () => {
                 }
             } catch (error) {
                 console.error('Error fetching profile:', error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchProfile();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             }
             setProfileLoading(false);
         };
@@ -66,6 +81,19 @@ const Result = () => {
                 }
             } catch (error) {
                 console.error("Error fetching student result:", error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchResult();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             } finally {
                 setLoading(false);
             }

@@ -9,6 +9,8 @@ import {
 import AuthContext from "../../../../Context/AuthContext";
 import { BASE_URL } from "../../../../Config";
 import { motion } from "framer-motion";
+import { refreshAccessToken } from "../../../../RefreshTokenHelper";
+import { toast } from "react-toastify";
 
 const RemarkTooltip = ({ children, message, darkMode }) => (
   <div className="group relative inline-block">
@@ -42,7 +44,7 @@ export default function TimetableRow({
   darkMode,
   isLoading
 }) {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const suggestionsRef = useRef(null);
 
   const [rowState, setRowState] = useState(() =>
@@ -95,6 +97,19 @@ export default function TimetableRow({
       }));
     } catch (error) {
       console.error("Teacher search error:", error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await searchTeachers(searchText);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
       return [];
     }
   }, [authState?.accessToken]);
@@ -121,33 +136,33 @@ export default function TimetableRow({
   };
 
 
-  useEffect(()=>{
-    console.log('schedule',schedule)
-  },[schedule]);
+  useEffect(() => {
+    console.log('schedule', schedule)
+  }, [schedule]);
 
-const addOptionalSubject = (lectureNo) => {
-  handleSchedule(prev => {
-    const daySchedule = prev[day] || [];
+  const addOptionalSubject = (lectureNo) => {
+    handleSchedule(prev => {
+      const daySchedule = prev[day] || [];
 
-    // Check if the lectureNo exists in the schedule
-    const lectureExists = daySchedule.some(lec => lec.lectureNo === lectureNo);
+      // Check if the lectureNo exists in the schedule
+      const lectureExists = daySchedule.some(lec => lec.lectureNo === lectureNo);
 
-    return {
-      ...prev,
-      [day]: lectureExists
-        ? daySchedule.map(lec =>
+      return {
+        ...prev,
+        [day]: lectureExists
+          ? daySchedule.map(lec =>
             lec.lectureNo === lectureNo
               ? {
-                  ...lec,
-                  optional: true,
-                  optionalSubjects: [
-                    ...(lec.optionalSubjects || []),
-                    { subject: '', teacher: '', mergeWithSection: '' }
-                  ]
-                }
+                ...lec,
+                optional: true,
+                optionalSubjects: [
+                  ...(lec.optionalSubjects || []),
+                  { subject: '', teacher: '', mergeWithSection: '' }
+                ]
+              }
               : lec
           )
-        : [
+          : [
             ...daySchedule,
             {
               lectureNo,
@@ -155,9 +170,9 @@ const addOptionalSubject = (lectureNo) => {
               optionalSubjects: [{ subject: '', teacher: '', mergeWithSection: '' }]
             }
           ]
-    };
-  });
-};
+      };
+    });
+  };
 
 
   const removeOptionalSubject = (lectureNo, index) => {
@@ -415,16 +430,16 @@ const LectureCell = ({
         }, 100); // Delay closing so that handleTeacherSelect executes first
       }
     };
-  
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  
+
   // In LectureCell component
   const handleTeacherSelect = async (teacher, isOptional = false, optionalIndex = null) => {
-    console.log("teacher",teacher);
+    console.log("teacher", teacher);
     if (isOptional) {
       handleOptionalSubjectUpdate(lecture.lectureNo, optionalIndex, 'teacher', {
         _id: teacher._id,

@@ -8,6 +8,7 @@ import { MdDeleteForever, MdCheck, MdCancel, MdExpandMore, MdExpandLess } from "
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from '../../../Config';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 export default function AttendenceTable({ additionalData, status, darkMode }) {
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ export default function AttendenceTable({ additionalData, status, darkMode }) {
   const [editRowIndex, setEditRowIndex] = useState(null);
   const [editData, setEditData] = useState({});
   const [originalData, setOriginalData] = useState({});
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
   const [expanded, setExpanded] = useState(null);
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(1);
@@ -97,6 +98,19 @@ export default function AttendenceTable({ additionalData, status, darkMode }) {
     } catch (err) {
       setError(err.message);
       toast.error(err.message);
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchUserData();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     } finally {
       setLoading(false)
     }
@@ -162,6 +176,19 @@ export default function AttendenceTable({ additionalData, status, darkMode }) {
     } catch (err) {
       setError(err.message);
       toast.error(err.message);
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleUpdate(index, event);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -186,6 +213,19 @@ export default function AttendenceTable({ additionalData, status, darkMode }) {
       } catch (err) {
         setError(err.message);
         toast.error(err.message);
+        if (
+          err.response &&
+          err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await handleDelete(index, event);
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(err.response?.data?.error || "An error occurred");
+        }
       }
     } else {
       toast.error('Cannot delete leave that is not pending');

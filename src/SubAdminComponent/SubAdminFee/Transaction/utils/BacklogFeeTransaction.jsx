@@ -6,6 +6,7 @@ import AuthContext from '../../../../Context/AuthContext';
 import { BASE_URL } from '../../../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import Loading from '../../../../LoadingScreen/Loading';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 
 
 const BacklogTransaction = () => {
@@ -47,6 +48,19 @@ const BacklogTransaction = () => {
       }
     } catch (error) {
       console.log(error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchStudents();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
     setLoading(false);
   };

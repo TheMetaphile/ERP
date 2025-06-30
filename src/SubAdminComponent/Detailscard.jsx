@@ -9,10 +9,12 @@ import {
     FaTag, FaCalendarAlt, FaFlag, FaUserFriends, FaUniversity,
     FaPhone
 } from 'react-icons/fa';
+import { refreshAccessToken } from '../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 export default function Detailscard() {
     const { email } = useParams();
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [imageError, setImageError] = useState(false);
@@ -36,6 +38,19 @@ export default function Detailscard() {
             }
         } catch (err) {
             console.error(err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchUserData();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }
@@ -154,7 +169,7 @@ export default function Detailscard() {
                             label="Aadhar Number"
                             value={userData?.aadhaarNumber}
                         />
-                         <DetailCard
+                        <DetailCard
                             icon={FaPhone}
                             label="Phone Number"
                             value={userData?.phoneNumber}

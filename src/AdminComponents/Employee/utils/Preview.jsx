@@ -5,11 +5,12 @@ import { toast } from 'react-toastify';
 import { BASE_URL } from '../../../Config';
 import AuthContext from '../../../Context/AuthContext';
 import { motion } from "framer-motion";
-import { FaUser,FaPlus, FaGraduationCap, FaUniversity, FaPhone, FaEnvelope, FaBirthdayCake, FaTint, FaIdCard, FaMapMarkerAlt, FaBuilding, FaUserTie, FaLink } from "react-icons/fa";
+import { FaUser, FaPlus, FaGraduationCap, FaUniversity, FaPhone, FaEnvelope, FaBirthdayCake, FaTint, FaIdCard, FaMapMarkerAlt, FaBuilding, FaUserTie, FaLink } from "react-icons/fa";
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 const Preview = ({ prevStep, formData }) => {
     const [loading, setLoading] = useState(false);
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [additionalFields, setAdditionalFields] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [newField, setNewField] = useState({
@@ -91,6 +92,19 @@ const Preview = ({ prevStep, formData }) => {
             console.error(error);
             const errorMessage = error.response?.data?.error || 'An error occurred';
             toast.error(errorMessage);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleConfirm();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setLoading(false);

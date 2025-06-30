@@ -2,9 +2,11 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { BASE_URL } from "../../../../Config";
 import AuthContext from "../../../../Context/AuthContext";
+import { toast } from "react-toastify";
+import { refreshAccessToken } from "../../../../RefreshTokenHelper";
 
 export default function ApplicableDiscounts({ selectedStudent, selectedDiscount, setSelectedDiscount, appliedDis, removedDiscount, setRemovedDiscount }) {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [discounts, setDiscounts] = useState([]);
     const [appliedDiscount, setAppliedDiscount] = useState(null);
 
@@ -24,6 +26,19 @@ export default function ApplicableDiscounts({ selectedStudent, selectedDiscount,
                 setRemovedDiscount(null);
             } catch (err) {
                 console.log(err);
+                if (
+                    err.response &&
+                    err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchDiscounts();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(err.response?.data?.error || "An error occurred");
+                }
             }
         };
 

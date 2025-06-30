@@ -6,11 +6,12 @@ import { FaTimes } from "react-icons/fa";
 import { MdCheck, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 import { motion } from 'framer-motion';
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 
 export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }) {
 
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const inputRef = useRef(null);
     const suggestionsRef = useRef(null);
     const [email, setEmail] = useState('');
@@ -120,6 +121,19 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
         } catch (error) {
             toast.error(error.message);
             console.error("Error in posting notice:", error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSendNotice(currentTeacher, SubstituteEmail, classs, sectionn);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -158,6 +172,19 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
                 }
                 catch (error) {
                     console.error("Error searching for teachers:", error);
+                    if (
+                        error.response &&
+                        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                    ) {
+                        toast.warn('Access denied. Attempting to refresh token...');
+                        try {
+                            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                            await searchTeacher();
+                        } catch (refreshError) {
+                        }
+                    } else {
+                        toast.error(error.response?.data?.error || "An error occurred");
+                    }
                 }
             }
             searchTeacher();
@@ -182,24 +209,24 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
 
     const rowVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: { 
-          opacity: 1, 
-          y: 0,
-          transition: {
-            type: 'spring',
-            stiffness: 100,
-            damping: 12
-          }
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: 'spring',
+                stiffness: 100,
+                damping: 12
+            }
         }
-      };
+    };
 
     return (
         <motion.tr
-        key={index}
-        variants={rowVariants}
-        className="border-b border-gray-200  last:border-none"
-      >
-    
+            key={index}
+            variants={rowVariants}
+            className="border-b border-gray-200  last:border-none"
+        >
+
             <td className="py-3 px-6 text-center whitespace-nowrap">{Teacher.employeeId}</td>
             <td className="flex py-3 px-6   items-center gap-2 whitespace-nowrap"><img src={Teacher.profileLink} alt="img" className="rounded-full h-12 w-12" />{Teacher.name}</td>
             <td className="py-3 px-6 text-center whitespace-nowrap">{date}</td>
@@ -280,7 +307,7 @@ export default function ClassTeacherOnLeaveRow({ Teacher, index, date, session }
 
 
 
-            </motion.tr>
+        </motion.tr>
 
     )
 }

@@ -5,10 +5,11 @@ import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 export default function NewTile({ data, setData }) {
     const [expanded, setExpanded] = useState(null);
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -48,6 +49,19 @@ export default function NewTile({ data, setData }) {
             console.error("Error updating status", err);
             toast.error(err);
             setError(`Error updating status: ${err}`);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleStatusUpdate(leaveId, status, email, index);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }

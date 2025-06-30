@@ -7,9 +7,10 @@ import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import { FiCalendar, FiType, FiMessageSquare } from 'react-icons/fi';
 import { IoClose } from 'react-icons/io5';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 function NewLeave({ onClose, onNewLeave }) {
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
@@ -89,6 +90,19 @@ function NewLeave({ onClose, onNewLeave }) {
     catch (error) {
       console.log(error);
       toast.error(error.response.data.error)
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleSubmit(event);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
     finally {
       setLoading(false)
@@ -147,8 +161,8 @@ function NewLeave({ onClose, onNewLeave }) {
                   min={getTodayDate()}
                   onChange={handleFromDateChange}
                   className={`w-full pl-10 pr-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${darkMode
-                      ? 'bg-gray-700 border-2 border-gray-600 text-white'
-                      : 'border-2 border-blue-300'
+                    ? 'bg-gray-700 border-2 border-gray-600 text-white'
+                    : 'border-2 border-blue-300'
                     }`}
                   required
                 />
@@ -164,8 +178,8 @@ function NewLeave({ onClose, onNewLeave }) {
                   min={getFromDate()}
                   onChange={handleToDateChange}
                   className={`w-full pl-10 pr-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${darkMode
-                      ? 'bg-gray-700 border-2 border-gray-600 text-white'
-                      : 'border-2 border-blue-300'
+                    ? 'bg-gray-700 border-2 border-gray-600 text-white'
+                    : 'border-2 border-blue-300'
                     }`}
                   required
                 />
@@ -179,8 +193,8 @@ function NewLeave({ onClose, onNewLeave }) {
                   value={leaveType}
                   onChange={handleLeaveTypeChange}
                   className={`w-full pl-10 pr-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none ${darkMode
-                      ? 'bg-gray-700 border-2 border-gray-600 text-white'
-                      : 'border-2 border-blue-300'
+                    ? 'bg-gray-700 border-2 border-gray-600 text-white'
+                    : 'border-2 border-blue-300'
                     }`}
                   required
                 >
@@ -202,8 +216,8 @@ function NewLeave({ onClose, onNewLeave }) {
                   value={reason}
                   onChange={handleReasonChange}
                   className={`w-full pl-10 pr-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${darkMode
-                      ? 'bg-gray-700 border-2 border-gray-600 text-white'
-                      : 'border-2 border-blue-300'
+                    ? 'bg-gray-700 border-2 border-gray-600 text-white'
+                    : 'border-2 border-blue-300'
                     }`}
                   rows={3}
                   required
@@ -217,8 +231,8 @@ function NewLeave({ onClose, onNewLeave }) {
               whileTap={{ scale: 0.95 }}
               type="button"
               className={`px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${darkMode
-                  ? 'bg-gray-700 text-blue-400 hover:bg-gray-600'
-                  : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                ? 'bg-gray-700 text-blue-400 hover:bg-gray-600'
+                : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
                 }`}
               onClick={onClose}
             >
@@ -229,8 +243,8 @@ function NewLeave({ onClose, onNewLeave }) {
               whileTap={{ scale: 0.95 }}
               type="submit"
               className={`px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${darkMode
-                  ? 'bg-blue-700 text-white hover:bg-blue-600'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
+                ? 'bg-blue-700 text-white hover:bg-blue-600'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
                 }`}
             >
               {loading ? <Loading /> : 'Submit'}

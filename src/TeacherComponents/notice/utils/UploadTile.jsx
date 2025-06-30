@@ -5,9 +5,10 @@ import { BASE_URL } from '../../../Config';
 import { toast } from "react-toastify";
 import { motion } from 'framer-motion';
 import { MdEdit, MdDeleteForever, MdCheck, MdCancel, MdExpandMore, MdExpandLess } from 'react-icons/md';
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 export default function UploadTile({ details }) {
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [newDetails, setDetails] = useState(details);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedNotice, setEditedNotice] = useState({});
@@ -48,6 +49,19 @@ export default function UploadTile({ details }) {
     } catch (err) {
       console.log(err);
       toast.error('Update Failed');
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleSave(index);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -68,6 +82,19 @@ export default function UploadTile({ details }) {
     } catch (err) {
       console.log(err);
       toast.error('Delete Failed');
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleDelete0index();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -81,8 +108,8 @@ export default function UploadTile({ details }) {
         <motion.div
           key={index}
           className={`p-4 rounded-lg shadow-lg ${darkMode
-              ? 'bg-gray-800 border border-gray-700'
-              : 'bg-white border border-blue-200'
+            ? 'bg-gray-800 border border-gray-700'
+            : 'bg-white border border-blue-200'
             }`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -97,8 +124,8 @@ export default function UploadTile({ details }) {
               >
                 <motion.div
                   className={`font-medium ${darkMode
-                      ? 'text-blue-300 hover:text-blue-200'
-                      : 'text-blue-700 hover:text-blue-600'
+                    ? 'text-blue-300 hover:text-blue-200'
+                    : 'text-blue-700 hover:text-blue-600'
                     }`}
                 >
                   {editingIndex === index ? (
@@ -107,8 +134,8 @@ export default function UploadTile({ details }) {
                       value={editedNotice.title}
                       onChange={(e) => handleInputChange(e, 'title')}
                       className={`border-b focus:outline-none px-1 ${darkMode
-                          ? 'bg-gray-800 text-white border-gray-600 focus:border-blue-500'
-                          : 'border-blue-300 focus:border-blue-500'
+                        ? 'bg-gray-800 text-white border-gray-600 focus:border-blue-500'
+                        : 'border-blue-300 focus:border-blue-500'
                         }`}
                     />
                   ) : (
@@ -141,8 +168,8 @@ export default function UploadTile({ details }) {
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         className={`${darkMode
-                            ? 'text-blue-400 hover:text-blue-300'
-                            : 'text-blue-500 hover:text-blue-600'
+                          ? 'text-blue-400 hover:text-blue-300'
+                          : 'text-blue-500 hover:text-blue-600'
                           }`}
                         onClick={() => handleEdit(index)}
                       >
@@ -152,8 +179,8 @@ export default function UploadTile({ details }) {
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         className={`${darkMode
-                            ? 'text-red-400 hover:text-red-300'
-                            : 'text-red-500 hover:text-red-600'
+                          ? 'text-red-400 hover:text-red-300'
+                          : 'text-red-500 hover:text-red-600'
                           }`}
                         onClick={() => handleDelete(index)}
                       >
@@ -193,8 +220,8 @@ export default function UploadTile({ details }) {
                         value={editedNotice.description}
                         onChange={(e) => handleInputChange(e, 'description')}
                         className={`w-full rounded p-2 focus:outline-none ${darkMode
-                            ? 'bg-gray-700 text-white border-gray-600 focus:border-blue-500'
-                            : 'border border-blue-300 focus:border-blue-500'
+                          ? 'bg-gray-700 text-white border-gray-600 focus:border-blue-500'
+                          : 'border border-blue-300 focus:border-blue-500'
                           }`}
                       />
                     ) : (

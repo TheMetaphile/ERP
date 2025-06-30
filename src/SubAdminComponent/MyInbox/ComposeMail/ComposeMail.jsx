@@ -7,9 +7,10 @@ import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 const ComposeEmail = () => {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [to, setTo] = useState([]);
     const [cc, setCc] = useState([]);
     const [subject, setSubject] = useState('');
@@ -81,6 +82,19 @@ const ComposeEmail = () => {
         } catch (error) {
             console.error(error);
             toast.error("Failed to send message");
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSubmit();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -172,6 +186,19 @@ const ComposeEmail = () => {
 
                     } catch (error) {
                         console.error("Error searching for roles:", error);
+                        if (
+                            error.response &&
+                            error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                        ) {
+                            toast.warn('Access denied. Attempting to refresh token...');
+                            try {
+                                const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                                await searchRole();
+                            } catch (refreshError) {
+                            }
+                        } else {
+                            toast.error(error.response?.data?.error || "An error occurred");
+                        }
                     }
                 };
                 searchRole();
@@ -209,6 +236,19 @@ const ComposeEmail = () => {
             }
         } catch (err) {
             console.error(err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchFields();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     };
 

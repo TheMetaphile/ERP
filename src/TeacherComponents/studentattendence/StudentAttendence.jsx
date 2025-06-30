@@ -9,9 +9,10 @@ import { motion } from "framer-motion";
 import { FaCheckCircle, FaTimesCircle, FaUserGraduate, FaCalendarAlt } from "react-icons/fa";
 import { IoMdRefresh } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 function StudentAttendance() {
-  const { authState, darkMode } = useContext(AuthContext);
+  const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
   const [students, setStudents] = useState([]);
   const containerRef = useRef(null);
   const [start, setStart] = useState(0);
@@ -65,6 +66,19 @@ function StudentAttendance() {
       } catch (error) {
         setError(error.response?.data?.error || "An error occurred");
         console.error("Error fetching student attendance:", error);
+        if (
+          error.response &&
+          error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await fetchStudents();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(error.response?.data?.error || "An error occurred");
+        }
       } finally {
         setLoading(false);
       }
@@ -156,6 +170,19 @@ function StudentAttendance() {
       toast.error('Error', error);
       setMarkLoading(false);
       console.error("Error marking attendance:", error);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleMark();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 

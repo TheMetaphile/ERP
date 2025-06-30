@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaIdCard, FaMapMarkerAlt, FaPray, FaBook, FaBirthdayCake, FaPhone, FaBriefcase, FaGraduationCap, FaMoneyBillWave, FaCloudUploadAlt, FaGoogle, FaPlus, FaAddressCard, FaVenusMars, FaCalendarAlt } from 'react-icons/fa';
 import { MdAdminPanelSettings } from 'react-icons/md';
 import FileUploadField from "../Student/FileUploadField";
+import { refreshAccessToken } from "../../RefreshTokenHelper";
 
 const initialFields = [
   { name: "name", label: "Name", icon: <FaUser />, type: "text" },
@@ -38,7 +39,7 @@ const itemVariants = {
 };
 
 export default function TeacherRegister() {
-  const { authState } = useContext(AuthContext);
+  const { authState, updateAccessToken, logout } = useContext(AuthContext);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -163,6 +164,19 @@ export default function TeacherRegister() {
       console.log(err);
       const errorMessage = err.response?.data?.error || 'An error occurred';
       toast.error(errorMessage);
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleSubmit();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -203,6 +217,19 @@ export default function TeacherRegister() {
       toast.error(errorMessage);
       setFetchedFields([]);
       setDocId(null);
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchFieldsForUserType();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
     }
   };
 
@@ -223,6 +250,19 @@ export default function TeacherRegister() {
       console.error(err);
       const errorMessage = err.response?.data?.error || 'An error occurred';
       toast.error(errorMessage);
+      if (
+        err.response &&
+        err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await handleMultiSignUp(data);
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(err.response?.data?.error || "An error occurred");
+      }
     } finally {
 
     }

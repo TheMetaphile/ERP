@@ -10,10 +10,11 @@ import { FaCheck, FaTimes } from 'react-icons/fa';
 import jsPDF from 'jspdf';
 import logo from '../../../../assets/metaphile_logo.png';
 import Loading from '../../../../LoadingScreen/Loading';
+import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 // import { useFilters } from '../../Students/utils/Filters';
 
 const FeePaymentRowQuarter = ({ student, key, fetchFees, selectedStudent, selectedDiscount, fetchTransaction }) => {
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const dropdownRef = useRef(null);
     const [Razorpay] = useRazorpay();
     const [paymentMode, setPaymentMode] = useState('');
@@ -52,6 +53,19 @@ const FeePaymentRowQuarter = ({ student, key, fetchFees, selectedStudent, select
             }
         } catch (error) {
             console.error('Error fetching agents:', error.response.data.error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await payOnline(data);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         setLoading(false);
     };
@@ -274,6 +288,19 @@ const FeePaymentRowQuarter = ({ student, key, fetchFees, selectedStudent, select
             toast.success("Fee payment successfull");
         } catch (error) {
             console.error('Error fetching back fee status:', error);
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await SemesterFeePayment(data);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

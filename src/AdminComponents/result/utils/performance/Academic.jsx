@@ -8,10 +8,12 @@ import { BASE_URL } from "../../../../Config";
 import AuthContext from "../../../../Context/AuthContext";
 import Loading from "../../../../LoadingScreen/Loading";
 import axios from "axios";
+import { refreshAccessToken } from "../../../../RefreshTokenHelper";
+import { toast } from "react-toastify";
 
 export default function Academic(props) {
     const { id } = useParams();
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [details, setDetails] = useState([])
     const [loading, setLoading] = useState(false)
 
@@ -31,6 +33,19 @@ export default function Academic(props) {
                 console.log('fetch', response.data.term1)
             } catch (error) {
                 console.error("Error fetching student result:", error);
+                if (
+                    error.response &&
+                    error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+                ) {
+                    toast.warn('Access denied. Attempting to refresh token...');
+                    try {
+                        const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                        await fetchResult();
+                    } catch (refreshError) {
+                    }
+                } else {
+                    toast.error(error.response?.data?.error || "An error occurred");
+                }
             }
             finally {
                 setLoading(false)

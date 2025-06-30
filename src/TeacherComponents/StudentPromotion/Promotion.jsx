@@ -8,10 +8,11 @@ import { BASE_URL } from '../../Config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PromotionRow from './utils/PromotionRow';
+import { refreshAccessToken } from '../../RefreshTokenHelper';
 
 function Promotion() {
     const [students, setStudents] = useState([]);
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [start, setStart] = useState(0);
     const end = 10;
@@ -83,6 +84,19 @@ function Promotion() {
         } catch (error) {
             console.error("Error fetching student:", error);
             toast.error('Failed to fetch students');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchStudents();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }
@@ -120,6 +134,19 @@ function Promotion() {
         } catch (error) {
             console.error("Error saving students:", error);
             toast.error('Failed to promote students.');
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleSave();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
     };
 

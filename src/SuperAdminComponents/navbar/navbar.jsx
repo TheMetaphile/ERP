@@ -7,11 +7,13 @@ import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../Config';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
+import { refreshAccessToken } from '../../RefreshTokenHelper';
+import { toast } from 'react-toastify';
 
 export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { logout, authState, setAuthState } = useContext(AuthContext);
+  const { logout, authState, setAuthState, updateAccessToken } = useContext(AuthContext);
   const [branches, setBranches] = useState(authState?.userDetails?.branches || []);
   const [selectedBranch, setSelectedBranch] = useState(authState?.userDetails?.branch || "");
 
@@ -54,7 +56,7 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
 
         setBranches((prevBranches) => [...prevBranches, newBranch]);
         setSelectedBranch(newBranch);
-        
+
         setAuthState((prevState) => ({
           ...prevState,
           userDetails: {
@@ -70,7 +72,20 @@ export default function SuperAdminNavbar({ onDrawerToggle, onEndDrawerToggle }) 
 
       } catch (error) {
         console.error("Error adding branch:", error);
-        alert(error.response?.data?.message || "Failed to add branch");
+        // alert(error.response?.data?.message || "Failed to add branch");
+        if (
+          error.response &&
+          error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+        ) {
+          toast.warn('Access denied. Attempting to refresh token...');
+          try {
+            const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+            await addBranch();
+          } catch (refreshError) {
+          }
+        } else {
+          toast.error(error.response?.data?.error || "An error occurred");
+        }
       }
     } else {
       alert("Branch already exists or is invalid!");

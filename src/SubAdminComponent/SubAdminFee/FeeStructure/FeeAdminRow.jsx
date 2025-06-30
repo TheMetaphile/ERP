@@ -7,11 +7,12 @@ import { toast } from 'react-toastify';
 import { BASE_URL } from '../../../Config';
 import { MdCheck, MdCancel, MdOutlineModeEdit } from 'react-icons/md';
 import { motion } from "framer-motion";
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 export default function FeeAdminRow({ Class, session, key }) {
     const [structure, setStructure] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { authState, darkMode } = useContext(AuthContext);
+    const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [admissionFee, setAdmissionFee] = useState('');
     const [monthlyFee, setMonthlyFee] = useState('');
     const [quarterFee, setQuarterFee] = useState('');
@@ -55,6 +56,19 @@ export default function FeeAdminRow({ Class, session, key }) {
             console.error(err);
             setLoading(false);
             setStructure([]);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchStructure();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     };
 
@@ -93,6 +107,19 @@ export default function FeeAdminRow({ Class, session, key }) {
         } catch (error) {
             toast.error('Error updating structure');
             console.error(error);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleConfirmEdit();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
     };
 

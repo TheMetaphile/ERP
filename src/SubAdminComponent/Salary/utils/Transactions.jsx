@@ -5,6 +5,7 @@ import Loading from "../../../LoadingScreen/Loading";
 import { ToastContainer, toast } from "react-toastify";
 import { BASE_URL } from "../../../Config";
 import { motion } from "framer-motion";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 const getSessions = () => {
     const currentYear = new Date().getFullYear();
@@ -21,7 +22,7 @@ const getSessions = () => {
 
 
 const Transactions = ({ transactions }) => {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState('');
     const [data, setData] = useState([]);
@@ -99,6 +100,19 @@ const Transactions = ({ transactions }) => {
             }
         } catch (err) {
             console.log(err);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await fetchTransaction();
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         } finally {
             setLoading(false);
         }

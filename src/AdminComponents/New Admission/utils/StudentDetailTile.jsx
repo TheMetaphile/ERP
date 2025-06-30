@@ -5,11 +5,12 @@ import { MdCheck, MdCancel, MdOutlineModeEdit } from 'react-icons/md';
 import { BASE_URL } from '../../../Config';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import { refreshAccessToken } from '../../../RefreshTokenHelper';
 
 export default function StudentDetailTile({ userData, Class }) {
     const [editMode, setEditMode] = useState(null);
     const [selectedSection, setSelectedSection] = useState('');
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
 
     const handleEditToggle = (index, item) => {
         setEditMode(index);
@@ -34,6 +35,19 @@ export default function StudentDetailTile({ userData, Class }) {
         } catch (err) {
             console.log(err);
             toast.error(err.response.data.error);
+            if (
+                err.response &&
+                err.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleConfirmEdit(index, id);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(err.response?.data?.error || "An error occurred");
+            }
         }
 
     };

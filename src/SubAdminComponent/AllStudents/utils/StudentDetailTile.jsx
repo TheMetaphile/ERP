@@ -6,9 +6,10 @@ import { BASE_URL } from "../../../Config";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { refreshAccessToken } from "../../../RefreshTokenHelper";
 
 export default function StudentDetailTile({ userData }) {
-    const { authState } = useContext(AuthContext);
+    const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [newData, setNewData] = useState(userData);
     const [loadinfIndex, setLoadingIndex] = useState('');
@@ -40,6 +41,19 @@ export default function StudentDetailTile({ userData }) {
         } catch (error) {
             console.error("There was an error terminating the student!", error);
             toast.error("Failed to terminate the student");
+            if (
+                error.response &&
+                error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+            ) {
+                toast.warn('Access denied. Attempting to refresh token...');
+                try {
+                    const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+                    await handleTerminate(email, index);
+                } catch (refreshError) {
+                }
+            } else {
+                toast.error(error.response?.data?.error || "An error occurred");
+            }
         }
         finally {
             setLoading(false);
@@ -58,7 +72,7 @@ export default function StudentDetailTile({ userData }) {
                     className="border-b border-gray-200 hover:bg-blue-100 transition-colors mb-2"
                 >
                     <div className="flex text-center mobile:max-tablet:gap-2 items-center justify-evenly border rounded-lg py-2 pl-2 tablet:max-laptop:w-fit">
-                        <Link to={`/Sub-Admin/Students/details/${user.email}`}  className="rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
+                        <Link to={`/Sub-Admin/Students/details/${user.email}`} className="rounded-full text-center px-3 py-2 font-semibold bg-blue-100 text-blue-800">
                             <div className="w-40 flex justify-center items-center space-x-2">
                                 <img src={user.profileLink} alt="" className="h-8 w-8 rounded-full object-cover" />
                                 <h1 className="text-base w-32 truncate">{user.name}</h1>
