@@ -6,7 +6,7 @@ import Loading from '../../../LoadingScreen/Loading';
 import { refreshAccessToken } from '../../../RefreshTokenHelper';
 import { toast } from 'react-toastify';
 
-const FeePaymentRowQuarter = ({ student, key, darkMode }) => {
+const FeePaymentRowQuarter = ({ student, key, darkMode, currentIndex, firstUnpaidIndexQuarter }) => {
     const { authState, updateAccessToken, logout } = useContext(AuthContext);
     const [paymentMode, setPaymentMode] = useState('');
     const [discount, setDiscount] = useState(0);
@@ -189,34 +189,63 @@ const FeePaymentRowQuarter = ({ student, key, darkMode }) => {
                 />
             </td>
             <td className="px-3 py-4">
-                {!(student.totalFee === student.paidFee) && (
-                    <div className="relative">
-                        <button
-                            className={`
-                                ${darkMode
-                                    ? 'text-blue-400 bg-blue-900 hover:bg-blue-800'
-                                    : 'text-blue-600 bg-blue-200 hover:bg-blue-300'
+                {(() => {
+                    const sequentialPayments = true;
+                    const isUnpaid = student.totalFee !== student.paidFee;
+                    const isFirstUnpaid = currentIndex === firstUnpaidIndexQuarter;
+
+                    const canPay = sequentialPayments
+                        ? isUnpaid && isFirstUnpaid
+                        : isUnpaid;
+
+                    if (canPay) {
+                        return (
+                            <div className="relative">
+                                <button
+                                    className={`
+              ${darkMode
+                                            ? 'text-blue-400 bg-blue-900 hover:bg-blue-800'
+                                            : 'text-blue-600 bg-blue-200 hover:bg-blue-300'
+                                        } 
+              focus:outline-none px-5 py-1 rounded-full text-center
+            `}
+                                    onClick={() => setPaymentMode('Online')}
+                                >
+                                    Pay
+                                </button>
+                            </div>
+                        );
+                    }
+
+                    if (sequentialPayments && isUnpaid && !isFirstUnpaid) {
+                        return (
+                            <span className={`
+          ${darkMode ? 'text-gray-500 bg-gray-800' : 'text-gray-500 bg-gray-200'} 
+          px-5 py-1 rounded-full opacity-50 cursor-not-allowed
+        `}>
+                                Pay
+                            </span>
+                        );
+                    }
+
+                    if (!isUnpaid) {
+                        return (
+                            <span className={`
+          ${darkMode
+                                    ? 'text-gray-400 bg-gray-700'
+                                    : 'text-gray-600 bg-gray-200'
                                 } 
-                                focus:outline-none px-5 py-1 rounded-full text-center
-                            `}
-                            onClick={() => setPaymentMode('Online')}
-                        >
-                            Pay
-                        </button>
-                    </div>
-                )}
-                {student.totalFee === student.paidFee && (
-                    <span className={`
-                        ${darkMode
-                            ? 'text-gray-400 bg-gray-700'
-                            : 'text-gray-600 bg-gray-200'
-                        } 
-                        px-5 py-1 rounded-full
-                    `}>
-                        Paid
-                    </span>
-                )}
+          px-5 py-1 rounded-full
+        `}>
+                                Paid
+                            </span>
+                        );
+                    }
+
+                    return null;
+                })()}
             </td>
+
         </tr>
     );
 };

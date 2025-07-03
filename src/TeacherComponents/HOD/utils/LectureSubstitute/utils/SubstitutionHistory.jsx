@@ -14,7 +14,8 @@ export default function ClassTeacherSubstitutionHistory() {
 
     const date = new Date();
     var month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-    const formattedDate = `${date.getFullYear()}-${month}-${date.getDate()}`;
+    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+    const formattedDate = `${date.getFullYear()}-${month}-${day}`;
     const session = getCurrentSession();
     const fetchTeacherOnLeaveList = async () => {
 

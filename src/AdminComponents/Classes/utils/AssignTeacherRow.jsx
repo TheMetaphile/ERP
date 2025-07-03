@@ -140,6 +140,7 @@ export default function AssignTeacherRow({ Class }) {
         }
 
     };
+    
     const handleAddSection = async () => {
         console.log('class', Class)
         console.log('section', newSection)
@@ -287,222 +288,166 @@ export default function AssignTeacherRow({ Class }) {
 
     return (
         <motion.div
-            key={Class}
-            className="w-full mb-4 rounded-lg mt-2 shadow-md border border-secondary-200 overflow-hidden"
+            className="w-full mb-4 rounded-lg mt-2 shadow-md border border-secondary-200"
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             transition={{ duration: 0.3 }}
         >
-            <motion.div
+            <div
                 className="flex justify-between items-center p-3 bg-secondary-100 hover:bg-secondary-200 cursor-pointer"
                 onClick={handleClick}
-
             >
                 <div className="flex items-center">
                     <FaUserGraduate className="text-secondary-600 mr-2" />
                     <div className="text-lg font-semibold text-secondary-800">{Class}</div>
                 </div>
-                <motion.div
-                    animate={{ rotate: expanded ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                >
-                    {expanded ? <FaChevronUp className="text-secondary-600" /> : <FaChevronDown className="text-secondary-600" />}
+                <motion.div animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.3 }}>
+                    {expanded ? <FaChevronUp /> : <FaChevronDown />}
                 </motion.div>
-            </motion.div>
+            </div>
 
             <AnimatePresence>
                 {expanded && (
                     <motion.div
+                        className="mx-3 border border-secondary-300 rounded-lg mb-2 mt-3 bg-white"
                         initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
+                        animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className='mx-3 border border-secondary-300 rounded-lg mb-2 mt-3 overflow-hidden'
                     >
-                        <div className="flex justify-between w-full py-2 pl-2 bg-blue-300 text-black">
-                            <h1 className="w-36 text-lg font-medium">Section</h1>
-                            <h1 className="w-36 text-lg font-medium">Class Teacher</h1>
-                            <h1 className="w-36 text-lg font-medium text-center">Action</h1>
+                        <div className="flex justify-between py-2 pl-2 bg-blue-300 text-black">
+                            <div className="w-36 font-semibold">Section</div>
+                            <div className="w-36 font-semibold">Class Teacher</div>
+                            <div className="w-36 font-semibold text-center">Actions</div>
                         </div>
 
                         {!loading ? (
                             sectionsDetails.length > 0 ? (
-                                <div>
-                                    {sectionsDetails.map((details, index) => (
-                                        <motion.div
-                                            key={index}
-                                            className={`flex justify-between w-full py-2 px-2 h-fit border-b border-secondary-200 ${index % 2 === 0 ? 'bg-secondary-50' : 'bg-white'}`}
-                                            initial={{ opacity: 0, y: -20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: index * 0.1 }}
-                                        >
-                                            <h1 className="w-36 text-lg font-medium text-secondary-800">
-                                                {editingRow === index ? (
+                                sectionsDetails.map((row, i) => (
+                                    <div
+                                        key={i}
+                                        className={`flex justify-between items-center py-2 px-2 border-b ${i % 2 === 0 ? "bg-secondary-50" : "bg-white"
+                                            }`}
+                                    >
+                                        <div className="w-36">
+                                            {editingRow === i ? (
+                                                <input
+                                                    className="w-full px-2 border border-secondary-300 rounded"
+                                                    value={newSection}
+                                                    onChange={handleSectionChange}
+                                                />
+                                            ) : (
+                                                row.section
+                                            )}
+                                        </div>
+
+                                        <div className="w-36 relative">
+                                            {editingRow === i ? (
+                                                <>
                                                     <input
-                                                        type="text"
-                                                        className="w-36 px-2 border border-secondary-300 rounded-lg text-lg font-medium"
-                                                        placeholder="Section"
-                                                        value={newSection}
-                                                        onChange={handleSectionChange}
-                                                        required
-                                                    />
-                                                ) : (
-                                                    <h1 className="w-36 text-lg font-medium text-secondary-700">{details.section}</h1>
-                                                )}
-                                            </h1>
-                                            <div className='relative'>
-                                                {editingRow === index ? (
-                                                    <input
-                                                        type="text"
-                                                        className="w-36 px-2 border border-secondary-300 rounded-lg text-lg font-medium"
-                                                        placeholder="Teacher"
+                                                        className="w-full px-2 border border-secondary-300 rounded"
                                                         value={name}
                                                         onChange={handleEmailChange}
-                                                        required
                                                     />
-                                                ) : (
-                                                    <h1 className="w-36 text-lg font-medium text-secondary-700">{details.name}</h1>
-                                                )}
-                                                {showSuggestions && suggestions.length > 0 && (
-                                                    <ul className="absolute z-10 w-72 bg-white border border-secondary-300 rounded-md mt-1 max-h-40 overflow-y-auto">
-                                                        {suggestions.map((suggest, idx) => (
-                                                            <li
-                                                                key={idx}
-                                                                className="flex items-center p-2 cursor-pointer hover:bg-secondary-100"
-                                                                onClick={() => handleSuggestionClick(suggest)}
-                                                            >
-                                                                <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                                                {suggest.name}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                )}
-                                            </div>
-                                            <div className='w-36 text-lg font-medium flex justify-center'>
-                                                {editingRow === index ? (
-                                                    <div className='flex items-center gap-2'>
-                                                        <motion.button
-                                                            whileHover={{ scale: 1.1 }}
-                                                            whileTap={{ scale: 0.9 }}
-                                                            className='bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                                            onClick={() => handleConfirmClick(index)}
-                                                        >
-                                                            <MdCheck />
-                                                        </motion.button>
-                                                        <motion.button
-                                                            whileHover={{ scale: 1.1 }}
-                                                            whileTap={{ scale: 0.9 }}
-                                                            className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md'
-                                                            onClick={handleCancelEdit}
-                                                        >
-                                                            <MdCancel />
-                                                        </motion.button>
-                                                    </div>
-                                                ) : (
-                                                    <div className='flex items-center gap-2'>
-                                                        <motion.button
-                                                            whileHover={{ scale: 1.1 }}
-                                                            whileTap={{ scale: 0.9 }}
-                                                            className='bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                                            onClick={() => handleUpdateClick(index)}
-                                                        >
-                                                            <MdEdit />
-                                                        </motion.button>
-                                                        <motion.button
-                                                            whileHover={{ scale: 1.1 }}
-                                                            whileTap={{ scale: 0.9 }}
-                                                            className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md flex items-center'
-                                                            onClick={() => handleDelete(index, details.section)}
-                                                        >
-                                                            <MdDeleteForever />
-                                                        </motion.button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </motion.div>
-                                    ))}
-                                </div>
+                                                    {showSuggestions && suggestions.length > 0 && (
+                                                        <ul className="absolute w-72 bg-white border border-secondary-300 rounded-md mt-1 max-h-40 overflow-y-auto z-[999] shadow-lg">
+                                                            {suggestions.map((s, idx) => (
+                                                                <li
+                                                                    key={idx}
+                                                                    className="flex items-center p-2 cursor-pointer hover:bg-secondary-100"
+                                                                    onClick={() => handleSuggestionClick(s)}
+                                                                >
+                                                                    <img src={s.profileLink} alt="P" className="w-6 h-6 rounded-full mr-2" />
+                                                                    {s.name}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                row.name
+                                            )}
+                                        </div>
+
+                                        <div className="flex gap-2 w-36 justify-center">
+                                            {editingRow === i ? (
+                                                <>
+                                                    <button onClick={() => handleConfirmClick(i)} className="bg-green-500 text-white p-2 rounded-lg">
+                                                        <MdCheck />
+                                                    </button>
+                                                    <button onClick={handleCancelEdit} className="bg-red-500 text-white p-2 rounded-lg">
+                                                        <MdCancel />
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <button onClick={() => handleUpdateClick(i)} className="bg-green-500 text-white p-2 rounded-lg">
+                                                        <MdEdit />
+                                                    </button>
+                                                    <button onClick={() => handleDelete(i, row.section)} className="bg-red-500 text-white p-2 rounded-lg">
+                                                        <MdDeleteForever />
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))
                             ) : (
-                                <div className='text-center py-4 text-secondary-600'>No section added</div>
+                                <div className="text-center py-4 text-secondary-600">No sections added</div>
                             )
                         ) : (
                             <Loading />
                         )}
 
                         {showNewRow && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className={`flex justify-between w-full py-2 px-4 h-fit border border-secondary-300 ${sectionsDetails.length > 0 ? "rounded-b-lg" : "rounded-lg"} bg-secondary-50`}
-                            >
-                                <h1 className="w-36 text-lg font-medium text-secondary-800">
+                            <div className="flex justify-between items-center px-4 py-2 bg-secondary-50 border-t border-secondary-300">
+                                <input
+                                    className="w-36 px-2 border border-secondary-300 rounded"
+                                    placeholder="Section"
+                                    value={newSection}
+                                    onChange={handleSectionChange}
+                                />
+                                <div className="w-36 relative">
                                     <input
-                                        type="text"
-                                        className="w-36 px-2 border border-secondary-300 rounded-lg text-lg font-medium"
-                                        placeholder="Section"
-                                        value={newSection}
-                                        onChange={handleSectionChange}
-                                        required
-                                    />
-                                </h1>
-                                <div className='relative'>
-                                    <input
-                                        type="text"
-                                        className="w-36 px-2 border border-secondary-300 rounded-lg text-lg font-medium"
+                                        className="w-full px-2 border border-secondary-300 rounded"
                                         placeholder="Teacher"
                                         value={name}
                                         onChange={handleEmailChange}
-                                        required
                                     />
                                     {showSuggestions && suggestions.length > 0 && (
-                                        <ul className="absolute z-10 w-72 bg-white border border-secondary-300 rounded-md mt-1 max-h-40 overflow-y-auto">
-                                            {suggestions.map((suggest, idx) => (
+                                        <ul className="absolute w-72 bg-white border border-secondary-300 rounded-md mt-1 max-h-40 overflow-y-auto z-[999] shadow-lg">
+                                            {suggestions.map((s, idx) => (
                                                 <li
                                                     key={idx}
                                                     className="flex items-center p-2 cursor-pointer hover:bg-secondary-100"
-                                                    onClick={() => handleSuggestionClick(suggest)}
+                                                    onClick={() => handleSuggestionClick(s)}
                                                 >
-                                                    <img src={suggest.profileLink} alt="Profile" className='w-6 h-6 rounded-full mr-2' />
-                                                    {suggest.email}
+                                                    <img src={s.profileLink} alt="P" className="w-6 h-6 rounded-full mr-2" />
+                                                    {s.name}
                                                 </li>
                                             ))}
                                         </ul>
                                     )}
                                 </div>
-                                <div className='flex items-center gap-2'>
-                                    <motion.button
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.9 }}
-                                        className='bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg shadow-md'
-                                        onClick={handleAddSection}
-                                    >
+                                <div className="flex gap-2">
+                                    <button onClick={handleAddSection} className="bg-green-500 text-white px-3 py-1 rounded-lg">
                                         Save
-                                    </motion.button>
-                                    <motion.button
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.9 }}
-                                        className='bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg shadow-md'
-                                        onClick={() => setShowNewRow(false)}
-                                    >
+                                    </button>
+                                    <button onClick={() => setShowNewRow(false)} className="bg-red-500 text-white px-3 py-1 rounded-lg">
                                         Cancel
-                                    </motion.button>
+                                    </button>
                                 </div>
-                            </motion.div>
+                            </div>
                         )}
 
-                        <motion.div
-                            className="flex justify-center w-full px-3 py-3 h-fit "
-
-                        >
-                            <motion.button
-                                className='px-4 py-2 rounded-lg flex items-center bg-blue-300 text-black'
-                                onClick={() => addNewRow()}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                        <div className="flex justify-center py-3">
+                            <button
+                                onClick={() => setShowNewRow(true)}
+                                className="px-4 py-2 bg-blue-300 text-black rounded-lg flex items-center"
                             >
                                 <MdAdd className="mr-2" /> Add section
-                            </motion.button>
-                        </motion.div>
+                            </button>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>

@@ -7,6 +7,7 @@ import axios from "axios";
 import { BASE_URL, WEB_SOCKET_BASE_URL } from "../../../Config";
 import { Archive, Trash2, Heart } from "lucide-react";
 import { refreshAccessToken } from "../../../RefreshTokenHelper";
+import Loading from "../../../LoadingScreen/Loading";
 
 function MailList({
   emails,
@@ -27,6 +28,7 @@ function MailList({
   const [page, setPage] = useState(1);
   const listRef = useRef(null);
   const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const getStatuses = (status) => {
     if (!status) return [];
@@ -92,6 +94,7 @@ function MailList({
                 setHasMore(true);
                 console.log("here", response.conversations);
                 setEmails(response.conversations);
+                setLoading(false);
                 break;
 
               case "more":
@@ -141,6 +144,7 @@ function MailList({
 
         socket.onerror = (error) => {
           console.error("WebSocket error:", error);
+          setLoading(false);
         };
 
         socket.onclose = () => {
@@ -152,6 +156,7 @@ function MailList({
         };
       } catch (error) {
         console.error("Error fetching emails:", error);
+        setLoading(false);
         if (
           error.response &&
           error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
@@ -257,7 +262,11 @@ function MailList({
       </div> */}
 
       <div ref={listRef} className="flex-1 overflow-y-auto px-2 py-4 space-y-3 no-scrollbar">
-        {emails.length === 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center h-full text-lg text-gray-500 dark:text-gray-300">
+            <Loading />
+          </div>
+        ) : emails.length === 0 ? (
           <div className={`text-center ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
             <p>No emails in {folderName}</p>
           </div>

@@ -13,7 +13,7 @@ import Loading from '../../../../LoadingScreen/Loading';
 import { refreshAccessToken } from '../../../../RefreshTokenHelper';
 // import { useFilters } from '../../Students/utils/Filters';
 
-const FeePaymentRow = ({ student, key, fetchFees, selectedStudent, selectedDiscount, fetchTransaction }) => {
+const FeePaymentRow = ({ student, key, fetchFees, selectedStudent, selectedDiscount, fetchTransaction, currentIndex, firstUnpaidIndex }) => {
     const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const dropdownRef = useRef(null);
     const [Razorpay] = useRazorpay();
@@ -439,6 +439,7 @@ const FeePaymentRow = ({ student, key, fetchFees, selectedStudent, selectedDisco
         return <Loading />;
     }
 
+
     return (
         <tr className={`border-b ${darkMode
             ? 'bg-gray-800 border-gray-700 hover:bg-gray-700'
@@ -570,87 +571,113 @@ const FeePaymentRow = ({ student, key, fetchFees, selectedStudent, selectedDisco
             </td>
 
             <td className="px-3 py-4" ref={dropdownRef}>
-                {!(student.totalFee === student.paidFee + student.categoryDiscount + student.manualDiscount) && paymentMode === '' && (
-                    <div className="relative">
-                        <button
-                            className={`focus:outline-none px-5 py-1 rounded-full text-center ${darkMode
-                                ? 'text-blue-400 bg-blue-900 hover:bg-blue-800'
-                                : 'text-blue-600 bg-blue-200 hover:bg-blue-300'
-                                }`}
-                            onClick={() => setShowSuggestion(true)}
-                        >
-                            Pay
-                        </button>
-                        {paymentMode === '' && showSuggestion && (
-                            <div className={`absolute z-10 mt-2 top-0 left-0 w-fit rounded-md shadow-lg ${darkMode
-                                ? 'bg-gray-700 ring-1 ring-gray-600'
-                                : 'bg-white ring-1 ring-black ring-opacity-5'
-                                }`}>
-                                <div className="py-1" role="menu" aria-orientation="vertical">
-                                    {['Online', 'Demand Draft', 'Cheque', 'Cash'].map((mode) => (
-                                        <button
-                                            key={mode}
-                                            className={`block px-4 py-2 text-sm w-full text-left ${darkMode
-                                                ? 'text-gray-300 hover:bg-gray-600 hover:text-white'
-                                                : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                                                }`}
-                                            role="menuitem"
-                                            onClick={() => { setShowSuggestion(false); setPaymentMode(mode) }}
-                                        >
-                                            {mode}
-                                        </button>
-                                    ))}
-                                </div>
+                {(() => {
+                    const sequentialPayments = true;
+                    const isUnpaid = student.totalFee !== student.paidFee + student.categoryDiscount + student.manualDiscount;
+                    const isFirstUnpaid = currentIndex === firstUnpaidIndex;
+
+                    const canPay = sequentialPayments
+                        ? isUnpaid && isFirstUnpaid && paymentMode === ''
+                        : isUnpaid && paymentMode === '';
+
+                    if (canPay) {
+                        return (
+                            <div className="relative">
+                                <button
+                                    className={`focus:outline-none px-5 py-1 rounded-full text-center ${darkMode
+                                        ? 'text-blue-400 bg-blue-900 hover:bg-blue-800'
+                                        : 'text-blue-600 bg-blue-200 hover:bg-blue-300'
+                                        }`}
+                                    onClick={() => setShowSuggestion(true)}
+                                >
+                                    Pay
+                                </button>
+
+                                {showSuggestion && (
+                                    <div className={`absolute z-10 mt-2 top-0 left-0 w-fit rounded-md shadow-lg ${darkMode
+                                        ? 'bg-gray-700 ring-1 ring-gray-600'
+                                        : 'bg-white ring-1 ring-black ring-opacity-5'
+                                        }`}>
+                                        <div className="py-1" role="menu" aria-orientation="vertical">
+                                            {['Online', 'Demand Draft', 'Cheque', 'Cash'].map((mode) => (
+                                                <button
+                                                    key={mode}
+                                                    className={`block px-4 py-2 text-sm w-full text-left ${darkMode
+                                                        ? 'text-gray-300 hover:bg-gray-600 hover:text-white'
+                                                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                                                        }`}
+                                                    role="menuitem"
+                                                    onClick={() => { setShowSuggestion(false); setPaymentMode(mode); }}
+                                                >
+                                                    {mode}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
-                )}
+                        );
+                    }
 
-                {(student.totalFee === student.paidFee + student.categoryDiscount + student.manualDiscount) && (
-                    <span className={`${darkMode
-                        ? 'text-gray-400 bg-gray-700'
-                        : 'text-gray-600 bg-gray-200'
-                        } px-5 py-1 rounded-full`}>
-                        Paid
-                    </span>
-                )}
+                    if (sequentialPayments && isUnpaid && !isFirstUnpaid && paymentMode === '') {
+                        return (
+                            <span className={`${darkMode ? 'text-gray-500 bg-gray-800' : 'text-gray-500 bg-gray-200'} px-5 py-1 rounded-full opacity-50 cursor-not-allowed`}>
+                                Pay
+                            </span>
+                        );
+                    }
 
-                {paymentMode !== '' && (
-                    <div className="flex space-x-4 items-center">
-                        <button
-                            onClick={() => handleOtherPayment(student.studentEmailId, student.studentWhatsAppNo)}
-                            className={`group flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 ${darkMode
-                                ? 'bg-green-900 hover:bg-green-800 focus:ring-green-700'
-                                : 'bg-green-100 hover:bg-green-200 focus:ring-green-300'
-                                }`}
-                        >
-                            <FaCheck
-                                className={`${darkMode
-                                    ? 'text-green-400 group-hover:text-green-300'
-                                    : 'text-green-600 group-hover:scale-110'
-                                    } transition-transform`}
-                                size={16}
-                            />
-                        </button>
+                    if (!isUnpaid) {
+                        return (
+                            <span className={`${darkMode ? 'text-gray-400 bg-gray-700' : 'text-gray-600 bg-gray-200'} px-5 py-1 rounded-full`}>
+                                Paid
+                            </span>
+                        );
+                    }
 
-                        <button
-                            onClick={() => setPaymentMode('')}
-                            className={`group flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 ${darkMode
-                                ? 'bg-red-900 hover:bg-red-800 focus:ring-red-700'
-                                : 'bg-red-100 hover:bg-red-200 focus:ring-red-300'
-                                }`}
-                        >
-                            <FaTimes
-                                className={`${darkMode
-                                    ? 'text-red-400 group-hover:text-red-300'
-                                    : 'text-red-600 group-hover:scale-110'
-                                    } transition-transform`}
-                                size={16}
-                            />
-                        </button>
-                    </div>
-                )}
+                    if (paymentMode !== '') {
+                        return (
+                            <div className="flex space-x-4 items-center">
+                                <button
+                                    onClick={() => handleOtherPayment(student.studentEmailId, student.studentWhatsAppNo)}
+                                    className={`group flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 ${darkMode
+                                        ? 'bg-green-900 hover:bg-green-800 focus:ring-green-700'
+                                        : 'bg-green-100 hover:bg-green-200 focus:ring-green-300'
+                                        }`}
+                                >
+                                    <FaCheck
+                                        className={`${darkMode
+                                            ? 'text-green-400 group-hover:text-green-300'
+                                            : 'text-green-600 group-hover:scale-110'
+                                            } transition-transform`}
+                                        size={16}
+                                    />
+                                </button>
+
+                                <button
+                                    onClick={() => setPaymentMode('')}
+                                    className={`group flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 ${darkMode
+                                        ? 'bg-red-900 hover:bg-red-800 focus:ring-red-700'
+                                        : 'bg-red-100 hover:bg-red-200 focus:ring-red-300'
+                                        }`}
+                                >
+                                    <FaTimes
+                                        className={`${darkMode
+                                            ? 'text-red-400 group-hover:text-red-300'
+                                            : 'text-red-600 group-hover:scale-110'
+                                            } transition-transform`}
+                                        size={16}
+                                    />
+                                </button>
+                            </div>
+                        );
+                    }
+
+                    return null;
+                })()}
             </td>
+
+
         </tr>
     );
 };

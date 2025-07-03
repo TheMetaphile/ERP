@@ -12,6 +12,7 @@ import ReplyDialog from "./ReplyDialog";
 import { useParams } from "react-router-dom";
 import { AiOutlineUnlock, AiOutlineLock } from "react-icons/ai";
 import { refreshAccessToken } from "../../../RefreshTokenHelper";
+import Loading from "../../../LoadingScreen/Loading";
 
 function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
   const { authState, updateAccessToken, logout } = useContext(AuthContext);
@@ -27,7 +28,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
   const socketRef = useRef(null);
   const bottomRef = useRef(null);
   const [data, setData] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const [folders, setFolders] = useState([]);
   // console.log(mail);
   const handleCreateNewFolder = () => {
@@ -597,6 +598,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
                 setMailTo(response.To);
                 setMailCc(response.Cc);
                 setMailContent(response.messages);
+                setLoading(false);
                 break;
 
               case "new":
@@ -651,6 +653,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
 
         socket.onerror = (error) => {
           console.error("WebSocket error:", error);
+          setLoading(false);
         };
 
         socket.onclose = () => {
@@ -662,6 +665,7 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         };
       } catch (error) {
         console.error("Error fetching emails:", error);
+        setLoading(false);
         if (
           error.response &&
           error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
@@ -705,6 +709,12 @@ function MailContent({ mail, darkMode, onUpdateMail, onStatusUpdateMail }) {
         </div>
       </div>
     );
+  }
+
+  if (loading) {
+    return (
+      <Loading />
+    )
   }
 
   // console.log(section, "here", id, authState);

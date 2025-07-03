@@ -262,6 +262,13 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
         </td>
     );
 
+    const firstUnpaidIndex = fees.monthlyStatus.findIndex(student =>
+        student.totalFee !== student.paidFee + student.categoryDiscount + student.manualDiscount
+    );
+
+    const firstUnpaidIndexQuarterly = fees.quarterlyStatus.findIndex(student =>
+        student.totalFee !== student.paidFee
+    );
 
     return (
         <motion.table
@@ -281,6 +288,8 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                                 fetchTransaction={fetchTransaction}
                                 selectedStudent={Student}
                                 selectedDiscount={selectedDiscount}
+                                currentIndex={index}
+                                firstUnpaidIndex={firstUnpaidIndex}
                             />
                         </tbody>
                     ))}
@@ -298,6 +307,8 @@ export default function FeeStructureField({ fees, selectedOption, setFees, Stude
                                 fetchTransaction={fetchTransaction}
                                 selectedStudent={Student}
                                 selectedDiscount={selectedDiscount}
+                                currentIndex={index}
+                                firstUnpaidIndex={firstUnpaidIndexQuarterly}
                             />
                         </tbody>
                     ))}

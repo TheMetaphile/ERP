@@ -142,7 +142,7 @@ export default function Row({ con }) {
     };
 
     return (
-        <div key={con.id} className="w-full mobile:max-tablet:flex-col overflow-auto items-center p-2 gap-2 border rounded-md flex mobile:max-tablet:items-start mobile:max-tablet:gap-2" ref={containerRef}>
+        <div key={con.id} className="w-full mobile:max-tablet:flex-col items-center p-2 gap-2 border rounded-md flex mobile:max-tablet:items-start mobile:max-tablet:gap-2" ref={containerRef}>
             <div className="flex-grow flex justify-between items-center">
                 <h2 className="text-lg mobile:max-sm:text-sm whitespace-nowrap mr-1">{con.classRange}</h2>
                 {editingRowId ? (
@@ -168,7 +168,7 @@ export default function Row({ con }) {
                                     required
                                 />
                                 {suggestions.length > 0 && (
-                                    <ul className="absolute z-10 w-52 bg-white border rounded-md mt-8 max-h-40 overflow-y-auto">
+                                    <ul className="absolute z-10 w-52 top-full left-0 bg-white border rounded-md mt-4 max-h-40 overflow-y-auto">
                                         {suggestions.map((suggestion, idx) => (
                                             <li
                                                 key={idx}

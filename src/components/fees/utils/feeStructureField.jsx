@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 import FeePaymentRow from "./FeePaymentRow";
 import FeePaymentRowQuarter from "./FeePaymentRowQuarter";
 
-export default function FeeStructureField({ 
-    fees, 
-    selectedOption, 
-    setFees, 
-    darkMode 
+export default function FeeStructureField({
+    fees,
+    selectedOption,
+    setFees,
+    darkMode
 }) {
     const { authState } = useContext(AuthContext);
 
@@ -34,13 +34,13 @@ export default function FeeStructureField({
         <motion.thead className={`${bgHeaderClass} rounded-t-lg w-full`}>
             <tr>
                 {[
-                    'Month', 'Total Fee', 'Paid Fee', 
-                    'Applied Discount (Manual + Category)', 
+                    'Month', 'Total Fee', 'Paid Fee',
+                    'Applied Discount (Manual + Category)',
                     'Pending Fee', 'Status', 'Amount', 'Payment Mode'
                 ].map((header, index) => (
-                    <th 
-                        key={index} 
-                        scope="col" 
+                    <th
+                        key={index}
+                        scope="col"
                         className={`px-3 py-3 ${textHeaderClass}`}
                     >
                         {header}
@@ -51,19 +51,19 @@ export default function FeeStructureField({
     );
 
     const QuarterFeeHeader = () => (
-        <motion.thead 
-            variants={rowVariants} 
+        <motion.thead
+            variants={rowVariants}
             className={`${bgHeaderClass} rounded-t-lg w-full`}
         >
             <tr>
                 {[
-                    'Months', 'Quarter', 'Total Fee', 'Paid Fee', 
-                    'Applied Discount', 'Pending Fee', 
+                    'Months', 'Quarter', 'Total Fee', 'Paid Fee',
+                    'Applied Discount', 'Pending Fee',
                     'Status', 'Amount', 'Payment Mode'
                 ].map((header, index) => (
-                    <th 
-                        key={index} 
-                        scope="col" 
+                    <th
+                        key={index}
+                        scope="col"
                         className={`px-3 py-3 ${textHeaderClass}`}
                     >
                         {header}
@@ -74,12 +74,22 @@ export default function FeeStructureField({
     );
 
     const Cell = ({ content }) => (
-        <td 
+        <td
             className={`flex-1 p-4 text-center flex items-center justify-center ${textClass}`}
         >
             <span>{content}</span>
         </td>
     );
+
+    const firstUnpaidIndex = fees.monthlyStatus.findIndex(student =>
+        student.totalFee !== student.paidFee + student.manualDiscount + student.categoryDiscount
+    );
+
+    const firstUnpaidIndexQuarter = fees.quarterlyStatus.findIndex(student =>
+        student.totalFee !== student.paidFee
+    );
+
+
 
     return (
         <motion.table
@@ -92,13 +102,15 @@ export default function FeeStructureField({
                 <>
                     <FeeStructureHeader />
                     {fees.monthlyStatus.map((data, index) => (
-                        <tbody 
-                            key={index} 
+                        <tbody
+                            key={index}
                             className={`${bgRowClass} ${borderClass} border-b`}
                         >
-                            <FeePaymentRow 
-                                student={data} 
-                                darkMode={darkMode} 
+                            <FeePaymentRow
+                                student={data}
+                                darkMode={darkMode}
+                                currentIndex={index}
+                                firstUnpaidIndex={firstUnpaidIndex}
                             />
                         </tbody>
                     ))}
@@ -109,13 +121,15 @@ export default function FeeStructureField({
                 <>
                     <QuarterFeeHeader />
                     {fees.quarterlyStatus.map((data, index) => (
-                        <tbody 
-                            key={index} 
+                        <tbody
+                            key={index}
                             className={`${bgRowClass} ${borderClass} border-b`}
                         >
-                            <FeePaymentRowQuarter 
-                                student={data} 
-                                darkMode={darkMode} 
+                            <FeePaymentRowQuarter
+                                student={data}
+                                darkMode={darkMode}
+                                currentIndex={index}
+                                firstUnpaidIndexQuarter={firstUnpaidIndexQuarter}
                             />
                         </tbody>
                     ))}
