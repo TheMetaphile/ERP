@@ -1,14 +1,15 @@
 import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/teacher-module/TeacherHome.dart';
-import 'package:untitled/teacher-module/techerClass.dart';
+import 'package:untitled/StudentModule/StudentHome/studentHome.dart';
 import 'package:workmanager/workmanager.dart';
 import '../../APIs/Authentication/teacherAuthenticationService.dart';
+import '../../StudentAPIs/Authentication/studentAuthentication.dart';
+import '../../StudentAPIs/SharedPreference/sharedPreferenceFile.dart';
 import '../../WorkManager1/workmanager1.dart';
 import '../../main.dart';
 import '../../utils/theme.dart';
@@ -26,24 +27,40 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final authApiAcess = TeacherAuthentication();
+  final TeacherAuthentication teacherAuthApi = TeacherAuthentication();
+  final StudentAuthentication studentAuthApi = StudentAuthentication();
+  String? selectedRole; // To store the selected role
   bool isLoading = false;
-
 
   Future<void> _handleLogin(BuildContext context) async {
     final email = emailController.text.trim();
     final password = passwordController.text;
+    final role = selectedRole;
 
-
+    if (role == null) {
+      showRedSnackBar("Please select a role", context);
+      return;
+    }
 
     setState(() {
       isLoading = true;
     });
 
     try {
-      var data = await authApiAcess.loginUser(email, password, context);
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      var data;
+
+      if (role == "Teacher/Admin") {
+        data = await teacherAuthApi.loginUser(email, password, context);
+      } else if (role == "Student") {
+        data = await studentAuthApi.loginUser(email, password, context);
+      }
+
       if (data == "Invalid Credentials") {
-        showRedSnackBar("Invalid Email and Password", context);
+        showRedSnackBar("Invalid Email or Password", context);
+        setState(() {
+          isLoading = false;
+        });
         return;
       }
 
@@ -51,16 +68,18 @@ class _LoginState extends State<Login> {
       Map<String, dynamic> tokens = data["tokens"] ?? {};
       Map<String, dynamic> subject = data["subject"] ?? {};
       Map<String, dynamic> classDetails = data["ClassDetails"] ?? {};
-      SharedPreferences pref = await SharedPreferences.getInstance();
+
+      // Save role
+      await pref.setString("role", role == "Teacher/Admin" ? "teacher" : "student");
 
       if (userDetails.isNotEmpty) {
         final userEmail = userDetails["email"] ?? "email@gmail.com";
         final name = userDetails["name"] ?? "UserName";
         final profileLink = userDetails["profileLink"] ??
             "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-        final employeeId = userDetails["employeeId"].toString() ?? "ID123";
-        final phoneNumber = userDetails["phoneNumber"].toString() ?? "+91 ********";
-        final dob = userDetails["DOB"].toString() ?? "DD-MM-YYYY";
+        final employeeId = userDetails["employeeId"]?.toString() ?? "ID123";
+        final phoneNumber = userDetails["phoneNumber"]?.toString() ?? "+91 ********";
+        final dob = userDetails["DOB"]?.toString() ?? "DD-MM-YYYY";
         final permanentAddress = userDetails["permanentAddress"] ?? "Address not provided";
 
         await pref.setString("email", userEmail);
@@ -70,6 +89,10 @@ class _LoginState extends State<Login> {
         await pref.setString("phoneNumber", phoneNumber);
         await pref.setString("dob", dob);
         await pref.setString("permanentAddress", permanentAddress);
+
+        if (role == "Student") {
+          await pref.setString("userDetails", jsonEncode(userDetails));
+        }
       } else {
         showRedSnackBar("User details are missing", context);
       }
@@ -88,7 +111,7 @@ class _LoginState extends State<Login> {
         showRedSnackBar("Tokens are missing", context);
       }
 
-      if (subject.isNotEmpty) {
+      if (role == "Teacher/Admin" && subject.isNotEmpty) {
         final Map<String, Map<String, List<String>>> transformedData = {};
 
         void addSubjects(List<dynamic> subjects) {
@@ -120,30 +143,63 @@ class _LoginState extends State<Login> {
         }
 
         await pref.setString('class_section_subjects', jsonEncode(transformedData));
+      }
+      else {
+        Map<String,dynamic> userDetails=data["userDetails"] ?? {};
+        Map<String,dynamic> tokens=data["tokens"] ?? {};
+        List<String> subjects = List<String>.from(data["subjects"] ?? []);
 
-        // To retrieve the data
-        String? jsonString = pref.getString('class_section_subjects');
-        if (jsonString != null) {
-          Map<String, dynamic> retrievedData = jsonDecode(jsonString);
-          print(retrievedData); // Use the retrieved data as needed
+
+        SharedPreferences pref = await SharedPreferences.getInstance();
+
+        print("user details $userDetails");
+
+
+        if(userDetails.isNotEmpty) {
+
+
+          await UserPreferences.saveDetails(userDetails,"userDetails");
+          Map<String, dynamic> getdetails = await UserPreferences.getDetails("userDetails");
+          print("getDetails $getdetails");
         }
-      } else {
-        showRedSnackBar("Subject information is missing", context);
+        if(subjects.isNotEmpty){
+          // await UserPreferences.saveUserDetails(subjects,"subjects");
+          // Map<String, dynamic> subjectsDetails = await UserPreferences.getUserDetails("subjects");
+          SharedPreferences pref=await SharedPreferences.getInstance();
+          pref.setStringList("subjects", subjects);
+
+          print("subjects  ${pref.getStringList("subjects")}");
+        }
+
+        if(tokens.isNotEmpty){
+
+          final accessToken = tokens["accessToken"];
+          final refreshToken = tokens["refreshToken"];
+
+
+          await pref.setString("accessToken", accessToken);
+          await pref.setString("refreshToken", refreshToken);
+
+          print(pref.getString("accessToken"));
+
+
+        }
       }
 
-      if (classDetails.isNotEmpty) {
+      if (role == "Teacher/Admin" && classDetails.isNotEmpty) {
         final teacherClass = classDetails["class"] ?? "";
         final teacherSection = classDetails["section"] ?? "";
 
         await pref.setString("teacherClass", teacherClass);
         await pref.setString("teacherSection", teacherSection);
-      } else {
-        showRedSnackBar("Class details are missing", context);
       }
 
+      // Navigate to the appropriate home page
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MyApp()),
+        MaterialPageRoute(
+          builder: (context) => role == "Teacher/Admin" ? const TeacherHome() : const StudentHome(),
+        ),
       );
     } catch (e) {
       print("Login error: $e");
@@ -155,9 +211,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-
   CustomTheme themeObj = CustomTheme();
-
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +248,6 @@ class _LoginState extends State<Login> {
   Widget buildLoginForm(Size size, BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(0),
-
       child: SizedBox(
         height: size.height * 0.7,
         child: Padding(
@@ -202,6 +255,10 @@ class _LoginState extends State<Login> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: size.height * 0.03),
+              buildLabelText("Select Role", size),
+              SizedBox(height: size.height * 0.01),
+              buildRoleDropdown(size),
               SizedBox(height: size.height * 0.03),
               buildLabelText("Your Email", size),
               SizedBox(height: size.height * 0.01),
@@ -215,8 +272,6 @@ class _LoginState extends State<Login> {
               SizedBox(height: size.height * 0.03),
               Center(child: continueButton(size, context)),
               SizedBox(height: size.height * 0.02),
-
-
             ],
           ),
         ),
@@ -231,6 +286,54 @@ class _LoginState extends State<Login> {
         fontSize: size.width * 0.05,
         fontWeight: FontWeight.w400,
         color: themeObj.textBlack,
+      ),
+    );
+  }
+
+  Widget buildRoleDropdown(Size size) {
+    return DropdownButtonFormField<String>(
+      value: selectedRole,
+      hint: Text(
+        "Select Role",
+        style: GoogleFonts.openSans(
+          fontSize: size.width * 0.04,
+          color: themeObj.textgrey,
+        ),
+      ),
+      items: ["Teacher/Admin", "Student"].map((String role) {
+        return DropdownMenuItem<String>(
+          value: role,
+          child: Text(
+            role,
+            style: GoogleFonts.openSans(
+              fontSize: size.width * 0.04,
+              color: themeObj.textBlack,
+            ),
+          ),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          selectedRole = value;
+        });
+      },
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+          vertical: size.height * 0.015,
+          horizontal: size.width * 0.03,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: themeObj.textgrey),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: themeObj.textgrey),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: themeObj.primayColor),
+        ),
       ),
     );
   }
@@ -285,8 +388,4 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
-
-
-
 }

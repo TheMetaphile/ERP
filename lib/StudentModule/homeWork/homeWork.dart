@@ -1,11 +1,14 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/StudentModule/homeWork/student_homework_bloc/student_home_work_bloc.dart';
+import 'package:untitled/StudentModule/homeWork/student_homework_bloc/student_home_work_event.dart';
+import 'package:untitled/StudentModule/homeWork/student_homework_bloc/student_home_work_state.dart';
 
 import '../../CustomTheme/customTheme.dart';
-import '../../StudentAPIs/SharedPreference/sharedPreferenceFile.dart';
-import '../../StudentAPIs/StudentModuleAPI/HomeWork/HomeWorkAPI.dart';
+
 
 class StudentHomework extends StatefulWidget {
   const StudentHomework({super.key});
@@ -14,76 +17,39 @@ class StudentHomework extends StatefulWidget {
   State<StudentHomework> createState() => _StudentHomeworkState();
 }
 
-class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProviderStateMixin  {
-  String selectedSubject="";
-  List<String>? subjectOptions;
-  List<String>  handleSubject=[
-    ""
-  ];
-  bool isLoading=true;
-  String currentClass="";
-  String section="";
-  int start =0;
-  List<Map<String,dynamic>>? homeWorkList;
+class _StudentHomeworkState extends State<StudentHomework>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
-
-  Future<void> fetchSubjects() async {
-    SharedPreferences pref=await SharedPreferences.getInstance();
-    subjectOptions =pref.getStringList("subjects") ;
-  }
-
-
-  Future<void> fetchHomework() async {
-    HomeworkAPI homeWorkObj=HomeworkAPI();
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      if (accessToken == null) {
-        throw Exception('Access token is null');
-      }
-
-      List<dynamic> data=await homeWorkObj.fetchHomeWork(accessToken, section, selectedSubject, start);
-
-      print("Data get $data");
-
-      homeWorkList=data.cast<Map<String, dynamic>>();
-
-      print("homeWorkList $homeWorkList");
-
-    } catch (e) {
-      print(e);
-      showRedSnackBar("$e", context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  Map<String, dynamic> retrievedUserDetails={};
-  Future<void> getDetails() async {
-    print("getDetails");
-    retrievedUserDetails = await UserPreferences.getDetails("userDetails");
-    currentClass=retrievedUserDetails["currentClass"]??"Unknown";
-    section=retrievedUserDetails["section"]??"Unknown";
-  }
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
     );
-    _animation = CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
-    getDetails();
-    fetchSubjects();
-    fetchHomework();
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
+
+    // Add the initialization logic similar to StudentClasswork
+    final bloc = context.read<StudentHomeworkBloc>();
+    final state = bloc.state;
+
+    print('Initial state type: ${state.runtimeType}');
+
+    // Only fetch subjects if not already loaded
+    if (state is StudentHomeworkInitial) {
+      print('Fetching subjects...');
+      bloc.add(FetchSubjectsEvent());
+    } else {
+      print('Skipping FetchSubjectsEvent — data already loaded.');
+      print('Current state: $state');
+    }
+
+    _animationController.forward();
   }
 
   @override
@@ -92,6 +58,11 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
     super.dispose();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Remove the animation forward call from here since it's now in initState
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,23 +71,74 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
 
     return Scaffold(
       backgroundColor: CustomTheme.whiteColor,
+      body: BlocConsumer<StudentHomeworkBloc, StudentHomeworkState>(
+        listener: (context, state) {
+          if (state is StudentHomeworkError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          return Column(
+            children: [
+              _buildSubjectDropdown(size, themeObj, state),
+              Expanded(
+                child: state is StudentHomeworkLoading
+                    ? _buildLoadingIndicator()
+                    : state is StudentHomeworkLoaded && state.homeworkList.isEmpty
+                    ? _buildEmptyState(size)
+                    : state is StudentHomeworkEmpty
+                    ? _buildEmptyState(size)
+                    : state is StudentHomeworkLoaded
+                    ? _buildHomeworkList(size, themeObj, state.homeworkList)
+                    : const SizedBox(),
 
-      body: Column(
-        children: [
-          _buildSubjectDropdown(size, themeObj),
-          Expanded(
-            child: isLoading
-                ? _buildLoadingIndicator()
-                : homeWorkList == null || homeWorkList!.isEmpty
-                ? _buildEmptyState(size)
-                : _buildHomeworkList(size, themeObj),
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildSubjectDropdown(Size size, CustomTheme themeObj) {
+  List<DropdownMenuItem<String>> _getSubjectItems(StudentHomeworkState state, CustomTheme themeObj) {
+    List<String> subjects = [];
+
+    if (state is StudentHomeworkLoaded) {
+      subjects = state.subjects;
+      print('Getting subjects from StudentHomeworkLoaded: $subjects');
+    } else if (state is StudentHomeworkEmpty) {
+      // Check if StudentHomeworkEmpty has subjects
+      try {
+        subjects = (state as dynamic).subjects ?? [];
+        print('Getting subjects from StudentHomeworkEmpty: $subjects');
+      } catch (e) {
+        print('StudentHomeworkEmpty does not have subjects property');
+      }
+    }
+
+/*    if (subjects.isEmpty) {
+      print('⚠️ No subjects found! Adding hardcoded subjects for testing...');
+      // Add hardcoded subjects for testing
+      subjects = ['Math', 'English', 'Science', 'Hindi', 'Social Studies'];
+    }*/
+
+    return subjects.map((String option) {
+
+      return DropdownMenuItem<String>(
+        value: option,
+        child: Text(option, style: themeObj.normalText),
+      );
+    }).toList();
+  }
+
+  Widget _buildSubjectDropdown(Size size, CustomTheme themeObj, StudentHomeworkState state) {
+    print('Building dropdown with state: ${state.runtimeType}');
+
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
@@ -125,10 +147,10 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
           child: Opacity(
             opacity: _animation.value,
             child: Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: CustomTheme.primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30),
                 ),
@@ -139,7 +161,7 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
                   Text("Select Subject", style: themeObj.bigNormalText),
                   Container(
                     width: size.width * 0.4,
-                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
                       color: CustomTheme.whiteColor,
                       borderRadius: BorderRadius.circular(25),
@@ -148,7 +170,7 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
                           color: Colors.grey.withOpacity(0.2),
                           spreadRadius: 1,
                           blurRadius: 5,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -156,20 +178,15 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
                       child: DropdownButton<String>(
                         isExpanded: true,
                         hint: Text("Subject", style: themeObj.normalText),
-                        value: selectedSubject.isEmpty ? null : selectedSubject,
+                        value: _getSelectedSubjectValue(state),
                         onChanged: (newValue) {
-                          setState(() {
-                            selectedSubject = newValue!;
-                            homeWorkList = [];
-                            fetchHomework();
-                          });
+                          print('Dropdown onChanged called with: $newValue');
+                          if (newValue != null) {
+                            print('Dispatching SelectSubjectEvent with: $newValue');
+                            context.read<StudentHomeworkBloc>().add(SelectSubjectEvent(newValue));
+                          }
                         },
-                        items: subjectOptions?.map((String option) {
-                          return DropdownMenuItem<String>(
-                            value: option,
-                            child: Text(option, style: themeObj.normalText),
-                          );
-                        }).toList() ?? [],
+                        items: _getSubjectItems(state, themeObj),
                       ),
                     ),
                   ),
@@ -180,6 +197,33 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
         );
       },
     );
+  }
+
+// Add this helper method to get the correct selected value
+  String? _getSelectedSubjectValue(StudentHomeworkState state) {
+    String? selectedSubject;
+    List<String> subjects = [];
+
+    if (state is StudentHomeworkLoaded) {
+      selectedSubject = state.selectedSubject;
+      subjects = state.subjects;
+    } else if (state is StudentHomeworkEmpty) {
+      try {
+        selectedSubject = (state as dynamic).selectedSubject ?? '';
+        subjects = (state as dynamic).subjects ?? [];
+      } catch (e) {
+        print('Error accessing selectedSubject from StudentHomeworkEmpty: $e');
+      }
+    }
+
+    // Only return the selected subject if it's not empty and exists in the subjects list
+    if (selectedSubject != null &&
+        selectedSubject.isNotEmpty &&
+        subjects.contains(selectedSubject)) {
+      return selectedSubject;
+    }
+
+    return null;
   }
 
   Widget _buildLoadingIndicator() {
@@ -197,7 +241,7 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.assignment_outlined, size: 100, color: Colors.grey[400]),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             "No homework found",
             style: TextStyle(fontSize: 18, color: Colors.grey[600]),
@@ -207,20 +251,20 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
     );
   }
 
-  Widget _buildHomeworkList(Size size, CustomTheme themeObj) {
+  Widget _buildHomeworkList(Size size, CustomTheme themeObj, List<Map<String, dynamic>> homeworkList) {
     return AnimationLimiter(
       child: ListView.builder(
-        itemCount: homeWorkList?.length ?? 0,
-        padding: EdgeInsets.all(5),
-        shrinkWrap: true,
+        itemCount: homeworkList.length,
+        padding: const EdgeInsets.all(5),
         itemBuilder: (context, index) {
+          final homework = homeworkList[index];
           return AnimationConfiguration.staggeredList(
             position: index,
             duration: const Duration(milliseconds: 375),
             child: SlideAnimation(
               verticalOffset: 50.0,
               child: FadeInAnimation(
-                child: _buildHomeworkCard(homeWorkList?[index], size, themeObj),
+                child: _buildHomeworkCard(homework, size, themeObj),
               ),
             ),
           );
@@ -229,13 +273,13 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
     );
   }
 
-  Widget _buildHomeworkCard(Map<String, dynamic>? homework, Size size, CustomTheme themeObj) {
+  Widget _buildHomeworkCard(Map<String, dynamic> homework, Size size, CustomTheme themeObj) {
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.only(bottom: 5),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Container(
@@ -261,9 +305,9 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
     );
   }
 
-  Widget _buildHomeworkHeader(Map<String, dynamic>? homework, CustomTheme themeObj) {
+  Widget _buildHomeworkHeader(Map<String, dynamic> homework, CustomTheme themeObj) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [CustomTheme.primaryColor, CustomTheme.secondaryColor],
@@ -275,11 +319,11 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            selectedSubject.isEmpty ? "Subject" : selectedSubject,
+            homework["subject"] ?? "Subject",
             style: themeObj.bigNormalText.copyWith(color: CustomTheme.whiteColor),
           ),
           Text(
-            homework?["date"] ?? "Date",
+            homework["date"] ?? "Date",
             style: themeObj.normalText.copyWith(color: CustomTheme.whiteColor),
           ),
         ],
@@ -287,18 +331,18 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
     );
   }
 
-  Widget _buildHomeworkContent(Map<String, dynamic>? homework, Size size, CustomTheme themeObj) {
+  Widget _buildHomeworkContent(Map<String, dynamic> homework, Size size, CustomTheme themeObj) {
     return Padding(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildInfoRow("Chapter:", homework?["chapter"] ?? "Chapter", size, themeObj),
-          SizedBox(height: 8),
-          _buildInfoRow("Topic:", homework?["topic"] ?? "Topic", size, themeObj),
-          SizedBox(height: 16),
-          _buildExpandableDescription(homework?["description"] ?? "Description", themeObj),
-          SizedBox(height: 16),
+          _buildInfoRow("Chapter:", homework["chapter"] ?? "Chapter", size, themeObj),
+          const SizedBox(height: 8),
+          _buildInfoRow("Topic:", homework["topic"] ?? "Topic", size, themeObj),
+          const SizedBox(height: 16),
+          _buildExpandableDescription(homework["description"] ?? "Description", themeObj),
+          const SizedBox(height: 16),
           _buildTeacherInfo(homework, size, themeObj),
         ],
       ),
@@ -310,9 +354,9 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
       title: Text("Description", style: themeObj.normalText.copyWith(fontWeight: FontWeight.w600)),
       children: [
         AnimatedContainer(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Text(
               description,
               style: themeObj.normalText,
@@ -323,20 +367,20 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
       trailing: Icon(Icons.arrow_drop_down, color: CustomTheme.primaryColor),
       tilePadding: EdgeInsets.zero,
       expandedAlignment: Alignment.topLeft,
-      childrenPadding: EdgeInsets.only(bottom: 16),
+      childrenPadding: const EdgeInsets.only(bottom: 16),
     );
   }
 
-  Widget _buildTeacherInfo(Map<String, dynamic>? homework, Size size, CustomTheme themeObj) {
+  Widget _buildTeacherInfo(Map<String, dynamic> homework, Size size, CustomTheme themeObj) {
     return Row(
       children: [
         CircleAvatar(
           radius: size.width * 0.04,
-          backgroundImage: NetworkImage(homework?["by"]["profileLink"] ?? ""),
+          backgroundImage: NetworkImage(homework["by"]["profileLink"] ?? ""),
         ),
-        SizedBox(width: 12),
+        const SizedBox(width: 12),
         Text(
-          "By ${homework?["by"]["name"] ?? "Name"}",
+          "By ${homework["by"]["name"] ?? "Name"}",
           style: themeObj.normalText.copyWith(fontWeight: FontWeight.bold),
         ),
       ],
@@ -359,10 +403,5 @@ class _StudentHomeworkState extends State<StudentHomework> with SingleTickerProv
         ),
       ],
     );
-  }
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _animationController.forward();
   }
 }

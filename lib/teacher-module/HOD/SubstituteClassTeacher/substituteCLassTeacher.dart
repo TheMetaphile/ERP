@@ -146,7 +146,7 @@ class _SubstituteClassTeacherState extends State<SubstituteClassTeacher> {
       }
 
       var response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/search/teacher'),
+        Uri.parse('http://10.0.2.2:8000search/teacher'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           "accessToken": accessToken,
@@ -201,7 +201,7 @@ class _SubstituteClassTeacherState extends State<SubstituteClassTeacher> {
       }
 
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/classTeacherSubstitute/create'),
+        Uri.parse('http://10.0.2.2:8000classTeacherSubstitute/create'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

@@ -82,7 +82,7 @@ class StudentApi{
   }
 
   Future<bool> studentEditData(String accessToken, Map<String,String> editFields) async{
-    final url=Uri.parse("http://10.0.2.2:8000/edit/student");
+    final url=Uri.parse("http://10.0.2.2:8000edit/student");
     Map<String,String> body={
       "accessToken":accessToken,
     };

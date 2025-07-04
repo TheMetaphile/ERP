@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ClassWorkAPI {
-  static const String _baseUrl = 'http://10.0.2.2:8000/';
+  static const String _baseUrl = 'http://10.0.2.2:8000';
 
   Future<List<dynamic>> fetchClasswork(String accessToken, String section,String subject,int start) async {
 
@@ -14,6 +14,9 @@ class ClassWorkAPI {
 
     print("month $month");
     print("Year $year");
+    print("month $section");
+    print("Year $subject");
+    print("Year $start");
 
     final url = Uri.parse(
         '$_baseUrl/classwork/fetch/student?class=9th&month=$month&year=$year&section=$section&subject=$subject&start=$start&end=4');

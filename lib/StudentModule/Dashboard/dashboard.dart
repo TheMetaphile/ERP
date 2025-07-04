@@ -52,9 +52,11 @@ class _StudentDashboardState extends State<StudentDashboard> with SingleTickerPr
       print(e);
       showRedSnackBar("$e", context);
     } finally {
+      if (!mounted) return;
       setState(() {
         isLoading = false;
       });
+
     }
   }
 
@@ -81,9 +83,11 @@ class _StudentDashboardState extends State<StudentDashboard> with SingleTickerPr
       print(e);
       showRedSnackBar("$e", context);
     } finally {
+      if (!mounted) return;
       setState(() {
         isLoading = false;
       });
+
     }
   }
   @override

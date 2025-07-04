@@ -160,7 +160,7 @@ class _LectureSubstituteState extends State<LectureSubstitute> {
       }
 
       var response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/search/teacher'),
+        Uri.parse('http://10.0.2.2:8000search/teacher'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           "accessToken": accessToken,
@@ -216,7 +216,7 @@ class _LectureSubstituteState extends State<LectureSubstitute> {
       }
 
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/LectureSubstitute/create'),
+        Uri.parse('http://10.0.2.2:8000LectureSubstitute/create'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -261,7 +261,7 @@ class _LectureSubstituteState extends State<LectureSubstitute> {
     // String day1=day.toLowerCase();
      String day1="wednesday";
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:8000/timetable/fetch/checkAvailability?lecture=$lecture&day=$day1&email=$email'),
+        Uri.parse('http://10.0.2.2:8000timetable/fetch/checkAvailability?lecture=$lecture&day=$day1&email=$email'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',

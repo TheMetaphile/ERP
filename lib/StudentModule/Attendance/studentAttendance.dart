@@ -1,28 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../CustomTheme/customTheme.dart';
-import '../../StudentAPIs/StudentModuleAPI/Attendance/student_Attendance_API.dart';
+import 'StudentAttendanceBloc/sudent_attendance_bloc.dart';
+import 'StudentAttendanceBloc/sudent_attendance_event.dart';
+import 'StudentAttendanceBloc/sudent_attendance_state.dart';
 
 class StudentAttendanceUI extends StatefulWidget {
+  const StudentAttendanceUI({super.key});
 
   @override
   State<StudentAttendanceUI> createState() => _StudentAttendanceUIState();
 }
 
-class _StudentAttendanceUIState extends State<StudentAttendanceUI> {
-  AttendanceApi apiObj=AttendanceApi();
-
-   Map<String, dynamic>? attendanceData;
-   bool isLoading=false;
-  int selectedMonthIndex = DateTime.now().month - 1;
-
-  String selectedYear = DateTime.now().year.toString();
-  List<String> years = List.generate(19, (index) => (2009 + index).toString());
-
-  List<String> months = [
+class _StudentAttendanceUIState extends State<StudentAttendanceUI> with AutomaticKeepAliveClientMixin {
+  final List<String> months = [
     'January',
     'February',
     'March',
@@ -34,242 +28,217 @@ class _StudentAttendanceUIState extends State<StudentAttendanceUI> {
     'September',
     'October',
     'November',
-    'December'
+    'December',
   ];
 
+  final List<String> years = List.generate(19, (index) => (2009 + index).toString());
+
+  @override
+  bool get wantKeepAlive => true; // Keep widget state alive across navigation
+
+  @override
+  @override
+  void initState() {
+    super.initState();
+    final bloc = context.read<AttendanceBloc>();
+    final currentState = bloc.state;
 
 
-
-  Future<void> fetchAttendance() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      if (accessToken == null) {
-        throw Exception('Access token is null');
-      }
-
-      var data  = await apiObj.fetchAttendance(accessToken,selectedMonthIndex+1,selectedYear);
-      setState(() {
-        attendanceData=data;
-
-      });
-
-      print("attendanceData $attendanceData");
-
-    } catch (e) {
-      print(e);
-      showRedSnackBar("$e", context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
+    if (currentState is AttendanceInitial) {
+      print('Initializing StudentAttendanceUI with current month/year');
+      bloc.add(
+        ChangeMonthYear(DateTime.now().month - 1, DateTime.now().year.toString()),
+      );
+    } else {
+      print('Skipping init ChangeMonthYear — already loaded');
     }
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    fetchAttendance();
-  }
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    CustomTheme themeObj=CustomTheme(size);
-    int total = attendanceData?['total']??0;
-    int absent = attendanceData?['absent']??0;
-    int leave = attendanceData?['leave']??0;
-    int present = total - absent - leave;
-
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            isLoading?  Center(
-              child: LoadingAnimationWidget.threeArchedCircle(
-                color: CustomTheme.primaryColor,
-                size: 50,
-              ),
-            ):
-             SizedBox(
-               height: size.height*0.78,
-               child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: [
-                   SingleChildScrollView(
-                     scrollDirection: Axis.horizontal,
-                     child: Row(
-                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                       children: [
-                         Text("Attendance",overflow: TextOverflow.ellipsis,style: themeObj.bigNormalText,),
-                         SizedBox(width: size.width*0.02,),
-                         Card(
-                           child: Container(
-                             width: size.width * 0.3,
-                             height: size.height * 0.05,
-                             child:    DropdownButton<int>(
-                               isExpanded: true,
-                               borderRadius: BorderRadius.circular(12),
-                               hint: Text("Month", style: themeObj.normalText),
-                               padding: EdgeInsets.all(8),
-                               icon: Icon(Icons.keyboard_arrow_down_sharp, color: CustomTheme.greyColor),
-                               alignment: Alignment.center,
-                               underline: Container(),
-                               value: selectedMonthIndex,
-                               onChanged: (newValue) {
-                                 setState(() {
-                                   selectedMonthIndex = newValue!;
-                                   attendanceData = {};
-                                   fetchAttendance();
-                                 });
-                               },
-                               items: List.generate(12, (index) {
-                                 return DropdownMenuItem<int>(
-                                   value: index,
-                                   child: Text(months[index], overflow: TextOverflow.ellipsis, style: themeObj.normalText),
-                                 );
-                               }),
-                             ),
+        child: BlocConsumer<AttendanceBloc, AttendanceState>(
+          listener: (context, state) {
+            if (state is AttendanceError) {
+              showRedSnackBar(state.message, context);
+            }
+          },
+          builder: (context, state) {
+            print('Building UI with state: $state');
+            Size size = MediaQuery.of(context).size;
+            CustomTheme themeObj = CustomTheme(size);
 
+            // Use state values, default to current month/year only if no state is set
+            int selectedMonthIndex;
+            String selectedYear;
+            Map<String, dynamic>? attendanceData;
+            bool isLoading = false;
 
-                           ),
-                         ),
-                         SizedBox(width: size.width*0.02,),
-                         Card(
-                           child: Container(
-                             width: size.width * 0.3,
-                             height: size.height * 0.05,
-                             child:DropdownButton<String>(
-                               isExpanded: true,
-                               borderRadius: BorderRadius.circular(12),
-                               hint: Text("Year", style: themeObj.normalText),
-                               padding: EdgeInsets.all(8),
-                               icon: Icon(Icons.keyboard_arrow_down_sharp, color: CustomTheme.greyColor),
-                               alignment: Alignment.center,
-                               underline: Container(),
-                               value: selectedYear,
-                               onChanged: (newValue) {
-                                 setState(() {
-                                   selectedYear = newValue!;
-                                   attendanceData = {};
-                                   fetchAttendance();
-                                 });
-                               },
-                               items: years.map((String year) {
-                                 return DropdownMenuItem<String>(
-                                   value: year,
-                                   child: Text(year, overflow: TextOverflow.ellipsis, style: themeObj.normalText),
-                                 );
-                               }).toList(),
-                             ),
+            if (state is AttendanceLoading) {
+              isLoading = true;
+              selectedMonthIndex = state.selectedMonthIndex;
+              selectedYear = state.selectedYear;
+            } else if (state is AttendanceLoaded) {
+              attendanceData = state.attendanceData;
+              selectedMonthIndex = state.selectedMonthIndex;
+              selectedYear = state.selectedYear;
+            } else if (state is AttendanceError) {
+              selectedMonthIndex = state.selectedMonthIndex;
+              selectedYear = state.selectedYear;
+            } else {
+              // Fallback for AttendanceInitial
+              selectedMonthIndex = DateTime.now().month - 1;
+              selectedYear = DateTime.now().year.toString();
+            }
 
+            int total = attendanceData?['total'] ?? 0;
+            int absent = attendanceData?['absent'] ?? 0;
+            int leave = attendanceData?['leave'] ?? 0;
+            int present = total - absent - leave;
 
-                           ),
-                         ),
-                       ],
-                     ),
-                   ),
-                   SizedBox(height: size.width*0.02),
-                   _buildAttendanceSection(context,present,absent,leave),
-                   // Card(
-                   //   elevation: 5,
-                   //   shape: RoundedRectangleBorder(
-                   //     side: BorderSide(color: Colors.grey, width: 1),
-                   //     borderRadius: BorderRadius.circular(12),
-                   //   ),
-                   //   child: Padding(
-                   //     padding: const EdgeInsets.all(16.0),
-                   //     child: Column(
-                   //       crossAxisAlignment: CrossAxisAlignment.start,
-                   //       children: [
-                   //         Text(
-                   //           "Attendance Statistics",
-                   //           style: themeObj.bigNormalText.copyWith(fontWeight: FontWeight.w500),
-                   //         ),
-                   //         const SizedBox(height: 16),
-                   //         Row(
-                   //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                   //           children: [
-                   //             _buildStatCard("Present",size, present, Colors.green, themeObj),
-                   //             _buildStatCard("Absent", size,absent, Colors.red, themeObj),
-                   //             _buildStatCard("Leave", size,leave, Colors.orange, themeObj),
-                   //           ],
-                   //         ),
-                   //         const SizedBox(height: 24),
-                   //         Center(
-                   //           child: SizedBox(
-                   //             height: size.width * 0.3,
-                   //             width: size.width * 0.3,
-                   //             child: Stack(
-                   //               fit: StackFit.expand,
-                   //               children: [
-                   //                 CircularProgressIndicator(
-                   //                   value: (present + absent + leave) > 0
-                   //                       ? present / (present + absent + leave)
-                   //                       : 0,
-                   //                   valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-                   //                   strokeWidth: 6,
-                   //                   backgroundColor: Colors.grey[400],
-                   //                 ),
-                   //                 Center(
-                   //                   child: Column(
-                   //                     mainAxisSize: MainAxisSize.min,
-                   //                     children: [
-                   //                       Text(
-                   //                         "${present + absent + leave}",
-                   //                         style: themeObj.normalText.copyWith(
-                   //                           fontSize: 24,
-                   //                           fontWeight: FontWeight.bold,
-                   //                         ),
-                   //                       ),
-                   //                       Text(
-                   //                         'Total Days',
-                   //                         style: themeObj.normalText,
-                   //                       ),
-                   //                     ],
-                   //                   ),
-                   //                 ),
-                   //               ],
-                   //             ),
-                   //           ),
-                   //         ),
-                   //       ],
-                   //     ),
-                   //   ),
-                   // ),
-                   SizedBox(height: size.width*0.02),
-                   Text(
-                       "${months[DateTime.now().month-1]} ${DateTime.now().year}",
-                       style:themeObj.normalText.copyWith(fontSize: size.width*0.045)
-                   ),
-                   Expanded(
-
-                     child: _buildMonthlyAttendance(),
-                   ),
-                        ],
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                isLoading
+                    ? Center(
+                  child: LoadingAnimationWidget.threeArchedCircle(
+                    color: CustomTheme.primaryColor,
+                    size: 50,
+                  ),
+                )
+                    : SizedBox(
+                  height: size.height * 0.78,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Attendance",
+                              overflow: TextOverflow.ellipsis,
+                              style: themeObj.bigNormalText,
+                            ),
+                            SizedBox(width: size.width * 0.02),
+                            Card(
+                              child: Container(
+                                width: size.width * 0.3,
+                                height: size.height * 0.05,
+                                child: DropdownButton<int>(
+                                  isExpanded: true,
+                                  borderRadius: BorderRadius.circular(12),
+                                  hint: Text("Month", style: themeObj.normalText),
+                                  padding: const EdgeInsets.all(8),
+                                  icon: Icon(Icons.keyboard_arrow_down_sharp,
+                                      color: CustomTheme.greyColor),
+                                  alignment: Alignment.center,
+                                  underline: Container(),
+                                  value: selectedMonthIndex,
+                                  onChanged: (newValue) {
+                                    print('Month changed to: ${months[newValue!]}');
+                                    context.read<AttendanceBloc>().add(
+                                      ChangeMonthYear(newValue, selectedYear),
+                                    );
+                                  },
+                                  items: List.generate(12, (index) {
+                                    return DropdownMenuItem<int>(
+                                      value: index,
+                                      child: Text(
+                                        months[index],
+                                        overflow: TextOverflow.ellipsis,
+                                        style: themeObj.normalText,
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: size.width * 0.02),
+                            Card(
+                              child: Container(
+                                width: size.width * 0.3,
+                                height: size.height * 0.05,
+                                child: DropdownButton<String>(
+                                  isExpanded: true,
+                                  borderRadius: BorderRadius.circular(12),
+                                  hint: Text("Year", style: themeObj.normalText),
+                                  padding: const EdgeInsets.all(8),
+                                  icon: Icon(Icons.keyboard_arrow_down_sharp,
+                                      color: CustomTheme.greyColor),
+                                  alignment: Alignment.center,
+                                  underline: Container(),
+                                  value: selectedYear,
+                                  onChanged: (newValue) {
+                                    print('Year changed to: $newValue');
+                                    context.read<AttendanceBloc>().add(
+                                      ChangeMonthYear(selectedMonthIndex, newValue!),
+                                    );
+                                  },
+                                  items: years.map((String year) {
+                                    return DropdownMenuItem<String>(
+                                      value: year,
+                                      child: Text(
+                                        year,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: themeObj.normalText,
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: size.width * 0.02),
+                            IconButton(
+                              icon: Icon(Icons.refresh, color: CustomTheme.primaryColor),
+                              onPressed: () {
+                                print('Refresh triggered for ${months[selectedMonthIndex]} $selectedYear');
+                                context.read<AttendanceBloc>().add(
+                                  RefreshAttendance(selectedMonthIndex, selectedYear),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-             )
-          ],
+                      SizedBox(height: size.width * 0.02),
+                      _buildAttendanceSection(context, present, absent, leave),
+                      SizedBox(height: size.width * 0.02),
+                      Text(
+                        "${months[selectedMonthIndex]} $selectedYear",
+                        style:
+                        themeObj.normalText.copyWith(fontSize: size.width * 0.045),
+                      ),
+                      Expanded(
+                        child: _buildMonthlyAttendance(
+                          attendanceData: attendanceData,
+                          selectedMonthIndex: selectedMonthIndex,
+                          selectedYear: selectedYear,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
   }
-  Widget _buildAttendanceSection(BuildContext context,present,absent,leave) {
 
+  Widget _buildAttendanceSection(BuildContext context, int present, int absent, int leave) {
     Size size = MediaQuery.of(context).size;
     CustomTheme themeObj = CustomTheme(size);
-    // int absent = attendanceStats['absent']??0;
-    // int leave = attendanceStats['leave']??0;
-    // int present = attendanceStats['present']??0;
+
     return Container(
       margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -278,7 +247,7 @@ class _StudentAttendanceUIState extends State<StudentAttendanceUI> {
             color: Colors.grey.withOpacity(0.1),
             spreadRadius: 5,
             blurRadius: 7,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -287,9 +256,10 @@ class _StudentAttendanceUIState extends State<StudentAttendanceUI> {
         children: [
           Text(
             "Attendance Statistics",
-            style:themeObj.bigNormalText.copyWith(fontSize:size.width*0.045,fontWeight: FontWeight.w500),
+            style: themeObj.bigNormalText
+                .copyWith(fontSize: size.width * 0.045, fontWeight: FontWeight.w500),
           ),
-          SizedBox(height: size.height*0.02),
+          SizedBox(height: size.height * 0.02),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -298,7 +268,7 @@ class _StudentAttendanceUIState extends State<StudentAttendanceUI> {
               _buildStatCard("Leave", size, leave, Colors.orange, themeObj),
             ],
           ),
-          SizedBox(height: size.height*0.025),
+          SizedBox(height: size.height * 0.025),
           Center(
             child: SizedBox(
               height: size.width * 0.35,
@@ -310,7 +280,7 @@ class _StudentAttendanceUIState extends State<StudentAttendanceUI> {
                     value: (present + absent + leave) > 0
                         ? present / (present + absent + leave)
                         : 0,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
                     strokeWidth: 12,
                     backgroundColor: Colors.red[300],
                   ),
@@ -319,16 +289,14 @@ class _StudentAttendanceUIState extends State<StudentAttendanceUI> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "${(present + absent + leave) > 0
-                              ? (present / (present + absent + leave) * 100).toStringAsFixed(1)
-                              : 0}%",
-                          style: TextStyle(
+                          "${(present + absent + leave) > 0 ? (present / (present + absent + leave) * 100).toStringAsFixed(1) : 0}%",
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Attendance',
                           style: TextStyle(fontSize: 16, color: Colors.black54),
                         ),
@@ -339,17 +307,19 @@ class _StudentAttendanceUIState extends State<StudentAttendanceUI> {
               ),
             ),
           ),
-          SizedBox(height: size.height*0.01),
+          SizedBox(height: size.height * 0.01),
         ],
       ),
     );
   }
-  Widget _buildStatCard(String title, Size size, int value, Color color, CustomTheme themeObj) {
+
+  Widget _buildStatCard(
+      String title, Size size, int value, Color color, CustomTheme themeObj) {
     return Column(
       children: [
         Text(
-            "$value",
-            style: themeObj.normalText.copyWith(fontSize: size.width * 0.045)
+          "$value",
+          style: themeObj.normalText.copyWith(fontSize: size.width * 0.045),
         ),
         Text(
           title,
@@ -359,14 +329,18 @@ class _StudentAttendanceUIState extends State<StudentAttendanceUI> {
     );
   }
 
-  Widget _buildMonthlyAttendance() {
+  Widget _buildMonthlyAttendance({
+    required Map<String, dynamic>? attendanceData,
+    required int selectedMonthIndex,
+    required String selectedYear,
+  }) {
     int year = int.parse(selectedYear);
-    int month = selectedMonthIndex + 1; // Convert 0-based index to 1-based month
+    int month = selectedMonthIndex + 1;
     DateTime firstDay = DateTime(year, month, 1);
     DateTime lastDay = DateTime(year, month + 1, 0);
 
     return GridView.builder(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 7,
         childAspectRatio: 1,
@@ -379,14 +353,8 @@ class _StudentAttendanceUIState extends State<StudentAttendanceUI> {
         final dateString = DateFormat('dd/MM/yyyy').format(date);
         final alternativeDateString = DateFormat('yyyy-MM-dd').format(date);
 
-        print("Date $date");
-        print("dateString $dateString");
-        print("alternativeDateString $alternativeDateString");
-
-        String status = attendanceData?["$dateString"] ?? attendanceData?[alternativeDateString] ?? '';
-        print("attendanceData?[dateString'] ${attendanceData?["$dateString"]}");
-        print("alternativeDateString?[dateString'] ${attendanceData?["$alternativeDateString"]}");
-        print("status $status");
+        String status =
+            attendanceData?["$dateString"] ?? attendanceData?[alternativeDateString] ?? '';
 
         return _buildDayCell(date, status);
       },
@@ -425,11 +393,11 @@ class _StudentAttendanceUIState extends State<StudentAttendanceUI> {
         children: [
           Text(
             '${date.day}',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(
             displayStatus,
-            style: TextStyle(fontSize: 12),
+            style: const TextStyle(fontSize: 12),
           ),
         ],
       ),

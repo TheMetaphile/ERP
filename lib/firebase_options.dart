@@ -39,7 +39,6 @@ class DefaultFirebaseOptions {
         );
     }
   }
-
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyAusDWT3oh6q_PS5u8H9C4EUuO3C25OA-E',
     appId: '1:640779355140:web:8ba2550b65acefa9316151',
@@ -52,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCsWVwOSgduYtuPgwLjbJlEV8FaOKLywGU',
-    appId: '1:640779355140:android:64f055ac2fb09c54316151',
+    appId: '1:640779355140:android:325fbfb9d8d00960316151',
     messagingSenderId: '640779355140',
     projectId: 'erpdemo-7dfd8',
     storageBucket: 'erpdemo-7dfd8.appspot.com',
