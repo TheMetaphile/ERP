@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import AuthContext from '../../../Context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -21,6 +21,7 @@ const NewExam = ({ onClose, addExam }) => {
       duration: '',
     },
   ]);
+  const [optionalSubjects, setOptionalSubjects] = useState([]);
 
   const handleChange = (index, e) => {
     const { name, value } = e.target;
@@ -48,6 +49,46 @@ const NewExam = ({ onClose, addExam }) => {
       },
     ]);
   };
+
+  const fetchSubjects = async () => {
+    try {
+      const response = await axios.post(`${BASE_URL}/subjects/fetch`, {
+        Class: classs,
+        stream: stream
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authState?.accessToken}`
+        }
+      });
+
+      const data = response.data;
+      if (data.status) {
+        setOptionalSubjects([...data.coreSubjects, ...data.optionalSubjects]);
+      }
+    } catch (error) {
+      toast.error('Error connecting to server');
+      if (
+        error.response &&
+        error.response.data.error === 'You are not permitted to access this data. Please contact the admin'
+      ) {
+        toast.warn('Access denied. Attempting to refresh token...');
+        try {
+          const newToken = await refreshAccessToken(authState, updateAccessToken, logout, toast);
+          await fetchSubjects();
+        } catch (refreshError) {
+        }
+      } else {
+        toast.error(error.response?.data?.error || "An error occurred");
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (stream && classs) {
+      fetchSubjects();
+    }
+  }, [stream, classs]);
 
   const removeNewExam = () => {
     if (exams.length > 0) {
@@ -230,6 +271,7 @@ const NewExam = ({ onClose, addExam }) => {
                 <option value="PCB">PCB</option>
                 <option value="Commerce">Commerce</option>
                 <option value="Arts">Arts</option>
+                <option value="General">General</option>
               </select>
             </div>
           </motion.div>
@@ -266,20 +308,12 @@ const NewExam = ({ onClose, addExam }) => {
                         onChange={(e) => handleChange(index, e)}
                         required
                       >
-                        <option value="" disabled>Select Subject</option>
-                        <option value="Hindi">Hindi</option>
-                        <option value="English">English</option>
-                        <option value="Maths">Maths</option>
-                        <option value="Science">Science</option>
-                        <option value="Social Science">Social Science</option>
-                        <option value="Drawing">Drawing</option>
-                        <option value="Computer">Computer</option>
-                        <option value="Sanskrit">Sanskrit</option>
-                        <option value="Physics">Physics</option>
-                        <option value="Chemistry">Chemistry</option>
-                        <option value="Economics">Economics</option>
-                        <option value="Business">Business</option>
-                        <option value="Accounts">Accounts</option>
+                        <option value="">Select Subject</option>
+                        {optionalSubjects.map(item =>
+                          <option key={item.subject || item} value={item.subject || item}>
+                            {item.subject || item} ({item.type || 'Core'})
+                          </option>
+                        )}
                       </select>
                     </td>
                     <td className="border px-4 py-2">

@@ -1,7 +1,11 @@
 import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
-import { FaUser, FaEnvelope, FaBirthdayCake, FaIdCard, FaGraduationCap, FaCalendarAlt, FaBookOpen, FaAddressCard, FaPhone, FaBriefcase, FaFlag, FaPray, FaTint } from 'react-icons/fa';
-import { IoMdSchool } from 'react-icons/io';
+import {
+  FaUser, FaEnvelope, FaBirthdayCake, FaIdCard,
+  FaTransgender, FaMapMarkerAlt, FaGraduationCap,
+  FaTag, FaCalendarAlt, FaFlag, FaUserFriends, FaUniversity,
+  FaPhone
+} from 'react-icons/fa'; import { IoMdSchool } from 'react-icons/io';
 import { GiIndiaGate } from 'react-icons/gi';
 import AuthContext from '../../Context/AuthContext';
 
@@ -20,7 +24,7 @@ const UserProfile = () => {
   const { authState, darkMode } = useContext(AuthContext);
   const userDetails = authState?.userDetails || {}; // If authState is null, userDetails remains undefined
   const subjects = authState?.subjects || [];
-
+  console.log(authState)
   const bgClass = darkMode
     ? 'bg-gradient-to-br from-gray-900 to-gray-800'
     : 'bg-gradient-to-br from-blue-100 to-blue-100';
@@ -33,6 +37,47 @@ const UserProfile = () => {
   const subjectBadgeClass = darkMode
     ? 'bg-indigo-900 text-indigo-300'
     : 'bg-blue-100 text-blue-800';
+
+  const DetailCard = ({ icon: Icon, label, value }) => (
+    <div className={`flex items-center p-4 rounded-lg shadow-md transition-all duration-300 
+            ${darkMode
+        ? 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+        : 'bg-white hover:bg-blue-50 text-gray-800'
+      }`}>
+      <div className={`mr-4 text-2xl ${darkMode ? 'text-blue-300' : 'text-blue-600'
+        }`}>
+        <Icon />
+      </div>
+      <div>
+        <p className={`text-sm font-medium ${darkMode ? 'text-blue-300' : 'text-blue-700'
+          }`}>{label}</p>
+        <p className="font-semibold">{value || 'N/A'}</p>
+      </div>
+    </div>
+  );
+
+  const ExtraFieldsSection = () => {
+    if (!userDetails?.extra || userDetails.extra.length === 0) return null;
+
+    return (
+      <div className="w-full">
+        <div className="grid laptop:grid-cols-3 mobile:max-tablet:grid-cols-1 tablet:grid-cols-2 gap-4">
+          {userDetails.extra.map((field, index) => (
+            <DetailCard
+              key={field._id || index}
+              icon={FaTag}
+              label={field.label}
+              value={
+                typeof field.value === 'object' && field.value !== null
+                  ? JSON.stringify(field.value)
+                  : field.value || 'N/A'
+              }
+            />
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <motion.div
@@ -79,26 +124,80 @@ const UserProfile = () => {
             className="grid laptop:grid-cols-3 mobile:max-tablet:grid-cols-1 tablet:grid-cols-2 gap-4"
             variants={containerVariants}
           >
-            <InfoItem icon={<FaEnvelope />} label="Email" value={userDetails?.email} darkMode={darkMode} />
-            <InfoItem icon={<FaBirthdayCake />} label="Date of Birth" value={userDetails?.DOB} darkMode={darkMode} />
-            <InfoItem icon={<FaIdCard />} label="Aadhaar Number" value={userDetails?.aadhaarNumber} darkMode={darkMode} />
-            <InfoItem icon={<IoMdSchool />} label="Admission Class" value={userDetails?.admissionClass} darkMode={darkMode} />
-            <InfoItem icon={<FaCalendarAlt />} label="Admission Date" value={userDetails?.admissionDate} darkMode={darkMode} />
-            <InfoItem icon={<FaGraduationCap />} label="Academic Year" value={userDetails?.academicYear} darkMode={darkMode} />
-            <InfoItem icon={<GiIndiaGate />} label="Nationality" value={userDetails?.nationality} darkMode={darkMode} />
-            <InfoItem icon={<FaTint />} label="Blood Group" value={userDetails?.bloodGroup} darkMode={darkMode} />
-            <InfoItem icon={<FaUser />} label="Category" value={userDetails?.category} darkMode={darkMode} />
-            <InfoItem icon={<FaPhone />} label="Emergency Contact" value={userDetails?.emergencyContactNumber} darkMode={darkMode} />
-            <InfoItem icon={<FaUser />} label="Gender" value={userDetails?.gender} darkMode={darkMode} />
-            <InfoItem icon={<FaIdCard />} label="Old Admission Number" value={userDetails?.oldAdmissionNumber} darkMode={darkMode} />
-            <InfoItem icon={<FaAddressCard />} label="Permanent Address" value={userDetails?.permanentAddress} darkMode={darkMode} />
-            <InfoItem icon={<FaPray />} label="Religion" value={userDetails?.religion} darkMode={darkMode} />
-            <InfoItem icon={<FaBookOpen />} label="Roll Number" value={userDetails?.rollNumber} darkMode={darkMode} />
-            <InfoItem icon={<FaCalendarAlt />} label="Session" value={userDetails?.session} darkMode={darkMode} />
+            <DetailCard
+              icon={FaEnvelope}
+              label="Email"
+              value={userDetails?.email}
+            />
+            <DetailCard
+              icon={FaBirthdayCake}
+              label="Date of Birth"
+              value={userDetails?.DOB}
+            />
+            <DetailCard
+              icon={FaIdCard}
+              label="Aadhar Number"
+              value={userDetails?.aadhaarNumber}
+            />
+            <DetailCard
+              icon={FaPhone}
+              label="Phone Number"
+              value={userDetails?.phoneNumber}
+            />
+            <DetailCard
+              icon={FaTransgender}
+              label="Gender"
+              value={userDetails?.gender}
+            />
+            <DetailCard
+              icon={FaMapMarkerAlt}
+              label="Branch"
+              value={userDetails?.branch}
+            />
+            <DetailCard
+              icon={FaGraduationCap}
+              label="Current Class"
+              value={`${userDetails?.currentClass} ${userDetails?.section}`}
+            />
+            <DetailCard
+              icon={FaGraduationCap}
+              label="Admission Class"
+              value={userDetails?.admissionClass}
+            />
+            <DetailCard
+              icon={FaUser}
+              label="Father's Name"
+              value={userDetails?.fatherName}
+            />
+            <DetailCard
+              icon={FaCalendarAlt}
+              label="Admission Date"
+              value={userDetails?.admissionDate}
+            />
+            <DetailCard
+              icon={FaUserFriends}
+              label="Guardian's Name"
+              value={userDetails?.guardiansName}
+            />
+            <DetailCard
+              icon={FaFlag}
+              label="Nationality"
+              value={userDetails?.nationality}
+            />
+            <DetailCard
+              icon={FaTag}
+              label="Category"
+              value={userDetails?.category}
+            />
+            <DetailCard
+              icon={FaUniversity}
+              label="Branch"
+              value={userDetails?.branch}
+            />
           </motion.div>
         </div>
 
-        <div className="tablet:px-8 py-2 mobile:max-tablet:px-2">
+        {/* <div className="tablet:px-8 py-2 mobile:max-tablet:px-2">
           <motion.h2
             className={`text-2xl font-bold mb-4 ${textClass}`}
             variants={itemVariants}
@@ -120,6 +219,21 @@ const UserProfile = () => {
             <InfoItem icon={<FaUser />} label="Guardian's Name" value={userDetails?.guardiansName} darkMode={darkMode} />
             <InfoItem icon={<FaBriefcase />} label="Guardian's Occupation" value={userDetails?.guardiansOccupation} darkMode={darkMode} />
             <InfoItem icon={<FaPhone />} label="Guardian's Phone" value={userDetails?.guardiansPhoneNumber} darkMode={darkMode} />
+          </motion.div>
+        </div> */}
+
+        <div className="tablet:px-8 py-2 mobile:max-tablet:px-2">
+          <motion.h2
+            className={`text-2xl font-bold mb-4 ${textClass}`}
+            variants={itemVariants}
+          >
+            Additional Information
+          </motion.h2>
+          <motion.div
+            className=""
+            variants={containerVariants}
+          >
+            <ExtraFieldsSection />
           </motion.div>
         </div>
 

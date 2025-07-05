@@ -288,8 +288,8 @@ function MailList({
 
     ${email?.unSeenCount
                   ? darkMode
-                    ? "bg-orange-900/20 border-l-[6px] border-orange-400 shadow-orange-500/20 animate-pulse"
-                    : "bg-orange-50 border-l-[6px] border-orange-500 shadow-orange-200/60 animate-pulse"
+                    ? "bg-orange-900/20 border-l-[6px] border-orange-400 shadow-orange-500/20"
+                    : "bg-orange-50 border-l-[6px] border-orange-500 shadow-orange-200/60"
                   : ""}
     
     ${email?.unSeenCount ? "font-semibold" : "font-normal"}

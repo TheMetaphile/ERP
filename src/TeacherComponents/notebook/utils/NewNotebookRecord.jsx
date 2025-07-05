@@ -96,8 +96,8 @@ const NewNoteBookRecord = () => {
 
   const handleSave = () => {
     const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
+    var month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
     // console.log(Class,Section,session,Subject,topic,chapter,checkedStudents)
     if (checkedStudents.length > 0 && chapter != "" && topic != "" && Subject && Class && Section && session) {
       let data = JSON.stringify({

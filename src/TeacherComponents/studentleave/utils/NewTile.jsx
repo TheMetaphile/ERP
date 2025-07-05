@@ -20,7 +20,7 @@ export default function NewTile({ data, setData }) {
         setExpanded(expanded === index ? null : index);
     }
     console.log(data, "*****************data***********************");
-    console.log('setData:', setData);
+    // console.log('setData:', setData);
 
     const handleStatusUpdate = async (leaveId, status, email, index) => {
         console.log('id', leaveId, 'status', status, 'email', email)

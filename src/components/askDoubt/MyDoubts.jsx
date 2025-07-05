@@ -262,12 +262,12 @@ export default function MyDoubts() {
                             >
                                 Resolved
                             </option>
-                            <option
+                            {/* <option
                                 value="Rejected"
                                 className={darkMode ? 'bg-gray-800' : 'bg-white'}
                             >
                                 Rejected
-                            </option>
+                            </option> */}
                         </select>
                         <motion.button
                             whileHover={{ scale: 1.05 }}

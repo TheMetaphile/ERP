@@ -8,7 +8,7 @@ import { IoMdCalendar, IoMdTime, IoMdCreate, IoMdTrash, IoMdCheckmark, IoMdClose
 import { refreshAccessToken } from '../../RefreshTokenHelper';
 
 
-export default function HomeWorkTile({ details, Class, additionalData, selectedSubject }) {
+export default function HomeWorkTile({ details, Class, additionalData, selectedSubject, setAdditionalData }) {
     const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [editingRow, setEditingRow] = useState(null);
     const [editedDetails, setEditedDetails] = useState(details);
@@ -25,6 +25,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
     useEffect(() => {
         if (additionalData.length !== 0 && additionalData[0].subject === selectedSubject) {
             setEditedDetails(prevData => [...additionalData, ...prevData]);
+            setAdditionalData([]);
         }
     }, [additionalData, selectedSubject]);
 
@@ -147,14 +148,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                                     </div>
                                     <div className='flex gap-3 items-center w-full mt-2'>
                                         <div className={`pl-2 font-medium ${darkMode ? 'text-white' : 'text-black'}`}>Subject: </div>
-                                        <input
-                                            className={`font-normal border rounded-lg px-3 py-2 text-justify flex-grow ${darkMode
-                                                ? 'bg-gray-700 text-white border-gray-600'
-                                                : 'border-blue-300 shadow-md'
-                                                }`}
-                                            value={detail.subject}
-                                            onChange={(e) => handleInputChange(index, 'subject', e.target.value)}
-                                        />
+                                        {detail.subject}
                                     </div>
                                     <div className='flex gap-3 items-center w-full mt-2'>
                                         <div className={`pl-2 font-medium ${darkMode ? 'text-white' : 'text-black'}`}>Topic: </div>
@@ -235,6 +229,7 @@ export default function HomeWorkTile({ details, Class, additionalData, selectedS
                                 <IoMdTime />
                                 {editingRow === index ? (
                                     <input
+                                        type="date"
                                         className={`border-b bg-transparent focus:outline-none ${darkMode
                                             ? 'border-gray-600 text-white focus:border-blue-500'
                                             : 'border-blue-300 focus:border-blue-500'

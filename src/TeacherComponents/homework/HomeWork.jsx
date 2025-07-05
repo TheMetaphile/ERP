@@ -329,7 +329,7 @@ function HomeWork() {
         </motion.div>
       ) : (
         <motion.div variants={itemVariants} className='w-full mt-2 rounded-lg'>
-          <HomeWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
+          <HomeWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} setAdditionalData={setAdditionalData}/>
           <div ref={sentinelRef} className="h-10">
             {loading && start > 0 && (
               <div className={`text-center w-full ${darkMode ? 'text-gray-400' : 'text-gray-600'} text-sm`}>Loading more...</div>

@@ -310,7 +310,7 @@ function ClassWork() {
                     className='w-full mt-2 rounded-lg  px-2'
                     variants={containerVariants}
                 >
-                    <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} selectedSubject={selectedSubject} />
+                    <ClassWorkTile details={details} Class={selectedClass} additionalData={additionalData} setAdditionalData={setAdditionalData} selectedSubject={selectedSubject} />
                     <div ref={sentinelRef} className="h-10">
                         {loading && start > 0 && (
                             <div className={`text-center w-full ${darkMode ? 'text-gray-400' : 'text-gray-600'} text-sm`}>Loading more...</div>

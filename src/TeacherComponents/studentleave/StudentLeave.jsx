@@ -64,7 +64,8 @@ function StudentLeave() {
         try {
             const today = new Date();
             var month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;
-            const formattedDate = `${today.getFullYear()}-${month}-${today.getDate()}`;
+            const day = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
+            const formattedDate = `${today.getFullYear()}-${month}-${day}`;
             const response = await axios.get(`${BASE_URL}/leave/fetch/classTeacher?start=${start}&end=${end}&status=${status}&date=${formattedDate}`, {
                 headers: {
                     Authorization: `Bearer ${authState?.accessToken}`
@@ -78,6 +79,7 @@ function StudentLeave() {
             }
             setData(prevData => [...prevData, ...response.data.StudentsLeaves]);
         } catch (err) {
+            console.log(err)
             setError(err.message);
             if (
                 err.response &&

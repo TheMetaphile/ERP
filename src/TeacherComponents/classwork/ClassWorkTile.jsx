@@ -8,7 +8,7 @@ import { IoMdCheckmark, IoMdClose, IoMdCreate, IoMdTrash, IoMdCalendar } from 'r
 import { refreshAccessToken } from '../../RefreshTokenHelper';
 
 
-export default function ClassWorkTile({ details, Class, additionalData, selectedSubject }) {
+export default function ClassWorkTile({ details, Class, additionalData, selectedSubject, setAdditionalData }) {
     const { authState, darkMode, updateAccessToken, logout } = useContext(AuthContext);
     const [editingRow, setEditingRow] = useState(null);
     const [editedDetails, setEditedDetails] = useState(details);
@@ -22,12 +22,14 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
         setEditingRow(index);
     };
 
+    console.log(additionalData, selectedSubject)
+
     useEffect(() => {
         if (additionalData.length !== 0 && additionalData[0].subject === selectedSubject) {
             console.log('bef', additionalData, additionalData[0].subject)
             setEditedDetails(prevData => [...additionalData, ...prevData]);
             console.log('afte', editedDetails)
-
+            setAdditionalData([]);
         }
     }, [additionalData, selectedSubject]);
 
@@ -80,7 +82,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
         console.log(Class)
         const detail = editedDetails[index];
         try {
-            const response = await axios.delete(`${BASE_URL}/classwork/delete?class=${Class}&month=${new Date().getMonth() + 1}&year=2024&id=${detail._id}`,
+            const response = await axios.delete(`${BASE_URL}/classwork/delete?class=${Class}&month=${new Date().getMonth() + 1}&year=${new Date().getFullYear()}&id=${detail._id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${authState?.accessToken}`,
@@ -155,14 +157,7 @@ export default function ClassWorkTile({ details, Class, additionalData, selected
                                         </div>
                                         <div className='flex gap-3 items-center w-full mt-2'>
                                             <div className={`pl-2 font-medium ${darkMode ? 'text-white' : 'text-black'}`}>Subject: </div>
-                                            <input
-                                                className={`font-normal border rounded-lg px-3 py-2 text-justify flex-grow ${darkMode
-                                                    ? 'bg-gray-700 text-white border-gray-600'
-                                                    : 'border-blue-300 shadow-md'
-                                                    }`}
-                                                value={detail.subject}
-                                                onChange={(e) => handleInputChange(index, 'subject', e.target.value)}
-                                            />
+                                            {detail.subject}
                                         </div>
                                         <div className='flex gap-3 items-center w-full mt-2'>
                                             <div className={`pl-2 font-medium ${darkMode ? 'text-white' : 'text-black'}`}>Topic: </div>
