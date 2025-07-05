@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 class ClassWorkAPI {
   static const String _baseUrl = 'http://10.0.2.2:8000';
 
-  Future<List<dynamic>> fetchClasswork(String accessToken, String section,String subject,int start) async {
-
+  Future<List<dynamic>> fetchClasswork(String accessToken,String studentclass, String section,String subject,int start) async {
+    print("section $studentclass");
     print("section $section");
     print("subject $subject");
 
@@ -14,12 +14,12 @@ class ClassWorkAPI {
 
     print("month $month");
     print("Year $year");
-    print("month $section");
-    print("Year $subject");
-    print("Year $start");
+    print("section $section");
+    print("subject $subject");
+    print("start $start");
 
     final url = Uri.parse(
-        '$_baseUrl/classwork/fetch/student?class=9th&month=$month&year=$year&section=$section&subject=$subject&start=$start&end=4');
+        '$_baseUrl/classwork/fetch/student?class=$studentclass&month=$month&year=$year&section=$section&subject=$subject&start=$start&end=4');
 
     try {
       final response = await http.get(

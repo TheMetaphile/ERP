@@ -290,14 +290,7 @@ class _StudentLeaveState extends State<StudentLeave> with SingleTickerProviderSt
       if(success==true){
 
         setState(() {
-          // int index = teacherLeaves?.indexWhere((leave) => leave['_id'] == updatedLeave["_id"]) ?? -1;
-          // if (index != -1) {
-          //   // Update the leave in the teacherLeaves list
-          //   teacherLeaves?[index] = {
-          //     ...teacherLeaves![index], // Keep existing fields
-          //     ...updatedLeave, // Update with new fields
-          //   };
-          // }
+
           fetchLeavesData();
 
           showGreenSnackBar("Leave Updated Successfully", context);
@@ -305,7 +298,6 @@ class _StudentLeaveState extends State<StudentLeave> with SingleTickerProviderSt
       }else{
         showGreenSnackBar("Leave Not updated", context);
       }
-
 
     } catch (e) {
 

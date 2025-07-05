@@ -28,7 +28,7 @@ class StudentClassworkBloc extends Bloc<StudentClassworkEvent, StudentClassworkS
           accessToken: pref.getString("accessToken"),
           section: section,
           selectedSubject: selectedSubject,
-          start: 0,
+          start: 0, studentclass: currentClass,
         );
         emit(StudentClassworkLoaded(
           subjectOptions: subjectOptions,
@@ -52,11 +52,13 @@ class StudentClassworkBloc extends Bloc<StudentClassworkEvent, StudentClassworkS
       emit(StudentClassworkLoading());
       try {
         final pref = await SharedPreferences.getInstance();
+        final userDetails = await UserPreferences.getDetails("userDetails");
+        final currentClass = userDetails["currentClass"] ?? "Unknown";
         final classWorkList = await _fetchClasswork(
           accessToken: pref.getString("accessToken"),
           section: currentState.section,
           selectedSubject: event.selectedSubject,
-          start: 0,
+          start: 0, studentclass:currentClass,
         );
         emit(StudentClassworkLoaded(
           subjectOptions: currentState.subjectOptions,
@@ -82,9 +84,11 @@ class StudentClassworkBloc extends Bloc<StudentClassworkEvent, StudentClassworkS
       final subjectOptions = pref.getStringList("subjects") ?? [];
       final classWorkList = await _fetchClasswork(
         accessToken: pref.getString("accessToken"),
+        studentclass: currentClass,
         section: event.section,
         selectedSubject: event.selectedSubject,
         start: event.start,
+
       );
       emit(StudentClassworkLoaded(
         subjectOptions: subjectOptions,
@@ -100,6 +104,7 @@ class StudentClassworkBloc extends Bloc<StudentClassworkEvent, StudentClassworkS
 
   Future<List<Map<String, dynamic>>> _fetchClasswork({
     required String? accessToken,
+    required String studentclass,
     required String section,
     required String selectedSubject,
     required int start,
@@ -111,6 +116,7 @@ class StudentClassworkBloc extends Bloc<StudentClassworkEvent, StudentClassworkS
     print("CLASSWORK API CALLLEDDDDDDDGJ22222222222222222222222222222222222222");
     final data = await classWorkObj.fetchClasswork(
       accessToken,
+      studentclass,
       section,
       selectedSubject,
       start,

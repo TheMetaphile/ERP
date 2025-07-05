@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class HomeworkAPI {
   static const String _baseUrl = 'http://10.0.2.2:8000';
 
-  Future<List<dynamic>> fetchHomeWork(String accessToken, String section,String subject,int start) async {
+  Future<List<dynamic>> fetchHomeWork(String accessToken, String studentclass,String section,String subject,int start) async {
 
     print("section $section");
     print("subject $subject");
@@ -16,7 +16,7 @@ class HomeworkAPI {
     print("Year $year");
 
     final url = Uri.parse(
-        '$_baseUrl/homework/fetch/student?class=9th&month=$month&year=$year&section=$section&subject=$subject&start=$start&end=4');
+        '$_baseUrl/homework/fetch/student?class=$studentclass&month=$month&year=$year&section=$section&subject=$subject&start=$start&end=4');
 
     try {
       final response = await http.get(

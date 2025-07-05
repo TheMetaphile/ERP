@@ -32,7 +32,7 @@ class StudentHomeworkBloc extends Bloc<StudentHomeworkEvent, StudentHomeworkStat
           accessToken: pref.getString("accessToken"),
           section: section,
           selectedSubject: selectedSubject,
-          start: 0,
+          start: 0, studentclass: currentClass,
         );
 
         if (homeworkList.isEmpty) {
@@ -68,11 +68,13 @@ class StudentHomeworkBloc extends Bloc<StudentHomeworkEvent, StudentHomeworkStat
       emit(StudentHomeworkLoading());
       try {
         final pref = await SharedPreferences.getInstance();
+        final userDetails = await UserPreferences.getDetails("userDetails");
+        final currentClass = userDetails["currentClass"] ?? "Unknown";
         final homeworkList = await _fetchHomework(
           accessToken: pref.getString("accessToken"),
           section: currentState.section,
           selectedSubject: event.selectedSubject,
-          start: 0,
+          start: 0, studentclass: currentClass,
         );
 
         if (homeworkList.isEmpty) {
@@ -98,11 +100,13 @@ class StudentHomeworkBloc extends Bloc<StudentHomeworkEvent, StudentHomeworkStat
       emit(StudentHomeworkLoading());
       try {
         final pref = await SharedPreferences.getInstance();
+        final userDetails = await UserPreferences.getDetails("userDetails");
+        final currentClass = userDetails["currentClass"] ?? "Unknown";
         final homeworkList = await _fetchHomework(
           accessToken: pref.getString("accessToken"),
           section: currentState.section,
           selectedSubject: event.selectedSubject,
-          start: 0,
+          start: 0, studentclass:currentClass,
         );
 
         if (homeworkList.isEmpty) {
@@ -142,7 +146,7 @@ class StudentHomeworkBloc extends Bloc<StudentHomeworkEvent, StudentHomeworkStat
         accessToken: pref.getString("accessToken"),
         section: event.section,
         selectedSubject: event.selectedSubject,
-        start: event.start,
+        start: event.start, studentclass:currentClass,
       );
 
       if (homeworkList.isEmpty) {
@@ -167,7 +171,9 @@ class StudentHomeworkBloc extends Bloc<StudentHomeworkEvent, StudentHomeworkStat
   }
 
   Future<List<Map<String, dynamic>>> _fetchHomework({
+
     required String? accessToken,
+    required String studentclass,
     required String section,
     required String selectedSubject,
     required int start,
@@ -179,6 +185,7 @@ class StudentHomeworkBloc extends Bloc<StudentHomeworkEvent, StudentHomeworkStat
     print("HOMEWORK API CALLLEDDDDDDDGJ22222222222222222222222222222222222222");
     final data = await homeworkObj.fetchHomeWork(
       accessToken,
+      studentclass,
       section,
       selectedSubject,
       start,
