@@ -40,7 +40,8 @@ function StudentAttendance() {
         console.log(start, "-", end);
         const today = new Date();
         const month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;
-        const formattedDate = `${today.getFullYear()}-${month}-${today.getDate()}`;
+        const day = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
+        const formattedDate = `${today.getFullYear()}-${month}-${day}`;
         const response = await axios.get(`${BASE_URL}/studentAttendance/fetch/student/list?date=${formattedDate}&start=${start}&end=${end}`, {
           headers: {
             Authorization: `Bearer ${authState?.accessToken}`,
