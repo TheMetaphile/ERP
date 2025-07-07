@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:untitled/StudentModule/NoteBookRecord/notebookRecordBloc/notebook_record_event.dart';
 
 // Teacher Modules
 import 'package:untitled/teacher-module/TeacherHome.dart';
@@ -29,17 +30,27 @@ import 'CustomTheme/customTheme.dart';
 import 'Notification/Messanging.dart';
 import 'StudentAPIs/Authentication/studentAuthentication.dart';
 import 'StudentAPIs/SharedPreference/sharedPreferenceFile.dart';
+import 'StudentAPIs/StudentModuleAPI/Ask_Doubts/ask_doubtAPI.dart';
 import 'StudentAPIs/StudentModuleAPI/Attendance/student_Attendance_API.dart';
+import 'StudentAPIs/StudentModuleAPI/Notice/notice_API.dart';
+import 'StudentAPIs/StudentModuleAPI/StudentLeave/studentLeaveApi.dart';
+import 'StudentModule/Ask_Doubts/askDoubtBloc/ask_doubt_bloc.dart';
+import 'StudentModule/Ask_Doubts/ask_doubts.dart';
 import 'StudentModule/Attendance/StudentAttendanceBloc/sudent_attendance_bloc.dart';
 import 'StudentModule/Attendance/studentAttendance.dart';
 import 'StudentModule/Classword/StudentClassworkBloc/student_classwork_bloc.dart';
+import 'StudentModule/Classword/StudentClassworkBloc/student_classwork_event.dart';
 import 'StudentModule/Classword/classWork.dart';
 import 'StudentModule/Fees/Fee_Due.dart';
 import 'StudentModule/NoteBookRecord/noteBook_Record.dart';
+import 'StudentModule/NoteBookRecord/notebookRecordBloc/notebook_record_bloc.dart';
 import 'StudentModule/Notice/notice.dart';
+import 'StudentModule/Notice/studentnotice/student_notice_bloc.dart';
+import 'StudentModule/Notice/studentnotice/student_notice_event.dart';
 import 'StudentModule/Result/result.dart';
 import 'StudentModule/StudentHome/StudentHomeBloc/student_home_bloc.dart';
 import 'StudentModule/StudentHome/studentHome.dart';
+import 'StudentModule/StudentLeave/studentLeaveBloc/student_leave_bloc.dart';
 import 'StudentModule/StudentLeave/student_leave.dart';
 import 'StudentModule/homeWork/homeWork.dart';
 import 'StudentModule/homeWork/student_homework_bloc/student_home_work_bloc.dart';
@@ -140,6 +151,22 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<StudentHomeworkBloc>(
             create:(_)=> StudentHomeworkBloc()
         ),
+        BlocProvider(create: (context) => StudentLeaveBloc(leaveApi: StudentLeaveApi())),
+
+        BlocProvider(
+    create: (context) => AskDoubtBloc(doubtObj: AskDoubtAPI()),),
+        BlocProvider(
+          create: (context) => StudentNoticeBloc(
+            noticeBoardAPI: NoticeBoardAPI(),
+          )..add( FetchNotices()),
+          lazy: false,
+          child: const StudentNoticeScreen(),
+        ),
+        BlocProvider(
+          create: (context) => NoteBookRecordBloc(),
+
+        ),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -147,7 +174,6 @@ class _MyAppState extends State<MyApp> {
           // Shared Routes
           '/resetPassword': (context) => ForgetPassword(),
           '/logout': (context) => const Login(),
-      
           // Teacher/Admin Routes
           '/dashboard': (context) => const TeacherHome(),
           '/attendance': (context) => const TeacherAttendance(),
@@ -167,7 +193,7 @@ class _MyAppState extends State<MyApp> {
           // Student Routes
           '/student-dashboard': (context) => const StudentHome(),
           '/student-attendance': (context) => StudentAttendanceUI(),
-          '/student-leave': (context) => const StudentLeave(),
+          '/student-leave': (context) => const StudentLeaveScreen(),
           '/student-result': (context) => ReportCardOpen(userDetails: retrievedUserDetails),
           '/student-classwork': (context) => const StudentClasswork(),
           '/student-fee-status': (context) => FeesDue(email: retrievedUserDetails["email"]),
@@ -176,7 +202,7 @@ class _MyAppState extends State<MyApp> {
             section: retrievedUserDetails["section"],
           ),
           '/student-homework': (context) => const StudentHomework(),
-          '/student-notice': (context) => const StudentNotice(),
+          '/student-notice': (context) => const StudentNoticeScreen(),
         },
         home: FutureBuilder<String>(
           future: getUserRoleAndVerifyToken(),

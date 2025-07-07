@@ -22,6 +22,7 @@ import '../../CustomTheme/customTheme.dart';
 import 'StudentHomeBloc/student_home_bloc.dart';
 import 'StudentHomeBloc/student_home_event.dart';
 import 'StudentHomeBloc/student_home_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class StudentHome extends StatelessWidget {
   const StudentHome({super.key});
@@ -164,7 +165,7 @@ class _StudentHomeContent extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const StudentNotice(),
+                        builder: (context) => const StudentNoticeScreen(),
                       ),
                     );
                   },
@@ -189,7 +190,17 @@ class _StudentHomeContent extends StatelessWidget {
                         SizedBox(height: size.height * 0.04),
                         CircleAvatar(
                           radius: size.width * 0.1,
-                          backgroundImage: NetworkImage(profileLink),
+                          backgroundColor: Colors.grey[200], // optional: placeholder background
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              imageUrl: profileLink,
+                              width: size.width * 0.2,
+                              height: size.width * 0.2,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => CircularProgressIndicator(strokeWidth: 2),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                            ),
+                          ),
                         ),
                         SizedBox(height: size.height * 0.01),
                         Text(
@@ -357,7 +368,7 @@ class _StudentHomeContent extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const StudentLeave(),
+                                  builder: (context) => const StudentLeaveScreen(),
                                 ),
                               );
                             },
@@ -410,7 +421,7 @@ class _StudentHomeContent extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const StudentNotice(),
+                                  builder: (context) => const StudentNoticeScreen(),
                                 ),
                               );
                             },

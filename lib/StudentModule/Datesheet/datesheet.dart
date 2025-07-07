@@ -1,72 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-
+import 'package:untitled/StudentModule/Datesheet/studentDatesheet/student_datesheet_bloc.dart';
+import 'package:untitled/StudentModule/Datesheet/studentDatesheet/student_datesheet_event.dart';
+import 'package:untitled/StudentModule/Datesheet/studentDatesheet/student_datesheet_state.dart';
 import '../../CustomTheme/customTheme.dart';
-import '../../StudentAPIs/StudentModuleAPI/DateSheet/date_sheet.dart';
 
-class DateSheet extends StatefulWidget {
+
+class DateSheet extends StatelessWidget {
   const DateSheet({Key? key, required this.Class}) : super(key: key);
   final String Class;
 
   @override
-  State<DateSheet> createState() => _DateSheetState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => DateSheetBloc()..add(FetchDateSheet(Class)),
+      child: DateSheetView(className: Class),
+    );
+  }
 }
 
-class _DateSheetState extends State<DateSheet> with SingleTickerProviderStateMixin {
-  DateSheetApi apiObj = DateSheetApi();
-  List<Map<String, dynamic>>? dateSheet;
-  bool isLoading = false;
-  late AnimationController _animationController;
+class DateSheetView extends StatelessWidget {
+  final String className;
 
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 1000),
-    );
-    fetchDateSheet();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  Future<void> fetchDateSheet() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      if (accessToken == null) {
-        throw Exception('Access token is null');
-      }
-      dateSheet = (await apiObj.fetchDateSheet(accessToken, widget.Class))
-          .cast<Map<String, dynamic>>();
-
-      dateSheet!.sort((a, b) {
-        DateTime dateA = DateTime.parse(a['schedule'][0]['date']);
-        DateTime dateB = DateTime.parse(b['schedule'][0]['date']);
-        return dateA.compareTo(dateB);
-      });
-    } catch (e) {
-      print('Error fetching DateSheet data: $e');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error fetching data: $e')));
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-      _animationController.forward();
-    }
-  }
+  const DateSheetView({Key? key, required this.className}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -86,32 +45,60 @@ class _DateSheetState extends State<DateSheet> with SingleTickerProviderStateMix
           style: themeObj.bigNormalText.copyWith(color: CustomTheme.blackColor),
         ),
       ),
-      body: isLoading
-          ? _buildShimmerEffect()
-          : dateSheet == null || dateSheet!.isEmpty || dateSheet![0]['schedule'].isEmpty
-          ? Center(
-        child: Text(
-          "No date sheet records found",
-          style: TextStyle(fontSize: 18, color: Colors.grey[600]),
-        ),
-      )
-          : AnimationLimiter(
-        child: ListView.builder(
-          itemCount: dateSheet?.length ?? 0,
-          itemBuilder: (context, index) {
-            final scheduleList = dateSheet![index]['schedule'] as List?;
-            if (scheduleList == null || scheduleList.isEmpty) {
-              return SizedBox.shrink();
+      body: RefreshIndicator(
+        onRefresh: () async {
+          context.read<DateSheetBloc>().add(RefreshDateSheet(className));
+          await Future.delayed(Duration(milliseconds: 1000)); // Simulate network delay
+        },
+        child: BlocConsumer<DateSheetBloc, DateSheetState>(
+          listener: (context, state) {
+            if (state is DateSheetError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
             }
-            final exam = scheduleList[0];
-            return AnimationConfiguration.staggeredList(
-              position: index,
-              duration: const Duration(milliseconds: 375),
-              child: SlideAnimation(
-                verticalOffset: 50.0,
-                child: FadeInAnimation(
-                  child: ExamCard(exam: exam),
+          },
+          builder: (context, state) {
+            if (state is DateSheetLoading) {
+              return _buildShimmerEffect();
+            }
+            if (state is DateSheetLoaded) {
+              if (state.dateSheet.isEmpty || state.dateSheet[0]['schedule'].isEmpty) {
+                return Center(
+                  child: Text(
+                    "No date sheet records found",
+                    style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+                  ),
+                );
+              }
+              return AnimationLimiter(
+                child: ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: state.dateSheet.length,
+                  itemBuilder: (context, index) {
+                    final scheduleList = state.dateSheet[index]['schedule'] as List?;
+                    if (scheduleList == null || scheduleList.isEmpty) {
+                      return SizedBox.shrink();
+                    }
+                    final exam = scheduleList[0];
+                    return AnimationConfiguration.staggeredList(
+                      position: index,
+                      duration: const Duration(milliseconds: 375),
+                      child: SlideAnimation(
+                        verticalOffset: 50.0,
+                        child: FadeInAnimation(
+                          child: ExamCard(exam: exam),
+                        ),
+                      ),
+                    );
+                  },
                 ),
+              );
+            }
+            return Center(
+              child: Text(
+                "No date sheet records found",
+                style: TextStyle(fontSize: 18, color: Colors.grey[600]),
               ),
             );
           },

@@ -1,65 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import '../../CustomTheme/customTheme.dart';
-import '../../StudentAPIs/StudentModuleAPI/NoteBookRecord/noteBook_Record_API.dart';
+import 'package:untitled/StudentModule/NoteBookRecord/notebookRecordBloc/notebook_record_event.dart';
 
-class   StudentNoteBookRecord extends StatefulWidget {
+import '../../CustomTheme/customTheme.dart';
+import '../Classword/StudentClassworkBloc/student_classwork_event.dart';
+import 'notebookRecordBloc/notebook_record_bloc.dart';
+import 'notebookRecordBloc/notebook_record_state.dart';
+import 'package:untitled/StudentModule/NoteBookRecord/notebookRecordBloc/notebook_record_event.dart' as notebook;
+import 'package:untitled/StudentModule/Classword/StudentClassworkBloc/student_classwork_event.dart' as classwork;
+
+
+class StudentNoteBookRecord extends StatefulWidget {
   const StudentNoteBookRecord({Key? key, required this.currentClass, required this.section}) : super(key: key);
   final String currentClass;
   final String section;
 
   @override
-  State<StudentNoteBookRecord> createState() => _StudentNoteBookRecordState();
+  _StudentNoteBookRecordState createState() => _StudentNoteBookRecordState();
 }
 
-class _StudentNoteBookRecordState extends State<StudentNoteBookRecord> with SingleTickerProviderStateMixin {
-  List<Map<String, dynamic>>? checkedStudentList;
-  String selectedSubject = "";
-  List<String>? subjectOptions;
-  bool isLoading = false;
-  NotebookRecordApi notebookObj = NotebookRecordApi();
-  late AnimationController _animationController;
-
+class _StudentNoteBookRecordState extends State<StudentNoteBookRecord> {
   @override
+
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 1000),
-    );
-    fetchSubjects();
-    fetchNoteBookRecord();
-  }
+    final bloc = context.read<NoteBookRecordBloc>();
+    final currentState = bloc.state;
 
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  Future<void> fetchNoteBookRecord() async {
-    setState(() => isLoading = true);
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-      if (accessToken == null) throw Exception('Access token is null');
-      checkedStudentList = (await notebookObj.fetchNoteBookRecord(accessToken, selectedSubject)).cast<Map<String, dynamic>>();
-    } catch (e) {
-      print('Error fetching NoteBookRecord data: $e');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error fetching data: $e')));
-    } finally {
-      setState(() => isLoading = false);
-      _animationController.forward();
+    if (currentState is NoteBookRecordInitial) {
+      print('📘 Initializing NoteBookRecord - fetching subjects');
+      bloc.add(notebook.FetchSubjectsEvent());
+    } else {
+      print('✅ NoteBookRecord already initialized — skipping fetch');
     }
   }
 
-  Future<void> fetchSubjects() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    subjectOptions = pref.getStringList("subjects");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,18 +53,35 @@ class _StudentNoteBookRecordState extends State<StudentNoteBookRecord> with Sing
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Column(
-        children: [
-          _buildSubjectDropdown(size, themeObj),
-          Expanded(
-            child: isLoading ? _buildShimmerEffect() : _buildContent(),
-          ),
-        ],
+      body: BlocConsumer<NoteBookRecordBloc, NoteBookRecordState>(
+        listener: (context, state) {
+          if (state.error != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error!)));
+          }
+        },
+        builder: (context, state) {
+          return Column(
+            children: [
+              _buildSubjectDropdown(context, size, themeObj, state),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    if (state.selectedSubject.isNotEmpty) {
+                      context.read<NoteBookRecordBloc>().add(FetchNoteBookRecordEvent(state.selectedSubject));
+                    }
+                    context.read<NoteBookRecordBloc>().add(RefreshSubjectsEvent());
+                  },
+                  child: state.isLoading ? _buildShimmerEffect() : _buildContent(state),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildSubjectDropdown(Size size, CustomTheme themeObj) {
+  Widget _buildSubjectDropdown(BuildContext context, Size size, CustomTheme themeObj, NoteBookRecordState state) {
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -120,20 +114,18 @@ class _StudentNoteBookRecordState extends State<StudentNoteBookRecord> with Sing
               child: DropdownButton<String>(
                 isExpanded: true,
                 hint: Text("Subject", style: themeObj.normalText),
-                value: selectedSubject.isEmpty ? null : selectedSubject,
+                value: state.selectedSubject.isEmpty ? null : state.selectedSubject,
                 onChanged: (newValue) {
-                  setState(() {
-                    selectedSubject = newValue!;
-                    checkedStudentList = [];
-                    fetchNoteBookRecord();
-                  });
+                  if (newValue != null) {
+                    context.read<NoteBookRecordBloc>().add(ChangeSubjectEvent(newValue));
+                  }
                 },
-                items: subjectOptions?.map((String option) {
+                items: state.subjects.map((String option) {
                   return DropdownMenuItem<String>(
                     value: option,
                     child: Text(option, style: themeObj.normalText),
                   );
-                }).toList() ?? [],
+                }).toList(),
               ),
             ),
           ),
@@ -188,7 +180,7 @@ class _StudentNoteBookRecordState extends State<StudentNoteBookRecord> with Sing
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -196,8 +188,8 @@ class _StudentNoteBookRecordState extends State<StudentNoteBookRecord> with Sing
     );
   }
 
-  Widget _buildContent() {
-    if (checkedStudentList == null || checkedStudentList!.isEmpty) {
+  Widget _buildContent(NoteBookRecordState state) {
+    if (state.records.isEmpty) {
       return Center(
         child: Text(
           "No Notebook Records Found",
@@ -207,9 +199,9 @@ class _StudentNoteBookRecordState extends State<StudentNoteBookRecord> with Sing
     }
     return AnimationLimiter(
       child: ListView.builder(
-        itemCount: checkedStudentList!.length,
+        itemCount: state.records.length,
         itemBuilder: (BuildContext context, int index) {
-          final record = checkedStudentList![index];
+          final record = state.records[index];
           return AnimationConfiguration.staggeredList(
             position: index,
             duration: const Duration(milliseconds: 375),

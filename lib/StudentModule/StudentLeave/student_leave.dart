@@ -1,533 +1,421 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shimmer/shimmer.dart';
-
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:untitled/StudentModule/StudentLeave/studentLeaveBloc/student_leave_bloc.dart';
+import 'package:untitled/StudentModule/StudentLeave/studentLeaveBloc/student_leave_event.dart';
+import 'package:untitled/StudentModule/StudentLeave/studentLeaveBloc/student_leave_state.dart';
 import '../../CustomTheme/customTheme.dart';
 import '../../StudentAPIs/StudentModuleAPI/StudentLeave/studentLeaveApi.dart';
 
-
-class StudentLeave extends StatefulWidget {
-  const StudentLeave({super.key});
+class StudentLeaveScreen extends StatefulWidget {
+  const StudentLeaveScreen({super.key});
 
   @override
-  State<StudentLeave> createState() => _StudentLeaveState();
+  State<StudentLeaveScreen> createState() => _StudentLeaveScreenState();
 }
 
-class _StudentLeaveState extends State<StudentLeave> with SingleTickerProviderStateMixin  {
-
-
-
-
-  DateTimeRange? selectedDateRange;
-
-  final _reason = TextEditingController();
-  TeacherLeaveApi leaveApiObj=TeacherLeaveApi();
-  bool isLoading=false;
-  int start=0;
-  String session = '';
-  String status ="Pending";
-
-  List<String> statusOptions = [
-    'Pending',
-    'Approved',
-    'Rejected',
-  ];
-
-  List<dynamic>? teacherLeaves;
-  int? leaveApplyDay;
-  Map<dynamic,dynamic>? applyLeave;
-
-  Map<String,dynamic> states={};
-
-
+class _StudentLeaveScreenState extends State<StudentLeaveScreen> with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  bool isLoadingMore = false;
-  bool allDataLoaded = false;
-
-
-
-
-  Future<void>newLeavePopup( BuildContext context ,Size size,CustomTheme themeObj)async {
-
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return  Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 10,),
-                  elevation: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: size.height*0.01,),
-                        Text("Apply For Leave",textAlign: TextAlign.center,style: GoogleFonts.openSans(  fontSize: size.width * 0.06,color: Colors.blue,),),
-                        const Divider(color: Colors.grey,thickness: 2),
-                        SizedBox(height: size.height*0.03,),
-                        Row(
-                          children: [
-                            Text("Choose Date",textAlign: TextAlign.center,style:  themeObj.bigNormalText),
-                            SizedBox(width: size.width*0.02,),
-                            Icon(Icons.calendar_month,color:CustomTheme.blackColor,)
-                          ],
-                        ),
-                        SizedBox(height: size.height*0.01,),
-                        Container(
-                            height: size.height*0.07,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.grey,width: 1),
-                              borderRadius: BorderRadius.circular(12),
-
-                            ),
-                            child: Center(
-                              child: ListTile(
-                                onTap: () async {
-                                  final DateTimeRange? pickedDateRange = await showDateRangePicker(
-                                    context: context,
-                                    initialDateRange: selectedDateRange ?? DateTimeRange(
-                                      start: DateTime.now(),
-                                      end: DateTime.now().add(const Duration(days: 7)),
-                                    ),
-                                    firstDate: DateTime(2024),
-                                    lastDate: DateTime(2025),
-                                  );
-                                  if (pickedDateRange != null && pickedDateRange != selectedDateRange) {
-                                    setState(() {
-                                      selectedDateRange = pickedDateRange;
-                                      // Calculate leaveApplyDay here
-                                    });
-                                  }
-                                },
-                                leading: selectedDateRange == null
-                                    ? Text('Not Selected', style: TextStyle(fontSize: size.height * 0.02, color: Colors.black),)
-                                    : Text('${selectedDateRange!.start.toString().split(' ')[0]} - ${selectedDateRange!.end.toString().split(' ')[0]}', style: TextStyle(fontSize: size.height * 0.02, color: Colors.black),),
-                                trailing: Text(leaveApplyDay?.toString() ?? '', style: TextStyle(fontSize: size.height * 0.02, color: Colors.black),),
-                              ),)
-                        ),
-                        SizedBox(height: size.height*0.03,),
-                        Text("Reason",textAlign: TextAlign.center,style: themeObj.normalText),
-                        SizedBox(height: size.height*0.01,),
-                        TextField(
-                          maxLines: 8,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12),)
-                          ),
-                          controller: _reason,
-                        ),
-                        SizedBox(height: size.height*0.02,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SizedBox(
-                              width: size.width*0.3,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(backgroundColor:const Color.fromRGBO(209,213,219,1),shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.grey,width: 1),borderRadius: BorderRadius.circular(8))),
-                                  onPressed: (){
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Cancel",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.black),)),
-                            ),
-                            SizedBox(
-                              width: size.width * 0.3,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(backgroundColor: const Color(0XFF6FF87D), shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.grey, width: 1), borderRadius: BorderRadius.circular(8))),
-                                onPressed: () async {
-                                  if (selectedDateRange != null&& _reason.text.isNotEmpty) {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    Map<dynamic, dynamic>? newLeave=  await applyLeaves(
-                                        selectedDateRange!.start.toString().split(' ')[0],
-                                        selectedDateRange!.end.toString().split(' ')[0],
-                                        _reason.text,
-                                    );
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    if (newLeave != null) {
-
-                                      teacherLeaves?.insert(0, newLeave);
-                                      print("added");
-                                      this.setState(() {});
-                                    }
-                                    Navigator.pop(context);
-                                  } else {
-                                    // Show an error message if any field is empty
-                                    showRedSnackBar("Please fill all fields", context);
-                                  }
-                                },
-                                child: isLoading
-                                    ? const CircularProgressIndicator(color: Colors.black)
-                                    : Text("Save", style: GoogleFonts.openSans(fontSize: size.width * 0.035, color: Colors.black),),
-                              ),
-                            ),
-
-                          ],
-                        ),
-
-
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },);
-
-      },);
-
-  }
-
-
-  Future<void> fetchLeavesData() async {
-    setState(() {
-      isLoading = true;
-      start = 0; // Reset start value
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      List<dynamic> fetchedLeaves = await leaveApiObj.studentLeaveData(accessToken!, start, status);
-
-      setState(() {
-        teacherLeaves = fetchedLeaves;
-      });
-    } catch (e) {
-      print('Error fetching leave data: $e');
-      showRedSnackBar("Error occurred to fetch leaves $e", context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  Future<void> fetchMoreLeavesData() async {
-    if (isLoadingMore) return;
-
-    setState(() {
-      isLoadingMore = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      int newStart = start + (teacherLeaves?.length ?? 0);
-      List<dynamic> fetchedLeaves = await leaveApiObj.studentLeaveData(accessToken!, newStart,status);
-      int? previousLength=teacherLeaves?.length;
-
-      teacherLeaves?.addAll(fetchedLeaves);
-
-      int? newLength=teacherLeaves?.length;
-      if(newLength==previousLength && newLength!=null && previousLength!=null){
-        allDataLoaded=true;
-      }
-
-      start = newStart;
-
-    } catch (e) {
-      print('Error fetching more leave data: $e');
-      showRedSnackBar("Error occurred to load more leaves $e.", context);
-    } finally {
-      setState(() {
-        isLoadingMore = false;
-      });
-    }
-  }
-
-
-  Future<dynamic> applyLeaves(String startDate,String endDate,String reason) async {
-    print(selectedDateRange!.start.toString().split(' ')[0]);
-    print(selectedDateRange!.end.toString().split(' ')[0]);
-    print(_reason.text);
-
-    print(DateTime.now().toString().split(" ")[0]);
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      var applyLeaveResponse = await leaveApiObj.studentLeaveApply(accessToken!,startDate,endDate,reason);
-      print("applyLeaveResponse $applyLeaveResponse");
-
-      return applyLeaveResponse;
-    } catch (e) {
-
-      showRedSnackBar("Error on applying $e.", context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  Future<void> updateLeave(Map<String, dynamic> updatedLeave) async {
-
-    print("/////////$updatedLeave");
-
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      var success = await leaveApiObj.updateLeave(accessToken!,updatedLeave["_id"],updatedLeave);
-      if(success==true){
-
-        setState(() {
-
-          fetchLeavesData();
-
-          showGreenSnackBar("Leave Updated Successfully", context);
-        });
-      }else{
-        showGreenSnackBar("Leave Not updated", context);
-      }
-
-    } catch (e) {
-
-      showRedSnackBar("Error on Updating $e.", context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  Future<void>updateLeavePopup( BuildContext context ,Size size, Map<String, dynamic> leaveData,CustomTheme themeObj){
-    print("////////////////////////$leaveData");
-    TextEditingController reasonController = TextEditingController(text: leaveData['reason']);
-    DateTimeRange initialDateRange = DateTimeRange(
-      start: DateTime.parse(leaveData['startDate']),
-      end: DateTime.parse(leaveData['endDate']),
-    );
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return  Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 10,),
-                  elevation: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: size.height*0.01,),
-                        Text("Update Leave",textAlign: TextAlign.center,style: GoogleFonts.openSans(  fontSize: size.width * 0.06,color: Colors.blue,),),
-                        const Divider(color: Colors.grey,thickness: 2),
-                        SizedBox(height: size.height*0.03,),
-                        Row(
-                          children: [
-                            Text("Choose Date",textAlign: TextAlign.center,style: themeObj.normalText,),
-                            SizedBox(width: size.width*0.02,),
-                            Icon(Icons.calendar_month,color:CustomTheme.blackColor,)
-                          ],
-                        ),
-                        SizedBox(height: size.height*0.01,),
-                        Container(
-                            height: size.height * 0.07,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.grey, width: 1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Center(
-                              child: ListTile(
-                                onTap: () async {
-                                  final DateTimeRange? pickedDateRange = await showDateRangePicker(
-                                    context: context,
-                                    initialDateRange: initialDateRange,
-                                    firstDate: DateTime(2024),
-                                    lastDate: DateTime(2025),
-                                  );
-                                  if (pickedDateRange != null && pickedDateRange != initialDateRange) {
-                                    setState(() {
-                                      initialDateRange = pickedDateRange;
-                                      // Calculate leaveApplyDay here if needed
-                                    });
-                                  }
-                                },
-                                leading: Text(
-                                  '${initialDateRange.start.toString().split(' ')[0]} - ${initialDateRange.end.toString().split(' ')[0]}',
-                                  style: TextStyle(fontSize: size.height * 0.02, color: Colors.black),
-                                ),
-                                trailing: Text(leaveApplyDay?.toString() ?? '', style: TextStyle(fontSize: size.height * 0.02, color: Colors.black)),
-                              ),
-                            )
-                        ),
-                        SizedBox(height: size.height*0.03,),
-
-                        SizedBox(height: size.height*0.03,),
-                        Text("Reason",textAlign: TextAlign.center,style: themeObj.normalText),
-                        SizedBox(height: size.height*0.01,),
-                        TextField(
-
-                          maxLines: 8,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12),)
-                          ),
-                          controller: reasonController,
-                        ),
-                        SizedBox(height: size.height*0.02,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SizedBox(
-                              width: size.width*0.3,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(backgroundColor:const Color.fromRGBO(209,213,219,1),shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.grey,width: 1),borderRadius: BorderRadius.circular(8))),
-                                  onPressed: (){
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Cancel",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.black),)),
-                            ),
-                            SizedBox(
-                              width: size.width * 0.3,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(backgroundColor: const Color(0XFF6FF87D), shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.grey, width: 1), borderRadius: BorderRadius.circular(8))),
-                                onPressed: () async {
-                                  if (reasonController.text.isNotEmpty) {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    Map<String, dynamic> updatedLeave = {
-                                      "_id": leaveData['_id'],
-                                      "startDate": initialDateRange.start.toString().split(' ')[0],
-                                      "endDate": initialDateRange.end.toString().split(' ')[0],
-                                      "reason": reasonController.text,
-                                    };
-                                    await updateLeave( updatedLeave);
-                                    Navigator.of(context).pop();
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-
-                                  } else {
-                                    showRedSnackBar("Please fill all fields", context);
-                                  }
-                                },
-                                child: isLoading
-                                    ? const CircularProgressIndicator(color: Colors.black)
-                                    : Text("Update", style: GoogleFonts.openSans(fontSize: size.width * 0.035, color: Colors.black),),
-                              ),
-                            ),
-
-                          ],
-                        ),
-
-
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },);
-
-      },);
-
-  }
-
-  Future<void> deleteLeave(String leaveID) async{
-
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      var success = await leaveApiObj.deleteLeave(accessToken!, leaveID);
-      print("applyLeaveResponse $success");
-      if(success==true){
-        setState(() {
-          teacherLeaves?.removeWhere((leave) => leave['_id'] == leaveID);
-          showGreenSnackBar("Leave deleted Successfully", context);
-        });
-      }else{
-        showRedSnackBar("Failed to delete a Leave", context);
-      }
-
-    } catch (e) {
-      print('Error delete a leave: $e');
-      showRedSnackBar("Error Occurred. $e", context);
-    }
-  }
-
-  Future<void> loadStats() async{
-
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      var stats = await leaveApiObj.getStats(accessToken!);
-
-      if(stats is Map){
-        setState(() {
-          states =stats.cast<String,dynamic >();
-        });
-      }else{
-        stats={};
-        showRedSnackBar("Failed to Load stats ", context);
-      }
-
-    } catch (e) {
-      print('Error delete a leave: $e');
-      showRedSnackBar("Error Occurred. $e", context);
-    }
-  }
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  DateTimeRange? selectedDateRange;
+  final _reason = TextEditingController();
+  late StudentLeaveBloc _studentLeaveBloc; // Add this line
+  final List<String> statusOptions = ['Pending', 'Approved', 'Rejected'];
 
   @override
   void initState() {
     super.initState();
-
-    fetchLeavesData();
-    fetchLeavesData();
-    loadStats();
-
+    // Initialize the bloc here
+    _studentLeaveBloc = StudentLeaveBloc(leaveApi: StudentLeaveApi());
     _scrollController.addListener(_scrollListener);
+
+    // Load initial data
+    _studentLeaveBloc.add(const LoadStats());
+    _studentLeaveBloc.add(const FetchLeaves(status: 'Pending'));
   }
+
   @override
   void dispose() {
     _scrollController.dispose();
+    _refreshController.dispose();
+    _reason.dispose();
+    _studentLeaveBloc.close(); // Close the bloc
     super.dispose();
   }
+
   void _scrollListener() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.9) {
-     if(!allDataLoaded){
-       fetchMoreLeavesData();
-     }
-
+      final state = context.read<StudentLeaveBloc>().state;
+      if (!state.isLoadingMore && !state.allDataLoaded) {
+        context.read<StudentLeaveBloc>().add(LoadMoreLeaves(status: state.status));
+      }
     }
   }
 
+  Future<void> _onRefresh() async {
+    context.read<StudentLeaveBloc>().add(FetchLeaves(status: context.read<StudentLeaveBloc>().state.status, isRefresh: true));
+    context.read<StudentLeaveBloc>().add(const LoadStats());
+    _refreshController.refreshCompleted();
+  }
+
+  // Method to refresh data after operations
+  void _refreshData() {
+    final currentState = context.read<StudentLeaveBloc>().state;
+
+    context.read<StudentLeaveBloc>().add(const LoadStats());
+    context.read<StudentLeaveBloc>().add(FetchLeaves(status: currentState.status, isRefresh: true));
+  }
+
+  Future<void> _newLeavePopup(BuildContext parentContext, Size size, CustomTheme themeObj) async {
+    _reason.clear();
+    selectedDateRange = null;
+    showDialog(
+      context: parentContext, // Use parentContext for the dialog
+      builder: (BuildContext dialogContext) {
+        return StatefulBuilder(
+          builder: (dialogContext, setState) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  elevation: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: size.height * 0.01),
+                        Text(
+                          "Apply For Leave",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.openSans(fontSize: size.width * 0.06, color: Colors.blue),
+                        ),
+                        const Divider(color: Colors.grey, thickness: 2),
+                        SizedBox(height: size.height * 0.03),
+                        Row(
+                          children: [
+                            Text("Choose Date", textAlign: TextAlign.center, style: themeObj.bigNormalText),
+                            SizedBox(width: size.width * 0.02),
+                            Icon(Icons.calendar_month, color: CustomTheme.blackColor),
+                          ],
+                        ),
+                        SizedBox(height: size.height * 0.01),
+                        Container(
+                          height: size.height * 0.07,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey, width: 1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: ListTile(
+                              onTap: () async {
+                                try {
+                                  final DateTimeRange? pickedDateRange = await showDateRangePicker(
+                                    context: dialogContext, // Use dialogContext for date picker
+                                    initialDateRange: selectedDateRange ??
+                                        DateTimeRange(
+                                          start: DateTime.now(),
+                                          end: DateTime.now().add(const Duration(days: 7)),
+                                        ),
+                                    firstDate: DateTime(2020),
+                                    lastDate: DateTime(2030),
+                                    builder: (context, child) {
+                                      return Theme(
+                                        data: Theme.of(dialogContext).copyWith(
+                                          colorScheme: Theme.of(dialogContext).colorScheme.copyWith(
+                                            primary: Colors.blue,
+                                          ),
+                                        ),
+                                        child: child!,
+                                      );
+                                    },
+                                  );
+
+                                  if (pickedDateRange != null && pickedDateRange != selectedDateRange) {
+                                    setState(() {
+                                      selectedDateRange = pickedDateRange;
+                                    });
+                                  }
+                                } catch (e) {
+                                  print("Error showing date picker: $e");
+                                  ScaffoldMessenger.of(parentContext).showSnackBar(
+                                    SnackBar(
+                                      content: Text("Error opening date picker. Please try again."),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              },
+                              leading: selectedDateRange == null
+                                  ? Text('Not Selected', style: TextStyle(fontSize: size.height * 0.02, color: Colors.black))
+                                  : Text(
+                                '${selectedDateRange!.start.toString().split(' ')[0]} - ${selectedDateRange!.end.toString().split(' ')[0]}',
+                                style: TextStyle(fontSize: size.height * 0.02, color: Colors.black),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: size.height * 0.03),
+                        Text("Reason", textAlign: TextAlign.center, style: themeObj.normalText),
+                        SizedBox(height: size.height * 0.01),
+                        TextField(
+                          maxLines: 8,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          controller: _reason,
+                        ),
+                        SizedBox(height: size.height * 0.02),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: size.width * 0.3,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color.fromRGBO(209, 213, 219, 1),
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(color: Colors.grey, width: 1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                onPressed: () => Navigator.pop(dialogContext),
+                                child: Text("Cancel", style: GoogleFonts.openSans(fontSize: size.width * 0.035, color: Colors.black)),
+                              ),
+                            ),
+                            SizedBox(
+                              width: size.width * 0.3,
+                              child: BlocBuilder<StudentLeaveBloc, StudentLeaveState>(
+                                bloc:_studentLeaveBloc,
+                                builder: (context, state) {
+                                  return ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0XFF6FF87D),
+                                      shape: RoundedRectangleBorder(
+                                        side: const BorderSide(color: Colors.grey, width: 1),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      if (selectedDateRange != null && _reason.text.isNotEmpty) {
+                                        context.read<StudentLeaveBloc>().add(
+                                          ApplyLeave(
+                                            startDate: selectedDateRange!.start.toString().split(' ')[0],
+                                            endDate: selectedDateRange!.end.toString().split(' ')[0],
+                                            reason: _reason.text,
+                                          ),
+                                        );
+                                        Navigator.pop(dialogContext);
+
+                                        // Wait a bit for the operation to complete, then refresh
+                                        await Future.delayed(Duration(milliseconds: 500));
+                                        _refreshData();
+
+                                        // Show success message
+                                        ScaffoldMessenger.of(parentContext).showSnackBar(
+                                          SnackBar(
+                                            content: Text("Leave application submitted successfully!"),
+                                            backgroundColor: Colors.green,
+                                          ),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(parentContext).showSnackBar(
+                                          SnackBar(
+                                            content: Text("Please fill all fields"),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    child: state.isLoading
+                                        ? const CircularProgressIndicator(color: Colors.black)
+                                        : Text("Save", style: GoogleFonts.openSans(fontSize: size.width * 0.035, color: Colors.black)),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _updateLeavePopup(BuildContext context, Size size, Map<String, dynamic> leaveData, CustomTheme themeObj) async {
+    final reasonController = TextEditingController(text: leaveData['reason']);
+    DateTimeRange initialDateRange = DateTimeRange(
+      start: DateTime.parse(leaveData['startDate']),
+      end: DateTime.parse(leaveData['endDate']),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  elevation: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: size.height * 0.01),
+                        Text(
+                          "Update Leave",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.openSans(fontSize: size.width * 0.06, color: Colors.blue),
+                        ),
+                        const Divider(color: Colors.grey, thickness: 2),
+                        SizedBox(height: size.height * 0.03),
+                        Row(
+                          children: [
+                            Text("Choose Date", textAlign: TextAlign.center, style: themeObj.normalText),
+                            SizedBox(width: size.width * 0.02),
+                            Icon(Icons.calendar_month, color: CustomTheme.blackColor),
+                          ],
+                        ),
+                        SizedBox(height: size.height * 0.01),
+                        Container(
+                          height: size.height * 0.07,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey, width: 1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: ListTile(
+                              onTap: () async {
+                                final DateTimeRange? pickedDateRange = await showDateRangePicker(
+                                  context: context,
+                                  initialDateRange: initialDateRange,
+                                  firstDate: DateTime(2024),
+                                  lastDate: DateTime(2025),
+                                );
+                                if (pickedDateRange != null && pickedDateRange != initialDateRange) {
+                                  setState(() {
+                                    initialDateRange = pickedDateRange;
+                                  });
+                                }
+                              },
+                              leading: Text(
+                                '${initialDateRange.start.toString().split(' ')[0]} - ${initialDateRange.end.toString().split(' ')[0]}',
+                                style: TextStyle(fontSize: size.height * 0.02, color: Colors.black),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: size.height * 0.03),
+                        Text("Reason", textAlign: TextAlign.center, style: themeObj.normalText),
+                        SizedBox(height: size.height * 0.01),
+                        TextField(
+                          maxLines: 8,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          controller: reasonController,
+                        ),
+                        SizedBox(height: size.height * 0.02),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: size.width * 0.3,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color.fromRGBO(209, 213, 219, 1),
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(color: Colors.grey, width: 1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("Cancel", style: GoogleFonts.openSans(fontSize: size.width * 0.035, color: Colors.black)),
+                              ),
+                            ),
+                            SizedBox(
+                              width: size.width * 0.3,
+                              child: BlocBuilder< StudentLeaveBloc, StudentLeaveState>(
+                                bloc: _studentLeaveBloc,
+                            builder: (context, state) {
+                              return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0XFF6FF87D),
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(color: Colors.grey, width: 1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  if (reasonController.text.isNotEmpty) {
+                                    context.read<StudentLeaveBloc>().add(
+                                      UpdateLeave(
+                                        leaveId: leaveData['_id'],
+                                        startDate: initialDateRange.start.toString().split(' ')[0],
+                                        endDate: initialDateRange.end.toString().split(' ')[0],
+                                        reason: reasonController.text,
+                                      ),
+                                    );
+                                    Navigator.pop(context);
+                                    await Future.delayed(Duration(milliseconds: 500));
+                                    _refreshData();
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text("Please fill all fields"),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: state.isLoading
+                                    ? const CircularProgressIndicator(color: Colors.black)
+                                    : Text("Update", style: GoogleFonts.openSans(fontSize: size.width * 0.035, color: Colors.black)),
+                              );
+                            },
+                            ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    print( states);
-    print(teacherLeaves);
     Size size = MediaQuery.of(context).size;
-    CustomTheme themeObj=CustomTheme(size);
-    return Scaffold(
-      backgroundColor: CustomTheme.whiteColor,
+    CustomTheme themeObj = CustomTheme(size);
+
+    return BlocProvider<StudentLeaveBloc>.value(
+      value: _studentLeaveBloc,
+      child: Scaffold(
+        backgroundColor: CustomTheme.whiteColor,
         appBar: AppBar(
           backgroundColor: CustomTheme.primaryColor,
           leading: IconButton(
@@ -544,15 +432,13 @@ class _StudentLeaveState extends State<StudentLeave> with SingleTickerProviderSt
           ),
           actions: [
             Container(
-              height: size.height*0.05,
-              // padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-
+              height: size.height * 0.05,
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: TextButton.icon(
-                onPressed: () => newLeavePopup(context, size, themeObj),
+                onPressed: () => _newLeavePopup(context, size, themeObj),
                 icon: Icon(CupertinoIcons.add_circled, color: Colors.black),
                 label: Text("New Leave", style: themeObj.normalText.copyWith(color: Colors.black)),
               ),
@@ -560,198 +446,213 @@ class _StudentLeaveState extends State<StudentLeave> with SingleTickerProviderSt
             SizedBox(width: 16),
           ],
         ),
-      body:SingleChildScrollView(
-      controller: _scrollController,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 3.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: size.height*0.02,),
-              Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.blue[100]!, Colors.blue[50]!],
-                    ),
-                  ),
-                  padding: EdgeInsets.all(12),
+        body: BlocConsumer<StudentLeaveBloc, StudentLeaveState>(
+          bloc: _studentLeaveBloc,
+          listener: (context, state) {
+            if (state.errorMessage != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage!),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            return SmartRefresher(
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Leave Statistics",
-                        style: themeObj.bigNormalText.copyWith(fontWeight: FontWeight.bold, color: Colors.blue[800]),
-                      ),
-                      SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _buildAnimatedStatCard("Approved", states?["approved"] ?? 0, Colors.green, themeObj),
-                          _buildAnimatedStatCard("Pending", states?["pending"] ?? 0, Colors.orange, themeObj),
-                          _buildAnimatedStatCard("Rejected", states?["rejected"] ?? 0, Colors.red, themeObj),
-                        ],
-                      ),
-                      SizedBox(height: 24),
-                      Center(
-                        child: TweenAnimationBuilder<double>(
-                          tween: Tween<double>(begin: 0, end: _calculateTotalProgress()),
-                          duration: Duration(seconds: 1),
-                          builder: (context, value, child) {
-                            return SizedBox(
-                              height: size.width * 0.3,
-                              width: size.width * 0.3,
-                              child: Stack(
-                                fit: StackFit.expand,
+                      SizedBox(height: size.height * 0.02),
+                      Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        child: Container(
+                          decoration: BoxDecoration(
+                         //   border: BorderRadius.circular(16),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Colors.blue[100]!, Colors.blue[50]!],
+                            ),
+                          ),
+                          padding: EdgeInsets.all(12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Leave Statistics",
+                                style: themeObj.bigNormalText.copyWith(fontWeight: FontWeight.bold, color: Colors.blue[800]),
+                              ),
+                              SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  CircularProgressIndicator(
-                                    value: value,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                                    strokeWidth: 10,
-                                    backgroundColor: Colors.grey[300],
-                                  ),
-                                  Center(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          "${(_calculateTotalLeaves() * value).toInt()}",
-                                          style: themeObj.bigNormalText.copyWith(
-                                            fontSize: 28,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blue[800],
-                                          ),
-                                        ),
-                                        Text(
-                                          'Total Leaves',
-                                          style: themeObj.normalText.copyWith(color: Colors.blue[600]),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  _buildAnimatedStatCard("Approved", state.stats["approved"] ?? 0, Colors.green, themeObj),
+                                  _buildAnimatedStatCard("Pending", state.stats["pending"] ?? 0, Colors.orange, themeObj),
+                                  _buildAnimatedStatCard("Rejected", state.stats["rejected"] ?? 0, Colors.red, themeObj),
                                 ],
                               ),
-                            );
-                          },
+                              SizedBox(height: 24),
+                              Center(
+                                child: TweenAnimationBuilder<double>(
+                                  tween: Tween<double>(begin: 0, end: _calculateTotalProgress(state)),
+                                  duration: Duration(seconds: 1),
+                                  builder: (context, value, child) {
+                                    return SizedBox(
+                                      height: size.width * 0.3,
+                                      width: size.width * 0.3,
+                                      child: Stack(
+                                        fit: StackFit.expand,
+                                        children: [
+                                          CircularProgressIndicator(
+                                            value: value,
+                                            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                                            strokeWidth: 10,
+                                            backgroundColor: Colors.grey[300],
+                                          ),
+                                          Center(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  "${(_calculateTotalLeaves(state) * value).toInt()}",
+                                                  style: themeObj.bigNormalText.copyWith(
+                                                    fontSize: 28,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.blue[800],
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Total Leaves',
+                                                  style: themeObj.normalText.copyWith(color: Colors.blue[600]),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Leave History",
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.openSans(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: size.width * 0.045,
+                            ),
+                          ),
+                          Card(
+                            child: SizedBox(
+                              width: size.width * 0.4,
+                              height: size.height * 0.05,
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                borderRadius: BorderRadius.circular(12),
+                                hint: const Text("Select Status"),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(8),
+                                icon: const Icon(Icons.keyboard_arrow_down_sharp),
+                                underline: Container(),
+                                value: state.status,
+                                onChanged: (newValue) {
+                                  context.read<StudentLeaveBloc>().add(FetchLeaves(status: newValue!));
+                                },
+                                items: statusOptions.map((String option) {
+                                  return DropdownMenuItem<String>(
+                                    value: option,
+                                    child: Text(option, overflow: TextOverflow.ellipsis),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(color: CustomTheme.greyColor),
+                      state.leaves == null || state.leaves!.isEmpty
+                          ? Center(
+                        child: Text(
+                          "No Leaves found!",
+                          style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey[600]),
+                        ),
+                      )
+                          : SizedBox(),
+                      state.isLoading
+                          ? Center(
+                        child: LoadingAnimationWidget.threeArchedCircle(
+                          color: CustomTheme.primaryColor,
+                          size: 50,
+                        ),
+                      )
+                          : SingleChildScrollView(
+                            child: ListView.builder(
+                                                    shrinkWrap: true, // Keeps the ListView compact
+                                                    physics: const AlwaysScrollableScrollPhysics(),
+                                                    itemCount: (state.leaves?.length ?? 0) + (state.isLoadingMore ? 1 : 0),
+                                                    itemBuilder: (context, index) {
+                            if (index < (state.leaves?.length ?? 0)) {
+                              final leave = state.leaves![index];
+                              return AnimationConfiguration.staggeredList(
+                                position: index,
+                                duration: const Duration(milliseconds: 375),
+                                child: SlideAnimation(
+                                  verticalOffset: 50.0,
+                                  child: FadeInAnimation(
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(16),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            _buildLeaveHeader(leave, size, themeObj),
+                                            _buildLeaveBody(leave, size, themeObj, context),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Center(
+                                child: LoadingAnimationWidget.threeArchedCircle(
+                                  color: CustomTheme.primaryColor,
+                                  size: 50,
+                                ),
+                              );
+                            }
+                                                    },
+                                                  ),
+                          ),
                     ],
                   ),
                 ),
               ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Leave History",
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.openSans(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: size.width * 0.045,
-                    ),
-                  ),
-                  Card(
-                    child: SizedBox(
-                      width: size.width * 0.4,
-                      height: size.height * 0.05,
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        borderRadius: BorderRadius.circular(12),
-                        hint: const Text("Select Day"),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(8),
-                        icon: const Icon(Icons.keyboard_arrow_down_sharp),
-                        underline: Container(),
-                        value: status,
-                        onChanged: (newValue) {
-                          setState(() {
-                            status = newValue!;
-                            fetchLeavesData();
-                          });
-                        },
-                        items: statusOptions.map((String option) {
-                          return DropdownMenuItem<String>(
-                            value: option,
-                            child: Text(option, overflow: TextOverflow.ellipsis),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(color: CustomTheme.greyColor,),
-              teacherLeaves == null || teacherLeaves!.isEmpty?
-              Center(
-                child: Text(
-                  "No Leaves found!",
-                  style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey[600]),
-                ),
-              ):SizedBox(),
-              SizedBox(
-
-                  child:  isLoading ?  Center(
-                    child: LoadingAnimationWidget.threeArchedCircle(
-                      color: CustomTheme.primaryColor,
-                      size: 50,
-                    ),
-                  )
-                      :
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: (teacherLeaves?.length ?? 0) + (isLoadingMore ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (index < (teacherLeaves?.length ?? 0)) {
-                        final leave = teacherLeaves?[index];
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          duration: const Duration(milliseconds: 375),
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: Card(
-
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      _buildLeaveHeader(leave, size, themeObj),
-                                      _buildLeaveBody(leave, size, themeObj),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      } else {
-                        return Center(
-                          child: LoadingAnimationWidget.threeArchedCircle(
-                            color: CustomTheme.primaryColor,
-                            size: 50,
-                          ),
-                        );
-                      }
-                    },
-                  )
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
-
     );
   }
+
   Widget _buildAnimatedStatCard(String title, int value, Color color, CustomTheme themeObj) {
     return TweenAnimationBuilder<int>(
       tween: IntTween(begin: 0, end: value),
@@ -784,8 +685,8 @@ class _StudentLeaveState extends State<StudentLeave> with SingleTickerProviderSt
       },
     );
   }
+
   Widget _buildLeaveHeader(Map<String, dynamic> leave, Size size, CustomTheme themeObj) {
-    Size size = MediaQuery.of(context).size;
     Color headerColor;
     IconData headerIcon;
 
@@ -818,7 +719,7 @@ class _StudentLeaveState extends State<StudentLeave> with SingleTickerProviderSt
           Row(
             children: [
               Icon(headerIcon, color: headerColor, size: 20),
-              SizedBox(width: size.width*0.01),
+              SizedBox(width: size.width * 0.01),
               Text(
                 leave["status"],
                 style: themeObj.bigNormalText.copyWith(color: headerColor, fontWeight: FontWeight.w500),
@@ -842,7 +743,7 @@ class _StudentLeaveState extends State<StudentLeave> with SingleTickerProviderSt
             child: Text(
               "${leave["startDate"]} - ${leave["endDate"]}",
               style: GoogleFonts.poppins(
-                fontSize: size.width*0.035,
+                fontSize: size.width * 0.035,
                 color: Colors.grey[700],
                 fontWeight: FontWeight.w500,
               ),
@@ -853,8 +754,7 @@ class _StudentLeaveState extends State<StudentLeave> with SingleTickerProviderSt
     );
   }
 
-  Widget _buildLeaveBody(Map<String, dynamic> leave, Size size, CustomTheme themeObj) {
-    Size size = MediaQuery.of(context).size;
+  Widget _buildLeaveBody(Map<String, dynamic> leave, Size size, CustomTheme themeObj, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -864,12 +764,12 @@ class _StudentLeaveState extends State<StudentLeave> with SingleTickerProviderSt
             "Reason:",
             style: themeObj.bigNormalText.copyWith(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: size.height*0.01),
+          SizedBox(height: size.height * 0.01),
           Text(
             leave["reason"],
             style: themeObj.normalText.copyWith(color: Colors.grey[700]),
           ),
-          SizedBox(height: size.height*0.02),
+          SizedBox(height: size.height * 0.02),
           if (leave["status"] == "Pending")
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -877,13 +777,13 @@ class _StudentLeaveState extends State<StudentLeave> with SingleTickerProviderSt
                 _buildAnimatedActionButton(
                   icon: Icons.edit,
                   color: Colors.blue,
-                  onPressed: () => updateLeavePopup(context, size, leave, themeObj),
+                  onPressed: () => _updateLeavePopup(context, size, leave, themeObj),
                 ),
                 SizedBox(width: 12),
                 _buildAnimatedActionButton(
                   icon: Icons.delete,
                   color: Colors.red,
-                  onPressed: () => deleteLeave(leave["_id"]),
+                  onPressed: () => context.read<StudentLeaveBloc>().add(DeleteLeave(leaveId: leave["_id"])),
                 ),
               ],
             ),
@@ -907,33 +807,13 @@ class _StudentLeaveState extends State<StudentLeave> with SingleTickerProviderSt
     );
   }
 
-  double _calculateTotalProgress() {
-    int total = _calculateTotalLeaves();
-    int approved = states["approved"] ?? 0;
+  double _calculateTotalProgress(StudentLeaveState state) {
+    int total = _calculateTotalLeaves(state);
+    int approved = state.stats["approved"] ?? 0;
     return total > 0 ? approved / total : 0;
   }
 
-  int _calculateTotalLeaves() {
-    return (states["approved"] ?? 0) +
-        (states["pending"] ?? 0) +
-        (states["rejected"] ?? 0);
+  int _calculateTotalLeaves(StudentLeaveState state) {
+    return (state.stats["approved"] ?? 0) + (state.stats["pending"] ?? 0) + (state.stats["rejected"] ?? 0);
   }
-
-
-  Widget _buildActionButton({required IconData icon, required Color color, required VoidCallback onPressed}) {
-    return Material(
-      color: color,
-      borderRadius: BorderRadius.circular(8),
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Icon(icon, color: Colors.white, size: 20),
-        ),
-      ),
-    );
-  }
-
 }
-

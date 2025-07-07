@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../CustomTheme/customTheme.dart';
-import '../../StudentAPIs/StudentModuleAPI/Ask_Doubts/ask_doubtAPI.dart';
+import 'askDoubtBloc/ask_doubt_bloc.dart';
+import 'askDoubtBloc/ask_doubt_event.dart';
+import 'askDoubtBloc/ask_doubt_state.dart';
 
 
 class AskDoubts extends StatefulWidget {
@@ -20,486 +22,104 @@ class AskDoubts extends StatefulWidget {
 }
 
 class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMixin {
-  String selectedSubject="";
-  List<String>? subjectOptions;
-  List<String>  handleSubject=[
-    ""
-  ];
-  String status ="Pending";
-  List<String> statusOptions = [
-    'Pending',
-    'Resolved',
-    'Rejected',
-  ];
-  bool isLoading=false;
-
-  AskDoubtAPI doubtObj=AskDoubtAPI();
-
-  List<dynamic>? doubtList;
-
+  String selectedSubject = "";
+  String status = "Pending";
+  List<String> statusOptions = ['Pending', 'Resolved', 'Rejected'];
   final ScrollController _scrollController = ScrollController();
-  bool isLoadingMore = false;
-  bool allDataLoaded = false;
-  int start=0;
-  final question = TextEditingController();
-
-  Future<void> fetchDoubts() async {
-    setState(() {
-      isLoading = true;
-      start = 0; // Reset start value
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      List<dynamic> fetchedDoubts  = await doubtObj.fetchDoubts(accessToken!, status,selectedSubject,start);
-      print("fetched leaves $fetchedDoubts ");
-
-      setState(() {
-        doubtList = fetchedDoubts ;
-      });
-    } catch (e) {
-      print('Error fetching leave data: $e');
-      showRedSnackBar("Error occurred to fetch doubts $e", context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  Future<void> fetchMoreDoubts() async {
-    if (isLoadingMore) return;
-
-    setState(() {
-      isLoadingMore = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      int newStart = start + (doubtList?.length ?? 0);
-      List<dynamic> fetchedDoubts = await doubtObj.fetchDoubts(accessToken!,status,selectedSubject, newStart);
-      int? previousLength=doubtList?.length;
-
-      doubtList?.addAll(fetchedDoubts);
-
-      int? newLength=doubtList?.length;
-      if(newLength==previousLength && newLength!=null && previousLength!=null){
-        allDataLoaded=true;
-      }
-    } catch (e) {
-      print('Error fetching more leave data: $e');
-      showRedSnackBar("Error occurred to load more leaves $e.", context);
-    } finally {
-      setState(() {
-        isLoadingMore = false;
-      });
-    }
-  }
-
-
-  Future<void> fetchSubjects() async {
-    SharedPreferences pref=await SharedPreferences.getInstance();
-    subjectOptions =pref.getStringList("subjects") ;
-  }
-
-
-  Future<dynamic> askDoubt(String subject,String question) async {
-
-
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      var doubtAsk = await doubtObj.askDoubts(accessToken!, question, subject);
-      print("doubtAsk $doubtAsk");
-
-      return doubtAsk;
-    } catch (e) {
-
-      showRedSnackBar("Error on askDoubt $e.", context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  Future<void>askDoubtPopup( BuildContext context ,Size size,CustomTheme themeObj,List<String> subjectOptions, String selectedSubject)async {
-
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return  Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 10,),
-                  elevation: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: size.width*0.9,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: size.height*0.01,),
-                          Text("To Ask a doubt please select class and subject and write your Question? You can also attached photos for references.",textAlign: TextAlign.center,style: themeObj.normalText,),
-                          SizedBox(height: size.height*0.01,),
-                          Card(
-                            child: SizedBox(
-                              width: size.width,
-                              height: size.height * 0.05,
-                              child:DropdownButton<String>(
-                                isExpanded: true,
-                                borderRadius: BorderRadius.circular(12),
-                                hint: Text("Subject", style: themeObj.normalText),
-                                padding: EdgeInsets.all(8),
-                                icon: Icon(Icons.keyboard_arrow_down_sharp, color: CustomTheme.greyColor),
-                                alignment: Alignment.center,
-                                underline: Container(),
-                                value: selectedSubject.isEmpty ? null : selectedSubject,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedSubject = newValue!;
-                                  });
-                                },
-                                items:subjectOptions.map((String option) {
-                                  return DropdownMenuItem<String>(
-                                    value: option,
-                                    child: Text(option, overflow: TextOverflow.ellipsis, style:themeObj.normalText),
-                                  );
-                                }).toList(),
-                              ),
-
-
-                            ),
-                          ),
-                          SizedBox(height: size.height*0.03,),
-                          Text("Your Question",textAlign: TextAlign.center,style: themeObj.normalText),
-                          SizedBox(height: size.height*0.01,),
-                          TextField(
-                            maxLines: 5,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12),)
-                            ),
-                            controller: question,
-                          ),
-                          SizedBox(height: size.height*0.02,),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              SizedBox(
-                                width: size.width*0.3,
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(backgroundColor:const Color.fromRGBO(209,213,219,1),shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.grey,width: 1),borderRadius: BorderRadius.circular(8))),
-                                    onPressed: (){
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("Cancel",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.black),)),
-                              ),
-                              SizedBox(
-                                width: size.width * 0.3,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0XFF6FF87D), shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.grey, width: 1), borderRadius: BorderRadius.circular(8))),
-                                  onPressed: () async {
-                                    if (question.text.isNotEmpty) {
-                                      setState(() {
-                                        isLoading = true;
-                                      });
-                                      Map<dynamic, dynamic>? newDoubt=  await askDoubt(selectedSubject, question.text.toString());
-                                      setState(() {
-                                        isLoading = false;
-                                      });
-                                      if (newDoubt != null) {
-
-                                        doubtList?.insert(0, newDoubt);
-                                        print("added");
-                                        this.setState(() {});
-                                      }
-                                      Navigator.pop(context);
-                                    } else {
-                                      // Show an error message if any field is empty
-                                      showRedSnackBar("Please fill all fields", context);
-                                    }
-                                  },
-                                  child: isLoading
-                                      ? const CircularProgressIndicator(color: Colors.black)
-                                      : Text("Submit", style: GoogleFonts.openSans(fontSize: size.width * 0.035, color: Colors.black),),
-                                ),
-                              ),
-
-                            ],
-                          ),
-
-
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },);
-
-      },);
-
-  }
-
-  Future<void> updateAskDoubt(Map<String, dynamic> updateDoubt,int index) async {
-
-    print("/////////$updateDoubt");
-
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      var success = await doubtObj.updateDoubt(accessToken!,updateDoubt["_id"],updateDoubt,widget.currentClass);
-      if(success==true){
-
-        setState(() {
-          // int index = teacherLeaves?.indexWhere((leave) => leave['_id'] == updatedLeave["_id"]) ?? -1;
-          // if (index != -1) {
-          //   // Update the leave in the teacherLeaves list
-          //   teacherLeaves?[index] = {
-          //     ...teacherLeaves![index], // Keep existing fields
-          //     ...updatedLeave, // Update with new fields
-          //   };
-          // }
-          print("index $index");
-          print("question ${updateDoubt["question"]}");
-          print("subject ${updateDoubt["subject"]}");
-          if (doubtList != null && doubtList!.length > index) {
-            doubtList![index]["question"] = updateDoubt["question"] ?? doubtList![index]["question"];
-            doubtList![index]["subject"] = updateDoubt["subject"] ?? doubtList![index]["subject"];
-          }
-          // fetchDoubts();
-
-          showGreenSnackBar("Doubt Updated Successfully", context);
-        });
-      }else{
-        showGreenSnackBar("Doubt Not updated", context);
-      }
-
-
-    } catch (e) {
-
-      showRedSnackBar("Error on Updating $e.", context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  Future<void>updateAskDoubtPopup( BuildContext context ,Size size,List<String> subjectOptions, String selectedSubject, Map<String, dynamic> doubtData,CustomTheme themeObj,int index){
-    print("////////////////////////$doubtData");
-    TextEditingController question = TextEditingController(text: doubtData['question']);
-
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return  Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 10,),
-                  elevation: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: size.width*0.9,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: size.height*0.01,),
-                          Text("To Ask a doubt please select class and subject and write your Question? You can also attached photos for references.",textAlign: TextAlign.center,style: themeObj.normalText,),
-                          SizedBox(height: size.height*0.01,),
-                          Card(
-                            child: SizedBox(
-                              width: size.width,
-                              height: size.height * 0.05,
-                              child:DropdownButton<String>(
-                                isExpanded: true,
-                                borderRadius: BorderRadius.circular(12),
-                                hint: Text("Subject", style: themeObj.normalText),
-                                padding: const EdgeInsets.all(8),
-                                icon: Icon(Icons.keyboard_arrow_down_sharp, color: CustomTheme.greyColor),
-                                alignment: Alignment.center,
-                                underline: Container(),
-                                value: selectedSubject.isEmpty ? null : selectedSubject,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedSubject = newValue!;
-                                  });
-                                },
-                                items:subjectOptions.map((String option) {
-                                  return DropdownMenuItem<String>(
-                                    value: option,
-                                    child: Text(option, overflow: TextOverflow.ellipsis, style:themeObj.normalText),
-                                  );
-                                }).toList(),
-                              ),
-
-
-                            ),
-                          ),
-                          SizedBox(height: size.height*0.03,),
-                          Text("Your Question",textAlign: TextAlign.center,style: themeObj.normalText),
-                          SizedBox(height: size.height*0.01,),
-                          TextField(
-                            maxLines: 5,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12),)
-                            ),
-                            controller: question,
-                          ),
-                          SizedBox(height: size.height*0.02,),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              SizedBox(
-                                width: size.width*0.3,
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(backgroundColor:const Color.fromRGBO(209,213,219,1),shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.grey,width: 1),borderRadius: BorderRadius.circular(8))),
-                                    onPressed: (){
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("Cancel",style: GoogleFonts.openSans(fontSize:size.width*0.035,color:Colors.black),)),
-                              ),
-                              SizedBox(
-                                width: size.width * 0.3,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0XFF6FF87D), shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.grey, width: 1), borderRadius: BorderRadius.circular(8))),
-                                  onPressed: () async {
-                                    if (question.text.isNotEmpty) {
-                                      setState(() {
-                                        isLoading = true;
-                                      });
-                                      Map<String, dynamic> updatedLeave = {
-                                        "_id": doubtData['_id'],
-                                       "subject":selectedSubject,
-                                        "question": question.text,
-                                      };
-                                      await updateAskDoubt( updatedLeave,index);
-                                      Navigator.of(context).pop();
-                                      setState(() {
-                                        isLoading = false;
-                                      });
-
-                                    } else {
-                                      showRedSnackBar("Please fill all fields", context);
-                                    }
-                                  },
-                                  child: isLoading
-                                      ? const CircularProgressIndicator(color: Colors.black)
-                                      : Text("Update", style: GoogleFonts.openSans(fontSize: size.width * 0.035, color: Colors.black),),
-                                ),
-                              ),
-
-                            ],
-                          ),
-
-
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },);
-
-      },);
-
-  }
-
-  Future<void> deleteDoubt(String doubtID) async{
-
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      var success = await doubtObj.deleteDoubt(accessToken!, doubtID,widget.currentClass);
-      print("applyLeaveResponse $success");
-      if(success==true){
-        setState(() {
-          doubtList?.removeWhere((leave) => leave['_id'] == doubtID);
-          showGreenSnackBar("Doubt deleted Successfully", context);
-        });
-      }else{
-        showRedSnackBar("Failed to delete a Doubt", context);
-      }
-
-    } catch (e) {
-      print('Error delete a Doubt: $e');
-      showRedSnackBar("Error Doubt. $e", context);
-    }
-  }
+  final TextEditingController question = TextEditingController();
 
   late AnimationController _animationController;
   late Animation<double> _animation;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    fetchSubjects();
-    fetchDoubts();
-    _scrollController.addListener(_scrollListener);
 
+    final bloc = context.read<AskDoubtBloc>();
+    final currentState = bloc.state;
+
+    print("🟡 Current isInitial flag: ${currentState.isInitial}");
+
+    if (currentState.isInitial) {
+      print("🟢 First-time fetch: Dispatching FetchSubjects and FetchDoubts");
+      bloc.add(FetchSubjects());
+      bloc.add(FetchDoubts(
+        status: status,
+        selectedSubject: selectedSubject,
+      ));
+    } else {
+      print("🔵 Skipping fetch — state already initialized");
+    }
+
+    _scrollController.addListener(_scrollListener);
 
     _animationController = AnimationController(
       duration: const Duration(seconds: 3),
       vsync: this,
     );
+
     _animation = CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
     );
   }
+
+
   @override
   void dispose() {
     _scrollController.dispose();
     _animationController.dispose();
+    question.dispose();
     super.dispose();
   }
+
   void _scrollListener() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.9) {
-    if(!allDataLoaded) {
-      fetchMoreDoubts();
-    }
+      final state = context.read<AskDoubtBloc>().state;
+      if (!state.isLoadingMore && !state.allDataLoaded) {
+        context.read<AskDoubtBloc>().add(FetchMoreDoubts(
+          status: status,
+          selectedSubject: selectedSubject,
+          start: state.doubtList?.length ?? 0,
+        ));
+      }
     }
   }
+
+  void showRedSnackBar(String message, BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: GoogleFonts.poppins(color: Colors.white)),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  void showGreenSnackBar(String message, BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: GoogleFonts.poppins(color: Colors.white)),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    print("doubtList $doubtList");
     Size size = MediaQuery.of(context).size;
     CustomTheme themeObj = CustomTheme(size);
-
-    print("Building main widget. doubtList length: ${doubtList?.length}");
 
     return Scaffold(
       backgroundColor: CustomTheme.whiteColor,
       appBar: _buildAppBar(size, themeObj),
       body: RefreshIndicator(
         onRefresh: () async {
-          await fetchDoubts();
+          context.read<AskDoubtBloc>().add(FetchDoubts(
+            status: status,
+            selectedSubject: selectedSubject,
+          ));
         },
         child: SingleChildScrollView(
-
           physics: const AlwaysScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -518,31 +138,23 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
       floatingActionButton: _buildFloatingActionButton(size, themeObj),
     );
   }
+
   AppBar _buildAppBar(Size size, CustomTheme themeObj) {
-    Size size = MediaQuery.of(context).size;
     return AppBar(
       elevation: 0,
       backgroundColor: CustomTheme.primaryColor,
       title: Text(
         "My Doubts",
         style: GoogleFonts.poppins(
-          fontSize: size.width*0.045,
+          fontSize: size.width * 0.045,
           fontWeight: FontWeight.w500,
           color: CustomTheme.blackColor,
         ),
       ),
       leading: IconButton(
-        icon:  Icon(Icons.arrow_back_ios, color: CustomTheme.blackColor),
+        icon: Icon(Icons.arrow_back_ios, color: CustomTheme.blackColor),
         onPressed: () => Navigator.pop(context),
       ),
-      // actions: [
-      //   IconButton(
-      //     icon:  Icon(Icons.search, color: CustomTheme.blackColor),
-      //     onPressed: () {
-      //       // Implement search functionality
-      //     },
-      //   ),
-      // ],
     );
   }
 
@@ -572,51 +184,59 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
       default:
         return Colors.grey;
     }
-
   }
+
   Widget _buildFilters(Size size, CustomTheme themeObj) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: CustomTheme.primaryColor.withOpacity(0.1),
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
-      child:  Row(
-        children: [
-          Expanded(
-            child: _buildDropdown(
-              hint: "Subject",
-              value: selectedSubject.isEmpty ? null : selectedSubject,
-              items: subjectOptions ?? handleSubject,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedSubject = newValue!;
-                  doubtList = [];
-                  fetchDoubts();
-                });
-              },
+    return BlocBuilder<AskDoubtBloc, AskDoubtState>(
+      builder: (context, state) {
+        return Container(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: CustomTheme.primaryColor.withOpacity(0.1),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
             ),
           ),
-          SizedBox(width: size.width * 0.03),
-          Expanded(
-            child: _buildDropdown(
-              hint: "Status",
-              value: status,
-              items: statusOptions,
-              onChanged: (newValue) {
-                setState(() {
-                  status = newValue!;
-                  doubtList = [];
-                  fetchDoubts();
-                });
-              },
-            ),
+          child: Row(
+            children: [
+              Expanded(
+                child: _buildDropdown(
+                  hint: "Subject",
+                  value: selectedSubject.isEmpty ? null : selectedSubject,
+                  items: state.subjectOptions ?? [""],
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedSubject = newValue!;
+                      context.read<AskDoubtBloc>().add(FetchDoubts(
+                        status: status,
+                        selectedSubject: selectedSubject,
+                      ));
+                    });
+                  },
+                ),
+              ),
+              SizedBox(width: size.width * 0.03),
+              Expanded(
+                child: _buildDropdown(
+                  hint: "Status",
+                  value: status,
+                  items: statusOptions,
+                  onChanged: (newValue) {
+                    setState(() {
+                      status = newValue!;
+                      context.read<AskDoubtBloc>().add(FetchDoubts(
+                        status: status,
+                        selectedSubject: selectedSubject,
+                      ));
+                    });
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -662,38 +282,45 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
   }
 
   Widget _buildDoubtsList(Size size, CustomTheme themeObj) {
-    if (isLoading) {
-      return _buildShimmerEffect(size);
-    }
+    return BlocBuilder<AskDoubtBloc, AskDoubtState>(
+      builder: (context, state) {
+        if (state.isLoading) {
+          return _buildShimmerEffect(size);
+        }
 
-    if (doubtList == null || doubtList!.isEmpty) {
-      return Center(
-        child: Text(
-          "No Doubts found!",
-          style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey[600]),
-        ),
-      );
-    }
-
-    return AnimationLimiter(
-      child: ListView.builder(
-        itemCount: doubtList!.length + (isLoadingMore ? 1 : 0),
-        controller: _scrollController,
-        padding: EdgeInsets.all(5),
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return AnimationConfiguration.staggeredList(
-            position: index,
-            duration: const Duration(milliseconds: 375),
-            child: SlideAnimation(
-              verticalOffset: 50.0,
-              child: FadeInAnimation(
-                child: _buildDoubtCard(doubtList![index], size, themeObj, index),
-              ),
+        if (state.doubtList == null || state.doubtList!.isEmpty) {
+          return Center(
+            child: Text(
+              "No Doubts found!",
+              style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey[600]),
             ),
           );
-        },
-      ),
+        }
+
+        return AnimationLimiter(
+          child: ListView.builder(
+            itemCount: state.doubtList!.length + (state.isLoadingMore ? 1 : 0),
+            controller: _scrollController,
+            padding: EdgeInsets.all(5),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              if (index == state.doubtList!.length) {
+                return Center(child: CircularProgressIndicator());
+              }
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 375),
+                child: SlideAnimation(
+                  verticalOffset: 50.0,
+                  child: FadeInAnimation(
+                    child: _buildDoubtCard(state.doubtList![index], size, themeObj, index),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -728,7 +355,7 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
     );
   }
 
-  Widget _buildDoubtCard(Map<String, dynamic> doubt, Size size, CustomTheme themeObj,int index) {
+  Widget _buildDoubtCard(Map<String, dynamic> doubt, Size size, CustomTheme themeObj, int index) {
     return Card(
       elevation: 3,
       margin: const EdgeInsets.only(bottom: 16),
@@ -748,7 +375,7 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
                     doubt['subject'],
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w500,
-                      fontSize: size.width*0.045,
+                      fontSize: size.width * 0.045,
                     ),
                   ),
                   Container(
@@ -759,7 +386,7 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
                     ),
                     child: Text(
                       doubt['status'],
-                      style: GoogleFonts.poppins(color: Colors.white,     fontSize: size.width*0.035,),
+                      style: GoogleFonts.poppins(color: Colors.white, fontSize: size.width * 0.035),
                     ),
                   ),
                 ],
@@ -772,17 +399,17 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
                 children: [
                   Text(
                     "Question:",
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: size.width*0.035,),
+                    style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: size.width * 0.035),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     doubt['question'],
-                    style: GoogleFonts.poppins(fontSize:  size.width*0.04),
+                    style: GoogleFonts.poppins(fontSize: size.width * 0.04),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     "Date: ${doubt['date']}",
-                    style: GoogleFonts.poppins(color: Colors.grey, fontSize:   size.width*0.035),
+                    style: GoogleFonts.poppins(color: Colors.grey, fontSize: size.width * 0.035),
                   ),
                 ],
               ),
@@ -797,7 +424,7 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
                       icon: Icons.edit,
                       color: Colors.blue,
                       onPressed: () {
-                        updateAskDoubtPopup(context, size, subjectOptions!, selectedSubject, doubt, themeObj,index);
+                        updateAskDoubtPopup(context, size, themeObj, doubt, index);
                       },
                     ),
                     const SizedBox(width: 8),
@@ -805,7 +432,10 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
                       icon: Icons.delete,
                       color: Colors.red,
                       onPressed: () {
-                        deleteDoubt(doubt["_id"]);
+                        context.read<AskDoubtBloc>().add(DeleteDoubt(
+                          doubtId: doubt["_id"],
+                          currentClass: widget.currentClass,
+                        ));
                       },
                     ),
                   ],
@@ -832,13 +462,13 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
     );
   }
 
-  Widget _buildSolutionExpansionTile(Map<String, dynamic> doubt, CustomTheme themeObj,Size size) {
+  Widget _buildSolutionExpansionTile(Map<String, dynamic> doubt, CustomTheme themeObj, Size size) {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         title: Text(
           "View Solution",
-          style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: size.width*0.04),
+          style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: size.width * 0.04),
         ),
         children: [
           Padding(
@@ -848,12 +478,12 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
               children: [
                 Text(
                   doubt['solution'],
-                  style: GoogleFonts.poppins(fontSize: size.width*0.035),
+                  style: GoogleFonts.poppins(fontSize: size.width * 0.035),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   "Replied on: ${doubt['replyDate']}",
-                  style: GoogleFonts.poppins(color: Colors.grey, fontSize: size.width*0.035),
+                  style: GoogleFonts.poppins(color: Colors.grey, fontSize: size.width * 0.035),
                 ),
                 const SizedBox(height: 8),
                 if (doubt['teacher'].isNotEmpty)
@@ -861,7 +491,7 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
                     children: [
                       CircleAvatar(
                         backgroundImage: NetworkImage(doubt['teacher'][0]['profileLink']),
-                        radius: size.width*0.045,
+                        radius: size.width * 0.045,
                       ),
                       const SizedBox(width: 8),
                       Expanded(
@@ -883,7 +513,7 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
   Widget _buildFloatingActionButton(Size size, CustomTheme themeObj) {
     return FloatingActionButton.extended(
       onPressed: () {
-        askDoubtPopup(context, size, themeObj, subjectOptions!, selectedSubject);
+        askDoubtPopup(context, size, themeObj);
       },
       backgroundColor: CustomTheme.primaryColor,
       icon: const Icon(CupertinoIcons.add_circled, color: Colors.white),
@@ -894,6 +524,299 @@ class _AskDoubtsState extends State<AskDoubts> with SingleTickerProviderStateMix
     );
   }
 
+  Future<void> askDoubtPopup(BuildContext context, Size size, CustomTheme themeObj) async {
+    String localSelectedSubject = selectedSubject;
+    question.clear();
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  elevation: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: size.width * 0.9,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: size.height * 0.01),
+                          Text(
+                            "To ask a doubt, please select class and subject and write your question. You can also attach photos for references.",
+                            textAlign: TextAlign.center,
+                            style: themeObj.normalText,
+                          ),
+                          SizedBox(height: size.height * 0.01),
+                          BlocBuilder<AskDoubtBloc, AskDoubtState>(
+                            builder: (context, state) {
+                              return Card(
+                                child: SizedBox(
+                                  width: size.width,
+                                  height: size.height * 0.05,
+                                  child: DropdownButton<String>(
+                                    isExpanded: true,
+                                    borderRadius: BorderRadius.circular(12),
+                                    hint: Text("Subject", style: themeObj.normalText),
+                                    padding: EdgeInsets.all(8),
+                                    icon: Icon(Icons.keyboard_arrow_down_sharp, color: CustomTheme.greyColor),
+                                    alignment: Alignment.center,
+                                    underline: Container(),
+                                    value: localSelectedSubject.isEmpty ? null : localSelectedSubject,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        localSelectedSubject = newValue!;
+                                      });
+                                    },
+                                    items: (state.subjectOptions ?? [""]).map((String option) {
+                                      return DropdownMenuItem<String>(
+                                        value: option,
+                                        child: Text(option, overflow: TextOverflow.ellipsis, style: themeObj.normalText),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: size.height * 0.03),
+                          Text("Your Question", textAlign: TextAlign.center, style: themeObj.normalText),
+                          SizedBox(height: size.height * 0.01),
+                          TextField(
+                            maxLines: 5,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            ),
+                            controller: question,
+                          ),
+                          SizedBox(height: size.height * 0.02),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(
+                                width: size.width * 0.3,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color.fromRGBO(209, 213, 219, 1),
+                                    shape: RoundedRectangleBorder(
+                                      side: const BorderSide(color: Colors.grey, width: 1),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    "Cancel",
+                                    style: GoogleFonts.openSans(fontSize: size.width * 0.035, color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: size.width * 0.3,
+                                child: BlocBuilder<AskDoubtBloc, AskDoubtState>(
+                                  builder: (context, state) {
+                                    return ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(0xFF6FF87D),
+                                        shape: RoundedRectangleBorder(
+                                          side: const BorderSide(color: Colors.grey, width: 1),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        if (question.text.isNotEmpty && localSelectedSubject.isNotEmpty) {
+                                          context.read<AskDoubtBloc>().add(AskNewDoubt(
+                                            subject: localSelectedSubject,
+                                            question: question.text,
+                                          ));
+                                          Navigator.pop(context);
+                                        } else {
+                                          showRedSnackBar("Please fill all fields", context);
+                                        }
+                                      },
+                                      child: state.isLoading
+                                          ? const CircularProgressIndicator(color: Colors.black)
+                                          : Text(
+                                        "Submit",
+                                        style: GoogleFonts.openSans(
+                                          fontSize: size.width * 0.035,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> updateAskDoubtPopup(
+      BuildContext context, Size size, CustomTheme themeObj, Map<String, dynamic> doubtData, int index) async {
+    String localSelectedSubject = doubtData['subject'];
+    TextEditingController questionController = TextEditingController(text: doubtData['question']);
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  elevation: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: size.width * 0.9,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: size.height * 0.01),
+                          Text(
+                            "To update a doubt, please select class and subject and write your question.",
+                            textAlign: TextAlign.center,
+                            style: themeObj.normalText,
+                          ),
+                          SizedBox(height: size.height * 0.01),
+                          BlocBuilder<AskDoubtBloc, AskDoubtState>(
+                            builder: (context, state) {
+                              return Card(
+                                child: SizedBox(
+                                  width: size.width,
+                                  height: size.height * 0.05,
+                                  child: DropdownButton<String>(
+                                    isExpanded: true,
+                                    borderRadius: BorderRadius.circular(12),
+                                    hint: Text("Subject", style: themeObj.normalText),
+                                    padding: const EdgeInsets.all(8),
+                                    icon: Icon(Icons.keyboard_arrow_down_sharp, color: CustomTheme.greyColor),
+                                    alignment: Alignment.center,
+                                    underline: Container(),
+                                    value: localSelectedSubject.isEmpty ? null : localSelectedSubject,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        localSelectedSubject = newValue!;
+                                      });
+                                    },
+                                    items: (state.subjectOptions ?? [""]).map((String option) {
+                                      return DropdownMenuItem<String>(
+                                        value: option,
+                                        child: Text(option, overflow: TextOverflow.ellipsis, style: themeObj.normalText),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: size.height * 0.03),
+                          Text("Your Question", textAlign: TextAlign.center, style: themeObj.normalText),
+                          SizedBox(height: size.height * 0.01),
+                          TextField(
+                            maxLines: 5,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            ),
+                            controller: questionController,
+                          ),
+                          SizedBox(height: size.height * 0.02),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(
+                                width: size.width * 0.3,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color.fromRGBO(209, 213, 219, 1),
+                                    shape: RoundedRectangleBorder(
+                                      side: const BorderSide(color: Colors.grey, width: 1),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    "Cancel",
+                                    style: GoogleFonts.openSans(fontSize: size.width * 0.035, color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: size.width * 0.3,
+                                child: BlocBuilder<AskDoubtBloc, AskDoubtState>(
+                                  builder: (context, state) {
+                                    return ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(0xFF6FF87D),
+                                        shape: RoundedRectangleBorder(
+                                          side: const BorderSide(color: Colors.grey, width: 1),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        if (questionController.text.isNotEmpty && localSelectedSubject.isNotEmpty) {
+                                          context.read<AskDoubtBloc>().add(UpdateDoubt(
+                                            doubtId: doubtData['_id'],
+                                            updatedDoubt: {
+                                              '_id': doubtData['_id'],
+                                              'subject': localSelectedSubject,
+                                              'question': questionController.text,
+                                            },
+                                            currentClass: widget.currentClass,
+                                          ));
+                                          Navigator.pop(context);
+                                        } else {
+                                          showRedSnackBar("Please fill all fields", context);
+                                        }
+                                      },
+                                      child: state.isLoading
+                                          ? const CircularProgressIndicator(color: Colors.black)
+                                          : Text(
+                                        "Update",
+                                        style: GoogleFonts.openSans(
+                                          fontSize: size.width * 0.035,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 }
-
-

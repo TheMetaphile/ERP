@@ -1,57 +1,52 @@
 import 'package:equatable/equatable.dart';
 
-class StudentLeaveState extends Equatable {
-  final List<dynamic>? leaves;
-  final Map<String, dynamic> stats;
+class AskDoubtState extends Equatable {
+  final bool isInitial;
   final bool isLoading;
   final bool isLoadingMore;
   final bool allDataLoaded;
+  final List<String>? subjectOptions;
+  final List<dynamic>? doubtList;
   final String? errorMessage;
-  final String status;
-  final int start;
 
-  const StudentLeaveState({
-    this.leaves,
-    this.stats = const {},
+  const AskDoubtState({
+    this.isInitial = true,
     this.isLoading = false,
     this.isLoadingMore = false,
     this.allDataLoaded = false,
+    this.subjectOptions,
+    this.doubtList,
     this.errorMessage,
-    this.status = 'Pending',
-    this.start = 0,
   });
 
-  StudentLeaveState copyWith({
-    List<dynamic>? leaves,
-    Map<String, dynamic>? stats,
+  AskDoubtState copyWith({
+    bool? isInitial,
     bool? isLoading,
     bool? isLoadingMore,
     bool? allDataLoaded,
+    List<String>? subjectOptions,
+    List<dynamic>? doubtList,
     String? errorMessage,
-    String? status,
-    int? start,
   }) {
-    return StudentLeaveState(
-      leaves: leaves ?? this.leaves,
-      stats: stats ?? this.stats,
+    return AskDoubtState(
+      isInitial: isInitial ?? this.isInitial,
       isLoading: isLoading ?? this.isLoading,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       allDataLoaded: allDataLoaded ?? this.allDataLoaded,
-      errorMessage: errorMessage,
-      status: status ?? this.status,
-      start: start ?? this.start,
+      subjectOptions: subjectOptions ?? this.subjectOptions,
+      doubtList: doubtList ?? this.doubtList,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
   List<Object?> get props => [
-    leaves,
-    stats,
+    isInitial,
     isLoading,
     isLoadingMore,
     allDataLoaded,
+    subjectOptions,
+    doubtList,
     errorMessage,
-    status,
-    start,
   ];
 }

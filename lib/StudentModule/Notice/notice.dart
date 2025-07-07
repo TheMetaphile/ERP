@@ -1,120 +1,77 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../CustomTheme/customTheme.dart';
-import '../../StudentAPIs/StudentModuleAPI/Notice/notice_API.dart';
+import 'package:untitled/StudentModule/Notice/studentnotice/student_notice_bloc.dart';
+import 'package:untitled/StudentModule/Notice/studentnotice/student_notice_event.dart';
+import 'package:untitled/StudentModule/Notice/studentnotice/student_notice_state.dart';
 
-class StudentNotice extends StatefulWidget {
-  const StudentNotice({Key? key}) : super(key: key);
+import '../../CustomTheme/customTheme.dart';
+
+class StudentNoticeScreen extends StatefulWidget {
+  const StudentNoticeScreen({Key? key}) : super(key: key);
 
   @override
-  State<StudentNotice> createState() => _StudentNoticeState();
+  State<StudentNoticeScreen> createState() => _StudentNoticeScreenState();
 }
 
-class _StudentNoticeState extends State<StudentNotice> with SingleTickerProviderStateMixin {
-  NoticeBoardAPI apiObj = NoticeBoardAPI();
-  bool isLoading = false;
-  bool isLoadingMore = false;
-  int start = 0;
-  List<dynamic> noticeData = [];
+class _StudentNoticeScreenState extends State<StudentNoticeScreen>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final ScrollController _scrollController = ScrollController();
   late AnimationController _animationController;
 
-  Future<void> fetchNoticeData() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
+  @override
+  bool get wantKeepAlive => true;
 
-      if (accessToken == null) {
-        throw Exception('Access token is null');
-      }
-      List<dynamic> data = await apiObj.fetchNoticeBoard(accessToken, start);
-
-      setState(() {
-        noticeData = data;
-        start += data.length;
-      });
-    } catch (e) {
-      print('Error fetching noticeData data: $e');
-      showRedSnackBar('Failed to load noticeData. Please try again.', context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  Future<void> fetchMoreNoticeData() async {
-    if (isLoadingMore) return;
-
-    setState(() {
-      isLoadingMore = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      if (accessToken == null) {
-        throw Exception('Access token is null');
-      }
-      List<dynamic> data = await apiObj.fetchNoticeBoard(accessToken, start);
-
-      setState(() {
-        noticeData.addAll(data);
-        start += data.length;
-      });
-    } catch (e) {
-      print('Error fetching more noticeData: $e');
-      showRedSnackBar('Failed to load more notices. Please try again.', context);
-    } finally {
-      setState(() {
-        isLoadingMore = false;
-      });
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    fetchNoticeData();
-    _scrollController.addListener(_scrollListener);
+    print('StudentNoticeScreen initState');
+    _scrollController.addListener(() {});
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
+    print('Dispatching FetchNotices event after frame');
+  /*  WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<StudentNoticeBloc>().add( FetchNotices(isRetry: false));
+    });*/
   }
 
   @override
   void dispose() {
+    print('StudentNoticeScreen dispose');
     _scrollController.dispose();
     _animationController.dispose();
     super.dispose();
   }
 
-  void _scrollListener() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-      fetchMoreNoticeData();
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Size size = MediaQuery.of(context).size;
-    CustomTheme themeObj = CustomTheme(size);
     return Scaffold(
       backgroundColor: CustomTheme.whiteColor,
       appBar: _buildAppBar(size),
       body: RefreshIndicator(
         onRefresh: () async {
-          await fetchNoticeData();
+          print('Pull-down refresh triggered, dispatching RefreshNotices');
+          context.read<StudentNoticeBloc>().add(RefreshNotices());
+          await context.read<StudentNoticeBloc>().stream.firstWhere(
+                (state) => state is StudentNoticeLoaded || state is StudentNoticeError,
+            orElse: () {
+              print('Refresh timeout or unexpected state');
+              return const StudentNoticeError(message: 'Refresh timed out');
+            },
+          );
         },
         child: Container(
           padding: const EdgeInsets.all(5),
@@ -124,41 +81,63 @@ class _StudentNoticeState extends State<StudentNotice> with SingleTickerProvider
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: isLoading
-                    ? _buildShimmerEffect(size)
-                    : noticeData.isEmpty
-                    ? _buildEmptyState()
-                    : AnimationLimiter(
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: noticeData.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index < noticeData.length) {
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          duration: const Duration(milliseconds: 375),
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: _buildNoticeCard(noticeData[index], size, themeObj),
-                            ),
-                          ),
-                        );
-                      } else if (isLoadingMore) {
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: LoadingAnimationWidget.threeArchedCircle(
-                              color: CustomTheme.primaryColor,
-                              size: 50,
-                            ),
-                          ),
-                        );
-                      } else {
-                        return const SizedBox.shrink();
+                child: BlocBuilder<StudentNoticeBloc, StudentNoticeState>(
+                  builder: (context, state) {
+                    print('Building UI with state: $state');
+                    if (state is StudentNoticeInitial || state is StudentNoticeLoading) {
+                      return _buildShimmerEffect(size);
+                    } else if (state is StudentNoticeLoaded || state is StudentNoticeLoadingMore) {
+                      final notices = (state is StudentNoticeLoaded)
+                          ? state.notices
+                          : (state as StudentNoticeLoadingMore).notices;
+                      final isLoadingMore = state is StudentNoticeLoadingMore;
+                      if (notices.isEmpty) {
+                        print('Notices empty, showing empty state');
+                        return _buildEmptyState();
                       }
-                    },
-                  ),
+                      return AnimationLimiter(
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: notices.length + (isLoadingMore ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index < notices.length) {
+                              return AnimationConfiguration.staggeredList(
+                                position: index,
+                                duration: const Duration(milliseconds: 375),
+                                child: SlideAnimation(
+                                  verticalOffset: 50.0,
+                                  child: FadeInAnimation(
+                                    child: _buildNoticeCard(notices[index], size),
+                                  ),
+                                ),
+                              );
+                            } else if (isLoadingMore) {
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: LoadingAnimationWidget.threeArchedCircle(
+                                    color: CustomTheme.primaryColor,
+                                    size: 50,
+                                  ),
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        ),
+                      );
+                    } else if (state is StudentNoticeError) {
+                      print('Error state: ${state.message}');
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showRedSnackBar(state.message, context);
+                      });
+                      return _buildEmptyState(errorMessage: state.message);
+                    } else {
+                      print('Unexpected state, showing empty state');
+                      return _buildEmptyState();
+                    }
+                  },
                 ),
               ),
             ],
@@ -174,7 +153,10 @@ class _StudentNoticeState extends State<StudentNotice> with SingleTickerProvider
       backgroundColor: CustomTheme.primaryColor,
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios, color: CustomTheme.blackColor),
-        onPressed: () => Navigator.pop(context),
+        onPressed: () {
+          print('Navigating back');
+          Navigator.pop(context);
+        },
       ),
       title: Text(
         "Notice Board",
@@ -184,15 +166,13 @@ class _StudentNoticeState extends State<StudentNotice> with SingleTickerProvider
           fontSize: size.width * 0.05,
         ),
       ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0),
-
     );
   }
 
-  Widget _buildNoticeCard(dynamic notice, Size size, CustomTheme themeObj) {
+  Widget _buildNoticeCard(dynamic notice, Size size) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: Card(
-
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         margin: const EdgeInsets.all(0),
         child: ClipRRect(
@@ -204,9 +184,9 @@ class _StudentNoticeState extends State<StudentNotice> with SingleTickerProvider
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  notice["title"],
+                  notice["title"] ?? 'No Title',
                   style: GoogleFonts.poppins(
-                    fontSize: size.width*0.045,
+                    fontSize: size.width * 0.045,
                     fontWeight: FontWeight.w500,
                     color: CustomTheme.primaryColor,
                   ),
@@ -215,10 +195,23 @@ class _StudentNoticeState extends State<StudentNotice> with SingleTickerProvider
                 Row(
                   children: [
                     Hero(
-                      tag: 'avatar_${notice["from"]["profileLink"]}',
-                      child: CircleAvatar(
-                        radius: size.width * 0.04,
-                        backgroundImage: NetworkImage(notice["from"]["profileLink"]),
+                      tag: 'avatar_${notice["from"]?["profileLink"] ?? ''}',
+                      child: ClipOval(
+                        child: CachedNetworkImage(
+                          imageUrl: notice["from"]?["profileLink"] ?? '',
+                          width: size.width * 0.08,
+                          height: size.width * 0.08,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => SizedBox(
+                            width: size.width * 0.08,
+                            height: size.width * 0.08,
+                            child: const CircularProgressIndicator(strokeWidth: 1.5),
+                          ),
+                          errorWidget: (context, url, error) {
+                            print('Image loading error: $error for URL: $url');
+                            return Icon(Icons.error, size: size.width * 0.08);
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(width: size.width * 0.02),
@@ -227,11 +220,11 @@ class _StudentNoticeState extends State<StudentNotice> with SingleTickerProvider
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            notice["from"]["name"],
+                            notice["from"]?["name"] ?? 'Unknown',
                             style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500),
                           ),
                           Text(
-                            notice["date"],
+                            notice["date"] ?? 'No Date',
                             style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey),
                           ),
                         ],
@@ -245,7 +238,7 @@ class _StudentNoticeState extends State<StudentNotice> with SingleTickerProvider
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  notice["description"],
+                  notice["description"] ?? 'No Description',
                   style: GoogleFonts.poppins(fontSize: 14),
                 ),
               ),
@@ -255,7 +248,7 @@ class _StudentNoticeState extends State<StudentNotice> with SingleTickerProvider
       ).animate()
           .fadeIn(duration: 300.ms)
           .slideY(begin: 0.2, end: 0)
-          .then() // Add a sequential animation
+          .then()
           .shimmer(duration: 1200.ms, color: Colors.white.withOpacity(0.2)),
     );
   }
@@ -329,7 +322,7 @@ class _StudentNoticeState extends State<StudentNotice> with SingleTickerProvider
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState({String? errorMessage}) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -340,10 +333,10 @@ class _StudentNoticeState extends State<StudentNotice> with SingleTickerProvider
             color: Colors.grey[400],
           ).animate()
               .fadeIn(duration: 600.ms)
-              .scale(begin: Offset(0, 0.5), end: Offset(0, 3)),
+              .scale(begin: const Offset(0, 0.5), end: const Offset(1, 1)),
           const SizedBox(height: 16),
           Text(
-            "No Notices Found",
+            errorMessage != null ? "Error Loading Notices" : "No Notices Found",
             style: GoogleFonts.poppins(
               fontSize: 18,
               color: Colors.grey[600],
@@ -354,7 +347,7 @@ class _StudentNoticeState extends State<StudentNotice> with SingleTickerProvider
               .slideY(begin: 0.2, end: 0),
           const SizedBox(height: 8),
           Text(
-            "Check back later for updates",
+            errorMessage ?? "Check back later for updates",
             style: GoogleFonts.poppins(
               fontSize: 14,
               color: Colors.grey[400],
@@ -362,6 +355,21 @@ class _StudentNoticeState extends State<StudentNotice> with SingleTickerProvider
           ).animate()
               .fadeIn(duration: 600.ms, delay: 200.ms)
               .slideY(begin: 0.2, end: 0),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              print('Retry button pressed, dispatching FetchNotices');
+              context.read<StudentNoticeBloc>().add( FetchNotices());
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: CustomTheme.primaryColor,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            child: Text(
+              "Retry",
+              style: GoogleFonts.poppins(color: CustomTheme.whiteColor),
+            ),
+          ),
         ],
       ),
     );
