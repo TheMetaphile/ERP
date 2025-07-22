@@ -1,31 +1,28 @@
-// File: lib/APIs/TimetableApi/timetable_api.dart
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../SharedPreference/sharedPreferenceFile.dart';
-
-
 
 class TimetableApi {
   static const String baseUrl = 'http://10.0.2.2:8000';
 
-  Future<List<dynamic>> fetchStudentTimetable(String accessToken,String day) async {
+  Future<Map<String, List<dynamic>>> fetchStudentTimetableAll(String accessToken) async {
+    Map<String, dynamic> retrievedUserDetails = {};
 
+    retrievedUserDetails = await UserPreferences.getDetails("userDetails");
+    String Class = retrievedUserDetails["currentClass"] ?? "";
+    String section = retrievedUserDetails["section"] ?? "";
+    // Add this debugging
+    print("=== DEBUGGING USER DETAILS ===");
+    print("Full userDetails: $retrievedUserDetails");
+    print("Class: '$Class'");
+    print("Section: '$section'");
+    print("Access Token: ${accessToken.substring(0, 20)}...");
+    print("===============================");
 
-    Map<String, dynamic> retrievedUserDetails={};
+    if (Class.isEmpty || section.isEmpty) {
+      throw Exception("Class and section is Empty $Class $section");
+    }
 
-      retrievedUserDetails = await UserPreferences.getDetails("userDetails");
-      String Class=retrievedUserDetails["currentClass"]??"";
-      String section=retrievedUserDetails["section"]??"";
-      if(Class.isEmpty || section.isEmpty){
-        throw Exception("Class and section is Empty $Class $section");
-      }
-
-
-    String date=DateTime.now().toString().split(' ')[0];
-    print("date $date");
     final url = Uri.parse('$baseUrl/timetable/fetch/student');
 
     try {
@@ -33,19 +30,30 @@ class TimetableApi {
         url,
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
         },
         body: jsonEncode({
-          'accessToken': accessToken,
           'class': Class,
           'section': section,
-          'day': day,
+          // Don't send day parameter - just like React
         }),
       );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        print("Response $data");
-        return data["$day"];
+        print("Full timetable response: $data");
+
+        // Convert to the format your Flutter app expects
+        Map<String, List<dynamic>> timetableData = {};
+        if (data != null && data is Map) {
+          data.forEach((key, value) {
+            if (value is List) {
+              timetableData[key.toLowerCase()] = List<dynamic>.from(value);
+            }
+          });
+        }
+
+        return timetableData;
       } else {
         throw Exception('Failed to fetch timetable (${response.body})');
       }
@@ -54,13 +62,27 @@ class TimetableApi {
     }
   }
 
+// Keep the old method for backward compatibility but make it use the new one
+  Future<List<dynamic>> fetchStudentTimetable(String accessToken, String day) async {
+    try {
+      final allData = await fetchStudentTimetableAll(accessToken);
+      return allData[day.toLowerCase()] ?? [];
+    } catch (e) {
+      throw e;
+    }
+  }
+
+
   Future<dynamic> fetchTimetableStructure(String accessToken) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/timeTableStructure/fetch'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
         body: jsonEncode({
-          'accessToken': accessToken,
+        //  'accessToken': accessToken,
           'classRange': '1st-12th',
         }),
       );
@@ -78,78 +100,4 @@ class TimetableApi {
       throw Exception('Failed to load timetable structure: $e');
     }
   }
-
-  // Future<List<dynamic>> fetchClassTimeTable(String accessToken , String email,String day) async {
-  //   try {
-  //
-  //
-  //     final response = await http.post(
-  //       Uri.parse('$baseUrl/timetable/fetch/teacher'),
-  //       headers: {'Content-Type': 'application/json'},
-  //       body: jsonEncode({
-  //         'accessToken': accessToken,
-  //         'email': email,
-  //         'day': day,
-  //       }),
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       final data = jsonDecode(response.body);
-  //       List<dynamic> timetable=data["timetable"];
-  //
-  //       return timetable;
-  //     } else {
-  //       throw Exception('Failed to fetch teacher timetable. Status code:  (${response.body})');
-  //     }
-  //   } catch (e) {
-  //     print('Error fetching teacher timetable: $e');
-  //
-  //     throw Exception('Error fetching teacher timetable: $e');
-  //   }
-  // }
-  //
-  // Future<List<dynamic>> fetchSubsituteTimeTable(String accessToken) async{
-  //   DateTime currentDateTime=DateTime.now();
-  //   String date=currentDateTime.toString().split(' ')[0];
-  //   String calculateCurrentSession() {
-  //     DateTime now = DateTime.now();
-  //     int currentYear = now.year;
-  //     int nextYear = currentYear + 1;
-  //
-  //     if (now.isBefore(DateTime(currentYear, 3, 31))) {
-  //       currentYear--;
-  //       nextYear--;
-  //     }
-  //
-  //     return "$currentYear-${nextYear.toString().substring(2)}";
-  //   }
-  //   String session=calculateCurrentSession();
-  //   print(date);
-  //   print(session);
-  //
-  //   final url = Uri.parse('$baseUrl/LectureSubstitute/fetch/checkSubstitute?date=$date&session=$session');
-  //
-  //   try {
-  //     final response = await http.get(
-  //       url,
-  //       headers: {
-  //         'Authorization': 'Bearer $accessToken',
-  //         'Content-Type': 'application/json',
-  //       },
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       List<dynamic> data = json.decode(response.body);
-  //        print(response.body);
-  //       print("response $data");
-  //
-  //       return data ;
-  //     } else {
-  //       throw Exception('Failed to load birthday: ${response.body}');
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Error fetching birthday: $e');
-  //   }
-  //
-  // }
 }

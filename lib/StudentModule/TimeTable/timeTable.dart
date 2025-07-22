@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/StudentModule/TimeTable/timetableBloc/studenttimetable_bloc.dart';
+import 'package:untitled/StudentModule/TimeTable/timetableBloc/studenttimetable_event.dart';
+import 'package:untitled/StudentModule/TimeTable/timetableBloc/studenttimetable_state.dart';
 import '../../CustomTheme/customTheme.dart';
 import '../../StudentAPIs/StudentModuleAPI/TimeTable/Time Table/timetableAPI.dart';
-
 
 class StudentTimeTable extends StatefulWidget {
   const StudentTimeTable({super.key});
@@ -15,100 +17,24 @@ class StudentTimeTable extends StatefulWidget {
   State<StudentTimeTable> createState() => _StudentTimeTableState();
 }
 
-class _StudentTimeTableState extends State<StudentTimeTable> with SingleTickerProviderStateMixin {
-  String selectDay = "Monday";
-  List<String> dayOption = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+class _StudentTimeTableState extends State<StudentTimeTable>
+    with SingleTickerProviderStateMixin {
 
+  List<String> dayOption = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
+  ];
 
-
-  String? Class;
-  String? section;
-
-
-
-  String? durationOfEachLecture;
-  String? durationOfLunch;
-  String? firstLectureTiming;
-  String? numberOfLecturesBeforeLunch;
-  String? numberOfLecture;
-  String? lastLectureTime;
-
-  //API Callling
-  Map<String,dynamic>? timetableStructure;
-  List<Map<String, dynamic>>? timeTableData;
-  bool isLoading = true;
-  String errorMessage = '';
-  TimetableApi timetableApi = TimetableApi();
   late AnimationController _controller;
   late Animation<double> _animation;
-
-  Future<void> fetchTimetable() async {
-    setState(() {
-      isLoading = true;
-      errorMessage = '';
-    });
-
-    try {
-
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-
-      if (accessToken == null) {
-        throw Exception('Access token not found');
-      }
-
-      var data = await timetableApi.fetchTimetableStructure(accessToken);
-
-      if(data is Map){
-        timetableStructure = data.cast<String, dynamic>();
-        durationOfEachLecture = timetableStructure?["durationOfEachLeacture"]?.toString();
-        durationOfLunch = timetableStructure?["durationOfLunch"]?.toString();
-        firstLectureTiming = timetableStructure?["firstLectureTiming"]?.toString();
-        numberOfLecturesBeforeLunch = timetableStructure?["numberOfLeacturesBeforeLunch"]?.toString();
-        numberOfLecture = timetableStructure?["numberOfLecture"]?.toString();
-        lastLectureTime = firstLectureTiming;
-
-        print("Timetable Structure:");
-        print("First Lecture Timing: $firstLectureTiming");
-        print("Duration of Each Lecture: $durationOfEachLecture");
-        print("Number of Lectures: $numberOfLecture");
-
-        var fetchData = await timetableApi.fetchStudentTimetable(accessToken,selectDay.toLowerCase());
-
-        timeTableData=fetchData.cast<Map<String, dynamic>>();
-
-
-
-      }else if(data==null){
-        showRedSnackBar("The Time Table Structure not found contact to admin", context);
-      }else{
-
-        showRedSnackBar("Something Went Wrong $data", context);
-      }
-
-
-      setState(() {
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        errorMessage = 'Failed to load timetable: $e';
-        isLoading = false;
-      });
-      print('Error in fetchTimetable: $e');
-    }
-  }
-  List<String>? subjectOptions;
-  Future<void> fetchSubjects() async {
-    SharedPreferences pref=await SharedPreferences.getInstance();
-    subjectOptions =pref.getStringList("subjects") ;
-  }
-
 
   @override
   void initState() {
     super.initState();
-    fetchSubjects();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -117,12 +43,6 @@ class _StudentTimeTableState extends State<StudentTimeTable> with SingleTickerPr
       parent: _controller,
       curve: Curves.easeInOut,
     );
-    fetchTimetable().then((_) {
-      if (mounted) {
-        setState(() {});
-        _controller.forward();
-      }
-    });
   }
 
   @override
@@ -132,103 +52,192 @@ class _StudentTimeTableState extends State<StudentTimeTable> with SingleTickerPr
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     CustomTheme themeObj = CustomTheme(size);
-    return Scaffold(
-      backgroundColor: CustomTheme.whiteColor,
-      appBar: AppBar(
-        backgroundColor: CustomTheme.primaryColor,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios, color: CustomTheme.blackColor),
-        ),
-        title: Text(
-          "Time Table",
-          style: GoogleFonts.poppins(
-            color: CustomTheme.blackColor,
-            fontWeight: FontWeight.w500,
+
+    return BlocProvider(
+      create: (context) => StudentTimetableBloc(timetableApi: TimetableApi())
+        ..add(LoadTimetableStructure()),
+      child: Scaffold(
+        backgroundColor: CustomTheme.whiteColor,
+        appBar: AppBar(
+          backgroundColor: CustomTheme.primaryColor,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back_ios, color: CustomTheme.blackColor),
+          ),
+          title: Text(
+            "Time Table",
+            style: GoogleFonts.poppins(
+              color: CustomTheme.blackColor,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
-      ),
-      body: isLoading
-          ? Center(
-        child: LoadingAnimationWidget.threeArchedCircle(
-          color: CustomTheme.primaryColor,
-          size: 50,
-        ),
-      )
-          : Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: CustomTheme.primaryColor.withOpacity(0.1),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Day-wise Lectures",
-                    style: themeObj.bigNormalText,
+        body: BlocConsumer<StudentTimetableBloc, StudentTimetableState>(
+          listener: (context, state) {
+            if (state is StudentTimetableLoaded) {
+              _controller.forward(from: 0.0);
+            } else if (state is StudentTimetableError) {
+              showRedSnackBar(state.message, context);
+            } else if (state is TimetableStructureNotFound) {
+              showRedSnackBar(
+                  "The Time Table Structure not found contact to admin",
+                  context
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is StudentTimetableLoading) {
+              return Center(
+                child: LoadingAnimationWidget.threeArchedCircle(
+                  color: CustomTheme.primaryColor,
+                  size: 50,
                 ),
-                Container(
-                  width: size.width * 0.4,
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: CustomTheme.whiteColor,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset: Offset(0, 3),
+              );
+            } else if (state is StudentTimetableLoaded) {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<StudentTimetableBloc>().add(RefreshTimetable());
+                },
+                child: Column(
+                  children: [
+                    _buildHeader(context, state, themeObj, size),
+                    Expanded(
+                      child: _buildTimetableContent(state),
+                    ),
+                  ],
+                ),
+              );
+            } else if (state is StudentTimetableError) {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<StudentTimetableBloc>().add(RefreshTimetable());
+                },
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 64,
+                        color: Colors.red[400],
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        "Error loading timetable",
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        "Pull down to refresh",
+                        style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          color: Colors.grey[500],
+                        ),
                       ),
                     ],
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: selectDay,
-                      onChanged: (newValue) {
-                        setState(() {
-                          selectDay = newValue!;
-                          fetchTimetable();
-                          _controller.forward(from: 0.0);
-                        });
-                      },
-                      items: dayOption.map((String option) {
-                        return DropdownMenuItem<String>(
-                          value: option,
-                          child: Text(option, style: TextStyle(color: CustomTheme.primaryColor)),
-                        );
-                      }).toList(),
-                      icon: Icon(Icons.arrow_drop_down, color: CustomTheme.primaryColor),
-                      dropdownColor: CustomTheme.whiteColor,
-                    ),
+                ),
+              );
+            } else {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<StudentTimetableBloc>().add(RefreshTimetable());
+                },
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.schedule,
+                        size: 64,
+                        color: Colors.grey[400],
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        "No timetable available",
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        "Pull down to refresh",
+                        style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, StudentTimetableLoaded state,
+      CustomTheme themeObj, Size size) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: CustomTheme.primaryColor.withOpacity(0.1),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Day-wise Lectures",
+            style: themeObj.bigNormalText,
+          ),
+          Container(
+            width: size.width * 0.4,
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: CustomTheme.whiteColor,
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
                 ),
               ],
             ),
-          ),
-          Expanded(
-            child: timeTableData == null || timeTableData!.isEmpty
-                ? Center(
-              child: Text(
-                "No Time Table Found on $selectDay",
-                style: GoogleFonts.poppins(fontSize: 18, color: Colors.grey[600]),
-              ),
-            )
-                : FadeTransition(
-              opacity: _animation,
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: allTable(),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: state.currentDay,
+                onChanged: (newValue) {
+                  if (newValue != null) {
+                    context.read<StudentTimetableBloc>()
+                        .add(LoadTimetableForDay(newValue));
+                  }
+                },
+                items: dayOption.map((String option) {
+                  return DropdownMenuItem<String>(
+                    value: option,
+                    child: Text(
+                        option,
+                        style: TextStyle(color: CustomTheme.primaryColor)
+                    ),
+                  );
+                }).toList(),
+                icon: Icon(Icons.arrow_drop_down, color: CustomTheme.primaryColor),
+                dropdownColor: CustomTheme.whiteColor,
               ),
             ),
           ),
@@ -237,41 +246,71 @@ class _StudentTimeTableState extends State<StudentTimeTable> with SingleTickerPr
     );
   }
 
-  Widget allTable() {
-    return AnimationLimiter(
-      child: ListView(
-        children: buildTimeTableRows(),
+  Widget _buildTimetableContent(StudentTimetableLoaded state) {
+    final currentDayData = state.cachedTimetableData[state.currentDay.toLowerCase()];
+
+    if (currentDayData == null || currentDayData.isEmpty) {
+      return Center(
+        child: Text(
+          "No Time Table Found on ${state.currentDay}",
+          style: GoogleFonts.poppins(fontSize: 18, color: Colors.grey[600]),
+        ),
+      );
+    }
+
+    return FadeTransition(
+      opacity: _animation,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: _buildAllTable(state, currentDayData),
       ),
     );
   }
 
-  List<Widget> buildTimeTableRows() {
-    DateTime currentTime = parseTime(firstLectureTiming!);
-    Duration lectureDuration = parseDuration(durationOfEachLecture!);
-    Duration lunchDuration = parseDuration(durationOfLunch!);
+  Widget _buildAllTable(StudentTimetableLoaded state, List<Map<String, dynamic>> dayData) {
+    return AnimationLimiter(
+      child: ListView(
+        children: _buildTimeTableRows(state, dayData),
+      ),
+    );
+  }
+
+  List<Widget> _buildTimeTableRows(StudentTimetableLoaded state, List<Map<String, dynamic>> dayData) {
+    final structure = state.timetableStructure;
+
+    String? durationOfEachLecture = structure["durationOfEachLeacture"]?.toString();
+    String? durationOfLunch = structure["durationOfLunch"]?.toString();
+    String? firstLectureTiming = structure["firstLectureTiming"]?.toString();
+    String? numberOfLecturesBeforeLunch = structure["numberOfLeacturesBeforeLunch"]?.toString();
+
+    DateTime currentTime = _parseTime(firstLectureTiming!);
+    Duration lectureDuration = _parseDuration(durationOfEachLecture!);
+    Duration lunchDuration = _parseDuration(durationOfLunch!);
     int lecturesBeforeLunch = int.parse(numberOfLecturesBeforeLunch!);
 
     List<Widget> rows = [];
     int lectureCount = 0;
 
-    for (var item in timeTableData!) {
+    for (var item in dayData) {
       if (lectureCount == lecturesBeforeLunch) {
         // Add lunch break
-        String lunchTiming = "${formatTime(currentTime)} - ${formatTime(currentTime.add(lunchDuration))}";
-        rows.add(buildLunchCard(lunchTiming));
+        String lunchTiming = "${_formatTime(currentTime)} - ${_formatTime(currentTime.add(lunchDuration))}";
+        rows.add(_buildLunchCard(lunchTiming));
         currentTime = currentTime.add(lunchDuration);
       }
 
       DateTime endTime = currentTime.add(lectureDuration);
-      String timing = "${formatTime(currentTime)} - ${formatTime(endTime)}";
+      String timing = "${_formatTime(currentTime)} - ${_formatTime(endTime)}";
       currentTime = endTime;
 
       if (item["optional"] == false) {
-        rows.add(buildLectureCard(item, timing, false));
+        rows.add(_buildLectureCard(item, timing, false, state.subjectOptions));
       } else if (item["optional"] == true) {
         for (var optSubject in item['optionalSubjects']) {
-          if(subjectOptions!.contains(optSubject["optionalSubject"])){
-            rows.add(buildLectureCard(item, timing, true, optionalSubject: optSubject));
+          if (state.subjectOptions != null &&
+              state.subjectOptions!.contains(optSubject["optionalSubject"])) {
+            rows.add(_buildLectureCard(item, timing, true, state.subjectOptions,
+                optionalSubject: optSubject));
           }
         }
       }
@@ -282,9 +321,9 @@ class _StudentTimeTableState extends State<StudentTimeTable> with SingleTickerPr
     return rows;
   }
 
-  Widget buildLunchCard(String timing) {
+  Widget _buildLunchCard(String timing) {
     return AnimationConfiguration.staggeredList(
-      position: -1, // Use a unique position for lunch
+      position: -1,
       duration: const Duration(milliseconds: 375),
       child: SlideAnimation(
         verticalOffset: 50.0,
@@ -325,8 +364,10 @@ class _StudentTimeTableState extends State<StudentTimeTable> with SingleTickerPr
     );
   }
 
-  Widget buildLectureCard(Map<String, dynamic> lecture, String timing, bool isOptional, {Map<String, dynamic>? optionalSubject}) {
-   Size size = MediaQuery.of(context).size;
+  Widget _buildLectureCard(Map<String, dynamic> lecture, String timing,
+      bool isOptional, List<String>? subjectOptions,
+      {Map<String, dynamic>? optionalSubject}) {
+    Size size = MediaQuery.of(context).size;
 
     return AnimationConfiguration.staggeredList(
       position: int.parse(lecture['lectureNo'].toString()) - 1,
@@ -351,7 +392,7 @@ class _StudentTimeTableState extends State<StudentTimeTable> with SingleTickerPr
                         isOptional ? "*Lecture ${lecture['lectureNo']}" : "Lecture ${lecture['lectureNo']}",
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w500,
-                          fontSize: size.width*0.045,
+                          fontSize: size.width * 0.045,
                           color: CustomTheme.primaryColor,
                         ),
                       ),
@@ -359,27 +400,27 @@ class _StudentTimeTableState extends State<StudentTimeTable> with SingleTickerPr
                         timing,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w500,
-                          fontSize: size.width*0.035,
+                          fontSize: size.width * 0.035,
                           color: Colors.grey[600],
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: size.height*0.01),
+                  SizedBox(height: size.height * 0.01),
                   Text(
                     isOptional
                         ? "${optionalSubject!['optionalSubject']} - (${optionalSubject['mergeWithSection']})"
                         : lecture['subject'] ?? "N/A",
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w600,
-                      fontSize: size.width*0.045,
+                      fontSize: size.width * 0.045,
                     ),
                   ),
-                  SizedBox(height: size.height*0.008),
+                  SizedBox(height: size.height * 0.008),
                   Text(
                     "Teacher: ${isOptional ? optionalSubject!['teacher']['name'] : lecture['teacher']['name'] ?? 'N/A'}",
                     style: GoogleFonts.poppins(
-                      fontSize: size.width*0.035,
+                      fontSize: size.width * 0.035,
                       color: Colors.grey[700],
                     ),
                   ),
@@ -392,36 +433,39 @@ class _StudentTimeTableState extends State<StudentTimeTable> with SingleTickerPr
     );
   }
 
-  Duration parseDuration(String durationString) {
-    // Remove any non-digit characters and parse the remaining digits
+  Duration _parseDuration(String durationString) {
     String digitsOnly = durationString.replaceAll(RegExp(r'[^0-9]'), '');
     if (digitsOnly.isEmpty) {
-      // If no digits found, return a default duration
-      return Duration(minutes: 45); // You can change this default value as needed
+      return Duration(minutes: 45);
     }
     int minutes = int.parse(digitsOnly);
     return Duration(minutes: minutes);
   }
 
-  DateTime parseTime(String timeString) {
-    // First, try parsing with AM/PM
+  DateTime _parseTime(String timeString) {
     try {
       return DateFormat("h:mm a").parse(timeString);
     } catch (e) {
-      // If that fails, try parsing without AM/PM
       try {
         return DateFormat("HH:mm").parse(timeString);
       } catch (e) {
-        // If all parsing attempts fail, return a default time
         print("Error parsing time: $timeString. Using default time.");
-        return DateTime(2024, 1, 1, 9, 0); // Default to 9:00 AM
+        return DateTime(2024, 1, 1, 9, 0);
       }
     }
   }
 
-  String formatTime(DateTime time) {
+  String _formatTime(DateTime time) {
     return DateFormat("h:mm a").format(time);
   }
+}
 
-
+// You'll need to implement this function according to your theme
+void showRedSnackBar(String message, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.red,
+    ),
+  );
 }

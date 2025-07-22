@@ -1,180 +1,131 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../CustomTheme/customTheme.dart';
-import '../../StudentAPIs/Fees/fees_Stats.dart';
+import 'feeBloc/fee_bloc.dart';
+import 'feeBloc/fee_event.dart';
+import 'feeBloc/fee_state.dart';
 
-class Fees extends StatefulWidget {
-  const Fees({Key? key, required this.email}) : super(key: key);
+class FeesPage extends StatefulWidget {
+  const FeesPage({Key? key, required this.email}) : super(key: key);
   final String email;
 
   @override
-  State<Fees> createState() => _FeesState();
+  State<FeesPage> createState() => _FeesPageState();
 }
 
-class _FeesState extends State<Fees> {
-  String selectedStatus = "Monthly";
-  List<String> statusOptions = ["Monthly", "Quarterly"];
-  bool isLoading = false;
-  // var amount = 100;
-
-  FeesStatsApi apiObj = FeesStatsApi();
-  List<dynamic>? monthlyStatus;
-  List<dynamic>? quarterlyStatus;
-  Map<String, dynamic> feeStats = {};
-
+class _FeesPageState extends State<FeesPage> {
   @override
   void initState() {
     super.initState();
-    fetchPaymentDetails();
-    fetchStats();
+    context.read<FeesBloc>().add(LoadFeesData(widget.email));
   }
-
-  Future<void> fetchPaymentDetails() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-      final details = await apiObj.fetchPaymentDetails(accessToken!);
-      monthlyStatus = details["monthlyStatus"];
-      quarterlyStatus = details["quarterlyStatus"];
-    } catch (e) {
-      print('Error loading result data: $e');
-      showRedSnackBar("$e", context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  Future<void> fetchStats() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-      if (accessToken == null) throw Exception('Access token is null');
-      var data = await apiObj.fetchStats(accessToken);
-      feeStats = data;
-    } catch (e) {
-      print(e);
-      showRedSnackBar("$e", context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  void razorPay(int amount,int index,String orderId) {
-
-    Razorpay razorpay = Razorpay();
-    var options = {
-      'key': 'rzp_test_nNousIIsoO34Lz',
-      'amount': amount*100,
-      'name': 'Metaphile',
-      'description': 'Metaphile',
-      'retry': {'enabled': true, 'max_count': 1},
-      'send_sms_hash': true,
-      'prefill': {'contact': '7302104299', 'email': 'bhanu68tyagi@gmail.com'},
-    };
-
-    Future<void> handlePaymentErrorResponse(PaymentFailureResponse response) async {
-      var paymentErrors=response;
-      String paymentId=response.error?["metadata"]["payment_id"] ??"";
-      print("Payment error: ${response.error?["metadata"]["payment_id"]}");
-      print("Payment error: ${response.error}");
-      await callFeesApi(paymentId,"Failed",amount,index,orderId);
-      showRedSnackBar("Payment failed: ${response.message}", context);
-    }
-
-    Future<void> handlePaymentSuccessResponse(PaymentSuccessResponse response) async {
-      print("Payment success: ${response.paymentId}");
-      String paymentId=response.paymentId ??"";
-      await callFeesApi(paymentId ,"Success",amount,index,orderId);
-    }
-
-    Future<void> handleExternalWalletSelected(ExternalWalletResponse response) async {
-      print("External wallet selected: ${response.walletName}");
-    }
-
-    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentErrorResponse);
-    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccessResponse);
-    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWalletSelected);
-    razorpay.open(options);
-  }
-
-
-
-  Future<void> callFeesApi(String paymentId,String status,int amount,int index,String oderId) async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-      final response = await apiObj.Fees(accessToken!, widget.email, amount, status, "", paymentId, "Online", false, "",oderId);
-      if (response == true) {
-        showGreenSnackBar("Payment Successful", context);
-        selectedStatus=="Monthly"? monthlyStatus![index]["status"]="Submitted":quarterlyStatus?[index]["status"]=="Submitted";
-
-
-      } else {
-        showRedSnackBar("Payment Failed", context);
-      }
-    } catch (e) {
-      print('Error processing payment: $e');
-      showRedSnackBar("$e", context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     CustomTheme themeObj = CustomTheme(size);
 
-    return Scaffold(
-      backgroundColor: CustomTheme.whiteColor,
-      body: isLoading
-          ? Center(
-        child: LoadingAnimationWidget.threeArchedCircle(
-          color: CustomTheme.primaryColor,
-          size: 50,
-        ),
-      )
-          : SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(size.width * 0.01),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+    return BlocConsumer<FeesBloc, FeesState>(
+      listener: (context, state) {
+        if (state is PaymentSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.green),
+          );
+        } else if (state is PaymentError || state is FeesError) {
+          String message = '';
+          if (state is PaymentError) message = state.message;
+          if (state is FeesError) message = state.message;
 
-              SizedBox(height: size.height * 0.01),
-              _buildFeeOverview(size, themeObj),
-              SizedBox(height: size.height * 0.02),
-              _buildStatusSelector(size, themeObj),
-              SizedBox(height: size.height * 0.02),
-              _buildFeeTable(size, themeObj),
-            ],
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message), backgroundColor: Colors.red),
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is FeesLoading || state is PaymentProcessing) {
+          return Center(
+            child: LoadingAnimationWidget.threeArchedCircle(
+              color: CustomTheme.primaryColor,
+              size: 50,
+            ),
+          );
+        }
+
+        if (state is FeesError) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<FeesBloc>().add(RefreshFeesData(widget.email));
+            },
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Container(
+                height: size.height * 0.7,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.error, size: 60, color: Colors.red),
+                      SizedBox(height: 16),
+                      Text('Error: ${state.message}'),
+                      ElevatedButton(
+                        onPressed: () {
+                          context.read<FeesBloc>().add(RefreshFeesData(widget.email));
+                        },
+                        child: Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+
+        if (state is FeesLoaded) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<FeesBloc>().add(RefreshFeesData(widget.email));
+            },
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: EdgeInsets.all(size.width * 0.01),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: size.height * 0.01),
+                    _buildFeeOverview(size, themeObj, state.feeStats),
+                    SizedBox(height: size.height * 0.02),
+                    _buildStatusSelector(size, themeObj, state.selectedStatus),
+                    SizedBox(height: size.height * 0.02),
+                    _buildFeeTable(size, themeObj, state),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+
+        return RefreshIndicator(
+          onRefresh: () async {
+            context.read<FeesBloc>().add(RefreshFeesData(widget.email));
+          },
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Container(
+              height: size.height * 0.7,
+              child: Center(child: Text('Pull to refresh')),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildFeeOverview(Size size, CustomTheme themeObj) {
+  Widget _buildFeeOverview(Size size, CustomTheme themeObj, Map<String, dynamic> feeStats) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -203,14 +154,6 @@ class _FeesState extends State<Fees> {
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(20),
-        //   gradient: LinearGradient(
-        //     colors: [color.withOpacity(0.7), color.withOpacity(0.9)],
-        //     begin: Alignment.topLeft,
-        //     end: Alignment.bottomRight,
-        //   ),
-        // ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -225,7 +168,7 @@ class _FeesState extends State<Fees> {
     );
   }
 
-  Widget _buildStatusSelector(Size size, CustomTheme themeObj) {
+  Widget _buildStatusSelector(Size size, CustomTheme themeObj, String selectedStatus) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -242,12 +185,9 @@ class _FeesState extends State<Fees> {
               icon: Icon(Icons.keyboard_arrow_down, color: CustomTheme.primaryColor),
               style: themeObj.normalText.copyWith(),
               onChanged: (String? newValue) {
-                setState(() {
-                  selectedStatus = newValue!;
-                  // fetchPaymentDetails();
-                });
+                context.read<FeesBloc>().add(ChangeFeesStatus(newValue!));
               },
-              items: statusOptions.map<DropdownMenuItem<String>>((String value) {
+              items: ["Monthly", "Quarterly"].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -260,13 +200,13 @@ class _FeesState extends State<Fees> {
     );
   }
 
-  Widget _buildFeeTable(Size size, CustomTheme themeObj) {
-    List<dynamic>? data = selectedStatus == "Monthly" ? monthlyStatus : quarterlyStatus;
+  Widget _buildFeeTable(Size size, CustomTheme themeObj, FeesLoaded state) {
+    List<dynamic>? data = state.selectedStatus == "Monthly" ? state.monthlyStatus : state.quarterlyStatus;
 
     if (data == null || data.isEmpty) {
       return Center(
         child: Text(
-          "No ${selectedStatus.toLowerCase()} records found",
+          "No ${state.selectedStatus.toLowerCase()} records found",
           style: GoogleFonts.poppins(fontSize: size.width*0.045, color: Colors.grey[600]),
         ),
       );
@@ -281,17 +221,17 @@ class _FeesState extends State<Fees> {
         child: DataTable(
           columnSpacing: 20,
           headingRowColor: MaterialStateProperty.all(Colors.grey[200]),
-          columns: _getColumns(),
+          columns: _getColumns(state.selectedStatus),
           rows: List.generate(
-          data.length,
-              (index) => _getDataRow(data[index], themeObj, index),
-        ),
+            data.length,
+                (index) => _getDataRow(data[index], themeObj, index, state.selectedStatus),
+          ),
         ),
       ),
     );
   }
 
-  List<DataColumn> _getColumns() {
+  List<DataColumn> _getColumns(String selectedStatus) {
     List<String> columns = selectedStatus == "Monthly"
         ? ['Month', 'Amount', 'Discount', 'Status', 'Action']
         : ['Months', 'Quarter', 'Amount', 'Discount', 'Pending', 'Status', 'Action'];
@@ -305,8 +245,7 @@ class _FeesState extends State<Fees> {
         .toList();
   }
 
-  DataRow _getDataRow(dynamic item, CustomTheme themeObj,int index) {
-    print("index $index");
+  DataRow _getDataRow(dynamic item, CustomTheme themeObj, int index, String selectedStatus) {
     if (selectedStatus == "Monthly") {
       return DataRow(cells: [
         DataCell(Text(item["month"] ?? "", style: themeObj.normalText)),
@@ -318,8 +257,8 @@ class _FeesState extends State<Fees> {
               ? Text("Paid", style: themeObj.normalText.copyWith(color: Colors.green))
               : ElevatedButton(
             onPressed: (){
-              razorPay(item["amount"],index,item["month"]);
-    },
+              _razorPay(item["amount"], index, item["month"]);
+            },
             child: Text("Pay"),
             style: ElevatedButton.styleFrom(
               backgroundColor: CustomTheme.primaryColor,
@@ -342,8 +281,8 @@ class _FeesState extends State<Fees> {
               ? Text("Paid", style: themeObj.normalText.copyWith(color: Colors.green))
               : ElevatedButton(
             onPressed: (){
-    razorPay(item["pendingFee"],index,item["quarter"]);
-    },
+              _razorPay(item["pendingFee"], index, item["quarter"]);
+            },
             child: Text("Pay"),
             style: ElevatedButton.styleFrom(
               backgroundColor: CustomTheme.primaryColor,
@@ -353,5 +292,32 @@ class _FeesState extends State<Fees> {
         ),
       ]);
     }
+  }
+
+  void _razorPay(int amount, int index, String orderId) {
+    Razorpay razorpay = Razorpay();
+    var options = {
+      'key': 'rzp_test_nNousIIsoO34Lz',
+      'amount': amount*100,
+      'name': 'Metaphile',
+      'description': 'Metaphile',
+      'retry': {'enabled': true, 'max_count': 1},
+      'send_sms_hash': true,
+      'prefill': {'contact': '7302104299', 'email': 'bhanu68tyagi@gmail.com'},
+    };
+
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, (PaymentSuccessResponse response) {
+      print("Payment success: ${response.paymentId}");
+      context.read<FeesBloc>().add(ProcessPayment(widget.email, amount, index, orderId));
+    });
+
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, (PaymentFailureResponse response) {
+      print("Payment error: ${response.error}");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Payment failed: ${response.message}'), backgroundColor: Colors.red),
+      );
+    });
+
+    razorpay.open(options);
   }
 }

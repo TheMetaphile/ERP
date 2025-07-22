@@ -1,98 +1,35 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../CustomTheme/customTheme.dart';
-
-
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import '../../CustomTheme/customTheme.dart';
-import '../../StudentAPIs/StudentModuleAPI/Result/result_API.dart';
+import 'package:untitled/StudentModule/Result/studentResultBloc/student_result_bloc.dart';
+import 'package:untitled/StudentModule/Result/studentResultBloc/student_result_event.dart';
+import 'package:untitled/StudentModule/Result/studentResultBloc/student_result_state.dart';
 
-class ReportCardOpen extends StatefulWidget {
+import '../../CustomTheme/customTheme.dart';
+
+
+class ReportCardOpen extends StatelessWidget {
   const ReportCardOpen({Key? key, required this.userDetails}) : super(key: key);
   final Map<String, dynamic> userDetails;
 
+  static const List<String> termOptions = ['Term 1', 'Half Yearly', 'Term 2', 'Final'];
+
   @override
-  State<ReportCardOpen> createState() => _ReportCardOpenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ReportCardBloc()
+        ..add(LoadReportCardData(email: userDetails["email"])),
+      child: ReportCardView(userDetails: userDetails),
+    );
+  }
 }
 
-class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProviderStateMixin {
-  String? _selectTerm = "Term 1";
-  List<String> termOption = ['Term 1', 'Half Yearly', 'Term 2', 'Final'];
-
-  ResultApi apiObj = ResultApi();
-  ScrollController scrollController = ScrollController();
-  List<dynamic>? Final, finalCoScholastic, halfYearly, halfYearlyCoScholastic, term1, term1CoScholastic, term2, term2CoScholastic;
-  bool isLoading = false;
-
-  late AnimationController _animationController;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-    _animation = CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
-    fetchResultData();
-    _animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  Future<void> fetchResultData() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-      final resultData = await apiObj.fetchResult(accessToken!, widget.userDetails["email"]);
-      setState(() {
-        Final = resultData["final"] ?? [];
-        finalCoScholastic = resultData["final_Co_scholastic"] ?? [];
-        halfYearly = resultData["halfYearly"] ?? [];
-        halfYearlyCoScholastic = resultData["halfYearly_Co_scholastic"] ?? [];
-        term1 = resultData["term1"] ?? [];
-        term1CoScholastic = resultData["term1_Co_scholastic"] ?? [];
-        term2 = resultData["term2"] ?? [];
-        term2CoScholastic = resultData["term2_Co_scholastic"] ?? [];
-      });
-    } catch (e) {
-      print('Error loading result data: $e');
-      showRedSnackBar("$e", context);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  String calculateRange(double totalMark) {
-    if (totalMark >= 91) return "A1";
-    if (totalMark >= 81) return "A2";
-    if (totalMark >= 71) return "B1";
-    if (totalMark >= 61) return "B2";
-    if (totalMark >= 51) return "C1";
-    if (totalMark >= 41) return "C2";
-    if (totalMark >= 33) return "D";
-    if (totalMark > 0) return "E";
-    return " ";
-  }
+class ReportCardView extends StatelessWidget {
+  const ReportCardView({Key? key, required this.userDetails}) : super(key: key);
+  final Map<String, dynamic> userDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -100,44 +37,94 @@ class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProvid
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: _buildAppBar(size),
+      appBar: _buildAppBar(size, context),
       body: SafeArea(
-        child: isLoading
-            ? Center(
-          child: LoadingAnimationWidget.threeArchedCircle(
-            color: CustomTheme.primaryColor,
-            size: 50,
-          ),
-        )
-            : SingleChildScrollView(
-          child: AnimationLimiter(
-            child: Column(
-              children: AnimationConfiguration.toStaggeredList(
-                duration: const Duration(milliseconds: 375),
-                childAnimationBuilder: (widget) => SlideAnimation(
-                  horizontalOffset: 50.0,
-                  child: FadeInAnimation(
-                    child: widget,
+        child: BlocConsumer<ReportCardBloc, ReportCardState>(
+          listener: (context, state) {
+            if (state is ReportCardError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is ReportCardLoading) {
+              return Center(
+                child: LoadingAnimationWidget.threeArchedCircle(
+                  color: CustomTheme.primaryColor,
+                  size: 50,
+                ),
+              );
+            }
+
+            String selectedTerm = "Term 1";
+            Map<String, List<dynamic>> data = {};
+            bool isRefreshing = false;
+
+            if (state is ReportCardLoaded) {
+              selectedTerm = state.selectedTerm;
+              data = state.allData;
+            } else if (state is ReportCardRefreshing) {
+              selectedTerm = state.selectedTerm;
+              data = state.cachedData;
+              isRefreshing = true;
+            } else if (state is ReportCardError) {
+              selectedTerm = state.selectedTerm ?? "Term 1";
+              data = {};
+            }
+
+            return RefreshIndicator(
+              onRefresh: () async {
+                context.read<ReportCardBloc>().add(
+                  RefreshReportCardData(
+                    email: userDetails["email"],
+                    selectedTerm: selectedTerm,
+                  ),
+                );
+                // Wait for the refresh to complete
+                await Future.delayed(Duration(milliseconds: 100));
+              },
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: AnimationLimiter(
+                  child: Column(
+                    children: [
+                      if (isRefreshing)
+                        LinearProgressIndicator(
+                          backgroundColor: CustomTheme.primaryColor.withOpacity(0.2),
+                          valueColor: AlwaysStoppedAnimation<Color>(CustomTheme.primaryColor),
+                        ),
+                      ...AnimationConfiguration.toStaggeredList(
+                        duration: const Duration(milliseconds: 375),
+                        childAnimationBuilder: (widget) => SlideAnimation(
+                          horizontalOffset: 50.0,
+                          child: FadeInAnimation(child: widget),
+                        ),
+                        children: [
+                          _buildHeaderSection(size, selectedTerm),
+                          _buildHeaderCard(size, selectedTerm),
+                          _buildScholasticCard(size, data, selectedTerm),
+                          _buildCoScholasticCard(size, data, selectedTerm),
+                          _buildAttendanceCard(size),
+                          _buildRemarkCard(size),
+                          _buildScholasticMarkRangeCard(size),
+                          _buildCoScholasticMarkRangeCard(size),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                children: [
-                  _buildHeaderSection(size),
-                  _buildHeaderCard(size),
-                  _buildScholasticCard(size),
-                  _buildCoScholasticCard(size),
-                  _buildAttendanceCard(size),
-                  _buildRemarkCard(size),
-                  _buildScholasticMarkRangeCard(size),
-                  _buildCoScholasticMarkRangeCard(size),
-                ],
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Implement action (e.g., download report card)
+          // Implement download functionality
         },
         child: Icon(Icons.download),
         backgroundColor: CustomTheme.primaryColor,
@@ -145,7 +132,7 @@ class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProvid
     );
   }
 
-  PreferredSizeWidget _buildAppBar(Size size) {
+  PreferredSizeWidget _buildAppBar(Size size, BuildContext context) {
     return AppBar(
       flexibleSpace: Container(
         decoration: BoxDecoration(
@@ -171,7 +158,7 @@ class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProvid
     );
   }
 
-  Widget _buildHeaderSection(Size size) {
+  Widget _buildHeaderSection(Size size, String selectedTerm) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -180,7 +167,7 @@ class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProvid
           SizedBox(
             width: size.width * 0.6,
             child: AutoSizeText(
-              '${widget.userDetails["name"]} Progress Report',
+              '${userDetails["name"]} Progress Report',
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.openSans(
                 color: CustomTheme.blackColor,
@@ -189,51 +176,55 @@ class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProvid
               ),
             ),
           ),
-          _buildTermDropdown(size),
+          _buildTermDropdown(size, selectedTerm),
         ],
       ),
     );
   }
 
-  Widget _buildTermDropdown(Size size) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: Offset(0, 2),
+  Widget _buildTermDropdown(Size size, String selectedTerm) {
+    return BlocBuilder<ReportCardBloc, ReportCardState>(
+      builder: (context, state) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 5),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 3,
+                offset: Offset(0, 2),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: _selectTerm,
-          icon: Icon(Icons.arrow_drop_down, color: CustomTheme.primaryColor),
-          iconSize: 24,
-          elevation: 16,
-          style: TextStyle(color: CustomTheme.primaryColor),
-          onChanged: (String? newValue) {
-            setState(() {
-              _selectTerm = newValue!;
-            });
-          },
-          items: termOption.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ),
-      ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: selectedTerm,
+              icon: Icon(Icons.arrow_drop_down, color: CustomTheme.primaryColor),
+              iconSize: 24,
+              elevation: 16,
+              style: TextStyle(color: CustomTheme.primaryColor),
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  context.read<ReportCardBloc>().add(ChangeTermSelection(newValue));
+                }
+              },
+              items: ReportCardOpen.termOptions.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildHeaderCard(Size size) {
+  Widget _buildHeaderCard(Size size, String selectedTerm) {
     return Card(
       elevation: 4,
       margin: EdgeInsets.all(16),
@@ -249,7 +240,7 @@ class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProvid
             ),
             child: Center(
               child: Text(
-                '$_selectTerm : 2024-25',
+                '$selectedTerm : 2024-25',
                 style: GoogleFonts.openSans(
                   color: CustomTheme.blackColor,
                   fontWeight: FontWeight.w500,
@@ -262,31 +253,22 @@ class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProvid
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                _buildInfoRow('Student\'s Name', widget.userDetails["name"] ?? "N/A"),
-                _buildInfoRow('Father\'s Name', widget.userDetails["fatherName"] ?? "N/A"),
-                _buildInfoRow('Mother\'s Name', widget.userDetails["motherName"] ?? "N/A"),
-                _buildInfoRow('Admission No.', widget.userDetails["oldAdmissionNumber"] ?? "N/A"),
-                _buildInfoRow('Class & Section', "${widget.userDetails["currentClass"] ?? "N/A"} ${widget.userDetails["currentSection"] ?? "N/A"}"),
-                _buildInfoRow('Date of Birth', widget.userDetails["DOB"] ?? "N/A"),
+                _buildInfoRow('Student\'s Name', userDetails["name"] ?? "N/A"),
+                _buildInfoRow('Father\'s Name', userDetails["fatherName"] ?? "N/A"),
+                _buildInfoRow('Mother\'s Name', userDetails["motherName"] ?? "N/A"),
+                _buildInfoRow('Admission No.', userDetails["oldAdmissionNumber"] ?? "N/A"),
+                _buildInfoRow('Class & Section', "${userDetails["currentClass"] ?? "N/A"} ${userDetails["currentSection"] ?? "N/A"}"),
+                _buildInfoRow('Date of Birth', userDetails["DOB"] ?? "N/A"),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildScholasticCard(Size size) {
-    List<dynamic> currentTermData = [];
-    if (_selectTerm == "Term 1" && term1 != null) {
-      currentTermData = term1!;
-    } else if (_selectTerm == "Half Yearly" && halfYearly != null) {
-      currentTermData = halfYearly!;
-    } else if (_selectTerm == "Term 2" && term2 != null) {
-      currentTermData = term2!;
-    } else if (_selectTerm == "Final" && Final != null) {
-      currentTermData = Final!;
-    }
+  Widget _buildScholasticCard(Size size, Map<String, List<dynamic>> data, String selectedTerm) {
+    List<dynamic> currentTermData = _getCurrentTermData(data, selectedTerm, false);
 
     return Card(
       elevation: 4,
@@ -312,62 +294,26 @@ class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProvid
               ),
             ),
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              columns: _buildScholasticColumns(currentTermData),
-              rows: _buildScholasticRows(currentTermData),
+          if (currentTermData.isEmpty)
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Center(child: Text("No scholastic data available for this term")),
+            )
+          else
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                columns: _buildScholasticColumns(),
+                rows: _buildScholasticRows(currentTermData),
+              ),
             ),
-          ),
         ],
       ),
     );
   }
 
-  List<DataColumn> _buildScholasticColumns(List<dynamic> currentTermData) {
-    return [
-      DataColumn(label: Text('Subject')),
-      DataColumn(label: Text('Note Book')),
-      DataColumn(label: Text('S.Enrichment')),
-      DataColumn(label: Text('Marks Obt')),
-      DataColumn(label: Text('Total')),
-      DataColumn(label: Text('%')),
-      DataColumn(label: Text('Grade')),
-    ];
-  }
-
-  List<DataRow> _buildScholasticRows(List<dynamic> currentTermData) {
-    return currentTermData.map((item) {
-      int noteBook = item['obtainedNoteBookMarks'] ?? 0;
-      int enrichment = item['obtainedSubjectEnrichmentMarks'] ?? 0;
-      int marksObtained = item['marksObtained'] ?? 0;
-      int obtainedTotal = noteBook + enrichment + marksObtained;
-      int totalMarks = item["totalPracticalMarks"] + item["totalNoteBookMarks"] + item["totalSubjectEnrichmentMarks"];
-      double percentage = (obtainedTotal / totalMarks) * 100;
-
-      return DataRow(cells: [
-        DataCell(Text(item['subject']?.toString() ?? '')),
-        DataCell(Text(noteBook.toString())),
-        DataCell(Text(enrichment.toString())),
-        DataCell(Text(marksObtained.toString())),
-        DataCell(Text(obtainedTotal.toString())),
-        DataCell(Text(percentage.toStringAsFixed(2))),
-        DataCell(Text(calculateRange(percentage))),
-      ]);
-    }).toList();
-  }
-
-  Widget _buildCoScholasticCard(Size size) {
-    List<dynamic> currentTermData = [];
-    if (_selectTerm == "Term 1" && term1CoScholastic != null) {
-      currentTermData = term1CoScholastic!;
-    } else if (_selectTerm == "Half Yearly" && halfYearlyCoScholastic != null) {
-      currentTermData = halfYearlyCoScholastic!;
-    } else if (_selectTerm == "Term 2" && term2CoScholastic != null) {
-      currentTermData = term2CoScholastic!;
-    } else if (_selectTerm == "Final" && finalCoScholastic != null) {
-      currentTermData = finalCoScholastic!;
-    }
+  Widget _buildCoScholasticCard(Size size, Map<String, List<dynamic>> data, String selectedTerm) {
+    List<dynamic> currentTermData = _getCurrentTermData(data, selectedTerm, true);
 
     return Card(
       elevation: 4,
@@ -398,8 +344,11 @@ class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProvid
             child: currentTermData.isEmpty
                 ? Center(child: Text("No co-scholastic data available for this term"))
                 : Column(
-              children: currentTermData.map((coScholastic) {
-                return _buildInfoRow(coScholastic["subject"], coScholastic["grade"]);
+              children: currentTermData.map<Widget>((coScholastic) {
+                return _buildInfoRow(
+                  coScholastic["subject"] ?? "N/A",
+                  coScholastic["grade"] ?? "N/A",
+                );
               }).toList(),
             ),
           ),
@@ -408,6 +357,73 @@ class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProvid
     );
   }
 
+  List<dynamic> _getCurrentTermData(Map<String, List<dynamic>> data, String selectedTerm, bool isCoScholastic) {
+    String key = '';
+    switch (selectedTerm) {
+      case "Term 1":
+        key = isCoScholastic ? "term1_Co_scholastic" : "term1";
+        break;
+      case "Half Yearly":
+        key = isCoScholastic ? "halfYearly_Co_scholastic" : "halfYearly";
+        break;
+      case "Term 2":
+        key = isCoScholastic ? "term2_Co_scholastic" : "term2";
+        break;
+      case "Final":
+        key = isCoScholastic ? "final_Co_scholastic" : "final";
+        break;
+    }
+    return data[key] ?? [];
+  }
+
+  List<DataColumn> _buildScholasticColumns() {
+    return [
+      DataColumn(label: Text('Subject')),
+      DataColumn(label: Text('Note Book')),
+      DataColumn(label: Text('S.Enrichment')),
+      DataColumn(label: Text('Marks Obt')),
+      DataColumn(label: Text('Total')),
+      DataColumn(label: Text('%')),
+      DataColumn(label: Text('Grade')),
+    ];
+  }
+
+  List<DataRow> _buildScholasticRows(List<dynamic> currentTermData) {
+    return currentTermData.map((item) {
+      int noteBook = item['obtainedNoteBookMarks'] ?? 0;
+      int enrichment = item['obtainedSubjectEnrichmentMarks'] ?? 0;
+      int marksObtained = item['marksObtained'] ?? 0;
+      int obtainedTotal = noteBook + enrichment + marksObtained;
+      int totalMarks = (item["totalPracticalMarks"] ?? 0) +
+          (item["totalNoteBookMarks"] ?? 0) +
+          (item["totalSubjectEnrichmentMarks"] ?? 0);
+      double percentage = totalMarks > 0 ? (obtainedTotal / totalMarks) * 100 : 0;
+
+      return DataRow(cells: [
+        DataCell(Text(item['subject']?.toString() ?? '')),
+        DataCell(Text(noteBook.toString())),
+        DataCell(Text(enrichment.toString())),
+        DataCell(Text(marksObtained.toString())),
+        DataCell(Text(obtainedTotal.toString())),
+        DataCell(Text(percentage.toStringAsFixed(2))),
+        DataCell(Text(_calculateRange(percentage))),
+      ]);
+    }).toList();
+  }
+
+  String _calculateRange(double totalMark) {
+    if (totalMark >= 91) return "A1";
+    if (totalMark >= 81) return "A2";
+    if (totalMark >= 71) return "B1";
+    if (totalMark >= 61) return "B2";
+    if (totalMark >= 51) return "C1";
+    if (totalMark >= 41) return "C2";
+    if (totalMark >= 33) return "D";
+    if (totalMark > 0) return "E";
+    return " ";
+  }
+
+  // Keep other card building methods unchanged...
   Widget _buildAttendanceCard(Size size) {
     return Card(
       elevation: 4,
@@ -650,5 +666,4 @@ class _ReportCardOpenState extends State<ReportCardOpen> with SingleTickerProvid
       ),
     );
   }
-
 }

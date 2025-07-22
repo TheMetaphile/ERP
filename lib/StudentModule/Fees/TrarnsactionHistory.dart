@@ -1,51 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../CustomTheme/customTheme.dart';
-import '../../StudentAPIs/Fees/fees_Stats.dart';
+import 'TransactionHIstoryBloc/transaction_history_bloc.dart';
+import 'TransactionHIstoryBloc/transaction_history_event.dart';
+import 'TransactionHIstoryBloc/transaction_history_state.dart';
 
-class TransactionHistory extends StatefulWidget {
-  const TransactionHistory({Key? key}) : super(key: key);
+
+class TransactionHistoryPage extends StatefulWidget {
+  const TransactionHistoryPage({Key? key}) : super(key: key);
 
   @override
-  State<TransactionHistory> createState() => _TransactionHistoryState();
+  State<TransactionHistoryPage> createState() => _TransactionHistoryPageState();
 }
 
-class _TransactionHistoryState extends State<TransactionHistory> {
-  bool isLoading = false;
-  List<dynamic>? transactionDetails;
-  FeesStatsApi apiObj = FeesStatsApi();
-
+class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   @override
   void initState() {
     super.initState();
-    fetchTransactionDetails();
-  }
-
-  Future<void> fetchTransactionDetails() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-      final details = await apiObj.fetchTransactionDetails(accessToken!);
-      setState(() {
-        transactionDetails = details;
-      });
-    } catch (e) {
-      print('Error loading result data: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
-      );
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    context.read<TransactionBloc>().add(LoadTransactionData());
   }
 
   @override
@@ -53,26 +28,69 @@ class _TransactionHistoryState extends State<TransactionHistory> {
     Size size = MediaQuery.of(context).size;
     CustomTheme themeObj = CustomTheme(size);
 
-    return Scaffold(
-      backgroundColor: CustomTheme.whiteColor,
-
-      body: _buildBody(size, themeObj),
+    return BlocConsumer<TransactionBloc, TransactionState>(
+      listener: (context, state) {
+        if (state is TransactionError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          );
+        }
+      },
+      builder: (context, state) {
+        return RefreshIndicator(
+          onRefresh: () async {
+            context.read<TransactionBloc>().add(RefreshTransactionData());
+          },
+          child: _buildBody(size, themeObj, state),
+        );
+      },
     );
   }
 
-
-
-  Widget _buildBody(Size size, CustomTheme themeObj) {
-    if (isLoading) {
-      return _buildShimmerLoading(size, themeObj);
-    } else if (transactionDetails == null || transactionDetails!.isEmpty) {
-      return _buildEmptyState(themeObj);
-    } else {
-      return _buildTransactionList(size, themeObj);
+  Widget _buildBody(Size size, CustomTheme themeObj, TransactionState state) {
+    if (state is TransactionLoading) {
+      return _buildShimmerLoading(size);
+    } else if (state is TransactionError) {
+      return SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Container(
+          height: size.height * 0.7,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error, size: 60, color: Colors.red),
+                SizedBox(height: 16),
+                Text('Error: ${state.message}'),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<TransactionBloc>().add(RefreshTransactionData());
+                  },
+                  child: Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    } else if (state is TransactionLoaded) {
+      if (state.transactions.isEmpty) {
+        return _buildEmptyState(themeObj, size);
+      } else {
+        return _buildTransactionList(size, themeObj, state.transactions);
+      }
     }
+
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: size.height * 0.7,
+        child: Center(child: Text('Pull to refresh')),
+      ),
+    );
   }
 
-  Widget _buildShimmerLoading(Size size, CustomTheme themeObj) {
+  Widget _buildShimmerLoading(Size size) {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
@@ -92,30 +110,37 @@ class _TransactionHistoryState extends State<TransactionHistory> {
     );
   }
 
-  Widget _buildEmptyState(CustomTheme themeObj) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.history, size: 64, color: Colors.grey[400]),
-          SizedBox(height: 16),
-          Text(
-            "No Transaction History",
-            style: themeObj.bigNormalText.copyWith(
-              color: Colors.grey[600],
-              fontWeight: FontWeight.w500,
-            ),
+  Widget _buildEmptyState(CustomTheme themeObj, Size size) {
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: size.height * 0.7,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.history, size: 64, color: Colors.grey[400]),
+              SizedBox(height: 16),
+              Text(
+                "No Transaction History",
+                style: themeObj.bigNormalText.copyWith(
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildTransactionList(Size size, CustomTheme themeObj) {
+  Widget _buildTransactionList(Size size, CustomTheme themeObj, List<dynamic> transactions) {
     return ListView.builder(
-      itemCount: transactionDetails!.length,
+      physics: AlwaysScrollableScrollPhysics(),
+      itemCount: transactions.length,
       itemBuilder: (context, index) {
-        final item = transactionDetails![index];
+        final item = transactions[index];
         return TransactionCard(
           installmentId: item['installment_id']?.toString() ?? '',
           orderId: item['order_id']?.toString() ?? '',

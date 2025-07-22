@@ -1,51 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:untitled/StudentModule/Fees/previous_session_Bloc/previous_session_bloc.dart';
+import 'package:untitled/StudentModule/Fees/previous_session_Bloc/previous_session_event.dart';
+import 'package:untitled/StudentModule/Fees/previous_session_Bloc/previous_session_state.dart';
 import '../../CustomTheme/customTheme.dart';
-import '../../StudentAPIs/Fees/fees_Stats.dart';
 
-class PreviousSession extends StatefulWidget {
-  const PreviousSession({Key? key, required this.email}) : super(key: key);
+
+class PreviousSessionPage extends StatefulWidget {
+  const PreviousSessionPage({Key? key, required this.email}) : super(key: key);
   final String email;
 
   @override
-  State<PreviousSession> createState() => _PreviousSessionState();
+  State<PreviousSessionPage> createState() => _PreviousSessionPageState();
 }
 
-class _PreviousSessionState extends State<PreviousSession> {
-  bool isLoading = false;
-  List<dynamic>? previousSessionDetails;
-  FeesStatsApi apiObj = FeesStatsApi();
-
+class _PreviousSessionPageState extends State<PreviousSessionPage> {
   @override
   void initState() {
     super.initState();
-    fetchPreviousSessionDetails();
-  }
-
-  Future<void> fetchPreviousSessionDetails() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String? accessToken = pref.getString("accessToken");
-      final details = await apiObj.fetchPreviousSession(accessToken!, widget.email);
-      setState(() {
-        previousSessionDetails = details;
-      });
-    } catch (e) {
-      print('Error loading result data: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
-      );
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    context.read<PreviousSessionBloc>().add(LoadPreviousSessionData(widget.email));
   }
 
   @override
@@ -53,22 +28,66 @@ class _PreviousSessionState extends State<PreviousSession> {
     Size size = MediaQuery.of(context).size;
     CustomTheme themeObj = CustomTheme(size);
 
-    return Scaffold(
-      backgroundColor: CustomTheme.whiteColor,
-      body: _buildBody(themeObj, size),
+    return BlocConsumer<PreviousSessionBloc, PreviousSessionState>(
+      listener: (context, state) {
+        if (state is PreviousSessionError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          );
+        }
+      },
+      builder: (context, state) {
+        return RefreshIndicator(
+          onRefresh: () async {
+            context.read<PreviousSessionBloc>().add(RefreshPreviousSessionData(widget.email));
+          },
+          child: _buildBody(themeObj, size, state),
+        );
+      },
     );
   }
 
-
-
-  Widget _buildBody(CustomTheme themeObj, Size size) {
-    if (isLoading) {
+  Widget _buildBody(CustomTheme themeObj, Size size, PreviousSessionState state) {
+    if (state is PreviousSessionLoading) {
       return _buildShimmerLoading(size);
-    } else if (previousSessionDetails == null || previousSessionDetails!.isEmpty) {
-      return _buildEmptyState(themeObj, size);
-    } else {
-      return _buildSessionList(themeObj, size);
+    } else if (state is PreviousSessionError) {
+      return SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Container(
+          height: size.height * 0.7,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error, size: 60, color: Colors.red),
+                SizedBox(height: 16),
+                Text('Error: ${state.message}'),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<PreviousSessionBloc>().add(RefreshPreviousSessionData(widget.email));
+                  },
+                  child: Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    } else if (state is PreviousSessionLoaded) {
+      if (state.sessions.isEmpty) {
+        return _buildEmptyState(themeObj, size);
+      } else {
+        return _buildSessionList(themeObj, size, state.sessions);
+      }
     }
+
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: size.height * 0.7,
+        child: Center(child: Text('Pull to refresh')),
+      ),
+    );
   }
 
   Widget _buildShimmerLoading(Size size) {
@@ -92,29 +111,36 @@ class _PreviousSessionState extends State<PreviousSession> {
   }
 
   Widget _buildEmptyState(CustomTheme themeObj, Size size) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.history, size: size.width * 0.16, color: Colors.grey[400]),
-          SizedBox(height: size.height * 0.02),
-          Text(
-            "No previous sessions found",
-            style: themeObj.bigNormalText.copyWith(
-              color: Colors.grey[600],
-              fontWeight: FontWeight.w500,
-            ),
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: size.height * 0.7,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.history, size: size.width * 0.16, color: Colors.grey[400]),
+              SizedBox(height: size.height * 0.02),
+              Text(
+                "No previous sessions found",
+                style: themeObj.bigNormalText.copyWith(
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildSessionList(CustomTheme themeObj, Size size) {
+  Widget _buildSessionList(CustomTheme themeObj, Size size, List<dynamic> sessions) {
     return ListView.builder(
-      itemCount: previousSessionDetails!.length,
+      physics: AlwaysScrollableScrollPhysics(),
+      itemCount: sessions.length,
       itemBuilder: (context, index) {
-        final item = previousSessionDetails![index];
+        final item = sessions[index];
         return _buildSessionCard(item, themeObj, size);
       },
     );
@@ -145,7 +171,7 @@ class _PreviousSessionState extends State<PreviousSession> {
             SizedBox(height: size.height * 0.02),
             ElevatedButton(
               onPressed: () {
-                // Implement payment logic
+                // Implement payment logic here
               },
               child: Text("Pay Now", style: themeObj.normalText.copyWith(color: CustomTheme.blackColor)),
               style: ElevatedButton.styleFrom(
