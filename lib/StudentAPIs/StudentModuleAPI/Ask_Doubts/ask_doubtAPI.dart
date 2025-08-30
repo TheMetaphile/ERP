@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AskDoubtAPI {
-  static const String _baseUrl = 'http://10.0.2.2:8000';
+  static const String _baseUrl = "http://10.0.2.2:8000";
 
   Future<List<dynamic>> fetchDoubts(String accessToken,String status, String subject, int start,
      ) async {

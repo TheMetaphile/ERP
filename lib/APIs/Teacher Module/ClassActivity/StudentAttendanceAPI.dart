@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../../StudentsData/student.dart';
 
 class StudentService {
-    String baseUrl = 'http://10.0.2.2:8000';
+    String baseUrl = "http://10.0.2.2:8000";
 
    Future<List<Student>> fetchStudents(String date,String accessToken ,int start,) async {
     final url = Uri.parse('$baseUrl/studentAttendance/fetch/student/list?date=$date&start=$start&end=10');

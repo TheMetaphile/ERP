@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../../../SharedPreference/sharedPreferenceFile.dart';
 
 class TimetableApi {
-  static const String baseUrl = 'http://10.0.2.2:8000';
+  static const String baseUrl = "http://10.0.2.2:8000";
 
   Future<Map<String, List<dynamic>>> fetchStudentTimetableAll(String accessToken) async {
     Map<String, dynamic> retrievedUserDetails = {};

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +5,10 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:untitled/StudentModule/NoteBookRecord/notebookRecordBloc/notebook_record_event.dart';
+import 'package:untitled/teacher-module/CheckIn/teacherAttendanceCheckinBloc/teacher_attendance_checkin_bloc.dart';
+import 'package:untitled/teacher-module/ClassWork/teacherClassWorkBloc/teacher_class_work_bloc.dart';
+import 'package:untitled/teacher-module/HomeWork/TeacherHomeWorkBloc/teacher_home_work_bloc.dart';
+import 'package:untitled/teacher-module/TeacherDashboardBloc/teacher_dashboard_bloc.dart';
 
 // Teacher Modules
 import 'package:untitled/teacher-module/TeacherHome.dart';
@@ -72,6 +75,7 @@ Future<void> main() async {
   Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
   runApp(const MyApp());
 }
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
   @override
@@ -85,7 +89,7 @@ class _MyAppState extends State<MyApp> {
     try {
       print("⚡ Getting SharedPreferences");
       SharedPreferences pref = await SharedPreferences.getInstance();
-      String? role = pref.getString("role"); // Set this after login
+      String? role = pref.getString("role");
       String? accessToken = pref.getString("accessToken");
       String? refreshToken = pref.getString("refreshToken");
 
@@ -136,37 +140,76 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<String>(
+      future: getUserRoleAndVerifyToken(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return MaterialApp(
+            home: Scaffold(
+              backgroundColor: myTheme.CustomTheme.whiteColor,
+              body: Center(
+                child: LoadingAnimationWidget.threeArchedCircle(
+                  color: myTheme.CustomTheme.primaryColor,
+                  size: 50,
+                ),
+              ),
+            ),
+          );
+        }
+
+        final userRole = snapshot.data ?? "none";
+
+        switch (userRole) {
+          case "student":
+            return StudentApp(userDetails: retrievedUserDetails);
+          case "teacher":
+          case "admin":
+            return const TeacherApp();
+          default:
+            return const LoginApp();
+        }
+      },
+    );
+  }
+}
+
+// Student App with all Student BLoCs
+class StudentApp extends StatelessWidget {
+  final Map<String, dynamic> userDetails;
+
+  const StudentApp({super.key, required this.userDetails});
+
+  @override
+  Widget build(BuildContext context) {
     return MultiBlocProvider(
-      
       providers: [
         BlocProvider<StudentHomeBloc>(
           create: (_) => StudentHomeBloc(),
         ),
         BlocProvider<AttendanceBloc>(
-            create:(_)=> AttendanceBloc(apiObj:  AttendanceApi())
+            create: (_) => AttendanceBloc(apiObj: AttendanceApi())
         ),
         BlocProvider<StudentClassworkBloc>(
-            create:(_)=> StudentClassworkBloc()
+            create: (_) => StudentClassworkBloc()
         ),
         BlocProvider<StudentHomeworkBloc>(
-            create:(_)=> StudentHomeworkBloc()
+            create: (_) => StudentHomeworkBloc()
         ),
-        BlocProvider(create: (context) => StudentLeaveBloc(leaveApi: StudentLeaveApi())),
-
         BlocProvider(
-    create: (context) => AskDoubtBloc(doubtObj: AskDoubtAPI()),),
+            create: (context) => StudentLeaveBloc(leaveApi: StudentLeaveApi())
+        ),
+        BlocProvider(
+          create: (context) => AskDoubtBloc(doubtObj: AskDoubtAPI()),
+        ),
         BlocProvider(
           create: (context) => StudentNoticeBloc(
             noticeBoardAPI: NoticeBoardAPI(),
-          )..add( FetchNotices()),
+          )..add(FetchNotices()),
           lazy: false,
-          child: const StudentNoticeScreen(),
         ),
         BlocProvider(
           create: (context) => NoteBookRecordBloc(),
-
         ),
-
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -174,6 +217,48 @@ class _MyAppState extends State<MyApp> {
           // Shared Routes
           '/resetPassword': (context) => ForgetPassword(),
           '/logout': (context) => const Login(),
+
+          // Student Routes
+          '/student-dashboard': (context) => const StudentHome(),
+          '/student-attendance': (context) => StudentAttendanceUI(),
+          '/student-leave': (context) => const StudentLeaveScreen(),
+          '/student-result': (context) => ReportCardOpen(userDetails: userDetails),
+          '/student-classwork': (context) => const StudentClasswork(),
+          '/student-fee-status': (context) => FeesDue(email: userDetails["email"]),
+          '/student-notebook': (context) => StudentNoteBookRecord(
+            currentClass: userDetails["currentClass"],
+            section: userDetails["section"],
+          ),
+          '/student-homework': (context) => const StudentHomework(),
+          '/student-notice': (context) => const StudentNoticeScreen(),
+        //  '/student-ask-doubts': (context) => const AskDoubts(),
+        },
+        home: const StudentHome(),
+      ),
+    );
+  }
+}
+
+// Teacher App - you can add Teacher BLoCs here when you create them
+class TeacherApp extends StatelessWidget {
+  const TeacherApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<TeacherDashboardBloc>(create: (_) => TeacherDashboardBloc()),
+        BlocProvider<TeacherAttendanceCheckInBloc>(create: (_) => TeacherAttendanceCheckInBloc()),
+        BlocProvider<ClassWorkBloc>(create: (_) => ClassWorkBloc()),
+        BlocProvider<HomeWorkBloc>(create: (_) => HomeWorkBloc()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        routes: {
+          // Shared Routes
+          '/resetPassword': (context) => ForgetPassword(),
+          '/logout': (context) => const Login(),
+
           // Teacher/Admin Routes
           '/dashboard': (context) => const TeacherHome(),
           '/attendance': (context) => const TeacherAttendance(),
@@ -189,46 +274,25 @@ class _MyAppState extends State<MyApp> {
           '/salary': (context) => const TeacherSalary(),
           '/homework': (context) => const HomeWork(),
           '/notice-board': (context) => const NoticeBoard(),
-      
-          // Student Routes
-          '/student-dashboard': (context) => const StudentHome(),
-          '/student-attendance': (context) => StudentAttendanceUI(),
-          '/student-leave': (context) => const StudentLeaveScreen(),
-          '/student-result': (context) => ReportCardOpen(userDetails: retrievedUserDetails),
-          '/student-classwork': (context) => const StudentClasswork(),
-          '/student-fee-status': (context) => FeesDue(email: retrievedUserDetails["email"]),
-          '/student-notebook': (context) => StudentNoteBookRecord(
-            currentClass: retrievedUserDetails["currentClass"],
-            section: retrievedUserDetails["section"],
-          ),
-          '/student-homework': (context) => const StudentHomework(),
-          '/student-notice': (context) => const StudentNoticeScreen(),
         },
-        home: FutureBuilder<String>(
-          future: getUserRoleAndVerifyToken(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Scaffold(
-                backgroundColor:myTheme.CustomTheme.whiteColor,
-                body: Center(
-                  child: LoadingAnimationWidget.threeArchedCircle(
-                    color: myTheme.CustomTheme.primaryColor,
-                    size: 50,
-                  ),
-                ),
-              );
-            } else {
-              if (snapshot.data == "teacher" || snapshot.data == "admin") {
-                return const TeacherHome();
-              } else if (snapshot.data == "student") {
-                return const StudentHome();
-              } else {
-                return const Login();
-              }
-            }
-          },
-        ),
+        home: const TeacherHome(),
       ),
+    );
+  }
+}
+
+// Login App (no BLoCs needed)
+class LoginApp extends StatelessWidget {
+  const LoginApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/resetPassword': (context) => ForgetPassword(),
+      },
+      home: const Login(),
     );
   }
 }

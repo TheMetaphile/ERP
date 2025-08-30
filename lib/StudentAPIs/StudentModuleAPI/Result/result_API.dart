@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ResultApi {
-  static const String _baseUrl = 'http://10.0.2.2:8000';
+  static const String _baseUrl = "http://10.0.2.2:8000";
 
   Future<dynamic> fetchResult(String accessToken,String email) async {
 

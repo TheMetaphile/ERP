@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeWorkAPI{
-  static const String _baseUrl = 'http://10.0.2.2:8000';
+  static const String _baseUrl = "http://10.0.2.2:8000";
 
   Future<List<dynamic>> fetchHomeWorkList(String accessToken,String Class,String month,String year,String section,String subject,int start) async {
 

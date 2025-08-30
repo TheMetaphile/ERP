@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:untitled/utils/utils.dart';
 class StudentApi{
 
-  static const String _baseUrl = 'http://10.0.2.2:8000';
+  static const String _baseUrl = "http://10.0.2.2:8000";
   Future<List<dynamic>> fetchStudents(String accessToken,String Class,String section,int start) async {
 
     if (Class == "" && section == "") {

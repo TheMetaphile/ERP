@@ -21,6 +21,7 @@ class _FeesPageState extends State<FeesPage> {
   void initState() {
     super.initState();
     context.read<FeesBloc>().add(LoadFeesData(widget.email));
+
   }
 
   @override
